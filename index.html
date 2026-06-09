@@ -482,14 +482,16 @@
             text-align: left;
         }
         .lp-math-title {
-            font-family: var(--mono);
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            color: var(--blue);
+            font-family: var(--sans);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #e2e8f0;
             text-transform: uppercase;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+            text-align: center;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
         }
         .lp-math-item {
             font-family: var(--sans);
@@ -534,9 +536,16 @@
         }
         .lp-news-col { display: flex; flex-direction: column; gap: 10px; }
         .lp-news-title {
-            font-size: 0.55rem; letter-spacing: 3px; color: var(--blue);
-            text-transform: uppercase; padding-bottom: 8px;
-            border-bottom: 1px solid var(--borderB); margin-bottom: 4px;
+            font-family: var(--sans);
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #e2e8f0;
+            text-transform: uppercase;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+            margin-bottom: 6px;
         }
         .lp-news-item {
             background: rgba(20,28,48,0.85); border: 1px solid rgba(56,189,248,0.15);
@@ -792,7 +801,7 @@
         <h2>Quantitative Portfolio Rebalancing. No Server. No Tracking. Just Math.</h2>
         <p>AQMath is a mathematical tool for passive crypto investors who want to maintain an optimal portfolio without giving away their data. It combines Risk Parity optimisation, DCA distribution, and real-time price feeds &ndash; all running directly in your browser. No backend, no sign-up, no personal data ever leaves your machine.</p>
         <div class="lp-math-box">
-            <div class="lp-math-title">// Core Engine</div>
+            <div class="lp-math-title">Core Engine</div>
             <div class="lp-math-item"><span class="lp-math-sym">&Delta;</span> Risk Parity &mdash; Equal risk contribution across all assets via full covariance matrix</div>
             <div class="lp-math-item"><span class="lp-math-sym">&nabla;</span> Karush&ndash;Kuhn&ndash;Tucker (KKT) &mdash; Projected gradient optimization for portfolio weights</div>
             <div class="lp-math-item"><span class="lp-math-sym">&lambda;</span> DCA Allocation &mdash; Weighted by historical volatility with APY self-sustainability filter</div>
@@ -805,7 +814,7 @@
 
     <div class="lp-grid">
         <div class="lp-news-col" id="newsLeft">
-            <div class="lp-news-title">// Crypto News</div>
+            <div class="lp-news-title">Crypto News</div>
         </div>
 
         <div class="lp-features">
@@ -836,7 +845,7 @@
         </div>
 
         <div class="lp-news-col" id="newsRight">
-            <div class="lp-news-title">// Market Updates</div>
+            <div class="lp-news-title">Market Updates</div>
         </div>
     </div>
 
