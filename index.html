@@ -513,7 +513,7 @@
             line-height: 1.8;
         }
         .lp-math-box {
-            background: rgba(10, 14, 26, 0.9);
+            background: var(--s1);
             border: 1px solid rgba(56, 189, 248, 0.3);
             border-radius: 6px;
             padding: 20px 28px;
@@ -526,17 +526,17 @@
             font-size: 0.75rem;
             font-weight: 600;
             letter-spacing: 2px;
-            color: #e2e8f0;
+            color: var(--text);
             text-transform: uppercase;
             text-align: center;
             margin-bottom: 16px;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+            border-bottom: 1px solid var(--border);
         }
         .lp-math-item {
             font-family: var(--sans);
             font-size: 0.85rem;
-            color: #cbd5e1;
+            color: var(--text);
             line-height: 1.6;
             margin-bottom: 8px;
             display: flex;
@@ -580,24 +580,24 @@
             font-size: 0.6rem;
             font-weight: 600;
             letter-spacing: 2px;
-            color: #e2e8f0;
+            color: var(--text);
             text-transform: uppercase;
             text-align: center;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+            border-bottom: 1px solid var(--border);
             margin-bottom: 6px;
         }
         .lp-news-item {
-            background: rgba(20,28,48,0.85); border: 1px solid rgba(56,189,248,0.15);
+            background: var(--s2); border: 1px solid var(--border);
             padding: 12px 14px; border-radius: 2px;
             transition: all 0.25s ease;
         }
         .lp-news-item:hover {
-            background: rgba(25,35,58,0.95); border-color: rgba(56,189,248,0.35);
+            background: var(--s1); border-color: rgba(56,189,248,0.35);
             transform: translateX(2px);
         }
         .lp-news-item a {
-            font-family: var(--mono); font-size: 0.65rem; color: #cbd5e1;
+            font-family: var(--mono); font-size: 0.65rem; color: var(--text);
             text-decoration: none; line-height: 1.5; display: block;
         }
         .lp-news-item a:hover { color: var(--blue); }
@@ -606,21 +606,21 @@
 
         .lp-features { display: flex; flex-direction: column; gap: 14px; }
         .lp-feature-card {
-            background: rgba(20,28,48,0.85); border: 1px solid rgba(56,189,248,0.15);
+            background: var(--s2); border: 1px solid var(--border);
             padding: 18px 20px; border-radius: 2px;
             transition: all 0.3s ease;
         }
         .lp-feature-card:hover {
-            background: rgba(25,35,58,0.95); border-color: var(--blue);
+            background: var(--s1); border-color: var(--blue);
             box-shadow: 0 0 12px rgba(56,189,248,0.1);
         }
         .lp-feature-card .card-title {
-            font-size: 0.58rem; letter-spacing: 3px; color: var(--amber);
+            font-size: 0.58rem; letter-spacing: 3px; color: var(--muted);
             text-transform: uppercase; margin-bottom: 10px; padding-bottom: 8px;
-            border-bottom: 1px solid rgba(251,191,36,0.2); font-weight: 500;
+            border-bottom: 1px solid var(--border); font-weight: 500;
         }
         .lp-feature-card p {
-            font-family: var(--sans); font-size: 0.72rem; color: #94a3b8;
+            font-family: var(--sans); font-size: 0.72rem; color: var(--text);
             line-height: 1.7;
         }
         .lp-feature-card .feat-icon { color: var(--blue); font-size: 1.1rem; margin-right: 6px; }
@@ -631,7 +631,7 @@
             position: relative; z-index: 1;
         }
         .lp-price-card {
-            background: rgba(20,28,48,0.85); border: 1px solid rgba(56,189,248,0.15);
+            background: var(--s2); border: 1px solid var(--border);
             padding: 32px 28px; border-radius: 2px; text-align: center;
             transition: all 0.3s ease;
         }
@@ -650,7 +650,7 @@
             list-style: none; text-align: left; margin-bottom: 24px;
         }
         .lp-price-features li {
-            font-family: var(--sans); font-size: 0.7rem; color: #94a3b8;
+            font-family: var(--sans); font-size: 0.7rem; color: var(--text);
             padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .lp-price-features li::before { content: "✓ "; color: var(--green); font-weight: 600; }
@@ -665,7 +665,7 @@
             color: var(--blue); text-transform: uppercase; margin-bottom: 16px;
         }
         .lp-why p {
-            font-family: var(--sans); font-size: 0.75rem; color: #94a3b8;
+            font-family: var(--sans); font-size: 0.75rem; color: var(--text);
             line-height: 1.8; margin-bottom: 12px;
         }
 
@@ -679,7 +679,7 @@
             text-align: center;
         }
         .lp-faq-item {
-            background: rgba(20,28,48,0.85); border: 1px solid rgba(56,189,248,0.15);
+            background: var(--s2); border: 1px solid var(--border);
             border-radius: 2px; margin-bottom: 10px;
             transition: all 0.3s ease;
         }
@@ -695,7 +695,7 @@
         }
         .lp-faq-item.open .lp-faq-q::after { content: '\2212'; }
         .lp-faq-a {
-            font-family: var(--sans); font-size: 0.7rem; color: #94a3b8;
+            font-family: var(--sans); font-size: 0.7rem; color: var(--text);
             line-height: 1.8; padding: 0 18px;
             max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.35s ease;
         }
@@ -923,10 +923,10 @@
 
         <div class="lp-faq-item">
             <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">What is the APY self-sustainability filter?</div>
-            <div class="lp-faq-a">If a token has high staking yield (APY &ge; 10%), the DCA automatically skips buying it. This creates an elegant cycle:
+            <div class="lp-faq-a">Tokens with high staking yield (APY &ge; 10%) are marked as self-sustaining. This information flows into the DCA engine as a safety factor &mdash; higher yield means lower historical volatility risk. Unlike simple skip-logic found elsewhere, AQMath integrates APY into the mathematical weight calculation:
                 <ul>
-                    <li>Yield-bearing tokens grow organically</li>
-                    <li>Fresh capital flows into undervalued tokens</li>
+                    <li>Yield-bearing tokens still receive DCA if underweight</li>
+                    <li>Their self-sustaining status adjusts volatility weighting</li>
                     <li>The Engine periodically rebalances the entire portfolio</li>
                 </ul>
                 Nobody else has this &ldquo;yield farming&rdquo; logic built into DCA.
