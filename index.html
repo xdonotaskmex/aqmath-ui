@@ -1566,8 +1566,9 @@
                 html += '<div style="margin:8px 0 4px;font-size:0.45rem;color:var(--red);letter-spacing:1px;">▼ LOSERS</div>';
                 losers.forEach(t => {
                     const sym = t.symbol.replace('USDT', '');
-                    const pct = parseFloat(t.priceChangePercent).toFixed(2);
-                    html += `<div class="lp-widget-row"><span class="sym">${sym}</span><span class="val down">${pct}%</span></div>`;
+                    const pct = parseFloat(t.priceChangePercent);
+                    const sign = pct >= 0 ? '+' : '';
+                    html += `<div class="lp-widget-row"><span class="sym">${sym}</span><span class="val ${pct >= 0 ? 'up' : 'down'}">${sign}${pct.toFixed(2)}%</span></div>`;
                 });
                 body.innerHTML = html;
             } catch(e) {
