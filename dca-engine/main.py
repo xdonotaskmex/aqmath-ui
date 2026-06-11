@@ -49,7 +49,7 @@ class DcaRequest(BaseModel):
 
 @app.get("/")
 async def root():
-    return {"service": "dca-engine", "status": "running", "data_source": "data-pipeline"}
+    return {"service": "dca-engine", "status": "running", "data_source": "data-pipeline", "version": "2.0.0-fix-selfsustaining"}
 
 
 @app.post("/dca")
