@@ -421,6 +421,45 @@
             box-shadow: 0 0 6px rgba(56,189,248,0.15);
         }
 
+        /* ===== TERMINAL DASHBOARD — Live Markets ===== */
+        .terminal-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .terminal-chart-tile {
+            background: rgba(11,15,26,0.95);
+            border: 1px solid rgba(56,189,248,0.18);
+            padding: 14px 16px 8px;
+            border-radius: 2px;
+            box-shadow: inset 0 0 8px rgba(56,189,248,0.06), 0 0 12px rgba(0,0,0,0.5);
+            transition: border-color 0.2s;
+        }
+        .terminal-chart-tile:hover {
+            border-color: rgba(56,189,248,0.4);
+        }
+        .tile-title {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 2px;
+            color: #38bdf8;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(56,189,248,0.18);
+        }
+        .tile-subtitle {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.45rem;
+            color: #64748b;
+            margin-left: 6px;
+            letter-spacing: 1px;
+        }
+        .tradingview-widget-container {
+            min-height: 100px;
+        }
+
         @media (max-width: 920px) {
             .main { grid-template-columns: 1fr; }
             .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
@@ -429,6 +468,7 @@
             table { min-width: 800px; }
             .lp-grid { grid-template-columns: 1fr; }
             .lp-news-col { display: none; }
+            .terminal-dashboard { grid-template-columns: 1fr; }
         }
 
         /* ===== ROUTING ===== */
@@ -1118,6 +1158,93 @@
             </div>
             <div class="history-chart-wrap"><canvas id="historyChart"></canvas></div>
             <div style="font-size:0.55rem;color:var(--muted);margin-top:6px;">Automatically updated after DCA distribution.</div>
+        </div>
+
+        <!-- ★ LIVE MARKETS — Always-On TradingView Dashboard -->
+        <div class="card">
+            <div class="card-title">// Live Markets</div>
+            <div class="terminal-dashboard">
+                <!-- BTC/USDT -->
+                <div class="terminal-chart-tile">
+                    <div class="tile-title">// BTC/USDT<span class="tile-subtitle">1W</span></div>
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+                        {
+                            "symbol": "BINANCE:BTCUSDT",
+                            "width": "100%",
+                            "height": 170,
+                            "locale": "en",
+                            "dateRange": "7d",
+                            "colorTheme": "dark",
+                            "isTransparent": true,
+                            "autosize": true,
+                            "largeChartUrl": ""
+                        }
+                        </script>
+                    </div>
+                </div>
+                <!-- ETH/USDT -->
+                <div class="terminal-chart-tile">
+                    <div class="tile-title">// ETH/USDT<span class="tile-subtitle">1W</span></div>
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+                        {
+                            "symbol": "BINANCE:ETHUSDT",
+                            "width": "100%",
+                            "height": 170,
+                            "locale": "en",
+                            "dateRange": "7d",
+                            "colorTheme": "dark",
+                            "isTransparent": true,
+                            "autosize": true,
+                            "largeChartUrl": ""
+                        }
+                        </script>
+                    </div>
+                </div>
+                <!-- SOL/USDT -->
+                <div class="terminal-chart-tile">
+                    <div class="tile-title">// SOL/USDT<span class="tile-subtitle">1W</span></div>
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+                        {
+                            "symbol": "BINANCE:SOLUSDT",
+                            "width": "100%",
+                            "height": 170,
+                            "locale": "en",
+                            "dateRange": "7d",
+                            "colorTheme": "dark",
+                            "isTransparent": true,
+                            "autosize": true,
+                            "largeChartUrl": ""
+                        }
+                        </script>
+                    </div>
+                </div>
+                <!-- BNB/USDT -->
+                <div class="terminal-chart-tile">
+                    <div class="tile-title">// BNB/USDT<span class="tile-subtitle">1W</span></div>
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+                        {
+                            "symbol": "BINANCE:BNBUSDT",
+                            "width": "100%",
+                            "height": 170,
+                            "locale": "en",
+                            "dateRange": "7d",
+                            "colorTheme": "dark",
+                            "isTransparent": true,
+                            "autosize": true,
+                            "largeChartUrl": ""
+                        }
+                        </script>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 </div>
