@@ -1799,7 +1799,7 @@
             symbol: t.sym,
             amount: t.amount,
             price: t.price,
-            entry: t.entry || 0,
+            entry: (t.entry && t.entry > 0) ? t.entry : t.price,
             apy: t.apy || 0,
             target: t.target,
             costBasis: t.costBasis || 0,
@@ -1819,15 +1819,24 @@
             }
             const result = await resp.json();
 
+            // DEBUG: Log full API response
+            console.log('DCA API Response:', JSON.stringify(result, null, 2));
+
             if (result.error) {
                 hideLoading();
+                console.error('DCA API returned error:', result.error);
                 return alert(result.error);
             }
 
             const updated = result.updated_positions || [];
+            console.log('DCA updated_positions count:', updated.length);
+            if (updated.length > 0) {
+                console.log('DCA updated_positions:', JSON.stringify(updated, null, 2));
+            }
             updated.forEach(up => {
                 const idx = portfolio.findIndex(t => t.sym === up.symbol);
                 if (idx >= 0) {
+                    console.log(`DCA: ${up.symbol} amount ${portfolio[idx].amount} → ${up.amount}`);
                     portfolio[idx].amount = up.amount;
                     portfolio[idx].costBasis = up.costBasis || portfolio[idx].costBasis;
                     portfolio[idx].totalTokens = up.totalTokens || portfolio[idx].totalTokens;
@@ -1844,6 +1853,7 @@
             const warnings = result.warnings || [];
             const totalAlloc = result.total_allocated || 0;
             const remaining = result.remaining || 0;
+            console.log('DCA Result:', { budget: dcaAmount, totalAlloc, remaining, buySummary, warnings });
 
             // Artificial delay for "heavy math" feel
             await sleep(1500);
@@ -1858,7 +1868,12 @@
             msg += `Remaining:  $${remaining.toFixed(2)}\n\n`;
 
             if (remaining > 0.01) {
-                msg += `The remaining $${remaining.toFixed(2)} was not allocated because all tokens have already reached their optimal target allocations. This preserves the risk-balanced structure of your portfolio.\n\n`;
+                if (buySummary.length === 0 && totalAlloc < 0.01) {
+                    msg += `⚠️  WARNING: $${remaining.toFixed(2)} remaining despite underweight positions.\n`;
+                    msg += `Possible DCA engine issue — check Railway logs.\n\n`;
+                } else {
+                    msg += `The remaining $${remaining.toFixed(2)} was not allocated because all tokens have already reached their optimal target allocations. This preserves the risk-balanced structure of your portfolio.\n\n`;
+                }
             }
 
             if (buySummary.length > 0) {
