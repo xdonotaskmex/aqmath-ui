@@ -604,6 +604,91 @@
         .lp-news-src { font-family: var(--mono); font-size: 0.48rem; color: var(--green); letter-spacing: 1px; margin-top: 4px; }
         .lp-news-date { font-family: var(--mono); font-size: 0.46rem; color: var(--muted); margin-left: 8px; }
 
+        /* ===== MARKET WIDGETS (Landing Page) ===== */
+        .lp-widget-title {
+            font-family: var(--mono);
+            font-size: 0.48rem;
+            letter-spacing: 2px;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border);
+        }
+        .lp-widget-value {
+            font-family: var(--mono);
+            font-size: 1.3rem;
+            font-weight: 600;
+            line-height: 1;
+        }
+        .lp-widget-label {
+            font-family: var(--mono);
+            font-size: 0.5rem;
+            color: var(--muted);
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+        .lp-widget-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+            flex-shrink: 0;
+        }
+        .lp-widget-dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+        .lp-widget-dot.amber { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+        .lp-widget-dot.red { background: var(--red); box-shadow: 0 0 6px var(--red); }
+        .lp-widget-row {
+            display: flex;
+            align-items: center;
+            padding: 3px 0;
+            font-family: var(--mono);
+            font-size: 0.52rem;
+            color: var(--text);
+        }
+        .lp-widget-row .sym {
+            flex: 1;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        .lp-widget-row .val {
+            text-align: right;
+            font-weight: 600;
+        }
+        .lp-widget-row .val.up { color: var(--green); }
+        .lp-widget-row .val.down { color: var(--red); }
+        .lp-widget-exch-row {
+            display: flex;
+            align-items: center;
+            padding: 4px 0;
+            font-family: var(--mono);
+            font-size: 0.5rem;
+            color: var(--text);
+        }
+        .lp-widget-exch-row .exch-label {
+            flex: 1;
+            letter-spacing: 1px;
+        }
+        .lp-widget-exch-row .exch-status {
+            font-size: 0.45rem;
+            color: var(--muted);
+        }
+        .lp-widget-sys-row {
+            display: flex;
+            align-items: center;
+            padding: 4px 0;
+            font-family: var(--mono);
+            font-size: 0.5rem;
+            color: var(--text);
+        }
+        .lp-widget-sys-row .sys-label {
+            flex: 1;
+        }
+        .lp-widget-sys-row .sys-val {
+            color: var(--muted);
+        }
+
         .lp-features { display: flex; flex-direction: column; gap: 14px; }
         .lp-feature-card {
             background: var(--s2); border: 1px solid var(--border);
@@ -1269,6 +1354,7 @@
             document.body.classList.remove('route-app');
             document.body.classList.add('route-landing');
             loadNewsFeeds();
+            loadAllWidgets();
         }
     }
     window.addEventListener('hashchange', handleRoute);
@@ -1330,6 +1416,244 @@
         } catch(e) {
             console.log('RSS feed error:', e);
         }
+    }
+
+    // ============ LANDING PAGE MARKET WIDGETS ============
+    let coingeckoCache = null;
+    let coingeckoCacheTime = 0;
+
+    function getNewsCol(id) {
+        return document.getElementById(id);
+    }
+
+    function makeWidgetCard(title) {
+        const div = document.createElement('div');
+        div.className = 'lp-news-item';
+        div.innerHTML = `<div class="lp-widget-title">// ${title}</div>`;
+        return div;
+    }
+
+    // ── 1. Fear & Greed Index ──
+    async function loadFearGreed() {
+        const col = getNewsCol('newsLeft');
+        if (!col || col.dataset.fngLoaded === 'true') return;
+        col.dataset.fngLoaded = 'true';
+        const card = makeWidgetCard('Fear & Greed');
+        const body = document.createElement('div');
+        body.innerHTML = '<span style="color:var(--muted);">loading...</span>';
+        card.appendChild(body);
+        col.appendChild(card);
+
+        async function refresh() {
+            try {
+                const r = await fetch('https://api.alternative.me/fng/?limit=1');
+                const d = await r.json();
+                if (!d.data || !d.data[0]) return;
+                const v = parseInt(d.data[0].value);
+                const cls = d.data[0].value_classification || '';
+                let color = 'var(--amber)';
+                if (v <= 40) color = 'var(--green)';
+                else if (v >= 60) color = 'var(--red)';
+                body.innerHTML = `
+                    <span class="lp-widget-value" style="color:${color}">${v}</span>
+                    <div class="lp-widget-label">${cls}</div>`;
+            } catch(e) {
+                body.innerHTML = '<span style="color:var(--dim);font-size:0.5rem;">unavailable</span>';
+            }
+        }
+        await refresh();
+        setInterval(refresh, 600000); // 10 min
+    }
+
+    // ── 2. BTC Dominance ──
+    async function loadBTCDominance() {
+        const col = getNewsCol('newsLeft');
+        if (!col) return;
+        const card = makeWidgetCard('BTC Dominance');
+        const body = document.createElement('div');
+        body.innerHTML = '<span style="color:var(--muted);">loading...</span>';
+        card.appendChild(body);
+        col.appendChild(card);
+
+        async function refresh() {
+            try {
+                await fetchCoingeckoGlobal();
+                if (coingeckoCache && coingeckoCache.market_cap_percentage && coingeckoCache.market_cap_percentage.btc) {
+                    const btc = coingeckoCache.market_cap_percentage.btc.toFixed(1);
+                    body.innerHTML = `
+                        <span class="lp-widget-value" style="color:var(--blue)">${btc}%</span>
+                        <div class="lp-widget-label">of total crypto market</div>`;
+                }
+            } catch(e) {
+                body.innerHTML = '<span style="color:var(--dim);font-size:0.5rem;">unavailable</span>';
+            }
+        }
+        await refresh();
+        setInterval(refresh, 900000); // 15 min
+    }
+
+    // ── 3. Exchange Status ──
+    async function loadExchangeStatus() {
+        const col = getNewsCol('newsLeft');
+        if (!col) return;
+        const card = makeWidgetCard('Exchange Status');
+        const body = document.createElement('div');
+        card.appendChild(body);
+        col.appendChild(card);
+
+        const exchanges = [
+            { label: 'BNC', url: 'https://api.binance.com/api/v3/ping', okTest: null },
+            { label: 'CB',  url: 'https://api.exchange.coinbase.com/time', okTest: null },
+            { label: 'KRK', url: 'https://api.kraken.com/0/public/SystemStatus', okTest: null }
+        ];
+
+        async function checkExchange(ex) {
+            try {
+                const r = await fetch(ex.url, { signal: AbortSignal.timeout(8000) });
+                return r.ok;
+            } catch(e) {
+                return false;
+            }
+        }
+
+        async function refresh() {
+            const results = await Promise.all(exchanges.map(ex => checkExchange(ex)));
+            let html = '';
+            exchanges.forEach((ex, i) => {
+                const ok = results[i];
+                html += `<div class="lp-widget-exch-row">
+                    <span class="lp-widget-dot ${ok ? 'green' : 'red'}"></span>
+                    <span class="exch-label">${ex.label}</span>
+                    <span class="exch-status">${ok ? 'ONLINE' : 'OFFLINE'}</span>
+                </div>`;
+            });
+            body.innerHTML = html;
+        }
+        await refresh();
+        setInterval(refresh, 30000); // 30 sec
+    }
+
+    // ── 4. Top 3 Gainers / Losers (24h) ──
+    async function loadMovers() {
+        const col = getNewsCol('newsRight');
+        if (!col) return;
+        const card = makeWidgetCard('Movers (24h)');
+        const body = document.createElement('div');
+        body.innerHTML = '<span style="color:var(--muted);">loading...</span>';
+        card.appendChild(body);
+        col.appendChild(card);
+
+        // Filter to well-known coins only
+        const known = new Set(['BTC','ETH','SOL','BNB','XRP','ADA','DOGE','AVAX','DOT','MATIC',
+            'LINK','UNI','ATOM','LTC','ETC','OP','ARB','APT','FIL','NEAR','TIA','PYTH','INJ',
+            'SUI','SEI','RUNE','FTM','RNDR','FET','WLD','PEPE','WIF','BONK','SHIB','TON']);
+
+        async function refresh() {
+            try {
+                const r = await fetch('https://api.binance.com/api/v3/ticker/24hr');
+                const all = await r.json();
+                const usdt = all.filter(t => t.symbol.endsWith('USDT') && known.has(t.symbol.replace('USDT','')));
+                usdt.sort((a, b) => parseFloat(b.priceChangePercent) - parseFloat(a.priceChangePercent));
+                const gainers = usdt.slice(0, 3);
+                const losers = usdt.slice(-3).reverse();
+
+                let html = '<div style="margin-bottom:8px;font-size:0.45rem;color:var(--green);letter-spacing:1px;">▲ GAINERS</div>';
+                gainers.forEach(t => {
+                    const sym = t.symbol.replace('USDT', '');
+                    const pct = parseFloat(t.priceChangePercent).toFixed(2);
+                    html += `<div class="lp-widget-row"><span class="sym">${sym}</span><span class="val up">+${pct}%</span></div>`;
+                });
+                html += '<div style="margin:8px 0 4px;font-size:0.45rem;color:var(--red);letter-spacing:1px;">▼ LOSERS</div>';
+                losers.forEach(t => {
+                    const sym = t.symbol.replace('USDT', '');
+                    const pct = parseFloat(t.priceChangePercent).toFixed(2);
+                    html += `<div class="lp-widget-row"><span class="sym">${sym}</span><span class="val down">${pct}%</span></div>`;
+                });
+                body.innerHTML = html;
+            } catch(e) {
+                body.innerHTML = '<span style="color:var(--dim);font-size:0.5rem;">unavailable</span>';
+            }
+        }
+        await refresh();
+        setInterval(refresh, 300000); // 5 min
+    }
+
+    // ── Shared CoinGecko fetch (for BTC dom + market cap) ──
+    async function fetchCoingeckoGlobal() {
+        const now = Date.now();
+        if (coingeckoCache && (now - coingeckoCacheTime) < 300000) return; // cache 5 min
+        const r = await fetch('https://api.coingecko.com/api/v3/global');
+        const d = await r.json();
+        coingeckoCache = d.data;
+        coingeckoCacheTime = now;
+    }
+
+    // ── 5. Total Market Cap ──
+    async function loadMarketCap() {
+        const col = getNewsCol('newsRight');
+        if (!col) return;
+        const card = makeWidgetCard('Total Market Cap');
+        const body = document.createElement('div');
+        body.innerHTML = '<span style="color:var(--muted);">loading...</span>';
+        card.appendChild(body);
+        col.appendChild(card);
+
+        function fmt(n) {
+            if (n >= 1e12) return '$' + (n / 1e12).toFixed(2) + 'T';
+            if (n >= 1e9) return '$' + (n / 1e9).toFixed(2) + 'B';
+            return '$' + (n / 1e6).toFixed(0) + 'M';
+        }
+
+        async function refresh() {
+            try {
+                await fetchCoingeckoGlobal();
+                if (coingeckoCache && coingeckoCache.total_market_cap && coingeckoCache.total_market_cap.usd) {
+                    const mcap = coingeckoCache.total_market_cap.usd;
+                    body.innerHTML = `
+                        <span class="lp-widget-value" style="color:var(--green)">${fmt(mcap)}</span>
+                        <div class="lp-widget-label">global crypto market</div>`;
+                }
+            } catch(e) {
+                body.innerHTML = '<span style="color:var(--dim);font-size:0.5rem;">unavailable</span>';
+            }
+        }
+        await refresh();
+        setInterval(refresh, 600000); // 10 min
+    }
+
+    // ── 6. System Status ──
+    function loadSystemStatus() {
+        const col = getNewsCol('newsRight');
+        if (!col) return;
+        const card = makeWidgetCard('System Status');
+        const body = document.createElement('div');
+        body.innerHTML = `
+            <div class="lp-widget-sys-row">
+                <span class="lp-widget-dot green"></span>
+                <span class="sys-label">Engine</span>
+                <span class="sys-val">IDLE</span>
+            </div>
+            <div class="lp-widget-sys-row">
+                <span class="lp-widget-dot green"></span>
+                <span class="sys-label">Pipeline</span>
+                <span class="sys-val">OK</span>
+            </div>
+            <div class="lp-widget-sys-row">
+                <span class="lp-widget-dot green"></span>
+                <span class="sys-label">Data</span>
+                <span class="sys-val">180 days</span>
+            </div>`;
+        card.appendChild(body);
+        col.appendChild(card);
+    }
+
+    function loadAllWidgets() {
+        loadFearGreed();
+        loadBTCDominance();
+        loadExchangeStatus();
+        loadMovers();
+        loadMarketCap();
+        loadSystemStatus();
     }
 
     // ============ STATE & CONSTANTS ============
