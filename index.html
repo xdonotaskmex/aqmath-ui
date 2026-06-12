@@ -569,6 +569,59 @@
         }
         .lp-btn-secondary:hover { background: rgba(251,191,36,0.1); }
 
+        .lp-section-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 0 32px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .lp-section-label {
+            font-family: var(--mono);
+            font-size: 0.55rem;
+            letter-spacing: 4px;
+            color: var(--blue);
+            text-transform: uppercase;
+            text-align: center;
+            padding: 32px 32px 16px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Price ticker strip */
+        .lp-ticker {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            padding: 10px 32px;
+            max-width: 1400px;
+            margin: 0 auto;
+            font-family: var(--mono);
+            font-size: 0.55rem;
+            letter-spacing: 1px;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+        }
+        .lp-ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lp-ticker-sym {
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+        .lp-ticker-price {
+            color: var(--text);
+            font-weight: 500;
+        }
+        .lp-ticker-change {
+            font-size: 0.48rem;
+        }
+        .lp-ticker-change.up { color: var(--green); }
+        .lp-ticker-change.down { color: var(--red); }
+
         .lp-grid {
             display: grid; grid-template-columns: 280px 1fr 280px;
             gap: 24px; padding: 0 32px 48px; position: relative; z-index: 1;
@@ -605,6 +658,10 @@
         .lp-news-date { font-family: var(--mono); font-size: 0.46rem; color: var(--muted); margin-left: 8px; }
 
         /* ===== MARKET WIDGETS (Landing Page) ===== */
+        .lp-news-item.lp-widget {
+            border-left: 2px solid var(--blue);
+            padding-left: 12px;
+        }
         .lp-widget-title {
             font-family: var(--mono);
             font-size: 0.48rem;
@@ -937,6 +994,13 @@
         </div>
     </section>
 
+    <div class="lp-section-label">// Market Overview</div>
+    <div class="lp-ticker" id="priceTicker">
+        <div class="lp-ticker-item"><span class="lp-ticker-sym">BTC</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
+        <div class="lp-ticker-item"><span class="lp-ticker-sym">ETH</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
+        <div class="lp-ticker-item"><span class="lp-ticker-sym">SOL</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
+    </div>
+
     <div class="lp-grid">
         <div class="lp-news-col" id="newsLeft">
             <div class="lp-news-title">Crypto News</div>
@@ -974,11 +1038,15 @@
         </div>
     </div>
 
+    <hr class="lp-section-divider">
+
     <section class="lp-why">
         <h3>Why AQMath?</h3>
         <p>Traditional portfolio tools either require you to connect your wallet or upload sensitive data to the cloud. AQMath flips that model: the data stays with you, the mathematics comes to you.</p>
         <p>It&rsquo;s built for investors who value privacy and want institutional-grade risk management without the complexity or cost.</p>
     </section>
+
+    <hr class="lp-section-divider">
 
     <section class="lp-faq">
         <h3>// Frequently Asked Questions</h3>
@@ -1041,6 +1109,9 @@
             <div class="lp-faq-a">Everything you do stays local. The server exists <strong>only to compute math and return numbers</strong>. There is no user table, no login, no session cookies. GDPR-compliant by design, not as an afterthought. You own your data because it never leaves your machine.</div>
         </div>
     </section>
+
+    <hr class="lp-section-divider">
+    <div class="lp-section-label">// Plans</div>
 
     <section class="lp-pricing">
         <div class="lp-price-card">
@@ -1428,7 +1499,7 @@
 
     function makeWidgetCard(title) {
         const div = document.createElement('div');
-        div.className = 'lp-news-item';
+        div.className = 'lp-news-item lp-widget';
         div.innerHTML = `<div class="lp-widget-title">// ${title}</div>`;
         return div;
     }
@@ -1648,7 +1719,43 @@
         col.appendChild(card);
     }
 
+    // ── Price Ticker Strip ──
+    async function loadPriceTicker() {
+        const ticker = document.getElementById('priceTicker');
+        if (!ticker || ticker.dataset.loaded === 'true') return;
+        ticker.dataset.loaded = 'true';
+
+        const symbols = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT'];
+        const names = ['BTC', 'ETH', 'SOL'];
+
+        async function refresh() {
+            try {
+                const r = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=' + JSON.stringify(symbols));
+                const data = await r.json();
+                let html = '';
+                data.forEach((t, i) => {
+                    const price = parseFloat(t.lastPrice);
+                    const change = parseFloat(t.priceChangePercent);
+                    const cls = change >= 0 ? 'up' : 'down';
+                    const sign = change >= 0 ? '+' : '';
+                    const priceStr = price >= 100 ? price.toFixed(0) : price >= 1 ? price.toFixed(2) : price.toFixed(4);
+                    html += `<div class="lp-ticker-item">
+                        <span class="lp-ticker-sym">${names[i]}</span>
+                        <span class="lp-ticker-price">$${priceStr}</span>
+                        <span class="lp-ticker-change ${cls}">${sign}${change.toFixed(2)}%</span>
+                    </div>`;
+                });
+                ticker.innerHTML = html;
+            } catch(e) {
+                console.log('Ticker error:', e);
+            }
+        }
+        await refresh();
+        setInterval(refresh, 30000); // 30 sec
+    }
+
     function loadAllWidgets() {
+        loadPriceTicker();
         loadFearGreed();
         loadBTCDominance();
         loadExchangeStatus();
