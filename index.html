@@ -1211,7 +1211,7 @@
         <div class="toast-title" id="toastTitle"></div>
         <div class="toast-msg" id="toastMsg"></div>
         <div class="toast-actions hidden" id="toastActions"></div>
-        <button class="toast-close" onclick="hideToast()">[ Close ]</button>
+        <button class="toast-close" id="toastClose" onclick="hideToast()">[ Close ]</button>
     </div>
 </div>
 
@@ -1502,6 +1502,7 @@
         const title = document.getElementById('toastTitle');
         const msgEl = document.getElementById('toastMsg');
         const actionsEl = document.getElementById('toastActions');
+        const closeBtn = document.getElementById('toastClose');
         box.className = 'toast-box ' + type;
         title.className = 'toast-title ' + type;
         title.textContent = type === 'error' ? 'ERROR' : type === 'success' ? 'DONE' : 'NOTICE';
@@ -1511,6 +1512,7 @@
         overlay.classList.remove('hidden');
         if (actions && actions.length > 0) {
             actionsEl.classList.remove('hidden');
+            closeBtn.classList.add('hidden');
             actions.forEach(a => {
                 const btn = document.createElement('button');
                 btn.className = 'toast-action-btn' + (a.primary ? ' primary' : '');
@@ -1526,6 +1528,7 @@
             toastTimer = setTimeout(hideToast, 12000);
         } else {
             actionsEl.classList.add('hidden');
+            closeBtn.classList.remove('hidden');
             if (toastTimer) clearTimeout(toastTimer);
             if (type === 'success' || type === 'warning') {
                 toastTimer = setTimeout(hideToast, 3500);
