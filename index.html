@@ -1512,7 +1512,7 @@
         overlay.classList.remove('hidden');
         if (actions && actions.length > 0) {
             actionsEl.classList.remove('hidden');
-            closeBtn.classList.add('hidden');
+            closeBtn.style.display = 'none';
             actions.forEach(a => {
                 const btn = document.createElement('button');
                 btn.className = 'toast-action-btn' + (a.primary ? ' primary' : '');
@@ -1528,7 +1528,7 @@
             toastTimer = setTimeout(hideToast, 12000);
         } else {
             actionsEl.classList.add('hidden');
-            closeBtn.classList.remove('hidden');
+            closeBtn.style.display = '';
             if (toastTimer) clearTimeout(toastTimer);
             if (type === 'success' || type === 'warning') {
                 toastTimer = setTimeout(hideToast, 3500);
