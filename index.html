@@ -466,8 +466,7 @@
             .top-row { grid-template-columns: 1fr; }
             .sum-grid { grid-template-columns: 1fr 1fr; }
             table { min-width: 800px; }
-            .lp-grid { grid-template-columns: 1fr; }
-            .lp-news-col { display: none; }
+
             .terminal-dashboard { grid-template-columns: 1fr; }
         }
 
@@ -622,12 +621,11 @@
         .lp-ticker-change.up { color: var(--green); }
         .lp-ticker-change.down { color: var(--red); }
 
-        .lp-grid {
-            display: grid; grid-template-columns: 280px 1fr 280px;
-            gap: 24px; padding: 0 32px 48px; position: relative; z-index: 1;
-            max-width: 1400px; margin: 0 auto;
+        .lp-features {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 16px; padding: 0 32px 48px; position: relative; z-index: 1;
+            max-width: 900px; margin: 0 auto;
         }
-        .lp-news-col { display: flex; flex-direction: column; gap: 10px; }
         .lp-news-title {
             font-family: var(--sans);
             font-size: 0.6rem;
@@ -746,7 +744,7 @@
             color: var(--muted);
         }
 
-        .lp-features { display: flex; flex-direction: column; gap: 14px; }
+
         .lp-feature-card {
             background: var(--s2); border: 1px solid var(--border);
             padding: 18px 20px; border-radius: 2px;
@@ -940,12 +938,7 @@
         .toast-action-btn.primary:hover { border-color: var(--green); background: rgba(0,230,118,0.08); }
 
         /* ===== MOBILE RESPONSIVE ===== */
-        @media (max-width: 1024px) {
-            .lp-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
-            .lp-grid .lp-news-col:first-child { grid-column: 1 / -1; }
-            .lp-grid .lp-features { grid-column: 1 / -1; }
-            .lp-grid .lp-news-col:last-child { grid-column: 1 / -1; }
-        }
+
 
         @media (max-width: 768px) {
             .lp-nav { padding: 0 16px; height: 56px; }
@@ -961,13 +954,7 @@
             .lp-cta-group { flex-direction: column; align-items: center; gap: 10px; }
             .lp-btn-primary, .lp-btn-secondary { width: 80%; text-align: center; padding: 12px 20px; }
 
-            .lp-grid { grid-template-columns: 1fr; padding: 0 16px 32px; gap: 16px; }
-            .lp-news-col { gap: 8px; }
-            .lp-news-title { font-size: 0.5rem; }
-            .lp-news-item { padding: 10px 12px; }
-            .lp-news-item a { font-size: 0.6rem; }
-
-            .lp-features { gap: 12px; }
+            .lp-features { grid-template-columns: 1fr; padding: 0 16px 32px; gap: 12px; }
             .lp-feature-card { padding: 14px 16px; }
             .lp-feature-card .card-title { font-size: 0.52rem; letter-spacing: 2px; }
             .lp-feature-card p { font-size: 0.65rem; }
@@ -1050,42 +1037,65 @@
         <div class="lp-ticker-item"><span class="lp-ticker-sym">SOL</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
     </div>
 
-    <div class="lp-grid">
-        <div class="lp-news-col" id="newsLeft">
-            <div class="lp-news-title">Crypto News</div>
-        </div>
+    <div class="lp-section-label">// Features</div>
 
-        <div class="lp-features">
-            <div class="lp-feature-card">
-                <div class="card-title"><span class="feat-icon">&Delta;</span> Quantum Engine (Risk Parity)</div>
-                <p>Uses 180 days of historical volatility to calculate target allocations that equalise risk contribution across your assets.</p>
-            </div>
-            <div class="lp-feature-card">
-                <div class="card-title"><span class="feat-icon">&lambda;</span> DCA Distributor</div>
-                <p>Automatically splits your next investment across underweight tokens, taking into account average entry price and yield.</p>
-            </div>
-            <div class="lp-feature-card">
-                <div class="card-title"><span class="feat-icon">&infin;</span> Multi-Token Support</div>
-                <p>Add any token available on CoinGecko or upload your own CSV history. Unlimited tokens with a Pro license.</p>
-            </div>
-            <div class="lp-feature-card">
-                <div class="card-title"><span class="feat-icon">&#10052;</span> Freeze &amp; Edit</div>
-                <p>Freeze positions you don&rsquo;t want to rebalance, edit allocations, APY, and entry prices at any time.</p>
-            </div>
-            <div class="lp-feature-card">
-                <div class="card-title"><span class="feat-icon">&#9670;</span> 100% Private</div>
-                <p>Everything stays in your browser&rsquo;s localStorage. No server, no database, no tracking. GDPR-compliant by design.</p>
-            </div>
-            <div class="lp-feature-card">
-                <div class="card-title"><span class="feat-icon">&#11042;</span> Pro License via NFT</div>
-                <p>Buy a yearly Pro license as a Polygon NFT. Simply enter your wallet address &ndash; no wallet connection required.</p>
-            </div>
+    <section class="lp-features">
+        <div class="lp-feature-card">
+            <div class="card-title"><span class="feat-icon">&Delta;</span> Quantum Engine (Risk Parity)</div>
+            <p>Uses 180 days of historical volatility to calculate target allocations that equalise risk contribution across your assets.</p>
         </div>
+        <div class="lp-feature-card">
+            <div class="card-title"><span class="feat-icon">&lambda;</span> DCA Distributor</div>
+            <p>Automatically splits your next investment across underweight tokens, taking into account average entry price and yield.</p>
+        </div>
+        <div class="lp-feature-card">
+            <div class="card-title"><span class="feat-icon">&infin;</span> Multi-Token Support</div>
+            <p>Add any token available on CoinGecko or upload your own CSV history. Unlimited tokens with a Pro license.</p>
+        </div>
+        <div class="lp-feature-card">
+            <div class="card-title"><span class="feat-icon">&#10052;</span> Freeze &amp; Edit</div>
+            <p>Freeze positions you don&rsquo;t want to rebalance, edit allocations, APY, and entry prices at any time.</p>
+        </div>
+        <div class="lp-feature-card">
+            <div class="card-title"><span class="feat-icon">&#9670;</span> 100% Private</div>
+            <p>Everything stays in your browser&rsquo;s localStorage. No server, no database, no tracking. GDPR-compliant by design.</p>
+        </div>
+        <div class="lp-feature-card">
+            <div class="card-title"><span class="feat-icon">&#11042;</span> Pro License via NFT</div>
+            <p>Buy a yearly Pro license as a Polygon NFT. Simply enter your wallet address &ndash; no wallet connection required.</p>
+        </div>
+    </section>
 
-        <div class="lp-news-col" id="newsRight">
-            <div class="lp-news-title">Market Updates</div>
+    <hr class="lp-section-divider">
+    <div class="lp-section-label">// Plans</div>
+
+    <section class="lp-pricing">
+        <div class="lp-price-card">
+            <div class="lp-price-tier">Free</div>
+            <div class="lp-price-val">$0</div>
+            <ul class="lp-price-features">
+                <li>Up to 4 tokens</li>
+                <li>DCA with manual CSV upload</li>
+                <li>Local data storage</li>
+                <li>Binance price sync</li>
+                <li>Portfolio export/import</li>
+            </ul>
+            <a class="lp-btn-primary" href="#/app" style="width:100%;text-align:center;">Open App</a>
         </div>
-    </div>
+        <div class="lp-price-card pro">
+            <div class="lp-price-tier">Pro &mdash; Coming Soon</div>
+            <div class="lp-price-val">NFT</div>
+            <ul class="lp-price-features">
+                <li>Unlimited tokens</li>
+                <li>Quantum Engine (Risk Parity)</li>
+                <li>Pipeline data sync (auto)</li>
+                <li>180-day historical analysis</li>
+                <li>Volatility & trend filters</li>
+                <li>Priority support</li>
+            </ul>
+            <button class="lp-btn-secondary" onclick="showProModal()" style="width:100%;">Coming Soon</button>
+        </div>
+    </section>
 
     <hr class="lp-section-divider">
 
@@ -1156,37 +1166,6 @@
         <div class="lp-faq-item">
             <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">No sign-up, no database &ndash; how does that work?</div>
             <div class="lp-faq-a">Everything you do stays local. The server exists <strong>only to compute math and return numbers</strong>. There is no user table, no login, no session cookies. GDPR-compliant by design, not as an afterthought. You own your data because it never leaves your machine.</div>
-        </div>
-    </section>
-
-    <hr class="lp-section-divider">
-    <div class="lp-section-label">// Plans</div>
-
-    <section class="lp-pricing">
-        <div class="lp-price-card">
-            <div class="lp-price-tier">Free</div>
-            <div class="lp-price-val">$0</div>
-            <ul class="lp-price-features">
-                <li>Up to 4 tokens</li>
-                <li>DCA with manual CSV upload</li>
-                <li>Local data storage</li>
-                <li>Binance price sync</li>
-                <li>Portfolio export/import</li>
-            </ul>
-            <a class="lp-btn-primary" href="#/app" style="width:100%;text-align:center;">Open App</a>
-        </div>
-        <div class="lp-price-card pro">
-            <div class="lp-price-tier">Pro &mdash; Coming Soon</div>
-            <div class="lp-price-val">NFT</div>
-            <ul class="lp-price-features">
-                <li>Unlimited tokens</li>
-                <li>Quantum Engine (Risk Parity)</li>
-                <li>Pipeline data sync (auto)</li>
-                <li>180-day historical analysis</li>
-                <li>Volatility & trend filters</li>
-                <li>Priority support</li>
-            </ul>
-            <button class="lp-btn-secondary" onclick="showProModal()" style="width:100%;">Coming Soon</button>
         </div>
     </section>
 
