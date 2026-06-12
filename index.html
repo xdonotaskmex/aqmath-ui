@@ -890,6 +890,42 @@
         }
         .lp-pro-close:hover { border-color: var(--text); color: var(--text); }
 
+        /* ===== TOAST NOTIFICATIONS (replaces browser alert) ===== */
+        .toast-overlay {
+            position: fixed; inset: 0; background: rgba(6,8,16,0.85);
+            backdrop-filter: blur(6px); z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .toast-overlay.hidden { display: none; }
+        .toast-box {
+            background: var(--s1); border: 1px solid var(--muted);
+            padding: 36px 44px; border-radius: 4px; text-align: center;
+            max-width: 440px; width: 90%;
+            animation: toastIn 0.2s ease-out;
+        }
+        @keyframes toastIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+        .toast-box.success { border-color: var(--green); }
+        .toast-box.warning { border-color: var(--amber); }
+        .toast-box.error { border-color: var(--red); }
+        .toast-title {
+            font-family: var(--mono); font-size: 0.7rem; letter-spacing: 4px;
+            text-transform: uppercase; margin-bottom: 12px;
+        }
+        .toast-title.success { color: var(--green); }
+        .toast-title.warning { color: var(--amber); }
+        .toast-title.error { color: var(--red); }
+        .toast-msg {
+            font-family: var(--sans); font-size: 0.75rem; color: var(--dim);
+            line-height: 1.7; margin-bottom: 20px; white-space: pre-line;
+        }
+        .toast-close {
+            background: transparent; border: 1px solid var(--muted);
+            color: var(--muted); font-family: var(--mono); font-size: 0.6rem;
+            letter-spacing: 2px; padding: 8px 20px; cursor: pointer;
+            text-transform: uppercase; transition: all 0.2s; border-radius: 2px;
+        }
+        .toast-close:hover { border-color: var(--text); color: var(--text); }
+
         /* ===== MOBILE RESPONSIVE ===== */
         @media (max-width: 1024px) {
             .lp-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -1153,6 +1189,15 @@
         <h3>&#128274; PRO Coming Soon</h3>
         <p>The Pro version with Quantum Engine (Risk Parity), unlimited tokens, and pipeline data sync is currently in development.<br><br>Stay tuned for the NFT-based yearly license on Polygon.</p>
         <button class="lp-pro-close" onclick="hideProModal()">[ Close ]</button>
+    </div>
+</div>
+
+<!-- ============ TOAST NOTIFICATION ============ -->
+<div class="toast-overlay hidden" id="toastOverlay" onclick="hideToast(event)">
+    <div class="toast-box" id="toastBox" onclick="event.stopPropagation()">
+        <div class="toast-title" id="toastTitle"></div>
+        <div class="toast-msg" id="toastMsg"></div>
+        <button class="toast-close" onclick="hideToast()">[ Close ]</button>
     </div>
 </div>
 
@@ -1432,6 +1477,32 @@
 
     function showProModal() { document.getElementById('proModal').classList.remove('hidden'); }
     function hideProModal() { document.getElementById('proModal').classList.add('hidden'); }
+
+    // ============ TOAST NOTIFICATIONS ============
+    let toastTimer = null;
+    function showToast(msg, type) {
+        type = type || 'warning';
+        if (type === 'pro-lock') { showProModal(); return; }
+        const overlay = document.getElementById('toastOverlay');
+        const box = document.getElementById('toastBox');
+        const title = document.getElementById('toastTitle');
+        const msgEl = document.getElementById('toastMsg');
+        box.className = 'toast-box ' + type;
+        title.className = 'toast-title ' + type;
+        title.textContent = type === 'error' ? 'ERROR' : type === 'success' ? 'DONE' : 'NOTICE';
+        msgEl.textContent = msg;
+        overlay.classList.remove('hidden');
+        if (toastTimer) clearTimeout(toastTimer);
+        if (type === 'success' || type === 'warning') {
+            toastTimer = setTimeout(hideToast, 3500);
+        }
+    }
+    function hideToast(e) {
+        if (e && e.target !== document.getElementById('toastOverlay')) return;
+        document.getElementById('toastOverlay').classList.add('hidden');
+        if (toastTimer) { clearTimeout(toastTimer); toastTimer = null; }
+    }
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') hideToast(); });
 
     // ============ RSS NEWS FEEDS ============
     async function loadNewsFeeds() {
@@ -1946,7 +2017,7 @@
     }
 
     async function osvjeziSveCijene() {
-        if (portfolio.length === 0) return alert('No positions.');
+        if (portfolio.length === 0) return showToast('No positions.', 'warning');
         const btn = document.getElementById('btnSyncAll');
         const originalText = btn.textContent;
         btn.textContent = "[ SYNC... ]";
@@ -1970,7 +2041,7 @@
             });
             render();
             console.log(`Updated ${cnt} prices from Binance (client IP).`);
-        } catch(e) { alert("Sync error: " + e.message); }
+        } catch(e) { showToast('Sync error: ' + e.message, 'error'); }
         finally {
             btn.textContent = originalText;
             btn.disabled = true;
@@ -2058,7 +2129,7 @@
                 });
             }
             if (!isPro && portfolio.length + newPortfolio.length > 4) {
-                alert('Free version allows max 4 tokens. Get a Pro license.');
+                showToast('Free version allows max 4 tokens.', 'pro-lock');
                 hideLoading();
                 event.target.value = '';
                 return;
@@ -2079,8 +2150,8 @@
             render();
             let msg = `Successfully imported ${newPortfolio.length} tokens.`;
             if (skipped.length > 0) msg += `\nSkipped: ${skipped.join(', ')}`;
-            alert(msg);
-        } catch(e) { alert('CSV import error: ' + e.message); }
+            showToast(msg, 'success');
+        } catch(e) { showToast('CSV import error: ' + e.message, 'error'); }
         finally { hideLoading(); event.target.value = ''; }
     }
 
@@ -2162,14 +2233,14 @@
 
     async function refreshAllHistory() {
         const tokens = activeTokens();
-        if (tokens.length === 0) return alert('No active tokens.');
+        if (tokens.length === 0) return showToast('No active tokens.', 'warning');
         showLoading('REFRESHING HISTORY', 'Fetching 180-day data for all tokens...');
         for (const token of tokens) {
             await fetchPrices(token.sym, true);
             await sleep(2000);
         }
         hideLoading();
-        alert('History refreshed. Quantum Engine is ready.');
+        showToast('History refreshed.', 'success');
     }
 
     // ============ QUANTITATIVE HELPERS (VOLATILITY, CAP, TREND) ============
@@ -2227,7 +2298,7 @@
 
     async function dodajToken() {
         const input = document.getElementById('iSym').value.trim();
-        if (!input) return alert('Enter a symbol or name.');
+        if (!input) return showToast('Enter a symbol or name.', 'warning');
         const sym = input.toUpperCase();
 
         const amount = parseFloat(document.getElementById('iAmt').value);
@@ -2235,8 +2306,8 @@
         const entryInput = parseFloat(document.getElementById('iEntry').value);
         const apy = parseFloat(document.getElementById('iApy').value) || 0;
         const target = parseFloat(document.getElementById('iTarget').value);
-        if (isNaN(amount) || amount <= 0) return alert('Quantity must be > 0.');
-        if (isNaN(target) || target <= 0) return alert('Allocation > 0%.');
+        if (isNaN(amount) || amount <= 0) return showToast('Quantity must be > 0.', 'warning');
+        if (isNaN(target) || target <= 0) return showToast('Allocation must be > 0%.', 'warning');
 
         const coinId = sym.toLowerCase();  // use sym as coinId
         const btn = document.getElementById('btnAdd');
@@ -2248,7 +2319,7 @@
                 const text = await csvFile.text();
                 const prices = parseHistoryCSV(text);
                 if (prices.length === 0) {
-                    alert('CSV file contains no valid prices.');
+                    showToast('CSV contains no valid prices.', 'error');
                     editMode = null;
                     resetForme();
                     btn.textContent = '[ Load ]';
@@ -2256,13 +2327,13 @@
                     return;
                 }
                 localStorage.setItem(`aq_history_${sym}`, JSON.stringify({ prices, timestamp: Date.now(), source: 'csv' }));
-                alert(`✅ Historical data loaded from CSV: ${prices.length} data points saved for ${sym}.`);
+                showToast(`Historical data loaded from CSV: ${prices.length} data points saved for ${sym}.`, 'success');
             }
 
             if (isNaN(price) || price <= 0) {
                 const apiPrice = await dohvatiCijenu(sym);
                 if (!apiPrice) {
-                    alert(`Price for ${sym} not found on Binance or CoinGecko.\n\nPlease enter the current price manually in the Price field.`);
+                    showToast(`Price for ${sym} not found on Binance or CoinGecko.\n\nPlease enter the current price manually in the Price field.`, 'error');
                     editMode = null;
                     resetForme();
                     btn.textContent = '[ Load ]';
@@ -2291,7 +2362,7 @@
                 }
             } else {
                 if (!isPro && portfolio.filter(t => !t.frozen).length >= 4) {
-                    alert('Free version allows max 4 tokens. Get a Pro license.');
+                    showToast('Free version allows max 4 tokens.', 'pro-lock');
                     editMode = null;
                     resetForme();
                     btn.textContent = '[ Load ]';
@@ -2303,7 +2374,7 @@
             resetForme();
             render();
         } catch(e) {
-            alert(e.message);
+            showToast(e.message, 'error');
             editMode = null;
             resetForme();
         }
@@ -2345,12 +2416,12 @@
     // ============ DCA DISTRIBUTION (BACKEND API) ============
     async function distribuirajDca() {
         if (Math.abs(totalTarget() - 100) > 0.01) {
-            return alert('DCA is locked until total target allocation equals 100%.');
+            return showToast('DCA is locked until total target allocation equals 100%.', 'warning');
         }
         const dcaAmount = parseFloat(document.getElementById('iDcaAmount').value);
-        if (isNaN(dcaAmount) || dcaAmount <= 0) return alert('Enter an amount > 0.');
+        if (isNaN(dcaAmount) || dcaAmount <= 0) return showToast('Enter an amount > 0.', 'warning');
         const active = activeTokens();
-        if (active.length === 0) return alert('No active tokens.');
+        if (active.length === 0) return showToast('No active tokens.', 'warning');
 
         showLoading('REBALANCING', 'Calculating optimal DCA distribution...');
 
@@ -2374,7 +2445,7 @@
             });
             if (!resp.ok) {
                 hideLoading();
-                return alert('DCA service error (HTTP ' + resp.status + '). Please try again later.');
+                return showToast('DCA service error (HTTP ' + resp.status + '). Please try again later.', 'error');
             }
             const result = await resp.json();
 
@@ -2384,7 +2455,7 @@
             if (result.error) {
                 hideLoading();
                 console.error('DCA API returned error:', result.error);
-                return alert(result.error);
+                return showToast(result.error, 'error');
             }
 
             const updated = result.updated_positions || [];
@@ -2440,11 +2511,11 @@
             }
             if (warnings.length > 0) msg += '\n' + warnings.join('\n');
 
-            alert(msg);
+            showToast(msg, 'success');
             if (confirm('DCA complete. Export updated JSON portfolio?')) exportJSON();
         } catch(e) {
             hideLoading();
-            alert('DCA API error: ' + e.message + '\n\nMake sure the dca-engine service is running at: ' + DCA_API_URL);
+            showToast('DCA API error: ' + e.message + '\n\nMake sure the dca-engine service is running at: ' + DCA_API_URL, 'error');
         }
     }
 
@@ -2454,7 +2525,7 @@
         return;
         /* PRO-ONLY: Dead code until Pro tier is activated
         const unfrozen = portfolio.filter(t => !t.frozen);
-        if (unfrozen.length < 2) return alert('Need at least 2 unfrozen tokens.');
+        if (unfrozen.length < 2) return showToast('Need at least 2 unfrozen tokens.', 'warning');
 
         showLoading('AQMath Quantum Engine', 'Running 180-day Risk Parity optimization...');
 
@@ -2473,18 +2544,18 @@
 
             if (result.error) {
                 hideLoading();
-                return alert(result.error);
+                return showToast(result.error, 'error');
             }
 
             if (result.missing && result.missing.length > 0) {
                 hideLoading();
-                return alert(`Missing historical data for: ${result.missing.join(', ')}.\n\nPlease ensure the data collectors have run for these tokens.`);
+                return showToast(`Missing historical data for: ${result.missing.join(', ')}.\n\nPlease ensure the data collectors have run for these tokens.`, 'error');
             }
 
             const allocations = result.allocations || {};
             if (Object.keys(allocations).length === 0) {
                 hideLoading();
-                return alert('Optimization returned no allocations.');
+                return showToast('Optimization returned no allocations.', 'error');
             }
 
             unfrozen.forEach(t => {
@@ -2512,10 +2583,10 @@
             if (youngTokens.length > 0) msg += `\n\u26a0\ufe0f Tokens with limited history (<180 days): ${youngTokens.join(', ')}.\nResults for these may be less reliable.`;
             if (result.skipped_tokens && result.skipped_tokens.length > 0) msg += `\n\nSkipped: ${result.skipped_tokens.join(', ')}.`;
             if (result.warnings && result.warnings.length > 0) msg += `\n\n` + result.warnings.join('\n');
-            alert(msg);
+            showToast(msg, 'success');
         } catch(e) {
             hideLoading();
-            alert('Quantum Engine API error: ' + e.message + '\n\nMake sure the aqmath-engine service is running at: ' + API_URL);
+            showToast('Quantum Engine API error: ' + e.message + '\n\nMake sure the aqmath-engine service is running at: ' + API_URL, 'error');
         }
         */
     }
@@ -2565,11 +2636,11 @@
                     saveHistory();
                     render();
                     renderHistoryChart();
-                    alert(`Portfolio imported (${portfolio.length} tokens).`);
+                    showToast(`Portfolio imported (${portfolio.length} tokens).`, 'success');
                 } else {
-                    alert('Invalid JSON file.');
+                    showToast('Invalid JSON file.', 'error');
                 }
-            } catch(err) { alert('Error: ' + err.message); }
+            } catch(err) { showToast('Error: ' + err.message, 'error'); }
         };
         reader.readAsText(file);
         event.target.value = '';
