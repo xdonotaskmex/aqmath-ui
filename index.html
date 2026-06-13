@@ -914,7 +914,45 @@
         .lp-community a:hover { color: var(--text); }
 
         /* ===== LANDING – TICKER ===== */
-        .lp-ticker { border: 1px solid var(--border); background: var(--s2); border-radius: 4px; backdrop-filter: blur(6px); }
+        .lp-ticker {
+            display: block;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: var(--s2);
+            border-radius: 4px;
+            backdrop-filter: blur(6px);
+            padding: 0;
+            position: relative;
+        }
+        .lp-ticker::before,
+        .lp-ticker::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 70px;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .lp-ticker::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
+        .lp-ticker::after { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
+        .lp-ticker-track {
+            display: flex;
+            width: max-content;
+            gap: 18px;
+            padding: 12px 18px;
+            animation: tickerScroll 34s linear infinite;
+        }
+        .lp-ticker:hover .lp-ticker-track { animation-play-state: paused; }
+        @keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .lp-ticker-item {
+            min-width: 128px;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border: 1px solid rgba(56,189,248,0.1);
+            background: rgba(0,0,0,0.24);
+            border-radius: 2px;
+        }
 
         /* ===== LANDING – MATH NOTE ===== */
         .lp-math-box { max-width: 100%; margin: 0; border-radius: 4px; background: var(--s2); backdrop-filter: blur(6px); }
@@ -925,6 +963,32 @@
             line-height: 1.8;
         }
         .lp-math-note strong { color: var(--blue); font-weight: 500; }
+        .lp-math-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .lp-math-metric {
+            border: 1px solid rgba(56,189,248,0.1);
+            background: rgba(0,0,0,0.24);
+            border-radius: 2px;
+            padding: 12px;
+        }
+        .lp-math-metric .metric-label {
+            font-family: var(--mono);
+            font-size: 0.5rem;
+            color: var(--muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .lp-math-metric .metric-copy {
+            font-family: var(--sans);
+            font-size: 0.68rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
 
         /* ===== LANDING – FREE VS PRO ===== */
         .lp-plan-grid,
@@ -961,7 +1025,22 @@
         }
         .lp-market-grid .lp-news-col { display: contents; }
         .lp-market-grid .lp-news-title { display: none; }
-        .lp-market-grid .lp-news-item { min-height: 132px; border-left: 2px solid var(--blue); }
+        .lp-market-grid .lp-news-item {
+            min-height: 96px;
+            border-left: 2px solid var(--blue);
+            padding: 14px 16px;
+        }
+        .lp-market-grid .lp-widget-value { font-size: 1.05rem; }
+        .lp-market-grid .lp-widget-title { margin-bottom: 6px; }
+        .lp-widget-meta {
+            margin-top: 8px;
+            padding-top: 7px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            font-family: var(--mono);
+            font-size: 0.48rem;
+            color: var(--dim);
+            letter-spacing: 1px;
+        }
 
         /* ===== LANDING – QUICK CHARTS ===== */
         .lp-charts-grid {
@@ -993,7 +1072,8 @@
             .lp-plan-grid,
             .lp-pricing,
             .lp-market-grid,
-            .lp-charts-grid { grid-template-columns: 1fr; }
+            .lp-charts-grid,
+            .lp-math-grid { grid-template-columns: 1fr; }
             .lp-ticker { flex-wrap: wrap; gap: 14px; }
         }
 
@@ -1177,9 +1257,14 @@
     <div class="lp-content">
         <section class="lp-section compact">
             <div class="lp-ticker" id="priceTicker">
-                <div class="lp-ticker-item"><span class="lp-ticker-sym">BTC</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
-                <div class="lp-ticker-item"><span class="lp-ticker-sym">ETH</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
-                <div class="lp-ticker-item"><span class="lp-ticker-sym">SOL</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
+                <div class="lp-ticker-track">
+                    <div class="lp-ticker-item"><span class="lp-ticker-sym">BTC</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
+                    <div class="lp-ticker-item"><span class="lp-ticker-sym">ETH</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
+                    <div class="lp-ticker-item"><span class="lp-ticker-sym">SOL</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
+                    <div class="lp-ticker-item"><span class="lp-ticker-sym">BNB</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
+                    <div class="lp-ticker-item"><span class="lp-ticker-sym">XRP</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
+                    <div class="lp-ticker-item"><span class="lp-ticker-sym">AVAX</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
+                </div>
             </div>
         </section>
 
@@ -1188,7 +1273,21 @@
         <section class="lp-section">
             <div class="lp-math-box lp-card">
                 <div class="card-title">// Mathematical Core</div>
-                <p class="lp-math-note">AQMath calculations run <strong>client-side</strong> with local portfolio data, combining <strong>Risk Parity</strong>, <strong>KKT</strong> projection, <strong>volatility</strong>-based allocation caps, full <strong>Covariance</strong>, and <strong>Variance Matrix</strong> analysis for privacy-preserving portfolio risk control.</p>
+                <p class="lp-math-note">AQMath calculations run <strong>client-side</strong> with local portfolio data, combining <strong>Risk Parity</strong>, <strong>KKT</strong> projection, <strong>volatility</strong>-based allocation caps, full <strong>Covariance</strong>, and <strong>Variance Matrix</strong> analysis for privacy-preserving portfolio risk control. The engine treats volatility as a constraint, not decoration: high-variance assets receive smaller dynamic caps, correlated assets are penalized through covariance, and underweight assets are prioritized only when they improve the risk-balanced structure.</p>
+                <div class="lp-math-grid">
+                    <div class="lp-math-metric">
+                        <div class="metric-label">Risk Model</div>
+                        <div class="metric-copy">Full covariance matrix estimates how assets move together, then Risk Parity targets equalized risk contribution.</div>
+                    </div>
+                    <div class="lp-math-metric">
+                        <div class="metric-label">Optimization</div>
+                        <div class="metric-copy">KKT-style projection keeps allocations inside volatility caps and prevents oversized high-risk positions.</div>
+                    </div>
+                    <div class="lp-math-metric">
+                        <div class="metric-label">Privacy</div>
+                        <div class="metric-copy">Portfolio amounts stay in local browser storage; server calls receive only symbols needed for market data.</div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -1518,92 +1617,6 @@
             <div style="font-size:0.55rem;color:var(--muted);margin-top:6px;">Automatically updated after DCA distribution.</div>
         </div>
 
-        <!-- ★ LIVE MARKETS — Always-On TradingView Dashboard -->
-        <div class="card">
-            <div class="card-title">// Live Markets</div>
-            <div class="terminal-dashboard">
-                <!-- BTC/USDT -->
-                <div class="terminal-chart-tile">
-                    <div class="tile-title">// BTC/USDT<span class="tile-subtitle">1W</span></div>
-                    <div class="tradingview-widget-container">
-                        <div class="tradingview-widget-container__widget"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-                        {
-                            "symbol": "BINANCE:BTCUSDT",
-                            "width": "100%",
-                            "height": 170,
-                            "locale": "en",
-                            "dateRange": "7d",
-                            "colorTheme": "dark",
-                            "isTransparent": true,
-                            "autosize": true,
-                            "largeChartUrl": ""
-                        }
-                        </script>
-                    </div>
-                </div>
-                <!-- ETH/USDT -->
-                <div class="terminal-chart-tile">
-                    <div class="tile-title">// ETH/USDT<span class="tile-subtitle">1W</span></div>
-                    <div class="tradingview-widget-container">
-                        <div class="tradingview-widget-container__widget"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-                        {
-                            "symbol": "BINANCE:ETHUSDT",
-                            "width": "100%",
-                            "height": 170,
-                            "locale": "en",
-                            "dateRange": "7d",
-                            "colorTheme": "dark",
-                            "isTransparent": true,
-                            "autosize": true,
-                            "largeChartUrl": ""
-                        }
-                        </script>
-                    </div>
-                </div>
-                <!-- SOL/USDT -->
-                <div class="terminal-chart-tile">
-                    <div class="tile-title">// SOL/USDT<span class="tile-subtitle">1W</span></div>
-                    <div class="tradingview-widget-container">
-                        <div class="tradingview-widget-container__widget"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-                        {
-                            "symbol": "BINANCE:SOLUSDT",
-                            "width": "100%",
-                            "height": 170,
-                            "locale": "en",
-                            "dateRange": "7d",
-                            "colorTheme": "dark",
-                            "isTransparent": true,
-                            "autosize": true,
-                            "largeChartUrl": ""
-                        }
-                        </script>
-                    </div>
-                </div>
-                <!-- BNB/USDT -->
-                <div class="terminal-chart-tile">
-                    <div class="tile-title">// BNB/USDT<span class="tile-subtitle">1W</span></div>
-                    <div class="tradingview-widget-container">
-                        <div class="tradingview-widget-container__widget"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-                        {
-                            "symbol": "BINANCE:BNBUSDT",
-                            "width": "100%",
-                            "height": 170,
-                            "locale": "en",
-                            "dateRange": "7d",
-                            "colorTheme": "dark",
-                            "isTransparent": true,
-                            "autosize": true,
-                            "largeChartUrl": ""
-                        }
-                        </script>
-                    </div>
-                </div>
-            </div>
-        </div>
     </main>
 </div>
 
@@ -1775,7 +1788,8 @@
                 else if (v >= 60) color = 'var(--red)';
                 body.innerHTML = `
                     <span class="lp-widget-value" style="color:${color}">${v}</span>
-                    <div class="lp-widget-label">${cls}</div>`;
+                    <div class="lp-widget-label">${cls}</div>
+                    <div class="lp-widget-meta">sentiment index · updates every 10m</div>`;
             } catch(e) {
                 body.innerHTML = '<span style="color:var(--dim);font-size:0.5rem;">unavailable</span>';
             }
@@ -1799,9 +1813,11 @@
                 await fetchCoingeckoGlobal();
                 if (coingeckoCache && coingeckoCache.market_cap_percentage && coingeckoCache.market_cap_percentage.btc) {
                     const btc = coingeckoCache.market_cap_percentage.btc.toFixed(1);
+                    const eth = coingeckoCache.market_cap_percentage.eth ? coingeckoCache.market_cap_percentage.eth.toFixed(1) : '--';
                     body.innerHTML = `
                         <span class="lp-widget-value" style="color:var(--blue)">${btc}%</span>
-                        <div class="lp-widget-label">of total crypto market</div>`;
+                        <div class="lp-widget-label">BTC share of total crypto market</div>
+                        <div class="lp-widget-meta">ETH DOM ${eth}% · source CoinGecko</div>`;
                 }
             } catch(e) {
                 body.innerHTML = '<span style="color:var(--dim);font-size:0.5rem;">unavailable</span>';
@@ -1931,7 +1947,8 @@
                     const mcap = coingeckoCache.total_market_cap.usd;
                     body.innerHTML = `
                         <span class="lp-widget-value" style="color:var(--green)">${fmt(mcap)}</span>
-                        <div class="lp-widget-label">global crypto market</div>`;
+                        <div class="lp-widget-label">global crypto market cap</div>
+                        <div class="lp-widget-meta">updates every 10m · source CoinGecko</div>`;
                 }
             } catch(e) {
                 body.innerHTML = '<span style="color:var(--dim);font-size:0.5rem;">unavailable</span>';
@@ -1962,7 +1979,8 @@
                 <span class="lp-widget-dot green"></span>
                 <span class="sys-label">Data</span>
                 <span class="sys-val">180 days</span>
-            </div>`;
+            </div>
+            <div class="lp-widget-meta">DCA free · Risk Parity Pro · local portfolio</div>`;
         card.appendChild(body);
         col.appendChild(card);
     }
@@ -1973,27 +1991,31 @@
         if (!ticker || ticker.dataset.loaded === 'true') return;
         ticker.dataset.loaded = 'true';
 
-        const symbols = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT'];
-        const names = ['BTC', 'ETH', 'SOL'];
+        const pairs = [
+            ['BTCUSDT', 'BTC'], ['ETHUSDT', 'ETH'], ['SOLUSDT', 'SOL'], ['BNBUSDT', 'BNB'],
+            ['XRPUSDT', 'XRP'], ['AVAXUSDT', 'AVAX'], ['LINKUSDT', 'LINK'], ['DOGEUSDT', 'DOGE']
+        ];
+        const symbols = pairs.map(p => p[0]);
+        const names = Object.fromEntries(pairs);
 
         async function refresh() {
             try {
                 const r = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=' + JSON.stringify(symbols));
                 const data = await r.json();
-                let html = '';
-                data.forEach((t, i) => {
+                const items = data.map(t => {
+                    const sym = names[t.symbol] || t.symbol.replace('USDT', '');
                     const price = parseFloat(t.lastPrice);
                     const change = parseFloat(t.priceChangePercent);
                     const cls = change >= 0 ? 'up' : 'down';
                     const sign = change >= 0 ? '+' : '';
                     const priceStr = price >= 100 ? price.toFixed(0) : price >= 1 ? price.toFixed(2) : price.toFixed(4);
-                    html += `<div class="lp-ticker-item">
-                        <span class="lp-ticker-sym">${names[i]}</span>
+                    return `<div class="lp-ticker-item">
+                        <span class="lp-ticker-sym">${sym}</span>
                         <span class="lp-ticker-price">$${priceStr}</span>
                         <span class="lp-ticker-change ${cls}">${sign}${change.toFixed(2)}%</span>
                     </div>`;
-                });
-                ticker.innerHTML = html;
+                }).join('');
+                ticker.innerHTML = `<div class="lp-ticker-track">${items}${items}</div>`;
             } catch(e) {
                 console.log('Ticker error:', e);
             }
