@@ -863,6 +863,139 @@
             color: var(--muted); line-height: 1.7;
             position: relative; z-index: 1;
         }
+        .lp-disclaimer a { color: var(--blue); text-decoration: none; }
+        .lp-disclaimer a:hover { color: var(--text); }
+
+        /* ===== LANDING – APP-UNIFIED LAYOUT ===== */
+        .lp-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 32px 56px;
+            position: relative;
+            z-index: 1;
+        }
+        .lp-section { padding: 42px 0; }
+        .lp-section.compact { padding: 28px 0; }
+        .lp-section-label { padding: 0 0 18px; text-align: left; }
+        .lp-section-divider { margin: 0 auto; max-width: 1400px; }
+        .lp-card,
+        .lp-feature-card,
+        .lp-price-card,
+        .lp-news-item,
+        .lp-faq-item,
+        .terminal-chart-tile {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            backdrop-filter: blur(6px);
+            box-shadow: none;
+        }
+        .lp-feature-card,
+        .lp-price-card,
+        .lp-news-item,
+        .terminal-chart-tile,
+        .lp-card { padding: 20px 22px; }
+        .lp-feature-card:hover,
+        .lp-price-card:hover,
+        .lp-news-item:hover,
+        .terminal-chart-tile:hover { border-color: var(--borderB); background: var(--s2); transform: none; }
+
+        /* ===== LANDING – HERO ===== */
+        .lp-hero { padding: 72px 32px 42px; }
+        .lp-hero p { max-width: 760px; }
+        .lp-community {
+            margin-top: 16px;
+            font-family: var(--mono);
+            font-size: 0.58rem;
+            letter-spacing: 1px;
+            color: var(--muted);
+        }
+        .lp-community a { color: var(--blue); text-decoration: none; }
+        .lp-community a:hover { color: var(--text); }
+
+        /* ===== LANDING – TICKER ===== */
+        .lp-ticker { border: 1px solid var(--border); background: var(--s2); border-radius: 4px; backdrop-filter: blur(6px); }
+
+        /* ===== LANDING – MATH NOTE ===== */
+        .lp-math-box { max-width: 100%; margin: 0; border-radius: 4px; background: var(--s2); backdrop-filter: blur(6px); }
+        .lp-math-note {
+            font-family: var(--sans);
+            font-size: 0.78rem;
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .lp-math-note strong { color: var(--blue); font-weight: 500; }
+
+        /* ===== LANDING – FREE VS PRO ===== */
+        .lp-plan-grid,
+        .lp-pricing { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: none; padding: 0; }
+        .lp-plan-card.free { border-top: 3px solid var(--green); }
+        .lp-plan-card.pro,
+        .lp-price-card.pro { border-top: 3px solid var(--amber); border-color: var(--border); }
+        .lp-plan-title { font-size: 0.68rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; }
+        .lp-plan-card.free .lp-plan-title { color: var(--green); }
+        .lp-plan-card.pro .lp-plan-title { color: var(--amber); }
+        .lp-feature-list { list-style: none; margin: 0 0 22px; padding: 0; }
+        .lp-feature-list li {
+            font-family: var(--sans);
+            font-size: 0.72rem;
+            color: var(--text);
+            line-height: 1.7;
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .lp-feature-list li::before { content: "✓ "; font-family: var(--mono); font-weight: 600; }
+        .lp-plan-card.free .lp-feature-list li::before { color: var(--green); }
+        .lp-plan-card.pro .lp-feature-list li::before { color: var(--amber); }
+
+        /* ===== LANDING – WHY AQMATH ===== */
+        .lp-why { max-width: none; padding: 0; }
+        .lp-why h3 { margin-bottom: 14px; }
+        .lp-why-card { padding: 22px; }
+
+        /* ===== LANDING – LIVE MARKETS ===== */
+        .lp-market-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+        }
+        .lp-market-grid .lp-news-col { display: contents; }
+        .lp-market-grid .lp-news-title { display: none; }
+        .lp-market-grid .lp-news-item { min-height: 132px; border-left: 2px solid var(--blue); }
+
+        /* ===== LANDING – QUICK CHARTS ===== */
+        .lp-charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+        .lp-chart-alt {
+            font-size: 0.48rem;
+            color: var(--dim);
+            letter-spacing: 1px;
+            margin-top: 6px;
+        }
+        .lp-tv-frame {
+            width: 100%;
+            height: 260px;
+            border: 0;
+            border-radius: 2px;
+            background: rgba(0,0,0,0.2);
+        }
+
+        /* ===== LANDING – RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .lp-market-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 768px) {
+            .lp-content { padding: 0 16px 36px; }
+            .lp-section { padding: 32px 0; }
+            .lp-plan-grid,
+            .lp-pricing,
+            .lp-market-grid,
+            .lp-charts-grid { grid-template-columns: 1fr; }
+            .lp-ticker { flex-wrap: wrap; gap: 14px; }
+        }
 
         .lp-pro-modal {
             position: fixed; inset: 0; background: rgba(6,8,16,0.92);
@@ -1025,175 +1158,184 @@
         <div class="lp-nav-links">
             <a class="lp-nav-link active" href="#/">Home</a>
             <a class="lp-nav-link" href="#/app">Open App</a>
+            <a class="lp-nav-link" href="https://x.com/aqmathapp" target="_blank" rel="noopener">[ X ]</a>
+            <a class="lp-nav-link" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">[ TG ]</a>
         </div>
     </nav>
 
     <section class="lp-hero">
         <h1>AQMath</h1>
         <h2>Quantitative Portfolio Rebalancing. No Server. No Tracking. Just Math.</h2>
-        <p>AQMath is a mathematical tool for passive crypto investors who want to maintain an optimal portfolio without giving away their data. It combines Risk Parity optimisation, DCA distribution, and real-time price feeds &ndash; all running directly in your browser. No backend, no sign-up, no personal data ever leaves your machine.</p>
-        <div class="lp-math-box">
-            <div class="lp-math-title">Core Engine</div>
-            <div class="lp-math-item"><span class="lp-math-sym">&Delta;</span> Risk Parity &mdash; Equal risk contribution across all assets via full covariance matrix</div>
-            <div class="lp-math-item"><span class="lp-math-sym">&nabla;</span> Karush&ndash;Kuhn&ndash;Tucker (KKT) &mdash; Projected gradient optimization for portfolio weights</div>
-            <div class="lp-math-item"><span class="lp-math-sym">&lambda;</span> DCA Allocation &mdash; Weighted by historical volatility with APY self-sustainability filter</div>
-        </div>
+        <p>AQMath combines <strong>Risk Parity</strong> with full <strong>Covariance</strong> &amp; <strong>Variance Matrix</strong> analysis for long-term crypto allocation, DCA execution, and volatility-aware portfolio control &ndash; directly in your browser.</p>
         <div class="lp-cta-group">
             <a class="lp-btn-primary" href="#/app">Try Free &mdash; No Registration</a>
-            <button class="lp-btn-secondary" onclick="showProModal()">Pro &mdash; Coming Soon</button>
+            <button class="lp-btn-secondary" onclick="showProModal()">Get Pro &mdash; Coming Soon</button>
         </div>
+        <div class="lp-community">Join the community: <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">&#128038; @aqmathapp</a> <span style="color:var(--dim);">|</span> <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">&#9992;&#65039; t.me/DoNotAskMex</a></div>
     </section>
 
-    <div class="lp-section-label">// Market Overview</div>
-    <div class="lp-ticker" id="priceTicker">
-        <div class="lp-ticker-item"><span class="lp-ticker-sym">BTC</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
-        <div class="lp-ticker-item"><span class="lp-ticker-sym">ETH</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
-        <div class="lp-ticker-item"><span class="lp-ticker-sym">SOL</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
+    <div class="lp-content">
+        <section class="lp-section compact">
+            <div class="lp-ticker" id="priceTicker">
+                <div class="lp-ticker-item"><span class="lp-ticker-sym">BTC</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
+                <div class="lp-ticker-item"><span class="lp-ticker-sym">ETH</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
+                <div class="lp-ticker-item"><span class="lp-ticker-sym">SOL</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div>
+            </div>
+        </section>
+
+        <hr class="lp-section-divider">
+
+        <section class="lp-section">
+            <div class="lp-math-box lp-card">
+                <div class="card-title">// Mathematical Core</div>
+                <p class="lp-math-note">AQMath calculations run <strong>client-side</strong> with local portfolio data, combining <strong>Risk Parity</strong>, <strong>KKT</strong> projection, <strong>volatility</strong>-based allocation caps, full <strong>Covariance</strong>, and <strong>Variance Matrix</strong> analysis for privacy-preserving portfolio risk control.</p>
+            </div>
+        </section>
+
+        <hr class="lp-section-divider">
+
+        <section class="lp-section">
+            <div class="lp-section-label">// FREE vs PRO</div>
+            <div class="lp-plan-grid">
+                <div class="lp-card lp-plan-card free">
+                    <div class="lp-plan-title">FREE</div>
+                    <ul class="lp-feature-list">
+                        <li>Up to 4 tokens for manual portfolio tracking</li>
+                        <li>DCA distribution with manual CSV history upload</li>
+                        <li>Binance price sync for supported symbols</li>
+                        <li>Portfolio export/import with client-side local storage</li>
+                        <li>No sign-up, no wallet connect, no server-stored portfolio</li>
+                    </ul>
+                    <a class="lp-btn-primary" href="#/app" style="width:100%;text-align:center;">Open App</a>
+                </div>
+                <div class="lp-card lp-plan-card pro">
+                    <div class="lp-plan-title">PRO</div>
+                    <ul class="lp-feature-list">
+                        <li>Risk Parity optimization with full Covariance &amp; Variance Matrix</li>
+                        <li>Dynamic volatility-based allocation caps</li>
+                        <li>Automatic 180-day historical data pipeline</li>
+                        <li>Unlimited token support and portfolio optimization</li>
+                        <li>Client-side privacy preserved &ndash; no server stores your portfolio</li>
+                    </ul>
+                    <button class="lp-btn-secondary" onclick="showProModal()" style="width:100%;">Get Pro</button>
+                </div>
+            </div>
+        </section>
+
+        <hr class="lp-section-divider">
+
+        <section class="lp-section lp-why">
+            <div class="lp-card lp-why-card">
+                <h3>Why AQMath?</h3>
+                <p>Traditional portfolio tools ask you to connect wallets, create accounts, or upload sensitive data. AQMath flips that model: portfolio inputs remain in <strong>client-side local storage</strong>, while the interface brings institutional-style math to a private browser workflow.</p>
+                <p>It is built for passive crypto investors who want transparent Risk Parity logic, practical DCA execution, and a dashboard-style experience without surrendering personal portfolio data.</p>
+            </div>
+        </section>
+
+        <hr class="lp-section-divider">
+
+        <section class="lp-section">
+            <div class="lp-section-label">// LIVE MARKETS</div>
+            <div class="lp-market-grid" id="marketWidgets">
+                <div class="lp-news-col" id="newsLeft"></div>
+                <div class="lp-news-col" id="newsRight"></div>
+            </div>
+        </section>
+
+        <hr class="lp-section-divider">
+
+        <section class="lp-section">
+            <div class="lp-section-label">// QUICK CHARTS</div>
+            <div class="lp-charts-grid">
+                <div class="terminal-chart-tile" aria-label="BTC volatility chart Risk Parity">
+                    <div class="tile-title">// BTC/USDT<span class="tile-subtitle">7D</span></div>
+                    <div class="tradingview-widget-container" title="BTC volatility chart Risk Parity">
+                        <iframe class="lp-tv-frame" title="BTC volatility chart Risk Parity" src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3ABTCUSDT&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=0&toolbarbg=000000&studies=[]&theme=dark&style=1&timezone=Etc%2FUTC&withdateranges=1&hideideas=1" loading="lazy"></iframe>
+                    </div>
+                    <div class="lp-chart-alt">BTC volatility chart Risk Parity</div>
+                </div>
+                <div class="terminal-chart-tile" aria-label="ETH covariance chart Variance Matrix">
+                    <div class="tile-title">// ETH/USDT<span class="tile-subtitle">7D</span></div>
+                    <div class="tradingview-widget-container" title="ETH covariance chart Variance Matrix">
+                        <iframe class="lp-tv-frame" title="ETH covariance chart Variance Matrix" src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AETHUSDT&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=0&toolbarbg=000000&studies=[]&theme=dark&style=1&timezone=Etc%2FUTC&withdateranges=1&hideideas=1" loading="lazy"></iframe>
+                    </div>
+                    <div class="lp-chart-alt">ETH covariance chart Variance Matrix</div>
+                </div>
+                <div class="terminal-chart-tile" aria-label="SOL volatility chart Risk Parity">
+                    <div class="tile-title">// SOL/USDT<span class="tile-subtitle">7D</span></div>
+                    <div class="tradingview-widget-container" title="SOL volatility chart Risk Parity">
+                        <iframe class="lp-tv-frame" title="SOL volatility chart Risk Parity" src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3ASOLUSDT&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=0&toolbarbg=000000&studies=[]&theme=dark&style=1&timezone=Etc%2FUTC&withdateranges=1&hideideas=1" loading="lazy"></iframe>
+                    </div>
+                    <div class="lp-chart-alt">SOL volatility chart Risk Parity</div>
+                </div>
+                <div class="terminal-chart-tile" aria-label="BNB allocation chart KKT optimization">
+                    <div class="tile-title">// BNB/USDT<span class="tile-subtitle">7D</span></div>
+                    <div class="tradingview-widget-container" title="BNB allocation chart KKT optimization">
+                        <iframe class="lp-tv-frame" title="BNB allocation chart KKT optimization" src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3ABNBUSDT&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=0&toolbarbg=000000&studies=[]&theme=dark&style=1&timezone=Etc%2FUTC&withdateranges=1&hideideas=1" loading="lazy"></iframe>
+                    </div>
+                    <div class="lp-chart-alt">BNB allocation chart KKT optimization</div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="lp-section-divider">
+
+        <section class="lp-section">
+            <div class="lp-section-label">// Pricing</div>
+            <div class="lp-pricing">
+                <div class="lp-price-card">
+                    <div class="lp-price-tier">Free</div>
+                    <div class="lp-price-val">$0</div>
+                    <ul class="lp-price-features">
+                        <li>Manual portfolio workflow</li>
+                        <li>DCA with CSV support</li>
+                        <li>Local browser storage</li>
+                        <li>Export/import backup</li>
+                    </ul>
+                    <a class="lp-btn-primary" href="#/app" style="width:100%;text-align:center;">Open App</a>
+                </div>
+                <div class="lp-price-card pro">
+                    <div class="lp-price-tier">Pro &mdash; Coming Soon</div>
+                    <div class="lp-price-val">NFT</div>
+                    <ul class="lp-price-features">
+                        <li>Risk Parity Quantum Engine</li>
+                        <li>180-day automated historical data</li>
+                        <li>Volatility, covariance, and KKT controls</li>
+                        <li>Unlimited token optimization</li>
+                    </ul>
+                    <button class="lp-btn-secondary" onclick="showProModal()" style="width:100%;">Coming Soon</button>
+                </div>
+            </div>
+        </section>
+
+        <hr class="lp-section-divider">
+
+        <section class="lp-section lp-faq">
+            <h3>// Frequently Asked Questions</h3>
+            <div class="lp-faq-item">
+                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">How does the engine calculate risk?</div>
+                <div class="lp-faq-a">The Pro engine uses a <strong>Variance Matrix</strong>, asset <strong>Covariance</strong>, volatility estimates, and KKT-style projection to calculate Risk Parity allocations where each asset contributes a controlled share of portfolio risk.</div>
+            </div>
+            <div class="lp-faq-item">
+                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">How is AQMath actually private?</div>
+                <div class="lp-faq-a">Your portfolio amounts, entry prices, and allocation choices remain in your browser. AQMath uses client-side local storage and does not collect personal data or store your portfolio on a server.</div>
+            </div>
+            <div class="lp-faq-item">
+                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">Is the free tier a real tool or just a demo?</div>
+                <div class="lp-faq-a">The free version is fully functional for manual portfolio tracking, CSV-based historical prices, DCA distribution, and browser-local export/import. Pro adds automated historical data and full Risk Parity optimization.</div>
+            </div>
+            <div class="lp-faq-item">
+                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">Why are market widgets separated from features?</div>
+                <div class="lp-faq-a">Live markets are informational context: ticker data, Fear &amp; Greed, BTC dominance, movers, and exchange status. They support decision-making but are intentionally separate from the product feature story.</div>
+            </div>
+        </section>
     </div>
-
-    <div class="lp-grid">
-        <div class="lp-news-col" id="newsLeft">
-            <div class="lp-news-title">Crypto News</div>
-        </div>
-
-        <div class="lp-features">
-            <div class="lp-feature-card">
-                <div class="card-title"><span class="feat-icon">&Delta;</span> Quantum Engine (Risk Parity)</div>
-                <p>Uses 180 days of historical volatility to calculate target allocations that equalise risk contribution across your assets.</p>
-            </div>
-            <div class="lp-feature-card">
-                <div class="card-title"><span class="feat-icon">&lambda;</span> DCA Distributor</div>
-                <p>Automatically splits your next investment across underweight tokens, taking into account average entry price and yield.</p>
-            </div>
-            <div class="lp-feature-card">
-                <div class="card-title"><span class="feat-icon">&infin;</span> Multi-Token Support</div>
-                <p>Add any token available on CoinGecko or upload your own CSV history. Unlimited tokens with a Pro license.</p>
-            </div>
-            <div class="lp-feature-card">
-                <div class="card-title"><span class="feat-icon">&#10052;</span> Freeze &amp; Edit</div>
-                <p>Freeze positions you don&rsquo;t want to rebalance, edit allocations, APY, and entry prices at any time.</p>
-            </div>
-            <div class="lp-feature-card">
-                <div class="card-title"><span class="feat-icon">&#9670;</span> 100% Private</div>
-                <p>Everything stays in your browser&rsquo;s localStorage. No server, no database, no tracking. GDPR-compliant by design.</p>
-            </div>
-            <div class="lp-feature-card">
-                <div class="card-title"><span class="feat-icon">&#11042;</span> Pro License via NFT</div>
-                <p>Buy a yearly Pro license as a Polygon NFT. Simply enter your wallet address &ndash; no wallet connection required.</p>
-            </div>
-        </div>
-
-        <div class="lp-news-col" id="newsRight">
-            <div class="lp-news-title">Market Updates</div>
-        </div>
-    </div>
-
-    <hr class="lp-section-divider">
-    <div class="lp-section-label">// Plans</div>
-
-    <section class="lp-pricing">
-        <div class="lp-price-card">
-            <div class="lp-price-tier">Free</div>
-            <div class="lp-price-val">$0</div>
-            <ul class="lp-price-features">
-                <li>Up to 4 tokens</li>
-                <li>DCA with manual CSV upload</li>
-                <li>Local data storage</li>
-                <li>Binance price sync</li>
-                <li>Portfolio export/import</li>
-            </ul>
-            <a class="lp-btn-primary" href="#/app" style="width:100%;text-align:center;">Open App</a>
-        </div>
-        <div class="lp-price-card pro">
-            <div class="lp-price-tier">Pro &mdash; Coming Soon</div>
-            <div class="lp-price-val">NFT</div>
-            <ul class="lp-price-features">
-                <li>Unlimited tokens</li>
-                <li>Quantum Engine (Risk Parity)</li>
-                <li>Pipeline data sync (auto)</li>
-                <li>180-day historical analysis</li>
-                <li>Volatility & trend filters</li>
-                <li>Priority support</li>
-            </ul>
-            <button class="lp-btn-secondary" onclick="showProModal()" style="width:100%;">Coming Soon</button>
-        </div>
-    </section>
-
-    <hr class="lp-section-divider">
-
-    <section class="lp-why">
-        <h3>Why AQMath?</h3>
-        <p>Traditional portfolio tools either require you to connect your wallet or upload sensitive data to the cloud. AQMath flips that model: the data stays with you, the mathematics comes to you.</p>
-        <p>It&rsquo;s built for investors who value privacy and want institutional-grade risk management without the complexity or cost.</p>
-    </section>
-
-    <hr class="lp-section-divider">
-
-    <section class="lp-faq">
-        <h3>// Frequently Asked Questions</h3>
-
-        <div class="lp-faq-item">
-            <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">How is AQMath actually private?</div>
-            <div class="lp-faq-a">Most tools claim privacy but still send your data to a server. AQMath is different by architecture: your portfolio (amounts, values, entry prices) <strong>never leaves your browser</strong>. The engine receives only token symbols &ndash; it has no idea how much of anything you hold. Everything is stored in localStorage. No accounts, no cookies, no tracking.</div>
-        </div>
-
-        <div class="lp-faq-item">
-            <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">What makes the math institutional-grade?</div>
-            <div class="lp-faq-a">This is not a fixed-percentage calculator. AQMath uses:
-                <ul>
-                    <li><strong>Risk Parity</strong> with full covariance matrix &ndash; not simple equal-weight</li>
-                    <li><strong>Projected Gradient Descent</strong> &ndash; the same algorithm class used by hedge funds</li>
-                    <li><strong>Iterative KKT projection</strong> &ndash; guarantees no token exceeds its volatility limit</li>
-                    <li><strong>Dynamic max weights</strong> derived from volatility &ndash; more volatile tokens get smaller caps</li>
-                </ul>
-                This is a production mathematical engine, not an Excel spreadsheet.
-            </div>
-        </div>
-
-        <div class="lp-faq-item">
-            <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">Why are the Engine and DCA separated?</div>
-            <div class="lp-faq-a">Other tools merge optimization and execution into one function. AQMath keeps them completely independent: the <strong>Engine calculates optimal targets</strong> (Risk Parity strategy), while the <strong>DCA executes purchases</strong> with safety filters (volatility, trend, self-sustainability). Neither depends on the other &ndash; each can be improved independently.</div>
-        </div>
-
-        <div class="lp-faq-item">
-            <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">What is the APY self-sustainability filter?</div>
-            <div class="lp-faq-a">Tokens with high staking yield (APY &ge; 10%) are marked as self-sustaining. This information flows into the DCA engine as a safety factor &mdash; higher yield means lower historical volatility risk. Unlike simple skip-logic found elsewhere, AQMath integrates APY into the mathematical weight calculation:
-                <ul>
-                    <li>Yield-bearing tokens still receive DCA if underweight</li>
-                    <li>Their self-sustaining status adjusts volatility weighting</li>
-                    <li>The Engine periodically rebalances the entire portfolio</li>
-                </ul>
-                Nobody else has this &ldquo;yield farming&rdquo; logic built into DCA.
-            </div>
-        </div>
-
-        <div class="lp-faq-item">
-            <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">Why a microservice architecture?</div>
-            <div class="lp-faq-a">AQMath is split into <strong>6 independent services</strong>: Collectors &rarr; Pipeline &rarr; Database &rarr; Engine / DCA &rarr; UI. Each has its own repository, responsibility, and deployment. This enables scaling, easy maintenance, and future NFT-gated protection &ndash; unlike monolithic projects that are hard to extend.</div>
-        </div>
-
-        <div class="lp-faq-item">
-            <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">Is the free tier a real tool or just a demo?</div>
-            <div class="lp-faq-a">The free version is <strong>fully functional</strong>, not a trial. It includes:
-                <ul>
-                    <li>Manual CSV upload for historical prices</li>
-                    <li>Direct Binance SYNC for live prices</li>
-                    <li>Full DCA distribution via Railway engine</li>
-                    <li>Up to 4 tokens</li>
-                </ul>
-                Pro adds the Quantum Engine and automation &ndash; but the free tier is a complete, usable tool on its own.
-            </div>
-        </div>
-
-        <div class="lp-faq-item">
-            <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">No sign-up, no database &ndash; how does that work?</div>
-            <div class="lp-faq-a">Everything you do stays local. The server exists <strong>only to compute math and return numbers</strong>. There is no user table, no login, no session cookies. GDPR-compliant by design, not as an afterthought. You own your data because it never leaves your machine.</div>
-        </div>
-    </section>
 
     <div class="lp-disclaimer">
         AQMath does not provide financial advice. All calculations are based on historical data and mathematical models.<br>
-        &copy; 2026 AQMath &mdash; Serverless. Private. Open Source.
+        All calculations are performed client-side; no personal data is collected.<br>
+        &copy; 2026 AQMath &mdash; Serverless. Private. Open Source.<br>
+        Follow: <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">X (Twitter)</a> &middot; <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">Telegram</a>
     </div>
 </div>
 
@@ -1484,7 +1626,6 @@
         } else {
             document.body.classList.remove('route-app');
             document.body.classList.add('route-landing');
-            loadNewsFeeds();
             loadAllWidgets();
         }
     }
@@ -1862,6 +2003,9 @@
     }
 
     function loadAllWidgets() {
+        const marketWidgets = document.getElementById('marketWidgets');
+        if (marketWidgets && marketWidgets.dataset.loaded === 'true') return;
+        if (marketWidgets) marketWidgets.dataset.loaded = 'true';
         loadPriceTicker();
         loadFearGreed();
         loadBTCDominance();
