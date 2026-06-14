@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AQMath — Quantitative Crypto Portfolio Rebalancer | Risk Parity</title>
-    <meta name="description" content="AQMath uses Risk Parity mathematics for long-term crypto portfolio allocation. Serverless, private, no data collected. Free tier available. Get your Pro NFT license.">
+    <meta name="description" content="AQMath uses Risk Parity mathematics for long-term crypto portfolio allocation. Serverless, private, no data collected. Free tier available. Annual Pro license (NFT-backed access key).">
     <meta name="keywords" content="crypto portfolio, risk parity, DCA, dollar cost averaging, portfolio rebalancer, quantitative finance, serverless, privacy, DeFi, Bitcoin, Ethereum">
     <meta name="author" content="AQMath">
     <meta name="robots" content="index, follow">
@@ -800,6 +800,14 @@
         .lp-price-val {
             font-size: 2rem; font-weight: 600; color: var(--green); margin-bottom: 16px;
         }
+        .lp-price-note {
+            font-family: var(--mono);
+            font-size: 0.6rem;
+            color: var(--muted);
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
         .lp-price-card.pro .lp-price-val { color: var(--amber); }
         .lp-price-features {
             list-style: none; text-align: left; margin-bottom: 24px;
@@ -1436,7 +1444,8 @@
                 </div>
                 <div class="lp-price-card pro">
                     <div class="lp-price-tier">Pro &mdash; Coming Soon</div>
-                    <div class="lp-price-val">NFT</div>
+                    <div class="lp-price-val">ANNUAL LICENSE</div>
+                    <div class="lp-price-note">Minted as a time-bound NFT. Valid for 1 year.</div>
                     <ul class="lp-price-features">
                         <li>Risk Parity Quantum Engine</li>
                         <li>180-day automated historical data</li>
@@ -1483,7 +1492,7 @@
 <div class="lp-pro-modal hidden" id="proModal">
     <div class="lp-pro-box">
         <h3>&#128274; PRO Coming Soon</h3>
-        <p>The Pro version with Quantum Engine (Risk Parity), unlimited tokens, and pipeline data sync is currently in development.<br><br>Stay tuned for the NFT-based yearly license on Polygon.</p>
+        <p>The Pro version with Quantum Engine (Risk Parity), unlimited tokens, and pipeline data sync is currently in development.<br><br>Stay tuned for the annual license on Polygon (minted as an NFT access key).</p>
         <button class="lp-pro-close" onclick="hideProModal()">[ Close ]</button>
     </div>
 </div>
