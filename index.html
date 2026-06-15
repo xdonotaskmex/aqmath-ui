@@ -846,18 +846,25 @@
         .lp-what-grid {
             display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;
         }
-        .lp-what-grid > div {
-            padding: 16px; background: var(--s1); border: 1px solid var(--border);
-            border-left: 2px solid var(--green); border-radius: 2px;
+        .lp-what-grid > .lp-card {
+            padding: 22px 22px 24px;
+            border-left: 2px solid var(--green);
+            background: var(--s2);
         }
-        .lp-what-item-title {
-            font-family: var(--mono); font-size: 0.9rem; letter-spacing: 3px;
-            color: var(--green); text-transform: uppercase; margin-bottom: 8px;
-            font-weight: 600;
+        .lp-what-grid .card-title {
+            font-family: var(--mono); font-size: 0.78rem; letter-spacing: 3px;
+            color: var(--blue); text-transform: uppercase;
+            margin-bottom: 14px; padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
         }
         .lp-what-grid p {
-            font-family: var(--sans); font-size: 0.86rem; color: var(--text);
+            font-family: var(--sans); font-size: 0.82rem; color: var(--text);
             line-height: 1.7;
+        }
+        .lp-what-grid .lp-whw-sym {
+            font-family: var(--mono); font-size: 1.4rem; color: var(--amber);
+            display: block; margin-bottom: 10px; line-height: 1;
+            letter-spacing: 2px;
         }
 
         .lp-faq {
@@ -1272,8 +1279,9 @@
             .lp-what-card h3 { font-size: 0.85rem; letter-spacing: 3px; }
             .lp-what-lead { font-size: 0.88rem; }
             .lp-what-grid { grid-template-columns: 1fr; gap: 12px; }
-            .lp-what-item-title { font-size: 0.78rem; }
+            .lp-what-grid > .lp-card { padding: 18px; }
             .lp-what-grid p { font-size: 0.78rem; }
+            .lp-what-grid .lp-whw-sym { font-size: 1.2rem; }
 
             .lp-faq { padding: 32px 16px; }
             .lp-faq h3 { font-size: 0.85rem; letter-spacing: 3px; }
@@ -1410,20 +1418,33 @@
 
         <section class="lp-section lp-what">
             <div class="lp-card lp-what-card">
-                <h3>What is AQMath?</h3>
-                <p class="lp-what-lead">AQMath is a private, client-side crypto portfolio rebalancer.</p>
+                <h3>What is AQMath, How It Works &amp; Why</h3>
+                <p class="lp-what-lead">A privacy-first quantitative rebalancer for passive crypto investors.</p>
                 <div class="lp-what-grid">
-                    <div>
-                        <div class="lp-what-item-title">Track</div>
-                        <p>You add your tokens and amounts. Nothing leaves your browser.</p>
+                    <div class="lp-card">
+                        <span class="lp-whw-sym">&delta;</span>
+                        <div class="card-title" style="color:var(--blue);">// WHAT</div>
+                        <p>AQMath is a quantitative portfolio rebalancer built for passive crypto investors.<br><br>
+                        It combines institutional-grade mathematics &mdash; Risk Parity, Karush-Kuhn-Tucker (KKT) optimization, and volatility-weighted Dollar-Cost Averaging &mdash; to keep your portfolio balanced without emotion, guesswork, or centralized data collection.<br><br>
+                        Your portfolio never leaves your browser. No accounts. No tracking. Just math.</p>
                     </div>
-                    <div>
-                        <div class="lp-what-item-title">Rebalance</div>
-                        <p>DCA engine distributes fresh capital to underweight tokens based on target %.</p>
+                    <div class="lp-card">
+                        <span class="lp-whw-sym">&lambda;</span>
+                        <div class="card-title" style="color:var(--blue);">// HOW</div>
+                        <p>1. Add your tokens and target allocations (or let the engine calculate them using 180-day historical volatility).<br><br>
+                        2. Click SYNC to get live prices from Binance &mdash; directly from your IP, no server involved.<br><br>
+                        3. Use DCA Distribution to invest new capital only into underweight tokens, filtered by volatility and trend.<br><br>
+                        4. (Pro) Run the Quantum Engine to re-compute optimal weights using full covariance matrix and KKT projection.</p>
                     </div>
-                    <div>
-                        <div class="lp-what-item-title">Optimize (Pro)</div>
-                        <p>Risk Parity engine uses 180 days of price history to equalize each asset's contribution to portfolio volatility.</p>
+                    <div class="lp-card">
+                        <span class="lp-whw-sym">&#9670;</span>
+                        <div class="card-title" style="color:var(--blue);">// WHY</div>
+                        <p>Most portfolio tools either collect your data or offer only basic rebalancing. AQMath is different:<br><br>
+                        &rarr; Institutional-grade math (same concepts used by multi-billion funds)<br>
+                        &rarr; 100% client-side &mdash; your portfolio stays in your browser&rsquo;s localStorage<br>
+                        &rarr; Transparent, auditable logic (no black boxes)<br>
+                        &rarr; Fair annual licensing &mdash; minted on Polygon as a time-bound NFT access key<br><br>
+                        No server ever sees your balances. No exchange API keys required. No data to sell.</p>
                     </div>
                 </div>
             </div>
