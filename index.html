@@ -1041,27 +1041,17 @@
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 14px;
             max-width: 100%;
-            text-align: left;
         }
         .lp-math-rules li {
             font-family: var(--sans);
             font-size: 0.82rem;
             color: var(--text);
             line-height: 1.65;
-            padding: 10px 12px 10px 18px;
-            position: relative;
+            padding: 10px 14px;
             background: rgba(0,0,0,0.18);
-            border-left: 2px solid var(--blue);
+            border: 1px solid rgba(56,189,248,0.1);
             border-radius: 2px;
-        }
-        .lp-math-rules li::before {
-            content: '\2192';
-            color: var(--blue);
-            font-family: var(--mono);
-            position: absolute;
-            left: 4px;
-            top: 10px;
-            font-size: 0.85rem;
+            text-align: center;
         }
         .lp-math-rules li strong { color: var(--text); font-weight: 600; }
         .lp-math-grid {
@@ -1126,10 +1116,11 @@
 
         /* ===== LANDING – FREE VS PRO ===== */
         .lp-plan-grid,
-        .lp-pricing { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: none; padding: 0; }
-        .lp-plan-card.free { border-top: 3px solid var(--green); }
+        .lp-pricing { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: none; padding: 0; align-items: stretch; }
+        .lp-plan-card.free { border-top: 3px solid var(--green); display: flex; flex-direction: column; height: 100%; }
         .lp-plan-card.pro,
         .lp-price-card.pro { border-top: 3px solid var(--amber); border-color: var(--border); }
+        .lp-plan-card.pro { display: flex; flex-direction: column; height: 100%; }
         .lp-plan-title { font-size: 0.68rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; }
         .lp-plan-price {
             font-family: var(--mono);
@@ -1172,7 +1163,7 @@
         }
         .lp-plan-card.free .lp-plan-title { color: var(--green); }
         .lp-plan-card.pro .lp-plan-title { color: var(--amber); }
-        .lp-feature-list { list-style: none; margin: 0 0 22px; padding: 0; }
+        .lp-feature-list { list-style: none; margin: 0 0 22px; padding: 0; flex: 1; }
         .lp-feature-list li {
             font-family: var(--sans);
             font-size: 0.72rem;
@@ -1229,7 +1220,7 @@
         .lp-widget-sub {
             font-family: var(--mono);
             font-size: 0.66rem;
-            color: var(--muted);
+            color: var(--text);
             letter-spacing: 1px;
             line-height: 1.45;
         }
@@ -1239,7 +1230,7 @@
             border-top: 1px solid rgba(255,255,255,0.05);
             font-family: var(--mono);
             font-size: 0.64rem;
-            color: var(--muted);
+            color: var(--text);
             letter-spacing: 1px;
         }
 
@@ -1279,7 +1270,7 @@
             .lp-math-box { padding: 18px 18px 22px; }
             .lp-math-heading { font-size: 0.92rem; }
             .lp-math-lead { font-size: 0.8rem; }
-            .lp-math-rules li { font-size: 0.78rem; padding: 8px 10px 8px 16px; }
+            .lp-math-rules li { font-size: 0.78rem; padding: 8px 12px; }
             .lp-math-metric { padding: 18px 14px 20px; }
             .lp-math-metric .mc-sym { font-size: 1.4rem; }
             .lp-math-metric .metric-label { font-size: 0.7rem; }
