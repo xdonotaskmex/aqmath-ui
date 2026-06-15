@@ -1011,31 +1011,37 @@
         }
 
         /* ===== LANDING – MATH NOTE ===== */
-        .lp-math-box { max-width: 100%; margin: 0; border-radius: 4px; background: var(--s2); backdrop-filter: blur(6px); padding: 28px 32px 32px; }
+        .lp-math-box { max-width: 100%; margin: 0; border-radius: 4px; background: var(--s2); backdrop-filter: blur(6px); padding: 36px 32px 36px; text-align: center; }
+        .lp-math-box .card-title { text-align: left; }
         .lp-math-heading {
             font-family: var(--sans);
-            font-size: 1.05rem;
+            font-size: 1.15rem;
             font-weight: 500;
             color: var(--text);
-            margin-bottom: 10px;
+            margin: 12px 0 10px;
             letter-spacing: 0.5px;
+            text-align: center;
         }
         .lp-math-lead {
             font-family: var(--sans);
-            font-size: 0.9rem;
+            font-size: 0.92rem;
             color: var(--muted);
             line-height: 1.75;
-            margin-bottom: 14px;
+            margin: 0 auto 18px;
+            max-width: 720px;
+            text-align: center;
         }
         .lp-math-lead strong { color: var(--blue); font-weight: 500; }
         .lp-math-rules {
             list-style: none;
-            margin: 0 0 8px 0;
+            margin: 0 auto 8px;
             padding: 14px 0 0;
             border-top: 1px solid var(--border);
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 14px;
+            max-width: 100%;
+            text-align: left;
         }
         .lp-math-rules li {
             font-family: var(--sans);
@@ -1062,47 +1068,60 @@
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 14px;
-            margin-top: 22px;
+            margin-top: 26px;
         }
         .lp-math-metric {
             border: 1px solid rgba(56,189,248,0.14);
-            border-left: 2px solid var(--green);
+            border-top: 2px solid var(--green);
             background: rgba(0,0,0,0.24);
             border-radius: 2px;
-            padding: 18px 18px 20px;
+            padding: 22px 20px 24px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            align-items: center;
+            gap: 4px;
+            text-align: center;
+        }
+        .lp-math-metric .mc-head {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            margin-bottom: 6px;
         }
         .lp-math-metric .mc-sym {
             font-family: var(--mono);
-            font-size: 1.4rem;
+            font-size: 1.8rem;
             color: var(--amber);
             line-height: 1;
             letter-spacing: 2px;
+            font-weight: 500;
         }
         .lp-math-metric .mc-num {
             font-family: var(--mono);
-            font-size: 0.62rem;
+            font-size: 0.55rem;
             color: var(--muted);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
         }
         .lp-math-metric .metric-label {
             font-family: var(--mono);
-            font-size: 0.76rem;
+            font-size: 0.72rem;
             color: var(--blue);
             letter-spacing: 3px;
             text-transform: uppercase;
-            margin: 6px 0 8px;
-            padding-bottom: 8px;
+            margin: 10px 0 10px;
+            padding-bottom: 10px;
             border-bottom: 1px solid var(--border);
+            width: 100%;
             font-weight: 500;
+            text-align: center;
         }
         .lp-math-metric .metric-copy {
             font-family: var(--sans);
-            font-size: 0.86rem;
+            font-size: 0.84rem;
             color: var(--text);
             line-height: 1.7;
+            text-align: center;
         }
 
         /* ===== LANDING – FREE VS PRO ===== */
@@ -1258,11 +1277,11 @@
             .lp-math-grid,
             .lp-math-rules { grid-template-columns: 1fr; }
             .lp-math-box { padding: 18px 18px 22px; }
-            .lp-math-heading { font-size: 0.9rem; }
-            .lp-math-lead { font-size: 0.82rem; }
+            .lp-math-heading { font-size: 0.92rem; }
+            .lp-math-lead { font-size: 0.8rem; }
             .lp-math-rules li { font-size: 0.78rem; padding: 8px 10px 8px 16px; }
-            .lp-math-metric { padding: 14px; }
-            .lp-math-metric .mc-sym { font-size: 1.2rem; }
+            .lp-math-metric { padding: 18px 14px 20px; }
+            .lp-math-metric .mc-sym { font-size: 1.4rem; }
             .lp-math-metric .metric-label { font-size: 0.7rem; }
             .lp-ticker { flex-wrap: wrap; gap: 14px; }
         }
@@ -1481,20 +1500,17 @@
                 </ul>
                 <div class="lp-math-grid">
                     <div class="lp-math-metric">
-                        <span class="mc-sym">&Sigma;</span>
-                        <span class="mc-num">01</span>
+                        <div class="mc-head"><span class="mc-sym">&Sigma;</span><span class="mc-num">01</span></div>
                         <div class="metric-label">// Risk Model</div>
                         <div class="metric-copy">The covariance matrix estimates how assets move together. Risk Parity then targets equal risk contribution &mdash; so no single token dominates your volatility.</div>
                     </div>
                     <div class="lp-math-metric">
-                        <span class="mc-sym">&Pi;</span>
-                        <span class="mc-num">02</span>
+                        <div class="mc-head"><span class="mc-sym">&Pi;</span><span class="mc-num">02</span></div>
                         <div class="metric-label">// Optimization</div>
                         <div class="metric-copy">KKT projection keeps allocations inside volatility caps and prevents oversized high-risk positions. Think of it as a mathematical governor that won&rsquo;t let the engine over-leverage.</div>
                     </div>
                     <div class="lp-math-metric">
-                        <span class="mc-sym">&#9672;</span>
-                        <span class="mc-num">03</span>
+                        <div class="mc-head"><span class="mc-sym">&#9672;</span><span class="mc-num">03</span></div>
                         <div class="metric-label">// Privacy</div>
                         <div class="metric-copy">Amounts, targets, and allocation weights stay in your browser&rsquo;s localStorage. The only data that leaves your device is the list of token symbols needed to fetch prices.</div>
                     </div>
