@@ -1511,6 +1511,7 @@
             display: flex; gap: 10px; justify-content: center; margin-top: 16px;
         }
         .toast-actions.hidden { display: none; }
+        .toast-close.hidden { display: none; }
         .toast-action-btn {
             background: var(--s2); border: 1px solid var(--border);
             color: var(--text); font-family: var(--mono); font-size: 0.65rem;
@@ -2026,15 +2027,16 @@
         const title = document.getElementById('toastTitle');
         const msgEl = document.getElementById('toastMsg');
         const actionsEl = document.getElementById('toastActions');
+        const closeBtn = document.getElementById('toastClose');
         box.className = 'toast-box ' + type;
         title.className = 'toast-title ' + type;
         title.textContent = type === 'error' ? 'error' : type === 'success' ? 'done' : 'notice';
         msgEl.textContent = msg;
-        // Render action buttons if provided
         actionsEl.innerHTML = '';
         overlay.classList.remove('hidden');
         if (actions && actions.length > 0) {
             actionsEl.classList.remove('hidden');
+            closeBtn.classList.add('hidden');
             actions.forEach(a => {
                 const btn = document.createElement('button');
                 btn.className = 'toast-action-btn' + (a.primary ? ' primary' : '');
@@ -2045,11 +2047,11 @@
                 };
                 actionsEl.appendChild(btn);
             });
-            // Don't auto-hide when actions are present
             if (toastTimer) clearTimeout(toastTimer);
             toastTimer = setTimeout(hideToast, 12000);
         } else {
             actionsEl.classList.add('hidden');
+            closeBtn.classList.remove('hidden');
             if (toastTimer) clearTimeout(toastTimer);
             if (type === 'success' || type === 'warning') {
                 toastTimer = setTimeout(hideToast, 3500);
@@ -3004,26 +3006,36 @@
     }
 
     function obrisiToken(sym) {
-        if (!confirm(`Delete ${sym}?`)) return;
-        portfolio = portfolio.filter(t => t.sym !== sym);
-        if (editMode === sym) resetForme();
-        render();
+        showToast(`delete ${sym}?`, 'warning', [
+            { label: '[ yes ]', primary: true, onClick: () => {
+                portfolio = portfolio.filter(t => t.sym !== sym);
+                if (editMode === sym) resetForme();
+                render();
+                saveState();
+                showToast(`${sym} removed.`, 'success');
+            }},
+            { label: '[ no ]', onClick: () => {} }
+        ]);
     }
 
     function obrisiSve() {
-        if (confirm('Delete entire portfolio?')) {
-            portfolio = [];
-            lastDcaDate = null;
-            lastOptimization = null;
-            localStorage.removeItem(DCA_KEY);
-            localStorage.removeItem(OPT_KEY);
-            localStorage.removeItem(HISTORY_KEY);
-            portfolioHistory = [];
-            saveHistory();
-            resetForme();
-            render();
-            renderHistoryChart();
-        }
+        showToast('delete entire portfolio?', 'warning', [
+            { label: '[ yes ]', primary: true, onClick: () => {
+                portfolio = [];
+                lastDcaDate = null;
+                lastOptimization = null;
+                localStorage.removeItem(DCA_KEY);
+                localStorage.removeItem(OPT_KEY);
+                localStorage.removeItem(HISTORY_KEY);
+                portfolioHistory = [];
+                saveHistory();
+                resetForme();
+                render();
+                renderHistoryChart();
+                showToast('portfolio cleared.', 'success');
+            }},
+            { label: '[ no ]', onClick: () => {} }
+        ]);
     }
 
     // ============ DCA DISTRIBUTION (BACKEND API) ============
@@ -3117,10 +3129,38 @@
                 }
             }
 
+            // Filter out dust buys (under $0.05) and aggregate per token
             if (buySummary.length > 0) {
-                msg += `buys:\n` + buySummary.join('\n') + '\n';
+                const significantBuys = buySummary.filter(b => {
+                    const match = b.match(/\+\$([\d.]+)/);
+                    return match && parseFloat(match[1]) >= 0.05;
+                });
+                if (significantBuys.length > 0) {
+                    msg += `buys:\n` + significantBuys.join('\n') + '\n';
+                }
+                const dustCount = buySummary.length - significantBuys.length;
+                if (dustCount > 0) {
+                    msg += `+ ${dustCount} dust entries filtered (< $0.05)\n`;
+                }
             }
-            if (warnings.length > 0) msg += '\n' + warnings.join('\n');
+
+            // Consolidate warnings: one per token, keep the highest avg cost
+            if (warnings.length > 0) {
+                const tokenWarnings = {};
+                warnings.forEach(w => {
+                    const m = w.match(/^(⚠️?\s*)(\w+):\s*Buying above avg cost \(\$([\d.]+)\)/);
+                    if (m) {
+                        const sym = m[2];
+                        const cost = parseFloat(m[3]);
+                        if (!tokenWarnings[sym] || cost > tokenWarnings[sym]) {
+                            tokenWarnings[sym] = cost;
+                        }
+                    }
+                });
+                const consolidatedWarnings = Object.entries(tokenWarnings)
+                    .map(([sym, cost]) => `warning: ${sym} buying above avg cost ($${cost.toFixed(6)}), raises average.`);
+                msg += '\n' + consolidatedWarnings.join('\n');
+            }
 
             showToast(msg, 'success', [
                 { label: '[ export json ]', primary: true, onClick: () => exportJSON() }
