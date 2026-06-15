@@ -443,7 +443,7 @@
         .terminal-chart-tile {
             background: rgba(11,15,26,0.95);
             border: 1px solid rgba(56,189,248,0.18);
-            padding: 14px 16px 8px;
+            padding: 12px 14px 6px;
             border-radius: 2px;
             box-shadow: inset 0 0 8px rgba(56,189,248,0.06), 0 0 12px rgba(0,0,0,0.5);
             transition: border-color 0.2s;
@@ -453,7 +453,7 @@
         }
         .tile-title {
             font-family: 'IBM Plex Mono', monospace;
-            font-size: 0.55rem;
+            font-size: 0.52rem;
             letter-spacing: 2px;
             color: #38bdf8;
             text-transform: uppercase;
@@ -1112,6 +1112,45 @@
         .lp-plan-card.pro,
         .lp-price-card.pro { border-top: 3px solid var(--amber); border-color: var(--border); }
         .lp-plan-title { font-size: 0.68rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; }
+        .lp-plan-price {
+            font-family: var(--mono);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--green);
+            margin-bottom: 4px;
+            letter-spacing: -1px;
+            text-align: center;
+        }
+        .lp-plan-price.pro { color: var(--amber); font-size: 1.3rem; letter-spacing: 2px; }
+        .lp-plan-subtitle {
+            font-family: var(--sans);
+            font-size: 0.72rem;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        .lp-plan-subtitle .lp-plan-note {
+            display: block;
+            font-family: var(--mono);
+            font-size: 0.6rem;
+            color: var(--muted);
+            letter-spacing: 1px;
+            margin-top: 6px;
+        }
+        .lp-plan-badge {
+            display: inline-block;
+            font-family: var(--mono);
+            font-size: 0.58rem;
+            letter-spacing: 2px;
+            color: var(--amber);
+            border: 1px solid var(--amber);
+            border-radius: 2px;
+            padding: 3px 8px;
+            margin-left: 8px;
+            vertical-align: middle;
+            text-transform: uppercase;
+        }
         .lp-plan-card.free .lp-plan-title { color: var(--green); }
         .lp-plan-card.pro .lp-plan-title { color: var(--amber); }
         .lp-feature-list { list-style: none; margin: 0 0 22px; padding: 0; }
@@ -1199,7 +1238,7 @@
         }
         .lp-tv-frame {
             width: 100%;
-            height: 260px;
+            height: 200px;
             border: 0;
             border-radius: 2px;
             background: rgba(0,0,0,0.2);
@@ -1470,6 +1509,8 @@
             <div class="lp-plan-grid">
                 <div class="lp-card lp-plan-card free">
                     <div class="lp-plan-title">FREE</div>
+                    <div class="lp-plan-price">$0</div>
+                    <div class="lp-plan-subtitle">No account. No wallet. Just math.</div>
                     <ul class="lp-feature-list">
                         <li>Up to 4 tokens for manual portfolio tracking</li>
                         <li>DCA distribution with manual CSV history upload</li>
@@ -1480,7 +1521,9 @@
                     <a class="lp-btn-primary" href="#/app" style="width:100%;text-align:center;">Open App</a>
                 </div>
                 <div class="lp-card lp-plan-card pro">
-                    <div class="lp-plan-title">PRO</div>
+                    <div class="lp-plan-title">PRO <span class="lp-plan-badge">Coming Soon</span></div>
+                    <div class="lp-plan-price pro">ANNUAL LICENSE</div>
+                    <div class="lp-plan-subtitle">Minted as a time-bound NFT. Valid for 1 year.</div>
                     <ul class="lp-feature-list">
                         <li>Risk Parity optimization with full Covariance &amp; Variance Matrix</li>
                         <li>Dynamic volatility-based allocation caps</li>
@@ -1488,7 +1531,7 @@
                         <li>Unlimited token support and portfolio optimization</li>
                         <li>Client-side privacy preserved &ndash; no server stores your portfolio</li>
                     </ul>
-                    <button class="lp-btn-secondary" onclick="showProModal()" style="width:100%;">Get Pro</button>
+                    <button class="lp-btn-secondary" onclick="showProModal()" style="width:100%;">Notify Me at Launch</button>
                 </div>
             </div>
         </section>
@@ -1574,39 +1617,6 @@
                 </div>
             </div>
         </section>
-
-        <hr class="lp-section-divider">
-
-        <section class="lp-section">
-            <div class="lp-section-label">// Pricing</div>
-            <div class="lp-pricing">
-                <div class="lp-price-card">
-                    <div class="lp-price-tier">Free</div>
-                    <div class="lp-price-val">$0</div>
-                    <ul class="lp-price-features">
-                        <li>Manual portfolio workflow</li>
-                        <li>DCA with CSV support</li>
-                        <li>Local browser storage</li>
-                        <li>Export/import backup</li>
-                    </ul>
-                    <a class="lp-btn-primary" href="#/app" style="width:100%;text-align:center;">Open App</a>
-                </div>
-                <div class="lp-price-card pro">
-                    <div class="lp-price-tier">Pro &mdash; Coming Soon</div>
-                    <div class="lp-price-val">ANNUAL LICENSE</div>
-                    <div class="lp-price-note">Minted as a time-bound NFT. Valid for 1 year.</div>
-                    <ul class="lp-price-features">
-                        <li>Risk Parity Quantum Engine</li>
-                        <li>180-day automated historical data</li>
-                        <li>Volatility, covariance, and KKT controls</li>
-                        <li>Unlimited token optimization</li>
-                    </ul>
-                    <button class="lp-btn-secondary" onclick="showProModal()" style="width:100%;">Coming Soon</button>
-                </div>
-            </div>
-        </section>
-
-        <hr class="lp-section-divider">
 
         <section class="lp-section lp-faq">
             <h3>// Frequently Asked Questions</h3>
