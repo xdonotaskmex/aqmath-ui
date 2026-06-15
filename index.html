@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AQMath — Quantitative Crypto Portfolio Rebalancer | Risk Parity</title>
-    <meta name="description" content="AQMath uses Risk Parity mathematics for long-term crypto portfolio allocation. Serverless, private, no data collected. Free tier available. Annual Pro license (NFT-backed access key).">
+    <meta name="description" content="AQMath is a private, client-side crypto portfolio rebalancer. Track holdings, distribute DCA to underweight tokens, and optimize with Risk Parity math (Pro). No wallet, no account, no data collection.">
     <meta name="keywords" content="crypto portfolio, risk parity, DCA, dollar cost averaging, portfolio rebalancer, quantitative finance, serverless, privacy, DeFi, Bitcoin, Ethereum">
     <meta name="author" content="AQMath">
     <meta name="robots" content="index, follow">
@@ -516,12 +516,12 @@
             text-transform: uppercase;
         }
         .lp-hero h2 {
-            font-family: var(--sans); font-size: 1rem; font-weight: 300;
+            font-family: var(--sans); font-size: 1.15rem; font-weight: 400;
             color: var(--text); letter-spacing: 2px; margin-bottom: 8px;
         }
         .lp-hero p {
-            font-family: var(--sans); font-size: 0.8rem;
-            color: var(--muted); max-width: 640px; margin: 0 auto 32px;
+            font-family: var(--sans); font-size: 0.95rem;
+            color: var(--text); max-width: 720px; margin: 0 auto 32px;
             line-height: 1.8;
         }
         .lp-math-box {
@@ -566,7 +566,7 @@
         .lp-cta-group { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
         .lp-btn-primary {
             background: var(--blue); color: #000; border: 1px solid var(--blue);
-            font-family: var(--mono); font-size: 0.7rem; letter-spacing: 3px;
+            font-family: var(--mono); font-size: 0.78rem; letter-spacing: 3px;
             padding: 14px 32px; cursor: pointer; text-transform: uppercase;
             transition: all 0.2s; font-weight: 600; border-radius: 2px;
             text-decoration: none; display: inline-block;
@@ -574,7 +574,7 @@
         .lp-btn-primary:hover { background: #fff; color: var(--blue); }
         .lp-btn-secondary {
             background: transparent; color: var(--amber); border: 1px solid var(--amber);
-            font-family: var(--mono); font-size: 0.7rem; letter-spacing: 3px;
+            font-family: var(--mono); font-size: 0.78rem; letter-spacing: 3px;
             padding: 14px 32px; cursor: pointer; text-transform: uppercase;
             transition: all 0.2s; font-weight: 500; border-radius: 2px;
             text-decoration: none; display: inline-block;
@@ -591,7 +591,7 @@
         }
         .lp-section-label {
             font-family: var(--mono);
-            font-size: 0.55rem;
+            font-size: 0.72rem;
             letter-spacing: 4px;
             color: var(--blue);
             text-transform: uppercase;
@@ -775,7 +775,7 @@
             border-bottom: 1px solid var(--border); font-weight: 500;
         }
         .lp-feature-card p {
-            font-family: var(--sans); font-size: 0.72rem; color: var(--text);
+            font-family: var(--sans); font-size: 0.84rem; color: var(--text);
             line-height: 1.7;
         }
         .lp-feature-card .feat-icon { color: var(--blue); font-size: 1.1rem; margin-right: 6px; }
@@ -828,8 +828,36 @@
             color: var(--blue); text-transform: uppercase; margin-bottom: 16px;
         }
         .lp-why p {
-            font-family: var(--sans); font-size: 0.75rem; color: var(--text);
+            font-family: var(--sans); font-size: 0.88rem; color: var(--text);
             line-height: 1.8; margin-bottom: 12px;
+        }
+
+        .lp-what { max-width: 1000px; margin: 0 auto; }
+        .lp-what-card { padding: 32px; }
+        .lp-what-card h3 {
+            font-family: var(--mono); font-size: 1rem; letter-spacing: 4px;
+            color: var(--blue); text-transform: uppercase; margin-bottom: 16px;
+            font-weight: 600;
+        }
+        .lp-what-lead {
+            font-family: var(--sans); font-size: 1.05rem; color: var(--text);
+            line-height: 1.7; margin-bottom: 24px; font-weight: 500;
+        }
+        .lp-what-grid {
+            display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;
+        }
+        .lp-what-grid > div {
+            padding: 16px; background: var(--s1); border: 1px solid var(--border);
+            border-left: 2px solid var(--green); border-radius: 2px;
+        }
+        .lp-what-item-title {
+            font-family: var(--mono); font-size: 0.9rem; letter-spacing: 3px;
+            color: var(--green); text-transform: uppercase; margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .lp-what-grid p {
+            font-family: var(--sans); font-size: 0.86rem; color: var(--text);
+            line-height: 1.7;
         }
 
         .lp-faq {
@@ -979,7 +1007,7 @@
         .lp-math-box { max-width: 100%; margin: 0; border-radius: 4px; background: var(--s2); backdrop-filter: blur(6px); }
         .lp-math-note {
             font-family: var(--sans);
-            font-size: 0.78rem;
+            font-size: 0.88rem;
             color: var(--text);
             line-height: 1.8;
         }
@@ -998,15 +1026,15 @@
         }
         .lp-math-metric .metric-label {
             font-family: var(--mono);
-            font-size: 0.5rem;
-            color: var(--muted);
+            font-size: 0.72rem;
+            color: var(--blue);
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 6px;
         }
         .lp-math-metric .metric-copy {
             font-family: var(--sans);
-            font-size: 0.68rem;
+            font-size: 0.82rem;
             color: var(--text);
             line-height: 1.6;
         }
@@ -1239,6 +1267,14 @@
             .lp-why h3 { font-size: 0.7rem; letter-spacing: 3px; }
             .lp-why p { font-size: 0.68rem; }
 
+            .lp-what { padding: 0 16px; }
+            .lp-what-card { padding: 20px; }
+            .lp-what-card h3 { font-size: 0.85rem; letter-spacing: 3px; }
+            .lp-what-lead { font-size: 0.88rem; }
+            .lp-what-grid { grid-template-columns: 1fr; gap: 12px; }
+            .lp-what-item-title { font-size: 0.78rem; }
+            .lp-what-grid p { font-size: 0.78rem; }
+
             .lp-faq { padding: 32px 16px; }
             .lp-faq h3 { font-size: 0.85rem; letter-spacing: 3px; }
             .lp-faq-q { font-size: 0.75rem; padding: 12px 14px 0; }
@@ -1295,7 +1331,7 @@
     <section class="lp-hero">
         <h1>AQMath</h1>
         <h2>Quantitative Portfolio Rebalancing. No Server. No Tracking. Just Math.</h2>
-        <p>AQMath combines <strong>Risk Parity</strong> with full <strong>Covariance</strong> &amp; <strong>Variance Matrix</strong> analysis for long-term crypto allocation, DCA execution, and volatility-aware portfolio control &ndash; directly in your browser.</p>
+        <p>AQMath lets you track your crypto portfolio, distribute DCA to underweight tokens, and (with Pro) optimize allocation using Risk Parity, full Covariance, and Variance Matrix analysis — all inside your browser, with no server storing your holdings.</p>
         <div class="lp-cta-group">
             <a class="lp-btn-primary" href="#/app">Try Free &mdash; No Registration</a>
             <button class="lp-btn-secondary" onclick="showProModal()">Get Pro &mdash; Coming Soon</button>
@@ -1372,11 +1408,24 @@
 
         <hr class="lp-section-divider">
 
-        <section class="lp-section lp-why">
-            <div class="lp-card lp-why-card">
-                <h3>Why AQMath?</h3>
-                <p>Traditional portfolio tools ask you to connect wallets, create accounts, or upload sensitive data. AQMath flips that model: portfolio inputs remain in <strong>client-side local storage</strong>, while the interface brings institutional-style math to a private browser workflow.</p>
-                <p>It is built for passive crypto investors who want transparent Risk Parity logic, practical DCA execution, and a dashboard-style experience without surrendering personal portfolio data.</p>
+        <section class="lp-section lp-what">
+            <div class="lp-card lp-what-card">
+                <h3>What is AQMath?</h3>
+                <p class="lp-what-lead">AQMath is a private, client-side crypto portfolio rebalancer.</p>
+                <div class="lp-what-grid">
+                    <div>
+                        <div class="lp-what-item-title">Track</div>
+                        <p>You add your tokens and amounts. Nothing leaves your browser.</p>
+                    </div>
+                    <div>
+                        <div class="lp-what-item-title">Rebalance</div>
+                        <p>DCA engine distributes fresh capital to underweight tokens based on target %.</p>
+                    </div>
+                    <div>
+                        <div class="lp-what-item-title">Optimize (Pro)</div>
+                        <p>Risk Parity engine uses 180 days of price history to equalize each asset's contribution to portfolio volatility.</p>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -1483,7 +1532,7 @@
     <div class="lp-disclaimer">
         AQMath does not provide financial advice. All calculations are based on historical data and mathematical models.<br>
         All calculations are performed client-side; no personal data is collected.<br>
-        &copy; 2026 AQMath &mdash; Serverless. Private. Open Source.<br>
+        &copy; 2026 AQMath &mdash; Serverless. Private. Client-side.<br>
         Follow: <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">X (Twitter)</a> &middot; <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">Telegram</a>
     </div>
 </div>
