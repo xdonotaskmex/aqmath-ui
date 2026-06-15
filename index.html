@@ -1476,8 +1476,9 @@
         .toast-overlay.hidden { display: none; }
         .toast-box {
             background: var(--s1); border: 1px solid var(--border);
-            padding: 32px 36px; border-radius: 10px; text-align: center;
-            max-width: 480px; width: 92%;
+            padding: 28px 32px; border-radius: 10px; text-align: center;
+            max-width: 600px; width: 92%;
+            max-height: 80vh; overflow-y: auto;
             animation: toastIn 0.2s ease-out;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -3129,18 +3130,29 @@
                 }
             }
 
-            // Filter out dust buys (under $0.05) and aggregate per token
+            // Aggregate buys per token (sum $ and tokens), filter dust
             if (buySummary.length > 0) {
-                const significantBuys = buySummary.filter(b => {
-                    const match = b.match(/\+\$([\d.]+)/);
-                    return match && parseFloat(match[1]) >= 0.05;
+                const tokenTotals = {};
+                let dustTotal = 0;
+                buySummary.forEach(b => {
+                    const m = b.match(/^(\w+):\s*\+\$([\d.]+)\s*\(([\d.]+)\s*tokens?\)/);
+                    if (m) {
+                        const sym = m[1];
+                        const usd = parseFloat(m[2]);
+                        const tokens = parseFloat(m[3]);
+                        if (usd < 0.05) { dustTotal += usd; return; }
+                        if (!tokenTotals[sym]) tokenTotals[sym] = { usd: 0, tokens: 0 };
+                        tokenTotals[sym].usd += usd;
+                        tokenTotals[sym].tokens += tokens;
+                    }
                 });
-                if (significantBuys.length > 0) {
-                    msg += `buys:\n` + significantBuys.join('\n') + '\n';
+                const aggBuys = Object.entries(tokenTotals)
+                    .map(([sym, t]) => `${sym}: +$${t.usd.toFixed(2)} (${t.tokens.toFixed(6)} tokens)`);
+                if (aggBuys.length > 0) {
+                    msg += `buys:\n` + aggBuys.join('\n') + '\n';
                 }
-                const dustCount = buySummary.length - significantBuys.length;
-                if (dustCount > 0) {
-                    msg += `+ ${dustCount} dust entries filtered (< $0.05)\n`;
+                if (dustTotal > 0) {
+                    msg += `+ $${dustTotal.toFixed(2)} in dust filtered (< $0.05 per entry)\n`;
                 }
             }
 
