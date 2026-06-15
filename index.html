@@ -676,13 +676,14 @@
         }
         .lp-widget-title {
             font-family: var(--mono);
-            font-size: 0.48rem;
+            font-size: 0.58rem;
             letter-spacing: 2px;
-            color: var(--muted);
+            color: var(--text);
             text-transform: uppercase;
             margin-bottom: 8px;
             padding-bottom: 6px;
             border-bottom: 1px solid var(--border);
+            font-weight: 500;
         }
         .lp-widget-value {
             font-family: var(--mono);
@@ -2207,7 +2208,7 @@
         body.innerHTML = `
             <div class="lp-widget-main-row"><span class="lp-widget-value" style="color:var(--amber)">~${days} days</span><span class="lp-widget-signal" style="color:var(--amber)">⏳</span></div>
             <div class="lp-widget-sub">estimated Apr 2028</div>
-            <div class="lp-widget-meta">macro cycle clock · no API required</div>`;
+            <div class="lp-widget-meta">macro cycle clock</div>`;
     }
 
     function loadMarketPulse() {
