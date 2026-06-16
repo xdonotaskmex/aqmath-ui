@@ -1523,6 +1523,20 @@
         .toast-action-btn:hover { border-color: var(--text); color: var(--text); background: rgba(255,255,255,0.05); }
         .toast-action-btn.primary:hover { border-color: var(--green); background: rgba(52,211,153,0.12); }
 
+
+        .beta-section { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+        .beta-active { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+        .beta-active.hidden { display: none; }
+        .btn-beta {
+            width: 100%; padding: 10px; margin-top: 8px;
+            background: rgba(168,85,247,0.12); border: 1px solid rgba(168,85,247,0.3);
+            color: var(--purple); font-family: var(--mono); font-size: 0.65rem;
+            letter-spacing: 1px; cursor: pointer; border-radius: 4px;
+            text-transform: lowercase; transition: all 0.2s;
+        }
+        .btn-beta:hover { background: rgba(168,85,247,0.2); border-color: var(--purple); }
+        .btn-beta-logout:hover { border-color: var(--red) !important; color: var(--red) !important; }
+
         /* ===== MOBILE RESPONSIVE ===== */
         @media (max-width: 1024px) {
             .lp-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -1909,6 +1923,25 @@
                 <input type="number" id="iDcaAmount" step="any" placeholder="500.00" min="0">
             </div>
             <button class="btn-dca" id="btnDca" onclick="distribuirajDca()">[ Distribute DCA ]</button>
+        </div>
+
+
+        <div class="beta-section" id="betaSection">
+            <div class="section-label">--beta-access</div>
+            <div class="fg">
+                <label>Beta Key</label>
+                <input type="text" id="iBetaKey" placeholder="AQMBETA-XXXX-XXXX" autocomplete="off">
+            </div>
+            <button class="btn-beta" id="btnBeta" onclick="activateBeta()">[ Activate Beta ]</button>
+            <div style="font-size:0.5rem;color:var(--muted);margin-top:4px;">unlocks pipeline prices, CSV parsing & engine</div>
+        </div>
+
+        <div class="beta-active hidden" id="betaActive">
+            <div class="section-label">--beta-access</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
+                <span style="color:var(--green);font-family:var(--mono);font-size:0.7rem;">beta active</span>
+                <button class="btn-beta-logout" onclick="deactivateBeta()" style="background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.55rem;padding:4px 10px;cursor:pointer;border-radius:4px;">[ deactivate ]</button>
+            </div>
         </div>
 
         <div class="opt-section" id="optSection">
@@ -2467,7 +2500,82 @@
     Chart.defaults.color = '#64748b';
     Chart.defaults.font.family = "'IBM Plex Mono', monospace";
 
-    const isPro = false;
+    // Beta mode: check for valid JWT token in sessionStorage
+    function getBetaToken() { return sessionStorage.getItem('pro_token') || ''; }
+    function isBetaActive() {
+        const token = getBetaToken();
+        if (!token) return false;
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.exp * 1000 > Date.now();
+        } catch { return false; }
+    }
+    const isPro = isBetaActive();
+
+
+    // ========== BETA AUTH ==========
+    const BETA_AUTH_URL = 'https://aqmath-beta-auth.up.railway.app';
+
+    async function pipelineFetch(url, options = {}) {
+        const token = getBetaToken();
+        if (!token) throw new Error('beta token missing');
+        const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+        const res = await fetch(url, { ...options, headers });
+        if (res.status === 401) {
+            sessionStorage.removeItem('pro_token');
+            showToast('beta key expired -- please re-enter your key', 'warning');
+            render();
+            throw new Error('token expired');
+        }
+        return res;
+    }
+
+    async function activateBeta() {
+        const key = document.getElementById('iBetaKey').value.trim();
+        if (!key) return showToast('enter a beta key', 'warning');
+        const btn = document.getElementById('btnBeta');
+        btn.textContent = '[ verifying... ]';
+        btn.disabled = true;
+        try {
+            const res = await fetch(BETA_AUTH_URL + '/auth/beta', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key: key })
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.detail || 'invalid key');
+            }
+            const data = await res.json();
+            sessionStorage.setItem('pro_token', data.token);
+            document.getElementById('betaSection').classList.add('hidden');
+            document.getElementById('betaActive').classList.remove('hidden');
+            showToast('beta activated -- pipeline unlocked', 'success');
+            render();
+        } catch(e) {
+            showToast('beta activation failed: ' + e.message, 'error');
+        } finally {
+            btn.textContent = '[ Activate Beta ]';
+            btn.disabled = false;
+        }
+    }
+
+    function deactivateBeta() {
+        sessionStorage.removeItem('pro_token');
+        document.getElementById('betaSection').classList.remove('hidden');
+        document.getElementById('betaActive').classList.add('hidden');
+        showToast('beta deactivated', 'notice');
+        render();
+    }
+
+    function checkBetaUI() {
+        const active = isBetaActive();
+        const section = document.getElementById('betaSection');
+        const activeEl = document.getElementById('betaActive');
+        if (section) section.classList.toggle('hidden', active);
+        if (activeEl) activeEl.classList.toggle('hidden', !active);
+    }
 
     // ========== BACKEND API URLs ==========
     // Set these to your deployed Railway URLs
@@ -3064,9 +3172,8 @@
         }));
 
         try {
-            const resp = await fetch(`${DCA_API_URL}/dca`, {
+            const resp = await pipelineFetch(`${DCA_API_URL}/dca`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ positions, dca_amount: dcaAmount })
             });
             if (!resp.ok) {
