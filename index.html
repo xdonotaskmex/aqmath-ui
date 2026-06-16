@@ -3134,8 +3134,19 @@
         ]);
     }
 
-    // ============ DCA DISTRIBUTION (BACKEND API) ============
+    // ============ DCA DISTRIBUTION ============
+    // Free tier: manual CSV upload only (client-side)
+    // Pro tier: backend API with data-pipeline + AQMath engine
     async function distribuirajDca() {
+        if (!isPro) {
+            return showToast(
+                'dca rebalancing requires pro access.\n\n' +
+                'free tier: upload CSV manually to track positions.\n' +
+                'pro tier: unlock automated DCA with pipeline + AQMath engine.\n\n' +
+                'activate your beta key in the sidebar to upgrade.',
+                'notice'
+            );
+        }
         if (Math.abs(totalTarget() - 100) > 0.01) {
             return showToast('dca is locked until total target allocation equals 100%.', 'warning');
         }
@@ -3273,7 +3284,7 @@
             ]);
         } catch(e) {
             hideLoading();
-            showToast('dca api error: ' + e.message + '\n\ncheck dca-engine service at: ' + DCA_API_URL, 'error');
+            showToast('dca rebalancing failed: ' + e.message + '\n\nplease try again or check your connection.', 'error');
         }
     }
 
