@@ -2571,8 +2571,7 @@
     // ========== BACKEND API URLs ==========
     // Set these to your deployed Railway URLs
     const API_URL = 'https://aqmath-engine-production.up.railway.app';   // aqmath-engine (Risk Parity + KKT) — Pro only
-    const DCA_API_URL = 'https://dca-engine-production.up.railway.app'; // dca-engine on Railway — Free tier
-    const DATA_PIPELINE_URL = 'https://data-pipeline-production.up.railway.app'; // data-pipeline — volatility + optimize
+    const DCA_API_URL = 'https://dca-engine-production.up.railway.app'; // dca-engine on Railway — Free DCA + Pro proxy (optimize, volatility)
 
     let portfolioHistory = [];
 
@@ -3473,7 +3472,7 @@
         const tokens = unfrozen.map(t => ({ sym: t.sym, value: t.curVal || 0 }));
 
         try {
-            const resp = await pipelineFetch(`${DATA_PIPELINE_URL}/optimize`, {
+            const resp = await pipelineFetch(`${DCA_API_URL}/optimize`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ tokens })
