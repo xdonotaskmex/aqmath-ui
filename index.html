@@ -2572,6 +2572,7 @@
     // Set these to your deployed Railway URLs
     const API_URL = 'https://aqmath-engine-production.up.railway.app';   // aqmath-engine (Risk Parity + KKT) — Pro only
     const DCA_API_URL = 'https://dca-engine-production.up.railway.app'; // dca-engine on Railway — Free tier
+    const DATA_PIPELINE_URL = 'https://data-pipeline-production.up.railway.app'; // data-pipeline — volatility + optimize
 
     let portfolioHistory = [];
 
@@ -3457,54 +3458,51 @@
         }
     }
 
-    // ============ AQMath QUANTUM ENGINE (BACKEND API) — PRO ONLY ============
+    // ============ RISK PARITY OPTIMIZATION (data-pipeline /optimize) — PRO ONLY ============
     async function optimizePortfolio() {
-        showProModal();
-        return;
-        /* PRO-ONLY: Dead code until Pro tier is activated
-        const unfrozen = portfolio.filter(t => !t.frozen);
-        if (unfrozen.length < 2) return showToast('Need at least 2 unfrozen tokens.', 'warning');
+        if (!isPro) { showProModal(); return; }
 
-        showLoading('AQMath Quantum Engine', 'Running 180-day Risk Parity optimization...');
+        const unfrozen = portfolio.filter(t => !t.frozen && !t.safeHaven);
+        if (unfrozen.length < 2) return showToast('Need at least 2 unfrozen risky tokens.', 'warning');
+
+        showLoading('Risk Parity Engine', 'Running 180-day inverse-volatility optimization...');
 
         const frozenTargets = {};
         portfolio.filter(t => t.frozen).forEach(t => { frozenTargets[t.sym] = t.target; });
 
-        const tickers = unfrozen.map(t => t.sym);
+        const tokens = unfrozen.map(t => ({ sym: t.sym, value: t.curVal || 0 }));
 
         try {
-            const resp = await fetch(`${API_URL}/optimize`, {
+            const resp = await pipelineFetch(`${DATA_PIPELINE_URL}/optimize`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ tickers, frozen_targets: frozenTargets })
+                body: JSON.stringify({ tokens })
             });
             const result = await resp.json();
 
-            if (result.error) {
+            if (result.detail) {
                 hideLoading();
-                return showToast(result.error, 'error');
+                return showToast(result.detail, 'error');
             }
 
-            if (result.missing && result.missing.length > 0) {
+            const weights = result.weights || [];
+            if (weights.length === 0) {
                 hideLoading();
-                return showToast(`Missing historical data for: ${result.missing.join(', ')}.\n\nPlease ensure the data collectors have run for these tokens.`, 'error');
+                return showToast('Optimization returned no weights.', 'error');
             }
 
-            const allocations = result.allocations || {};
-            if (Object.keys(allocations).length === 0) {
-                hideLoading();
-                return showToast('Optimization returned no allocations.', 'error');
-            }
-
-            unfrozen.forEach(t => {
-                if (allocations[t.sym] !== undefined) {
-                    t.target = Math.max(0, allocations[t.sym]);
+            // Apply weights as new targets
+            weights.forEach(w => {
+                const token = portfolio.find(t => t.sym === w.sym);
+                if (token && w.weight > 0) {
+                    token.target = w.weight;
                 }
             });
 
-            const youngTokens = result.young_tokens || [];
+            // Track tokens with insufficient data
+            const insufficient = weights.filter(w => w.error === 'insufficient_data').map(w => w.sym);
             unfrozen.forEach(t => {
-                t.insufficientHistory = youngTokens.includes(t.sym);
+                t.insufficientHistory = insufficient.includes(t.sym);
             });
 
             lastOptimization = Date.now();
@@ -3514,19 +3512,20 @@
             await sleep(2000);
             hideLoading();
 
-            let msg = 'AQMath Quantum Engine: Optimization Complete\n';
-            msg += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
-            msg += 'New target allocations based on 180-day Risk Parity model:\n\n';
-            Object.entries(allocations).forEach(([sym, pct]) => { msg += `  ${sym}: ${pct}%\n`; });
-            if (youngTokens.length > 0) msg += `\n\u26a0\ufe0f Tokens with limited history (<180 days): ${youngTokens.join(', ')}.\nResults for these may be less reliable.`;
-            if (result.skipped_tokens && result.skipped_tokens.length > 0) msg += `\n\nSkipped: ${result.skipped_tokens.join(', ')}.`;
-            if (result.warnings && result.warnings.length > 0) msg += `\n\n` + result.warnings.join('\n');
+            let msg = 'Risk Parity Optimization Complete\n';
+            msg += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+            msg += 'Inverse-volatility weights (180-day data):\n\n';
+            weights.forEach(w => {
+                const vol = w.volatility != null ? ` (vol: ${(w.volatility * 100).toFixed(1)}%)` : ' (no data)';
+                msg += `  ${w.sym}: ${w.weight}%${vol}\n`;
+            });
+            if (insufficient.length > 0) msg += `\n\u26a0\ufe0f Insufficient history (<30 days): ${insufficient.join(', ')}`;
+            if (result.data_points) msg += `\nData points: ${Object.entries(result.data_points).map(([s,n]) => `${s}=${n}`).join(', ')}`;
             showToast(msg, 'success');
         } catch(e) {
             hideLoading();
-            showToast('Quantum Engine API error: ' + e.message + '\n\nMake sure the aqmath-engine service is running at: ' + API_URL, 'error');
+            showToast('Risk Parity API error: ' + e.message, 'error');
         }
-        */
     }
 
     // ============ EXPORT / IMPORT ============
