@@ -3273,15 +3273,6 @@
     // Pro tier: backend API with data-pipeline + AQMath engine
     // Layered defense: Circuit Breaker → Safety Factor → Trend Filter → Hard Caps → Risk Budget
     async function distribuirajDca() {
-        if (!isPro) {
-            return showToast(
-                'dca rebalancing requires pro access.\n\n' +
-                'free tier: upload CSV manually to track positions.\n' +
-                'pro tier: unlock automated DCA with pipeline + AQMath engine.\n\n' +
-                'activate your beta key in the sidebar to upgrade.',
-                'notice'
-            );
-        }
         if (Math.abs(totalTarget() - 100) > 0.01) {
             return showToast('dca is locked until total target allocation equals 100%.', 'warning');
         }
@@ -3290,22 +3281,25 @@
         const active = activeTokens();
         if (active.length === 0) return showToast('no active tokens.', 'warning');
 
-        // Step 1: Circuit Breaker — check portfolio drawdown from ATH
-        updatePortfolioATH();
-        const breaker = checkCircuitBreaker();
-        if (breaker.tripped) {
-            return showToast(
-                `circuit breaker activated.\n\n` +
-                `portfolio drawdown: ${(breaker.drawdown * 100).toFixed(1)}% from ATH ($${fmtUSD(breaker.ath)})\n` +
-                `current value: $${fmtUSD(breaker.currentVal)}\n` +
-                `threshold: ${(breaker.threshold * 100).toFixed(0)}% (dynamic, based on 30d vol: ${(breaker.vol * 100).toFixed(1)}%)\n\n` +
-                `dca is paused to protect capital during extreme market stress.\n` +
-                `resume when drawdown recovers below threshold.`,
-                'error'
-            );
-        }
-        if (breaker.drawdown > 0.15) {
-            console.log(`[DCA] Drawdown warning: ${(breaker.drawdown * 100).toFixed(1)}% (threshold: ${(breaker.threshold * 100).toFixed(0)}%) — safety factor will reduce buys`);
+        let breaker = { drawdown: 0, threshold: 0, tripped: false, vol: 0 };
+        if (isPro) {
+            // Circuit Breaker — Pro only
+            updatePortfolioATH();
+            breaker = checkCircuitBreaker();
+            if (breaker.tripped) {
+                return showToast(
+                    `circuit breaker activated.\n\n` +
+                    `portfolio drawdown: ${(breaker.drawdown * 100).toFixed(1)}% from ATH ($${fmtUSD(breaker.ath)})\n` +
+                    `current value: $${fmtUSD(breaker.currentVal)}\n` +
+                    `threshold: ${(breaker.threshold * 100).toFixed(0)}% (dynamic, based on 30d vol: ${(breaker.vol * 100).toFixed(1)}%)\n\n` +
+                    `dca is paused to protect capital during extreme market stress.\n` +
+                    `resume when drawdown recovers below threshold.`,
+                    'error'
+                );
+            }
+            if (breaker.drawdown > 0.15) {
+                console.log(`[DCA] Drawdown warning: ${(breaker.drawdown * 100).toFixed(1)}% (threshold: ${(breaker.threshold * 100).toFixed(0)}%) — safety factor will reduce buys`);
+            }
         }
 
         showLoading('REBALANCING', 'Calculating optimal DCA distribution...');
@@ -3324,8 +3318,9 @@
         }));
 
         try {
-            const resp = await pipelineFetch(`${DCA_API_URL}/dca`, {
+            const resp = await fetch(`${DCA_API_URL}/dca`, {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ positions, dca_amount: dcaAmount })
             });
             if (!resp.ok) {
@@ -3346,11 +3341,14 @@
             const updated = result.updated_positions || [];
             console.log('DCA updated_positions count:', updated.length);
 
-            // Step 5-7: Apply hard caps + risk budget + stablecoin redirect
-            const hardCapResult = applyHardCaps(updated, dcaAmount);
-            const capped = hardCapResult.capped;
-            if (capped.length > 0) {
-                console.log('[DCA] Hard caps applied:', capped);
+            let capped = [];
+            if (isPro) {
+                // Hard caps + risk budget + stablecoin redirect — Pro only
+                const hardCapResult = applyHardCaps(updated, dcaAmount);
+                capped = hardCapResult.capped;
+                if (capped.length > 0) {
+                    console.log('[DCA] Hard caps applied:', capped);
+                }
             }
 
             updated.forEach(up => {
@@ -3659,7 +3657,11 @@
         dcaBtn.title = canDca ? 'Start DCA distribution' : 'DCA is available only when total target allocation equals 100%.';
 
         const optSection = document.getElementById('optSection');
-        // optSection always visible, Pro features locked via showProModal()
+        if (isPro) {
+            optSection.innerHTML = '<div class="section-label">--quantitative-optimization</div>'
+                + '<button class="btn-opt-pro" onclick="optimizePortfolio()">[ Risk Parity Optimize ]</button>'
+                + '<div style="font-size:0.55rem;color:var(--green);margin-top:6px;">\u2713 Pro \u2014 180-day inverse-volatility weighting</div>';
+        }
 
         const pct = Math.min(Math.max(tgt, 0), 100);
         const fill = document.getElementById('aFill'); fill.style.width = `${pct}%`;
