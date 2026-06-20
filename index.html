@@ -2136,10 +2136,6 @@
             <label>Target Allocation (%)</label>
             <input type="number" id="iTarget" step="0.1" min="0.1" max="100" placeholder="0.0">
         </div>
-        <div class="fg" style="display:flex;align-items:center;gap:8px;">
-            <input type="checkbox" id="iSafeHaven" style="width:auto;accent-color:var(--green);">
-            <label for="iSafeHaven" style="margin:0;font-size:0.55rem;color:var(--muted);cursor:pointer;">Safe-Haven (stablecoin — exempt from filters)</label>
-        </div>
         <div class="fg">
             <label>Historical Prices (CSV)</label>
             <input type="file" id="iHistoryCSV" accept=".csv">
@@ -3431,14 +3427,12 @@
         document.getElementById('iEntry').value = token.entry || '';
         document.getElementById('iApy').value = token.apy || 0;
         document.getElementById('iTarget').value = token.target;
-        document.getElementById('iSafeHaven').checked = token.safeHaven || false;
         document.getElementById('btnAdd').textContent = '[ Update ]';
         editMode = token.sym;
     }
 
     function resetForme() {
         ['iSym','iAmt','iPrice','iEntry','iApy','iTarget'].forEach(id => document.getElementById(id).value = '');
-        document.getElementById('iSafeHaven').checked = false;
         document.getElementById('iHistoryCSV').value = '';
         document.getElementById('btnAdd').textContent = '[ Load ]';
         editMode = null;
@@ -3454,7 +3448,7 @@
         const entryInput = parseFloat(document.getElementById('iEntry').value);
         const apy = parseFloat(document.getElementById('iApy').value) || 0;
         const target = parseFloat(document.getElementById('iTarget').value);
-        const safeHaven = document.getElementById('iSafeHaven').checked || isStablecoin(sym);
+        const safeHaven = isStablecoin(sym);
         if (isNaN(amount) || amount <= 0) return showToast('quantity must be > 0.', 'warning');
         if (isNaN(target) || target <= 0) return showToast('allocation must be > 0%.', 'warning');
 
