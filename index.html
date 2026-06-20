@@ -346,6 +346,15 @@
         .sh-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 1px; color: var(--green); font-weight: 500; }
         .sh-label.off { color: var(--muted); }
         .sh-desc { font-size: 0.48rem; color: var(--dim); letter-spacing: 0.5px; margin-top: 2px; }
+        .sh-deploy-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+        .sh-deploy-btn { flex: 1; padding: 8px 10px; background: rgba(56,189,248,0.08);
+            border: 1px solid rgba(56,189,248,0.25); border-radius: 3px; color: var(--blue);
+            font-family: var(--mono); font-size: 0.55rem; letter-spacing: 1px; cursor: pointer;
+            transition: all 0.2s; text-align: center; }
+        .sh-deploy-btn:hover { background: rgba(56,189,248,0.15); border-color: var(--blue); }
+        .sh-deploy-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .sh-balance { font-family: var(--mono); font-size: 0.55rem; color: var(--green);
+            letter-spacing: 0.5px; white-space: nowrap; }
 
         /* ===== USDC ROW HIGHLIGHT ===== */
         tbody tr.row-safe-haven { background: rgba(52,211,153,0.04); }
@@ -2162,6 +2171,10 @@
                     <div class="sh-desc" id="shDesc">ON &mdash; absorbs hard-cap surplus &amp; unallocated DCA</div>
                 </div>
             </div>
+            <div class="sh-deploy-row">
+                <span class="sh-balance" id="shBalance">$0.00</span>
+                <button class="sh-deploy-btn" id="shDeployBtn" onclick="deployUSDC()">DEPLOY TO DCA</button>
+            </div>
         </div>
 
         <div class="beta-section" id="betaSection">
@@ -2940,6 +2953,8 @@
         const lb = document.getElementById('shLabel');
         const ds = document.getElementById('shDesc');
         const row = document.getElementById('shToggleRow');
+        const bal = document.getElementById('shBalance');
+        const btn = document.getElementById('shDeployBtn');
         if (!sw) return;
         sw.className = on ? 'sh-switch' : 'sh-switch off';
         lb.className = on ? 'sh-label' : 'sh-label off';
@@ -2947,6 +2962,27 @@
             ? 'ON \u2014 absorbs hard-cap surplus & unallocated DCA'
             : 'OFF \u2014 USDC treated as normal token';
         row.className = on ? 'sh-toggle-row' : 'sh-toggle-row off';
+        // Show USDC balance and deploy button state
+        const usdc = portfolio.find(t => t.sym === 'USDC');
+        const usdcVal = usdc ? (usdc.amount * usdc.price) : 0;
+        if (bal) bal.textContent = '$' + usdcVal.toFixed(2);
+        if (btn) btn.disabled = usdcVal < 0.01;
+    }
+
+    function deployUSDC() {
+        const usdc = portfolio.find(t => t.sym === 'USDC');
+        if (!usdc || usdc.amount * usdc.price < 0.01) {
+            return showToast('no USDC balance to deploy.', 'warning');
+        }
+        const val = usdc.amount * usdc.price;
+        const dcaInput = document.getElementById('iDcaAmount');
+        const current = parseFloat(dcaInput.value) || 0;
+        dcaInput.value = (current + val).toFixed(2);
+        usdc.amount = 0;
+        saveState();
+        updateSafeHavenUI();
+        render();
+        showToast(`$${val.toFixed(2)} USDC moved to DCA input. click DISTRIBUTE to deploy.`, 'success');
     }
 
     // ============ STRUCTURAL LIMITS ============
@@ -4048,6 +4084,7 @@
         }
 
         // Quantum Engine is locked for free tier - shows "PRO Coming Soon" modal
+        updateSafeHavenUI();
     }
 
     // ============ INITIALIZATION ============
