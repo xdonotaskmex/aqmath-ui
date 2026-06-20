@@ -210,11 +210,12 @@
 
         .sidebar {
             border-right: 1px solid var(--border);
-            background: var(--s1);
+            background: rgba(2,5,13,0.75);
             padding: 24px 20px;
             display: flex; flex-direction: column; gap: 0;
             overflow-y: auto;
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             box-shadow: 1px 0 12px rgba(0,0,0,0.2);
         }
 
@@ -310,6 +311,80 @@
         .faq-q { color: var(--blue); font-size: 0.82rem; font-weight: 600; margin-top: 12px; border-left: 2px solid var(--border); padding-left: 10px; }
         .faq-a { margin-bottom: 10px; padding-left: 14px; font-size: 0.78rem; color: var(--muted); }
 
+        /* ===== SAFE-HAVEN TOGGLE ===== */
+        .safehaven-section { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); }
+        .sh-toggle-row {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px;
+            background: rgba(52,211,153,0.04);
+            border: 1px solid rgba(52,211,153,0.15);
+            border-radius: 4px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .sh-toggle-row:hover { border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.06); }
+        .sh-toggle-row.off { background: rgba(255,255,255,0.02); border-color: var(--border); }
+        .sh-switch {
+            width: 36px; height: 20px;
+            background: rgba(52,211,153,0.25);
+            border-radius: 10px;
+            position: relative;
+            transition: background 0.25s;
+            flex-shrink: 0;
+        }
+        .sh-switch::after {
+            content: '';
+            width: 16px; height: 16px;
+            background: var(--green);
+            border-radius: 50%;
+            position: absolute;
+            top: 2px; left: 18px;
+            transition: all 0.25s;
+            box-shadow: 0 0 6px rgba(52,211,153,0.4);
+        }
+        .sh-switch.off { background: rgba(255,255,255,0.1); }
+        .sh-switch.off::after { left: 2px; background: var(--muted); box-shadow: none; }
+        .sh-label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 1px; color: var(--green); font-weight: 500; }
+        .sh-label.off { color: var(--muted); }
+        .sh-desc { font-size: 0.48rem; color: var(--dim); letter-spacing: 0.5px; margin-top: 2px; }
+
+        /* ===== USDC ROW HIGHLIGHT ===== */
+        tbody tr.row-safe-haven { background: rgba(52,211,153,0.04); }
+        tbody tr.row-safe-haven:hover { background: rgba(52,211,153,0.07); }
+        .sh-badge {
+            display: inline-block; font-size: 0.5rem; padding: 1px 5px;
+            border-radius: 3px; letter-spacing: 1px; font-family: var(--mono); font-weight: 600;
+            vertical-align: middle; margin-left: 4px;
+        }
+        .sh-badge.on { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.25); }
+
+        /* ===== UNIFIED FAQ CARDS ===== */
+        .faq-item {
+            background: var(--s2); border: 1px solid var(--border);
+            border-radius: 2px; margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+        .faq-item:hover { border-color: rgba(56,189,248,0.35); }
+        .faq-item .faq-q {
+            font-family: var(--mono); font-size: 0.7rem; color: var(--amber);
+            letter-spacing: 0.5px; padding: 12px 14px 0; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            font-weight: 500; border-left: none; margin-top: 0;
+        }
+        .faq-item .faq-q::after {
+            content: '+'; color: var(--blue); font-size: 1rem; font-weight: 300;
+            transition: transform 0.2s; flex-shrink: 0; margin-left: 10px;
+        }
+        .faq-item.open .faq-q::after { content: '\2212'; }
+        .faq-item .faq-a {
+            font-family: var(--sans); font-size: 0.72rem; color: var(--text);
+            line-height: 1.7; padding: 0 14px; margin-bottom: 0;
+            max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.35s ease;
+        }
+        .faq-item.open .faq-a {
+            max-height: 500px; padding: 8px 14px 14px;
+        }
+        .faq-item .faq-a strong { color: var(--text); font-weight: 500; }
+
         .content { padding: 24px; overflow: auto; position: relative; z-index: 1; }
 
         .status {
@@ -350,10 +425,10 @@
         .tbl-wrap { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 1200px; }
         thead tr { border-bottom: 1px solid var(--border); }
-        th { padding: 9px 6px; text-align: left; font-size: 0.52rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; font-weight: 500; }
+        th { padding: 9px 6px; text-align: left; font-size: 0.52rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; font-weight: 500; font-family: var(--mono); }
         tbody tr { border-bottom: 1px solid rgba(255,255,255,0.03); transition: background 0.15s; }
         tbody tr:hover { background: rgba(56,189,248,0.03); }
-        td { padding: 10px 6px; font-size: 0.76rem; white-space: nowrap; }
+        td { padding: 10px 6px; font-size: 0.76rem; white-space: nowrap; font-family: var(--mono); }
 
         .sym { font-weight: 600; letter-spacing: 2px; font-size: 0.85rem; }
 
@@ -924,7 +999,7 @@
             position: relative; z-index: 1;
         }
         .lp-faq h3 {
-            font-family: var(--mono); font-size: 1rem; letter-spacing: 3px;
+            font-family: var(--mono); font-size: 0.58rem; letter-spacing: 3px;
             color: var(--purple); text-transform: lowercase; margin-bottom: 24px;
             text-align: center; font-weight: 500;
         }
@@ -1877,6 +1952,7 @@
                         <li>DCA distribution with manual CSV history upload</li>
                         <li>Binance price sync for supported symbols</li>
                         <li>Portfolio export/import with client-side local storage</li>
+                        <li>USDC safe-haven for surplus absorption</li>
                         <li>No sign-up, no wallet connect, no server-stored portfolio</li>
                     </ul>
                     <a class="lp-btn-primary" href="#/app" style="width:100%;text-align:center;">Open App</a>
@@ -1958,6 +2034,10 @@
             <div class="lp-faq-item">
                 <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">Why are market widgets separated from features?</div>
                 <div class="lp-faq-a">Live markets are informational context: ticker data, Fear &amp; Greed, BTC dominance, movers, and exchange status. They support decision-making but are intentionally separate from the product feature story.</div>
+            </div>
+            <div class="lp-faq-item">
+                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">What is the Safe-Haven (USDC) feature?</div>
+                <div class="lp-faq-a">When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token.</div>
             </div>
         </section>
     </div>
@@ -2076,6 +2156,17 @@
             <button class="btn-dca" id="btnDca" onclick="distribuirajDca()">[ Distribute DCA ]</button>
         </div>
 
+        <!-- Safe-Haven Global Toggle -->
+        <div class="safehaven-section">
+            <div class="section-label">--risk-settings</div>
+            <div class="sh-toggle-row" id="shToggleRow" onclick="toggleGlobalSafeHaven()">
+                <div class="sh-switch" id="shSwitch"></div>
+                <div>
+                    <div class="sh-label" id="shLabel">SAFE-HAVEN (USDC)</div>
+                    <div class="sh-desc" id="shDesc">ON &mdash; absorbs hard-cap surplus &amp; unallocated DCA</div>
+                </div>
+            </div>
+        </div>
 
         <div class="beta-section" id="betaSection">
             <div class="section-label">--beta-access</div>
@@ -2110,23 +2201,39 @@
         </div>
 
         <div class="faq-section">
-            <details>
-                <summary>❓ FAQ</summary>
+            <div class="section-label">--frequently-asked-questions</div>
+            <div class="faq-item" onclick="this.classList.toggle('open')">
                 <div class="faq-q">What is AQMath?</div>
                 <div class="faq-a">A serverless tool for long-term passive crypto portfolio management using DCA and quantitative optimization (Risk Parity).</div>
+            </div>
+            <div class="faq-item" onclick="this.classList.toggle('open')">
                 <div class="faq-q">How does DCA distribution work?</div>
                 <div class="faq-a">You enter a total budget, and the app allocates it to tokens below their target allocation, considering risk and average cost.</div>
+            </div>
+            <div class="faq-item" onclick="this.classList.toggle('open')">
                 <div class="faq-q">What does the Quantum Engine do?</div>
                 <div class="faq-a">It uses 180 days of price history to compute optimal allocation weights (Risk Parity) so each token contributes equally to portfolio risk.</div>
+            </div>
+            <div class="faq-item" onclick="this.classList.toggle('open')">
                 <div class="faq-q">How to import data?</div>
                 <div class="faq-a">You can manually enter, import a CSV with transactions (Date, Type, Symbol, Amount) or load a previously exported JSON.</div>
-                <div class="faq-q">What do ❄️ / 🔥 mean?</div>
-                <div class="faq-a">Freeze (❄️) excludes the token from DCA and optimization; useful for positions you don't want to change.</div>
-                <div class="faq-q">Why the ⚠️ warning?</div>
-                <div class="faq-a">The token has less than 180 days of price history – optimization results are less reliable.</div>
+            </div>
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-q">What do &#10052;&#65039; / &#128293; mean?</div>
+                <div class="faq-a">Freeze (&#10052;&#65039;) excludes the token from DCA and optimization; useful for positions you don&rsquo;t want to change.</div>
+            </div>
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-q">Why the &#9888;&#65039; warning?</div>
+                <div class="faq-a">The token has less than 180 days of price history &ndash; optimization results are less reliable.</div>
+            </div>
+            <div class="faq-item" onclick="this.classList.toggle('open')">
+                <div class="faq-q">What is Safe-Haven (USDC)?</div>
+                <div class="faq-a">When enabled, USDC acts as a stablecoin buffer. Excess funds from hard caps and unallocated DCA budget flow into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token.</div>
+            </div>
+            <div class="faq-item" onclick="this.classList.toggle('open')">
                 <div class="faq-q">Is my data safe?</div>
                 <div class="faq-a">Everything stays in your browser (localStorage). No server, no data transmission.</div>
-            </details>
+            </div>
         </div>
     </aside>
 
@@ -2778,6 +2885,7 @@
             const opt = localStorage.getItem(OPT_KEY);
             if (opt) lastOptimization = parseInt(opt);
         } catch(e) { portfolio = []; }
+        ensureUSDC();
     }
 
     function saveState() {
@@ -2785,6 +2893,17 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
         if (lastDcaDate) localStorage.setItem(DCA_KEY, lastDcaDate.toString());
         if (lastOptimization) localStorage.setItem(OPT_KEY, lastOptimization.toString());
+    }
+
+    function ensureUSDC() {
+        if (!portfolio.find(t => t.sym === 'USDC')) {
+            portfolio.push({
+                sym: 'USDC', price: 1.00, amount: 0, target: 0,
+                safeHaven: getSafeHavenToggle(), frozen: false,
+                coinId: 'usdc', entry: 0, apy: 0,
+                costBasis: 0, totalTokens: 0
+            });
+        }
     }
 
     const r2 = (n, d = 2) => Math.round(n * 10**d) / 10**d;
@@ -2802,6 +2921,37 @@
     // ============ STABLECOIN SAFE-HAVEN ============
     const STABLECOINS = new Set(['USDC', 'USDT', 'DAI', 'TUSD', 'BUSD', 'FDUSD', 'USDP', 'PYUSD', 'EURC', 'GUSD']);
     function isStablecoin(sym) { return STABLECOINS.has((sym || '').toUpperCase()); }
+
+    // ============ SAFE-HAVEN GLOBAL TOGGLE ============
+    const SH_KEY = 'aqmath_safehaven_on';
+    function getSafeHavenToggle() {
+        const v = localStorage.getItem(SH_KEY);
+        return v === null ? true : v === 'true';
+    }
+    function setSafeHavenToggle(on) {
+        localStorage.setItem(SH_KEY, on ? 'true' : 'false');
+        const usdc = portfolio.find(t => t.sym === 'USDC');
+        if (usdc) usdc.safeHaven = on;
+        render();
+    }
+    function toggleGlobalSafeHaven() {
+        setSafeHavenToggle(!getSafeHavenToggle());
+        updateSafeHavenUI();
+    }
+    function updateSafeHavenUI() {
+        const on = getSafeHavenToggle();
+        const sw = document.getElementById('shSwitch');
+        const lb = document.getElementById('shLabel');
+        const ds = document.getElementById('shDesc');
+        const row = document.getElementById('shToggleRow');
+        if (!sw) return;
+        sw.className = on ? 'sh-switch' : 'sh-switch off';
+        lb.className = on ? 'sh-label' : 'sh-label off';
+        ds.textContent = on
+            ? 'ON \u2014 absorbs hard-cap surplus & unallocated DCA'
+            : 'OFF \u2014 USDC treated as normal token';
+        row.className = on ? 'sh-toggle-row' : 'sh-toggle-row off';
+    }
 
     // ============ STRUCTURAL LIMITS ============
     const HARD_CAP_PER_TOKEN = 0.20;  // 20% max per risky token
@@ -3420,6 +3570,7 @@
                 portfolioHistory = [];
                 saveHistory();
                 resetForme();
+                ensureUSDC();
                 render();
                 renderHistoryChart();
                 showToast('portfolio cleared.', 'success');
@@ -3721,6 +3872,7 @@
                         costBasis: t.costBasis || 0, totalTokens: t.totalTokens || 0,
                         insufficientHistory: t.insufficientHistory || false
                     }));
+                    ensureUSDC();
                     lastDcaDate = data.lastDcaDate || null;
                     lastOptimization = data.lastOptimization || null;
                     if (data.portfolioHistory && Array.isArray(data.portfolioHistory)) {
@@ -3872,7 +4024,7 @@
                 const frozenIcon = t.frozen ? '❄️' : '🔥';
                 const warnIcon = t.insufficientHistory ? `<span class="warn-icon" title="Less than 180 days of history – unreliable data"></span>` : '';
                 const safeIcon = t.safeHaven ? `<span style="color:var(--green);font-size:0.6rem;margin-left:4px;" title="Safe-haven (stablecoin) — exempt from filters">🛡</span>` : '';
-                return `<tr>
+                return `<tr${t.safeHaven ? ' class="row-safe-haven"' : ''}>
                     <td><span class="sym" style="color:${colors[i]}">${t.sym}${warnIcon}${safeIcon}</span></td>
                     <td>${fmtQty(t.amount, t.price)}</td>
                     <td>$${fmtUSD(t.price)}</td>
@@ -3914,6 +4066,8 @@
         });
         hideLoading();
         loadState();
+        ensureUSDC();
+        updateSafeHavenUI();
         render();
         renderHistoryChart();
     })();
