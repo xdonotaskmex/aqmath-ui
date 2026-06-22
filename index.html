@@ -4332,16 +4332,26 @@
             });
 
             lastDcaDate = Date.now();
-            saveState();
-            document.getElementById('iDcaAmount').value = '';
-            addSnapshot();
-            render();
 
             const buySummary = result.buy_summary || [];
             const warnings = result.warnings || [];
             const totalAlloc = result.total_allocated || 0;
             const remaining = result.remaining || 0;
             console.log('DCA Result:', { budget: dcaAmount, totalAlloc, remaining, buySummary, warnings });
+
+            // Return unallocated DCA budget back to safe-haven USDC (prevents value loss)
+            if (remaining > 0.01) {
+                const usdc = portfolio.find(t => t.safeHaven && !t.frozen);
+                if (usdc) {
+                    usdc.amount += remaining;
+                    console.log(`[DCA] Returned $${remaining.toFixed(2)} remaining budget to ${usdc.sym}`);
+                }
+            }
+
+            saveState();
+            document.getElementById('iDcaAmount').value = '';
+            addSnapshot();
+            render();
 
             // Artificial delay for "heavy math" feel
             await sleep(1500);
