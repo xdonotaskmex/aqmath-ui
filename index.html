@@ -30,14 +30,7 @@
     <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer">
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"AQMath","url":"https://aqmath.xyz/","description":"Quantitative crypto portfolio rebalancer using Risk Parity mathematics.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","name":"Free Tier","price":"0","priceCurrency":"USD"}}</script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-    window.MathJax = {
-        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
-        svg: { fontCache: 'global' },
-        startup: { typeset: true }
-    };
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
     <style>
         /* ===== GLOBAL & VARIABLES ===== */
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -2468,22 +2461,20 @@
         <a href="#doc-zk" class="doc-nav-sub">Zero-Knowledge Privacy</a>
         <a href="#doc-portfolio" class="doc-nav-head">Portfolio</a>
         <a href="#doc-metrics" class="doc-nav-sub">Position Metrics</a>
-        <a href="#doc-pnl" class="doc-nav-sub">P&amp;L Calculation</a>
+        <a href="#doc-pnl" class="doc-nav-sub">P&amp;L Tracking</a>
         <a href="#doc-dca" class="doc-nav-head">DCA Engine</a>
         <a href="#doc-dca-overview" class="doc-nav-sub">Overview</a>
-        <a href="#doc-iterative" class="doc-nav-sub">Iterative Algorithm</a>
+        <a href="#doc-iterative" class="doc-nav-sub">How It Works</a>
         <a href="#doc-small-dca" class="doc-nav-sub">Small DCA Rule</a>
         <a href="#doc-defense" class="doc-nav-head">Layered Defense</a>
-        <a href="#doc-circuit" class="doc-nav-sub">Circuit Breaker</a>
-        <a href="#doc-safety" class="doc-nav-sub">Safety Factor</a>
-        <a href="#doc-trend" class="doc-nav-sub">Trend Filter</a>
-        <a href="#doc-apy" class="doc-nav-sub">APY Filter</a>
-        <a href="#doc-hardcaps" class="doc-nav-sub">Hard Caps</a>
-        <a href="#doc-riskbudget" class="doc-nav-sub">Risk Budget</a>
-        <a href="#doc-safehaven" class="doc-nav-sub">Safe-Haven</a>
+        <a href="#doc-circuit" class="doc-nav-sub">L1 &ndash; Circuit Breaker</a>
+        <a href="#doc-safety" class="doc-nav-sub">L2 &ndash; Safety Factor</a>
+        <a href="#doc-trend" class="doc-nav-sub">L3 &ndash; Trend Filter</a>
+        <a href="#doc-apy" class="doc-nav-sub">L4 &ndash; APY Filter</a>
+        <a href="#doc-hardcaps" class="doc-nav-sub">L5 &ndash; Hard Caps</a>
+        <a href="#doc-riskbudget" class="doc-nav-sub">L6 &ndash; Risk Budget</a>
+        <a href="#doc-safehaven" class="doc-nav-sub">L7 &ndash; Safe-Haven</a>
         <a href="#doc-volatility" class="doc-nav-head">Volatility</a>
-        <a href="#doc-logreturns" class="doc-nav-sub">Log Returns</a>
-        <a href="#doc-portvol" class="doc-nav-sub">Portfolio Volatility</a>
         <a href="#doc-privacy" class="doc-nav-head">Privacy Deep-Dive</a>
         <a href="#doc-separation" class="doc-nav-sub">Data Separation</a>
         <a href="#doc-backend-never" class="doc-nav-sub">What Backend Never Sees</a>
@@ -2602,53 +2593,14 @@
         <!-- PORTFOLIO -->
         <div class="doc-block" id="doc-portfolio">
             <h2 id="doc-metrics">3. Portfolio Tracking</h2>
-            <p>Each token in your portfolio is defined by a set of parameters stored in your browser&rsquo;s localStorage. These parameters form the complete state of your position and drive every calculation in the system &mdash; from drift metrics to DCA allocation to risk budget enforcement.</p>
-            <table class="doc-table">
-                <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
-                <tbody>
-                    <tr><td>sym</td><td>string</td><td>Token symbol (e.g., BTC, ETH, SOL)</td></tr>
-                    <tr><td>amount</td><td>float</td><td>Quantity of tokens held</td></tr>
-                    <tr><td>price</td><td>float</td><td>Current market price in USD</td></tr>
-                    <tr><td>target</td><td>float</td><td>Desired allocation percentage (0&ndash;100%)</td></tr>
-                    <tr><td>entry</td><td>float</td><td>User-specified average entry price</td></tr>
-                    <tr><td>apy</td><td>float</td><td>Staking yield (annual %)</td></tr>
-                    <tr><td>costBasis</td><td>float</td><td>Total USD invested (auto-updated by DCA)</td></tr>
-                    <tr><td>totalTokens</td><td>float</td><td>Total tokens acquired (for weighted avg)</td></tr>
-                    <tr><td>safeHaven</td><td>bool</td><td>Stablecoin safe-haven asset?</td></tr>
-                    <tr><td>frozen</td><td>bool</td><td>Excluded from DCA distribution?</td></tr>
-                </tbody>
-            </table>
+            <p>Your portfolio is a collection of token positions stored entirely in your browser&rsquo;s localStorage. For each token, AQMath tracks your holdings, target allocation percentage, current price, staking yield, entry price history, and DCA cost basis. Together, these parameters form the complete state of your portfolio and drive every calculation in the system &mdash; from allocation metrics to risk budget enforcement.</p>
 
             <h3>3.1 Position Metrics</h3>
-            <p>Every time the UI renders or a DCA calculation runs, the system computes real-time metrics for each token. These metrics are the foundation of the entire allocation logic.</p>
-            <div class="doc-formula">
-                <div class="doc-fl">Current Value &amp; Allocation %</div>
-                $$V_i = \text{amount}_i \times \text{price}_i$$
-                $$\text{curPct}_i = \frac{V_i}{V_{\text{portfolio}}} \times 100$$
-                <div class="doc-fe">This tells you how much each position is worth in dollars and what share of your total portfolio it represents. If you hold 0.5 BTC at $60,000, that position is worth $30,000. If your total portfolio is $100,000, BTC represents 30% of your allocation.</div>
-            </div>
-            <div class="doc-formula">
-                <div class="doc-fl">Drift &amp; Delta</div>
-                $$\text{drift}_i = \text{curPct}_i - \text{target}_i$$
-                $$\text{delta}_i = \left(\frac{\text{target}_i}{100} \times V_{\text{portfolio}}\right) - V_i$$
-                <div class="doc-fe"><strong>Drift</strong> is the percentage-point gap between where a token is and where it should be. A drift of -5% means the token is 5 percentage points below target. <strong>Delta</strong> converts that gap into dollars: if your target says SOL should be worth $15,000 but it&rsquo;s currently $10,000, delta is +$5,000. The DCA engine uses delta to prioritize which tokens receive new capital first.</div>
-            </div>
-            <div class="doc-callout blue">
-                <div class="doc-ct">&#128216; BUY SIGNAL LOGIC</div>
-                <p>A token receives a <strong>BUY</strong> recommendation when its drift is more than 0.5 percentage points below target (drift &lt; -0.5%) AND the dollar delta exceeds $0.01. Safe-haven tokens (stablecoins like USDC) bypass the drift filter entirely.</p>
-            </div>
+            <p>Every time the UI renders or a DCA calculation runs, the system computes real-time metrics for each token. It measures how much each position is currently worth, what share of your total portfolio it represents, and how far it has drifted from your intended target.</p>
+            <p>The DCA engine uses <strong>delta</strong> &mdash; the dollar gap between where a token is and where it should be &mdash; to prioritize which tokens receive new capital first. Tokens that are most underweight relative to their target get funded first. Safe-haven tokens (stablecoins) bypass this filter entirely and always receive capital when designated.</p>
 
-            <h3 id="doc-pnl">3.2 P&amp;L Calculation</h3>
-            <div class="doc-formula">
-                <div class="doc-fl">Profit / Loss Percentage</div>
-                $$\text{P\&amp;L}_i = \frac{\text{price}_i - \text{entry}_i}{\text{entry}_i} \times 100$$
-                <div class="doc-fe">Standard percentage return formula. If you bought ETH at $2,000 and it&rsquo;s now $3,000, your P&amp;L is +50%. The system uses the <code>entry</code> field or the weighted average price from cost basis tracking.</div>
-            </div>
-            <div class="doc-formula">
-                <div class="doc-fl">Weighted Average Price (from cost basis)</div>
-                $$\bar{P}_i = \frac{\text{costBasis}_i}{\text{totalTokens}_i}$$
-                <div class="doc-fe">As the DCA engine buys more tokens over time, it accumulates cost basis and total tokens acquired. Dividing these gives a true dollar-cost-averaged entry price &mdash; the exact average price you&rsquo;ve paid across all purchases.</div>
-            </div>
+            <h3 id="doc-pnl">3.2 P&amp;L Tracking</h3>
+            <p>Profit and loss is tracked against your cost basis &mdash; the true dollar-cost-averaged entry price across all purchases. As the DCA engine buys more tokens over time, it accumulates your cost basis and total tokens acquired, giving you an accurate average price and return percentage for each position.</p>
         </div>
 
 
@@ -2656,29 +2608,14 @@
         <div class="doc-block" id="doc-dca">
             <h2 id="doc-dca-overview">4. DCA Distribution Engine</h2>
             <p>The DCA engine is the heart of AQMath. Given a budget (e.g., $500), it determines exactly how to distribute that capital across your portfolio&rsquo;s underweight tokens &mdash; not equally, not randomly, but proportionally to how far each token is from its target, adjusted for risk.</p>
-            <p>The engine uses an <strong>iterative proportional allocation</strong> algorithm that runs up to 1,000 rounds. In each round, it distributes the remaining budget proportionally to each token&rsquo;s risk-adjusted delta, removes tokens that have reached their target, and redistributes the freed-up share to remaining tokens.</p>
+            <p>The engine uses an <strong>iterative allocation</strong> algorithm that converges over multiple rounds. In each round, it distributes the remaining budget to the most underweight tokens, removes tokens that have reached their target, and redistributes the freed-up share to remaining candidates. This process repeats until the entire budget is allocated or all eligible tokens are fulfilled.</p>
 
-            <h3 id="doc-iterative">4.1 Iterative Proportional Allocation</h3>
-            <div class="doc-step-flow">
-                <div class="doc-step"><div class="doc-step-num">1</div><div class="doc-step-body"><div class="doc-st">Compute Eligible Tokens</div><p>Filter positions: underweight (delta &gt; $0.01), below 50-day SMA, pass safety factor, APY &lt; 10%. Safe-haven tokens bypass all filters.</p></div></div>
-                <div class="doc-step"><div class="doc-step-num">2</div><div class="doc-step-body"><div class="doc-st">Proportional Allocation</div><p>Compute each token&rsquo;s share using the risk-adjusted delta formula.</p></div></div>
-                <div class="doc-step"><div class="doc-step-num">3</div><div class="doc-step-body"><div class="doc-st">Update Positions &amp; Cost Basis</div><p>Add bought tokens, update cost basis, reduce remainingDelta and budget.</p></div></div>
-                <div class="doc-step"><div class="doc-step-num">4</div><div class="doc-step-body"><div class="doc-st">Remove Fulfilled &amp; Repeat</div><p>Tokens with remainingDelta &lt; $0.01 are removed. Loop until budget &lt; $0.01, no eligible tokens, or 1,000 iterations. Dust goes to most underweight token.</p></div></div>
-            </div>
-            <div class="doc-formula">
-                <div class="doc-fl">Allocation Formula (per iteration)</div>
-                $$\text{alloc}_i = \min\!\Big(\delta_i^{\text{rem}},\; B_{\text{rem}} \times \frac{\delta_i \times S_i}{\sum_{j} \delta_j \times S_j}\Big)$$
-                <div class="doc-fe">Each token&rsquo;s allocation is the minimum of what it still needs and its proportional share of the remaining budget. The proportion is weighted by both delta (how underweight) and safety factor (how risky). A very underweight but volatile token gets moderated allocation &mdash; funded, but not as aggressively as a low-volatility underweight token.</div>
-            </div>
-            <div class="doc-formula">
-                <div class="doc-fl">Cost Basis Update (after each buy)</div>
-                $$\text{costBasis}_{\text{new}} = \text{costBasis}_{\text{old}} + \text{alloc}_i$$
-                $$\text{totalTokens}_{\text{new}} = \text{totalTokens}_{\text{old}} + \frac{\text{alloc}_i}{\text{price}_i}$$
-                <div class="doc-fe">Every DCA buy updates cost basis and total tokens acquired. These compute the weighted average price shown in the UI, giving you a true DCA average across all purchases over time.</div>
-            </div>
+            <h3 id="doc-iterative">4.1 How It Works (High-Level)</h3>
+            <p>Before any allocation happens, each token is evaluated through the 7-layer defense pipeline (see Section 5). Only tokens that pass all filters are eligible to receive DCA funds. The allocation then follows a simple principle: <strong>the more underweight a token is relative to its target, the larger share of new capital it receives</strong> &mdash; tempered by a risk adjustment that reduces allocation for highly volatile assets.</p>
+            <p>After each round, cost basis and token counts are updated automatically. Over multiple DCA cycles, the engine naturally balances your portfolio toward its ideal allocation.</p>
 
-            <h3 id="doc-small-dca">4.2 Small DCA Rule (below $50)</h3>
-            <p>When the DCA budget is below $50, the engine allocates the <strong>entire amount</strong> to the single most underweight eligible token.</p>
+            <h3 id="doc-small-dca">4.2 Small DCA Rule</h3>
+            <p>When the DCA budget is very small, the engine allocates the <strong>entire amount</strong> to the single most underweight eligible token.</p>
             <div class="doc-callout green">
                 <div class="doc-ct">&#128202; WHY SINGLE-TOKEN FOR SMALL AMOUNTS</div>
                 <p>If you DCA $20 across 5 tokens, each gets $4 &mdash; likely below exchange minimums, and fees would consume a significant percentage. The small DCA rule puts the full $20 into the token that needs it most. Over multiple DCA cycles, the algorithm naturally balances across all tokens.</p>
@@ -2689,130 +2626,37 @@
         <div class="doc-block" id="doc-defense">
             <h2>5. Layered Defense System</h2>
             <p>AQMath implements a 7-layer defense pipeline designed for crypto markets. Traditional systems would halt trading on a 15% dip &mdash; but in crypto, 15&ndash;20% pullbacks happen regularly and are often excellent buying opportunities. Each layer operates independently and in strict sequence, creating defense-in-depth where no single point of failure can compromise portfolio safety.</p>
-            <div class="doc-diagram">
-                <div class="doc-fl">7-Layer Defense Pipeline</div>
-                <svg viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg" style="max-width:720px;">
-                    <rect x="20" y="20" width="720" height="44" rx="4" fill="rgba(248,113,113,0.06)" stroke="#f87171" stroke-width="0.8" opacity="0.7"/>
-                    <text x="40" y="46" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">L1: CIRCUIT BREAKER</text>
-                    <text x="220" y="46" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="8">Halt ALL DCA if drawdown &ge; 40% from ATH</text>
-                    <rect x="20" y="74" width="720" height="44" rx="4" fill="rgba(251,191,36,0.06)" stroke="#fbbf24" stroke-width="0.8" opacity="0.7"/>
-                    <text x="40" y="100" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">L2: SAFETY FACTOR</text>
-                    <text x="220" y="100" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="8">Reduce buy size: S = max(0.2, 1 &minus; 5&sigma;)</text>
-                    <rect x="20" y="128" width="720" height="44" rx="4" fill="rgba(56,189,248,0.06)" stroke="#38bdf8" stroke-width="0.8" opacity="0.7"/>
-                    <text x="40" y="154" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">L3: TREND FILTER</text>
-                    <text x="220" y="154" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="8">Skip tokens above 50-day SMA</text>
-                    <rect x="20" y="182" width="720" height="44" rx="4" fill="rgba(167,139,250,0.06)" stroke="#a78bfa" stroke-width="0.8" opacity="0.7"/>
-                    <text x="40" y="208" fill="#a78bfa" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">L4: APY FILTER</text>
-                    <text x="220" y="208" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="8">Skip self-sustaining tokens (APY &ge; 10%)</text>
-                    <rect x="20" y="236" width="720" height="44" rx="4" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="0.8" opacity="0.7"/>
-                    <text x="40" y="262" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">L5: HARD CAP</text>
-                    <text x="220" y="262" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="8">Max 20% per risky token &mdash; overflow &rarr; stablecoin</text>
-                    <rect x="20" y="290" width="720" height="44" rx="4" fill="rgba(6,182,212,0.06)" stroke="#06b6d4" stroke-width="0.8" opacity="0.7"/>
-                    <text x="40" y="316" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">L6: RISK BUDGET</text>
-                    <text x="220" y="316" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="8">Max 60% total risky &mdash; proportional scaling</text>
-                    <rect x="20" y="344" width="720" height="44" rx="4" fill="rgba(52,211,153,0.1)" stroke="#34d399" stroke-width="1" opacity="0.8"/>
-                    <text x="40" y="370" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="700">L7: SAFE-HAVEN REDIRECT</text>
-                    <text x="268" y="370" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="8">All surplus flows into USDC</text>
-                </svg>
-            </div>
 
-            <h3 id="doc-circuit">5.1 Circuit Breaker (L1)</h3>
-            <p>The circuit breaker halts <strong>all</strong> DCA distribution when portfolio drawdown from ATH is severe. The threshold adapts to current market volatility &mdash; higher in volatile markets to prevent false positives.</p>
-            <div class="doc-formula">
-                <div class="doc-fl">Circuit Breaker Formula</div>
-                $$\text{drawdown} = 1 - \frac{V_{\text{current}}}{V_{\text{ATH}}}$$
-                $$\text{threshold} = \max\!\Big(0.40,\; \min\!\big(0.55,\; 1 - (\sigma_{\text{port}} \times 2.5)\big)\Big)$$
-                <div class="doc-fe">The drawdown measures how far the portfolio has fallen from its peak. The threshold is <strong>dynamic</strong>: in calm markets (low vol ~8%), it sits at ~40%. In volatile markets (vol ~20%), it rises to ~55%. The 2.5&times; multiplier scales the threshold proportionally to volatility, ensuring the circuit breaker is contextually aware.</div>
-            </div>
-            <div class="doc-param-grid">
-                <div class="doc-param"><div class="doc-pn">MIN_THRESHOLD</div><div class="doc-pv">40%</div><div class="doc-pd">Minimum drawdown to trip</div></div>
-                <div class="doc-param"><div class="doc-pn">MAX_THRESHOLD</div><div class="doc-pv">55%</div><div class="doc-pd">Maximum threshold (calm markets)</div></div>
-                <div class="doc-param"><div class="doc-pn">VOL_MULTIPLIER</div><div class="doc-pv">2.5&times;</div><div class="doc-pd">Volatility scaling factor</div></div>
-            </div>
+            <h3 id="doc-circuit">L1 &mdash; Circuit Breaker</h3>
+            <p>The circuit breaker halts <strong>all</strong> DCA distribution when portfolio drawdown from its all-time high is severe. The threshold adapts to current market volatility &mdash; higher in volatile markets to prevent false positives, lower in calm markets for tighter protection.</p>
 
-            <h3 id="doc-safety">5.2 Safety Factor (L2)</h3>
-            <p>Per-token risk adjustment that reduces buy size for high-volatility assets. Continuous scaling, not binary skip/accept.</p>
-            <div class="doc-formula">
-                <div class="doc-fl">Safety Factor</div>
-                $$S_i = \max\!\big(0.2,\; 1.0 - (5 \times \sigma_{30d})\big)$$
-                <div class="doc-fe">Starts at 1.0 (full allocation) and decreases by 5&times; the token&rsquo;s 30-day volatility. A token with 8% monthly vol gets S = 0.60 (60% of proportional share). The floor at 0.20 ensures even very volatile tokens still receive some allocation.</div>
-            </div>
-            <table class="doc-table">
-                <thead><tr><th>30d Vol</th><th>Safety Factor</th><th>Effect</th></tr></thead>
-                <tbody>
-                    <tr><td>4%</td><td>0.80</td><td>80% of proportional share</td></tr>
-                    <tr><td>8%</td><td>0.60</td><td>60% of proportional share</td></tr>
-                    <tr><td>12%</td><td>0.40</td><td>40% of proportional share</td></tr>
-                    <tr><td>16%+</td><td>0.20 (floor)</td><td>Minimum allocation</td></tr>
-                </tbody>
-            </table>
+            <h3 id="doc-safety">L2 &mdash; Safety Factor</h3>
+            <p>A per-token risk adjustment that reduces buy size for high-volatility assets. More volatile tokens receive proportionally less capital, ensuring that risky positions don&rsquo;t get outsized allocations even when they&rsquo;re the most underweight.</p>
 
-            <h3 id="doc-trend">5.3 Trend Filter (L3)</h3>
-            <div class="doc-formula">
-                <div class="doc-fl">50-Day Simple Moving Average</div>
-                $$\text{SMA}_{50} = \frac{1}{n}\sum_{k=1}^{n} P_k \quad (n \leq 50)$$
-                <div class="doc-fe">If the current price is above the 50-day SMA, the token is trending up &mdash; buying now means buying at a relative high. The filter enforces &ldquo;buy the dip&rdquo; discipline: capital flows to tokens during pullbacks, not during rallies.</div>
-            </div>
+            <h3 id="doc-trend">L3 &mdash; Trend Filter</h3>
+            <p>Skips tokens currently trading above their moving average &mdash; effectively enforcing a &ldquo;buy the dip&rdquo; discipline. Capital flows to tokens during pullbacks, not during rallies.</p>
 
-            <h3 id="doc-apy">5.4 APY Filter (L4)</h3>
-            <div class="doc-formula">
-                <div class="doc-fl">Self-Sustaining Threshold</div>
-                $$\text{skip if: } \text{APY}_i \geq 10\%$$
-                <div class="doc-fe">A token earning 12% APY compounds $120/year on $1,000 &mdash; effectively DCA-ing itself. The engine redirects budget to lower-yield tokens that need capital injection.</div>
-            </div>
+            <h3 id="doc-apy">L4 &mdash; APY Filter</h3>
+            <p>Tokens earning high staking yields compound on their own and are excluded from DCA distribution. The engine redirects that capital to lower-yield tokens that need active injection.</p>
 
-            <h3 id="doc-hardcaps">5.5 Hard Caps (L5)</h3>
-            <div class="doc-formula">
-                <div class="doc-fl">Per-Token Hard Cap</div>
-                $$\text{if } w_i = \frac{V_i}{V_{\text{port}}} > 0.20:$$
-                $$V_i^{\text{capped}} = 0.20 \times V_{\text{port}}, \quad \text{surplus} += V_i - V_i^{\text{capped}}$$
-                <div class="doc-fe">If DCA allocation would push a token above 20% of total portfolio value, the excess is trimmed and added to the surplus pool. Prevents dangerous concentration even if a token is massively underweight by target.</div>
-            </div>
+            <h3 id="doc-hardcaps">L5 &mdash; Hard Caps</h3>
+            <p>No single risky token can exceed a structural concentration limit. If allocation would push a token beyond this cap, the excess is trimmed and redirected to the surplus pool.</p>
 
-            <h3 id="doc-riskbudget">5.6 Risk Budget (L6)</h3>
-            <div class="doc-formula">
-                <div class="doc-fl">Total Risk Budget</div>
-                $$\text{if } \sum V_{\text{risky}} > 0.60 \times V_{\text{port}}:$$
-                $$\text{scale} = \frac{0.60 \times V_{\text{port}}}{\sum V_{\text{risky}}}, \quad V_i^{\text{new}} = V_i \times \text{scale}$$
-                <div class="doc-fe">Ensures at least 40% of your portfolio remains in stable assets. If risky tokens total 70%, they&rsquo;re scaled by 60/70 = 0.857, bringing exposure to exactly 60%. Scaling is proportional &mdash; relative allocation ratios are preserved.</div>
-            </div>
+            <h3 id="doc-riskbudget">L6 &mdash; Risk Budget</h3>
+            <p>Total risky exposure is capped at a percentage of your portfolio, ensuring a safety buffer always exists. If risky tokens exceed the budget, all allocations are scaled down proportionally.</p>
 
-            <h3 id="doc-safehaven">5.7 Safe-Haven Redirect (L7)</h3>
-            <div class="doc-formula">
-                <div class="doc-fl">Stablecoin Absorption</div>
-                $$\text{amount}_{\text{USDC}} += \frac{\text{surplus}}{\$1.00}$$
-                <div class="doc-fe">All surplus from hard caps and risk budget scaling flows to the active stablecoin. Since stablecoins trade at ~$1.00, the surplus dollar amount is directly added as token quantity. This capital sits until the user clicks &ldquo;Deploy to DCA.&rdquo;</div>
-            </div>
-            <p><strong>Supported stablecoins</strong> (auto-detected): USDC, USDT, DAI, TUSD, BUSD, FDUSD, USDP, PYUSD, EURC, GUSD.</p>
+            <h3 id="doc-safehaven">L7 &mdash; Safe-Haven Redirect</h3>
+            <p>All surplus capital from hard caps and risk budget scaling flows into your designated stablecoin. This capital sits in a safe buffer until you decide to redeploy it through DCA.</p>
         </div>
 
 
         <!-- VOLATILITY -->
         <div class="doc-block" id="doc-volatility">
             <h2 id="doc-logreturns">6. Volatility Calculation</h2>
-            <p>Volatility is the foundational risk metric used throughout AQMath. It feeds into the safety factor, the circuit breaker threshold, and (in Pro) the covariance matrix. Accurate volatility estimation is what allows the system to distinguish between normal market noise and genuine risk.</p>
-            <div class="doc-formula">
-                <div class="doc-fl">Log Returns</div>
-                $$r_t = \ln\!\left(\frac{P_t}{P_{t-1}}\right)$$
-                <div class="doc-fe">Log returns are used instead of simple percentage returns because they are additive over time and symmetric. They are the standard input for volatility estimation in quantitative finance.</div>
-            </div>
-            <div class="doc-formula">
-                <div class="doc-fl">Daily Volatility</div>
-                $$\sigma_{\text{daily}} = \sqrt{\frac{1}{n}\sum_{t=1}^{n}(r_t - \bar{r})^2}$$
-                <div class="doc-fe">Measures the average dispersion of daily returns around their mean over a 30-day rolling window. A token with high daily volatility has returns that swing widely &mdash; it&rsquo;s riskier.</div>
-            </div>
-            <div class="doc-formula">
-                <div class="doc-fl">Annualized Volatility</div>
-                $$\sigma_{\text{annual}} = \sigma_{\text{daily}} \times \sqrt{365}$$
-                <div class="doc-fe">Daily vol is scaled using the square-root-of-time rule. We use &radic;365 instead of &radic;252 because crypto markets trade 24/7/365 &mdash; no weekends or closures.</div>
-            </div>
+            <p>Volatility is the foundational risk metric used throughout AQMath. It feeds into the safety factor, the circuit breaker threshold, and (in Pro) the covariance matrix. The system computes a rolling 30-day volatility estimate for each token using log returns &mdash; a standard approach in quantitative finance that captures the magnitude of daily price swings.</p>
 
             <h3 id="doc-portvol">6.1 Portfolio Volatility</h3>
-            <div class="doc-formula">
-                <div class="doc-fl">Weighted Portfolio Volatility</div>
-                $$\sigma_{\text{port}} = \sum_{i=1}^{n} w_i \times \sigma_{\text{annual},i} \quad \text{where } w_i = \frac{V_i}{V_{\text{port}}}$$
-                <div class="doc-fe">Each token&rsquo;s volatility is weighted by its share of total portfolio value. Safe-haven tokens and frozen positions are excluded &mdash; they have near-zero volatility by definition.</div>
-            </div>
+            <p>Portfolio-level volatility is a weighted aggregate of each token&rsquo;s individual volatility, proportional to its share of total portfolio value. Safe-haven tokens and frozen positions are excluded since they have near-zero volatility by definition. This portfolio-level metric drives adaptive thresholds across the entire defense system.</p>
             <div class="doc-callout blue">
                 <div class="doc-ct">&#128216; COVARIANCE MATRIX (Pro Feature)</div>
                 <p>The Pro engine computes a full covariance matrix estimating how assets move <em>together</em>. Two tokens with moderate individual volatility but high correlation (like ETH and SOL) have amplified combined risk. The Risk Parity optimizer uses this to ensure each asset contributes equal risk &mdash; preventing hidden concentration through correlation.</p>
@@ -2909,10 +2753,7 @@
             document.body.classList.add('route-app');
         } else if (hash === '#/docs' || hash === '#/doc') {
             document.body.classList.add('route-doc');
-            // Re-typeset MathJax when doc view becomes visible
-            if (window.MathJax && window.MathJax.typesetPromise) {
-                window.MathJax.typesetPromise([document.getElementById('docView')]);
-            }
+
         } else {
             document.body.classList.add('route-landing');
             loadAllWidgets();
