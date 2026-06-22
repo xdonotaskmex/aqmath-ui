@@ -2595,6 +2595,45 @@
             <h2 id="doc-metrics">3. Portfolio Tracking</h2>
             <p>Your portfolio is a collection of token positions stored entirely in your browser&rsquo;s localStorage. For each token, AQMath tracks your holdings, target allocation percentage, current price, staking yield, entry price history, and DCA cost basis. Together, these parameters form the complete state of your portfolio and drive every calculation in the system &mdash; from allocation metrics to risk budget enforcement.</p>
 
+            <div class="doc-diagram">
+                <div class="doc-fl">Portfolio Position Overview (example)</div>
+                <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;">
+                    <rect x="10" y="10" width="580" height="180" rx="6" fill="none" stroke="#06b6d4" stroke-width="1" opacity="0.4"/>
+                    <text x="30" y="34" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="500">PORTFOLIO</text>
+                    <text x="540" y="34" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="9" text-anchor="end">TOTAL: $100,000</text>
+                    <line x1="30" y1="44" x2="570" y2="44" stroke="rgba(255,255,255,0.07)" stroke-width="0.5"/>
+                    <circle cx="45" cy="68" r="8" fill="rgba(251,191,36,0.15)" stroke="#fbbf24" stroke-width="0.5"/>
+                    <text x="45" y="72" text-anchor="middle" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="6" font-weight="600">BTC</text>
+                    <text x="62" y="72" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="10">Bitcoin</text>
+                    <text x="200" y="72" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">0.45 BTC</text>
+                    <text x="320" y="72" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">target: 25%</text>
+                    <text x="440" y="72" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">current: 27%</text>
+                    <rect x="440" y="78" width="80" height="4" rx="2" fill="rgba(255,255,255,0.05)"/>
+                    <rect x="440" y="78" width="72" height="4" rx="2" fill="rgba(52,211,153,0.4)"/>
+                    <circle cx="45" cy="108" r="8" fill="rgba(56,189,248,0.15)" stroke="#38bdf8" stroke-width="0.5"/>
+                    <text x="45" y="112" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="6" font-weight="600">ETH</text>
+                    <text x="62" y="112" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="10">Ethereum</text>
+                    <text x="200" y="112" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">12.5 ETH</text>
+                    <text x="320" y="112" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">target: 20%</text>
+                    <text x="440" y="112" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">current: 15%</text>
+                    <rect x="440" y="118" width="80" height="4" rx="2" fill="rgba(255,255,255,0.05)"/>
+                    <rect x="440" y="118" width="52" height="4" rx="2" fill="rgba(248,113,113,0.4)"/>
+                    <circle cx="45" cy="148" r="8" fill="rgba(52,211,153,0.15)" stroke="#34d399" stroke-width="0.5"/>
+                    <text x="45" y="152" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="6" font-weight="600">USDC</text>
+                    <text x="62" y="152" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="10">USD Coin</text>
+                    <text x="200" y="152" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">20,000 USDC</text>
+                    <text x="320" y="152" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">target: 25%</text>
+                    <text x="440" y="152" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">current: 20%</text>
+                    <rect x="440" y="158" width="80" height="4" rx="2" fill="rgba(255,255,255,0.05)"/>
+                    <rect x="440" y="158" width="64" height="4" rx="2" fill="rgba(52,211,153,0.3)"/>
+                    <rect x="540" y="60" width="4" height="100" rx="2" fill="rgba(251,191,36,0.1)"/>
+                    <text x="548" y="80" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="6">P&amp;L</text>
+                    <text x="548" y="96" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="7">+18%</text>
+                    <text x="548" y="116" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="7">+24%</text>
+                    <text x="548" y="152" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">0%</text>
+                </svg>
+            </div>
+
             <h3>3.1 Position Metrics</h3>
             <p>Every time the UI renders or a DCA calculation runs, the system computes real-time metrics for each token. It measures how much each position is currently worth, what share of your total portfolio it represents, and how far it has drifted from your intended target.</p>
             <p>The DCA engine uses <strong>delta</strong> &mdash; the dollar gap between where a token is and where it should be &mdash; to prioritize which tokens receive new capital first. Tokens that are most underweight relative to their target get funded first. Safe-haven tokens (stablecoins) bypass this filter entirely and always receive capital when designated.</p>
@@ -2609,6 +2648,42 @@
             <h2 id="doc-dca-overview">4. DCA Distribution Engine</h2>
             <p>The DCA engine is the heart of AQMath. Given a budget (e.g., $500), it determines exactly how to distribute that capital across your portfolio&rsquo;s underweight tokens &mdash; not equally, not randomly, but proportionally to how far each token is from its target, adjusted for risk.</p>
             <p>The engine uses an <strong>iterative allocation</strong> algorithm that converges over multiple rounds. In each round, it distributes the remaining budget to the most underweight tokens, removes tokens that have reached their target, and redistributes the freed-up share to remaining candidates. This process repeats until the entire budget is allocated or all eligible tokens are fulfilled.</p>
+
+            <div class="doc-diagram">
+                <div class="doc-fl">DCA Budget Flow (example: $500)</div>
+                <svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg" style="max-width:660px;">
+                    <rect x="10" y="50" width="120" height="70" rx="6" fill="rgba(251,191,36,0.08)" stroke="#fbbf24" stroke-width="1" opacity="0.6"/>
+                    <text x="70" y="78" text-anchor="middle" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="13" font-weight="600">$500</text>
+                    <text x="70" y="96" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="8">DCA Budget</text>
+                    <line x1="135" y1="85" x2="195" y2="85" stroke="#64748b" stroke-width="1" opacity="0.5" stroke-dasharray="4,3"/>
+                    <polygon points="193,81 193,89 199,85" fill="#64748b" opacity="0.5"/>
+                    <rect x="200" y="40" width="130" height="90" rx="6" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="1.5" opacity="0.6"/>
+                    <text x="265" y="68" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">DCA ENGINE</text>
+                    <text x="265" y="84" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">7-layer defense</text>
+                    <text x="265" y="98" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">iterative allocation</text>
+                    <text x="265" y="118" text-anchor="middle" fill="#a855f7" font-family="'JetBrains Mono',monospace" font-size="7" opacity="0.7">ZK-inspired</text>
+                    <line x1="335" y1="60" x2="400" y2="35" stroke="#64748b" stroke-width="0.8" opacity="0.4"/>
+                    <line x1="335" y1="75" x2="400" y2="70" stroke="#64748b" stroke-width="0.8" opacity="0.4"/>
+                    <line x1="335" y1="90" x2="400" y2="105" stroke="#64748b" stroke-width="0.8" opacity="0.4"/>
+                    <line x1="335" y1="105" x2="400" y2="140" stroke="#64748b" stroke-width="0.8" opacity="0.4"/>
+                    <rect x="405" y="18" width="125" height="30" rx="4" fill="rgba(56,189,248,0.06)" stroke="#38bdf8" stroke-width="0.5" opacity="0.5"/>
+                    <text x="415" y="38" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">BTC  +$142</text>
+                    <rect x="405" y="53" width="125" height="30" rx="4" fill="rgba(56,189,248,0.06)" stroke="#38bdf8" stroke-width="0.5" opacity="0.5"/>
+                    <text x="415" y="73" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">ETH  +$89</text>
+                    <rect x="405" y="88" width="125" height="30" rx="4" fill="rgba(56,189,248,0.06)" stroke="#38bdf8" stroke-width="0.5" opacity="0.5"/>
+                    <text x="415" y="108" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">SOL  +$54</text>
+                    <rect x="405" y="123" width="125" height="30" rx="4" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
+                    <text x="415" y="143" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="9">USDC +$215</text>
+                    <line x1="535" y1="33" x2="580" y2="33" stroke="#64748b" stroke-width="0.5" opacity="0.3" stroke-dasharray="2,2"/>
+                    <line x1="535" y1="68" x2="580" y2="68" stroke="#64748b" stroke-width="0.5" opacity="0.3" stroke-dasharray="2,2"/>
+                    <line x1="535" y1="103" x2="580" y2="103" stroke="#64748b" stroke-width="0.5" opacity="0.3" stroke-dasharray="2,2"/>
+                    <line x1="535" y1="138" x2="580" y2="138" stroke="#64748b" stroke-width="0.5" opacity="0.3" stroke-dasharray="2,2"/>
+                    <text x="590" y="37" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="7">&#x2713; on target</text>
+                    <text x="590" y="72" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="7">&#x25BC; underweight</text>
+                    <text x="590" y="107" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="7">&#x25BC; underweight</text>
+                    <text x="590" y="142" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="7">&#x25B6; safe-haven</text>
+                </svg>
+            </div>
 
             <h3 id="doc-iterative">4.1 How It Works (High-Level)</h3>
             <p>Before any allocation happens, each token is evaluated through the 7-layer defense pipeline (see Section 5). Only tokens that pass all filters are eligible to receive DCA funds. The allocation then follows a simple principle: <strong>the more underweight a token is relative to its target, the larger share of new capital it receives</strong> &mdash; tempered by a risk adjustment that reduces allocation for highly volatile assets.</p>
@@ -2626,6 +2701,48 @@
         <div class="doc-block" id="doc-defense">
             <h2>5. Layered Defense System</h2>
             <p>AQMath implements a 7-layer defense pipeline designed for crypto markets. Traditional systems would halt trading on a 15% dip &mdash; but in crypto, 15&ndash;20% pullbacks happen regularly and are often excellent buying opportunities. Each layer operates independently and in strict sequence, creating defense-in-depth where no single point of failure can compromise portfolio safety.</p>
+
+            <div class="doc-diagram">
+                <div class="doc-fl">7-Layer Defense Pipeline</div>
+                <svg viewBox="0 0 480 310" xmlns="http://www.w3.org/2000/svg" style="max-width:440px;">
+                    <rect x="20" y="10" width="440" height="32" rx="4" fill="rgba(248,113,113,0.06)" stroke="#f87171" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="48" cy="26" r="12" fill="rgba(248,113,113,0.15)" stroke="#f87171" stroke-width="0.5"/>
+                    <text x="48" y="30" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L1</text>
+                    <text x="72" y="30" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="10">Circuit Breaker</text>
+                    <text x="440" y="30" text-anchor="end" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">halts all DCA on severe drawdown</text>
+                    <rect x="20" y="50" width="440" height="32" rx="4" fill="rgba(251,191,36,0.06)" stroke="#fbbf24" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="48" cy="66" r="12" fill="rgba(251,191,36,0.15)" stroke="#fbbf24" stroke-width="0.5"/>
+                    <text x="48" y="70" text-anchor="middle" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L2</text>
+                    <text x="72" y="70" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="10">Safety Factor</text>
+                    <text x="440" y="70" text-anchor="end" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">reduces buy size for volatile assets</text>
+                    <rect x="20" y="90" width="440" height="32" rx="4" fill="rgba(56,189,248,0.06)" stroke="#38bdf8" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="48" cy="106" r="12" fill="rgba(56,189,248,0.15)" stroke="#38bdf8" stroke-width="0.5"/>
+                    <text x="48" y="110" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L3</text>
+                    <text x="72" y="110" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="10">Trend Filter</text>
+                    <text x="440" y="110" text-anchor="end" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">enforces buy-the-dip discipline</text>
+                    <rect x="20" y="130" width="440" height="32" rx="4" fill="rgba(168,85,247,0.06)" stroke="#a855f7" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="48" cy="146" r="12" fill="rgba(168,85,247,0.15)" stroke="#a855f7" stroke-width="0.5"/>
+                    <text x="48" y="150" text-anchor="middle" fill="#a855f7" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L4</text>
+                    <text x="72" y="150" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="10">APY Filter</text>
+                    <text x="440" y="150" text-anchor="end" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">skips self-sustaining tokens</text>
+                    <rect x="20" y="170" width="440" height="32" rx="4" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="48" cy="186" r="12" fill="rgba(52,211,153,0.15)" stroke="#34d399" stroke-width="0.5"/>
+                    <text x="48" y="190" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L5</text>
+                    <text x="72" y="190" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="10">Hard Caps</text>
+                    <text x="440" y="190" text-anchor="end" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">max concentration per token</text>
+                    <rect x="20" y="210" width="440" height="32" rx="4" fill="rgba(6,182,212,0.06)" stroke="#06b6d4" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="48" cy="226" r="12" fill="rgba(6,182,212,0.15)" stroke="#06b6d4" stroke-width="0.5"/>
+                    <text x="48" y="230" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L6</text>
+                    <text x="72" y="230" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="10">Risk Budget</text>
+                    <text x="440" y="230" text-anchor="end" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">caps total risky exposure</text>
+                    <rect x="20" y="250" width="440" height="32" rx="4" fill="rgba(52,211,153,0.1)" stroke="#34d399" stroke-width="1.2" opacity="0.7"/>
+                    <circle cx="48" cy="266" r="12" fill="rgba(52,211,153,0.2)" stroke="#34d399" stroke-width="0.5"/>
+                    <text x="48" y="270" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L7</text>
+                    <text x="72" y="270" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">Safe-Haven Redirect</text>
+                    <text x="440" y="270" text-anchor="end" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">surplus flows to stablecoin</text>
+                    <line x1="48" y1="40" x2="48" y2="250" stroke="#64748b" stroke-width="0.5" opacity="0.15"/>
+                </svg>
+            </div>
 
             <h3 id="doc-circuit">L1 &mdash; Circuit Breaker</h3>
             <p>The circuit breaker halts <strong>all</strong> DCA distribution when portfolio drawdown from its all-time high is severe. The threshold adapts to current market volatility &mdash; higher in volatile markets to prevent false positives, lower in calm markets for tighter protection.</p>
