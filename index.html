@@ -2492,7 +2492,7 @@
         <div class="doc-block" id="doc-intro">
             <h2 id="doc-what">1. What is AQMath?</h2>
             <p>AQMath is a quantitative portfolio rebalancer purpose-built for the crypto market. It combines institutional-grade mathematical models &mdash; the same class of optimization used by multi-billion-dollar hedge funds &mdash; with a privacy-first architecture that ensures your financial data never leaves your control.</p>
-            <p>At its core, AQMath solves a deceptively complex problem: <strong>when you add new capital to your crypto portfolio, which tokens should you buy, and how much of each?</strong> A naive approach (split equally) ignores that some positions are already overweight while others are dangerously underweight. AQMath&rsquo;s DCA engine uses deviation-weighted proportional allocation, filtered through a 7-layer risk defense system, to ensure every dollar you invest moves your portfolio closer to its optimal structure.</p>
+            <p>At its core, AQMath solves a deceptively complex problem: <strong>when you add new capital to your crypto portfolio, which tokens should you buy, and how much of each?</strong> A naive approach (split equally) ignores that some positions are already overweight while others are dangerously underweight. AQMath&rsquo;s DCA engine uses smart proportional allocation, filtered through a 7-layer risk defense system, to ensure every dollar you invest moves your portfolio closer to its optimal structure.</p>
             <p>The system operates on a <strong>hybrid architecture</strong>: your portfolio data (token amounts, entry prices, targets) stays exclusively in your browser&rsquo;s localStorage, while computationally intensive math (covariance matrices, iterative DCA optimization, volatility analysis) runs on our secure backend engine. This means you get institutional-quality analysis without ever exposing your holdings to a server.</p>
             <div class="doc-callout purple">
                 <div class="doc-ct">&#128272; ZERO-KNOWLEDGE ARCHITECTURE</div>
@@ -2541,11 +2541,11 @@
                     <rect x="340" y="88" width="200" height="32" rx="3" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
                     <text x="440" y="108" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">DCA Distribution Engine</text>
                     <rect x="340" y="128" width="200" height="32" rx="3" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
-                    <text x="440" y="148" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">Covariance Matrix + KKT</text>
+                    <text x="440" y="148" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">Risk Optimization Engine</text>
                     <rect x="340" y="168" width="200" height="32" rx="3" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
                     <text x="440" y="188" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">Circuit Breaker + Hard Caps</text>
                     <rect x="340" y="208" width="200" height="32" rx="3" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
-                    <text x="440" y="228" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">Volatility Calculator (30d)</text>
+                    <text x="440" y="228" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">Volatility Calculator</text>
                     <rect x="340" y="248" width="200" height="32" rx="3" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
                     <text x="440" y="268" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">Safety Factor + Trend Filter</text>
                     <line x1="560" y1="130" x2="620" y2="130" stroke="#64748b" stroke-width="1" opacity="0.4" stroke-dasharray="4,3"/>
@@ -2554,11 +2554,11 @@
                     <text x="700" y="84" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">EXTERNAL APIs</text>
                     <text x="700" y="104" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="8">Binance (live prices)</text>
                     <text x="700" y="120" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="8">CoinGecko (OHLC history)</text>
-                    <text x="700" y="136" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="8">Data Pipeline (180d)</text>
+                    <text x="700" y="136" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="8">Data Pipeline (OHLC)</text>
                     <rect x="620" y="200" width="160" height="80" rx="4" fill="rgba(251,191,36,0.06)" stroke="#fbbf24" stroke-width="0.5" opacity="0.4"/>
                     <text x="700" y="222" text-anchor="middle" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="500">PRIVACY BOUNDARY</text>
                     <text x="700" y="240" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Only token symbols cross.</text>
-                    <text x="700" y="254" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Amounts NEVER leave.</text>
+                    <text x="700" y="254" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Amounts sent only during DCA, never stored.</text>
                     <text x="700" y="268" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">No server-side persistence.</text>
                 </svg>
             </div>
@@ -2569,7 +2569,7 @@
                 <li><strong>User enters tokens + targets</strong> &rarr; stored exclusively in browser localStorage. No network request is made.</li>
                 <li><strong>SYNC clicked</strong> &rarr; only token symbols (e.g., BTC, ETH, SOL) are sent to the backend. The backend fetches current prices from Binance and returns them. It has no way of knowing how much BTC or ETH you hold.</li>
                 <li><strong>DCA Distribute clicked</strong> &rarr; positions (including amounts) and DCA budget are sent to the backend engine via a single HTTPS POST request.</li>
-                <li><strong>Backend computes</strong> &rarr; the DCA engine runs iterative proportional allocation with the full 7-layer defense pipeline. All computation happens in-memory. Nothing is written to disk or database.</li>
+                <li><strong>Backend computes</strong> &rarr; the DCA engine runs iterative allocation with the full 7-layer defense pipeline. All computation happens in-memory. Nothing is written to disk or database.</li>
                 <li><strong>Results returned</strong> &rarr; updated token amounts are sent back to the browser and written to localStorage. The backend discards the request data immediately after responding.</li>
             </ol>
 
@@ -2770,13 +2770,13 @@
         <!-- VOLATILITY -->
         <div class="doc-block" id="doc-volatility">
             <h2 id="doc-logreturns">6. Volatility Calculation</h2>
-            <p>Volatility is the foundational risk metric used throughout AQMath. It feeds into the safety factor, the circuit breaker threshold, and (in Pro) the covariance matrix. The system computes a rolling 30-day volatility estimate for each token using log returns &mdash; a standard approach in quantitative finance that captures the magnitude of daily price swings.</p>
+            <p>Volatility is the foundational risk metric used throughout AQMath. It feeds into the safety factor, the circuit breaker threshold, and (in Pro) the covariance matrix. The system computes a rolling volatility estimate for each token using log returns &mdash; a standard approach in quantitative finance that captures the magnitude of daily price swings.</p>
 
             <h3 id="doc-portvol">6.1 Portfolio Volatility</h3>
             <p>Portfolio-level volatility is a weighted aggregate of each token&rsquo;s individual volatility, proportional to its share of total portfolio value. Safe-haven tokens and frozen positions are excluded since they have near-zero volatility by definition. This portfolio-level metric drives adaptive thresholds across the entire defense system.</p>
             <div class="doc-callout blue">
                 <div class="doc-ct">&#128216; COVARIANCE MATRIX (Pro Feature)</div>
-                <p>The Pro engine computes a full covariance matrix estimating how assets move <em>together</em>. Two tokens with moderate individual volatility but high correlation (like ETH and SOL) have amplified combined risk. The Risk Parity optimizer uses this to ensure each asset contributes equal risk &mdash; preventing hidden concentration through correlation.</p>
+                <p>The Pro engine computes a full covariance matrix estimating how assets move <em>together</em>. Two tokens with moderate individual volatility but high correlation (like ETH and SOL) have amplified combined risk. The optimizer uses this to ensure each asset contributes equal risk &mdash; preventing hidden concentration through correlation.</p>
             </div>
         </div>
 
