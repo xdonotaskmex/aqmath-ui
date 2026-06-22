@@ -594,6 +594,56 @@
             .terminal-dashboard { grid-template-columns: 1fr; }
         }
 
+        /* ===== RESPONSIVE: APP VIEW + DOC VIEW (768px) ===== */
+        @media (max-width: 768px) {
+            /* App view: cards, status bar, sidebar padding */
+            .card { padding: 14px 16px; }
+            .card-title { font-size: 0.65rem; letter-spacing: 2px; }
+            .status-bar { padding: 6px 16px; }
+            .sidebar { padding: 16px; }
+            .sum-grid { grid-template-columns: 1fr 1fr; }
+            .sum-item { padding: 10px; }
+            .sum-l { font-size: 0.5rem; }
+            .sum-v { font-size: 0.95rem; }
+            .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+            /* Doc view: padding and font scaling */
+            .doc-wrap { padding: 20px 16px 60px; }
+            .doc-hero-block h1 { font-size: 1.3rem; }
+            .doc-hero-block .doc-sub { font-size: 0.55rem; }
+            .doc-block { margin-bottom: 36px; }
+            .doc-block h2 { font-size: 0.9rem; }
+            .doc-block p { font-size: 0.82rem; line-height: 1.7; }
+            .doc-block li { font-size: 0.78rem; }
+            .doc-callout { padding: 10px 14px; }
+            .doc-callout p { font-size: 0.72rem; }
+            .doc-diagram { padding: 14px; }
+            .doc-table th { font-size: 0.5rem; padding: 6px 8px; }
+            .doc-table td { font-size: 0.62rem; padding: 6px 8px; }
+            .doc-formula { padding: 14px 16px; }
+
+            /* Landing: nav tabs compact */
+            .lp-nav-links { gap: 6px; }
+            .lp-nav-link.lp-nav-tab { padding: 4px 8px; font-size: 0.5rem; letter-spacing: 1px; }
+        }
+
+        /* ===== RESPONSIVE: SMALL PHONES (480px) ===== */
+        @media (max-width: 480px) {
+            /* App view: sum-grid 1-col */
+            .sum-grid { grid-template-columns: 1fr; }
+            .card { padding: 12px 14px; }
+            .sidebar { padding: 14px; }
+
+            /* Doc view: tighter padding */
+            .doc-wrap { padding: 16px 12px 48px; }
+            .doc-hero-block h1 { font-size: 1.1rem; }
+            .doc-block h2 { font-size: 0.82rem; }
+            .doc-block p { font-size: 0.78rem; }
+
+            /* Landing: nav tabs hide social on very small */
+            .lp-nav-link.lp-nav-tab:not(.lp-nav-cta) { display: none; }
+        }
+
         /* ===== ROUTING ===== */
         #landingView, #appView, #docView { display: none; }
         body.route-landing #landingView { display: block; }
@@ -3647,7 +3697,18 @@
             if (stablecoin) {
                 const stableUp = updated.find(up => up.symbol === stablecoin.sym);
                 if (stableUp) {
-                    stableUp.amount += surplus; // price ~= $1
+                    // Use protected amount (never reduced) + surplus
+                    stableUp.amount = Math.max(stableUp.amount, stablecoin.amount) + surplus;
+                    capped.push(`safe-haven: +$${surplus.toFixed(2)} redirected to ${stablecoin.sym}`);
+                } else {
+                    // Stablecoin not in updated array, add it with original + surplus
+                    updated.push({
+                        symbol: stablecoin.sym,
+                        amount: stablecoin.amount + surplus,
+                        price: stablecoin.price,
+                        costBasis: stablecoin.costBasis,
+                        totalTokens: stablecoin.totalTokens
+                    });
                     capped.push(`safe-haven: +$${surplus.toFixed(2)} redirected to ${stablecoin.sym}`);
                 }
             }
@@ -4258,6 +4319,11 @@
             updated.forEach(up => {
                 const idx = portfolio.findIndex(t => t.sym === up.symbol);
                 if (idx >= 0) {
+                    // Protect safe-haven tokens: never reduce amounts during DCA
+                    if (portfolio[idx].safeHaven && up.amount < portfolio[idx].amount) {
+                        console.log(`[DCA] Protected safe-haven ${up.symbol} from reduction: ${up.amount} → keeping ${portfolio[idx].amount}`);
+                        up.amount = portfolio[idx].amount;
+                    }
                     console.log(`DCA: ${up.symbol} amount ${portfolio[idx].amount} → ${up.amount}`);
                     portfolio[idx].amount = up.amount;
                     portfolio[idx].costBasis = up.costBasis || portfolio[idx].costBasis;
