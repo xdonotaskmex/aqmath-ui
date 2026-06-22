@@ -1765,6 +1765,12 @@
             text-transform: uppercase; transition: all 0.2s; border-radius: 4px;
         }
         .lp-pro-close:hover { border-color: var(--text); color: var(--text); }
+                .lp-pro-beta { margin-bottom: 18px; }
+                .lp-pro-beta-label { font-family: var(--mono); font-size: 0.62rem; color: var(--green); letter-spacing: 1px; margin-bottom: 8px; }
+                .lp-pro-beta-links { display: flex; gap: 10px; justify-content: center; align-items: center; }
+                .lp-pro-beta-links a { font-family: var(--mono); font-size: 0.65rem; color: var(--blue); text-decoration: none; padding: 5px 12px; border: 1px solid rgba(6,182,212,0.3); border-radius: 4px; transition: all 0.2s; letter-spacing: 1px; }
+                .lp-pro-beta-links a:hover { border-color: var(--blue); background: rgba(6,182,212,0.08); }
+                .lp-pro-beta-sep { color: var(--dim); font-size: 0.7rem; }
 
         /* ===== TOAST NOTIFICATIONS (replaces browser alert) ===== */
         .toast-overlay {
@@ -2244,6 +2250,14 @@
     <div class="lp-pro-box">
         <h3>&#128274; PRO Coming Soon</h3>
         <p>The Pro version with Quantum Engine (Risk Parity), unlimited tokens, and pipeline data sync is currently in development.<br><br>Stay tuned for the annual cryptographic license key (minted on Polygon).</p>
+        <div class="lp-pro-beta">
+            <div class="lp-pro-beta-label">want free beta access? contact us:</div>
+            <div class="lp-pro-beta-links">
+                <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">[ telegram ]</a>
+                <span class="lp-pro-beta-sep">&middot;</span>
+                <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">[ x ]</a>
+            </div>
+        </div>
         <button class="lp-pro-close" onclick="hideProModal()">[ Close ]</button>
     </div>
 </div>
@@ -2365,6 +2379,7 @@
             </div>
             <button class="btn-beta" id="btnBeta" onclick="activateBeta()">[ Activate Beta ]</button>
             <div style="font-size:0.5rem;color:var(--muted);margin-top:4px;">unlocks pipeline prices, CSV parsing & engine</div>
+            <div style="font-size:0.5rem;color:var(--dim);margin-top:6px;">need a beta key? <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:none;">[ telegram ]</a> &middot; <a href="https://x.com/aqmathapp" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:none;">[ x ]</a></div>
         </div>
 
         <div class="beta-active hidden" id="betaActive">
