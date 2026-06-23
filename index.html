@@ -2395,9 +2395,9 @@
 
         <div class="opt-section" id="optSection">
             <div class="section-label">--quantitative-optimization</div>
-            <button class="btn-opt-pro" onclick="showProModal()">[ AQMath Quantum Engine — PRO ]</button>
+            <button class="btn-opt-pro" onclick="showProModal()">[ AQMath Engine — PRO ]</button>
             <button class="btn-sync" style="margin-top:8px;width:100%;opacity:0.4;cursor:not-allowed;" disabled>[ REFRESH HISTORY — PRO ]</button>
-            <div style="font-size:0.55rem;color:var(--amber);margin-top:6px;">🔒 Pro version — Coming Soon. Includes 180-day Risk Parity analysis.</div>
+            <div style="font-size:0.55rem;color:var(--amber);margin-top:6px;">🔒 Pro version — Coming Soon. Includes 180-day AQMath Engine covariance + ERC analysis.</div>
         </div>
 
         <div class="a-meter">
@@ -4474,14 +4474,14 @@
         }
     }
 
-    // ============ RISK PARITY OPTIMIZATION (data-pipeline /optimize) — PRO ONLY ============
+    // ============ AQMath ENGINE OPTIMIZATION (data-pipeline /optimize) — PRO ONLY ============
     async function optimizePortfolio() {
         if (!isPro) { showProModal(); return; }
 
         const unfrozen = portfolio.filter(t => !t.frozen && !t.safeHaven);
         if (unfrozen.length < 2) return showToast('Need at least 2 unfrozen risky tokens.', 'warning');
 
-        showLoading('Risk Parity Engine', 'Running 180-day inverse-volatility optimization...');
+        showLoading('AQMath Engine', 'Building covariance matrix + ERC optimization...');
 
         const frozenTargets = {};
         portfolio.filter(t => t.frozen).forEach(t => { frozenTargets[t.sym] = t.target; });
@@ -4528,19 +4528,35 @@
             await sleep(2000);
             hideLoading();
 
-            let msg = 'Risk Parity Optimization Complete\n';
-            msg += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
-            msg += 'Inverse-volatility weights (180-day data):\n\n';
+            let msg = '\u2699\ufe0f AQMath Engine Optimization Complete\n';
+            msg += '\u2501'.repeat(30) + '\n';
+            msg += `Method: ${result.method || 'ERC+covariance+KKT'} (${result.erc_iterations || '?'} iter)\n`;
+            if (result.portfolio_volatility) msg += `Portfolio vol: ${(result.portfolio_volatility * 100).toFixed(1)}%\n`;
+            msg += '\n';
+            msg += 'Weights (KKT-projected):\n\n';
             weights.forEach(w => {
-                const vol = w.volatility != null ? ` (vol: ${(w.volatility * 100).toFixed(1)}%)` : ' (no data)';
-                msg += `  ${w.sym}: ${w.weight}%${vol}\n`;
+                const vol = w.volatility != null ? `vol:${(w.volatility * 100).toFixed(1)}%` : 'no data';
+                const rc = w.risk_contribution ? `rc:${(w.risk_contribution * 100).toFixed(1)}%` : '';
+                const cap = w.capped ? ' \u26a0\ufe0f' : '';
+                const erc = w.erc_weight != null ? `erc:${w.erc_weight}%` : '';
+                msg += `  ${w.sym}: ${w.weight}% (${vol}, ${erc}, ${rc})${cap}\n`;
             });
-            if (insufficient.length > 0) msg += `\n\u26a0\ufe0f Insufficient history (<30 days): ${insufficient.join(', ')}`;
-            if (result.data_points) msg += `\nData points: ${Object.entries(result.data_points).map(([s,n]) => `${s}=${n}`).join(', ')}`;
+            if (result.correlations && result.correlations.length > 0) {
+                msg += '\nTop correlations:\n';
+                result.correlations.slice(0, 3).forEach(c => {
+                    msg += `  ${c.pair}: ${c.corr.toFixed(2)}\n`;
+                });
+            }
+            if (result.kkt_constraints && result.kkt_constraints.length > 0) {
+                msg += '\nKKT constraints:\n';
+                result.kkt_constraints.forEach(k => { msg += `  \u26a0\ufe0f ${k}\n`; });
+            }
+            if (insufficient.length > 0) msg += `\n\u26a0\ufe0f Insufficient history (<30d): ${insufficient.join(', ')}`;
+            if (result.data_points) msg += `\nData: ${Object.entries(result.data_points).map(([s,n]) => `${s}=${n}d`).join(', ')}`;
             showToast(msg, 'success');
         } catch(e) {
             hideLoading();
-            showToast('Risk Parity API error: ' + e.message, 'error');
+            showToast('AQMath Engine error: ' + e.message, 'error');
         }
     }
 
@@ -4679,8 +4695,8 @@
         const optSection = document.getElementById('optSection');
         if (isPro) {
             optSection.innerHTML = '<div class="section-label">--quantitative-optimization</div>'
-                + '<button class="btn-opt-pro" onclick="optimizePortfolio()">[ Risk Parity Optimize ]</button>'
-                + '<div style="font-size:0.55rem;color:var(--green);margin-top:6px;">\u2713 Pro \u2014 180-day inverse-volatility weighting</div>';
+                + '<button class="btn-opt-pro" onclick="optimizePortfolio()">[ AQMath Engine ]</button>'
+                + '<div style="font-size:0.55rem;color:var(--green);margin-top:6px;">\u2713 Pro \u2014 covariance + ERC + KKT optimization</div>';
         }
 
         const pct = Math.min(Math.max(tgt, 0), 100);
