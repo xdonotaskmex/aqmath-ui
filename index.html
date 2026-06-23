@@ -2368,9 +2368,9 @@
                     </div>
                     <button class="btn green" id="btnDca" onclick="distribuirajDca()">Distribute DCA</button>
                     <div class="fg-hint">Smart allocation across positions</div>
-                    <button class="btn amber" onclick="showProModal()">AQMath Engine — PRO</button>
+                    <button class="btn amber" id="btnEngine" onclick="optimizePortfolio()">AQMath Engine — PRO</button>
                     <div class="engine-hint">180-day covariance + ERC analysis</div>
-                    <button class="btn ghost" disabled>Refresh History — PRO</button>
+                    <button class="btn ghost" id="btnRefreshHistory" onclick="refreshHistory()" disabled>Refresh History — PRO</button>
                 </div>
             </div>
         </div>
@@ -3598,6 +3598,7 @@
             document.getElementById('betaSection').classList.add('hidden');
             document.getElementById('betaActive').classList.remove('hidden');
             showToast('beta activated -- pipeline unlocked', 'success');
+            updateProButtons();
             render();
         } catch(e) {
             showToast('beta activation failed: ' + e.message, 'error');
@@ -3613,7 +3614,33 @@
         document.getElementById('betaSection').classList.remove('hidden');
         document.getElementById('betaActive').classList.add('hidden');
         showToast('beta deactivated', 'notice');
+        updateProButtons();
         render();
+    }
+
+    function updateProButtons() {
+        const engineBtn = document.getElementById('btnEngine');
+        const refreshBtn = document.getElementById('btnRefreshHistory');
+        if (engineBtn) {
+            if (isPro) {
+                engineBtn.className = 'btn amber';
+                engineBtn.textContent = 'AQMath Engine — OPTIMIZE';
+            } else {
+                engineBtn.className = 'btn amber';
+                engineBtn.textContent = 'AQMath Engine — PRO';
+            }
+        }
+        if (refreshBtn) {
+            if (isPro) {
+                refreshBtn.className = 'btn blue';
+                refreshBtn.disabled = false;
+                refreshBtn.textContent = 'Refresh History';
+            } else {
+                refreshBtn.className = 'btn ghost';
+                refreshBtn.disabled = true;
+                refreshBtn.textContent = 'Refresh History — PRO';
+            }
+        }
     }
 
     function checkBetaUI() {
@@ -4746,6 +4773,70 @@
         event.target.value = '';
     }
 
+    // ============ REFRESH HISTORY (PRO) ============
+    async function refreshHistory() {
+        if (!isPro) { updateProButtons(); return; }
+        const tokens = portfolio.filter(t => t.amount > 0 && !t.safeHaven);
+        if (tokens.length === 0) return showToast('no positions to build history from.', 'warning');
+
+        showLoading('Refresh History', 'Fetching 90-day price data from Binance...');
+
+        const STABLES = ['USDC', 'USDT', 'DAI', 'BUSD', 'TUSD', 'FDUSD', 'USDP'];
+        const priceMap = {};
+
+        try {
+            for (const t of tokens) {
+                if (STABLES.includes(t.sym)) {
+                    priceMap[t.sym] = Array(90).fill(1.0);
+                    continue;
+                }
+                const symbol = t.sym + 'USDT';
+                try {
+                    const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1d&limit=90`);
+                    if (!res.ok) continue;
+                    const klines = await res.json();
+                    priceMap[t.sym] = klines.map(k => parseFloat(k[4]));
+                } catch(e) { continue; }
+            }
+
+            const syms = Object.keys(priceMap);
+            if (syms.length === 0) {
+                hideLoading();
+                return showToast('could not fetch price data for any token.', 'error');
+            }
+
+            const minLen = Math.min(...syms.map(s => priceMap[s].length));
+            const history = [];
+
+            for (let i = 0; i < minLen; i++) {
+                let total = 0;
+                for (const t of tokens) {
+                    if (priceMap[t.sym] && priceMap[t.sym][i] != null) {
+                        total += t.amount * priceMap[t.sym][i];
+                    }
+                }
+                if (total > 0) {
+                    const daysAgo = minLen - 1 - i;
+                    history.push({
+                        timestamp: Date.now() - daysAgo * 86400000,
+                        total: total
+                    });
+                }
+            }
+
+            portfolioHistory = history;
+            saveHistory();
+            renderHistoryChart();
+
+            await sleep(1500);
+            hideLoading();
+            showToast(`history rebuilt: ${history.length} data points from ${syms.length} tokens`, 'success');
+        } catch(e) {
+            hideLoading();
+            showToast('history refresh failed: ' + e.message, 'error');
+        }
+    }
+
     // ============ HISTORY CHART ============
     function renderHistoryChart() {
         if (historyChart) { historyChart.destroy(); historyChart = null; }
@@ -4923,6 +5014,7 @@
         loadState();
         ensureUSDC();
         updateSafeHavenUI();
+        updateProButtons();
         render();
         renderHistoryChart();
     })();
