@@ -4913,13 +4913,6 @@
         dcaBtn.disabled = !canDca;
         dcaBtn.title = canDca ? 'Start DCA distribution' : 'DCA is available only when total target allocation equals 100%.';
 
-        const optSection = document.getElementById('optSection');
-        if (isPro) {
-            optSection.innerHTML = '<div class="section-label">--quantitative-optimization</div>'
-                + '<button class="btn-opt-pro" onclick="optimizePortfolio()">[ AQMath Engine ]</button>'
-                + '<div style="font-size:0.55rem;color:var(--green);margin-top:6px;">\u2713 Pro \u2014 covariance + ERC + KKT optimization</div>';
-        }
-
         const pct = Math.min(Math.max(tgt, 0), 100);
         const fill = document.getElementById('aFill'); fill.style.width = `${pct}%`;
         fill.className = `a-fill${tgt > 100.01 ? ' over' : tgt >= 99.99 ? ' full' : ''}`;
