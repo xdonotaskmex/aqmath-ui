@@ -50,8 +50,8 @@
             --amber: #fbbf24;
             --purple: #a855f7;
             --text: #e2e8f0;
-            --muted: #64748b;
-            --dim: #475569;
+            --muted: #7a8ba5;
+            --dim: #8a9bb5;
             --mono: 'JetBrains Mono', monospace;
             --sans: 'Plus Jakarta Sans', sans-serif;
         }
@@ -78,6 +78,17 @@
             background-size: 24px 24px;
             pointer-events: none;
             z-index: 0;
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg, transparent, transparent 2px,
+                rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 9999;
         }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -172,6 +183,34 @@
         .logo-name { font-size: 1rem; font-weight: 600; letter-spacing: 5px; color: var(--text); }
         .logo-tag  { font-size: 0.55rem; letter-spacing: 2px; color: var(--muted); margin-top: 1px; }
 
+        /* Nav tabs in header */
+        .hdr-nav {
+            display: flex;
+            gap: 8px;
+            margin-left: 20px;
+        }
+        .hdr-nav-tab {
+            font-family: var(--mono);
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s;
+            background: transparent;
+        }
+        .hdr-nav-tab:hover {
+            border-color: var(--purple);
+            color: var(--purple);
+        }
+        .hdr-nav-tab.active {
+            border-color: var(--purple);
+            color: var(--purple);
+            background: rgba(168,85,247,0.08);
+        }
+
         .hdr-stats { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
         .hstat { text-align: right; }
         .hstat-l { font-size: 0.55rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
@@ -231,7 +270,7 @@
         }
 
         .fg { margin-bottom: 14px; }
-        label { display: block; font-size: 0.58rem; letter-spacing: 2px; color: var(--dim); text-transform: uppercase; margin-bottom: 5px; }
+        label { display: block; font-size: 0.58rem; letter-spacing: 2px; color: var(--text); text-transform: uppercase; margin-bottom: 5px; }
         input[type=text], input[type=number] {
             width: 100%; padding: 10px 12px;
             background: rgba(0,0,0,0.6);
@@ -314,6 +353,73 @@
         }
         .faq-q { color: var(--blue); font-size: 0.82rem; font-weight: 600; margin-top: 12px; border-left: 2px solid var(--border); padding-left: 10px; }
         .faq-a { margin-bottom: 10px; padding-left: 14px; font-size: 0.78rem; color: var(--muted); }
+
+        /* ===== TERMINAL CARD (Unified) ===== */
+        .tc {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .tc-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(0,0,0,0.2);
+        }
+        .tc-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+        .tc-title {
+            font-family: var(--mono);
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            color: var(--purple);
+        }
+        .tc-body {
+            padding: 16px;
+        }
+        .btn-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .btn-stack .btn-desc {
+            font-size: 0.65rem;
+            color: var(--muted);
+            letter-spacing: 1px;
+        }
+
+        /* ===== BETA CARD ===== */
+        .beta-card {
+            margin-bottom: 16px;
+        }
+        .beta-active-card {
+            background: linear-gradient(135deg, rgba(52,211,153,0.06), rgba(6,182,212,0.04));
+            border: 1px solid rgba(52,211,153,0.3);
+        }
+        .pro-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(52,211,153,0.12);
+            border: 1px solid rgba(52,211,153,0.3);
+            padding: 5px 14px;
+            border-radius: 14px;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: var(--green);
+        }
+        .beta-links {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
 
         /* ===== SAFE-HAVEN TOGGLE ===== */
         .safehaven-section { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); }
@@ -2203,16 +2309,6 @@
             </div>
         </section>
 
-        <hr class="lp-section-divider">
-
-        <section class="lp-section">
-            <div class="lp-section-label">--live-markets</div>
-            <div class="lp-market-grid" id="marketWidgets">
-                <div class="lp-news-col" id="newsLeft"></div>
-                <div class="lp-news-col" id="newsRight"></div>
-            </div>
-        </section>
-
 
         <section class="lp-section lp-faq">
             <h3>--frequently-asked-questions</h3>
@@ -2277,6 +2373,7 @@
 
 <!-- ============ APP VIEW ============ -->
 <div id="appView">
+<div class="scanlines"></div>
 
 <div class="loading-overlay hidden" id="loadingOverlay">
     <div class="loading-spinner"></div>
@@ -2291,6 +2388,11 @@
             <div class="logo-name">AQMath</div>
             <div class="logo-tag">non-custodial • quantum engine</div>
         </div>
+    </div>
+    <div class="hdr-nav">
+        <a class="hdr-nav-tab" href="#/">[ landing ]</a>
+        <a class="hdr-nav-tab active" href="#/app">[ app ]</a>
+        <a class="hdr-nav-tab" href="#/docs">[ docs ]</a>
     </div>
     <div class="hdr-stats">
         <button class="btn-sync" id="btnSyncAll" onclick="osvjeziSveCijene()">[ SYNC ]</button>
@@ -2317,89 +2419,138 @@
 
 <div class="main">
     <aside class="sidebar">
-        <div class="section-label">--position</div>
-        <div class="fg">
-            <label>Symbol or Name</label>
-            <input type="text" id="iSym" placeholder="BTC, ETH, Celestia…" autocomplete="off">
-        </div>
-        <div class="fg">
-            <label>Quantity</label>
-            <input type="number" id="iAmt" step="any" placeholder="0.00000000" min="0">
-        </div>
-        <div class="fg">
-            <label>Price ($) — Auto</label>
-            <input type="number" id="iPrice" step="any" placeholder="Empty = API">
-        </div>
-        <div class="fg">
-            <label>Entry Price ($)</label>
-            <input type="number" id="iEntry" step="any" placeholder="Current price if empty" min="0">
-        </div>
-        <div class="fg">
-            <label>APY (%)</label>
-            <input type="number" id="iApy" step="0.1" placeholder="0.0" min="0" value="0">
-        </div>
-        <div class="fg">
-            <label>Target Allocation (%)</label>
-            <input type="number" id="iTarget" step="0.1" min="0.1" max="100" placeholder="0.0">
-        </div>
-        <div class="fg">
-            <label>Historical Prices (CSV)</label>
-            <input type="file" id="iHistoryCSV" accept=".csv">
-            <div style="font-size:0.5rem;color:var(--muted)">Format: Date, Price (weekly or daily)</div>
-        </div>
-        <button class="btn-add" id="btnAdd" onclick="dodajToken()">[ Load ]</button>
-
-        <div class="dca-section">
-            <div class="section-label">--dca-allocation</div>
-            <div class="fg">
-                <label>Total Amount ($)</label>
-                <input type="number" id="iDcaAmount" step="any" placeholder="500.00" min="0">
+        <!-- BETA ACCESS — Active State -->
+        <div class="tc beta-active-card beta-card hidden" id="betaActive">
+            <div class="tc-bar">
+                <span class="tc-dot" style="background:var(--green)"></span>
+                <span class="tc-dot" style="background:var(--green)"></span>
+                <span class="tc-dot" style="background:var(--green)"></span>
+                <span class="tc-title">--beta-access</span>
             </div>
-            <button class="btn-dca" id="btnDca" onclick="distribuirajDca()">[ Distribute DCA ]</button>
-        </div>
-
-        <!-- Safe-Haven Global Toggle -->
-        <div class="safehaven-section">
-            <div class="section-label">--risk-settings</div>
-            <div class="sh-toggle-row" id="shToggleRow" onclick="toggleGlobalSafeHaven()">
-                <div class="sh-switch" id="shSwitch"></div>
-                <div>
-                    <div class="sh-label" id="shLabel">SAFE-HAVEN (USDC)</div>
-                    <div class="sh-desc" id="shDesc">ON &mdash; absorbs hard-cap surplus &amp; unallocated DCA</div>
+            <div class="tc-body" style="text-align:center;padding:12px 16px;">
+                <span class="pro-badge">● PRO ACTIVE</span>
+                <div style="margin-top:10px;">
+                    <button class="btn-beta-logout" onclick="deactivateBeta()" style="background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.55rem;padding:4px 10px;cursor:pointer;border-radius:4px;">[ deactivate ]</button>
                 </div>
             </div>
-            <div class="sh-deploy-row">
-                <span class="sh-balance" id="shBalance">$0.00</span>
-                <button class="sh-deploy-btn" id="shDeployBtn" onclick="deployUSDC()">DEPLOY TO DCA</button>
+        </div>
+
+        <!-- BETA ACCESS — Inactive State -->
+        <div class="tc beta-card" id="betaSection">
+            <div class="tc-bar">
+                <span class="tc-dot" style="background:var(--purple)"></span>
+                <span class="tc-dot" style="background:var(--purple)"></span>
+                <span class="tc-dot" style="background:var(--purple)"></span>
+                <span class="tc-title">--beta-access</span>
+            </div>
+            <div class="tc-body" style="text-align:center;">
+                <div class="fg">
+                    <label>Beta Key</label>
+                    <input type="text" id="iBetaKey" placeholder="AQMBETA-XXXX-XXXX" autocomplete="off">
+                </div>
+                <button class="btn-add" id="btnBeta" onclick="activateBeta()" style="border-color:var(--purple);color:var(--purple);">[ Activate Beta ]</button>
+                <div style="font-size:0.5rem;color:var(--muted);margin-top:8px;">unlocks pipeline prices, CSV parsing & engine</div>
+                <div class="beta-links" style="margin-top:8px;">
+                    <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:none;font-size:0.6rem;font-family:var(--mono);">[ telegram ]</a>
+                    <a href="https://x.com/aqmathapp" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:none;font-size:0.6rem;font-family:var(--mono);">[ x ]</a>
+                </div>
             </div>
         </div>
 
-        <div class="beta-section" id="betaSection">
-            <div class="section-label">--beta-access</div>
-            <div class="fg">
-                <label>Beta Key</label>
-                <input type="text" id="iBetaKey" placeholder="AQMBETA-XXXX-XXXX" autocomplete="off">
+        <!-- POSITION -->
+        <div class="tc">
+            <div class="tc-bar">
+                <span class="tc-dot" style="background:var(--blue)"></span>
+                <span class="tc-dot" style="background:var(--amber)"></span>
+                <span class="tc-dot" style="background:var(--green)"></span>
+                <span class="tc-title">--position</span>
             </div>
-            <button class="btn-beta" id="btnBeta" onclick="activateBeta()">[ Activate Beta ]</button>
-            <div style="font-size:0.5rem;color:var(--muted);margin-top:4px;">unlocks pipeline prices, CSV parsing & engine</div>
-            <div style="font-size:0.5rem;color:var(--dim);margin-top:6px;">need a beta key? <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:none;">[ telegram ]</a> &middot; <a href="https://x.com/aqmathapp" target="_blank" rel="noopener" style="color:var(--blue);text-decoration:none;">[ x ]</a></div>
-        </div>
-
-        <div class="beta-active hidden" id="betaActive">
-            <div class="section-label">--beta-access</div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
-                <span style="color:var(--green);font-family:var(--mono);font-size:0.7rem;">beta active</span>
-                <button class="btn-beta-logout" onclick="deactivateBeta()" style="background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:0.55rem;padding:4px 10px;cursor:pointer;border-radius:4px;">[ deactivate ]</button>
+            <div class="tc-body">
+                <div class="fg">
+                    <label>Symbol or Name</label>
+                    <input type="text" id="iSym" placeholder="BTC, ETH, Celestia…" autocomplete="off">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div class="fg">
+                        <label>Quantity</label>
+                        <input type="number" id="iAmt" step="any" placeholder="0.00000000" min="0">
+                    </div>
+                    <div class="fg">
+                        <label>Price ($) — Auto</label>
+                        <input type="number" id="iPrice" step="any" placeholder="Empty = API">
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div class="fg">
+                        <label>Entry Price ($)</label>
+                        <input type="number" id="iEntry" step="any" placeholder="Current price if empty" min="0">
+                    </div>
+                    <div class="fg">
+                        <label>APY (%)</label>
+                        <input type="number" id="iApy" step="0.1" placeholder="0.0" min="0" value="0">
+                    </div>
+                </div>
+                <div class="fg">
+                    <label>Target Allocation (%)</label>
+                    <input type="number" id="iTarget" step="0.1" min="0.1" max="100" placeholder="0.0">
+                </div>
+                <div class="fg">
+                    <label>Historical Prices (CSV)</label>
+                    <input type="file" id="iHistoryCSV" accept=".csv">
+                    <div style="font-size:0.5rem;color:var(--muted)">Format: Date, Price (weekly or daily)</div>
+                </div>
+                <button class="btn-add" id="btnAdd" onclick="dodajToken()">[ Load ]</button>
             </div>
         </div>
 
-        <div class="opt-section" id="optSection">
-            <div class="section-label">--quantitative-optimization</div>
-            <button class="btn-opt-pro" onclick="showProModal()">[ AQMath Engine — PRO ]</button>
-            <button class="btn-sync" style="margin-top:8px;width:100%;opacity:0.4;cursor:not-allowed;" disabled>[ REFRESH HISTORY — PRO ]</button>
-            <div style="font-size:0.55rem;color:var(--amber);margin-top:6px;">🔒 Pro version — Coming Soon. Includes 180-day AQMath Engine covariance + ERC analysis.</div>
+        <!-- DCA + ENGINE -->
+        <div class="tc">
+            <div class="tc-bar">
+                <span class="tc-dot" style="background:var(--green)"></span>
+                <span class="tc-dot" style="background:var(--amber)"></span>
+                <span class="tc-dot" style="background:var(--purple)"></span>
+                <span class="tc-title">--dca-engine</span>
+            </div>
+            <div class="tc-body">
+                <div class="btn-stack">
+                    <div class="fg" style="margin-bottom:8px;">
+                        <label>DCA Amount ($)</label>
+                        <input type="number" id="iDcaAmount" step="any" placeholder="500.00" min="0">
+                    </div>
+                    <button class="btn-dca" id="btnDca" onclick="distribuirajDca()">[ Distribute DCA ]</button>
+                    <div class="btn-desc">Smart allocation across positions</div>
+                    <button class="btn-opt-pro" onclick="showProModal()">[ AQMath Engine — PRO ]</button>
+                    <div class="btn-desc" style="color:var(--amber);">180-day covariance + ERC analysis</div>
+                    <button class="btn-sync" style="opacity:0.4;cursor:not-allowed;width:100%;" disabled>[ REFRESH HISTORY — PRO ]</button>
+                </div>
+            </div>
         </div>
 
+        <!-- RISK SETTINGS -->
+        <div class="tc" id="optSection">
+            <div class="tc-bar">
+                <span class="tc-dot" style="background:var(--amber)"></span>
+                <span class="tc-dot" style="background:var(--amber)"></span>
+                <span class="tc-dot" style="background:var(--amber)"></span>
+                <span class="tc-title">--risk-settings</span>
+            </div>
+            <div class="tc-body">
+                <!-- Safe-Haven Global Toggle -->
+                <div class="sh-toggle-row" id="shToggleRow" onclick="toggleGlobalSafeHaven()">
+                    <div class="sh-switch" id="shSwitch"></div>
+                    <div>
+                        <div class="sh-label" id="shLabel">SAFE-HAVEN (USDC)</div>
+                        <div class="sh-desc" id="shDesc">ON &mdash; absorbs hard-cap surplus &amp; unallocated DCA</div>
+                    </div>
+                </div>
+                <div class="sh-deploy-row">
+                    <span class="sh-balance" id="shBalance">$0.00</span>
+                    <button class="sh-deploy-btn" id="shDeployBtn" onclick="deployUSDC()">DEPLOY TO DCA</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ALLOCATION METER -->
         <div class="a-meter">
             <div class="a-meter-top"><span>ALLOCATION</span><span id="aPctLbl">0.00%</span></div>
             <div class="a-track"><div class="a-fill" id="aFill" style="width:0%"></div></div>
@@ -2407,6 +2558,7 @@
             <div class="a-rem" id="aRem">Remaining: 100.00%</div>
         </div>
 
+        <!-- FAQ -->
         <div class="faq-section">
             <div class="section-label">--frequently-asked-questions</div>
             <div class="faq-item" onclick="this.classList.toggle('open')">
@@ -2451,39 +2603,81 @@
         </div>
 
         <div class="top-row">
-            <div class="card">
-                <div class="card-title">--allocation</div>
-                <div class="chart-wrap"><canvas id="chart"></canvas><div class="chart-center"><div class="chart-cv" id="cCV">—</div><div class="chart-cl">Tokens</div></div></div>
-                <div class="legend" id="legend"></div>
-            </div>
-            <div class="card">
-                <div class="card-title">--overview</div>
-                <div class="sum-grid">
-                    <div class="sum-item"><div class="sum-l">Total</div><div class="sum-v" id="sTotalVal">$0.00</div></div>
-                    <div class="sum-item"><div class="sum-l">P&L</div><div class="sum-v" id="sPnl">—</div></div>
-                    <div class="sum-item"><div class="sum-l">Largest</div><div class="sum-v" id="sLargest">—</div></div>
-                    <div class="sum-item"><div class="sum-l">Max Drift</div><div class="sum-v" id="sMaxDrift">—</div></div>
-                    <div class="sum-item"><div class="sum-l">DCA needed</div><div class="sum-v" id="sNeedReb">—</div></div>
-                    <div class="sum-item"><div class="sum-l">Allocation</div><div class="sum-v" id="sAllocSt">—</div></div>
+            <div class="tc">
+                <div class="tc-bar">
+                    <span class="tc-dot" style="background:var(--blue)"></span>
+                    <span class="tc-dot" style="background:var(--amber)"></span>
+                    <span class="tc-dot" style="background:var(--green)"></span>
+                    <span class="tc-title">--allocation</span>
                 </div>
-                <div class="rebalance-reminder" id="reminderBox"><span id="reminderTxt">No scheduled rebalance.</span></div>
+                <div class="tc-body">
+                    <div class="chart-wrap"><canvas id="chart"></canvas><div class="chart-center"><div class="chart-cv" id="cCV">—</div><div class="chart-cl">Tokens</div></div></div>
+                    <div class="legend" id="legend"></div>
+                </div>
+            </div>
+            <div class="tc">
+                <div class="tc-bar">
+                    <span class="tc-dot" style="background:var(--green)"></span>
+                    <span class="tc-dot" style="background:var(--green)"></span>
+                    <span class="tc-dot" style="background:var(--green)"></span>
+                    <span class="tc-title">--overview</span>
+                </div>
+                <div class="tc-body">
+                    <div class="sum-grid">
+                        <div class="sum-item"><div class="sum-l">Total</div><div class="sum-v" id="sTotalVal">$0.00</div></div>
+                        <div class="sum-item"><div class="sum-l">P&L</div><div class="sum-v" id="sPnl">—</div></div>
+                        <div class="sum-item"><div class="sum-l">Largest</div><div class="sum-v" id="sLargest">—</div></div>
+                        <div class="sum-item"><div class="sum-l">Max Drift</div><div class="sum-v" id="sMaxDrift">—</div></div>
+                        <div class="sum-item"><div class="sum-l">DCA needed</div><div class="sum-v" id="sNeedReb">—</div></div>
+                        <div class="sum-item"><div class="sum-l">Allocation</div><div class="sum-v" id="sAllocSt">—</div></div>
+                    </div>
+                    <div class="rebalance-reminder" id="reminderBox"><span id="reminderTxt">No scheduled rebalance.</span></div>
+                </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-title">--holdings-rebalance-engine</div>
-            <div class="tbl-wrap" id="tblWrap">
-                <div class="empty"><div class="empty-ico">[∅]</div><div class="empty-txt">Portfolio empty</div></div>
+        <div class="tc">
+            <div class="tc-bar">
+                <span class="tc-dot" style="background:var(--blue)"></span>
+                <span class="tc-dot" style="background:var(--amber)"></span>
+                <span class="tc-dot" style="background:var(--green)"></span>
+                <span class="tc-title">--holdings-rebalance-engine</span>
+            </div>
+            <div class="tc-body" style="padding:0;">
+                <div class="tbl-wrap" id="tblWrap">
+                    <div class="empty"><div class="empty-ico">[∅]</div><div class="empty-txt">Portfolio empty</div></div>
+                </div>
             </div>
         </div>
 
-        <div class="card history-card">
-            <div class="card-title">
-                // Portfolio History
-                <button class="btn-snapshot" onclick="saveSnapshot()">[ Save Snapshot ]</button>
+        <div class="tc">
+            <div class="tc-bar">
+                <span class="tc-dot" style="background:var(--purple)"></span>
+                <span class="tc-dot" style="background:var(--purple)"></span>
+                <span class="tc-dot" style="background:var(--purple)"></span>
+                <span class="tc-title">--portfolio-history</span>
+                <button class="btn-snapshot" onclick="saveSnapshot()" style="margin-left:auto;">[ Save Snapshot ]</button>
             </div>
-            <div class="history-chart-wrap"><canvas id="historyChart"></canvas></div>
-            <div style="font-size:0.55rem;color:var(--muted);margin-top:6px;">Automatically updated after DCA distribution.</div>
+            <div class="tc-body">
+                <div class="history-chart-wrap"><canvas id="historyChart"></canvas></div>
+                <div style="font-size:0.55rem;color:var(--muted);margin-top:6px;">Automatically updated after DCA distribution.</div>
+            </div>
+        </div>
+
+        <!-- LIVE MARKETS -->
+        <div class="tc">
+            <div class="tc-bar">
+                <span class="tc-dot" style="background:var(--green)"></span>
+                <span class="tc-dot" style="background:var(--amber)"></span>
+                <span class="tc-dot" style="background:var(--blue)"></span>
+                <span class="tc-title">--live-markets</span>
+            </div>
+            <div class="tc-body" style="padding:0;">
+                <div class="lp-market-grid" id="appMarketWidgets">
+                    <div class="lp-news-col" id="appNewsLeft"></div>
+                    <div class="lp-news-col" id="appNewsRight"></div>
+                </div>
+            </div>
         </div>
 
     </main>
@@ -3025,6 +3219,8 @@
         document.body.classList.remove('route-landing', 'route-app', 'route-doc');
         if (hash === '#/app') {
             document.body.classList.add('route-app');
+            // Load market widgets for app view
+            loadAllWidgets();
         } else if (hash === '#/docs' || hash === '#/doc') {
             document.body.classList.add('route-doc');
 
@@ -3084,8 +3280,8 @@
 
     // ============ RSS NEWS FEEDS ============
     async function loadNewsFeeds() {
-        const leftCol = document.getElementById('newsLeft');
-        const rightCol = document.getElementById('newsRight');
+        const leftCol = document.getElementById('appNewsLeft') || document.getElementById('newsLeft');
+        const rightCol = document.getElementById('appNewsRight') || document.getElementById('newsRight');
         if (!leftCol || !rightCol) return;
         if (leftCol.dataset.loaded === 'true') return;
         leftCol.dataset.loaded = 'true';
@@ -3148,7 +3344,13 @@
     let previousMarketCap = null;
 
     function getNewsCol(id) {
-        return document.getElementById(id);
+        // Return app element if on app view, otherwise landing element
+        const appId = 'app' + id.charAt(0).toUpperCase() + id.slice(1);
+        const appEl = document.getElementById(appId);
+        const landEl = document.getElementById(id);
+        // Prefer app element if visible, otherwise use landing element
+        if (appEl && !appEl.closest('.hidden')) return appEl;
+        return landEl || appEl;
     }
 
     function makeWidgetCard(title) {
@@ -3451,7 +3653,7 @@
     }
 
     async function loadAllWidgets() {
-        const marketWidgets = document.getElementById('marketWidgets');
+        const marketWidgets = document.getElementById('marketWidgets') || document.getElementById('appMarketWidgets');
         if (marketWidgets && marketWidgets.dataset.loaded === 'true') return;
         if (marketWidgets) marketWidgets.dataset.loaded = 'true';
         loadPriceTicker();
