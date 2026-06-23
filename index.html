@@ -2843,7 +2843,7 @@
             <p>No single risky token can exceed a structural concentration limit. If allocation would push a token beyond this cap, the excess is trimmed and redirected to the surplus pool.</p>
             <div class="doc-callout blue">
                 <div class="doc-ct">&#128295; DYNAMIC CAPS (Pro Feature)</div>
-                <p>The Pro engine replaces the flat cap with <strong>volatility-adaptive limits</strong>: high-volatility tokens receive smaller caps (as low as 10%), while low-volatility tokens can hold larger positions (up to 40%). The formula <em>maxCap_i = 40% &minus; (&sigma;_i / &sigma;_max) &times; 30%</em> ensures that riskier assets are structurally constrained proportionally to their actual volatility.</p>
+                <p>The Pro engine replaces the flat cap with <strong>volatility-adaptive limits</strong>: high-volatility tokens receive smaller caps (as low as 10%), while low-volatility tokens can hold larger positions (up to 40%). Each token&rsquo;s maximum weight is dynamically scaled between 10% and 40% based on how volatile it is relative to the most volatile token in the portfolio. The more volatile a token, the tighter its cap.</p>
             </div>
 
             <h3 id="doc-riskbudget">L6 &mdash; Risk Budget</h3>
@@ -2857,7 +2857,7 @@
         <!-- VOLATILITY -->
         <div class="doc-block" id="doc-volatility">
             <h2 id="doc-logreturns">6. Volatility Calculation</h2>
-            <p>Volatility is the foundational risk metric used throughout AQMath. It feeds into the safety factor, the circuit breaker threshold, and (in Pro) the covariance matrix. The system computes a rolling volatility estimate for each token using log returns &mdash; a standard approach in quantitative finance that captures the magnitude of daily price swings.</p>
+            <p>Volatility is the foundational risk metric used throughout AQMath. It feeds into the safety factor, the circuit breaker threshold, and (in Pro) the covariance matrix. The system computes a rolling volatility estimate for each token by measuring the magnitude of daily price swings &mdash; a standard approach in quantitative finance.</p>
 
             <h3 id="doc-portvol">6.1 Portfolio Volatility</h3>
             <p>Portfolio-level volatility is a weighted aggregate of each token&rsquo;s individual volatility, proportional to its share of total portfolio value. Safe-haven tokens and frozen positions are excluded since they have near-zero volatility by definition. This portfolio-level metric drives adaptive thresholds across the entire defense system.</p>
@@ -2879,14 +2879,14 @@
                 <svg viewBox="0 0 720 140" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;">
                     <rect x="10" y="30" width="150" height="80" rx="6" fill="rgba(56,189,248,0.06)" stroke="#38bdf8" stroke-width="1" opacity="0.6"/>
                     <text x="85" y="58" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">COVARIANCE</text>
-                    <text x="85" y="74" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">180d log returns</text>
-                    <text x="85" y="88" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">&Sigma; matrix + &sigma;_i</text>
+                    <text x="85" y="74" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">180 days of prices</text>
+                    <text x="85" y="88" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Risk matrix</text>
                     <line x1="165" y1="70" x2="200" y2="70" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
                     <polygon points="198,66 198,74 204,70" fill="#64748b" opacity="0.5"/>
                     <rect x="205" y="30" width="150" height="80" rx="6" fill="rgba(168,85,247,0.06)" stroke="#a855f7" stroke-width="1" opacity="0.6"/>
                     <text x="280" y="58" text-anchor="middle" fill="#a855f7" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">ERC SOLVER</text>
                     <text x="280" y="74" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Equal Risk Contribution</text>
-                    <text x="280" y="88" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">RC_i = &sigma;&sup2;_p / n</text>
+                    <text x="280" y="88" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Equal risk weights</text>
                     <line x1="360" y1="70" x2="395" y2="70" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
                     <polygon points="393,66 393,74 399,70" fill="#64748b" opacity="0.5"/>
                     <rect x="400" y="30" width="150" height="80" rx="6" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="1" opacity="0.6"/>
@@ -2903,18 +2903,18 @@
 
             <h3 id="doc-erc-solver">8.1 Equal Risk Contribution (ERC)</h3>
             <p>Traditional portfolio optimization (Markowitz mean-variance) requires estimating expected returns &mdash; a notoriously unreliable process that amplifies estimation errors into extreme allocations. Risk Parity sidesteps this entirely by optimizing for <strong>equal risk contribution</strong> rather than equal weight or maximum return.</p>
-            <p>The ERC solver uses a fixed-point iteration algorithm that converges to weights where each asset contributes exactly <em>1/n</em> of total portfolio risk. Mathematically:</p>
+            <p>The ERC solver uses a fixed-point iteration algorithm that converges to weights where each asset contributes exactly an equal share of total portfolio risk. The process works as follows:</p>
             <ul>
-                <li>Each token&rsquo;s <strong>risk contribution</strong> is RC_i = w_i &times; (&Sigma;w)_i / &sigma;&sup2;_p</li>
-                <li>The solver iterates: w_i &larr; (target_rc &times; &sigma;_p) / MRC_i, where MRC_i is the marginal risk contribution</li>
-                <li>Convergence typically reaches tolerance 10<sup>&minus;8</sup> within 5&ndash;15 iterations</li>
+                <li>Each token&rsquo;s <strong>risk contribution</strong> is calculated by multiplying its weight by its marginal contribution to overall portfolio volatility.</li>
+                <li>The solver repeatedly adjusts weights &mdash; increasing allocation to tokens that contribute too little risk, decreasing those that contribute too much.</li>
+                <li>The algorithm typically converges to a stable solution within 5&ndash;15 iterations.</li>
             </ul>
             <p>The result is a portfolio where BTC and a small-cap altcoin each contribute the same amount of risk &mdash; preventing any single asset from dominating your portfolio&rsquo;s volatility profile, even if it has the largest allocation.</p>
 
             <h3 id="doc-kkt">8.2 KKT Projection &amp; Structural Limits</h3>
             <p>The raw ERC weights may violate real-world constraints (e.g., a 35% allocation to a single token). The KKT projection step enforces structural limits through iterative clipping:</p>
             <ul>
-                <li><strong>Dynamic per-token caps</strong> &mdash; each token&rsquo;s maximum weight is computed from its volatility: <em>maxCap_i = 40% &minus; (&sigma;_i / &sigma;_max) &times; 30%</em>. High-vol tokens get caps as low as 10%; stable, low-vol tokens can reach 40%.</li>
+                <li><strong>Dynamic per-token caps</strong> &mdash; each token&rsquo;s maximum weight is computed from its volatility. The more volatile a token is compared to the rest of the portfolio, the tighter its cap (as low as 10%). Stable, low-volatility tokens can hold up to 40%.</li>
                 <li><strong>Risk budget</strong> &mdash; total risky exposure is capped at 60%. If ERC weights exceed this, all allocations are scaled down proportionally.</li>
                 <li><strong>Minimum floor</strong> &mdash; tokens below 1% are removed, preventing dust allocations.</li>
                 <li><strong>Surplus redistribution</strong> &mdash; capital freed by capping is redistributed to uncapped tokens proportionally.</li>
@@ -2922,11 +2922,11 @@
             <p>The projection runs iteratively (up to 10 rounds) until all constraints are simultaneously satisfied.</p>
 
             <h3 id="doc-correlations">8.3 Correlation &amp; Covariance Analysis</h3>
-            <p>The engine computes a full NxN covariance matrix from 180 days of cleaned, aligned log returns. This matrix captures not just individual asset volatility but <strong>how assets move together</strong>. Two tokens with moderate individual volatility but high correlation (e.g., ETH and SOL at &rho; = 0.85) have amplified combined risk &mdash; a relationship that simple weight-based allocation ignores entirely.</p>
+            <p>The engine computes a full NxN covariance matrix from 180 days of cleaned, aligned price history. This matrix captures not just individual asset volatility but <strong>how assets move together</strong>. Two tokens with moderate individual volatility but high correlation (e.g., ETH and SOL tend to move in the same direction 85% of the time) have amplified combined risk &mdash; a relationship that simple weight-based allocation ignores entirely.</p>
             <p>The AQMath Engine returns:</p>
             <ul>
                 <li><strong>Covariance matrix</strong> &mdash; upper-triangle annualized covariances for all token pairs</li>
-                <li><strong>Top correlations</strong> &mdash; the 6 highest-correlated pairs, sorted by |&rho;|</li>
+                <li><strong>Top correlations</strong> &mdash; the 6 highest-correlated pairs, sorted by correlation strength</li>
                 <li><strong>Portfolio volatility</strong> &mdash; the aggregate annualized volatility after KKT projection</li>
                 <li><strong>Per-token diagnostics</strong> &mdash; ERC weight, KKT weight, risk contribution, volatility, dynamic cap, and capped status</li>
             </ul>
