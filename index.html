@@ -3405,7 +3405,7 @@
             return payload.exp * 1000 > Date.now();
         } catch { return false; }
     }
-    const isPro = isBetaActive();
+    let isPro = isBetaActive();
 
 
     // ========== BETA AUTH ==========
@@ -3444,6 +3444,7 @@
             }
             const data = await res.json();
             sessionStorage.setItem('pro_token', data.token);
+            isPro = true;
             document.getElementById('betaSection').classList.add('hidden');
             document.getElementById('betaActive').classList.remove('hidden');
             showToast('beta activated -- pipeline unlocked', 'success');
@@ -3458,6 +3459,7 @@
 
     function deactivateBeta() {
         sessionStorage.removeItem('pro_token');
+        isPro = false;
         document.getElementById('betaSection').classList.remove('hidden');
         document.getElementById('betaActive').classList.add('hidden');
         showToast('beta deactivated', 'notice');
