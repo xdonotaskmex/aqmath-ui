@@ -3398,8 +3398,20 @@
     Chart.defaults.color = '#64748b';
     Chart.defaults.font.family = "'IBM Plex Mono', monospace";
 
-    // Beta mode: check for valid JWT token in sessionStorage
-    function getBetaToken() { return sessionStorage.getItem('pro_token') || ''; }
+    // Beta mode: check for valid JWT token in localStorage (with sessionStorage migration)
+    function getBetaToken() {
+        let token = localStorage.getItem('pro_token');
+        if (!token) {
+            // Migrate from old sessionStorage if present
+            token = sessionStorage.getItem('pro_token');
+            if (token) {
+                localStorage.setItem('pro_token', token);
+                sessionStorage.removeItem('pro_token');
+                console.log('[AQMath] Migrated beta token from sessionStorage to localStorage');
+            }
+        }
+        return token || '';
+    }
     function isBetaActive() {
         const token = getBetaToken();
         if (!token) return false;
@@ -3416,12 +3428,17 @@
 
     async function pipelineFetch(url, options = {}) {
         const token = getBetaToken();
-        if (!token) throw new Error('beta token missing');
+        if (!token) {
+            isPro = false;
+            showToast('beta token missing -- please re-enter your beta key', 'warning');
+            throw new Error('beta token missing');
+        }
         const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
-        if (token) headers['Authorization'] = 'Bearer ' + token;
+        headers['Authorization'] = 'Bearer ' + token;
         const res = await fetch(url, { ...options, headers });
         if (res.status === 401) {
-            sessionStorage.removeItem('pro_token');
+            localStorage.removeItem('pro_token');
+            isPro = false;
             showToast('beta key expired -- please re-enter your key', 'warning');
             render();
             throw new Error('token expired');
@@ -3446,7 +3463,7 @@
                 throw new Error(err.detail || 'invalid key');
             }
             const data = await res.json();
-            sessionStorage.setItem('pro_token', data.token);
+            localStorage.setItem('pro_token', data.token);
             isPro = true;
             console.log('[AQMath] Beta activated: isPro=' + isPro);
             document.getElementById('betaSection').classList.add('hidden');
@@ -3462,7 +3479,7 @@
     }
 
     function deactivateBeta() {
-        sessionStorage.removeItem('pro_token');
+        localStorage.removeItem('pro_token');
         isPro = false;
         document.getElementById('betaSection').classList.remove('hidden');
         document.getElementById('betaActive').classList.add('hidden');
