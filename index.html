@@ -2526,6 +2526,7 @@
         <a href="#doc-arch" class="doc-nav-head">Architecture</a>
         <a href="#doc-sysdiag" class="doc-nav-sub">System Diagram</a>
         <a href="#doc-dataflow" class="doc-nav-sub">Data Flow</a>
+        <a href="#doc-cleaning" class="doc-nav-sub">Data Cleaning</a>
         <a href="#doc-zk" class="doc-nav-sub">Zero-Knowledge Privacy</a>
         <a href="#doc-portfolio" class="doc-nav-head">Portfolio</a>
         <a href="#doc-metrics" class="doc-nav-sub">Position Metrics</a>
@@ -2543,6 +2544,10 @@
         <a href="#doc-riskbudget" class="doc-nav-sub">L6 &ndash; Risk Budget</a>
         <a href="#doc-safehaven" class="doc-nav-sub">L7 &ndash; Safe-Haven</a>
         <a href="#doc-volatility" class="doc-nav-head">Volatility</a>
+        <a href="#doc-aqmath" class="doc-nav-head">AQMath Engine (Pro)</a>
+        <a href="#doc-erc-solver" class="doc-nav-sub">Equal Risk Contribution</a>
+        <a href="#doc-kkt" class="doc-nav-sub">KKT Projection</a>
+        <a href="#doc-correlations" class="doc-nav-sub">Correlation Analysis</a>
         <a href="#doc-privacy" class="doc-nav-head">Privacy Deep-Dive</a>
         <a href="#doc-separation" class="doc-nav-sub">Data Separation</a>
         <a href="#doc-backend-never" class="doc-nav-sub">What Backend Never Sees</a>
@@ -2593,7 +2598,7 @@
                     <rect x="40" y="128" width="200" height="32" rx="3" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="0.5" opacity="0.5"/>
                     <text x="140" y="148" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">Entry prices, cost basis</text>
                     <rect x="40" y="168" width="200" height="32" rx="3" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="0.5" opacity="0.5"/>
-                    <text x="140" y="188" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">Price history cache (30d)</text>
+                    <text x="140" y="188" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">Market data via backend (180d)</text>
                     <rect x="40" y="208" width="200" height="32" rx="3" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
                     <text x="140" y="228" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">DCA results &rarr; updated amounts</text>
                     <rect x="40" y="248" width="200" height="32" rx="3" fill="rgba(251,191,36,0.08)" stroke="#fbbf24" stroke-width="0.5" opacity="0.5"/>
@@ -2609,7 +2614,7 @@
                     <rect x="340" y="88" width="200" height="32" rx="3" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
                     <text x="440" y="108" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">DCA Distribution Engine</text>
                     <rect x="340" y="128" width="200" height="32" rx="3" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
-                    <text x="440" y="148" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">Risk Optimization Engine</text>
+                    <text x="440" y="148" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">AQMath Engine (Pro)</text>
                     <rect x="340" y="168" width="200" height="32" rx="3" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
                     <text x="440" y="188" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">Circuit Breaker + Hard Caps</text>
                     <rect x="340" y="208" width="200" height="32" rx="3" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
@@ -2641,7 +2646,17 @@
                 <li><strong>Results returned</strong> &rarr; updated token amounts are sent back to the browser and written to localStorage. The backend discards the request data immediately after responding.</li>
             </ol>
 
-            <h3 id="doc-zk">2.2 Zero-Knowledge Privacy Model <span class="doc-zk-badge">ZK-INSPIRED</span></h3>
+            <h3 id="doc-cleaning">2.2 Data Cleaning Pipeline</h3>
+            <p>Before price data reaches the optimization engine, it passes through a multi-stage cleaning pipeline that ensures mathematical integrity. Raw market data from multiple sources (CoinGecko, Kraken, Coinbase) is often noisy &mdash; containing duplicates, exchange-specific outliers, and occasional gaps. The cleaning pipeline applies four sequential filters:</p>
+            <ol>
+                <li><strong>Deduplication</strong> &mdash; removes duplicate timestamps, keeping the latest entry per date.</li>
+                <li><strong>Outlier Removal</strong> &mdash; rejects prices that deviate more than 2 standard deviations from a 7-day rolling window, eliminating flash-crash spikes and stale quotes.</li>
+                <li><strong>Gap Interpolation</strong> &mdash; fills gaps of 2 days or fewer using linear interpolation, preserving trend continuity.</li>
+                <li><strong>Multi-Source Merge</strong> &mdash; when the same token is collected from multiple exchanges, the median price is used to eliminate exchange-specific bias.</li>
+            </ol>
+            <p>This pipeline runs daily at 01:00 UTC via a scheduled cron job. The result is a clean, continuous price series suitable for covariance and volatility calculations.</p>
+
+            <h3 id="doc-zk">2.3 Zero-Knowledge Privacy Model <span class="doc-zk-badge">ZK-INSPIRED</span></h3>
             <p>AQMath&rsquo;s privacy architecture draws from Zero-Knowledge proof principles. In cryptography, a ZK proof allows one party to prove a statement is true without revealing the underlying data. AQMath applies a similar philosophy:</p>
             <p>The backend <strong>proves</strong> that a DCA allocation is mathematically optimal (through its buy summary and structural limit messages) without ever <strong>knowing</strong> your total portfolio value in a persistent sense. It processes your data in a stateless, ephemeral manner &mdash; like a ZK verifier that validates a computation without seeing the witness.</p>
             <ul>
@@ -2826,6 +2841,10 @@
 
             <h3 id="doc-hardcaps">L5 &mdash; Hard Caps</h3>
             <p>No single risky token can exceed a structural concentration limit. If allocation would push a token beyond this cap, the excess is trimmed and redirected to the surplus pool.</p>
+            <div class="doc-callout blue">
+                <div class="doc-ct">&#128295; DYNAMIC CAPS (Pro Feature)</div>
+                <p>The Pro engine replaces the flat cap with <strong>volatility-adaptive limits</strong>: high-volatility tokens receive smaller caps (as low as 10%), while low-volatility tokens can hold larger positions (up to 40%). The formula <em>maxCap_i = 40% &minus; (&sigma;_i / &sigma;_max) &times; 30%</em> ensures that riskier assets are structurally constrained proportionally to their actual volatility.</p>
+            </div>
 
             <h3 id="doc-riskbudget">L6 &mdash; Risk Budget</h3>
             <p>Total risky exposure is capped at a percentage of your portfolio, ensuring a safety buffer always exists. If risky tokens exceed the budget, all allocations are scaled down proportionally.</p>
@@ -2848,9 +2867,79 @@
             </div>
         </div>
 
+
+        <!-- AQMATH ENGINE (PRO) -->
+        <div class="doc-block" id="doc-aqmath">
+            <h2 id="doc-erc">8. AQMath Engine (Pro)</h2>
+            <p>The AQMath Engine is the Pro-tier optimization layer that sits alongside the DCA engine. While the DCA engine distributes a fixed dollar budget, the AQMath Engine answers a deeper question: <strong>what should the target weights themselves be?</strong> It uses institutional-grade quantitative methods &mdash; the same class of algorithms deployed by multi-billion-dollar hedge funds &mdash; to compute mathematically optimal portfolio weights from first principles.</p>
+            <p>The engine runs a three-stage pipeline: it builds a full covariance matrix from 180 days of cleaned price history, solves for Equal Risk Contribution (true Risk Parity), and applies KKT projection with dynamic volatility caps to enforce structural limits.</p>
+
+            <div class="doc-diagram">
+                <div class="doc-fl">AQMath Engine Pipeline</div>
+                <svg viewBox="0 0 720 140" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;">
+                    <rect x="10" y="30" width="150" height="80" rx="6" fill="rgba(56,189,248,0.06)" stroke="#38bdf8" stroke-width="1" opacity="0.6"/>
+                    <text x="85" y="58" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">COVARIANCE</text>
+                    <text x="85" y="74" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">180d log returns</text>
+                    <text x="85" y="88" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">&Sigma; matrix + &sigma;_i</text>
+                    <line x1="165" y1="70" x2="200" y2="70" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
+                    <polygon points="198,66 198,74 204,70" fill="#64748b" opacity="0.5"/>
+                    <rect x="205" y="30" width="150" height="80" rx="6" fill="rgba(168,85,247,0.06)" stroke="#a855f7" stroke-width="1" opacity="0.6"/>
+                    <text x="280" y="58" text-anchor="middle" fill="#a855f7" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">ERC SOLVER</text>
+                    <text x="280" y="74" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Equal Risk Contribution</text>
+                    <text x="280" y="88" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">RC_i = &sigma;&sup2;_p / n</text>
+                    <line x1="360" y1="70" x2="395" y2="70" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
+                    <polygon points="393,66 393,74 399,70" fill="#64748b" opacity="0.5"/>
+                    <rect x="400" y="30" width="150" height="80" rx="6" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="1" opacity="0.6"/>
+                    <text x="475" y="58" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">KKT PROJECT</text>
+                    <text x="475" y="74" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Dynamic caps (10&ndash;40%)</text>
+                    <text x="475" y="88" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">60% risk budget</text>
+                    <line x1="555" y1="70" x2="590" y2="70" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
+                    <polygon points="588,66 588,74 594,70" fill="#64748b" opacity="0.5"/>
+                    <rect x="595" y="40" width="115" height="60" rx="6" fill="rgba(251,191,36,0.08)" stroke="#fbbf24" stroke-width="1" opacity="0.6"/>
+                    <text x="652" y="65" text-anchor="middle" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">WEIGHTS</text>
+                    <text x="652" y="82" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">new targets</text>
+                </svg>
+            </div>
+
+            <h3 id="doc-erc-solver">8.1 Equal Risk Contribution (ERC)</h3>
+            <p>Traditional portfolio optimization (Markowitz mean-variance) requires estimating expected returns &mdash; a notoriously unreliable process that amplifies estimation errors into extreme allocations. Risk Parity sidesteps this entirely by optimizing for <strong>equal risk contribution</strong> rather than equal weight or maximum return.</p>
+            <p>The ERC solver uses a fixed-point iteration algorithm that converges to weights where each asset contributes exactly <em>1/n</em> of total portfolio risk. Mathematically:</p>
+            <ul>
+                <li>Each token&rsquo;s <strong>risk contribution</strong> is RC_i = w_i &times; (&Sigma;w)_i / &sigma;&sup2;_p</li>
+                <li>The solver iterates: w_i &larr; (target_rc &times; &sigma;_p) / MRC_i, where MRC_i is the marginal risk contribution</li>
+                <li>Convergence typically reaches tolerance 10<sup>&minus;8</sup> within 5&ndash;15 iterations</li>
+            </ul>
+            <p>The result is a portfolio where BTC and a small-cap altcoin each contribute the same amount of risk &mdash; preventing any single asset from dominating your portfolio&rsquo;s volatility profile, even if it has the largest allocation.</p>
+
+            <h3 id="doc-kkt">8.2 KKT Projection &amp; Structural Limits</h3>
+            <p>The raw ERC weights may violate real-world constraints (e.g., a 35% allocation to a single token). The KKT projection step enforces structural limits through iterative clipping:</p>
+            <ul>
+                <li><strong>Dynamic per-token caps</strong> &mdash; each token&rsquo;s maximum weight is computed from its volatility: <em>maxCap_i = 40% &minus; (&sigma;_i / &sigma;_max) &times; 30%</em>. High-vol tokens get caps as low as 10%; stable, low-vol tokens can reach 40%.</li>
+                <li><strong>Risk budget</strong> &mdash; total risky exposure is capped at 60%. If ERC weights exceed this, all allocations are scaled down proportionally.</li>
+                <li><strong>Minimum floor</strong> &mdash; tokens below 1% are removed, preventing dust allocations.</li>
+                <li><strong>Surplus redistribution</strong> &mdash; capital freed by capping is redistributed to uncapped tokens proportionally.</li>
+            </ul>
+            <p>The projection runs iteratively (up to 10 rounds) until all constraints are simultaneously satisfied.</p>
+
+            <h3 id="doc-correlations">8.3 Correlation &amp; Covariance Analysis</h3>
+            <p>The engine computes a full NxN covariance matrix from 180 days of cleaned, aligned log returns. This matrix captures not just individual asset volatility but <strong>how assets move together</strong>. Two tokens with moderate individual volatility but high correlation (e.g., ETH and SOL at &rho; = 0.85) have amplified combined risk &mdash; a relationship that simple weight-based allocation ignores entirely.</p>
+            <p>The AQMath Engine returns:</p>
+            <ul>
+                <li><strong>Covariance matrix</strong> &mdash; upper-triangle annualized covariances for all token pairs</li>
+                <li><strong>Top correlations</strong> &mdash; the 6 highest-correlated pairs, sorted by |&rho;|</li>
+                <li><strong>Portfolio volatility</strong> &mdash; the aggregate annualized volatility after KKT projection</li>
+                <li><strong>Per-token diagnostics</strong> &mdash; ERC weight, KKT weight, risk contribution, volatility, dynamic cap, and capped status</li>
+            </ul>
+            <div class="doc-callout green">
+                <div class="doc-ct">&#128200; WHY RISK PARITY MATTERS</div>
+                <p>A na&iuml;ve equal-weight portfolio of BTC + SOL + DOGE allocates 33% each. But DOGE&rsquo;s volatility is roughly 3x BTC&rsquo;s, meaning DOGE contributes ~60% of total portfolio risk despite holding only 33% of value. ERC automatically corrects this: it would allocate ~55% to BTC, ~25% to SOL, and ~20% to DOGE &mdash; ensuring each token genuinely contributes one-third of the risk.</p>
+            </div>
+        </div>
+
+
         <!-- PRIVACY DEEP-DIVE -->
         <div class="doc-block" id="doc-privacy">
-            <h2 id="doc-separation">7. Privacy &amp; Data Separation</h2>
+            <h2 id="doc-separation">9. Privacy &amp; Data Separation</h2>
             <p>AQMath&rsquo;s privacy is not a feature bolted onto the product &mdash; it&rsquo;s the foundational architectural principle. The system is designed so that your financial data is mathematically isolated from the computation layer.</p>
             <div class="doc-privacy-grid">
                 <div class="doc-privacy-col">
@@ -2879,7 +2968,7 @@
                 </div>
             </div>
 
-            <h3 id="doc-backend-never">7.1 What the Backend NEVER Sees</h3>
+            <h3 id="doc-backend-never">9.1 What the Backend NEVER Sees</h3>
             <p>This is the most critical section. The following data is architecturally impossible for the backend to access:</p>
             <div class="doc-callout red">
                 <div class="doc-ct">&#128274; ARCHITECTURAL PRIVACY GUARANTEES</div>
@@ -2900,7 +2989,7 @@
             </table>
             <p>The backend processes your DCA request in a single HTTP round-trip: receive positions &rarr; compute allocation &rarr; return results &rarr; discard. There is no database table that maps users to portfolios. There is no log file that records your holdings. Even if someone gained full access to the server, they would find <strong>zero information</strong> about any user&rsquo;s financial state.</p>
 
-            <h3 id="doc-zk-model">7.2 Zero-Knowledge Privacy Model <span class="doc-zk-badge">ZK-INSPIRED</span></h3>
+            <h3 id="doc-zk-model">9.2 Zero-Knowledge Privacy Model <span class="doc-zk-badge">ZK-INSPIRED</span></h3>
             <p>AQMath&rsquo;s privacy architecture is conceptually aligned with Zero-Knowledge proof systems. In a ZK proof, a prover demonstrates that a computation is correct without revealing the inputs. AQMath implements a practical analog:</p>
             <ul>
                 <li><strong>The backend proves</strong> that the DCA allocation is mathematically optimal through detailed buy summaries (e.g., &ldquo;BTC: +$142.30 (0.002371 tokens)&rdquo;).</li>
