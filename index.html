@@ -4537,7 +4537,8 @@
             weights.forEach(w => {
                 const vol = w.volatility != null ? `vol:${(w.volatility * 100).toFixed(1)}%` : 'no data';
                 const rc = w.risk_contribution ? `rc:${(w.risk_contribution * 100).toFixed(1)}%` : '';
-                const cap = w.capped ? ' \u26a0\ufe0f' : '';
+                const dynCap = result.dynamic_caps && result.dynamic_caps[w.sym] != null ? `cap:${(result.dynamic_caps[w.sym]*100).toFixed(0)}%` : '';
+                const cap = w.capped ? ` \u26a0\ufe0f(${dynCap})` : (dynCap ? ` ${dynCap}` : '');
                 const erc = w.erc_weight != null ? `erc:${w.erc_weight}%` : '';
                 msg += `  ${w.sym}: ${w.weight}% (${vol}, ${erc}, ${rc})${cap}\n`;
             });
