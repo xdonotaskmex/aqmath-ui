@@ -2980,14 +2980,10 @@
                 actionsEl.appendChild(btn);
             });
             if (toastTimer) clearTimeout(toastTimer);
-            toastTimer = setTimeout(hideToast, 12000);
         } else {
             actionsEl.classList.add('hidden');
             closeBtn.classList.remove('hidden');
             if (toastTimer) clearTimeout(toastTimer);
-            if (type === 'success' || type === 'warning') {
-                toastTimer = setTimeout(hideToast, 3500);
-            }
         }
     }
     function hideToast(e) {
