@@ -3437,11 +3437,15 @@
         headers['Authorization'] = 'Bearer ' + token;
         const res = await fetch(url, { ...options, headers });
         if (res.status === 401) {
-            localStorage.removeItem('pro_token');
-            isPro = false;
-            showToast('beta key expired -- please re-enter your key', 'warning');
-            render();
-            throw new Error('token expired');
+            let detail = 'authentication failed';
+            try { const err = await res.json(); detail = err.detail || err.message || detail; } catch {}
+            if (detail.toLowerCase().includes('expired')) {
+                localStorage.removeItem('pro_token');
+                isPro = false;
+                render();
+            }
+            showToast('AQMath Engine auth: ' + detail, 'warning');
+            throw new Error(detail);
         }
         return res;
     }
