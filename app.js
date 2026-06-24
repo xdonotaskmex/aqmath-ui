@@ -1614,4 +1614,14 @@ function render() {
     updateProButtons();
     renderHistoryChart();
 })();
+
+// ============ EXPOSE TO GLOBAL SCOPE (for HTML onclick handlers) ============
+Object.assign(window, {
+    showProModal, hideProModal, showToast, hideToast,
+    activateBeta, deactivateBeta,
+    saveSnapshot, toggleGlobalSafeHaven, deployUSDC,
+    osvjeziSveCijene, importCSV, dodajToken,
+    obrisiSve, distribuirajDca, optimizePortfolio,
+    exportJSON, importJSON, refreshHistory
+});
 })();
