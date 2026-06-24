@@ -350,16 +350,21 @@
 <div class="lp-pro-modal hidden" id="proModal">
     <div class="lp-pro-box">
         <h3>&#128274; PRO Coming Soon</h3>
-        <p>The Pro version with Quantum Engine (Risk Parity), unlimited tokens, and pipeline data sync is currently in development.<br><br>Stay tuned for the annual cryptographic license key (minted on Polygon).</p>
+        <p>The Pro version with Risk Parity Engine, unlimited tokens, and 180-day covariance pipeline is in development.<br><br>Annual cryptographic license key (minted on Polygon).</p>
         <div class="lp-pro-beta">
-            <div class="lp-pro-beta-label">want free beta access? contact us:</div>
+            <div class="lp-pro-beta-label">ask for your spot:</div>
             <div class="lp-pro-beta-links">
                 <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">[ telegram ]</a>
                 <span class="lp-pro-beta-sep">&middot;</span>
                 <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">[ x ]</a>
             </div>
         </div>
-        <button class="lp-pro-close" onclick="hideProModal()">[ Close ]</button>
+        <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;">
+            <div class="lp-pro-beta-label" style="margin-bottom:8px;">or enter beta key:</div>
+            <input type="text" id="iBetaKeyModal" placeholder="AQMBETA-XXXX-XXXX" autocomplete="off" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:4px;color:#e2e8f0;font-family:var(--mono);font-size:0.7rem;letter-spacing:1px;text-align:center;box-sizing:border-box;">
+            <button class="lp-pro-close" style="width:100%;margin-top:8px;background:rgba(168,85,247,0.12);border-color:rgba(168,85,247,0.3);color:var(--purple);" onclick="document.getElementById('iBetaKey').value=document.getElementById('iBetaKeyModal').value;activateBeta()">[ Activate Beta ]</button>
+        </div>
+        <button class="lp-pro-close" onclick="hideProModal()" style="margin-top:12px;">[ Close ]</button>
     </div>
 </div>
 
