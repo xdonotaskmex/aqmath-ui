@@ -2559,7 +2559,7 @@
         <a href="#doc-sysdiag" class="doc-nav-sub">System Diagram</a>
         <a href="#doc-dataflow" class="doc-nav-sub">Data Flow</a>
         <a href="#doc-cleaning" class="doc-nav-sub">Data Cleaning</a>
-        <a href="#doc-zk" class="doc-nav-sub">Zero-Knowledge Privacy</a>
+        <a href="#doc-zk" class="doc-nav-sub">Non-Custodial Privacy</a>
         <a href="#doc-portfolio" class="doc-nav-head">Portfolio</a>
         <a href="#doc-metrics" class="doc-nav-sub">Position Metrics</a>
         <a href="#doc-pnl" class="doc-nav-sub">P&amp;L Tracking</a>
@@ -2567,7 +2567,7 @@
         <a href="#doc-dca-overview" class="doc-nav-sub">Overview</a>
         <a href="#doc-iterative" class="doc-nav-sub">How It Works</a>
         <a href="#doc-small-dca" class="doc-nav-sub">Small DCA Rule</a>
-        <a href="#doc-defense" class="doc-nav-head">Layered Defense</a>
+        <a href="#doc-defense" class="doc-nav-head">DCA Safety Pipeline</a>
         <a href="#doc-circuit" class="doc-nav-sub">L1 &ndash; Circuit Breaker</a>
         <a href="#doc-safety" class="doc-nav-sub">L2 &ndash; Safety Factor</a>
         <a href="#doc-trend" class="doc-nav-sub">L3 &ndash; Trend Filter</a>
@@ -2597,11 +2597,11 @@
         <div class="doc-block" id="doc-intro">
             <h2 id="doc-what">1. What is AQMath?</h2>
             <p>AQMath is a quantitative portfolio rebalancer purpose-built for the crypto market. It combines institutional-grade mathematical models &mdash; the same class of optimization used by multi-billion-dollar hedge funds &mdash; with a privacy-first architecture that ensures your financial data never leaves your control.</p>
-            <p>At its core, AQMath solves a deceptively complex problem: <strong>when you add new capital to your crypto portfolio, which tokens should you buy, and how much of each?</strong> A naive approach (split equally) ignores that some positions are already overweight while others are dangerously underweight. AQMath&rsquo;s DCA engine uses smart proportional allocation, filtered through a 7-layer risk defense system, to ensure every dollar you invest moves your portfolio closer to its optimal structure.</p>
+            <p>At its core, AQMath solves a deceptively complex problem: <strong>when you add new capital to your crypto portfolio, which tokens should you buy, and how much of each?</strong> A naive approach (split equally) ignores that some positions are already overweight while others are dangerously underweight. AQMath&rsquo;s DCA engine uses smart proportional allocation, filtered through a DCA safety pipeline, to ensure every dollar you invest moves your portfolio closer to its optimal structure.</p>
             <p>The system operates on a <strong>hybrid architecture</strong>: your portfolio data (token amounts, entry prices, targets) stays exclusively in your browser&rsquo;s localStorage, while computationally intensive math (covariance matrices, iterative DCA optimization, volatility analysis) runs on our secure backend engine. This means you get institutional-quality analysis without ever exposing your holdings to a server.</p>
             <div class="doc-callout purple">
-                <div class="doc-ct">&#128272; ZERO-KNOWLEDGE ARCHITECTURE</div>
-                <p>AQMath&rsquo;s privacy model is inspired by Zero-Knowledge (ZK) principles: the backend can prove that a DCA allocation is mathematically optimal without ever knowing the actual dollar value of your portfolio. It receives position data in-memory during a single DCA request, computes the result, and discards everything. No persistence. No logs of your amounts. No user database. Your financial state is provably private by design.</p>
+                <div class="doc-ct">&#128272; NON-CUSTODIAL PRIVACY</div>
+                <p>AQMath&rsquo;s privacy model is non-custodial by design: the backend receives position data in-memory during a single DCA request, computes the result, and discards everything. No persistence. No logs of your amounts. No user database. Your financial state lives exclusively in your browser&rsquo;s localStorage &mdash; the server never retains it.</p>
             </div>
 
             <h3 id="doc-who">1.1 Who Is AQMath For?</h3>
@@ -2674,7 +2674,7 @@
                 <li><strong>User enters tokens + targets</strong> &rarr; stored exclusively in browser localStorage. No network request is made.</li>
                 <li><strong>SYNC clicked</strong> &rarr; only token symbols (e.g., BTC, ETH, SOL) are sent to the backend. The backend fetches current prices from Binance and returns them. It has no way of knowing how much BTC or ETH you hold.</li>
                 <li><strong>DCA Distribute clicked</strong> &rarr; positions (including amounts) and DCA budget are sent to the backend engine via a single HTTPS POST request.</li>
-                <li><strong>Backend computes</strong> &rarr; the DCA engine runs iterative allocation with the full 7-layer defense pipeline. All computation happens in-memory. Nothing is written to disk or database.</li>
+                <li><strong>Backend computes</strong> &rarr; the DCA engine runs iterative allocation with the full safety pipeline. All computation happens in-memory. Nothing is written to disk or database.</li>
                 <li><strong>Results returned</strong> &rarr; updated token amounts are sent back to the browser and written to localStorage. The backend discards the request data immediately after responding.</li>
             </ol>
 
@@ -2688,9 +2688,8 @@
             </ol>
             <p>This pipeline runs daily at 01:00 UTC via a scheduled cron job. The result is a clean, continuous price series suitable for covariance and volatility calculations.</p>
 
-            <h3 id="doc-zk">2.3 Zero-Knowledge Privacy Model <span class="doc-zk-badge">ZK-INSPIRED</span></h3>
-            <p>AQMath&rsquo;s privacy architecture draws from Zero-Knowledge proof principles. In cryptography, a ZK proof allows one party to prove a statement is true without revealing the underlying data. AQMath applies a similar philosophy:</p>
-            <p>The backend <strong>proves</strong> that a DCA allocation is mathematically optimal (through its buy summary and structural limit messages) without ever <strong>knowing</strong> your total portfolio value in a persistent sense. It processes your data in a stateless, ephemeral manner &mdash; like a ZK verifier that validates a computation without seeing the witness.</p>
+            <h3 id="doc-zk">2.3 Non-Custodial Privacy Model</h3>
+            <p>AQMath&rsquo;s privacy architecture is non-custodial by design. The backend processes your DCA request statelessly &mdash; it receives position data, computes optimal allocation, returns results, and discards everything from memory. No persistent record of your holdings is ever created server-side:</p>
             <ul>
                 <li>No user database exists &mdash; there is nothing to hack, leak, or subpoena</li>
                 <li>No portfolio amounts are logged or stored server-side after a DCA response</li>
@@ -2774,9 +2773,9 @@
                     <polygon points="193,81 193,89 199,85" fill="#64748b" opacity="0.5"/>
                     <rect x="200" y="40" width="130" height="90" rx="6" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="1.5" opacity="0.6"/>
                     <text x="265" y="68" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">DCA ENGINE</text>
-                    <text x="265" y="84" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">7-layer defense</text>
+                    <text x="265" y="84" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">DCA safety pipeline</text>
                     <text x="265" y="98" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">iterative allocation</text>
-                    <text x="265" y="118" text-anchor="middle" fill="#a855f7" font-family="'JetBrains Mono',monospace" font-size="7" opacity="0.7">ZK-inspired</text>
+                    <text x="265" y="118" text-anchor="middle" fill="#a855f7" font-family="'JetBrains Mono',monospace" font-size="7" opacity="0.7">non-custodial</text>
                     <line x1="335" y1="60" x2="400" y2="35" stroke="#64748b" stroke-width="0.8" opacity="0.4"/>
                     <line x1="335" y1="75" x2="400" y2="70" stroke="#64748b" stroke-width="0.8" opacity="0.4"/>
                     <line x1="335" y1="90" x2="400" y2="105" stroke="#64748b" stroke-width="0.8" opacity="0.4"/>
@@ -2801,7 +2800,7 @@
             </div>
 
             <h3 id="doc-iterative">4.1 How It Works (High-Level)</h3>
-            <p>Before any allocation happens, each token is evaluated through the 7-layer defense pipeline (see Section 5). Only tokens that pass all filters are eligible to receive DCA funds. The allocation then follows a simple principle: <strong>the more underweight a token is relative to its target, the larger share of new capital it receives</strong> &mdash; tempered by a risk adjustment that reduces allocation for highly volatile assets.</p>
+            <p>Before any allocation happens, each token is evaluated through the DCA safety pipeline (see Section 5). Only tokens that pass all filters are eligible to receive DCA funds. The allocation then follows a simple principle: <strong>the more underweight a token is relative to its target, the larger share of new capital it receives</strong> &mdash; tempered by a risk adjustment that reduces allocation for highly volatile assets.</p>
             <p>After each round, cost basis and token counts are updated automatically. Over multiple DCA cycles, the engine naturally balances your portfolio toward its ideal allocation.</p>
 
             <h3 id="doc-small-dca">4.2 Small DCA Rule</h3>
@@ -2814,11 +2813,11 @@
 
         <!-- LAYERED DEFENSE -->
         <div class="doc-block" id="doc-defense">
-            <h2>5. Layered Defense System</h2>
-            <p>AQMath implements a 7-layer defense pipeline designed for crypto markets. Traditional systems would halt trading on a 15% dip &mdash; but in crypto, 15&ndash;20% pullbacks happen regularly and are often excellent buying opportunities. Each layer operates independently and in strict sequence, creating defense-in-depth where no single point of failure can compromise portfolio safety.</p>
+            <h2>5. DCA Safety Pipeline</h2>
+            <p>AQMath implements a multi-layer safety pipeline for DCA allocation designed for crypto markets. Traditional systems would halt trading on a 15% dip &mdash; but in crypto, 15&ndash;20% pullbacks happen regularly and are often excellent buying opportunities. Each layer operates independently and in strict sequence. <strong>Note:</strong> This pipeline governs only how new DCA capital is allocated &mdash; it does not trim or sell existing positions.</p>
 
             <div class="doc-diagram">
-                <div class="doc-fl">7-Layer Defense Pipeline</div>
+                <div class="doc-fl">DCA Safety Pipeline</div>
                 <svg viewBox="0 0 480 310" xmlns="http://www.w3.org/2000/svg" style="max-width:440px;">
                     <rect x="20" y="10" width="440" height="32" rx="4" fill="rgba(248,113,113,0.06)" stroke="#f87171" stroke-width="0.8" opacity="0.6"/>
                     <circle cx="48" cy="26" r="12" fill="rgba(248,113,113,0.15)" stroke="#f87171" stroke-width="0.5"/>
@@ -3021,14 +3020,14 @@
             </table>
             <p>The backend processes your DCA request in a single HTTP round-trip: receive positions &rarr; compute allocation &rarr; return results &rarr; discard. There is no database table that maps users to portfolios. There is no log file that records your holdings. Even if someone gained full access to the server, they would find <strong>zero information</strong> about any user&rsquo;s financial state.</p>
 
-            <h3 id="doc-zk-model">9.2 Zero-Knowledge Privacy Model <span class="doc-zk-badge">ZK-INSPIRED</span></h3>
-            <p>AQMath&rsquo;s privacy architecture is conceptually aligned with Zero-Knowledge proof systems. In a ZK proof, a prover demonstrates that a computation is correct without revealing the inputs. AQMath implements a practical analog:</p>
+            <h3 id="doc-zk-model">9.2 Non-Custodial Privacy Model</h3>
+            <p>AQMath implements a practical non-custodial privacy model:</p>
             <ul>
                 <li><strong>The backend proves</strong> that the DCA allocation is mathematically optimal through detailed buy summaries (e.g., &ldquo;BTC: +$142.30 (0.002371 tokens)&rdquo;).</li>
                 <li><strong>The backend does not retain</strong> the inputs. After the HTTP response is sent, the request data is garbage-collected from memory. No disk write. No database insert.</li>
                 <li><strong>The browser verifies</strong> the results by applying updated amounts and re-rendering the portfolio.</li>
             </ul>
-            <p>This is not a cryptographic ZK proof in the formal sense (like zk-SNARKs or STARKs), but it embodies the same philosophical principle: <strong>computational utility without data retention</strong>. You get the benefit of institutional-grade mathematical processing without surrendering custody of your financial information.</p>
+            <p>The backend does not retain your data after the HTTP response is sent &mdash; request data is garbage-collected from memory with no disk write, no database insert, and no logs of your holdings. Your portfolio lives in your browser&rsquo;s localStorage, and nowhere else.</p>
             <div class="doc-callout purple">
                 <div class="doc-ct">&#128272; COMPARISON WITH TRADITIONAL TOOLS</div>
                 <p>Traditional trackers store everything on centralized servers &mdash; one breach exposes all users. AQMath stores nothing server-side. No accounts, no wallet connections, no analytics tracking. Your portfolio lives in your browser, and nowhere else.</p>
@@ -3225,7 +3224,7 @@
         const known = new Set(['BTC','ETH','SOL','BNB','XRP','ADA','DOGE','AVAX','DOT','MATIC',
             'LINK','UNI','ATOM','LTC','ETC','OP','ARB','APT','FIL','NEAR','TIA','PYTH','INJ',
             'SUI','SEI','RUNE','FTM','RNDR','FET','WLD','PEPE','WIF','BONK','SHIB','TON']);
-        const r = await fetch('https://api.binance.com/api/v3/ticker/24hr');
+        const r = await fetch(`${DCA_API_URL}/api/binance/ticker`);
         const all = await r.json();
         moversCache = all
             .filter(t => t.symbol.endsWith('USDT') && known.has(t.symbol.replace('USDT','')))
@@ -3466,7 +3465,7 @@
 
         async function refresh() {
             try {
-                const r = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=' + JSON.stringify(symbols));
+                const r = await fetch(`${DCA_API_URL}/api/binance/ticker?symbols=${encodeURIComponent(JSON.stringify(symbols))}`);
                 const data = await r.json();
                 const items = data.map(t => {
                     const sym = names[t.symbol] || t.symbol.replace('USDT', '');
@@ -3645,10 +3644,12 @@
 
     function checkBetaUI() {
         const active = isBetaActive();
+        isPro = active; // sync global flag with actual token state
         const section = document.getElementById('betaSection');
         const activeEl = document.getElementById('betaActive');
         if (section) section.classList.toggle('hidden', active);
         if (activeEl) activeEl.classList.toggle('hidden', !active);
+        updateProButtons();
     }
 
     // ========== BACKEND API URLs ==========
@@ -3808,31 +3809,77 @@
     }
 
     function calcPortfolioVol() {
-        // Weighted avg 30-day vol from localStorage price history
+        // Correlation-aware portfolio vol from localStorage price history
         const portVal = totalValue();
         if (portVal <= 0) return 0.5; // default high vol for empty portfolio
-        let weightedVol = 0;
+        const active = [];
         portfolio.forEach(t => {
             if (t.safeHaven || t.frozen) return;
             const weight = (t.amount * t.price) / portVal;
+            if (weight <= 0) return;
             const histKey = `aq_history_${t.sym}`;
             let hist = null;
             try { hist = JSON.parse(localStorage.getItem(histKey)); } catch {}
             const prices = hist?.prices || [];
-            if (prices.length < 10) { weightedVol += weight * 0.8; return; } // default high vol for sparse data
-            const last30 = prices.slice(-30);
-            const returns = [];
-            for (let i = 1; i < last30.length; i++) {
-                if (last30[i] > 0 && last30[i-1] > 0) returns.push(Math.log(last30[i] / last30[i-1]));
+            let dailyVol, annVol;
+            if (prices.length < 10) { dailyVol = 0.8 / Math.sqrt(365); annVol = 0.8; }
+            else {
+                const last30 = prices.slice(-30);
+                const returns = [];
+                for (let i = 1; i < last30.length; i++) {
+                    if (last30[i] > 0 && last30[i-1] > 0) returns.push(Math.log(last30[i] / last30[i-1]));
+                }
+                if (returns.length < 2) { dailyVol = 0.8 / Math.sqrt(365); annVol = 0.8; }
+                else {
+                    const mean = returns.reduce((a,b) => a+b, 0) / returns.length;
+                    const variance = returns.reduce((a,b) => a + (b-mean)**2, 0) / returns.length;
+                    dailyVol = Math.sqrt(variance);
+                    annVol = dailyVol * Math.sqrt(365);
+                }
             }
-            if (returns.length < 2) { weightedVol += weight * 0.8; return; }
-            const mean = returns.reduce((a,b) => a+b, 0) / returns.length;
-            const variance = returns.reduce((a,b) => a + (b-mean)**2, 0) / returns.length;
-            const dailyVol = Math.sqrt(variance);
-            const annualVol = dailyVol * Math.sqrt(365);
-            weightedVol += weight * annualVol;
+            active.push({ sym: t.sym, weight, annVol, dailyVol, prices });
         });
-        return weightedVol;
+        if (active.length === 0) return 0.5;
+        if (active.length === 1) return active[0].annVol;
+
+        // Compute average pairwise correlation from aligned price returns
+        let sumCorr = 0, nPairs = 0;
+        for (let i = 0; i < active.length; i++) {
+            for (let j = i + 1; j < active.length; j++) {
+                const pi = active[i].prices.slice(-30);
+                const pj = active[j].prices.slice(-30);
+                const minLen = Math.min(pi.length, pj.length);
+                if (minLen < 5) continue;
+                const ri = [], rj = [];
+                for (let k = 1; k < minLen; k++) {
+                    if (pi[k] > 0 && pi[k-1] > 0 && pj[k] > 0 && pj[k-1] > 0) {
+                        ri.push(Math.log(pi[k] / pi[k-1]));
+                        rj.push(Math.log(pj[k] / pj[k-1]));
+                    }
+                }
+                if (ri.length < 3) continue;
+                const mi = ri.reduce((a,b) => a+b, 0) / ri.length;
+                const mj = rj.reduce((a,b) => a+b, 0) / rj.length;
+                let num = 0, di = 0, dj = 0;
+                for (let k = 0; k < ri.length; k++) {
+                    num += (ri[k] - mi) * (rj[k] - mj);
+                    di += (ri[k] - mi) ** 2;
+                    dj += (rj[k] - mj) ** 2;
+                }
+                const corr = (di > 0 && dj > 0) ? num / Math.sqrt(di * dj) : 0;
+                sumCorr += corr;
+                nPairs++;
+            }
+        }
+        const avgCorr = nPairs > 0 ? Math.max(0, sumCorr / nPairs) : 0;
+
+        // Correlation-adjusted portfolio vol:
+        // uncorrelated: sqrt(sum(wi*vi)^2)   fully correlated: sum(wi*vi)
+        // Blend using avgCorr as interpolation factor
+        const weightedAvgVol = active.reduce((s, a) => s + a.weight * a.annVol, 0);
+        const weightedRmsVol = Math.sqrt(active.reduce((s, a) => s + (a.weight * a.annVol) ** 2, 0));
+        const blendedVol = weightedRmsVol * (1 - avgCorr) + weightedAvgVol * avgCorr;
+        return blendedVol;
     }
 
     function checkCircuitBreaker() {
@@ -3961,7 +4008,7 @@
         // Try Binance first (free, no key needed)
         try {
             const pair = sym + 'USDT';
-            const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${pair}`);
+            const res = await fetch(`${DCA_API_URL}/api/binance/price?symbol=${pair}`);
             if (res.ok) {
                 const data = await res.json();
                 const price = parseFloat(data.price);
@@ -3993,7 +4040,7 @@
     async function dohvatiViseCijena(symbols) {
         try {
             // Use Binance public API directly (free, no key needed, user's IP)
-            const res = await fetch('https://api.binance.com/api/v3/ticker/price');
+            const res = await fetch(`${DCA_API_URL}/api/binance/ticker`);
             if (!res.ok) return {};
             const tickerData = await res.json();
             const priceMap = {};
@@ -4019,7 +4066,7 @@
         btn.disabled = true;
         try {
             // SYNC: Call Binance public API directly from browser (client IP)
-            const res = await fetch('https://api.binance.com/api/v3/ticker/price');
+            const res = await fetch(`${DCA_API_URL}/api/binance/ticker`);
             if (!res.ok) throw new Error('Binance API unavailable.');
             const tickerData = await res.json();
             // Build map: BTCUSDT -> price, ETHUSDT -> price, etc.
@@ -4431,7 +4478,7 @@
     // ============ DCA DISTRIBUTION ============
     // Free tier: manual CSV upload only (client-side)
     // Pro tier: backend API with data-pipeline + AQMath engine
-    // Layered defense: Circuit Breaker → Safety Factor → Trend Filter → Hard Caps → Risk Budget
+    // DCA safety pipeline: Circuit Breaker → Safety Factor → Trend Filter → Hard Caps → Risk Budget
     async function distribuirajDca() {
         if (Math.abs(totalTarget() - 100) > 0.01) {
             return showToast('dca is locked until total target allocation equals 100%.', 'warning');
@@ -4792,7 +4839,7 @@
                 }
                 const symbol = t.sym + 'USDT';
                 try {
-                    const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1d&limit=90`);
+                    const res = await fetch(`${DCA_API_URL}/api/binance/klines?symbol=${symbol}&interval=1d&limit=90`);
                     if (!res.ok) continue;
                     const klines = await res.json();
                     priceMap[t.sym] = klines.map(k => parseFloat(k[4]));
@@ -5007,6 +5054,7 @@
         loadState();
         ensureUSDC();
         updateSafeHavenUI();
+        checkBetaUI();
         updateProButtons();
         render();
         renderHistoryChart();
