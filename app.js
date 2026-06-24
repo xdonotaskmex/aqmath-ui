@@ -626,19 +626,25 @@ async function osvjeziSveCijene() {
     btn.textContent = "[ SYNC... ]";
     btn.disabled = true;
     try {
-        const data = await fetchCoinGeckoMarkets();
+        const data = await fetchBinanceMarkets();
         const priceMap = {};
         data.forEach(c => {
-            const sym = CG_SYM_MAP[c.id] || (c.symbol ? c.symbol.toUpperCase() : null);
-            if (sym && c.current_price) priceMap[sym] = c.current_price;
+            if (c.symbol && c.current_price) priceMap[c.symbol] = c.current_price;
         });
+        // Fallback: fetch individual prices for tokens not in WS tracked list
+        const missing = portfolio.filter(t => !priceMap[t.sym] && !['USDC','USDT','DAI','BUSD','TUSD','FDUSD','USDP'].includes(t.sym));
+        for (const t of missing) {
+            const p = await dohvatiCijenu(t.sym);
+            if (p) priceMap[t.sym] = p;
+        }
         let cnt = 0;
         portfolio.forEach(t => {
             if (t.sym && priceMap[t.sym]) { t.price = priceMap[t.sym]; cnt++; }
+            if (['USDC','USDT','DAI','BUSD','TUSD','FDUSD','USDP'].includes(t.sym)) { t.price = 1.0; cnt++; }
         });
         render();
         updatePortfolioATH();
-        console.log(`Updated ${cnt} prices from CoinGecko.`);
+        showToast(`synced ${cnt} prices from Binance.`, 'success');
     } catch(e) { showToast('sync error: ' + e.message, 'error'); }
     finally {
         btn.textContent = originalText;
@@ -1247,7 +1253,7 @@ async function optimizePortfolio() {
     const tokens = unfrozen.map(t => ({ sym: t.sym, value: t.curVal || 0 }));
 
     try {
-        const resp = await pipelineFetch(`${API_URL}/optimize`, {
+        const resp = await pipelineFetch(`${DCA_API_URL}/optimize`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ tokens })
