@@ -1247,7 +1247,7 @@ async function optimizePortfolio() {
     const tokens = unfrozen.map(t => ({ sym: t.sym, value: t.curVal || 0 }));
 
     try {
-        const resp = await pipelineFetch(`${DCA_API_URL}/optimize`, {
+        const resp = await pipelineFetch(`${API_URL}/optimize`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ tokens })
