@@ -216,7 +216,7 @@ function checkBetaUI() {
 // ========== BACKEND API URLs ==========
 // Set these to your deployed Railway URLs
 const API_URL = 'https://aqmath-engine-production.up.railway.app';   // aqmath-engine (Risk Parity + KKT) — Pro only
-const DCA_API_URL = 'https://dca-engine-production.up.railway.app'; // dca-engine on Railway — Free DCA + Pro proxy (optimize, volatility)
+const DCA_API_URL = 'https://dca-engine-production.up.railway.app'; // dca-engine on Railway — DCA distribution only
 
 let portfolioHistory = [];
 
@@ -569,7 +569,7 @@ async function dohvatiCijenu(symbol) {
     // Try Binance first (free, no key needed)
     try {
         const pair = sym + 'USDT';
-        const res = await fetch(`${DCA_API_URL}/api/binance/price?symbol=${pair}`);
+        const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${pair}`);
         if (res.ok) {
             const data = await res.json();
             const price = parseFloat(data.price);
@@ -601,7 +601,7 @@ async function dohvatiCijenu(symbol) {
 async function dohvatiViseCijena(symbols) {
     try {
         // Use Binance public API directly (free, no key needed, user's IP)
-        const res = await fetch(`${DCA_API_URL}/api/binance/ticker`);
+        const res = await fetch('https://api.binance.com/api/v3/ticker/24hr');
         if (!res.ok) return {};
         const tickerData = await res.json();
         const priceMap = {};
@@ -1405,7 +1405,7 @@ async function refreshHistory() {
             }
             const symbol = t.sym + 'USDT';
             try {
-                const res = await fetch(`${DCA_API_URL}/api/binance/klines?symbol=${symbol}&interval=1d&limit=90`);
+                const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1d&limit=90`);
                 if (!res.ok) continue;
                 const klines = await res.json();
                 priceMap[t.sym] = klines.map(k => parseFloat(k[4]));

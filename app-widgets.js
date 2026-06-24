@@ -57,29 +57,69 @@ async function loadNewsFeeds() {
 // ============ LANDING PAGE MARKET WIDGETS ============
 let coingeckoCache = null;
 let coingeckoCacheTime = 0;
-let moversCache = null;
-let moversCacheTime = 0;
 let latestFearGreed = null;
 let latestMarketCap = null;
-let cgMarketsCache = null;
-let cgMarketsCacheTime = 0;
-const CG_IDS = 'bitcoin,ethereum,solana,binancecoin,ripple,avalanche-2,chainlink,dogecoin,cardano,polkadot,matic-network,uniswap,cosmos,litecoin,ethereum-classic,optimism,arbitrum,aptos,filecoin,near,celestia,pyth-network,injective-protocol,sui,sei-network,thorchain,render-token,artificial-superintelligence-alliance,worldcoin,pepe,dogwifhat,bonk,shiba-inu,the-open-network';
-const CG_SYM_MAP = {bitcoin:'BTC',ethereum:'ETH',solana:'SOL',binancecoin:'BNB',ripple:'XRP','avalanche-2':'AVAX',chainlink:'LINK',dogecoin:'DOGE',cardano:'ADA',polkadot:'DOT','matic-network':'MATIC',uniswap:'UNI',cosmos:'ATOM',litecoin:'LTC','ethereum-classic':'ETC',optimism:'OP',arbitrum:'ARB',aptos:'APT',filecoin:'FIL',near:'NEAR',celestia:'TIA','pyth-network':'PYTH','injective-protocol':'INJ',sui:'SUI','sei-network':'SEI',thorchain:'RUNE','render-token':'RNDR','artificial-superintelligence-alliance':'FET',worldcoin:'WLD',pepe:'PEPE',dogwifhat:'WIF',bonk:'BONK','shiba-inu':'SHIB','the-open-network':'TON'};
-
-async function fetchCoinGeckoMarkets() {
-    const now = Date.now();
-    if (cgMarketsCache && (now - cgMarketsCacheTime) < 300000) return cgMarketsCache;
-    try {
-        const r = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${CG_IDS}&order=market_cap_desc&sparkline=false&price_change_percentage=24h`);
-        if (!r.ok) return cgMarketsCache || [];
-        cgMarketsCache = await r.json();
-        cgMarketsCacheTime = now;
-        return cgMarketsCache;
-    } catch(e) {
-        return cgMarketsCache || [];
-    }
-}
 let previousMarketCap = null;
+
+// ── Binance WebSocket Manager (CORS-free, real-time) ──
+const WS_TRACKED = ['BTC','ETH','SOL','BNB','XRP','AVAX','LINK','DOGE','ADA','DOT','MATIC','UNI','ATOM','LTC','OP','ARB','APT','FIL','NEAR','TIA','PYTH','INJ','SUI','SEI','RUNE','RNDR','FET','WLD','PEPE','WIF','BONK','SHIB','TON'];
+const wsCache = {};
+let wsConnection = null;
+let wsReconnectDelay = 1000;
+
+function connectBinanceWS() {
+    if (wsConnection && wsConnection.readyState <= 1) return;
+    const streams = WS_TRACKED.map(s => s.toLowerCase() + 'usdt@ticker').join('/');
+    wsConnection = new WebSocket(`wss://stream.binance.com:9443/stream?streams=${streams}`);
+    wsConnection.onopen = () => {
+        console.log('[WS] Binance connected:', WS_TRACKED.length, 'streams');
+        wsReconnectDelay = 1000;
+    };
+    wsConnection.onmessage = (evt) => {
+        try {
+            const msg = JSON.parse(evt.data);
+            const d = msg.data;
+            if (d && d.s && d.s.endsWith('USDT')) {
+                wsCache[d.s] = {
+                    symbol: d.s,
+                    price: parseFloat(d.c),
+                    priceChangePercent: parseFloat(d.P),
+                    volume: parseFloat(d.q),
+                    high: parseFloat(d.h),
+                    low: parseFloat(d.l),
+                    ts: Date.now()
+                };
+            }
+        } catch {}
+    };
+    wsConnection.onclose = () => {
+        console.log('[WS] Disconnected, reconnecting in', wsReconnectDelay, 'ms');
+        setTimeout(connectBinanceWS, wsReconnectDelay);
+        wsReconnectDelay = Math.min(wsReconnectDelay * 2, 30000);
+    };
+    wsConnection.onerror = () => { if (wsConnection) wsConnection.close(); };
+}
+
+async function fetchBinanceMarkets() {
+    if (Object.keys(wsCache).length === 0) await new Promise(r => setTimeout(r, 2000));
+    return WS_TRACKED.map(sym => {
+        const t = wsCache[sym + 'USDT'];
+        if (!t) return null;
+        return {
+            symbol: sym, current_price: t.price,
+            price_change_percentage_24h: t.priceChangePercent,
+            total_volume: t.volume
+        };
+    }).filter(Boolean);
+}
+
+async function fetchMovers() {
+    if (Object.keys(wsCache).length === 0) await new Promise(r => setTimeout(r, 2000));
+    return Object.values(wsCache)
+        .filter(t => WS_TRACKED.includes(t.symbol.replace('USDT', '')))
+        .map(t => ({ symbol: t.symbol, priceChangePercent: String(t.priceChangePercent) }))
+        .sort((a, b) => parseFloat(b.priceChangePercent) - parseFloat(a.priceChangePercent));
+}
 
 function getNewsCol(id) {
     // Return app element if on app view, otherwise landing element
@@ -117,21 +157,6 @@ async function fetchCoingeckoGlobal() {
     const d = await r.json();
     coingeckoCache = d.data;
     coingeckoCacheTime = now;
-}
-
-async function fetchMovers() {
-    const now = Date.now();
-    if (moversCache && (now - moversCacheTime) < 300000) return moversCache;
-    const data = await fetchCoinGeckoMarkets();
-    moversCache = data
-        .filter(c => c.id && CG_SYM_MAP[c.id])
-        .map(c => ({
-            symbol: CG_SYM_MAP[c.id] + 'USDT',
-            priceChangePercent: (c.price_change_percentage_24h || 0).toString()
-        }))
-        .sort((a, b) => parseFloat(b.priceChangePercent) - parseFloat(a.priceChangePercent));
-    moversCacheTime = now;
-    return moversCache;
 }
 
 async function loadFearGreed() {
@@ -351,7 +376,7 @@ function loadMarketPulse() {
     setInterval(render, 60000);
 }
 
-// ── Price Ticker Strip ──
+// ── Price Ticker Strip (Binance WebSocket) ──
 async function loadPriceTicker() {
     const ticker = document.getElementById('priceTicker');
     if (!ticker || ticker.dataset.loaded === 'true') return;
@@ -361,18 +386,17 @@ async function loadPriceTicker() {
 
     async function refresh() {
         try {
-            const data = await fetchCoinGeckoMarkets();
-            const filtered = data.filter(c => c.symbol && tickerSymbols.has(c.symbol.toUpperCase()));
+            const data = await fetchBinanceMarkets();
+            const filtered = data.filter(c => tickerSymbols.has(c.symbol));
             if (!filtered.length) return;
             const items = filtered.map(c => {
-                const sym = c.symbol.toUpperCase();
                 const price = c.current_price || 0;
                 const change = c.price_change_percentage_24h || 0;
                 const cls = change >= 0 ? 'up' : 'down';
                 const sign = change >= 0 ? '+' : '';
                 const priceStr = price >= 100 ? price.toFixed(0) : price >= 1 ? price.toFixed(2) : price.toFixed(4);
                 return `<div class="lp-ticker-item">
-                    <span class="lp-ticker-sym">${sym}</span>
+                    <span class="lp-ticker-sym">${c.symbol}</span>
                     <span class="lp-ticker-price">$${priceStr}</span>
                     <span class="lp-ticker-change ${cls}">${sign}${change.toFixed(2)}%</span>
                 </div>`;
@@ -383,10 +407,11 @@ async function loadPriceTicker() {
         }
     }
     await refresh();
-    setInterval(refresh, 60000); // 60 sec
+    setInterval(refresh, 30000); // 30 sec (real-time WS data)
 }
 
 async function loadAllWidgets() {
+    connectBinanceWS();
     const marketWidgets = document.getElementById('marketWidgets') || document.getElementById('appMarketWidgets');
     if (marketWidgets && marketWidgets.dataset.loaded === 'true') return;
     if (marketWidgets) marketWidgets.dataset.loaded = 'true';
