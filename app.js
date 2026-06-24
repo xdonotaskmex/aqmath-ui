@@ -1,3 +1,5 @@
+(function() {
+'use strict';
 // ============ ROUTING ============
 function handleRoute() {
     const hash = window.location.hash;
@@ -1611,3 +1613,5 @@ function render() {
     render();
     updateProButtons();
     renderHistoryChart();
+})();
+})();
