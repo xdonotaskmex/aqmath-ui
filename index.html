@@ -99,7 +99,7 @@
             <text x="350" y="112" text-anchor="middle" fill="#475569" font-family="'JetBrains Mono',monospace" font-size="7" letter-spacing="1">LINK</text>
         </svg>
         <h1>quantitative <span class="gradient-text">portfolio rebalancer</span></h1>
-        <h2>No emotions. No human error. Institutional risk management for smart crypto DCA.</h2>
+        <h2>No emotions. No human error. Structural limits on every DCA dollar you deploy.</h2>
         <p>AQMath processes complex covariance matrices on our secure backend engine. Your actual holdings and token amounts stay 100% private in your browser&rsquo;s localStorage.</p>
         <div class="lp-cta-group">
             <a class="lp-btn-primary" href="#/app">--try-free-no-registration</a>
@@ -207,7 +207,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">02</span></div>
                         <div class="metric-label">--optimization</div>
-                        <div class="metric-copy">KKT projection keeps allocations inside volatility caps and prevents oversized high-risk positions. Think of it as a mathematical governor that won&rsquo;t let the engine over-leverage.</div>
+                        <div class="metric-copy">KKT projection keeps allocations inside volatility caps and prevents oversized high-risk positions. It parks new DCA capital in USDC when drawdown is severe &mdash; stops you buying into a crash.</div>
                         <a href="#/docs" class="doc-formula-link">[ view formula ]</a>
                     </div>
                     <div class="lp-math-metric">
@@ -1043,7 +1043,7 @@
             <p>Volatility is the foundational risk metric used throughout AQMath. It feeds into the safety factor, the circuit breaker threshold, and (in Pro) the covariance matrix. The system computes a rolling volatility estimate for each token by measuring the magnitude of daily price swings &mdash; a standard approach in quantitative finance.</p>
 
             <h3 id="doc-portvol">6.1 Portfolio Volatility</h3>
-            <p>Portfolio-level volatility is a weighted aggregate of each token&rsquo;s individual volatility, proportional to its share of total portfolio value. Safe-haven tokens and frozen positions are excluded since they have near-zero volatility by definition. This portfolio-level metric drives adaptive thresholds across the entire defense system.</p>
+            <p>Portfolio-level volatility is a weighted aggregate of each token&rsquo;s individual volatility, proportional to its share of total portfolio value. Safe-haven tokens and frozen positions are excluded since they have near-zero volatility by definition. This portfolio-level metric drives adaptive thresholds across the entire safety pipeline.</p>
             <div class="doc-callout blue">
                 <div class="doc-ct">&#128216; COVARIANCE MATRIX (Pro Feature)</div>
                 <p>The Pro engine computes a full covariance matrix estimating how assets move <em>together</em>. Two tokens with moderate individual volatility but high correlation (like ETH and SOL) have amplified combined risk. The optimizer uses this to ensure each asset contributes equal risk &mdash; preventing hidden concentration through correlation.</p>
