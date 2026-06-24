@@ -1273,6 +1273,16 @@ async function optimizePortfolio() {
             }
         });
 
+        // Close the gap: assign remainder to USDC (safe-haven) so totalTarget = 100%
+        const riskyTotal = weights.reduce((sum, w) => sum + (w.weight > 0 ? w.weight : 0), 0);
+        const frozenTotal = Object.values(frozenTargets).reduce((s, v) => s + v, 0);
+        const usdc = portfolio.find(t => t.safeHaven);
+        let usdcTarget = 0;
+        if (usdc) {
+            usdcTarget = Math.max(0, +(100 - riskyTotal - frozenTotal).toFixed(2));
+            usdc.target = usdcTarget;
+        }
+
         // Track tokens with insufficient data
         const insufficient = weights.filter(w => w.error === 'insufficient_data').map(w => w.sym);
         unfrozen.forEach(t => {
@@ -1300,6 +1310,7 @@ async function optimizePortfolio() {
             const erc = w.erc_weight != null ? `erc:${w.erc_weight}%` : '';
             msg += `  ${w.sym}: ${w.weight}% (${vol}, ${erc}, ${rc})${cap}\n`;
         });
+        if (usdcTarget > 0) msg += `  USDC: ${usdcTarget}% (safe-haven remainder)\n`;
         if (result.correlations && result.correlations.length > 0) {
             msg += '\nTop correlations:\n';
             result.correlations.slice(0, 3).forEach(c => {
