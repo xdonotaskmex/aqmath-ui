@@ -300,6 +300,8 @@
             padding: 5px 14px; border-radius: 14px;
             font-family: var(--mono); font-size: 0.68rem; letter-spacing: 1px; color: var(--green); font-weight: 600; }
         .pro-badge .pdot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+        .pro-badge.inactive { background: rgba(248,113,113,0.12); border-color: rgba(248,113,113,0.3); color: var(--red); }
+        .pro-badge.inactive .pdot { background: var(--red); box-shadow: 0 0 8px var(--red); }
         .btn-deact { background: transparent; border: 1px solid rgba(248,113,113,0.2); color: rgba(248,113,113,0.6);
             font-family: var(--mono); font-size: 0.58rem; letter-spacing: 1px; padding: 4px 12px;
             cursor: pointer; border-radius: 3px; transition: all 0.2s; }
@@ -2293,6 +2295,9 @@
                 <span class="tc-title">--beta-access</span>
             </div>
             <div class="tc-body" style="text-align:center;">
+                <div class="beta-active-row" style="margin-bottom:10px;">
+                    <span class="pro-badge inactive"><span class="pdot"></span>PRO INACTIVE</span>
+                </div>
                 <div class="fg">
                     <label>Beta Key</label>
                     <input type="text" id="iBetaKey" placeholder="AQMBETA-XXXX-XXXX" autocomplete="off">
@@ -3178,6 +3183,24 @@
     let moversCacheTime = 0;
     let latestFearGreed = null;
     let latestMarketCap = null;
+    let cgMarketsCache = null;
+    let cgMarketsCacheTime = 0;
+    const CG_IDS = 'bitcoin,ethereum,solana,binancecoin,ripple,avalanche-2,chainlink,dogecoin,cardano,polkadot,matic-network,uniswap,cosmos,litecoin,ethereum-classic,optimism,arbitrum,aptos,filecoin,near,celestia,pyth-network,injective-protocol,sui,sei-network,thorchain,render-token,artificial-superintelligence-alliance,worldcoin,pepe,dogwifhat,bonk,shiba-inu,the-open-network';
+    const CG_SYM_MAP = {bitcoin:'BTC',ethereum:'ETH',solana:'SOL',binancecoin:'BNB',ripple:'XRP','avalanche-2':'AVAX',chainlink:'LINK',dogecoin:'DOGE',cardano:'ADA',polkadot:'DOT','matic-network':'MATIC',uniswap:'UNI',cosmos:'ATOM',litecoin:'LTC','ethereum-classic':'ETC',optimism:'OP',arbitrum:'ARB',aptos:'APT',filecoin:'FIL',near:'NEAR',celestia:'TIA','pyth-network':'PYTH','injective-protocol':'INJ',sui:'SUI','sei-network':'SEI',thorchain:'RUNE','render-token':'RNDR','artificial-superintelligence-alliance':'FET',worldcoin:'WLD',pepe:'PEPE',dogwifhat:'WIF',bonk:'BONK','shiba-inu':'SHIB','the-open-network':'TON'};
+
+    async function fetchCoinGeckoMarkets() {
+        const now = Date.now();
+        if (cgMarketsCache && (now - cgMarketsCacheTime) < 300000) return cgMarketsCache;
+        try {
+            const r = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${CG_IDS}&order=market_cap_desc&sparkline=false&price_change_percentage=24h`);
+            if (!r.ok) return cgMarketsCache || [];
+            cgMarketsCache = await r.json();
+            cgMarketsCacheTime = now;
+            return cgMarketsCache;
+        } catch(e) {
+            return cgMarketsCache || [];
+        }
+    }
     let previousMarketCap = null;
 
     function getNewsCol(id) {
@@ -3221,13 +3244,13 @@
     async function fetchMovers() {
         const now = Date.now();
         if (moversCache && (now - moversCacheTime) < 300000) return moversCache;
-        const known = new Set(['BTC','ETH','SOL','BNB','XRP','ADA','DOGE','AVAX','DOT','MATIC',
-            'LINK','UNI','ATOM','LTC','ETC','OP','ARB','APT','FIL','NEAR','TIA','PYTH','INJ',
-            'SUI','SEI','RUNE','FTM','RNDR','FET','WLD','PEPE','WIF','BONK','SHIB','TON']);
-        const r = await fetch(`${DCA_API_URL}/api/binance/ticker`);
-        const all = await r.json();
-        moversCache = all
-            .filter(t => t.symbol.endsWith('USDT') && known.has(t.symbol.replace('USDT','')))
+        const data = await fetchCoinGeckoMarkets();
+        moversCache = data
+            .filter(c => c.id && CG_SYM_MAP[c.id])
+            .map(c => ({
+                symbol: CG_SYM_MAP[c.id] + 'USDT',
+                priceChangePercent: (c.price_change_percentage_24h || 0).toString()
+            }))
             .sort((a, b) => parseFloat(b.priceChangePercent) - parseFloat(a.priceChangePercent));
         moversCacheTime = now;
         return moversCache;
@@ -3456,21 +3479,17 @@
         if (!ticker || ticker.dataset.loaded === 'true') return;
         ticker.dataset.loaded = 'true';
 
-        const pairs = [
-            ['BTCUSDT', 'BTC'], ['ETHUSDT', 'ETH'], ['SOLUSDT', 'SOL'], ['BNBUSDT', 'BNB'],
-            ['XRPUSDT', 'XRP'], ['AVAXUSDT', 'AVAX'], ['LINKUSDT', 'LINK'], ['DOGEUSDT', 'DOGE']
-        ];
-        const symbols = pairs.map(p => p[0]);
-        const names = Object.fromEntries(pairs);
+        const tickerSymbols = new Set(['BTC','ETH','SOL','BNB','XRP','AVAX','LINK','DOGE']);
 
         async function refresh() {
             try {
-                const r = await fetch(`${DCA_API_URL}/api/binance/ticker?symbols=${encodeURIComponent(JSON.stringify(symbols))}`);
-                const data = await r.json();
-                const items = data.map(t => {
-                    const sym = names[t.symbol] || t.symbol.replace('USDT', '');
-                    const price = parseFloat(t.lastPrice);
-                    const change = parseFloat(t.priceChangePercent);
+                const data = await fetchCoinGeckoMarkets();
+                const filtered = data.filter(c => c.symbol && tickerSymbols.has(c.symbol.toUpperCase()));
+                if (!filtered.length) return;
+                const items = filtered.map(c => {
+                    const sym = c.symbol.toUpperCase();
+                    const price = c.current_price || 0;
+                    const change = c.price_change_percentage_24h || 0;
                     const cls = change >= 0 ? 'up' : 'down';
                     const sign = change >= 0 ? '+' : '';
                     const priceStr = price >= 100 ? price.toFixed(0) : price >= 1 ? price.toFixed(2) : price.toFixed(4);
@@ -3486,7 +3505,7 @@
             }
         }
         await refresh();
-        setInterval(refresh, 30000); // 30 sec
+        setInterval(refresh, 60000); // 60 sec
     }
 
     async function loadAllWidgets() {
@@ -4067,25 +4086,19 @@
         btn.textContent = "[ SYNC... ]";
         btn.disabled = true;
         try {
-            // SYNC: Call Binance public API directly from browser (client IP)
-            const res = await fetch(`${DCA_API_URL}/api/binance/ticker`);
-            if (!res.ok) throw new Error('Binance API unavailable.');
-            const tickerData = await res.json();
-            // Build map: BTCUSDT -> price, ETHUSDT -> price, etc.
+            const data = await fetchCoinGeckoMarkets();
             const priceMap = {};
-            tickerData.forEach(t => {
-                if (t.symbol && t.symbol.endsWith('USDT')) {
-                    const base = t.symbol.replace('USDT', '');
-                    priceMap[base] = parseFloat(t.price);
-                }
+            data.forEach(c => {
+                const sym = CG_SYM_MAP[c.id] || (c.symbol ? c.symbol.toUpperCase() : null);
+                if (sym && c.current_price) priceMap[sym] = c.current_price;
             });
             let cnt = 0;
             portfolio.forEach(t => {
                 if (t.sym && priceMap[t.sym]) { t.price = priceMap[t.sym]; cnt++; }
             });
             render();
-            updatePortfolioATH(); // track ATH after price sync
-            console.log(`Updated ${cnt} prices from Binance (client IP).`);
+            updatePortfolioATH();
+            console.log(`Updated ${cnt} prices from CoinGecko.`);
         } catch(e) { showToast('sync error: ' + e.message, 'error'); }
         finally {
             btn.textContent = originalText;
