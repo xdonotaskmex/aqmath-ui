@@ -274,13 +274,17 @@ function saveState() {
 }
 
 function ensureUSDC() {
-    if (!portfolio.find(t => t.sym === 'USDC')) {
+    const existing = portfolio.find(t => t.sym === 'USDC');
+    if (!existing) {
         portfolio.push({
             sym: 'USDC', price: 1.00, amount: 0, target: 0,
             safeHaven: getSafeHavenToggle(), frozen: false,
             coinId: 'usdc', entry: 0, apy: 0,
             costBasis: 0, totalTokens: 0
         });
+    } else {
+        // Always enforce safe-haven flag on USDC (fixes stale localStorage data)
+        existing.safeHaven = true;
     }
 }
 
