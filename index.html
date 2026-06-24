@@ -3554,6 +3554,7 @@
         const token = getBetaToken();
         if (!token) {
             isPro = false;
+            checkBetaUI();
             showToast('beta token missing -- please re-enter your beta key', 'warning');
             throw new Error('beta token missing');
         }
@@ -3566,6 +3567,7 @@
             if (detail.toLowerCase().includes('expired')) {
                 localStorage.removeItem('pro_token');
                 isPro = false;
+                checkBetaUI();
                 render();
             }
             showToast('AQMath Engine auth: ' + detail, 'warning');
@@ -5055,8 +5057,8 @@
         ensureUSDC();
         updateSafeHavenUI();
         checkBetaUI();
-        updateProButtons();
         render();
+        updateProButtons();
         renderHistoryChart();
     })();
 </script>
