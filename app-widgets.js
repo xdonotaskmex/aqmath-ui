@@ -55,8 +55,9 @@ async function loadNewsFeeds() {
 }
 
 // ============ LANDING PAGE MARKET WIDGETS ============
-let coingeckoCache = null;
-let coingeckoCacheTime = 0;
+let globalDataCache = null;
+let globalDataCacheTime = 0;
+let globalDataFetchPromise = null;
 let latestFearGreed = null;
 let latestMarketCap = null;
 let previousMarketCap = null;
@@ -212,13 +213,53 @@ function widgetUnavailable(body) {
     body.innerHTML = '<span style="color:var(--dim);font-size:0.5rem;">unavailable</span><div class="lp-widget-meta">data source temporarily limited</div>';
 }
 
-async function fetchCoingeckoGlobal() {
+async function fetchGlobalData() {
     const now = Date.now();
-    if (coingeckoCache && (now - coingeckoCacheTime) < 300000) return;
-    const r = await fetch('https://api.coingecko.com/api/v3/global');
-    const d = await r.json();
-    coingeckoCache = d.data;
-    coingeckoCacheTime = now;
+    if (globalDataCache && (now - globalDataCacheTime) < 300000) return globalDataCache;
+    if (globalDataFetchPromise) return globalDataFetchPromise;
+
+    globalDataFetchPromise = (async () => {
+        // Primary: CoinGecko /global (includes stablecoin dominance in market_cap_percentage)
+        try {
+            const r = await fetch('https://api.coingecko.com/api/v3/global');
+            if (r.ok) {
+                const d = await r.json();
+                if (d.data) {
+                    const pct = d.data.market_cap_percentage || {};
+                    globalDataCache = {
+                        total_market_cap: d.data.total_market_cap,
+                        market_cap_percentage: pct,
+                        stablecoin_dominance: (pct.usdt || 0) + (pct.usdc || 0) + (pct.dai || 0)
+                    };
+                    globalDataCacheTime = Date.now();
+                    return globalDataCache;
+                }
+            }
+        } catch(e) { console.log('[Global] CoinGecko failed:', e.message); }
+
+        // Fallback: Coinlore (BTC/ETH dominance + total market cap, no stablecoin data)
+        try {
+            const r = await fetch('https://api.coinlore.com/api/global/');
+            if (r.ok) {
+                const arr = await r.json();
+                if (arr && arr[0]) {
+                    const g = arr[0];
+                    globalDataCache = {
+                        total_market_cap: { usd: parseFloat(g.total_mcap) },
+                        market_cap_percentage: { btc: parseFloat(g.btc_d), eth: parseFloat(g.eth_d) },
+                        stablecoin_dominance: 0
+                    };
+                    globalDataCacheTime = Date.now();
+                    return globalDataCache;
+                }
+            }
+        } catch(e) { console.log('[Global] Coinlore fallback failed:', e.message); }
+
+        return globalDataCache;
+    })();
+
+    try { return await globalDataFetchPromise; }
+    finally { globalDataFetchPromise = null; }
 }
 
 async function loadFearGreed() {
@@ -264,15 +305,17 @@ async function loadBTCDominance() {
 
     async function refresh() {
         try {
-            await fetchCoingeckoGlobal();
-            if (coingeckoCache?.market_cap_percentage?.btc) {
-                const btc = coingeckoCache.market_cap_percentage.btc.toFixed(1);
-                const eth = coingeckoCache.market_cap_percentage.eth ? coingeckoCache.market_cap_percentage.eth.toFixed(1) : '--';
+            const data = await fetchGlobalData();
+            const btcPct = data?.market_cap_percentage?.btc;
+            if (btcPct) {
+                const btc = btcPct.toFixed(1);
+                const ethPct = data.market_cap_percentage.eth;
+                const eth = ethPct ? ethPct.toFixed(1) : '--';
                 body.innerHTML = `
                     <div class="lp-widget-main-row"><span class="lp-widget-value" style="color:var(--blue)">${btc}%</span><span class="lp-widget-signal" style="color:var(--blue)">BTC</span></div>
                     <div class="lp-widget-sub">ETH dominance: ${eth}%</div>
                     <div class="lp-widget-meta">higher BTC share = defensive crypto rotation</div>`;
-            }
+            } else { widgetUnavailable(body); }
         } catch(e) {
             widgetUnavailable(body);
         }
@@ -290,19 +333,16 @@ async function loadStablecoinDominance() {
 
     async function refresh() {
         try {
-            await fetchCoingeckoGlobal();
-            const totalCap = coingeckoCache?.total_market_cap?.usd || 0;
-            const r = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=tether,usd-coin,dai');
-            const coins = await r.json();
-            const stableCap = coins.reduce((sum, coin) => sum + (coin.market_cap || 0), 0);
-            if (!totalCap || !stableCap) return;
-            const dominance = (stableCap / totalCap) * 100;
-            const color = dominance < 5 ? 'var(--green)' : dominance <= 8 ? 'var(--amber)' : 'var(--red)';
-            const signal = dominance < 5 ? 'neutral liquidity backdrop' : dominance <= 8 ? 'capital partly sidelined' : 'bearish sidelined capital signal';
-            body.innerHTML = `
-                <div class="lp-widget-main-row"><span class="lp-widget-value" style="color:${color}">${dominance.toFixed(1)}%</span><span class="lp-widget-signal" style="color:${color}">USD</span></div>
-                <div class="lp-widget-sub">USDT + USDC + DAI</div>
-                <div class="lp-widget-meta">${signal}</div>`;
+            const data = await fetchGlobalData();
+            const stablePct = data?.stablecoin_dominance;
+            if (stablePct && stablePct > 0) {
+                const color = stablePct < 5 ? 'var(--green)' : stablePct <= 8 ? 'var(--amber)' : 'var(--red)';
+                const signal = stablePct < 5 ? 'neutral liquidity backdrop' : stablePct <= 8 ? 'capital partly sidelined' : 'bearish sidelined capital signal';
+                body.innerHTML = `
+                    <div class="lp-widget-main-row"><span class="lp-widget-value" style="color:${color}">${stablePct.toFixed(1)}%</span><span class="lp-widget-signal" style="color:${color}">USD</span></div>
+                    <div class="lp-widget-sub">USDT + USDC + DAI</div>
+                    <div class="lp-widget-meta">${signal}</div>`;
+            } else { widgetUnavailable(body); }
         } catch(e) {
             widgetUnavailable(body);
         }
@@ -326,9 +366,9 @@ async function loadMarketCap() {
 
     async function refresh() {
         try {
-            await fetchCoingeckoGlobal();
-            const mcap = coingeckoCache?.total_market_cap?.usd || 0;
-            if (!mcap) return;
+            const data = await fetchGlobalData();
+            const mcap = data?.total_market_cap?.usd;
+            if (!mcap) { widgetUnavailable(body); return; }
             previousMarketCap = Number(localStorage.getItem('aqmath_last_market_cap')) || mcap;
             latestMarketCap = mcap;
             localStorage.setItem('aqmath_last_market_cap', String(mcap));
@@ -337,7 +377,7 @@ async function loadMarketCap() {
             body.innerHTML = `
                 <div class="lp-widget-main-row"><span class="lp-widget-value" style="color:var(--green)">${fmt(mcap)}</span><span class="lp-widget-signal" style="color:${cls}">${delta >= 0 ? '↗' : '↘'}</span></div>
                 <div class="lp-widget-sub">cached trend: ${delta >= 0 ? '+' : ''}${delta.toFixed(2)}%</div>
-                <div class="lp-widget-meta">global crypto market cap · CoinGecko</div>`;
+                <div class="lp-widget-meta">global crypto market cap</div>`;
         } catch(e) {
             widgetUnavailable(body);
         }
