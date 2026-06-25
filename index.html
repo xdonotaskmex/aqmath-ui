@@ -100,7 +100,7 @@
         </svg>
         <h1>quantitative <span class="gradient-text">portfolio rebalancer</span></h1>
         <h2>No emotions. No human error. Structural limits on every DCA dollar you deploy.</h2>
-        <p>AQMath processes complex covariance matrices on our secure backend engine. Your actual holdings and token amounts stay 100% private in your browser&rsquo;s localStorage.</p>
+        <p>AQMath processes complex covariance matrices on our secure backend engine. Your holdings are processed in-memory and never stored on our servers &mdash; only your browser&rsquo;s localStorage keeps your data.</p>
         <div class="lp-cta-group">
             <a class="lp-btn-primary" href="#/app">--try-free-no-registration</a>
             <button class="lp-btn-secondary" onclick="showProModal()">PRO BETA (Early Access)</button>
@@ -171,7 +171,7 @@
             <div class="lp-math-box lp-card">
                 <div class="card-title">--mathematical-core</div>
                 <div class="lp-math-heading">The Math Behind Your Portfolio</div>
-                <p class="lp-math-lead">The covariance matrix runs on our secure backend. Your portfolio amounts never leave your device &mdash; only token symbols are sent to fetch live prices and compute risk weights.</p>
+                <p class="lp-math-lead">The covariance matrix runs on our secure backend. All computation is stateless &mdash; data is processed in-memory and discarded immediately. Nothing is written to disk.</p>
                 <ul class="lp-math-rules">
                     <li>High-variance assets receive <strong>smaller dynamic caps</strong></li>
                     <li>Correlated assets are <strong>penalized through covariance</strong></li>
@@ -219,7 +219,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">03</span></div>
                         <div class="metric-label">--privacy</div>
-                        <div class="metric-copy">Amounts, targets, and allocation weights stay in your browser&rsquo;s localStorage. The only data that leaves your device is the list of token symbols needed to fetch prices.</div>
+                        <div class="metric-copy">Amounts, targets, and allocation weights stay in your browser&rsquo;s localStorage. Data sent to the backend is processed in-memory and discarded immediately &mdash; nothing is persisted.</div>
                     </div>
                 </div>
             </div>
@@ -289,7 +289,7 @@
                         <div class="card-title" style="color:var(--blue);">--what</div>
                         <p>AQMath is a quantitative portfolio rebalancer built for passive crypto investors.<br><br>
                         It combines institutional-grade mathematics &mdash; Risk Parity, Karush-Kuhn-Tucker (KKT) optimization, and volatility-weighted Dollar-Cost Averaging &mdash; to keep your portfolio balanced without emotion, guesswork, or centralized data collection.<br><br>
-                        Non-Custodial Math Processing. Your portfolio amounts never leave your browser. No accounts. No tracking. Just math.</p>
+                        Non-Custodial Math Processing. Your portfolio data is sent only during DCA/Optimize and never persisted. No accounts. No tracking. Just math.</p>
                     </div>
                     <div class="lp-card">
                         <div class="card-title" style="color:var(--blue);">--how</div>
@@ -302,10 +302,10 @@
                         <div class="card-title" style="color:var(--blue);">--why</div>
                         <p>Most portfolio tools either collect your data or offer only basic rebalancing. AQMath is different:<br><br>
                         &rarr; Institutional-grade math (same concepts used by multi-billion funds)<br>
-                        &rarr; Non-Custodial &mdash; your portfolio stays in your browser&rsquo;s localStorage<br>
+                        &rarr; Non-Custodial &mdash; your portfolio stays in your browser&rsquo;s localStorage, backend processing is ephemeral<br>
                         &rarr; Transparent, auditable logic (no black boxes)<br>
                         &rarr; Fair annual licensing &mdash; cryptographic Pro key minted on Polygon<br><br>
-                        Your balances never leave your browser. No exchange API keys required. No data to sell.</p>
+                        Your balances are ephemeral &mdash; processed in-memory, never stored. No exchange API keys required. No data to sell.</p>
                     </div>
                 </div>
             </div>
@@ -829,7 +829,7 @@
             <p>Understanding the data flow is critical to understanding AQMath&rsquo;s privacy guarantees. Every interaction follows the same pattern: your browser sends the minimum information needed for computation, and the backend returns results without retaining any state.</p>
             <ol>
                 <li><strong>User enters tokens + targets</strong> &rarr; stored exclusively in browser localStorage. No network request is made.</li>
-                <li><strong>SYNC clicked</strong> &rarr; only token symbols (e.g., BTC, ETH, SOL) are sent to the backend. The backend fetches current prices from Binance and returns them. It has no way of knowing how much BTC or ETH you hold.</li>
+                <li><strong>SYNC clicked</strong> &rarr; prices are fetched directly from Binance via WebSocket &mdash; no backend call needed. Your holdings are never transmitted.</li>
                 <li><strong>DCA Distribute clicked</strong> &rarr; positions (including amounts) and DCA budget are sent to the backend engine via a single HTTPS POST request.</li>
                 <li><strong>Backend computes</strong> &rarr; the DCA engine runs iterative allocation with the full safety pipeline. All computation happens in-memory. Nothing is written to disk or database.</li>
                 <li><strong>Results returned</strong> &rarr; updated token amounts are sent back to the browser and written to localStorage. The backend discards the request data immediately after responding.</li>
