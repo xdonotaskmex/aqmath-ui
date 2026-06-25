@@ -886,7 +886,9 @@ function calculateSafetyFactor(prices) {
 }
 
 // ============ ADD / UPDATE TOKEN ============
-function popuniFormu(token) {
+function popuniFormu(sym) {
+    const token = portfolio.find(p => p.sym === sym);
+    if (!token) return;
     document.getElementById('iSym').value = token.sym;
     document.getElementById('iAmt').value = token.amount;
     document.getElementById('iPrice').value = token.price;
@@ -1599,7 +1601,7 @@ function render() {
                 <td style="color:${c.avgType === 'down' ? 'var(--green)' : c.avgType === 'up' ? 'var(--red)' : 'var(--dim)'}">${avgStr}</td>
                 <td><span class="act ${c.actionClass}">${c.action}</span></td>
                 <td><span class="freeze" onclick="toggleFreeze('${t.sym}')">${frozenIcon}</span></td>
-                <td><button class="btn-edit" onclick="popuniFormu(portfolio.find(p=>p.sym==='${t.sym}'))">EDIT</button></td>
+                <td><button class="btn-edit" onclick="popuniFormu('${t.sym}')">EDIT</button></td>
                 <td><button class="btn-del" onclick="obrisiToken('${t.sym}')">DEL</button></td>
             </tr>`;
         }).join('');
