@@ -1643,6 +1643,7 @@ Object.assign(window, {
     saveSnapshot, toggleGlobalSafeHaven, deployUSDC,
     osvjeziSveCijene, importCSV, dodajToken,
     obrisiSve, distribuirajDca, optimizePortfolio,
-    exportJSON, importJSON, refreshHistory
+    exportJSON, importJSON, refreshHistory,
+    toggleFreeze, popuniFormu, obrisiToken
 });
 })();
