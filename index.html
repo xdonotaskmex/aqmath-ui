@@ -320,7 +320,7 @@
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">How is AQMath actually private?</div>
-                <div class="lp-faq-a">We don&rsquo;t track your wallet and we don&rsquo;t have a user database. Your token balances stay strictly inside your local browser storage. Our backend quant-engine only processes raw mathematical weights and live market data. Your financial privacy is mathematically guaranteed. <a href="#/docs" style="color:#a78bfa;">Read the full privacy architecture in our [Documentation].</a></div>
+                <div class="lp-faq-a">We don&rsquo;t track your wallet and we don&rsquo;t have a user database. Your token balances are stored only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. Your financial privacy is architecturally enforced. <a href="#/docs" style="color:#a78bfa;">Read the full privacy architecture in our [Documentation].</a></div>
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">Is the free tier a real tool or just a demo?</div>
@@ -339,7 +339,7 @@
 
     <div class="lp-disclaimer">
         AQMath does not provide financial advice. All calculations are based on historical data and mathematical models.<br>
-        Mathematical processing runs on our secure backend; your portfolio data never leaves your browser.<br>
+        Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted.<br>
         &copy; 2026 AQMath &mdash; Secure Backend Engine. Private. Non-Custodial.<br>
         <a href="#/docs" style="color:var(--muted);">Documentation</a> &middot;
         Follow: <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">X (Twitter)</a>
@@ -594,7 +594,7 @@
             </div>
             <div class="faq-item" onclick="this.classList.toggle('open')">
                 <div class="faq-q">Is my data safe?</div>
-                <div class="faq-a">Your portfolio amounts, targets, and allocation choices stay in your browser (localStorage). Our backend only processes token symbols for live prices and mathematical risk weights. Non-custodial by design.</div>
+                <div class="faq-a">Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in-memory, and discarded immediately. Non-custodial by design.</div>
             </div>
         </div>
     </aside>
@@ -755,7 +755,7 @@
             <h2 id="doc-what">1. What is AQMath?</h2>
             <p>AQMath is a quantitative portfolio rebalancer purpose-built for the crypto market. It combines institutional-grade mathematical models &mdash; the same class of optimization used by multi-billion-dollar hedge funds &mdash; with a privacy-first architecture that ensures your financial data never leaves your control.</p>
             <p>At its core, AQMath solves a deceptively complex problem: <strong>when you add new capital to your crypto portfolio, which tokens should you buy, and how much of each?</strong> A naive approach (split equally) ignores that some positions are already overweight while others are dangerously underweight. AQMath&rsquo;s DCA engine uses smart proportional allocation, filtered through a DCA safety pipeline, to ensure every dollar you invest moves your portfolio closer to its optimal structure.</p>
-            <p>The system operates on a <strong>hybrid architecture</strong>: your portfolio data (token amounts, entry prices, targets) stays exclusively in your browser&rsquo;s localStorage, while computationally intensive math (covariance matrices, iterative DCA optimization, volatility analysis) runs on our secure backend engine. This means you get institutional-quality analysis without ever exposing your holdings to a server.</p>
+            <p>The system operates on a <strong>hybrid architecture</strong>: your portfolio data (token amounts, entry prices, targets) is stored exclusively in your browser&rsquo;s localStorage, while computationally intensive math (covariance matrices, iterative DCA optimization, volatility analysis) runs on our secure backend engine. This means you get institutional-quality analysis without your holdings being stored on any server.</p>
             <div class="doc-callout purple">
                 <div class="doc-ct">&#128272; NON-CUSTODIAL PRIVACY</div>
                 <p>AQMath&rsquo;s privacy model is non-custodial by design: the backend receives position data in-memory during a single DCA request, computes the result, and discards everything. No persistence. No logs of your amounts. No user database. Your financial state lives exclusively in your browser&rsquo;s localStorage &mdash; the server never retains it.</p>
