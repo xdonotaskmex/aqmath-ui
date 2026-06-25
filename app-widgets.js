@@ -66,16 +66,39 @@ const WS_TRACKED = ['BTC','ETH','SOL','BNB','XRP','AVAX','LINK','DOGE','ADA','DO
 const wsCache = {};
 let wsConnection = null;
 let wsReconnectDelay = 1000;
+let wsReconnecting = false;
+let wsLastMessageTime = 0;
+let wsHeartbeatInterval = null;
 
 function connectBinanceWS() {
     if (wsConnection && wsConnection.readyState <= 1) return;
+    if (wsReconnecting) return;
+    wsReconnecting = true;
     const streams = WS_TRACKED.map(s => s.toLowerCase() + 'usdt@ticker').join('/');
-    wsConnection = new WebSocket(`wss://stream.binance.com:9443/stream?streams=${streams}`);
+    try {
+        wsConnection = new WebSocket(`wss://stream.binance.com:9443/stream?streams=${streams}`);
+    } catch(e) {
+        wsReconnecting = false;
+        setTimeout(connectBinanceWS, wsReconnectDelay);
+        wsReconnectDelay = Math.min(wsReconnectDelay * 2, 30000);
+        return;
+    }
     wsConnection.onopen = () => {
         console.log('[WS] Binance connected:', WS_TRACKED.length, 'streams');
         wsReconnectDelay = 1000;
+        wsReconnecting = false;
+        wsLastMessageTime = Date.now();
+        // Start heartbeat: detect stale connection every 30s
+        if (wsHeartbeatInterval) clearInterval(wsHeartbeatInterval);
+        wsHeartbeatInterval = setInterval(() => {
+            if (wsLastMessageTime && Date.now() - wsLastMessageTime > 60000) {
+                console.log('[WS] No messages for 60s, forcing reconnect');
+                if (wsConnection) wsConnection.close();
+            }
+        }, 30000);
     };
     wsConnection.onmessage = (evt) => {
+        wsLastMessageTime = Date.now();
         try {
             const msg = JSON.parse(evt.data);
             const d = msg.data;
@@ -93,6 +116,8 @@ function connectBinanceWS() {
         } catch {}
     };
     wsConnection.onclose = () => {
+        wsReconnecting = false;
+        if (wsHeartbeatInterval) { clearInterval(wsHeartbeatInterval); wsHeartbeatInterval = null; }
         console.log('[WS] Disconnected, reconnecting in', wsReconnectDelay, 'ms');
         setTimeout(connectBinanceWS, wsReconnectDelay);
         wsReconnectDelay = Math.min(wsReconnectDelay * 2, 30000);
@@ -101,10 +126,40 @@ function connectBinanceWS() {
 }
 
 async function fetchBinanceMarkets() {
+    const STALE_MS = 120000; // 2 min
+    const freshCache = Object.values(wsCache).filter(t => Date.now() - t.ts < STALE_MS);
+    // REST fallback when WS cache is empty or stale
+    if (freshCache.length === 0) {
+        try {
+            const res = await fetch('https://api.binance.com/api/v3/ticker/24hr');
+            if (res.ok) {
+                const data = await res.json();
+                const now = Date.now();
+                data.forEach(t => {
+                    if (t.symbol && t.symbol.endsWith('USDT')) {
+                        wsCache[t.symbol] = {
+                            symbol: t.symbol,
+                            price: parseFloat(t.lastPrice),
+                            priceChangePercent: parseFloat(t.priceChangePercent),
+                            volume: parseFloat(t.quoteVolume),
+                            high: parseFloat(t.highPrice),
+                            low: parseFloat(t.lowPrice),
+                            ts: now
+                        };
+                    }
+                });
+                wsReconnectDelay = 1000; // Reset delay on REST success
+                console.log('[WS] REST fallback populated', Object.keys(wsCache).length, 'symbols');
+            }
+        } catch(e) {
+            console.log('[WS] REST fallback failed:', e.message);
+        }
+    }
+    // If WS is still connecting and cache is empty, wait briefly
     if (Object.keys(wsCache).length === 0) await new Promise(r => setTimeout(r, 2000));
     return WS_TRACKED.map(sym => {
         const t = wsCache[sym + 'USDT'];
-        if (!t) return null;
+        if (!t || Date.now() - t.ts > STALE_MS) return null;
         return {
             symbol: sym, current_price: t.price,
             price_change_percentage_24h: t.priceChangePercent,
@@ -114,9 +169,16 @@ async function fetchBinanceMarkets() {
 }
 
 async function fetchMovers() {
-    if (Object.keys(wsCache).length === 0) await new Promise(r => setTimeout(r, 2000));
+    const STALE_MS = 120000;
+    const fresh = Object.values(wsCache).filter(t =>
+        WS_TRACKED.includes(t.symbol.replace('USDT', '')) && Date.now() - t.ts < STALE_MS
+    );
+    // REST fallback for movers too
+    if (fresh.length === 0) {
+        await fetchBinanceMarkets(); // triggers REST fallback if needed
+    }
     return Object.values(wsCache)
-        .filter(t => WS_TRACKED.includes(t.symbol.replace('USDT', '')))
+        .filter(t => WS_TRACKED.includes(t.symbol.replace('USDT', '')) && Date.now() - t.ts < STALE_MS)
         .map(t => ({ symbol: t.symbol, priceChangePercent: String(t.priceChangePercent) }))
         .sort((a, b) => parseFloat(b.priceChangePercent) - parseFloat(a.priceChangePercent));
 }
