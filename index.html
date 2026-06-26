@@ -1233,18 +1233,27 @@
 function cleanGoogleBranding() {
     var gadget = document.querySelector('.goog-te-gadget');
     if (!gadget) return;
-    // Remove all spans except the one containing the select
+    
+    // Set font-size 0 on gadget to hide any text nodes
+    gadget.style.fontSize = '0';
+    
+    // Find all spans and hide everything except the one containing the select
     var spans = gadget.querySelectorAll('span');
     spans.forEach(function(span) {
-        if (!span.querySelector('.goog-te-combo') && 
-            (span.textContent.toLowerCase().includes('powered') || 
-             span.textContent.toLowerCase().includes('google') ||
-             span.querySelector('a[href*="translate"]') ||
-             span.querySelector('img'))) {
-            span.remove();
+        if (span.querySelector('.goog-te-combo')) {
+            span.style.fontSize = '0.6rem';
+            return; // keep this one visible
         }
+        // Hide everything else
+        span.style.display = 'none';
+        span.style.visibility = 'hidden';
+        span.style.fontSize = '0';
+        span.style.width = '0';
+        span.style.height = '0';
+        span.style.overflow = 'hidden';
     });
-    // Also remove any direct links
+    
+    // Also remove direct links
     var links = gadget.querySelectorAll('a[href*="translate.google"]');
     links.forEach(function(link) { link.remove(); });
 }

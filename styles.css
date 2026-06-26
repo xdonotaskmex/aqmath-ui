@@ -1175,12 +1175,21 @@
     font-family: var(--mono) !important; padding: 4px 8px !important;
 }
 .goog-te-combo option:hover { background: rgba(6,182,212,0.15) !important; }
-/* Hide the Google branding text next to select */
-.goog-te-gadget > span:not(.goog-te-combo):not(:has(.goog-te-combo)) { display: none !important; }
+/* Hide the Google branding - font-size:0 on gadget, reset on select parent */
+.goog-te-gadget {
+    font-size: 0 !important;
+}
+.goog-te-combo {
+    font-size: 0.6rem !important;
+}
+/* Hide all spans except the one containing the select */
+.goog-te-gadget span + span,
+.goog-te-gadget .goog-te-combo ~ span,
+.goog-te-gadget .goog-te-combo + span {
+    display: none !important;
+    visibility: hidden !important;
+}
 .goog-logo-link { display: none !important; }
-.goog-te-gadget span[style*="font-size"] { display: none !important; }
-.goog-te-gadget .goog-te-combo ~ span, .goog-te-gadget .goog-te-combo ~ a { display: none !important; }
-.goog-te-gadget .goog-te-combo + span { display: none !important; }
 .lp-translate-wrap .goog-te-gadget img { display: none !important; }
 .goog-te-banner-frame { display: none !important; }
 body { top: 0 !important; }
