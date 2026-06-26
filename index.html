@@ -58,6 +58,7 @@
             <a class="lp-nav-link lp-nav-cta" href="#/app">open app</a>
             <a class="lp-nav-link lp-nav-tab" href="https://x.com/aqmathapp" target="_blank" rel="noopener">[ x ]</a>
             <a class="lp-nav-link lp-nav-tab" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">[ tg ]</a>
+            <div class="lp-nav-link lp-translate-wrap" id="google_translate_element"></div>
         </div>
     </nav>
 
@@ -333,6 +334,21 @@
             <div class="lp-faq-item">
                 <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">What is the Safe-Haven (USDC) feature?</div>
                 <div class="lp-faq-a">When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token.</div>
+            </div>
+        </section>
+
+        <section class="lp-section lp-feedbacks">
+            <h3>--community-signals</h3>
+            <div class="lp-feedback-card">
+                <div class="lp-feedback-quote">
+                    <span class="lp-quote-mark">&ldquo;</span>
+                    Fed the engine a deliberately broken book to blow past the risk caps &mdash; it held every one and scaled the risky sleeve exactly where it said it would. The allocation math is real, and that&rsquo;s the part most tools fake.
+                    <span class="lp-quote-mark">&rdquo;</span>
+                </div>
+                <div class="lp-feedback-attr">
+                    <span class="lp-feedback-author">r/guant</span>
+                    <span class="lp-feedback-context">&middot; portfolio stress-test verification</span>
+                </div>
             </div>
         </section>
     </div>
@@ -1211,6 +1227,19 @@
 <!-- 100% privacy-first analytics -->
 <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+
+<!-- Google Translate -->
+<script type="text/javascript">
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,zh-CN,ja,ko,es,fr,de,ru',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+    }, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>

@@ -1113,6 +1113,64 @@
         content: '> '; color: var(--blue); font-family: var(--mono); font-size: 0.72rem;
     }
 
+/* ── Feedbacks Section ── */
+.lp-feedbacks {
+    padding: 48px 32px; max-width: 900px; margin: 0 auto;
+    position: relative; z-index: 1;
+}
+.lp-feedbacks h3 {
+    font-family: var(--mono); font-size: 0.58rem; letter-spacing: 3px;
+    color: var(--purple); text-transform: lowercase; margin-bottom: 24px;
+    text-align: center; font-weight: 500;
+}
+.lp-feedback-card {
+    background: var(--s2); border: 1px solid var(--border);
+    border-left: 3px solid var(--green); border-radius: 2px;
+    padding: 28px 32px; position: relative;
+    transition: border-color 0.3s ease;
+}
+.lp-feedback-card:hover { border-color: rgba(52,211,153,0.5); }
+.lp-feedback-quote {
+    font-family: var(--mono); font-size: 0.85rem; color: var(--text);
+    line-height: 1.9; letter-spacing: 0.3px;
+}
+.lp-quote-mark {
+    color: var(--green); font-size: 1.2rem; font-weight: 700;
+    opacity: 0.6;
+}
+.lp-feedback-attr {
+    margin-top: 16px; font-family: var(--mono); font-size: 0.7rem;
+    color: var(--muted); letter-spacing: 1px;
+}
+.lp-feedback-author {
+    color: var(--green); font-weight: 500;
+}
+.lp-feedback-context {
+    color: var(--dim);
+}
+
+/* ── Google Translate Widget ── */
+.lp-translate-wrap {
+    display: inline-flex; align-items: center;
+}
+.lp-translate-wrap .goog-te-gadget {
+    font-family: var(--mono) !important; font-size: 0.65rem !important;
+}
+.lp-translate-wrap .goog-te-gadget-simple {
+    background: transparent !important; border: 1px solid var(--border) !important;
+    border-radius: 2px !important; padding: 4px 8px !important;
+    font-family: var(--mono) !important; color: var(--muted) !important;
+}
+.lp-translate-wrap .goog-te-gadget-simple .goog-te-menu-value {
+    color: var(--muted) !important; font-family: var(--mono) !important;
+    font-size: 0.65rem !important;
+}
+.lp-translate-wrap .goog-te-gadget-simple .goog-te-menu-value span {
+    color: var(--muted) !important;
+}
+.goog-te-banner-frame { display: none !important; }
+body { top: 0 !important; }
+
     .lp-disclaimer {
         text-align: center; padding: 24px 32px;
         border-top: 1px solid var(--border);
@@ -1826,6 +1884,12 @@
         .lp-faq-q { font-size: 0.75rem; padding: 12px 14px 0; }
         .lp-faq-a { font-size: 0.74rem; }
         .lp-faq-item.open .lp-faq-a { padding: 8px 14px 14px; }
+
+        .lp-feedbacks { padding: 32px 16px; }
+        .lp-feedbacks h3 { font-size: 0.85rem; letter-spacing: 3px; }
+        .lp-feedback-card { padding: 20px 18px; }
+        .lp-feedback-quote { font-size: 0.78rem; line-height: 1.8; }
+        .lp-feedback-attr { font-size: 0.6rem; }
 
         .lp-pricing { grid-template-columns: 1fr; padding: 32px 16px; gap: 16px; }
         .lp-price-card { padding: 24px 20px; }
