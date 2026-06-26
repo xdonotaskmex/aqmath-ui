@@ -1155,21 +1155,38 @@
 }
 .lp-translate-wrap .goog-te-gadget {
     font-family: var(--mono) !important; font-size: 0.65rem !important;
+    color: var(--muted) !important;
+}
+.lp-translate-wrap .goog-te-gadget span {
+    color: var(--muted) !important;
 }
 .lp-translate-wrap .goog-te-gadget-simple {
     background: transparent !important; border: 1px solid var(--border) !important;
     border-radius: 2px !important; padding: 4px 8px !important;
     font-family: var(--mono) !important; color: var(--muted) !important;
+    display: inline-block !important; line-height: 1.5 !important;
 }
 .lp-translate-wrap .goog-te-gadget-simple .goog-te-menu-value {
     color: var(--muted) !important; font-family: var(--mono) !important;
-    font-size: 0.65rem !important;
+    font-size: 0.65rem !important; text-decoration: none !important;
 }
 .lp-translate-wrap .goog-te-gadget-simple .goog-te-menu-value span {
-    color: var(--muted) !important;
+    color: var(--muted) !important; border: none !important;
+}
+.lp-translate-wrap .goog-te-gadget-simple .goog-te-menu-value:hover {
+    color: var(--text) !important;
+}
+.lp-translate-wrap .goog-te-gadget img {
+    display: none !important;
 }
 .goog-te-banner-frame { display: none !important; }
 body { top: 0 !important; }
+.goog-te-menu2 { background: var(--s2) !important; border: 1px solid var(--border) !important; }
+.goog-te-menu2 .goog-te-menu2-item-selected { background: rgba(6,182,212,0.1) !important; }
+.goog-te-menu2 .goog-te-menu2-item-hover { background: rgba(6,182,212,0.08) !important; }
+.goog-te-menu2 td { font-family: var(--mono) !important; font-size: 0.7rem !important; color: var(--text) !important; padding: 6px 14px !important; }
+.goog-te-menu2 span { color: var(--text) !important; }
+.goog-te-menu-frame { border: 1px solid var(--border) !important; }
 
     .lp-disclaimer {
         text-align: center; padding: 24px 32px;
