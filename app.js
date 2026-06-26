@@ -920,6 +920,13 @@ async function dodajToken() {
     if (isNaN(amount) || amount <= 0) return showToast('quantity must be > 0.', 'warning');
     if (isNaN(target) || target <= 0) return showToast('allocation must be > 0%.', 'warning');
 
+    // Free-tier limit check BEFORE any processing (CSV save, API calls)
+    if (!editMode && !isPro && portfolio.filter(t => !t.frozen).length >= 4) {
+        console.log('[AQMath] Token blocked: isPro=' + isPro + ', tokens=' + portfolio.filter(t => !t.frozen).length);
+        showToast('free version allows max 4 tokens.', 'pro-lock');
+        return;
+    }
+
     const coinId = sym.toLowerCase();  // use sym as coinId
     const btn = document.getElementById('btnAdd');
     btn.textContent = "[ FETCHING... ]";
@@ -978,15 +985,6 @@ async function dodajToken() {
                 portfolio[idx] = newToken;
             }
         } else {
-            if (!isPro && portfolio.filter(t => !t.frozen).length >= 4) {
-                console.log('[AQMath] Token blocked: isPro=' + isPro + ', tokens=' + portfolio.filter(t => !t.frozen).length);
-                showToast('free version allows max 4 tokens.', 'pro-lock');
-                editMode = null;
-                resetForme();
-                btn.textContent = '[ Load ]';
-                btn.disabled = false;
-                return;
-            }
             portfolio.push(newToken);
         }
         resetForme();
