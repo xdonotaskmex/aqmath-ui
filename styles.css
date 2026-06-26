@@ -1152,17 +1152,23 @@
 /* ── Language Selector ── */
 .lp-lang-wrap {
     display: inline-flex; align-items: center;
+    border: 1px solid var(--border); border-radius: 4px;
+    padding: 4px 8px;
 }
 .lp-lang-select {
     font-family: var(--mono); font-size: 0.6rem;
     color: var(--muted); background: transparent;
-    border: 1px solid var(--border); border-radius: 4px;
-    padding: 5px 8px; letter-spacing: 1px;
+    border: none; border-radius: 0;
+    padding: 0; letter-spacing: 2px;
     cursor: pointer; outline: none;
     -webkit-appearance: none; appearance: none;
+    text-transform: lowercase;
 }
-.lp-lang-select:hover {
-    color: var(--text); border-color: var(--blue);
+.lp-lang-wrap:hover {
+    border-color: var(--border);
+}
+.lp-lang-wrap:hover .lp-lang-select {
+    color: var(--text);
 }
 .lp-lang-select option {
     background: var(--s2); color: var(--text);
