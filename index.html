@@ -1230,6 +1230,24 @@
 
 <!-- Google Translate -->
 <script type="text/javascript">
+function cleanGoogleBranding() {
+    var gadget = document.querySelector('.goog-te-gadget');
+    if (!gadget) return;
+    // Remove all spans except the one containing the select
+    var spans = gadget.querySelectorAll('span');
+    spans.forEach(function(span) {
+        if (!span.querySelector('.goog-te-combo') && 
+            (span.textContent.toLowerCase().includes('powered') || 
+             span.textContent.toLowerCase().includes('google') ||
+             span.querySelector('a[href*="translate"]') ||
+             span.querySelector('img'))) {
+            span.remove();
+        }
+    });
+    // Also remove any direct links
+    var links = gadget.querySelectorAll('a[href*="translate.google"]');
+    links.forEach(function(link) { link.remove(); });
+}
 function googleTranslateElementInit() {
     new google.translate.TranslateElement({
         pageLanguage: 'en',
@@ -1237,17 +1255,10 @@ function googleTranslateElementInit() {
         layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
         autoDisplay: false
     }, 'google_translate_element');
-    setTimeout(function() {
-        var gadget = document.querySelector('.goog-te-gadget');
-        if (gadget) {
-            var spans = gadget.querySelectorAll('span');
-            spans.forEach(function(span) {
-                if (span.textContent.includes('Powered by') || span.querySelector('a[href*="translate.google"]')) {
-                    span.remove();
-                }
-            });
-        }
-    }, 500);
+    // Multiple cleanup attempts
+    setTimeout(cleanGoogleBranding, 300);
+    setTimeout(cleanGoogleBranding, 800);
+    setTimeout(cleanGoogleBranding, 2000);
 }
 </script>
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
