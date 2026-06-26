@@ -1176,8 +1176,11 @@
 }
 .goog-te-combo option:hover { background: rgba(6,182,212,0.15) !important; }
 /* Hide the Google branding text next to select */
-.goog-te-gadget > span { display: none !important; }
-.goog-te-gadget > span:first-child { display: inline-block !important; }
+.goog-te-gadget > span:not(.goog-te-combo):not(:has(.goog-te-combo)) { display: none !important; }
+.goog-logo-link { display: none !important; }
+.goog-te-gadget span[style*="font-size"] { display: none !important; }
+.goog-te-gadget .goog-te-combo ~ span, .goog-te-gadget .goog-te-combo ~ a { display: none !important; }
+.goog-te-gadget .goog-te-combo + span { display: none !important; }
 .lp-translate-wrap .goog-te-gadget img { display: none !important; }
 .goog-te-banner-frame { display: none !important; }
 body { top: 0 !important; }
