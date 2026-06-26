@@ -1,0 +1,66 @@
+{
+  "hero": {
+    "title": "quantitative portfolio rebalancer",
+    "subtitle": "No emotions. No human error. Structural limits on every DCA dollar you deploy.",
+    "description": "AQMath processes complex covariance matrices on our secure backend engine. Your holdings are processed in-memory and never stored on our servers — only your browser's localStorage keeps your data.",
+    "cta": "--try-free-no-registration",
+    "proBeta": "PRO BETA (Early Access)",
+    "follow": "follow for updates & news: <a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">[ x ]</a> · <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" rel=\"noopener\">[ telegram ]</a>"
+  },
+  "math": {
+    "sectionTitle": "--mathematical-core",
+    "heading": "The Math Behind Your Portfolio",
+    "lead": "The covariance matrix runs on our secure backend. All computation is stateless — data is processed in-memory and discarded immediately. Nothing is written to disk.",
+    "rule1": "High-variance assets receive smaller dynamic caps",
+    "rule2": "Correlated assets are penalized through covariance",
+    "rule3": "Underweight assets are prioritized only when they improve the risk-balanced structure",
+    "riskLabel": "--risk-model",
+    "riskCopy": "The covariance matrix estimates how assets move together. Risk Parity then targets equal risk contribution — so no single token dominates your volatility.",
+    "riskLink": "[ read mathematical proof in docs ]",
+    "optLabel": "--optimization",
+    "optCopy": "KKT projection keeps allocations inside volatility caps and prevents oversized high-risk positions. It parks new DCA capital in USDC when drawdown is severe — stops you buying into a crash.",
+    "optLink": "[ view formula ]",
+    "privLabel": "--privacy",
+    "privCopy": "Amounts, targets, and allocation weights stay in your browser's localStorage. Data sent to the backend is processed in-memory and discarded immediately — nothing is persisted."
+  },
+  "beta": {
+    "tag": "// limited early access",
+    "title": "We're looking for <span class=\"gradient-text\">10 beta testers</span>",
+    "description": "Get early access to AQMath Pro — Risk Parity optimization, 180-day volatility analysis, and pipeline-powered DCA. Help us shape the product before public launch.",
+    "cta": "--apply-as-beta-tester",
+    "note": "direct message on Telegram · no forms, no spam"
+  },
+  "plans": {
+    "sectionTitle": "--free-vs-pro",
+    "freeTitle": "FREE",
+    "freeSubtitle": "No account. No wallet. Just math.",
+    "proTitle": "PRO <span class=\"lp-plan-badge\">Coming Soon</span>",
+    "proPrice": "ANNUAL LICENSE",
+    "proSubtitle": "Cryptographic Pro License Key (Minted on Polygon). Valid for 1 year.",
+    "notifyMe": "Notify Me at Launch"
+  },
+  "what": {
+    "title": "What is AQMath, How It Works & Why",
+    "lead": "A privacy-first quantitative rebalancer for passive crypto investors.",
+    "whatTitle": "--what",
+    "howTitle": "--how",
+    "whyTitle": "--why"
+  },
+  "faq": {
+    "title": "--frequently-asked-questions",
+    "q1": "How does the engine calculate risk?",
+    "a1": "The Pro engine uses a <strong>Variance Matrix</strong>, asset <strong>Covariance</strong>, volatility estimates, and KKT-style projection to calculate Risk Parity allocations where each asset contributes a controlled share of portfolio risk. <a href=\"#/docs\" style=\"color:#a78bfa;\">You can audit the full mathematical model in our [Documentation].</a>",
+    "q2": "How is AQMath actually private?",
+    "a2": "We don't track your wallet and we don't have a user database. Your token balances are stored only in your browser's localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately — nothing is persisted. Your financial privacy is architecturally enforced. <a href=\"#/docs\" style=\"color:#a78bfa;\">Read the full privacy architecture in our [Documentation].</a>",
+    "q3": "Is the free tier a real tool or just a demo?",
+    "a3": "The free version is fully functional for manual portfolio tracking, CSV-based historical prices, DCA distribution, and browser-local export/import. Pro adds automated historical data and full Risk Parity optimization.",
+    "q4": "Why are market widgets separated from features?",
+    "a4": "Live markets are informational context: ticker data, Fear & Greed, BTC dominance, movers, and exchange status. They support decision-making but are intentionally separate from the product feature story.",
+    "q5": "What is the Safe-Haven (USDC) feature?",
+    "a5": "When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token."
+  },
+  "community": {
+    "title": "--community-signals"
+  },
+  "disclaimer": "AQMath does not provide financial advice. All calculations are based on historical data and mathematical models.<br>Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted.<br>© 2026 AQMath — Secure Backend Engine. Private. Non-Custodial.<br><a href=\"#/docs\" style=\"color:var(--muted);\">Documentation</a> · Follow: <a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">X (Twitter)</a>"
+}

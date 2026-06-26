@@ -1,0 +1,66 @@
+{
+  "hero": {
+    "title": "量化投资组合再平衡器",
+    "subtitle": "无情绪干扰。无人为错误。每一笔 DCA 投入都有结构性限制。",
+    "description": "AQMath 在安全后端引擎处理复杂的协方差矩阵。您的持仓数据仅在内存中处理，从不存储于服务器 — 只有您浏览器的 localStorage 保存您的数据。",
+    "cta": "--免费使用-无需注册",
+    "proBeta": "PRO 内测（抢先体验）",
+    "follow": "关注获取更新与新闻：<a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">[ x ]</a> · <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" rel=\"noopener\">[ telegram ]</a>"
+  },
+  "math": {
+    "sectionTitle": "--数学核心",
+    "heading": "投资组合背后的数学",
+    "lead": "协方差矩阵在安全后端运行。所有计算无状态 — 数据在内存中处理后立即丢弃。不写入磁盘。",
+    "rule1": "高波动资产获得更小的动态上限",
+    "rule2": "相关资产通过协方差进行惩罚",
+    "rule3": "低配资产仅在改善风险平衡结构时优先分配",
+    "riskLabel": "--风险模型",
+    "riskCopy": "协方差矩阵估计资产联动关系。风险平价策略使每个资产贡献相等的风险份额 — 避免单一代币主导组合波动。",
+    "riskLink": "[ 在文档中查看数学证明 ]",
+    "optLabel": "--优化",
+    "optCopy": "KKT 投影确保分配在波动率上限内，防止高风险头寸过大。当回撤严重时，新的 DCA 资金转入 USDC — 避免在崩盘中追买。",
+    "optLink": "[ 查看公式 ]",
+    "privLabel": "--隐私",
+    "privCopy": "金额、目标和配置权重保存在浏览器的 localStorage 中。发送到后端的数据在内存中处理并立即丢弃 — 不做任何持久化。"
+  },
+  "beta": {
+    "tag": "// 限时早期访问",
+    "title": "我们正在寻找 <span class=\"gradient-text\">10 位内测用户</span>",
+    "description": "抢先体验 AQMath Pro — 风险平价优化、180 天波动率分析和数据管道驱动的 DCA。帮助我们在公开发布前完善产品。",
+    "cta": "--申请成为内测用户",
+    "note": "Telegram 私信 · 无表格，无垃圾信息"
+  },
+  "plans": {
+    "sectionTitle": "--免费版-vs-Pro版",
+    "freeTitle": "免费版",
+    "freeSubtitle": "无需账户。无需钱包。只有数学。",
+    "proTitle": "PRO <span class=\"lp-plan-badge\">即将推出</span>",
+    "proPrice": "年度许可",
+    "proSubtitle": "加密 Pro 许可证密钥（在 Polygon 上铸造）。有效期 1 年。",
+    "notifyMe": "上线时通知我"
+  },
+  "what": {
+    "title": "AQMath 是什么、如何运作、为什么",
+    "lead": "为被动加密投资者打造的隐私优先量化再平衡器。",
+    "whatTitle": "--是什么",
+    "howTitle": "--如何运作",
+    "whyTitle": "--为什么"
+  },
+  "faq": {
+    "title": "--常见问题",
+    "q1": "引擎如何计算风险？",
+    "a1": "Pro 引擎使用<strong>方差矩阵</strong>、资产<strong>协方差</strong>、波动率估计和 KKT 投影来计算风险平价分配，使每个资产贡献可控的风险份额。<a href=\"#/docs\" style=\"color:#a78bfa;\">您可以在[文档]中审计完整的数学模型。</a>",
+    "q2": "AQMath 如何做到真正隐私？",
+    "a2": "我们不追踪您的钱包，也没有用户数据库。您的代币余额仅存储在浏览器的 localStorage 中。在 DCA 和优化期间，头寸数据发送到后端、在内存中处理并立即丢弃 — 不做持久化。您的金融隐私由架构强制执行。<a href=\"#/docs\" style=\"color:#a78bfa;\">在[文档]中阅读完整的隐私架构。</a>",
+    "q3": "免费版是真实工具还是只是演示？",
+    "a3": "免费版完全可用，支持手动投资组合跟踪、基于 CSV 的历史价格、DCA 分配和浏览器本地导入/导出。Pro 版增加自动化历史数据和完整的风险平价优化。",
+    "q4": "为什么市场组件与功能分开？",
+    "a4": "实时市场是信息背景：行情数据、恐惧与贪婪指数、BTC 主导率、涨跌榜和交易所状态。它们辅助决策，但有意与产品功能故事分离。",
+    "q5": "安全港（USDC）功能是什么？",
+    "a5": "启用后，USDC 作为组合内的稳定币缓冲。硬上限产生的盈余或未分配的 DCA 预算流入 USDC，而非丢失。关闭此功能可将 USDC 视为普通代币。"
+  },
+  "community": {
+    "title": "--社区信号"
+  },
+  "disclaimer": "AQMath 不提供投资建议。所有计算基于历史数据和数学模型。<br>数学处理在安全后端运行；您的投资组合数据在内存中处理，从不持久化。<br>© 2026 AQMath — 安全后端引擎。隐私。非托管。<br><a href=\"#/docs\" style=\"color:var(--muted);\">文档</a> · 关注：<a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">X (Twitter)</a>"
+}

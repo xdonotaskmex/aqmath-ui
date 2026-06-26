@@ -58,7 +58,18 @@
             <a class="lp-nav-link lp-nav-cta" href="#/app">open app</a>
             <a class="lp-nav-link lp-nav-tab" href="https://x.com/aqmathapp" target="_blank" rel="noopener">[ x ]</a>
             <a class="lp-nav-link lp-nav-tab" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">[ tg ]</a>
-            <div class="lp-nav-link lp-translate-wrap" id="google_translate_element"></div>
+            <div class="lp-nav-link lp-lang-wrap">
+                            <select class="lp-lang-select" id="langSelect" onchange="switchLang(this.value)">
+                                <option value="en">EN</option>
+                                <option value="zh-CN">中文</option>
+                                <option value="ja">日本語</option>
+                                <option value="ko">한국어</option>
+                                <option value="es">ES</option>
+                                <option value="fr">FR</option>
+                                <option value="de">DE</option>
+                                <option value="ru">RU</option>
+                            </select>
+                        </div>
         </div>
     </nav>
 
@@ -99,14 +110,14 @@
             <text x="270" y="50" text-anchor="middle" fill="#475569" font-family="'JetBrains Mono',monospace" font-size="7" letter-spacing="1">AVAX</text>
             <text x="350" y="112" text-anchor="middle" fill="#475569" font-family="'JetBrains Mono',monospace" font-size="7" letter-spacing="1">LINK</text>
         </svg>
-        <h1>quantitative <span class="gradient-text">portfolio rebalancer</span></h1>
-        <h2>No emotions. No human error. Structural limits on every DCA dollar you deploy.</h2>
-        <p>AQMath processes complex covariance matrices on our secure backend engine. Your holdings are processed in-memory and never stored on our servers &mdash; only your browser&rsquo;s localStorage keeps your data.</p>
+        <h1 data-i18n="hero.title">quantitative <span class="gradient-text">portfolio rebalancer</span></h1>
+        <h2 data-i18n="hero.subtitle">No emotions. No human error. Structural limits on every DCA dollar you deploy.</h2>
+        <p data-i18n="hero.description">AQMath processes complex covariance matrices on our secure backend engine. Your holdings are processed in-memory and never stored on our servers &mdash; only your browser&rsquo;s localStorage keeps your data.</p>
         <div class="lp-cta-group">
-            <a class="lp-btn-primary" href="#/app">--try-free-no-registration</a>
-            <button class="lp-btn-secondary" onclick="showProModal()">PRO BETA (Early Access)</button>
+            <a class="lp-btn-primary" href="#/app" data-i18n="hero.cta">--try-free-no-registration</a>
+            <button class="lp-btn-secondary" onclick="showProModal()" data-i18n="hero.proBeta">PRO BETA (Early Access)</button>
         </div>
-        <div class="lp-community">follow for updates &amp; news: <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">[ x ]</a> &middot; <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">[ telegram ]</a></div>
+        <div class="lp-community" data-i18n-html="hero.follow">follow for updates &amp; news: <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">[ x ]</a> &middot; <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">[ telegram ]</a></div>
     </section>
 
     <div class="lp-terminal-preview">
@@ -170,13 +181,13 @@
 
         <section class="lp-section">
             <div class="lp-math-box lp-card">
-                <div class="card-title">--mathematical-core</div>
-                <div class="lp-math-heading">The Math Behind Your Portfolio</div>
-                <p class="lp-math-lead">The covariance matrix runs on our secure backend. All computation is stateless &mdash; data is processed in-memory and discarded immediately. Nothing is written to disk.</p>
+                <div class="card-title" data-i18n="math.sectionTitle">--mathematical-core</div>
+                <div class="lp-math-heading" data-i18n="math.heading">The Math Behind Your Portfolio</div>
+                <p class="lp-math-lead" data-i18n="math.lead">The covariance matrix runs on our secure backend. All computation is stateless &mdash; data is processed in-memory and discarded immediately. Nothing is written to disk.</p>
                 <ul class="lp-math-rules">
-                    <li>High-variance assets receive <strong>smaller dynamic caps</strong></li>
-                    <li>Correlated assets are <strong>penalized through covariance</strong></li>
-                    <li>Underweight assets are <strong>prioritized only when they improve</strong> the risk-balanced structure</li>
+                    <li data-i18n="math.rule1">High-variance assets receive <strong>smaller dynamic caps</strong></li>
+                    <li data-i18n="math.rule2">Correlated assets are <strong>penalized through covariance</strong></li>
+                    <li data-i18n="math.rule3">Underweight assets are <strong>prioritized only when they improve</strong> the risk-balanced structure</li>
                 </ul>
                 <div class="lp-math-grid">
                     <div class="lp-math-metric">
@@ -192,9 +203,9 @@
                             <line x1="33" y1="16" x2="33" y2="25" stroke="#06b6d4" stroke-width="0.6" opacity="0.3"/>
                         </svg>
                         <div class="mc-head"><span class="mc-num">01</span></div>
-                        <div class="metric-label">--risk-model</div>
-                        <div class="metric-copy">The covariance matrix estimates how assets move together. Risk Parity then targets equal risk contribution &mdash; so no single token dominates your volatility.</div>
-                        <a href="#/docs" class="doc-formula-link">[ read mathematical proof in docs ]</a>
+                        <div class="metric-label" data-i18n="math.riskLabel">--risk-model</div>
+                        <div class="metric-copy" data-i18n="math.riskCopy">The covariance matrix estimates how assets move together. Risk Parity then targets equal risk contribution &mdash; so no single token dominates your volatility.</div>
+                        <a href="#/docs" class="doc-formula-link" data-i18n="math.riskLink">[ read mathematical proof in docs ]</a>
                     </div>
                     <div class="lp-math-metric">
                         <svg viewBox="0 0 44 44" class="mc-icon" xmlns="http://www.w3.org/2000/svg">
@@ -207,9 +218,9 @@
                             <rect x="10" y="10" width="24" height="24" fill="none" stroke="#34d399" stroke-width="0.4" opacity="0.12" rx="2" stroke-dasharray="3,3"/>
                         </svg>
                         <div class="mc-head"><span class="mc-num">02</span></div>
-                        <div class="metric-label">--optimization</div>
-                        <div class="metric-copy">KKT projection keeps allocations inside volatility caps and prevents oversized high-risk positions. It parks new DCA capital in USDC when drawdown is severe &mdash; stops you buying into a crash.</div>
-                        <a href="#/docs" class="doc-formula-link">[ view formula ]</a>
+                        <div class="metric-label" data-i18n="math.optLabel">--optimization</div>
+                        <div class="metric-copy" data-i18n="math.optCopy">KKT projection keeps allocations inside volatility caps and prevents oversized high-risk positions. It parks new DCA capital in USDC when drawdown is severe &mdash; stops you buying into a crash.</div>
+                        <a href="#/docs" class="doc-formula-link" data-i18n="math.optLink">[ view formula ]</a>
                     </div>
                     <div class="lp-math-metric">
                         <svg viewBox="0 0 44 44" class="mc-icon" xmlns="http://www.w3.org/2000/svg">
@@ -219,8 +230,8 @@
                             <line x1="22" y1="25.5" x2="22" y2="30" stroke="#fbbf24" stroke-width="1" opacity="0.5"/>
                         </svg>
                         <div class="mc-head"><span class="mc-num">03</span></div>
-                        <div class="metric-label">--privacy</div>
-                        <div class="metric-copy">Amounts, targets, and allocation weights stay in your browser&rsquo;s localStorage. Data sent to the backend is processed in-memory and discarded immediately &mdash; nothing is persisted.</div>
+                        <div class="metric-label" data-i18n="math.privLabel">--privacy</div>
+                        <div class="metric-copy" data-i18n="math.privCopy">Amounts, targets, and allocation weights stay in your browser&rsquo;s localStorage. Data sent to the backend is processed in-memory and discarded immediately &mdash; nothing is persisted.</div>
                     </div>
                 </div>
             </div>
@@ -235,23 +246,23 @@
                 <text x="35" y="33" text-anchor="middle" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="18" font-weight="700">10</text>
                 <text x="35" y="46" text-anchor="middle" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="6.5" letter-spacing="2" opacity="0.8">SPOTS</text>
             </svg>
-            <div class="lp-beta-recruit-tag">// limited early access</div>
-            <h2>We&rsquo;re looking for <span class="gradient-text">10 beta testers</span></h2>
-            <p>Get early access to AQMath Pro &mdash; Risk Parity optimization, 180-day volatility analysis, and pipeline-powered DCA. Help us shape the product before public launch.</p>
-            <a class="lp-btn-primary lp-beta-cta" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">--apply-as-beta-tester</a>
-            <div class="lp-beta-recruit-note">direct message on Telegram &middot; no forms, no spam</div>
+            <div class="lp-beta-recruit-tag" data-i18n="beta.tag">// limited early access</div>
+            <h2 data-i18n-html="beta.title">We&rsquo;re looking for <span class="gradient-text">10 beta testers</span></h2>
+            <p data-i18n="beta.description">Get early access to AQMath Pro &mdash; Risk Parity optimization, 180-day volatility analysis, and pipeline-powered DCA. Help us shape the product before public launch.</p>
+            <a class="lp-btn-primary lp-beta-cta" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener" data-i18n="beta.cta">--apply-as-beta-tester</a>
+            <div class="lp-beta-recruit-note" data-i18n="beta.note">direct message on Telegram &middot; no forms, no spam</div>
         </div>
     </section>
 
         <hr class="lp-section-divider">
 
         <section class="lp-section">
-            <div class="lp-section-label">--free-vs-pro</div>
+            <div class="lp-section-label" data-i18n="plans.sectionTitle">--free-vs-pro</div>
             <div class="lp-plan-grid">
                 <div class="lp-card lp-plan-card free">
-                    <div class="lp-plan-title">FREE</div>
+                    <div class="lp-plan-title" data-i18n="plans.freeTitle">FREE</div>
                     <div class="lp-plan-price">$0</div>
-                    <div class="lp-plan-subtitle">No account. No wallet. Just math.</div>
+                    <div class="lp-plan-subtitle" data-i18n="plans.freeSubtitle">No account. No wallet. Just math.</div>
                     <ul class="lp-feature-list">
                         <li>Up to 4 tokens for manual portfolio tracking</li>
                         <li>DCA distribution with manual CSV history upload</li>
@@ -264,9 +275,9 @@
                     <a class="lp-btn-primary" href="#/app" style="width:100%;text-align:center;">Open App</a>
                 </div>
                 <div class="lp-card lp-plan-card pro">
-                    <div class="lp-plan-title">PRO <span class="lp-plan-badge">Coming Soon</span></div>
-                    <div class="lp-plan-price pro">ANNUAL LICENSE</div>
-                    <div class="lp-plan-subtitle">Cryptographic Pro License Key (Minted on Polygon). Valid for 1 year.</div>
+                    <div class="lp-plan-title" data-i18n-html="plans.proTitle">PRO <span class="lp-plan-badge">Coming Soon</span></div>
+                    <div class="lp-plan-price pro" data-i18n="plans.proPrice">ANNUAL LICENSE</div>
+                    <div class="lp-plan-subtitle" data-i18n="plans.proSubtitle">Cryptographic Pro License Key (Minted on Polygon). Valid for 1 year.</div>
                     <ul class="lp-feature-list">
                         <li>Risk Parity optimization with full Covariance &amp; Variance Matrix</li>
                         <li>Dynamic volatility-based allocation caps</li>
@@ -274,7 +285,7 @@
                         <li>Unlimited token support and portfolio optimization</li>
                         <li>Non-custodial privacy &mdash; no server stores your portfolio</li>
                     </ul>
-                    <button class="lp-btn-secondary" onclick="showProModal()" style="width:100%;">Notify Me at Launch</button>
+                    <button class="lp-btn-secondary" onclick="showProModal()" style="width:100%;" data-i18n="plans.notifyMe">Notify Me at Launch</button>
                 </div>
             </div>
         </section>
@@ -283,24 +294,24 @@
 
         <section class="lp-section lp-what">
             <div class="lp-card lp-what-card">
-                <h3>What is AQMath, How It Works &amp; Why</h3>
-                <p class="lp-what-lead">A privacy-first quantitative rebalancer for passive crypto investors.</p>
+                <h3 data-i18n="what.title">What is AQMath, How It Works &amp; Why</h3>
+                <p class="lp-what-lead" data-i18n="what.lead">A privacy-first quantitative rebalancer for passive crypto investors.</p>
                 <div class="lp-what-grid">
                     <div class="lp-card">
-                        <div class="card-title" style="color:var(--blue);">--what</div>
+                        <div class="card-title" style="color:var(--blue);" data-i18n="what.whatTitle">--what</div>
                         <p>AQMath is a quantitative portfolio rebalancer built for passive crypto investors.<br><br>
                         It combines institutional-grade mathematics &mdash; Risk Parity, Karush-Kuhn-Tucker (KKT) optimization, and volatility-weighted Dollar-Cost Averaging &mdash; to keep your portfolio balanced without emotion, guesswork, or centralized data collection.<br><br>
                         Non-Custodial Math Processing. Your portfolio data is sent only during DCA/Optimize and never persisted. No accounts. No tracking. Just math.</p>
                     </div>
                     <div class="lp-card">
-                        <div class="card-title" style="color:var(--blue);">--how</div>
+                        <div class="card-title" style="color:var(--blue);" data-i18n="what.howTitle">--how</div>
                         <p>1. Add your tokens and target allocations (or let the engine calculate them using 180-day historical volatility).<br><br>
                         2. Click SYNC to get live prices from Binance &mdash; price data is fetched directly from Binance via WebSocket.<br><br>
                         3. Use DCA Distribution to invest new capital only into underweight tokens, filtered by volatility and trend.<br><br>
                         4. (Pro) Run the Quantum Engine to re-compute optimal weights using full covariance matrix and KKT projection.</p>
                     </div>
                     <div class="lp-card">
-                        <div class="card-title" style="color:var(--blue);">--why</div>
+                        <div class="card-title" style="color:var(--blue);" data-i18n="what.whyTitle">--why</div>
                         <p>Most portfolio tools either collect your data or offer only basic rebalancing. AQMath is different:<br><br>
                         &rarr; Institutional-grade math (same concepts used by multi-billion funds)<br>
                         &rarr; Non-Custodial &mdash; your portfolio stays in your browser&rsquo;s localStorage, backend processing is ephemeral<br>
@@ -314,31 +325,31 @@
 
 
         <section class="lp-section lp-faq">
-            <h3>--frequently-asked-questions</h3>
+            <h3 data-i18n="faq.title">--frequently-asked-questions</h3>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">How does the engine calculate risk?</div>
-                <div class="lp-faq-a">The Pro engine uses a <strong>Variance Matrix</strong>, asset <strong>Covariance</strong>, volatility estimates, and KKT-style projection to calculate Risk Parity allocations where each asset contributes a controlled share of portfolio risk. <a href="#/docs" style="color:#a78bfa;">You can audit the full mathematical model in our [Documentation].</a></div>
+                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q1">How does the engine calculate risk?</div>
+                <div class="lp-faq-a" data-i18n-html="faq.a1">The Pro engine uses a <strong>Variance Matrix</strong>, asset <strong>Covariance</strong>, volatility estimates, and KKT-style projection to calculate Risk Parity allocations where each asset contributes a controlled share of portfolio risk. <a href="#/docs" style="color:#a78bfa;">You can audit the full mathematical model in our [Documentation].</a></div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">How is AQMath actually private?</div>
-                <div class="lp-faq-a">We don&rsquo;t track your wallet and we don&rsquo;t have a user database. Your token balances are stored only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. Your financial privacy is architecturally enforced. <a href="#/docs" style="color:#a78bfa;">Read the full privacy architecture in our [Documentation].</a></div>
+                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q2">How is AQMath actually private?</div>
+                <div class="lp-faq-a" data-i18n-html="faq.a2">We don&rsquo;t track your wallet and we don&rsquo;t have a user database. Your token balances are stored only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. Your financial privacy is architecturally enforced. <a href="#/docs" style="color:#a78bfa;">Read the full privacy architecture in our [Documentation].</a></div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">Is the free tier a real tool or just a demo?</div>
-                <div class="lp-faq-a">The free version is fully functional for manual portfolio tracking, CSV-based historical prices, DCA distribution, and browser-local export/import. Pro adds automated historical data and full Risk Parity optimization.</div>
+                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q3">Is the free tier a real tool or just a demo?</div>
+                <div class="lp-faq-a" data-i18n="faq.a3">The free version is fully functional for manual portfolio tracking, CSV-based historical prices, DCA distribution, and browser-local export/import. Pro adds automated historical data and full Risk Parity optimization.</div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">Why are market widgets separated from features?</div>
-                <div class="lp-faq-a">Live markets are informational context: ticker data, Fear &amp; Greed, BTC dominance, movers, and exchange status. They support decision-making but are intentionally separate from the product feature story.</div>
+                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q4">Why are market widgets separated from features?</div>
+                <div class="lp-faq-a" data-i18n="faq.a4">Live markets are informational context: ticker data, Fear &amp; Greed, BTC dominance, movers, and exchange status. They support decision-making but are intentionally separate from the product feature story.</div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')">What is the Safe-Haven (USDC) feature?</div>
-                <div class="lp-faq-a">When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token.</div>
+                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q5">What is the Safe-Haven (USDC) feature?</div>
+                <div class="lp-faq-a" data-i18n="faq.a5">When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token.</div>
             </div>
         </section>
 
         <section class="lp-section lp-feedbacks">
-            <h3>--community-signals</h3>
+            <h3 data-i18n="community.title">--community-signals</h3>
             <div class="lp-feedback-card">
                 <div class="lp-feedback-quote">
                     <span class="lp-quote-mark">&ldquo;</span>
@@ -353,8 +364,7 @@
         </section>
     </div>
 
-    <div class="lp-disclaimer">
-        AQMath does not provide financial advice. All calculations are based on historical data and mathematical models.<br>
+    <div class="lp-disclaimer" data-i18n-html="disclaimer">AQMath does not provide financial advice. All calculations are based on historical data and mathematical models.<br>
         Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted.<br>
         &copy; 2026 AQMath &mdash; Secure Backend Engine. Private. Non-Custodial.<br>
         <a href="#/docs" style="color:var(--muted);">Documentation</a> &middot;
@@ -1228,49 +1238,54 @@
 <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 
-<!-- Google Translate -->
-<script type="text/javascript">
-function cleanGoogleBranding() {
-    var gadget = document.querySelector('.goog-te-gadget');
-    if (!gadget) return;
-    
-    // Set font-size 0 on gadget to hide any text nodes
-    gadget.style.fontSize = '0';
-    
-    // Find all spans and hide everything except the one containing the select
-    var spans = gadget.querySelectorAll('span');
-    spans.forEach(function(span) {
-        if (span.querySelector('.goog-te-combo')) {
-            span.style.fontSize = '0.6rem';
-            return; // keep this one visible
-        }
-        // Hide everything else
-        span.style.display = 'none';
-        span.style.visibility = 'hidden';
-        span.style.fontSize = '0';
-        span.style.width = '0';
-        span.style.height = '0';
-        span.style.overflow = 'hidden';
+<!-- i18n — Localization -->
+<script src="https://unpkg.com/i18next@23.11.5/dist/umd/i18next.min.js"></script>
+<script>
+var i18nResources = {};
+var i18nReady = false;
+
+function loadLocale(lang) {
+    return fetch('locales/' + lang + '.json')
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .catch(function() { return null; });
+}
+
+function switchLang(lang) {
+    var sel = document.getElementById('langSelect');
+    if (sel) sel.value = lang;
+    localStorage.setItem('aqmath-lang', lang);
+
+    loadLocale(lang).then(function(res) {
+        if (!res) return;
+        i18nResources[lang] = { translation: res };
+        i18next.init({ lng: lang, resources: i18nResources, fallbackLng: 'en' }, function(err) {
+            if (err) return;
+            i18nReady = true;
+            applyTranslations();
+        });
     });
-    
-    // Also remove direct links
-    var links = gadget.querySelectorAll('a[href*="translate.google"]');
-    links.forEach(function(link) { link.remove(); });
 }
-function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,zh-CN,ja,ko,es,fr,de,ru',
-        layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
-        autoDisplay: false
-    }, 'google_translate_element');
-    // Multiple cleanup attempts
-    setTimeout(cleanGoogleBranding, 300);
-    setTimeout(cleanGoogleBranding, 800);
-    setTimeout(cleanGoogleBranding, 2000);
+
+function applyTranslations() {
+    if (!i18nReady) return;
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var key = el.getAttribute('data-i18n');
+        var t = i18next.t(key);
+        if (t && t !== key) el.textContent = t;
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+        var key = el.getAttribute('data-i18n-html');
+        var t = i18next.t(key);
+        if (t && t !== key) el.innerHTML = t;
+    });
 }
+
+// Init: load saved language or default to English
+(function() {
+    var savedLang = localStorage.getItem('aqmath-lang') || 'en';
+    switchLang(savedLang);
+})();
 </script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>
