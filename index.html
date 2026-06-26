@@ -419,32 +419,32 @@
         <div class="logo-box">AQ</div>
         <div>
             <div class="logo-name">AQMath</div>
-            <div class="logo-tag">non-custodial • quantum engine</div>
+            <div class="logo-tag" data-i18n="app.logoTag">non-custodial • quantum engine</div>
         </div>
     </div>
     <div class="hdr-nav">
-        <button class="hdr-nav-btn" onclick="location.hash='#/'">landing</button>
-        <button class="hdr-nav-btn active" onclick="location.hash='#/app'">app</button>
-        <button class="hdr-nav-btn" onclick="location.hash='#/docs'">docs</button>
+        <button class="hdr-nav-btn" onclick="location.hash='#/'" data-i18n="app.navLanding">landing</button>
+        <button class="hdr-nav-btn active" onclick="location.hash='#/app'" data-i18n="app.navApp">app</button>
+        <button class="hdr-nav-btn" onclick="location.hash='#/docs'" data-i18n="app.navDocs">docs</button>
     </div>
     <div class="hdr-right">
-        <button class="hdr-btn" id="btnSyncAll" onclick="osvjeziSveCijene()">SYNC</button>
-        <button class="hdr-btn c-amber" onclick="document.getElementById('csvFile').click()">CSV IMPORT</button>
+        <button class="hdr-btn" id="btnSyncAll" onclick="osvjeziSveCijene()" data-i18n="app.sync">SYNC</button>
+        <button class="hdr-btn c-amber" onclick="document.getElementById('csvFile').click()" data-i18n="app.csvImport">CSV IMPORT</button>
         <input type="file" id="csvFile" accept=".csv" style="display:none" onchange="importCSV(event)">
-        <button class="hdr-btn c-amber" onclick="exportJSON()">EXPORT</button>
-        <button class="hdr-btn c-green" onclick="document.getElementById('importFile').click()">IMPORT</button>
+        <button class="hdr-btn c-amber" onclick="exportJSON()" data-i18n="app.export">EXPORT</button>
+        <button class="hdr-btn c-green" onclick="document.getElementById('importFile').click()" data-i18n="app.import">IMPORT</button>
         <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
-        <button class="hdr-btn c-red" onclick="obrisiSve()">RESET</button>
+        <button class="hdr-btn c-red" onclick="obrisiSve()" data-i18n="app.reset">RESET</button>
         <div class="hstat">
-            <div class="hstat-l">Portfolio</div>
+            <div class="hstat-l" data-i18n="app.statPortfolio">Portfolio</div>
             <div class="hstat-v" id="hTotal">$0.00</div>
         </div>
         <div class="hstat">
-            <div class="hstat-l">Positions</div>
+            <div class="hstat-l" data-i18n="app.statPositions">Positions</div>
             <div class="hstat-v" id="hPos">0</div>
         </div>
         <div class="hstat">
-            <div class="hstat-l">Status</div>
+            <div class="hstat-l" data-i18n="app.statStatus">Status</div>
             <div class="hstat-v" id="hStatus">—</div>
         </div>
     </div>
@@ -456,11 +456,11 @@
         <div class="tc beta-active-card beta-card hidden" id="betaActive">
             <div class="tc-bar">
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title">--beta-access</span>
+                <span class="tc-title" data-i18n="app.betaAccess">--beta-access</span>
             </div>
             <div class="tc-body">
                 <div class="beta-active-row">
-                    <span class="pro-badge"><span class="pdot"></span>PRO ACTIVE</span>
+                    <span class="pro-badge"><span data-i18n="app.proActive">PRO ACTIVE</span>
                     <button class="btn-deact" onclick="deactivateBeta()">DEACTIVATE</button>
                 </div>
             </div>
@@ -470,18 +470,18 @@
         <div class="tc beta-card" id="betaSection">
             <div class="tc-bar">
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title">--beta-access</span>
+                <span class="tc-title" data-i18n="app.betaAccess">--beta-access</span>
             </div>
             <div class="tc-body" style="text-align:center;">
                 <div class="beta-active-row" style="margin-bottom:10px;">
-                    <span class="pro-badge inactive"><span class="pdot"></span>PRO INACTIVE</span>
+                    <span class="pro-badge inactive"><span class="pdot"></span><span data-i18n="app.proInactive">PRO INACTIVE</span></span>
                 </div>
                 <div class="fg">
-                    <label>Beta Key</label>
+                    <label data-i18n="app.betaKeyLabel">Beta Key</label>
                     <input type="text" id="iBetaKey" placeholder="AQMBETA-XXXX-XXXX" autocomplete="off">
                 </div>
-                <button class="btn purple" id="btnBeta" onclick="activateBeta()">Activate Beta</button>
-                <div class="beta-hint">unlocks pipeline prices, CSV parsing & engine</div>
+                <button class="btn purple" id="btnBeta" onclick="activateBeta()" data-i18n="app.activateBeta">Activate Beta</button>
+                <div class="beta-hint" data-i18n="app.betaHint">unlocks pipeline prices, CSV parsing & engine</div>
                 <div class="beta-links">
                     <a class="beta-link" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">telegram</a>
                     <a class="beta-link" href="https://x.com/aqmathapp" target="_blank" rel="noopener">x</a>
@@ -493,26 +493,26 @@
         <div class="tc">
             <div class="tc-bar">
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title">--position</span>
+                <span class="tc-title" data-i18n="app.position">--position</span>
             </div>
             <div class="tc-body">
                 <div class="fg">
-                    <label>Symbol or Name</label>
+                    <label data-i18n="app.symbolLabel">Symbol or Name</label>
                     <input type="text" id="iSym" placeholder="BTC, ETH, Celestia…" autocomplete="off">
                 </div>
                 <div class="fg-row">
                     <div class="fg">
-                        <label>Quantity</label>
+                        <label data-i18n="app.quantityLabel">Quantity</label>
                         <input type="number" id="iAmt" step="any" placeholder="0.00000000" min="0">
                     </div>
                     <div class="fg">
-                        <label>Price ($) — Auto</label>
+                        <label data-i18n="app.priceLabel">Price ($) — Auto</label>
                         <input type="number" id="iPrice" step="any" placeholder="Empty = API">
                     </div>
                 </div>
                 <div class="fg-row">
                     <div class="fg">
-                        <label>Entry Price ($)</label>
+                        <label data-i18n="app.entryPriceLabel">Entry Price ($)</label>
                         <input type="number" id="iEntry" step="any" placeholder="Current price if empty" min="0">
                     </div>
                     <div class="fg">
@@ -521,19 +521,19 @@
                     </div>
                 </div>
                 <div class="fg">
-                    <label>Target Allocation (%)</label>
+                    <label data-i18n="app.targetLabel">Target Allocation (%)</label>
                     <input type="number" id="iTarget" step="0.1" min="0.1" max="100" placeholder="0.0">
                 </div>
                 <div class="fg">
-                    <label>Historical Prices (CSV)</label>
+                    <label data-i18n="app.historyCsvLabel">Historical Prices (CSV)</label>
                     <label class="fg-file" for="iHistoryCSV">
                         <span class="fg-file-icon">📄</span>
                         <span class="fg-file-text">Choose CSV file…</span>
                         <input type="file" id="iHistoryCSV" accept=".csv">
                     </label>
-                    <div class="fg-hint">Format: Date, Price (weekly or daily)</div>
+                    <div class="fg-hint" data-i18n="app.csvFormat">Format: Date, Price (weekly or daily)</div>
                 </div>
-                <button class="btn blue" id="btnAdd" onclick="dodajToken()">Load</button>
+                <button class="btn blue" id="btnAdd" onclick="dodajToken()" data-i18n="app.load">Load</button>
             </div>
         </div>
 
@@ -541,19 +541,19 @@
         <div class="tc">
             <div class="tc-bar">
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title">--dca-engine</span>
+                <span class="tc-title" data-i18n="app.dcaEngine">--dca-engine</span>
             </div>
             <div class="tc-body">
                 <div class="btn-stack">
                     <div class="fg" style="margin-bottom:8px;">
-                        <label>DCA Amount ($)</label>
+                        <label data-i18n="app.dcaAmount">DCA Amount ($)</label>
                         <input type="number" id="iDcaAmount" step="any" placeholder="500.00" min="0">
                     </div>
-                    <button class="btn green" id="btnDca" onclick="distribuirajDca()">Distribute DCA</button>
-                    <div class="fg-hint">Smart allocation across positions</div>
-                    <button class="btn amber" id="btnEngine" onclick="optimizePortfolio()">AQMath Engine — PRO</button>
-                    <div class="engine-hint">180-day covariance + ERC analysis</div>
-                    <button class="btn ghost" id="btnRefreshHistory" onclick="refreshHistory()" disabled>Refresh History — PRO</button>
+                    <button class="btn green" id="btnDca" onclick="distribuirajDca()" data-i18n="app.distributeDca">Distribute DCA</button>
+                    <div class="fg-hint" data-i18n="app.smartAlloc">Smart allocation across positions</div>
+                    <button class="btn amber" id="btnEngine" onclick="optimizePortfolio()" data-i18n="app.engineBtn">AQMath Engine — PRO</button>
+                    <div class="engine-hint" data-i18n="app.engineHint">180-day covariance + ERC analysis</div>
+                    <button class="btn ghost" id="btnRefreshHistory" onclick="refreshHistory()" disabled data-i18n="app.refreshHistory">Refresh History — PRO</button>
                 </div>
             </div>
         </div>
@@ -562,65 +562,65 @@
         <div class="tc" id="optSection">
             <div class="tc-bar">
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title">--risk-settings</span>
+                <span class="tc-title" data-i18n="app.riskSettings">--risk-settings</span>
             </div>
             <div class="tc-body">
                 <div class="sh-row" id="shToggleRow" onclick="toggleGlobalSafeHaven()">
                     <div class="sh-sw" id="shSwitch"></div>
                     <div>
-                        <div class="sh-lbl" id="shLabel">SAFE-HAVEN (USDC)</div>
-                        <div class="sh-dsc" id="shDesc">ON &mdash; absorbs hard-cap surplus &amp; unallocated DCA</div>
+                        <div class="sh-lbl" id="shLabel" data-i18n="app.safeHaven">SAFE-HAVEN (USDC)</div>
+                        <div class="sh-dsc" id="shDesc" data-i18n="app.safeHavenDesc">ON — absorbs hard-cap surplus & unallocated DCA</div>
                     </div>
                 </div>
                 <div class="sh-deploy">
                     <span class="sh-bal" id="shBalance">$0.00</span>
-                    <button class="sh-dbtn" id="shDeployBtn" onclick="deployUSDC()">DEPLOY TO DCA</button>
+                    <button class="sh-dbtn" id="shDeployBtn" onclick="deployUSDC()" data-i18n="app.deployToDca">DEPLOY TO DCA</button>
                 </div>
             </div>
         </div>
 
         <!-- ALLOCATION METER -->
         <div class="a-meter">
-            <div class="a-meter-top"><span>ALLOCATION</span><span id="aPctLbl">0.00%</span></div>
+            <div class="a-meter-top"><span data-i18n="app.allocation">ALLOCATION</span><span id="aPctLbl">0.00%</span></div>
             <div class="a-track"><div class="a-fill" id="aFill" style="width:0%"></div></div>
             <div class="a-num"><span id="aNumVal">0.00</span><span style="font-size:1rem;color:var(--muted)">%</span></div>
-            <div class="a-rem" id="aRem">Remaining: 100.00%</div>
+            <div class="a-rem" id="aRem" data-i18n="app.remaining">Remaining: 100.00%</div>
         </div>
 
         <!-- FAQ -->
         <div class="faq-section">
-            <div class="section-label">--frequently-asked-questions</div>
+            <div class="section-label" data-i18n="app.faqTitle">--frequently-asked-questions</div>
             <div class="faq-item" onclick="this.classList.toggle('open')">
-                <div class="faq-q">What is AQMath?</div>
-                <div class="faq-a">A non-custodial tool for long-term passive crypto portfolio management using DCA and quantitative optimization (Risk Parity).</div>
+                <div class="faq-q" data-i18n="app.faq.q1">What is AQMath?</div>
+                <div class="faq-a" data-i18n="app.faq.a1">A non-custodial tool for long-term passive crypto portfolio management using DCA and quantitative optimization (Risk Parity).</div>
             </div>
             <div class="faq-item" onclick="this.classList.toggle('open')">
-                <div class="faq-q">How does DCA distribution work?</div>
-                <div class="faq-a">You enter a total budget, and the app allocates it to tokens below their target allocation, considering risk and average cost.</div>
+                <div class="faq-q" data-i18n="app.faq.q2">How does DCA distribution work?</div>
+                <div class="faq-a" data-i18n="app.faq.a2">You enter a total budget, and the app allocates it to tokens below their target allocation, considering risk and average cost.</div>
             </div>
             <div class="faq-item" onclick="this.classList.toggle('open')">
-                <div class="faq-q">What does the Quantum Engine do?</div>
-                <div class="faq-a">It uses 180 days of price history to compute optimal allocation weights (Risk Parity) so each token contributes equally to portfolio risk.</div>
+                <div class="faq-q" data-i18n="app.faq.q3">What does the Quantum Engine do?</div>
+                <div class="faq-a" data-i18n="app.faq.a3">It uses 180 days of price history to compute optimal allocation weights (Risk Parity) so each token contributes equally to portfolio risk.</div>
             </div>
             <div class="faq-item" onclick="this.classList.toggle('open')">
-                <div class="faq-q">How to import data?</div>
-                <div class="faq-a">You can manually enter, import a CSV with transactions (Date, Type, Symbol, Amount) or load a previously exported JSON.</div>
+                <div class="faq-q" data-i18n="app.faq.q4">How to import data?</div>
+                <div class="faq-a" data-i18n="app.faq.a4">You can manually enter, import a CSV with transactions (Date, Type, Symbol, Amount) or load a previously exported JSON.</div>
             </div>
             <div class="faq-item" onclick="this.classList.toggle('open')">
                 <div class="faq-q">What do &#10052;&#65039; / &#128293; mean?</div>
                 <div class="faq-a">Freeze (&#10052;&#65039;) excludes the token from DCA and optimization; useful for positions you don&rsquo;t want to change.</div>
             </div>
             <div class="faq-item" onclick="this.classList.toggle('open')">
-                <div class="faq-q">Why the &#9888;&#65039; warning?</div>
-                <div class="faq-a">The token has less than 180 days of price history &ndash; optimization results are less reliable.</div>
+                <div class="faq-q" data-i18n="app.faq.q6">Why the &#9888;&#65039; warning?</div>
+                <div class="faq-a" data-i18n="app.faq.a6">The token has less than 180 days of price history – optimization results are less reliable.</div>
             </div>
             <div class="faq-item" onclick="this.classList.toggle('open')">
-                <div class="faq-q">What is Safe-Haven (USDC)?</div>
-                <div class="faq-a">When enabled, USDC acts as a stablecoin buffer. Excess funds from hard caps and unallocated DCA budget flow into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token.</div>
+                <div class="faq-q" data-i18n="app.faq.q7">What is Safe-Haven (USDC)?</div>
+                <div class="faq-a" data-i18n="app.faq.a7">When enabled, USDC acts as a stablecoin buffer. Excess funds from hard caps and unallocated DCA budget flow into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token.</div>
             </div>
             <div class="faq-item" onclick="this.classList.toggle('open')">
-                <div class="faq-q">Is my data safe?</div>
-                <div class="faq-a">Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in-memory, and discarded immediately. Non-custodial by design.</div>
+                <div class="faq-q" data-i18n="app.faq.q8">Is my data safe?</div>
+                <div class="faq-a" data-i18n="app.faq.a8">Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in-memory, and discarded immediately. Non-custodial by design.</div>
             </div>
         </div>
     </aside>
@@ -635,26 +635,26 @@
             <div class="tc">
                 <div class="tc-bar">
                     <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                    <span class="tc-title">--allocation</span>
+                    <span class="tc-title" data-i18n="app.allocationTitle">--allocation</span>
                 </div>
                 <div class="tc-body">
-                    <div class="chart-wrap"><canvas id="chart"></canvas><div class="chart-center"><div class="chart-cv" id="cCV">—</div><div class="chart-cl">Tokens</div></div></div>
+                    <div class="chart-wrap"><canvas id="chart"></canvas><div class="chart-center"><div class="chart-cv" id="cCV">—</div><div class="chart-cl" data-i18n="app.tokens">Tokens</div></div></div>
                     <div class="legend" id="legend"></div>
                 </div>
             </div>
             <div class="tc">
                 <div class="tc-bar">
                     <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                    <span class="tc-title">--overview</span>
+                    <span class="tc-title" data-i18n="app.overviewTitle">--overview</span>
                 </div>
                 <div class="tc-body">
                     <div class="sum-grid">
-                        <div class="sum-item"><div class="sum-l">Total</div><div class="sum-v" id="sTotalVal">$0.00</div></div>
+                        <div class="sum-item"><div class="sum-l" data-i18n="app.total">Total</div><div class="sum-v" id="sTotalVal">$0.00</div></div>
                         <div class="sum-item"><div class="sum-l">P&L</div><div class="sum-v" id="sPnl">—</div></div>
-                        <div class="sum-item"><div class="sum-l">Largest</div><div class="sum-v" id="sLargest">—</div></div>
-                        <div class="sum-item"><div class="sum-l">Max Drift</div><div class="sum-v" id="sMaxDrift">—</div></div>
-                        <div class="sum-item"><div class="sum-l">DCA needed</div><div class="sum-v" id="sNeedReb">—</div></div>
-                        <div class="sum-item"><div class="sum-l">Allocation</div><div class="sum-v" id="sAllocSt">—</div></div>
+                        <div class="sum-item"><div class="sum-l" data-i18n="app.largest">Largest</div><div class="sum-v" id="sLargest">—</div></div>
+                        <div class="sum-item"><div class="sum-l" data-i18n="app.maxDrift">Max Drift</div><div class="sum-v" id="sMaxDrift">—</div></div>
+                        <div class="sum-item"><div class="sum-l" data-i18n="app.dcaNeeded">DCA needed</div><div class="sum-v" id="sNeedReb">—</div></div>
+                        <div class="sum-item"><div class="sum-l" data-i18n="app.allocationStat">Allocation</div><div class="sum-v" id="sAllocSt">—</div></div>
                     </div>
                     <div class="rebalance-reminder" id="reminderBox"><span id="reminderTxt">No scheduled rebalance.</span></div>
                 </div>
@@ -664,11 +664,11 @@
         <div class="tc">
             <div class="tc-bar">
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title">--holdings-rebalance-engine</span>
+                <span class="tc-title" data-i18n="app.holdingsTitle">--holdings-rebalance-engine</span>
             </div>
             <div class="tc-body" style="padding:0;">
                 <div class="tbl-wrap" id="tblWrap">
-                    <div class="empty"><div class="empty-ico">[∅]</div><div class="empty-txt">Portfolio empty</div></div>
+                    <div class="empty"><div class="empty-ico">[∅]</div><div class="empty-txt" data-i18n="app.portfolioEmpty">Portfolio empty</div></div>
                 </div>
             </div>
         </div>
@@ -676,14 +676,14 @@
         <div class="tc">
             <div class="tc-bar">
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title">--portfolio-history</span>
+                <span class="tc-title" data-i18n="app.historyTitle">--portfolio-history</span>
                 <div class="tc-right">
-                    <button class="tc-action" onclick="saveSnapshot()">Save Snapshot</button>
+                    <button class="tc-action" onclick="saveSnapshot()" data-i18n="app.saveSnapshot">Save Snapshot</button>
                 </div>
             </div>
             <div class="tc-body">
                 <div class="history-chart-wrap"><canvas id="historyChart"></canvas></div>
-                <div class="fg-hint">Automatically updated after DCA distribution.</div>
+                <div class="fg-hint" data-i18n="app.historyHint">Automatically updated after DCA distribution.</div>
             </div>
         </div>
 
@@ -691,7 +691,7 @@
         <div class="tc">
             <div class="tc-bar">
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title">--live-markets</span>
+                <span class="tc-title" data-i18n="app.liveMarkets">--live-markets</span>
             </div>
             <div class="tc-body" style="padding:0;">
                 <div class="lp-market-grid" id="appMarketWidgets">
@@ -708,7 +708,7 @@
     <div class="logo-box-mini">AQ</div>
     <span>AQMath 2026</span>
     <span style="margin-left:12px;color:var(--dim);">|</span>
-    <span style="margin-left:12px;">AQMath does not provide financial advice.</span>
+    <span data-i18n="app.footerDisclaimer">AQMath does not provide financial advice.</span>
 </footer>
 
 </div><!-- /appView -->
@@ -724,7 +724,7 @@
             <div class="logo-box">AQ</div>
             <div>
                 <div class="logo-name">AQMath</div>
-                <div class="logo-tag">system documentation</div>
+                <div class="logo-tag" data-i18n="doc.logoTag">system documentation</div>
             </div>
         </div>
         <div class="lp-nav-links">
@@ -735,44 +735,44 @@
     </nav>
 
     <nav class="doc-nav-sidebar">
-        <a href="#doc-intro" class="doc-nav-head">Introduction</a>
-        <a href="#doc-what" class="doc-nav-sub">What is AQMath</a>
-        <a href="#doc-who" class="doc-nav-sub">Who It&rsquo;s For</a>
-        <a href="#doc-arch" class="doc-nav-head">Architecture</a>
-        <a href="#doc-sysdiag" class="doc-nav-sub">System Diagram</a>
-        <a href="#doc-dataflow" class="doc-nav-sub">Data Flow</a>
-        <a href="#doc-cleaning" class="doc-nav-sub">Data Cleaning</a>
-        <a href="#doc-zk" class="doc-nav-sub">Non-Custodial Privacy</a>
-        <a href="#doc-portfolio" class="doc-nav-head">Portfolio</a>
-        <a href="#doc-metrics" class="doc-nav-sub">Position Metrics</a>
-        <a href="#doc-pnl" class="doc-nav-sub">P&amp;L Tracking</a>
-        <a href="#doc-dca" class="doc-nav-head">DCA Engine</a>
-        <a href="#doc-dca-overview" class="doc-nav-sub">Overview</a>
-        <a href="#doc-iterative" class="doc-nav-sub">How It Works</a>
-        <a href="#doc-small-dca" class="doc-nav-sub">Small DCA Rule</a>
-        <a href="#doc-defense" class="doc-nav-head">DCA Safety Pipeline</a>
-        <a href="#doc-circuit" class="doc-nav-sub">L1 &ndash; Circuit Breaker</a>
-        <a href="#doc-safety" class="doc-nav-sub">L2 &ndash; Safety Factor</a>
-        <a href="#doc-trend" class="doc-nav-sub">L3 &ndash; Trend Filter</a>
-        <a href="#doc-apy" class="doc-nav-sub">L4 &ndash; APY Filter</a>
-        <a href="#doc-hardcaps" class="doc-nav-sub">L5 &ndash; Hard Caps</a>
-        <a href="#doc-riskbudget" class="doc-nav-sub">L6 &ndash; Risk Budget</a>
-        <a href="#doc-safehaven" class="doc-nav-sub">L7 &ndash; Safe-Haven</a>
-        <a href="#doc-volatility" class="doc-nav-head">Volatility</a>
-        <a href="#doc-aqmath" class="doc-nav-head">AQMath Engine (Pro)</a>
-        <a href="#doc-erc-solver" class="doc-nav-sub">Equal Risk Contribution</a>
-        <a href="#doc-kkt" class="doc-nav-sub">KKT Projection</a>
-        <a href="#doc-correlations" class="doc-nav-sub">Correlation Analysis</a>
-        <a href="#doc-privacy" class="doc-nav-head">Privacy Deep-Dive</a>
-        <a href="#doc-separation" class="doc-nav-sub">Data Separation</a>
-        <a href="#doc-backend-never" class="doc-nav-sub">What Backend Never Sees</a>
-        <a href="#doc-zk-model" class="doc-nav-sub">ZK Privacy Model</a>
+        <a href="#doc-intro" class="doc-nav-head" data-i18n="doc.nav.intro">Introduction</a>
+        <a href="#doc-what" class="doc-nav-sub" data-i18n="doc.nav.what">What is AQMath</a>
+        <a href="#doc-who" class="doc-nav-sub" data-i18n="doc.nav.who">Who It&rsquo;s For</a>
+        <a href="#doc-arch" class="doc-nav-head" data-i18n="doc.nav.arch">Architecture</a>
+        <a href="#doc-sysdiag" class="doc-nav-sub" data-i18n="doc.nav.sysdiag">System Diagram</a>
+        <a href="#doc-dataflow" class="doc-nav-sub" data-i18n="doc.nav.dataflow">Data Flow</a>
+        <a href="#doc-cleaning" class="doc-nav-sub" data-i18n="doc.nav.cleaning">Data Cleaning</a>
+        <a href="#doc-zk" class="doc-nav-sub" data-i18n="doc.nav.zk">Non-Custodial Privacy</a>
+        <a href="#doc-portfolio" class="doc-nav-head" data-i18n="doc.nav.portfolio">Portfolio</a>
+        <a href="#doc-metrics" class="doc-nav-sub" data-i18n="doc.nav.metrics">Position Metrics</a>
+        <a href="#doc-pnl" class="doc-nav-sub" data-i18n="doc.nav.pnl">P&amp;L Tracking</a>
+        <a href="#doc-dca" class="doc-nav-head" data-i18n="doc.nav.dca">DCA Engine</a>
+        <a href="#doc-dca-overview" class="doc-nav-sub" data-i18n="doc.nav.dcaOverview">Overview</a>
+        <a href="#doc-iterative" class="doc-nav-sub" data-i18n="doc.nav.iterative">How It Works</a>
+        <a href="#doc-small-dca" class="doc-nav-sub" data-i18n="doc.nav.smallDca">Small DCA Rule</a>
+        <a href="#doc-defense" class="doc-nav-head" data-i18n="doc.nav.defense">DCA Safety Pipeline</a>
+        <a href="#doc-circuit" class="doc-nav-sub" data-i18n="doc.nav.circuit">L1 — Circuit Breaker</a>
+        <a href="#doc-safety" class="doc-nav-sub" data-i18n="doc.nav.safety">L2 — Safety Factor</a>
+        <a href="#doc-trend" class="doc-nav-sub" data-i18n="doc.nav.trend">L3 — Trend Filter</a>
+        <a href="#doc-apy" class="doc-nav-sub" data-i18n="doc.nav.apy">L4 — APY Filter</a>
+        <a href="#doc-hardcaps" class="doc-nav-sub" data-i18n="doc.nav.hardcaps">L5 — Hard Caps</a>
+        <a href="#doc-riskbudget" class="doc-nav-sub" data-i18n="doc.nav.riskbudget">L6 — Risk Budget</a>
+        <a href="#doc-safehaven" class="doc-nav-sub" data-i18n="doc.nav.safehaven">L7 — Safe-Haven</a>
+        <a href="#doc-volatility" class="doc-nav-head" data-i18n="doc.nav.volatility">Volatility</a>
+        <a href="#doc-aqmath" class="doc-nav-head" data-i18n="doc.nav.aqmath">AQMath Engine (Pro)</a>
+        <a href="#doc-erc-solver" class="doc-nav-sub" data-i18n="doc.nav.erc">Equal Risk Contribution</a>
+        <a href="#doc-kkt" class="doc-nav-sub" data-i18n="doc.nav.kkt">KKT Projection</a>
+        <a href="#doc-correlations" class="doc-nav-sub" data-i18n="doc.nav.correlations">Correlation Analysis</a>
+        <a href="#doc-privacy" class="doc-nav-head" data-i18n="doc.nav.privacy">Privacy Deep-Dive</a>
+        <a href="#doc-separation" class="doc-nav-sub" data-i18n="doc.nav.separation">Data Separation</a>
+        <a href="#doc-backend-never" class="doc-nav-sub" data-i18n="doc.nav.backendNever">What Backend Never Sees</a>
+        <a href="#doc-zk-model" class="doc-nav-sub" data-i18n="doc.nav.zkModel">ZK Privacy Model</a>
     </nav>
 
     <div class="doc-wrap doc-has-sidebar">
         <div class="doc-hero-block">
-            <h1>System Documentation</h1>
-            <div class="doc-sub">AQMath Quantitative Portfolio Rebalancer &mdash; Technical Reference</div>
+            <h1 data-i18n="doc.title">System Documentation</h1>
+            <div class="doc-sub" data-i18n="doc.subtitle">AQMath Quantitative Portfolio Rebalancer — Technical Reference</div>
             <div class="doc-ver">v1.0 &mdash; June 2026</div>
         </div>
 
