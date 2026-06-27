@@ -21,6 +21,11 @@ window.addEventListener('hashchange', handleRoute);
 function showProModal() { document.getElementById('proModal').classList.remove('hidden'); }
 function hideProModal() { document.getElementById('proModal').classList.add('hidden'); }
 
+// ============ LEGAL MODALS ============
+function showImpressum() { document.getElementById('impressumModal').classList.remove('hidden'); }
+function showPrivacyPolicy() { document.getElementById('privacyModal').classList.remove('hidden'); }
+function hideLegalModal(id) { document.getElementById(id).classList.add('hidden'); }
+
 // ============ TOAST NOTIFICATIONS ============
 let toastTimer = null;
 function showToast(msg, type, actions) {

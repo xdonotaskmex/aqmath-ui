@@ -58,11 +58,9 @@
             <a class="lp-nav-link lp-nav-cta" href="#/app">open app</a>
             <a class="lp-nav-link lp-nav-tab" href="https://x.com/aqmathapp" target="_blank" rel="noopener">[ x ]</a>
             <a class="lp-nav-link lp-nav-tab" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">[ tg ]</a>
-            <div class="lp-nav-link lp-lang-wrap">
-                <select class="lp-lang-select" id="langSelect" onchange="switchLang(this.value)">
-                    <option value="en">[ en ]</option>
-                    <option value="zh-CN">[ 中文 ]</option>
-                </select>
+            <div class="lp-lang-wrap">
+                <button type="button" class="lp-lang-btn lp-lang-active" data-lang="en" onclick="switchLang('en')">[ en ]</button>
+                <button type="button" class="lp-lang-btn" data-lang="zh-CN" onclick="switchLang('zh-CN')">[ 中文 ]</button>
             </div>
         </div>
     </nav>
@@ -362,6 +360,8 @@
         Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted.<br>
         &copy; 2026 AQMath &mdash; Secure Backend Engine. Private. Non-Custodial.<br>
         <a href="#/docs" style="color:var(--muted);">Documentation</a> &middot;
+        <a href="javascript:void(0)" onclick="showImpressum()">Impressum</a> &middot;
+        <a href="javascript:void(0)" onclick="showPrivacyPolicy()">Privacy &amp; Legacy Policy</a> &middot;
         Follow: <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">X (Twitter)</a>
     </div>
 </div>
@@ -385,6 +385,54 @@
             <button class="lp-pro-close" style="width:100%;margin-top:8px;background:rgba(168,85,247,0.12);border-color:rgba(168,85,247,0.3);color:var(--purple);" onclick="document.getElementById('iBetaKey').value=document.getElementById('iBetaKeyModal').value;activateBeta()">[ Activate Beta ]</button>
         </div>
         <button class="lp-pro-close" onclick="hideProModal()" style="margin-top:12px;">[ Close ]</button>
+    </div>
+</div>
+
+<!-- ============ IMPRESSUM MODAL ============ -->
+<div class="legal-modal hidden" id="impressumModal" onclick="hideLegalModal('impressumModal')">
+    <div class="legal-modal-box" onclick="event.stopPropagation()">
+        <h2>&#128196; Impressum</h2>
+        <h3>Responsible for content according to &sect; 5 TMG (German Telemedia Act):</h3>
+        <p>Momir Demirov<br>Rinnen&auml;ckerstr. 2<br>71332 Waiblingen<br>Germany</p>
+        <h3>Contact Information:</h3>
+        <p>Email: momo.demirov@gmail.com</p>
+        <h3>Disclaimer:</h3>
+        <p>The content of this website has been created with the greatest possible care. However, I cannot guarantee the accuracy, completeness, or timeliness of the content. As a service provider, I am responsible for my own content on these pages under general laws (&sect; 7 Abs.1 TMG). According to &sect;&sect; 8 to 10 TMG, however, I am not obliged to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity. Obligations to remove or block the use of information under general laws remain unaffected. Liability in this regard is only possible from the time of knowledge of a specific infringement. Upon notification of such violations, I will remove the content immediately.</p>
+        <h3>Liability for Links:</h3>
+        <p>This website may contain links to external websites of third parties, over whose content I have no influence. Therefore, I cannot assume any liability for this external content. The respective provider or operator of the pages is always responsible for the content of the linked pages. The linked pages were checked for possible legal violations at the time of linking. Illegal content was not recognizable at the time of linking. However, permanent monitoring of the content of the linked pages is not reasonable without concrete evidence of a violation of the law. Upon notification of violations, I will remove such links immediately.</p>
+        <h3>Copyright:</h3>
+        <p>The content and works created by me on these pages are subject to German copyright law. Duplication, processing, distribution, or any form of commercialization of such material beyond the scope of copyright law requires my prior written consent. Downloads and copies of this site are only permitted for private, non-commercial use.</p>
+        <button class="legal-modal-close" onclick="hideLegalModal('impressumModal')">[ Close ]</button>
+    </div>
+</div>
+
+<!-- ============ PRIVACY &amp; LEGACY POLICY MODAL ============ -->
+<div class="legal-modal hidden" id="privacyModal" onclick="hideLegalModal('privacyModal')">
+    <div class="legal-modal-box" onclick="event.stopPropagation()">
+        <h2>&#128196; Privacy &amp; Legacy Policy</h2>
+        <h3>General Principles:</h3>
+        <ul>
+            <li>No accounts, no wallets, no databases.</li>
+            <li>No personal data is stored, logged, or persisted on servers.</li>
+            <li>All computations are processed in-memory and discarded immediately.</li>
+            <li>Only localStorage on the user&rsquo;s device keeps portfolio preferences.</li>
+            <li>Prices are fetched directly from Binance or other public APIs; no backend call is needed for market data.</li>
+            <li>Backend processing (when used for optimization) is ephemeral &mdash; data is processed transiently and discarded immediately.</li>
+        </ul>
+        <h3>Data Handling:</h3>
+        <ul>
+            <li>Portfolio amounts are not stored server-side.</li>
+            <li>Token symbols may be transmitted for computation, but they are processed in-memory and discarded immediately.</li>
+            <li>No user-identifiable information is collected, stored, or shared.</li>
+            <li>No cookies or tracking mechanisms are used beyond essential localStorage functionality.</li>
+        </ul>
+        <h3>Legal Basis (GDPR/DSGVO):</h3>
+        <p>As no personal data is collected or stored, the requirements of GDPR/DSGVO regarding consent, access, rectification, and deletion do not apply. Users retain full control of their data locally on their own devices.</p>
+        <h3>Disclaimer of Liability:</h3>
+        <p>This service is provided &ldquo;as is&rdquo; without warranties of any kind. All financial decisions remain the responsibility of the user. No liability is assumed for losses or damages resulting from the use of this service.</p>
+        <h3>Legacy Policy:</h3>
+        <p>In the event of discontinuation of this service, no user data will remain, as nothing is stored server-side. LocalStorage data remains solely on the user&rsquo;s device and can be deleted by the user at any time.</p>
+        <button class="legal-modal-close" onclick="hideLegalModal('privacyModal')">[ Close ]</button>
     </div>
 </div>
 
@@ -703,6 +751,10 @@
     <span>AQMath 2026</span>
     <span style="margin-left:12px;color:var(--dim);">|</span>
     <span data-i18n="app.footerDisclaimer">AQMath does not provide financial advice.</span>
+    <span style="margin-left:12px;color:var(--dim);">|</span>
+    <a href="javascript:void(0)" onclick="showImpressum()" style="color:var(--blue);text-decoration:none;">Impressum</a>
+    <span style="margin-left:8px;color:var(--dim);">|</span>
+    <a href="javascript:void(0)" onclick="showPrivacyPolicy()" style="color:var(--blue);text-decoration:none;">Privacy &amp; Legacy Policy</a>
 </footer>
 
 </div><!-- /appView -->
@@ -1245,8 +1297,10 @@ function loadLocale(lang) {
 }
 
 function switchLang(lang) {
-    var sel = document.getElementById('langSelect');
-    if (sel) sel.value = lang;
+    // Update active button state
+    document.querySelectorAll('.lp-lang-btn').forEach(function(btn) {
+        btn.classList.toggle('lp-lang-active', btn.getAttribute('data-lang') === lang);
+    });
     localStorage.setItem('aqmath-lang', lang);
 
     loadLocale(lang).then(function(res) {
