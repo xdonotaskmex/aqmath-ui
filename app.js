@@ -579,9 +579,55 @@ function calcToken(t, portVal) {
     return { curVal, curPct, drift, action, actionClass, pnl, avgPrice, avgType, yieldGap, selfSustaining, delta, safeHaven: false };
 }
 
+// CoinGecko ID map for tokens where Binance has wrong/missing prices
+const TOKEN_CG_MAP = {
+    'DAG': 'constellation-dag',
+    'EWT': 'energy-web-token',
+    'TICS': null,      // use CoinGecko search (ID unknown)
+    'ATH': null,
+    'PEAQ': 'peaq-2',
+    'CELESTIA': 'celestia',
+    'PYTH': 'pyth-network',
+};
+
 async function dohvatiCijenu(symbol) {
     const sym = symbol.toUpperCase();
-    // Try Binance first (free, no key needed)
+    const cgId = TOKEN_CG_MAP[sym];
+
+    // If token has a known CoinGecko ID, use it directly (skip Binance)
+    if (cgId) {
+        try {
+            const priceRes = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cgId}&vs_currencies=usd`);
+            if (priceRes.ok) {
+                const priceData = await priceRes.json();
+                if (priceData[cgId] && priceData[cgId].usd) {
+                    return priceData[cgId].usd;
+                }
+            }
+        } catch(e) { /* CoinGecko failed, fall through to Binance */ }
+    }
+
+    // If token is in CG map but ID is null, use CoinGecko search
+    if (sym in TOKEN_CG_MAP && !cgId) {
+        try {
+            const searchRes = await fetch(`https://api.coingecko.com/api/v3/search?query=${sym}`);
+            if (searchRes.ok) {
+                const searchData = await searchRes.json();
+                if (searchData.coins && searchData.coins.length > 0) {
+                    const coinId = searchData.coins[0].id;
+                    const priceRes = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd`);
+                    if (priceRes.ok) {
+                        const priceData = await priceRes.json();
+                        if (priceData[coinId] && priceData[coinId].usd) {
+                            return priceData[coinId].usd;
+                        }
+                    }
+                }
+            }
+        } catch(e) { /* CoinGecko search failed, fall through to Binance */ }
+    }
+
+    // Try Binance (free, no key needed)
     try {
         const pair = sym + 'USDT';
         const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${pair}`);
@@ -646,6 +692,8 @@ async function osvjeziSveCijene() {
         data.forEach(c => {
             if (c.symbol && c.current_price) priceMap[c.symbol] = c.current_price;
         });
+        // Remove Binance prices for tokens that must use CoinGecko (Binance has wrong/missing prices)
+        Object.keys(TOKEN_CG_MAP).forEach(sym => { delete priceMap[sym]; });
         // Fallback: fetch individual prices for tokens not in WS tracked list
         const missing = portfolio.filter(t => !priceMap[t.sym] && !['USDC','USDT','DAI','BUSD','TUSD','FDUSD','USDP'].includes(t.sym));
         for (const t of missing) {
@@ -1650,6 +1698,7 @@ function render() {
 // ============ EXPOSE TO GLOBAL SCOPE (for HTML onclick handlers) ============
 Object.assign(window, {
     showProModal, hideProModal, showToast, hideToast,
+    showImpressum, showPrivacyPolicy, hideLegalModal,
     activateBeta, deactivateBeta,
     saveSnapshot, toggleGlobalSafeHaven, deployUSDC,
     osvjeziSveCijene, importCSV, dodajToken,

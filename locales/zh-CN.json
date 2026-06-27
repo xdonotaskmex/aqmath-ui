@@ -62,7 +62,7 @@
   "community": {
     "title": "--社区信号"
   },
-  "disclaimer": "AQMath 不提供投资建议。所有计算基于历史数据和数学模型。<br>数学处理在安全后端运行；您的投资组合数据在内存中处理，从不持久化。<br>© 2026 AQMath — 安全后端引擎。隐私。非托管。<br><a href=\"#/docs\" style=\"color:var(--muted);\">文档</a> · <a href=\"javascript:void(0)\" onclick=\"showImpressum()\">法律声明</a> · <a href=\"javascript:void(0)\" onclick=\"showPrivacyPolicy()\">隐私与遗留政策</a> · 关注：<a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">X (Twitter)</a>",
+  "disclaimer": "AQMath 不提供投资建议。所有计算基于历史数据和数学模型。<br>数学处理在安全后端运行；您的投资组合数据在内存中处理，从不持久化。<br>© 2026 AQMath — 安全后端引擎。隐私。非托管。<br><a href=\"#/docs\">文档</a> · <a href=\"javascript:void(0)\" onclick=\"showImpressum()\">法律声明</a> · <a href=\"javascript:void(0)\" onclick=\"showPrivacyPolicy()\">隐私与遗留政策</a> · 关注：<a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">X (Twitter)</a>",
     "footer": {
       "impressum": "法律声明",
       "privacyPolicy": "隐私与遗留政策"

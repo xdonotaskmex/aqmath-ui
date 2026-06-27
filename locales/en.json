@@ -62,7 +62,7 @@
   "community": {
     "title": "--community-signals"
   },
-  "disclaimer": "AQMath does not provide financial advice. All calculations are based on historical data and mathematical models.<br>Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted.<br>© 2026 AQMath — Secure Backend Engine. Private. Non-Custodial.<br><a href=\"#/docs\" style=\"color:var(--muted);\">Documentation</a> · <a href=\"javascript:void(0)\" onclick=\"showImpressum()\">Impressum</a> · <a href=\"javascript:void(0)\" onclick=\"showPrivacyPolicy()\">Privacy & Legacy Policy</a> · Follow: <a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">X (Twitter)</a>",
+  "disclaimer": "AQMath does not provide financial advice. All calculations are based on historical data and mathematical models.<br>Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted.<br>© 2026 AQMath — Secure Backend Engine. Private. Non-Custodial.<br><a href=\"#/docs\">Documentation</a> · <a href=\"javascript:void(0)\" onclick=\"showImpressum()\">Impressum</a> · <a href=\"javascript:void(0)\" onclick=\"showPrivacyPolicy()\">Privacy & Legacy Policy</a> · Follow: <a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">X (Twitter)</a>",
     "footer": {
       "impressum": "Impressum",
       "privacyPolicy": "Privacy & Legacy Policy"
