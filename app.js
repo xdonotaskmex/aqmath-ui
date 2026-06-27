@@ -680,6 +680,33 @@ async function dohvatiViseCijena(symbols) {
     } catch { return {}; }
 }
 
+// Batch fetch all TOKEN_CG_MAP prices in a single CoinGecko API call
+async function fetchCoinGeckoBatch() {
+    const ids = Object.values(TOKEN_CG_MAP).filter(Boolean);
+    const symById = {};
+    Object.entries(TOKEN_CG_MAP).forEach(([sym, id]) => { if (id) symById[id] = sym; });
+    const result = {};
+    try {
+        const url = `https://api.coingecko.com/api/v3/simple/price?ids=${ids.join(',')}&vs_currencies=usd`;
+        console.log('[AQMath] CoinGecko batch fetch:', ids.length, 'tokens');
+        const res = await fetch(url);
+        if (!res.ok) {
+            console.warn('[AQMath] CoinGecko batch failed:', res.status, res.statusText);
+            return result;
+        }
+        const data = await res.json();
+        ids.forEach(id => {
+            if (data[id] && data[id].usd) {
+                result[symById[id]] = data[id].usd;
+            }
+        });
+        console.log('[AQMath] CoinGecko batch result:', Object.keys(result).length, 'prices fetched');
+    } catch(e) {
+        console.warn('[AQMath] CoinGecko batch error:', e.message);
+    }
+    return result;
+}
+
 async function osvjeziSveCijene() {
     if (portfolio.length === 0) return showToast('no positions.', 'warning');
     const btn = document.getElementById('btnSyncAll');
@@ -694,7 +721,10 @@ async function osvjeziSveCijene() {
         });
         // Remove Binance prices for tokens that must use CoinGecko (Binance has wrong/missing prices)
         Object.keys(TOKEN_CG_MAP).forEach(sym => { delete priceMap[sym]; });
-        // Fallback: fetch individual prices for tokens not in WS tracked list
+        // Batch fetch CoinGecko prices for mapped tokens (single API call, avoids rate-limit)
+        const cgPrices = await fetchCoinGeckoBatch();
+        Object.entries(cgPrices).forEach(([sym, price]) => { priceMap[sym] = price; });
+        // Fallback: fetch individual prices for remaining tokens not yet resolved
         const missing = portfolio.filter(t => !priceMap[t.sym] && !['USDC','USDT','DAI','BUSD','TUSD','FDUSD','USDP'].includes(t.sym));
         for (const t of missing) {
             const p = await dohvatiCijenu(t.sym);
@@ -707,7 +737,8 @@ async function osvjeziSveCijene() {
         });
         render();
         updatePortfolioATH();
-        showToast(`synced ${cnt} prices from Binance.`, 'success');
+        const cgCount = Object.keys(cgPrices).length;
+        showToast(`synced ${cnt} prices (${cgCount} from CoinGecko, rest from Binance).`, 'success');
     } catch(e) { showToast('sync error: ' + e.message, 'error'); }
     finally {
         btn.textContent = originalText;
