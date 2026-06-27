@@ -581,10 +581,10 @@ function calcToken(t, portVal) {
 
 // CoinGecko ID map for tokens where Binance has wrong/missing prices
 const TOKEN_CG_MAP = {
-    'DAG': 'constellation-dag',
+    'DAG': 'constellation-labs',
     'EWT': 'energy-web-token',
-    'TICS': null,      // use CoinGecko search (ID unknown)
-    'ATH': null,
+    'TICS': 'qubetics',
+    'ATH': 'aethir',
     'PEAQ': 'peaq-2',
     'CELESTIA': 'celestia',
     'PYTH': 'pyth-network',
