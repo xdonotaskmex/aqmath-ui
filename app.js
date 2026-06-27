@@ -290,6 +290,12 @@ function ensureUSDC() {
 
 const r2 = (n, d = 2) => Math.round(n * 10**d) / 10**d;
 const fmtUSD = n => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmtPrice = p => {
+    if (p >= 1) return p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (p >= 0.01) return p.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+    if (p >= 0.0001) return p.toLocaleString('en-US', { minimumFractionDigits: 6, maximumFractionDigits: 6 });
+    return p.toLocaleString('en-US', { minimumFractionDigits: 8, maximumFractionDigits: 8 });
+};
 const fmtQty = (qty, price) => {
     if (!price || price >= 1) return qty.toLocaleString('en-US', { maximumFractionDigits: 6 });
     if (price >= 0.01) return qty.toLocaleString('en-US', { maximumFractionDigits: 6 });
@@ -1580,7 +1586,7 @@ function render() {
             const c = calcToken(t, portVal);
             const barW = Math.min(c.curPct, 100), barT = Math.min(t.target, 100);
             const pnlStr = c.pnl !== null ? `${c.pnl >= 0 ? '+' : ''}${c.pnl.toFixed(2)}%` : '—';
-            const avgStr = c.avgPrice ? `$${c.avgPrice.toFixed(2)} (${c.avgType === 'down' ? '↓' : c.avgType === 'up' ? '↑' : '→'})` : '—';
+            const avgStr = c.avgPrice ? `$${fmtPrice(c.avgPrice)} (${c.avgType === 'down' ? '↓' : c.avgType === 'up' ? '↑' : '→'})` : '—';
             const ygStr = c.yieldGap >= 0 ? `+${c.yieldGap.toFixed(1)}%` : `${c.yieldGap.toFixed(1)}%`;
             const frozenIcon = t.frozen ? '❄️' : '🔥';
             const warnIcon = t.insufficientHistory ? `<span class="warn-icon" title="Less than 180 days of history – unreliable data"></span>` : '';
@@ -1588,7 +1594,7 @@ function render() {
             return `<tr${t.safeHaven ? ' class="row-safe-haven"' : ''}>
                 <td><span class="sym" style="color:${colors[i]}">${t.sym}${warnIcon}${safeIcon}</span></td>
                 <td>${fmtQty(t.amount, t.price)}</td>
-                <td>$${fmtUSD(t.price)}</td>
+                <td>$${fmtPrice(t.price)}</td>
                 <td>$${fmtUSD(c.curVal)}</td>
                 <td>${c.curPct.toFixed(2)}% <span class="mbar"><span class="mbar-f" style="width:${barW}%;background:${colors[i]}"></span><span class="mbar-t" style="left:${barT}%"></span></span></td>
                 <td>${t.target.toFixed(1)}%</td>

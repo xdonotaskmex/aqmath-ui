@@ -1157,12 +1157,13 @@
 }
 .lp-lang-select {
     font-family: var(--mono); font-size: 0.6rem;
-    color: var(--muted); background: transparent;
+    color: var(--text); background: transparent;
     border: none; border-radius: 0;
-    padding: 0; letter-spacing: 2px;
+    padding: 2px 4px; letter-spacing: 2px;
     cursor: pointer; outline: none;
     -webkit-appearance: none; appearance: none;
     text-transform: lowercase;
+    min-width: 50px; text-align: center;
 }
 .lp-lang-wrap:hover {
     border-color: var(--border);
