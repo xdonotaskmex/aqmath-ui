@@ -299,6 +299,24 @@
     .sh-dbtn:hover { background: rgba(56,189,248,0.12); border-color: var(--blue); }
     .sh-dbtn:disabled { opacity: 0.3; cursor: not-allowed; }
 
+    /* ===== DELEVERAGE TOGGLE ===== */
+    .dl-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+        background: rgba(251,191,36,0.04); border: 1px solid rgba(251,191,36,0.15);
+        border-radius: 4px; cursor: pointer; transition: all 0.2s; }
+    .dl-row:hover { border-color: rgba(251,191,36,0.3); }
+    .dl-row.off { background: rgba(255,255,255,0.02); border-color: var(--border); }
+    .dl-sw { width: 36px; height: 20px; background: rgba(251,191,36,0.25); border-radius: 10px;
+        position: relative; flex-shrink: 0; transition: background 0.25s; }
+    .dl-sw::after { content: ''; width: 16px; height: 16px; background: var(--amber); border-radius: 50%;
+        position: absolute; top: 2px; left: 18px; transition: all 0.25s; box-shadow: 0 0 6px rgba(251,191,36,0.4); }
+    .dl-sw.off { background: rgba(255,255,255,0.1); }
+    .dl-sw.off::after { left: 2px; background: var(--muted); box-shadow: none; }
+    .dl-lbl { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 1px; color: var(--amber); font-weight: 500; display: flex; align-items: center; gap: 6px; }
+    .dl-lbl.off { color: var(--muted); }
+    .dl-dsc { font-family: var(--mono); font-size: 0.58rem; color: var(--dim); margin-top: 2px; letter-spacing: 0.5px; }
+    .dl-pro-badge { font-size: 0.45rem; padding: 1px 5px; background: rgba(251,191,36,0.12); color: var(--amber);
+        border: 1px solid rgba(251,191,36,0.25); border-radius: 3px; letter-spacing: 1px; font-weight: 600; }
+
     /* ===== USDC ROW HIGHLIGHT ===== */
     tbody tr.row-safe-haven { background: rgba(52,211,153,0.04); }
     tbody tr.row-safe-haven:hover { background: rgba(52,211,153,0.07); }

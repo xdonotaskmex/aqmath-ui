@@ -369,6 +369,48 @@ function deployUSDC() {
     showToast(`$${val.toFixed(2)} USDC moved to DCA input. click DISTRIBUTE to deploy.`, 'success');
 }
 
+// ============ DELEVERAGE TOGGLE (PRO) ============
+const DL_KEY = 'aqmath_deleverage_on';
+const DL_STATE_KEY = 'aqmath_deleverage_shield_state';
+function getDeleverageToggle() {
+    const v = localStorage.getItem(DL_KEY);
+    return v === null ? false : v === 'true';
+}
+function setDeleverageToggle(on) {
+    localStorage.setItem(DL_KEY, on ? 'true' : 'false');
+}
+function getDeleverageShieldState() {
+    const v = localStorage.getItem(DL_STATE_KEY);
+    return v ? JSON.parse(v) : null;
+}
+function setDeleverageShieldState(state) {
+    if (state) {
+        localStorage.setItem(DL_STATE_KEY, JSON.stringify(state));
+    } else {
+        localStorage.removeItem(DL_STATE_KEY);
+    }
+}
+function toggleDeleverage() {
+    if (!isPro) { showProModal(); return; }
+    setDeleverageToggle(!getDeleverageToggle());
+    updateDeleverageUI();
+}
+function updateDeleverageUI() {
+    const on = getDeleverageToggle();
+    const sw = document.getElementById('dlSwitch');
+    const lb = document.getElementById('dlLabel');
+    const ds = document.getElementById('dlDesc');
+    const row = document.getElementById('dlToggleRow');
+    if (!sw) return;
+    sw.className = on ? 'dl-sw' : 'dl-sw off';
+    lb.className = on ? 'dl-lbl' : 'dl-lbl off';
+    lb.innerHTML = 'DELEVERAGE <span class="dl-pro-badge">PRO</span>';
+    ds.textContent = on
+        ? 'ON \u2014 shields KKT weights during downside signature'
+        : 'OFF \u2014 KKT weights pass through unmodified';
+    row.className = on ? 'dl-row' : 'dl-row off';
+}
+
 // ============ STRUCTURAL LIMITS ============
 const HARD_CAP_PER_TOKEN = 0.20;  // 20% max per risky token
 const RISK_BUDGET_TOTAL = 0.60;   // 60% max in risky assets
@@ -1346,11 +1388,19 @@ async function optimizePortfolio() {
 
     const tokens = unfrozen.map(t => ({ sym: t.sym, value: t.curVal || 0 }));
 
+    // Deleverage: send toggle state + persisted shield state
+    const deleverageEnabled = isPro && getDeleverageToggle();
+    const shieldState = deleverageEnabled ? getDeleverageShieldState() : null;
+
     try {
         const resp = await pipelineFetch(`${DCA_API_URL}/optimize`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tokens })
+            body: JSON.stringify({
+                tokens,
+                deleverage_enabled: deleverageEnabled,
+                shield_state: shieldState
+            })
         });
         const result = await resp.json();
 
@@ -1389,6 +1439,16 @@ async function optimizePortfolio() {
             t.insufficientHistory = insufficient.includes(t.sym);
         });
 
+        // Deleverage: persist shield state for next call
+        let dlInfo = null;
+        if (deleverageEnabled && result.deleverage) {
+            const dl = result.deleverage;
+            setDeleverageShieldState(dl.shield_state);
+            dlInfo = dl.diagnostics;
+        } else if (!deleverageEnabled) {
+            setDeleverageShieldState(null);
+        }
+
         lastOptimization = Date.now();
         saveState();
         render();
@@ -1423,6 +1483,19 @@ async function optimizePortfolio() {
         }
         if (insufficient.length > 0) msg += `\n\u26a0\ufe0f Insufficient history (<30d): ${insufficient.join(', ')}`;
         if (result.data_points) msg += `\nData: ${Object.entries(result.data_points).map(([s,n]) => `${s}=${n}d`).join(', ')}`;
+
+        // Deleverage diagnostics
+        if (dlInfo) {
+            msg += '\n\n\u26a1 Deleverage Shield:\n';
+            msg += `  Status: ${dlInfo.shield_active ? '\u26a1 ACTIVE' : '\u2705 NORMAL'}\n`;
+            msg += `  Target exposure: ${(dlInfo.target_exposure * 100).toFixed(1)}%\n`;
+            msg += `  Global DD: ${(dlInfo.global_dd * 100).toFixed(1)}%  |  Window DD: ${(dlInfo.current_dd * 100).toFixed(1)}%\n`;
+            msg += `  Downside vol: ${(dlInfo.ds_vol * 100).toFixed(1)}%\n`;
+            if (dlInfo.exit_reason) msg += `  Exit reason: ${dlInfo.exit_reason}\n`;
+            if (dlInfo.entry_triggered) msg += `  \u26a0\ufe0f Shield ENTRY triggered this call\n`;
+            msg += `  Risky total: ${dlInfo.risky_total}%  |  USDC: ${dlInfo.usdc_remainder}%\n`;
+        }
+
         showToast(msg, 'success');
     } catch(e) {
         hideLoading();
@@ -1706,6 +1779,7 @@ function render() {
 
     // Quantum Engine is locked for free tier - shows "PRO Coming Soon" modal
     updateSafeHavenUI();
+    updateDeleverageUI();
 }
 
 // ============ INITIALIZATION ============
@@ -1720,6 +1794,7 @@ function render() {
     loadState();
     ensureUSDC();
     updateSafeHavenUI();
+    updateDeleverageUI();
     checkBetaUI();
     render();
     updateProButtons();

@@ -688,6 +688,14 @@
                     <span class="sh-bal" id="shBalance">$0.00</span>
                     <button class="sh-dbtn" id="shDeployBtn" onclick="deployUSDC()" data-i18n="app.deployToDca">DEPLOY TO DCA</button>
                 </div>
+                <!-- DELEVERAGE TOGGLE (PRO) -->
+                <div class="dl-row" id="dlToggleRow" onclick="toggleDeleverage()" style="margin-top:8px">
+                    <div class="dl-sw off" id="dlSwitch"></div>
+                    <div>
+                        <div class="dl-lbl off" id="dlLabel">DELEVERAGE <span class="dl-pro-badge">PRO</span></div>
+                        <div class="dl-dsc" id="dlDesc">OFF — KKT weights pass through unmodified</div>
+                    </div>
+                </div>
             </div>
         </div>
 
