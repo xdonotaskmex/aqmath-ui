@@ -391,8 +391,11 @@ function setDeleverageShieldState(state) {
     }
 }
 function toggleDeleverage() {
+    console.log('[Deleverage] Click! isPro=' + isPro + ', token=' + (getBetaToken() ? 'exists' : 'none'));
     if (!isPro) { showProModal(); return; }
-    setDeleverageToggle(!getDeleverageToggle());
+    const newVal = !getDeleverageToggle();
+    setDeleverageToggle(newVal);
+    console.log('[Deleverage] Toggled to: ' + newVal);
     updateDeleverageUI();
 }
 function updateDeleverageUI() {
@@ -1806,7 +1809,7 @@ Object.assign(window, {
     showProModal, hideProModal, showToast, hideToast,
     showImpressum, showPrivacyPolicy, hideLegalModal,
     activateBeta, deactivateBeta,
-    saveSnapshot, toggleGlobalSafeHaven, deployUSDC,
+    saveSnapshot, toggleGlobalSafeHaven, deployUSDC, toggleDeleverage,
     osvjeziSveCijene, importCSV, dodajToken,
     obrisiSve, distribuirajDca, optimizePortfolio,
     exportJSON, importJSON, refreshHistory,
