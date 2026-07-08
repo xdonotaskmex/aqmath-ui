@@ -675,7 +675,7 @@ async function dohvatiCijenu(symbol) {
     // Try Binance (free, no key needed)
     try {
         const pair = sym + 'USDT';
-        const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${pair}`);
+        const res = await fetch(`${DCA_API_URL}/api/binance/price?symbol=${pair}`);
         if (res.ok) {
             const data = await res.json();
             const price = parseFloat(data.price);
@@ -707,7 +707,7 @@ async function dohvatiCijenu(symbol) {
 async function dohvatiViseCijena(symbols) {
     try {
         // Use Binance public API directly (free, no key needed, user's IP)
-        const res = await fetch('https://api.binance.com/api/v3/ticker/24hr');
+        const res = await fetch(`${DCA_API_URL}/api/binance/ticker`);
         if (!res.ok) return {};
         const tickerData = await res.json();
         const priceMap = {};
@@ -1581,7 +1581,7 @@ async function refreshHistory() {
             }
             const symbol = t.sym + 'USDT';
             try {
-                const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1d&limit=90`);
+                const res = await fetch(`${DCA_API_URL}/api/binance/klines?symbol=${symbol}&interval=1d&limit=90`);
                 if (!res.ok) continue;
                 const klines = await res.json();
                 priceMap[t.sym] = klines.map(k => parseFloat(k[4]));
