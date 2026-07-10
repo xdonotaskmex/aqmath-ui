@@ -338,7 +338,7 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
         if (res.exit_reason) events.push({ day: dayNum, type: 'FINAL', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: 'EXIT: ' + res.exit_reason });
         if (res.exit_blocked) events.push({ day: dayNum, type: 'BLOCKED', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: res.exit_block_reason });
 
-        eqA.push(unitsA * navA);
+        eqA.push(unitsA * navA + usdcR);  // FIX: include USDC reserve in total equity
         invA.push(totalInv);
         usdcT.push(usdcR);
         shT.push(sOn ? 1 : 0);
