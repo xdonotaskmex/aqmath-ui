@@ -1492,9 +1492,32 @@ async function optimizePortfolio() {
             msg += '\n\n\u26a1 Deleverage Shield:\n';
             msg += `  Status: ${dlInfo.shield_active ? '\u26a1 ACTIVE' : '\u2705 NORMAL'}\n`;
             msg += `  Target exposure: ${(dlInfo.target_exposure * 100).toFixed(1)}%\n`;
+            // Gap 2: Show effective exposure when asymmetric cap is active
+            if (dlInfo.effective_exposure != null) {
+                const effPct = (dlInfo.effective_exposure * 100).toFixed(1);
+                const tgtPct = (dlInfo.target_exposure * 100).toFixed(1);
+                if (dlInfo.effective_exposure < dlInfo.target_exposure - 0.001) {
+                    const delta = ((dlInfo.target_exposure - dlInfo.effective_exposure) * 100).toFixed(1);
+                    msg += `  Effective exposure: ${effPct}% (capped, +${delta}% remaining)\n`;
+                } else {
+                    msg += `  Effective exposure: ${effPct}%\n`;
+                }
+            }
             msg += `  Global DD: ${(dlInfo.global_dd * 100).toFixed(1)}%  |  Window DD: ${(dlInfo.current_dd * 100).toFixed(1)}%\n`;
             msg += `  Downside vol: ${(dlInfo.ds_vol * 100).toFixed(1)}%\n`;
+            // Gap 3: Show peak_ds_vol with lockout threshold
+            if (dlInfo.peak_ds_vol != null) {
+                const peakVol = (dlInfo.peak_ds_vol * 100).toFixed(1);
+                const lockout = (dlInfo.peak_ds_vol * 0.70 * 100).toFixed(1);
+                if (dlInfo.peak_ds_vol > 0.01) {
+                    msg += `  Peak DS vol: ${peakVol}% (lockout threshold: ${lockout}%)\n`;
+                } else {
+                    msg += `  Peak DS vol: ${peakVol}% (decayed — lockout cleared)\n`;
+                }
+            }
             if (dlInfo.exit_reason) msg += `  Exit reason: ${dlInfo.exit_reason}\n`;
+            // Gap 4: Show divergence guard block status
+            if (dlInfo.exit_blocked) msg += `  \u26d4 EXIT BLOCKED: ${dlInfo.exit_block_reason}\n`;
             if (dlInfo.entry_triggered) msg += `  \u26a0\ufe0f Shield ENTRY triggered this call\n`;
             msg += `  Risky total: ${dlInfo.risky_total}%  |  USDC: ${dlInfo.usdc_remainder}%\n`;
         }
