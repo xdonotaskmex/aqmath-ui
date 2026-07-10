@@ -235,22 +235,21 @@ function btShowStatus(msg, type) {
 }
 
 function btReadCfg() {
-    var g = function(id, def) { var el = document.getElementById(id); return el ? +el.value : def; };
-    var volHl = g('btVolHalflife', 30);
+    // Production deleverage v10.6 defaults — hardcoded, no user-configurable engine params
     return {
-        dd_window: g('btDdWindow', 20),
-        exit_window: g('btExitWindow', 180),
-        dd_threshold: g('btDdThresh', 0.12),
-        ds_vol_high: g('btDsVolHigh', 0.48),
-        ds_vol_low: g('btDsVolLow', 0.30),
-        risk_budget: g('btRiskBudget', 0.85),
-        partial_sell: g('btPartialSell', 0.50),
+        dd_window: DL.DD_WINDOW,
+        exit_window: DL.EXIT_WINDOW,
+        dd_threshold: DL.DD_THRESHOLD,
+        ds_vol_high: DL.DS_VOL_HIGH,
+        ds_vol_low: DL.DS_VOL_LOW,
+        risk_budget: DL.RISK_BUDGET,
+        partial_sell: DL.PARTIAL_SELL,
         floor_exposure: DL.FLOOR_EXPOSURE,
-        vol_decay: Math.pow(0.5, 1.0 / volHl),
-        exit_dd_divergence: g('btDivergence', 0.30),
-        tranche_1_pct: g('btTranche1', 0.25),
-        tranche_2_pct: g('btTranche2', 0.50),
-        tranche_2_gap: g('btTranche2Gap', 0.15)
+        vol_decay: DL.VOL_DECAY,
+        exit_dd_divergence: DL.EXIT_DD_DIVERGENCE,
+        tranche_1_pct: DL.TRANCHE_1_PCT,
+        tranche_2_pct: DL.TRANCHE_2_PCT,
+        tranche_2_gap: DL.TRANCHE_2_GAP
     };
 }
 
