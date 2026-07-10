@@ -48,7 +48,7 @@ function computeDrawdownFromPeak(equity, window) {
     return [Math.max(0, curDd), Math.max(0, maxDd)];
 }
 
-function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcReserve, t1Done, t2Done) {
+function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcReserve, t1Done, t2Done, totalEquity) {
     cfg = cfg || {};
     var ddWindow = cfg.dd_window || DL.DD_WINDOW;
     var exitWindow = cfg.exit_window || DL.EXIT_WINDOW;
@@ -64,7 +64,7 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
     var t2g = cfg.tranche_2_gap !== undefined ? cfg.tranche_2_gap : DL.TRANCHE_2_GAP;
 
     var E = {
-        shield_active: false, target_exposure: riskBudget,
+        shield_active: false, target_exposure: floorExp,  // Bug 5 FIX: Conservative default
         global_dd: 0, window_dd: 0, exit_dd: 0, ds_vol: 0,
         local_max_dd: 0, peak_ds_vol: peakDsVol,
         exit_reason: null, entry_triggered: false,
@@ -107,12 +107,16 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         if (peakDsVol > 0.01) hOk = dsV > peakDsVol * 0.70;
         if (gDd > ddThresh && dsV > dsVolHigh && hOk) {
             shieldActive = true; localMaxDd = eDd; peakDsVol = dsV; entry = true;
+            tExp = floorExp;  // Bug 2 FIX: Instant de-risk to floor on entry
+        } else {
+            tExp = riskBudget;
         }
-        tExp = riskBudget;
     } else {
         if (eDd > localMaxDd) localMaxDd = eDd;
         if (dsV > peakDsVol) peakDsVol = dsV;
+        // Bug 4 FIX: Don't increase exposure if DD is still deepening
         var rf = localMaxDd > 0.001 ? (localMaxDd - eDd) / localMaxDd : 0;
+        if (eDd > localMaxDd * 0.80) rf = 0;  // Still near worst - no recovery
         rf = Math.max(0, Math.min(1, rf));
         tExp = Math.min(riskBudget, floorExp + rf * (riskBudget - floorExp));
 
@@ -140,6 +144,11 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
                 var t2a = +(usdcReserve * tp2).toFixed(4);
                 tAmt += t2a; usdcReserve -= t2a; t2Done = true;
                 tEvt = tEvt ? tEvt + '+tranche_2' : 'tranche_2';
+            }
+            // Bug 1+3 FIX: Tranche deployment increases actual exposure
+            if (tAmt > 0 && totalEquity > 0) {
+                var trancheExposure = tAmt / totalEquity;
+                tExp = Math.min(riskBudget, tExp + trancheExposure);
             }
             if (!exitR) {
                 var wouldExit = (isDdHealedFull) || (isVolCalm && isPartialRec);
@@ -284,7 +293,8 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
 
     for (var i = 0; i < portRet.length; i++) {
         var sub = portRet.slice(0, i + 1);
-        var res = evaluateShield(sub, sOn, lMd, pDv, cfg, usdcR, t1Done, t2Done);
+        var totalEquity = eqA[eqA.length - 1];  // Bug 1+3 FIX: Pass portfolio value for tranche conversion
+        var res = evaluateShield(sub, sOn, lMd, pDv, cfg, usdcR, t1Done, t2Done, totalEquity);
         sOn = res.shield_active; lMd = res.local_max_dd; pDv = res.peak_ds_vol;
         usdcR = res.usdc_reserve; t1Done = res.tranche_1_executed; t2Done = res.tranche_2_executed;
 
