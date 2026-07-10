@@ -3,14 +3,15 @@
 // ============ ROUTING ============
 function handleRoute() {
     const hash = window.location.hash;
-    document.body.classList.remove('route-landing', 'route-app', 'route-doc');
+    document.body.classList.remove('route-landing', 'route-app', 'route-doc', 'route-backtest');
     if (hash === '#/app') {
         document.body.classList.add('route-app');
         // Load market widgets for app view
         loadAllWidgets();
     } else if (hash === '#/docs' || hash === '#/doc') {
         document.body.classList.add('route-doc');
-
+    } else if (hash === '#/backtest') {
+        document.body.classList.add('route-backtest');
     } else {
         document.body.classList.add('route-landing');
         loadAllWidgets();
