@@ -376,8 +376,21 @@ function btCalcMetrics(eq, totalIn, years) {
 //  MAIN BACKTEST RUNNER
 // ============================================================
 
+function btShowLoading() {
+    var el = document.getElementById('btLoading');
+    if (el) el.classList.remove('hidden');
+}
+
+function btHideLoading() {
+    var el = document.getElementById('btLoading');
+    if (el) el.classList.add('hidden');
+}
+
 function btRunBacktest() {
-    btShowStatus('Running backtest...', 'running');
+    btShowLoading();
+    setTimeout(function() {
+        try {
+            btShowStatus('Running backtest...', 'running');
     var cfg = btReadCfg();
     var startCap = +document.getElementById('btStartCapital').value || 1000;
     var dcaAmt = +document.getElementById('btDcaAmount').value || 100;
@@ -556,6 +569,9 @@ function btRunBacktest() {
 
     document.getElementById('btResultsSection').classList.remove('hidden');
     document.getElementById('btResultsSection').scrollIntoView({ behavior: 'smooth' });
+        } catch(e) { console.error(e); btShowStatus('Error: ' + e.message, 'error'); }
+        btHideLoading();
+    }, 50);
 }
 
 // ============================================================
@@ -563,7 +579,10 @@ function btRunBacktest() {
 // ============================================================
 
 function btRunWFGrid() {
-    var pr = btGetPortReturns();
+    btShowLoading();
+    setTimeout(function() {
+        try {
+            var pr = btGetPortReturns();
     var startCap = +document.getElementById('btStartCapital').value || 1000;
     var dcaAmt = +document.getElementById('btDcaAmount').value || 100;
     var dcaInt = +document.getElementById('btDcaInterval').value || 30;
@@ -637,6 +656,9 @@ function btRunWFGrid() {
     document.getElementById('btWfSection').classList.remove('hidden');
     btShowStatus('WF grid: ' + (sw.values.length * cr.values.length) + ' sims done. Best: ' + sw.label + '=' + sw.fmt(best.sv), 'success');
     document.getElementById('btWfSection').scrollIntoView({ behavior: 'smooth' });
+        } catch(e) { console.error(e); btShowStatus('Error: ' + e.message, 'error'); }
+        btHideLoading();
+    }, 50);
 }
 
 function btResetAll() {
