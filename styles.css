@@ -2003,7 +2003,7 @@
     .bt-slot-sym { font-size: 0.95rem; font-weight: 600; color: var(--text); font-family: var(--mono); }
     .bt-slot-info { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
     .bt-upload-slot input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-    .bt-remove-btn { position: absolute; top: 4px; right: 6px; background: none; border: none; color: var(--red); cursor: crosshair; font-size: 1rem; display: none; line-height: 1; }
+    .bt-remove-btn { position: absolute; top: 4px; right: 6px; background: none; border: none; color: var(--red); cursor: crosshair; font-size: 1rem; display: none; line-height: 1; z-index: 10; }
     .bt-remove-btn:hover { color: #ff0000; transform: scale(1.2); }
     .bt-upload-slot.loaded .bt-remove-btn { display: block; }
 
