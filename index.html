@@ -906,7 +906,6 @@
             <span class="tc-title">--backtest-settings</span>
         </div>
         <div class="tc-body">
-            <div class="bt-explain bt-explain-sm">Engine uses production deleverage v10.6 settings (DD window: 20, Exit window: 180, DD threshold: 12%, DS vol high: 48%, DS vol low: 30%, Divergence guard: 30%, Tranche T1: 25%, T2: 50%, T2 gap: 15%).</div>
             <div class="bt-settings-grid">
                 <div class="bt-setting"><label>Start Capital ($)</label><input type="number" id="btStartCapital" value="1000" step="100" min="100" max="1000000"></div>
                 <div class="bt-setting"><label>DCA Amount ($)</label><input type="number" id="btDcaAmount" value="100" step="50" min="0" max="100000"></div>
@@ -914,6 +913,7 @@
             </div>
             <div class="bt-controls">
                 <button class="btn blue" id="btRunBtn" onclick="btRunBacktest()" disabled>Run Backtest</button>
+                <button class="btn ghost" id="btWfBtn" onclick="btRunWFGrid()" disabled>Run WF Grid</button>
                 <button class="btn red" onclick="btResetAll()">Reset All</button>
                 <span id="btLoadStatus" style="font-size:.8rem;color:var(--muted)"></span>
             </div>
@@ -990,6 +990,32 @@
         </div>
     </div>
 
+    <!-- WALK-FORWARD -->
+    <div id="btWfSection" class="tc bt-card hidden">
+        <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--walk-forward-grid</span></div>
+        <div class="tc-body">
+            <div class="bt-explain bt-explain-sm">Systematic sweep of key parameters. Best row highlighted. All runs use the same DCA schedule and production deleverage settings.</div>
+            <div class="bt-wf-controls">
+                <div class="bt-setting"><label>Sweep Parameter</label>
+                    <select id="btWfSweep" onchange="btRunWFGrid()">
+                        <option value="dd_threshold">DD Threshold</option>
+                        <option value="ds_vol_high">DS Vol High</option>
+                        <option value="exit_dd_divergence">Divergence Guard</option>
+                        <option value="exit_window">Exit Window</option>
+                    </select>
+                </div>
+                <div class="bt-setting"><label>Metric</label>
+                    <select id="btWfMetric" onchange="btRunWFGrid()">
+                        <option value="final">Final Value</option>
+                        <option value="calmar">Calmar Ratio</option>
+                        <option value="maxdd">Max Drawdown</option>
+                        <option value="sharpe">Sharpe Ratio</option>
+                    </select>
+                </div>
+            </div>
+            <div id="btWfGridContainer" style="overflow-x:auto"></div>
+        </div>
+    </div>
 
 </div><!-- /bt-main -->
 
