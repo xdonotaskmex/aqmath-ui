@@ -21,7 +21,10 @@
     "optCopy": "KKT projection keeps allocations inside volatility caps and prevents oversized high-risk positions. It parks new DCA capital in USDC when drawdown is severe — stops you buying into a crash.",
     "optLink": "[ view formula ]",
     "privLabel": "--privacy",
-    "privCopy": "Amounts, targets, and allocation weights stay in your browser's localStorage. Data sent to the backend is processed in-memory and discarded immediately — nothing is persisted."
+    "privCopy": "Amounts, targets, and allocation weights stay in your browser's localStorage. Data sent to the backend is processed in-memory and discarded immediately — nothing is persisted.",
+    "shieldLabel": "--deleverage-shield",
+    "shieldCopy": "Emergency Brake: on crash detection, exposure drops to floor instantly — all positions scaled down, DCA rerouted to USDC. Capital re-enters via 3-stage tranche recovery.",
+    "shieldLink": "[ see 8.7-year backtest ]"
   },
   "beta": {
     "tag": "// limited early access",

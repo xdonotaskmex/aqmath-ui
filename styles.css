@@ -1526,7 +1526,7 @@
     .lp-math-rules li strong { color: var(--text); font-weight: 600; }
     .lp-math-grid {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 14px;
         margin-top: 26px;
     }
@@ -1585,56 +1585,12 @@
         text-align: center;
     }
 
-    /* ===== LANDING – DELEVERAGE SHIELD (compact, matches math section) ===== */
-    .lp-shield-card {
-        border-color: rgba(248, 113, 113, 0.25) !important;
-    }
+    /* ===== LANDING – DELEVERAGE SHIELD (card 04) ===== */
     .gradient-text-red {
         background: linear-gradient(90deg, var(--red), var(--amber));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-    }
-    .lp-shield-inline-vs {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 16px;
-        margin-top: 16px;
-        padding: 12px 0;
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-    }
-    .lp-shield-vs-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2px;
-    }
-    .lp-shield-vs-label {
-        font-family: var(--mono);
-        font-size: 0.6rem;
-        color: var(--muted);
-        letter-spacing: 1px;
-        text-transform: uppercase;
-    }
-    .lp-shield-vs-val {
-        font-family: var(--mono);
-        font-size: 1.4rem;
-        font-weight: 700;
-        letter-spacing: -0.5px;
-    }
-    .lp-shield-vs-sub {
-        font-family: var(--sans);
-        font-size: 0.65rem;
-        color: var(--muted);
-    }
-    .lp-shield-vs-sep {
-        font-family: var(--mono);
-        font-size: 0.7rem;
-        color: var(--muted);
-        font-weight: 600;
-        letter-spacing: 1px;
     }
     .lp-hero-shield {
         display: inline-flex;
@@ -1818,8 +1774,6 @@
         .lp-math-metric .mc-num { font-size: 1.2rem; }
         .lp-math-metric .metric-label { font-size: 0.7rem; }
         .lp-ticker { flex-wrap: wrap; gap: 14px; }
-        .lp-shield-inline-vs { gap: 10px; }
-        .lp-shield-vs-val { font-size: 1.2rem; }
         .lp-hero-shield { flex-direction: column; gap: 4px; text-align: center; }
     }
 
@@ -1974,6 +1928,7 @@
         .lp-grid .lp-news-col:first-child { grid-column: 1 / -1; }
         .lp-grid .lp-features { grid-column: 1 / -1; }
         .lp-grid .lp-news-col:last-child { grid-column: 1 / -1; }
+        .lp-math-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 768px) {

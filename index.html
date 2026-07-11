@@ -230,38 +230,17 @@
                         <div class="metric-label" data-i18n="math.privLabel">--privacy</div>
                         <div class="metric-copy" data-i18n="math.privCopy">Amounts, targets, and allocation weights stay in your browser&rsquo;s localStorage. Data sent to the backend is processed in-memory and discarded immediately &mdash; nothing is persisted.</div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <hr class="lp-section-divider">
-
-        <!-- DELEVERAGE SHIELD -->
-        <section class="lp-section">
-            <div class="lp-math-box lp-card lp-shield-card">
-                <div class="card-title" style="color:var(--red);">--deleverage-shield</div>
-                <div class="lp-math-heading">Crash Protection That <span class="gradient-text-red">Actually Works</span></div>
-                <p class="lp-math-lead">When the market crashes, the Deleverage Shield cuts exposure instantly &mdash; preserving capital in stablecoins while Buy &amp; Hold gets destroyed.</p>
-                <ul class="lp-math-rules">
-                    <li data-i18n="math.shield1"><strong>Emergency Brake</strong> &mdash; exposure drops to floor <strong>instantly</strong> on crash detection (not gradual)</li>
-                    <li data-i18n="math.shield2"><strong>True de-risk</strong> &mdash; scales down ALL existing positions, not just pausing DCA</li>
-                    <li data-i18n="math.shield3"><strong>3-stage tranche recovery</strong> &mdash; preserved capital re-enters in stages (25% &rarr; 50% &rarr; 100%)</li>
-                </ul>
-                <div class="lp-shield-inline-vs">
-                    <div class="lp-shield-vs-item">
-                        <span class="lp-shield-vs-label">With Shield</span>
-                        <span class="lp-shield-vs-val" style="color:var(--green);">-4%</span>
-                        <span class="lp-shield-vs-sub">loss in -80% crash</span>
+                    <div class="lp-math-metric">
+                        <svg viewBox="0 0 44 44" class="mc-icon" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 4 L36 12 L36 26 C36 33 29 38 22 40 C15 38 8 34 8 26 L8 12 Z" fill="none" stroke="#f87171" stroke-width="1" opacity="0.5"/>
+                            <path d="M22 10 L30 15 L30 24 C30 29 27 33 22 35 C17 33 14 29 14 24 L14 15 Z" fill="rgba(248,113,113,0.08)" stroke="#f87171" stroke-width="0.5" opacity="0.3"/>
+                            <text x="22" y="26" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="700" opacity="0.8">&#9888;</text>
+                        </svg>
+                        <div class="mc-head"><span class="mc-num">04</span></div>
+                        <div class="metric-label" data-i18n="math.shieldLabel">--deleverage-shield</div>
+                        <div class="metric-copy" data-i18n="math.shieldCopy">Emergency Brake: on crash detection, exposure drops to floor <strong>instantly</strong> &mdash; all positions scaled down, DCA rerouted to USDC. Capital re-enters via 3-stage tranche recovery.</div>
+                        <a href="#/backtest" class="doc-formula-link" data-i18n="math.shieldLink">[ see 8.7-year backtest ]</a>
                     </div>
-                    <span class="lp-shield-vs-sep">vs</span>
-                    <div class="lp-shield-vs-item">
-                        <span class="lp-shield-vs-label">Without Shield</span>
-                        <span class="lp-shield-vs-val" style="color:var(--red);">-80%</span>
-                        <span class="lp-shield-vs-sub">loss in -80% crash</span>
-                    </div>
-                </div>
-                <div style="text-align:center;margin-top:16px;">
-                    <a href="#/backtest" class="doc-formula-link">[ see 8.7-year backtest results ]</a>
                 </div>
             </div>
         </section>
