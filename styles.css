@@ -1585,6 +1585,175 @@
         text-align: center;
     }
 
+    /* ===== LANDING – DELEVERAGE SHIELD SHOWCASE ===== */
+    .lp-shield-showcase {
+        padding: 48px 32px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    .lp-shield-header {
+        text-align: center;
+        margin-bottom: 36px;
+    }
+    .lp-shield-badge {
+        display: inline-block;
+        margin-bottom: 12px;
+    }
+    .lp-shield-badge-icon {
+        width: 56px;
+        height: 56px;
+    }
+    .lp-shield-title {
+        font-family: var(--sans);
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 8px 0 12px;
+        letter-spacing: -0.5px;
+    }
+    .gradient-text-red {
+        background: linear-gradient(90deg, var(--red), var(--amber));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .lp-shield-lead {
+        font-family: var(--sans);
+        font-size: 0.95rem;
+        color: var(--muted);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.7;
+    }
+    .lp-shield-grid {
+        display: grid;
+        grid-template-columns: 1fr 280px;
+        gap: 32px;
+        align-items: center;
+        margin-bottom: 36px;
+    }
+    .lp-shield-diagram {
+        background: var(--s2);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 16px;
+    }
+    .lp-shield-diagram svg {
+        width: 100%;
+        height: auto;
+    }
+    .lp-shield-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .lp-shield-stat {
+        background: var(--s1);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 14px 16px;
+        text-align: center;
+    }
+    .lp-stat-value {
+        font-family: var(--mono);
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+    }
+    .lp-stat-label {
+        font-family: var(--sans);
+        font-size: 0.72rem;
+        color: var(--muted);
+        line-height: 1.4;
+    }
+    .lp-shield-comparison {
+        margin-bottom: 28px;
+    }
+    .lp-shield-vs {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 0;
+        align-items: stretch;
+    }
+    .lp-vs-col {
+        padding: 24px 20px;
+        text-align: center;
+        border-radius: 6px;
+    }
+    .lp-vs-dl {
+        background: rgba(6, 182, 212, 0.06);
+        border: 1px solid rgba(6, 182, 212, 0.25);
+    }
+    .lp-vs-bh {
+        background: rgba(251, 191, 36, 0.04);
+        border: 1px solid rgba(251, 191, 36, 0.2);
+    }
+    .lp-vs-header {
+        font-family: var(--mono);
+        font-size: 0.65rem;
+        letter-spacing: 2px;
+        color: var(--muted);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+    .lp-vs-dl .lp-vs-header { color: var(--blue); }
+    .lp-vs-bh .lp-vs-header { color: var(--amber); }
+    .lp-vs-value {
+        font-family: var(--mono);
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+    .lp-vs-dl .lp-vs-value { color: var(--green); }
+    .lp-vs-bh .lp-vs-value { color: var(--red); }
+    .lp-vs-desc {
+        font-family: var(--sans);
+        font-size: 0.8rem;
+        color: var(--text);
+        margin-bottom: 4px;
+    }
+    .lp-vs-detail {
+        font-family: var(--sans);
+        font-size: 0.7rem;
+        color: var(--muted);
+    }
+    .lp-vs-divider {
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+    }
+    .lp-vs-divider span {
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--muted);
+        letter-spacing: 2px;
+    }
+    .lp-shield-cta {
+        text-align: center;
+    }
+    .lp-hero-shield {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(248, 113, 113, 0.08);
+        border: 1px solid rgba(248, 113, 113, 0.25);
+        border-radius: 4px;
+        padding: 8px 16px;
+        margin-bottom: 20px;
+        font-family: var(--mono);
+    }
+    .lp-shield-icon {
+        color: var(--red);
+        font-size: 1rem;
+    }
+    .lp-shield-text {
+        font-size: 0.7rem;
+        color: var(--text);
+        letter-spacing: 0.5px;
+    }
+
     /* ===== LANDING – FREE VS PRO ===== */
     .lp-plan-grid,
     .lp-pricing { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: none; padding: 0; align-items: stretch; }
@@ -1746,6 +1915,12 @@
         .lp-math-metric .mc-num { font-size: 1.2rem; }
         .lp-math-metric .metric-label { font-size: 0.7rem; }
         .lp-ticker { flex-wrap: wrap; gap: 14px; }
+        .lp-shield-grid { grid-template-columns: 1fr; }
+        .lp-shield-vs { grid-template-columns: 1fr; gap: 12px; }
+        .lp-vs-divider { justify-content: center; padding: 8px 0; }
+        .lp-shield-title { font-size: 1.4rem; }
+        .lp-shield-showcase { padding: 32px 16px; }
+        .lp-hero-shield { flex-direction: column; gap: 4px; text-align: center; }
     }
 
     .lp-pro-modal {

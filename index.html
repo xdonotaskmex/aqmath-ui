@@ -6,9 +6,9 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQMath — Quantitative Crypto Portfolio Rebalancer | Risk Parity</title>
-    <meta name="description" content="AQMath is a non-custodial crypto portfolio rebalancer. Track holdings, distribute DCA to underweight tokens, and optimize with Risk Parity math (Pro). Private. No wallet, no account, no data collection.">
-    <meta name="keywords" content="crypto portfolio, risk parity, DCA, dollar cost averaging, portfolio rebalancer, quantitative finance, non-custodial, privacy, DeFi, Bitcoin, Ethereum">
+    <title>AQMath — Quantitative Crypto Portfolio Rebalancer | Risk Parity | Deleverage Shield</title>
+    <meta name="description" content="AQMath is a non-custodial crypto portfolio rebalancer with Deleverage Shield crash protection. Track holdings, distribute DCA, optimize with Risk Parity math, and auto-de-risk during market crashes. Private. No wallet, no account.">
+    <meta name="keywords" content="crypto portfolio, risk parity, DCA, dollar cost averaging, portfolio rebalancer, quantitative finance, non-custodial, privacy, DeFi, Bitcoin, Ethereum, deleverage shield, crash protection, emergency brake, drawdown protection, stablecoin hedge">
     <meta name="author" content="AQMath">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://aqmath.xyz/">
@@ -17,21 +17,21 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://aqmath.xyz/">
-    <meta property="og:title" content="AQMath — Quantitative Portfolio Rebalancing. Private. Non-Custodial. Just Math.">
-    <meta property="og:description" content="Risk Parity mathematics for long-term crypto portfolio allocation. Non-custodial, private, no data collected.">
+    <meta property="og:title" content="AQMath — Quantitative Portfolio Rebalancing with Deleverage Shield. Private. Non-Custodial.">
+    <meta property="og:description" content="Risk Parity mathematics + Deleverage Shield crash protection for crypto portfolios. Instant de-risk during market crashes. Non-custodial, private, no data collected.">
     <meta property="og:site_name" content="AQMath">
     <meta property="og:image" content="https://aqmath.xyz/social-preview.png">
     <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer">
+    <meta property="og:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer with Deleverage Shield Crash Protection">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="AQMath — Quantitative Portfolio Rebalancing">
-    <meta name="twitter:description" content="Risk Parity mathematics for crypto portfolio allocation. Non-custodial, private, no data collected.">
+    <meta name="twitter:title" content="AQMath — Quantitative Portfolio Rebalancing + Deleverage Shield">
+    <meta name="twitter:description" content="Risk Parity math + Deleverage Shield crash protection. Auto-de-risk during market crashes. Non-custodial, private, no data collected.">
     <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png">
-    <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"AQMath","url":"https://aqmath.xyz/","description":"Quantitative crypto portfolio rebalancer using Risk Parity mathematics.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","name":"Free Tier","price":"0","priceCurrency":"USD"}}</script>
+    <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer with Deleverage Shield">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"AQMath","url":"https://aqmath.xyz/","description":"Quantitative crypto portfolio rebalancer with Deleverage Shield crash protection. Risk Parity mathematics, DCA optimization, and automatic de-risking during market crashes.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","name":"Free Tier","price":"0","priceCurrency":"USD"},"featureList":["Risk Parity Optimization","Deleverage Shield Crash Protection","DCA Distribution","Non-Custodial Privacy","Emergency Brake Auto De-Risk"]}</script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="styles.css">
@@ -106,6 +106,10 @@
         <h1 data-i18n="hero.title">quantitative <span class="gradient-text">portfolio rebalancer</span></h1>
         <h2 data-i18n="hero.subtitle">No emotions. No human error. Structural limits on every DCA dollar you deploy.</h2>
         <p data-i18n="hero.description">AQMath processes complex covariance matrices on our secure backend engine. Your holdings are processed in-memory and never stored on our servers &mdash; only your browser&rsquo;s localStorage keeps your data.</p>
+        <div class="lp-hero-shield">
+            <span class="lp-shield-icon">&#9888;</span>
+            <span class="lp-shield-text">Emergency Brake: Instant de-risk to stablecoins when crash detected</span>
+        </div>
         <div class="lp-cta-group">
             <a class="lp-btn-primary" href="#/app" data-i18n="hero.cta">--try-free-no-registration</a>
             <button class="lp-btn-secondary" onclick="showProModal()" data-i18n="hero.proBeta">PRO BETA (Early Access)</button>
@@ -212,7 +216,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">02</span></div>
                         <div class="metric-label" data-i18n="math.optLabel">--optimization</div>
-                        <div class="metric-copy" data-i18n="math.optCopy">KKT projection keeps allocations inside volatility caps and prevents oversized high-risk positions. It parks new DCA capital in USDC when drawdown is severe &mdash; stops you buying into a crash.</div>
+                        <div class="metric-copy" data-i18n="math.optCopy">KKT projection keeps allocations inside volatility caps and prevents oversized high-risk positions. When drawdown is severe, the <strong>Deleverage Shield</strong> instantly cuts exposure &mdash; stopping you from buying into a crash.</div>
                         <a href="#/docs" class="doc-formula-link" data-i18n="math.optLink">[ view formula ]</a>
                     </div>
                     <div class="lp-math-metric">
@@ -229,6 +233,106 @@
                 </div>
             </div>
         </section>
+
+        <hr class="lp-section-divider">
+
+        <!-- DELEVERAGE SHIELD SHOWCASE -->
+        <section class="lp-section lp-shield-showcase">
+            <div class="lp-shield-header">
+                <div class="lp-shield-badge">
+                    <svg viewBox="0 0 48 48" class="lp-shield-badge-icon" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M24 4 L40 12 L40 24 C40 34 33 42 24 44 C15 42 8 34 8 24 L8 12 Z" fill="none" stroke="#f87171" stroke-width="1.5" opacity="0.6"/>
+                        <path d="M24 10 L34 16 L34 24 C34 30 30 36 24 38 C18 36 14 30 14 24 L14 16 Z" fill="rgba(248,113,113,0.08)" stroke="#f87171" stroke-width="0.8" opacity="0.4"/>
+                        <text x="24" y="28" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="12" font-weight="700">&#9888;</text>
+                    </svg>
+                </div>
+                <div class="lp-section-label" style="color:var(--red);">--deleverage-shield</div>
+                <h3 class="lp-shield-title">Crash Protection That <span class="gradient-text-red">Actually Works</span></h3>
+                <p class="lp-shield-lead">When the market crashes, most portfolios get destroyed. The Deleverage Shield cuts exposure instantly &mdash; preserving capital when you need it most.</p>
+            </div>
+
+            <div class="lp-shield-grid">
+                <div class="lp-shield-visual">
+                    <div class="lp-shield-diagram">
+                        <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Normal -->
+                            <rect x="5" y="35" width="65" height="70" rx="4" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="1" opacity="0.6"/>
+                            <text x="37" y="58" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="600">NORMAL</text>
+                            <text x="37" y="72" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">Full exposure</text>
+                            <text x="37" y="84" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">DCA active</text>
+                            <!-- Arrow 1 -->
+                            <line x1="73" y1="70" x2="93" y2="70" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="3,2"/>
+                            <polygon points="91,67 91,73 96,70" fill="#64748b" opacity="0.5"/>
+                            <text x="83" y="62" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="6">CRASH</text>
+                            <!-- Shield Active -->
+                            <rect x="98" y="35" width="65" height="70" rx="4" fill="rgba(248,113,113,0.06)" stroke="#f87171" stroke-width="1" opacity="0.6"/>
+                            <text x="130" y="52" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="600">SHIELD</text>
+                            <text x="130" y="66" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">Positions cut</text>
+                            <text x="130" y="78" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">DCA &rarr; USDC</text>
+                            <text x="130" y="90" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">~94% stable</text>
+                            <!-- Arrow 2 -->
+                            <line x1="166" y1="70" x2="186" y2="70" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="3,2"/>
+                            <polygon points="184,67 184,73 189,70" fill="#64748b" opacity="0.5"/>
+                            <text x="177" y="62" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="6">RECOVER</text>
+                            <!-- Tranches -->
+                            <rect x="191" y="35" width="55" height="70" rx="4" fill="rgba(56,189,248,0.06)" stroke="#38bdf8" stroke-width="1" opacity="0.6"/>
+                            <text x="218" y="55" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">TRANCHE</text>
+                            <text x="218" y="69" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">25% &rarr; 50%</text>
+                            <text x="218" y="81" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">Gradual entry</text>
+                            <!-- Arrow 3 -->
+                            <line x1="249" y1="70" x2="264" y2="70" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="3,2"/>
+                            <polygon points="262,67 262,73 267,70" fill="#64748b" opacity="0.5"/>
+                            <!-- Full -->
+                            <rect x="269" y="35" width="46" height="70" rx="4" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="1" opacity="0.6"/>
+                            <text x="292" y="58" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">FULL</text>
+                            <text x="292" y="72" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">100%</text>
+                            <text x="292" y="84" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">deployed</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="lp-shield-stats">
+                    <div class="lp-shield-stat">
+                        <div class="lp-stat-value" style="color:var(--red);">&#9888; INSTANT</div>
+                        <div class="lp-stat-label">Emergency Brake fires on crash detection</div>
+                    </div>
+                    <div class="lp-shield-stat">
+                        <div class="lp-stat-value" style="color:var(--green);">~94%</div>
+                        <div class="lp-stat-label">Capital preserved in stablecoins during shield</div>
+                    </div>
+                    <div class="lp-shield-stat">
+                        <div class="lp-stat-value" style="color:var(--blue);">3-Stage</div>
+                        <div class="lp-stat-label">Tranche recovery: 25% &rarr; 50% &rarr; 100%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lp-shield-comparison">
+                <div class="lp-shield-vs">
+                    <div class="lp-vs-col lp-vs-dl">
+                        <div class="lp-vs-header">WITH SHIELD</div>
+                        <div class="lp-vs-value">-4%</div>
+                        <div class="lp-vs-desc">Loss during -80% crash</div>
+                        <div class="lp-vs-detail">Minimal exposure absorbs only a fraction</div>
+                    </div>
+                    <div class="lp-vs-divider">
+                        <span>VS</span>
+                    </div>
+                    <div class="lp-vs-col lp-vs-bh">
+                        <div class="lp-vs-header">WITHOUT SHIELD</div>
+                        <div class="lp-vs-value">-80%</div>
+                        <div class="lp-vs-desc">Loss during -80% crash</div>
+                        <div class="lp-vs-detail">Full exposure takes full damage</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lp-shield-cta">
+                <a href="#/backtest" class="lp-btn-secondary">See 8.7-year backtest results &rarr;</a>
+            </div>
+        </section>
+
+        <hr class="lp-section-divider">
 
     <section class="lp-beta-recruit">
         <div class="lp-beta-recruit-inner">
