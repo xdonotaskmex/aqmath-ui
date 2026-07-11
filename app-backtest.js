@@ -313,11 +313,18 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
         sOn = res.shield_active; lMd = res.local_max_dd; pDv = res.peak_ds_vol;
         usdcR = res.usdc_reserve; t1Done = res.tranche_1_executed; t2Done = res.tranche_2_executed;
 
-        var eff = res.target_exposure;
-        if (pExp !== null) {
-            var md = cfg.partial_sell * cfg.risk_budget;
-            var d = res.target_exposure - pExp;
-            if (d > 0 && d > md) eff = pExp + md; else eff = pExp + d;
+        // EMERGENCY BRAKE: On shield entry, force floor exposure INSTANTLY.
+        // Bypass max_delta, ignore prev_exposure. Auditor requirement.
+        var eff;
+        if (res.entry_triggered && res.shield_active) {
+            eff = cfg.floor_exposure;
+        } else {
+            eff = res.target_exposure;
+            if (pExp !== null) {
+                var md = cfg.partial_sell * cfg.risk_budget;
+                var d = res.target_exposure - pExp;
+                if (d > 0 && d > md) eff = pExp + md; else eff = pExp + d;
+            }
         }
         pExp = eff;
         var scale = Math.max(0, Math.min(1, eff / cfg.risk_budget));
