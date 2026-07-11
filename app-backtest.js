@@ -78,12 +78,14 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
     // Global equity curve
     var gEq = [1];
     for (var i = 0; i < rets.length; i++) gEq.push(gEq[gEq.length - 1] * (1 + rets[i]));
-    var pk = gEq[0], gDd = 0;
+    var pk = gEq[0], gDd = 0, pkIdx = 0;
     for (var i = 0; i < gEq.length; i++) {
-        if (gEq[i] > pk) pk = gEq[i];
+        if (gEq[i] > pk) { pk = gEq[i]; pkIdx = i; }
         var dd = pk > 0 ? (pk - gEq[i]) / pk : 0;
         if (dd > gDd) gDd = dd;
     }
+    // Peak staleness: how many bars since the all-time peak
+    var peakAge = gEq.length - 1 - pkIdx;
 
     // Short window equity
     var wR = rets.slice(-ddWindow);
@@ -125,7 +127,20 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         var isDdHealedFull = isDdHealed && isVolCalm;
         var isPartialRec = localMaxDd > 0 && eDd <= localMaxDd * 0.5;
         var gap = gDd - eDd;
-        var gOk = gap < exitDdDiv;
+        // Divergence guard with peak-staleness graduation:
+        // When peak is recent, use strict threshold (exitDdDiv).
+        // As peak ages past 365 bars, linearly relax threshold.
+        // After 730 bars (2y), fully relax (allow exit if exit_dd < 10%).
+        // Prevents permanent shield lock while still blocking premature exits.
+        var effDiv;
+        if (peakAge <= 365) {
+            effDiv = exitDdDiv;
+        } else if (peakAge >= 730) {
+            effDiv = 1.0;
+        } else {
+            effDiv = exitDdDiv + (1.0 - exitDdDiv) * (peakAge - 365) / 365;
+        }
+        var gOk = gap < effDiv;
         var finalExit = (isDdHealedFull && gOk) || (isVolCalm && isPartialRec && gOk);
 
         if (finalExit) {
