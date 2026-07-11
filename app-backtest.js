@@ -21,6 +21,7 @@ const DL = {
     TRANCHE_1_PCT: 0.25,
     TRANCHE_2_PCT: 0.50,
     TRANCHE_2_GAP: 0.15,
+    FEE_RATE: 0.001,  // 10 bps per trade (rebalance, DCA, tranche)
 };
 
 function computeDownsideVol(rets, window) {
@@ -273,7 +274,8 @@ function btReadCfg() {
         exit_dd_divergence: DL.EXIT_DD_DIVERGENCE,
         tranche_1_pct: DL.TRANCHE_1_PCT,
         tranche_2_pct: DL.TRANCHE_2_PCT,
-        tranche_2_gap: DL.TRANCHE_2_GAP
+        tranche_2_gap: DL.TRANCHE_2_GAP,
+        fee_rate: DL.FEE_RATE
     };
 }
 
@@ -301,6 +303,8 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
     var sOn = false, lMd = 0, pDv = 0, pExp = null;
     var unitsA = startCap, navA = 1.0, usdcR = 0, totalInv = startCap, totalDep = 0;
     var t1Done = false, t2Done = false;
+    var totalFees = 0, rebN = 0;  // Fee tracking
+    var sim_expT_prev = null;  // Track previous exposure for rebalance fee
     var eqA = [startCap], invA = [startCap], usdcT = [0];
     var shT = [], expT = [], gDdT = [], eDdT = [], dsVT = [], pkVT = [], gapT = [];
     var events = [];
@@ -328,6 +332,22 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
         }
         pExp = eff;
         var scale = Math.max(0, Math.min(1, eff / cfg.risk_budget));
+
+        // Rebalance fee: when exposure changes, model the trading cost
+        if (pExp !== null && i > 0) {
+            var prevEff = sim_expT_prev;
+            var prevScale = Math.max(0, Math.min(1, prevEff / cfg.risk_budget));
+            var scaleDelta = Math.abs(scale - prevScale);
+            if (scaleDelta > 1e-6) {
+                var tradeVal = scaleDelta * unitsA * navA;  // dollar amount traded
+                var fee = tradeVal * cfg.fee_rate;
+                totalFees += fee;
+                rebN++;
+                navA *= (1 - fee / (unitsA * navA));  // deduct fee from portfolio
+            }
+        }
+        sim_expT_prev = eff;
+
         navA *= (1 + portRet[i] * scale);
 
         var dayNum = i + 1;
@@ -337,9 +357,11 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
         if (isDca) {
             dcaN++;
             if (!sOn) {
-                unitsA += dcaAmt / navA;
+                var dcaFee = dcaAmt * cfg.fee_rate;
+                totalFees += dcaFee;
+                unitsA += (dcaAmt - dcaFee) / navA;
                 totalInv += dcaAmt;
-                events.push({ day: dayNum, type: 'DCA', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '+$' + dcaAmt + ' \u2192 tokens' });
+                events.push({ day: dayNum, type: 'DCA', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '+$' + dcaAmt + ' \u2192 tokens (fee $' + dcaFee.toFixed(2) + ')' });
             } else {
                 usdcR += dcaAmt;
                 totalInv += dcaAmt;
@@ -348,15 +370,17 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
         }
 
         if (res.tranche_amount > 0) {
+            var trFee = res.tranche_amount * cfg.fee_rate;
+            totalFees += trFee;
             totalDep += res.tranche_amount;
             var evType = res.tranche_event.indexOf('tranche_1') >= 0 && res.tranche_event.indexOf('tranche_2') >= 0 ? 'T1+T2'
                 : res.tranche_event.indexOf('tranche_1') >= 0 ? 'T1'
                 : res.tranche_event.indexOf('tranche_2') >= 0 ? 'T2'
                 : 'FINAL';
-            events.push({ day: dayNum, type: evType, gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '$' + res.tranche_amount.toFixed(0) + ' deployed (' + res.tranche_event + ')' });
+            events.push({ day: dayNum, type: evType, gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '$' + res.tranche_amount.toFixed(0) + ' deployed (' + res.tranche_event + ', fee $' + trFee.toFixed(2) + ')' });
         }
 
-        if (res.entry_triggered) events.push({ day: dayNum, type: 'ENTRY', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: 'shield triggered' });
+        if (res.entry_triggered) events.push({ day: dayNum, type: 'ENTRY', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '\u26A0 Emergency Brake \u2014 exposure \u2192 ' + (cfg.floor_exposure * 100).toFixed(0) + '% instantly' });
         if (res.exit_reason) events.push({ day: dayNum, type: 'FINAL', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: 'EXIT: ' + res.exit_reason });
         if (res.exit_blocked) events.push({ day: dayNum, type: 'BLOCKED', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: res.exit_block_reason });
 
@@ -373,17 +397,22 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
         if (sOn) shDays++;
     }
 
-    // Buy & Hold: DCA unconditional
-    var unitsB = startCap, navB = 1.0, totalInvB = startCap;
+    // Buy & Hold: DCA unconditional (with trading fees)
+    var unitsB = startCap, navB = 1.0, totalInvB = startCap, bhFees = 0;
     var eqB = [startCap], invB = [startCap];
     for (var i = 0; i < portRet.length; i++) {
         navB *= (1 + portRet[i]);
-        if (dcaAmt > 0 && (i + 1) % dcaInt === 0) { unitsB += dcaAmt / navB; totalInvB += dcaAmt; }
+        if (dcaAmt > 0 && (i + 1) % dcaInt === 0) {
+            var bhFee = dcaAmt * cfg.fee_rate;
+            bhFees += bhFee;
+            unitsB += (dcaAmt - bhFee) / navB;
+            totalInvB += dcaAmt;
+        }
         eqB.push(unitsB * navB);
         invB.push(totalInvB);
     }
 
-    return { eqA: eqA, invA: invA, eqB: eqB, invB: invB, usdcT: usdcT, shT: shT, expT: expT, gDdT: gDdT, eDdT: eDdT, dsVT: dsVT, pkVT: pkVT, gapT: gapT, events: events, totalInv: totalInv, totalInvB: totalInvB, totalDep: totalDep, shDays: shDays, dcaN: dcaN };
+    return { eqA: eqA, invA: invA, eqB: eqB, invB: invB, usdcT: usdcT, shT: shT, expT: expT, gDdT: gDdT, eDdT: eDdT, dsVT: dsVT, pkVT: pkVT, gapT: gapT, events: events, totalInv: totalInv, totalInvB: totalInvB, totalDep: totalDep, shDays: shDays, dcaN: dcaN, totalFees: totalFees, rebN: rebN, bhFees: bhFees };
 }
 
 function btCalcMetrics(eq, totalIn, years) {
@@ -453,7 +482,8 @@ function btRunBacktest() {
         + '<div class="bt-sub">Invested: $' + m1.totalIn.toLocaleString() + ' | Return: ' + (m1.ret * 100).toFixed(1) + '%</div>'
         + '<div class="bt-sub">Max DD: ' + (m1.mdd * 100).toFixed(1) + '% | Calmar: ' + m1.cal.toFixed(2) + ' | Sharpe: ' + m1.sh.toFixed(2) + '</div>'
         + '<div class="bt-sub">XIRR: ' + (m1.xi * 100).toFixed(1) + '% | Shield: ' + sim.shDays + '/' + pr.rets.length + ' days</div>'
-        + '<div class="bt-sub">Tranches: $' + sim.totalDep.toFixed(0) + ' | DCA: ' + sim.dcaN + '</div>';
+        + '<div class="bt-sub">Tranches: $' + sim.totalDep.toFixed(0) + ' | DCA: ' + sim.dcaN + '</div>'
+        + '<div class="bt-sub" style="color:var(--amber)">Fees: $' + sim.totalFees.toFixed(0) + ' (' + sim.rebN + ' rebalances)</div>';
     sr.appendChild(c1);
 
     var c2 = document.createElement('div');
@@ -462,7 +492,8 @@ function btRunBacktest() {
         + '<div class="bt-big" style="color:var(--' + (!best ? 'green' : 'amber') + ')">$' + m2.final.toLocaleString(undefined, { maximumFractionDigits: 0 }) + '</div>'
         + '<div class="bt-sub">Invested: $' + m2.totalIn.toLocaleString() + ' | Return: ' + (m2.ret * 100).toFixed(1) + '%</div>'
         + '<div class="bt-sub">Max DD: ' + (m2.mdd * 100).toFixed(1) + '% | Calmar: ' + m2.cal.toFixed(2) + ' | Sharpe: ' + m2.sh.toFixed(2) + '</div>'
-        + '<div class="bt-sub">XIRR: ' + (m2.xi * 100).toFixed(1) + '%</div>';
+        + '<div class="bt-sub">XIRR: ' + (m2.xi * 100).toFixed(1) + '%</div>'
+        + '<div class="bt-sub" style="color:var(--amber)">Fees: $' + sim.bhFees.toFixed(0) + ' (DCA only)</div>';
     sr.appendChild(c2);
 
     var alpha = m2.final > 0 ? ((m1.final / m2.final - 1) * 100).toFixed(1) : '?';
@@ -488,7 +519,8 @@ function btRunBacktest() {
         { l: 'Tranche Deploys', v: '$' + sim.totalDep.toFixed(0), c: '' },
         { l: 'Shield Entries', v: entries.length, c: '' },
         { l: 'Exits', v: exits.length, c: '' },
-        { l: 'Blocked', v: blocked.length, c: blocked.length > 0 ? 'warn' : '' }
+        { l: 'Blocked', v: blocked.length, c: blocked.length > 0 ? 'warn' : '' },
+        { l: 'Total Fees', v: '$' + sim.totalFees.toFixed(0), c: sim.totalFees > 0 ? 'warn' : '' }
     ];
     metrics.forEach(function(it) {
         var b = document.createElement('div');
@@ -500,6 +532,50 @@ function btRunBacktest() {
     // Destroy old charts
     Object.keys(btCharts).forEach(function(k) { if (btCharts[k]) btCharts[k].destroy(); });
     btCharts = {};
+
+    // Collect ENTRY event indices for Emergency Brake annotation lines
+    var entryDays = entries.map(function(e) { return e.day - 1; });  // 0-based index into dateLabels
+
+    // Custom Chart.js plugin: draw red dashed vertical lines at Emergency Brake entry points
+    var emergencyBrakePlugin = {
+        id: 'emergencyBrakeLines',
+        afterDraw: function(chart) {
+            if (!entryDays.length) return;
+            var ctx = chart.ctx;
+            var xAxis = chart.scales.x;
+            var yTop = chart.chartArea.top;
+            var yBottom = chart.chartArea.bottom;
+            ctx.save();
+            ctx.setLineDash([5, 4]);
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = 'rgba(248, 113, 113, 0.7)';
+            for (var k = 0; k < entryDays.length; k++) {
+                var x = xAxis.getPixelForValue(entryDays[k]);
+                if (x >= chart.chartArea.left && x <= chart.chartArea.right) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, yTop);
+                    ctx.lineTo(x, yBottom);
+                    ctx.stroke();
+                }
+            }
+            // Label at top of first entry line
+            if (entryDays.length > 0) {
+                var x0 = xAxis.getPixelForValue(entryDays[0]);
+                if (x0 >= chart.chartArea.left && x0 <= chart.chartArea.right) {
+                    ctx.setLineDash([]);
+                    ctx.font = 'bold 10px monospace';
+                    ctx.fillStyle = '#f87171';
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'top';
+                    var label = '\u26A0 EMERGENCY BRAKE';
+                    var lx = x0 + 4;
+                    if (lx + ctx.measureText(label).width > chart.chartArea.right) lx = x0 - ctx.measureText(label).width - 4;
+                    ctx.fillText(label, lx, yTop + 4);
+                }
+            }
+            ctx.restore();
+        }
+    };
 
     var cO = function() {
         return {
@@ -522,7 +598,8 @@ function btRunBacktest() {
                 { label: 'Buy & Hold + DCA', data: sim.eqB.slice(1), borderColor: '#fbbf24', fill: false, pointRadius: 0, borderWidth: 1.5 }
             ]
         },
-        options: (function() { var o = cO(); o.scales.y.ticks.callback = function(v) { return '$' + (v >= 1e3 ? (v / 1e3).toFixed(0) + 'k' : v.toFixed(0)); }; return o; })()
+        options: (function() { var o = cO(); o.scales.y.ticks.callback = function(v) { return '$' + (v >= 1e3 ? (v / 1e3).toFixed(0) + 'k' : v.toFixed(0)); }; return o; })(),
+        plugins: [emergencyBrakePlugin]
     });
 
     // Capital breakdown
@@ -547,17 +624,19 @@ function btRunBacktest() {
             labels: dateLabels,
             datasets: [{ label: 'Shield', data: sim.shT, borderColor: function(ctx) { return ctx.raw ? '#f87171' : '#34d399'; }, backgroundColor: function(ctx) { return ctx.raw ? 'rgba(248,113,113,0.25)' : 'rgba(52,211,153,0.1)'; }, fill: true, pointRadius: 0, borderWidth: 1.5, stepped: true }]
         },
-        options: (function() { var o = cO(); o.scales.y.min = -0.15; o.scales.y.max = 1.3; o.scales.y.ticks.callback = function(v) { return v >= 0.5 ? 'ON' : 'OFF'; }; return o; })()
+        options: (function() { var o = cO(); o.scales.y.min = -0.15; o.scales.y.max = 1.3; o.scales.y.ticks.callback = function(v) { return v >= 0.5 ? 'ON' : 'OFF'; }; return o; })(),
+        plugins: [emergencyBrakePlugin]
     });
 
-    // Exposure
+    // Exposure — stepped:'before' makes hard-switch a VERTICAL drop (instant), not diagonal
     btCharts.exp = new Chart(document.getElementById('btExposureChart'), {
         type: 'line',
         data: {
             labels: dateLabels,
-            datasets: [{ label: 'Exposure', data: sim.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.15)', fill: true, pointRadius: 0, borderWidth: 1.5 }]
+            datasets: [{ label: 'Exposure', data: sim.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.15)', fill: true, pointRadius: 0, borderWidth: 1.5, stepped: 'before' }]
         },
-        options: (function() { var o = cO(); o.scales.y.min = 0; o.scales.y.max = 100; o.scales.y.ticks.callback = function(v) { return v + '%'; }; return o; })()
+        options: (function() { var o = cO(); o.scales.y.min = 0; o.scales.y.max = 100; o.scales.y.ticks.callback = function(v) { return v + '%'; }; return o; })(),
+        plugins: [emergencyBrakePlugin]
     });
 
     // Volatility
@@ -595,7 +674,7 @@ function btRunBacktest() {
     sim.events.forEach(function(e) {
         var tr = document.createElement('tr');
         var dt = dateLabels[e.day - 1] || ('day ' + e.day);
-        tr.innerHTML = '<td>' + dt + '</td><td>' + e.day + '</td><td class="bt-ev-' + e.type.toLowerCase().replace('+', '-') + '">' + e.type + '</td><td>' + (e.gdd * 100).toFixed(1) + '%</td><td>' + (e.edd * 100).toFixed(1) + '%</td><td>' + ((e.gap || 0) * 100).toFixed(1) + '%</td><td>' + (e.dsv * 100).toFixed(1) + '%</td><td>' + (e.eff * 100).toFixed(1) + '%</td><td>$' + (e.usdc || 0).toFixed(0) + '</td><td>' + e.detail + '</td>';
+        tr.innerHTML = '<td>' + dt + '</td><td>' + e.day + '</td><td class="bt-ev-' + e.type.toLowerCase().replace('+', '-') + '">' + (e.type === 'ENTRY' ? '\u26A0 BRAKE' : e.type) + '</td><td>' + (e.gdd * 100).toFixed(1) + '%</td><td>' + (e.edd * 100).toFixed(1) + '%</td><td>' + ((e.gap || 0) * 100).toFixed(1) + '%</td><td>' + (e.dsv * 100).toFixed(1) + '%</td><td>' + (e.eff * 100).toFixed(1) + '%</td><td>$' + (e.usdc || 0).toFixed(0) + '</td><td>' + e.detail + '</td>';
         tbody.appendChild(tr);
     });
 

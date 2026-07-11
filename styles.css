@@ -2048,7 +2048,8 @@
     .bt-events-table { width: 100%; border-collapse: collapse; font-size: 0.72rem; font-family: var(--mono); }
     .bt-events-table th { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); color: var(--muted); font-weight: 500; position: sticky; top: 0; background: var(--s1); }
     .bt-events-table td { padding: 5px 8px; border-bottom: 1px solid rgba(255,255,255,0.03); }
-    .bt-ev-entry { color: var(--red); font-weight: 600; }
+    .bt-ev-entry { color: var(--red); font-weight: 700; text-shadow: 0 0 6px rgba(248,113,113,0.4); }
+    .bt-events-table tr:has(.bt-ev-entry) { background: rgba(248,113,113,0.08); }
     .bt-ev-final { color: var(--green); font-weight: 600; }
     .bt-ev-blocked { color: var(--amber); }
     .bt-ev-dca { color: #39d2c0; }
