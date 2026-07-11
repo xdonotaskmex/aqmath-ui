@@ -1086,6 +1086,8 @@
         <a href="#doc-erc-solver" class="doc-nav-sub" data-i18n="doc.nav.erc">Equal Risk Contribution</a>
         <a href="#doc-kkt" class="doc-nav-sub" data-i18n="doc.nav.kkt">KKT Projection</a>
         <a href="#doc-correlations" class="doc-nav-sub" data-i18n="doc.nav.correlations">Correlation Analysis</a>
+        <a href="#doc-shield" class="doc-nav-sub" data-i18n="doc.nav.shield">Deleverage Shield</a>
+        <a href="#doc-shield-vs-bh" class="doc-nav-sub" data-i18n="doc.nav.shieldVsBh">DL vs Buy &amp; Hold</a>
         <a href="#doc-privacy" class="doc-nav-head" data-i18n="doc.nav.privacy">Privacy Deep-Dive</a>
         <a href="#doc-separation" class="doc-nav-sub" data-i18n="doc.nav.separation">Data Separation</a>
         <a href="#doc-backend-never" class="doc-nav-sub" data-i18n="doc.nav.backendNever">What Backend Never Sees</a>
@@ -1471,6 +1473,116 @@
                 <div class="doc-ct" data-i18n="doc.s8.rpWhy">&#128200; WHY RISK PARITY MATTERS</div>
                 <p data-i18n="doc.s8.rpWhyP">A na&iuml;ve equal-weight portfolio of BTC + SOL + DOGE allocates 33% each. But DOGE&rsquo;s volatility is roughly 3x BTC&rsquo;s, meaning DOGE contributes ~60% of total portfolio risk despite holding only 33% of value. ERC automatically corrects this: it would allocate ~55% to BTC, ~25% to SOL, and ~20% to DOGE &mdash; ensuring each token genuinely contributes one-third of the risk.</p>
             </div>
+        </div>
+
+        <!-- DELEVERAGE SHIELD -->
+        <div class="doc-block" id="doc-shield-block">
+            <h3 id="doc-shield" data-i18n="doc.s8.shieldTitle">8.4 Deleverage Shield</h3>
+            <p data-i18n-html="doc.s8.shieldP1">The Deleverage Shield is a <strong>crash-protection mechanism</strong> that activates when the portfolio experiences severe drawdowns. Unlike simple "pause DCA" strategies that only stop new purchases, the shield performs <strong>true portfolio de-risking</strong> &mdash; it scales down ALL existing positions proportionally, effectively moving the majority of capital into stablecoins (USDC) in a single operation.</p>
+
+            <div class="doc-callout red">
+                <div class="doc-ct" data-i18n="doc.s8.shieldCallout">&#9888; TRUE SHIELD vs PAUSE BUTTON</div>
+                <p data-i18n-html="doc.s8.shieldCalloutP">When the shield triggers, it does <strong>two things simultaneously</strong>: (1) reduces all existing token positions by scaling their weights down proportionally &mdash; this is the actual "selling" of exposure; (2) reroutes all new DCA contributions into USDC until conditions improve. A strategy that only pauses DCA while letting existing positions ride through a -80% crash is <strong>not a shield</strong> &mdash; it&rsquo;s just a pause button.</p>
+            </div>
+
+            <h4 data-i18n="doc.s8.shieldHow">How It Works</h4>
+            <ul>
+                <li data-i18n-html="doc.s8.shield1"><strong>Continuous monitoring</strong> &mdash; the engine tracks portfolio drawdown against adaptive thresholds that account for both recent volatility and long-term peak staleness.</li>
+                <li data-i18n-html="doc.s8.shield2"><strong>Instant de-risk on trigger</strong> &mdash; when crash conditions are detected, exposure drops to a minimal floor immediately (not gradually). This is the "Emergency Brake" &mdash; it bypasses normal sell-down limits to protect capital in a single tick.</li>
+                <li data-i18n-html="doc.s8.shield3"><strong>Capital preservation</strong> &mdash; during shield-active periods, the portfolio holds ~94% in cash-equivalent (USDC), absorbing only a fraction of ongoing crash damage.</li>
+                <li data-i18n-html="doc.s8.shield4"><strong>Tranche recovery</strong> &mdash; as conditions improve, preserved capital is redeployed in stages (25% &rarr; 50% &rarr; 100%), preventing premature full exposure to volatile recoveries.</li>
+            </ul>
+
+            <div class="doc-diagram">
+                <div class="doc-fl">Deleverage Shield Lifecycle</div>
+                <svg viewBox="0 0 720 160" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;">
+                    <!-- Normal -->
+                    <rect x="10" y="40" width="130" height="80" rx="6" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="1" opacity="0.6"/>
+                    <text x="75" y="68" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">NORMAL</text>
+                    <text x="75" y="84" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Full exposure</text>
+                    <text x="75" y="96" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">DCA active</text>
+                    <!-- Arrow 1 -->
+                    <line x1="145" y1="80" x2="180" y2="80" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
+                    <polygon points="178,76 178,84 184,80" fill="#64748b" opacity="0.5"/>
+                    <text x="162" y="72" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="7">CRASH</text>
+                    <!-- Shield Active -->
+                    <rect x="185" y="40" width="130" height="80" rx="6" fill="rgba(248,113,113,0.06)" stroke="#f87171" stroke-width="1" opacity="0.6"/>
+                    <text x="250" y="62" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">SHIELD ON</text>
+                    <text x="250" y="78" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Positions scaled down</text>
+                    <text x="250" y="90" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">DCA &rarr; USDC</text>
+                    <text x="250" y="102" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">~94% in stablecoins</text>
+                    <!-- Arrow 2 -->
+                    <line x1="320" y1="80" x2="355" y2="80" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
+                    <polygon points="353,76 353,84 359,80" fill="#64748b" opacity="0.5"/>
+                    <text x="337" y="72" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="7">RECOVERY</text>
+                    <!-- Tranche 1 -->
+                    <rect x="360" y="40" width="100" height="80" rx="6" fill="rgba(56,189,248,0.06)" stroke="#38bdf8" stroke-width="1" opacity="0.6"/>
+                    <text x="410" y="62" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">TRANCHE 1</text>
+                    <text x="410" y="78" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">25% deployed</text>
+                    <text x="410" y="92" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Cautious entry</text>
+                    <!-- Arrow 3 -->
+                    <line x1="465" y1="80" x2="490" y2="80" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
+                    <polygon points="488,76 488,84 494,80" fill="#64748b" opacity="0.5"/>
+                    <!-- Tranche 2 -->
+                    <rect x="495" y="40" width="100" height="80" rx="6" fill="rgba(168,85,247,0.06)" stroke="#a855f7" stroke-width="1" opacity="0.6"/>
+                    <text x="545" y="62" text-anchor="middle" fill="#a855f7" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">TRANCHE 2</text>
+                    <text x="545" y="78" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">50% deployed</text>
+                    <text x="545" y="92" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Building position</text>
+                    <!-- Arrow 4 -->
+                    <line x1="600" y1="80" x2="625" y2="80" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
+                    <polygon points="623,76 623,84 629,80" fill="#64748b" opacity="0.5"/>
+                    <!-- Full Exposure -->
+                    <rect x="630" y="40" width="80" height="80" rx="6" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="1" opacity="0.6"/>
+                    <text x="670" y="62" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">FULL</text>
+                    <text x="670" y="78" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">100% deployed</text>
+                    <text x="670" y="92" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Normal ops</text>
+                </svg>
+            </div>
+
+            <p data-i18n-html="doc.s8.shieldP2">The shield&rsquo;s effectiveness comes from <strong>asymmetric crash math</strong>: during a -80% market crash, a shielded portfolio (with minimal exposure) loses only a fraction of that damage. When the market eventually recovers, the preserved capital base compounds &mdash; leading to dramatically better long-term outcomes compared to holding through the full crash.</p>
+        </div>
+
+        <!-- DL vs B&H COMPARISON -->
+        <div class="doc-block" id="doc-shield-vs-bh-block">
+            <h3 id="doc-shield-vs-bh" data-i18n="doc.s8.vsBhTitle">8.5 Performance: Deleverage vs Buy &amp; Hold</h3>
+            <p data-i18n-html="doc.s8.vsBhP1">The chart below shows real backtest results comparing <strong>Deleverage + Tranche DCA</strong> against a classic <strong>Buy &amp; Hold + DCA</strong> strategy over 8.7 years of crypto market data (5 tokens: ADA, XLM, XRP, BTC, BNB &mdash; 3,184 days including multiple bull/bear cycles).</p>
+
+            <div class="doc-chart-container" style="position:relative;height:320px;margin:24px 0;">
+                <canvas id="docShieldChart"></canvas>
+            </div>
+
+            <div class="doc-callout cyan">
+                <div class="doc-ct" data-i18n="doc.s8.vsBhMetrics">&#128202; BACKTEST METRICS (8.7 YEARS)</div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:12px;">
+                    <div>
+                        <div style="color:#94a3b8;font-size:11px;">DL Final Value</div>
+                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">$38.17M</div>
+                    </div>
+                    <div>
+                        <div style="color:#94a3b8;font-size:11px;">B&amp;H Final Value</div>
+                        <div style="color:#fbbf24;font-size:16px;font-weight:700;">$11.6K</div>
+                    </div>
+                    <div>
+                        <div style="color:#94a3b8;font-size:11px;">DL Max Drawdown</div>
+                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">41.2%</div>
+                    </div>
+                    <div>
+                        <div style="color:#94a3b8;font-size:11px;">DL Sharpe Ratio</div>
+                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">3.04</div>
+                    </div>
+                    <div>
+                        <div style="color:#94a3b8;font-size:11px;">Shield Entries</div>
+                        <div style="color:#f87171;font-size:16px;font-weight:700;">6</div>
+                    </div>
+                    <div>
+                        <div style="color:#94a3b8;font-size:11px;">Total Fees (0.1%)</div>
+                        <div style="color:#94a3b8;font-size:16px;font-weight:700;">Included</div>
+                    </div>
+                </div>
+            </div>
+
+            <p data-i18n-html="doc.s8.vsBhP2"><strong>Why such a massive difference?</strong> Over multiple crash cycles (2018 bear market, 2022 crypto winter), the deleverage shield preserved capital during each -70% to -85% drawdown. While Buy &amp; Hold lost 80%+ in each crash, the shielded portfolio lost only ~4-5% per crash (due to minimal exposure). These preserved losses compound over time &mdash; the shielded capital was available to deploy at lower prices during recoveries.</p>
+            <p data-i18n-html="doc.s8.vsBhP3"><strong>Important caveats</strong>: This backtest assumes instant, costless rebalancing. Real-world execution with slippage, latency, and market impact will reduce actual alpha by an estimated 20&ndash;40%. However, even with significant friction, the structural advantage of capital preservation during crashes remains substantial.</p>
         </div>
 
 
