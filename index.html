@@ -126,12 +126,12 @@
                 <span class="lp-terminal-title">aqmath &mdash; live engine</span>
             </div>
             <div class="lp-terminal-body">
-                <div class="lp-term-line"><span class="lp-term-prompt">$</span> aqmath engine v1.0.4 &mdash; initializing...</div>
+                <div class="lp-term-line"><span class="lp-term-prompt">$</span> aqmath engine v2.0 &mdash; initializing...</div>
                 <div class="lp-term-line lp-term-ok">data pipeline: 3 exchanges &times; 180-day history &rarr; covariance matrix</div>
-                <div class="lp-term-line"><span class="lp-term-prompt">$</span> <span id="termCmdLine">computing risk parity weights...</span></div>
-                <div class="lp-term-line lp-term-ok" id="termResultLine">covariance matrix computed (ADA&times;BTC&times;XRP) &mdash; KKT projection running...</div>
-                <div class="lp-term-line"><span class="lp-term-prompt">$</span> <span id="termStatusLine">scanning shield conditions...</span></div>
-                <div class="lp-term-line lp-term-ok" id="termDetailLine">risk parity weights locked &mdash; exposure: 87.3% risky / 12.7% USDC</div>
+                <div class="lp-term-line"><span class="lp-term-prompt">$</span> <span id="termLine0"></span></div>
+                <div class="lp-term-line lp-term-ok" id="termLine1"></div>
+                <div class="lp-term-line"><span class="lp-term-prompt">$</span> <span id="termLine2"></span></div>
+                <div class="lp-term-line lp-term-ok" id="termLine3"></div>
                 <div class="lp-term-line lp-term-cursor">$ <span class="lp-blink">_</span></div>
             </div>
         </div>
@@ -139,11 +139,14 @@
 
     <script>
     (function() {
-        var cmd = document.getElementById('termCmdLine');
-        var result = document.getElementById('termResultLine');
-        var status = document.getElementById('termStatusLine');
-        var detail = document.getElementById('termDetailLine');
-        if (!cmd || !result || !status || !detail) return;
+        var els = [
+            document.getElementById('termLine0'),
+            document.getElementById('termLine1'),
+            document.getElementById('termLine2'),
+            document.getElementById('termLine3')
+        ];
+        if (!els[0] || !els[1] || !els[2] || !els[3]) return;
+
         var sets = [
             [
                 'computing risk parity weights...',
@@ -176,27 +179,44 @@
                 'your portfolio stays in your browser. we never see it.'
             ]
         ];
-        var idx = 0;
-        setInterval(function() {
-            idx = (idx + 1) % sets.length;
-            cmd.style.opacity = '0';
-            result.style.opacity = '0';
-            status.style.opacity = '0';
-            detail.style.opacity = '0';
-            setTimeout(function() {
-                cmd.textContent = sets[idx][0];
-                result.textContent = sets[idx][1];
-                status.textContent = sets[idx][2];
-                detail.textContent = sets[idx][3];
-                cmd.style.opacity = '1';
-                result.style.opacity = '1';
-                status.style.opacity = '1';
-                detail.style.opacity = '1';
-            }, 400);
-        }, 4000);
-        [cmd, result, status, detail].forEach(function(el) {
-            el.style.transition = 'opacity 0.4s';
-        });
+
+        var CHAR_DELAY = 28;
+        var LINE_DELAY = 300;
+        var PAUSE_AFTER_SET = 3500;
+        var setIdx = 0;
+
+        function typeLine(lineIdx, text, charIdx, cb) {
+            if (charIdx <= text.length) {
+                els[lineIdx].textContent = text.substring(0, charIdx);
+                setTimeout(function() { typeLine(lineIdx, text, charIdx + 1, cb); }, CHAR_DELAY);
+            } else {
+                cb();
+            }
+        }
+
+        function typeSet(set, lineIdx, done) {
+            if (lineIdx >= set.length) return done();
+            els[lineIdx].textContent = '';
+            typeLine(lineIdx, set[lineIdx], 0, function() {
+                setTimeout(function() { typeSet(set, lineIdx + 1, done); }, LINE_DELAY);
+            });
+        }
+
+        function clearLines() {
+            for (var i = 0; i < els.length; i++) els[i].textContent = '';
+        }
+
+        function loop() {
+            clearLines();
+            typeSet(sets[setIdx], 0, function() {
+                setTimeout(function() {
+                    setIdx = (setIdx + 1) % sets.length;
+                    loop();
+                }, PAUSE_AFTER_SET);
+            });
+        }
+
+        loop();
     })();
     </script>
 
