@@ -126,12 +126,12 @@
                 <span class="lp-terminal-title">aqmath &mdash; live engine</span>
             </div>
             <div class="lp-terminal-body">
-                <div class="lp-term-line"><span class="lp-term-prompt">$</span> initializing portfolio engine...</div>
-                <div class="lp-term-line lp-term-ok">connected to 15+ exchanges</div>
-                <div class="lp-term-line"><span class="lp-term-prompt">$</span> scanning market volatility across your tokens</div>
-                <div class="lp-term-line lp-term-ok" id="termRiskLine">risk levels calculated &mdash; all positions within safe bounds</div>
-                <div class="lp-term-line"><span class="lp-term-prompt">$</span> rebalancing recommendations ready</div>
-                <div class="lp-term-line lp-term-ok" id="termAllocLine">your portfolio is balanced. nothing to worry about.</div>
+                <div class="lp-term-line"><span class="lp-term-prompt">$</span> aqmath engine v1.0.4 &mdash; initializing...</div>
+                <div class="lp-term-line lp-term-ok">data pipeline: 3 exchanges &times; 180-day history &rarr; covariance matrix</div>
+                <div class="lp-term-line"><span class="lp-term-prompt">$</span> <span id="termCmdLine">computing risk parity weights...</span></div>
+                <div class="lp-term-line lp-term-ok" id="termResultLine">covariance matrix computed (ADA&times;BTC&times;XRP) &mdash; KKT projection running...</div>
+                <div class="lp-term-line"><span class="lp-term-prompt">$</span> <span id="termStatusLine">scanning shield conditions...</span></div>
+                <div class="lp-term-line lp-term-ok" id="termDetailLine">risk parity weights locked &mdash; exposure: 87.3% risky / 12.7% USDC</div>
                 <div class="lp-term-line lp-term-cursor">$ <span class="lp-blink">_</span></div>
             </div>
         </div>
@@ -139,37 +139,64 @@
 
     <script>
     (function() {
-        var riskLine = document.getElementById('termRiskLine');
-        var allocLine = document.getElementById('termAllocLine');
-        if (!riskLine || !allocLine) return;
-        var riskSets = [
-            'risk levels calculated \u2014 BTC 22.4%, ETH 18.7%, SOL 11.2%',
-            'risk levels calculated \u2014 covariance matrix updated',
-            'risk levels calculated \u2014 AVAX 9.8%, LINK 7.1%, within bounds',
-            'risk levels calculated \u2014 volatility-weighted targets locked',
-            'risk levels calculated \u2014 all positions within safe bounds'
-        ];
-        var allocSets = [
-            'DCA allocated $412.30 across 3 underweight tokens',
-            'your portfolio is balanced. nothing to worry about.',
-            'rebalance recommended: BTC +2.1%, ETH -0.8% drift',
-            'safe-haven USDC absorbed $18.40 surplus',
-            'your portfolio is balanced. nothing to worry about.'
+        var cmd = document.getElementById('termCmdLine');
+        var result = document.getElementById('termResultLine');
+        var status = document.getElementById('termStatusLine');
+        var detail = document.getElementById('termDetailLine');
+        if (!cmd || !result || !status || !detail) return;
+        var sets = [
+            [
+                'computing risk parity weights...',
+                'covariance matrix computed (ADA\u00d7BTC\u00d7XRP) \u2014 KKT projection running...',
+                'scanning shield conditions...',
+                'risk parity weights locked \u2014 exposure: 87.3% risky / 12.7% USDC'
+            ],
+            [
+                'deleverage shield: scanning 180d volatility...',
+                '\u26a0 SHIELD ACTIVE \u2014 drawdown 34.2% detected, exposure cut to 5%',
+                'rerouting DCA to USDC reserve...',
+                'capital preserved \u2014 9 entries, 16 exits, 289 blocked by shield'
+            ],
+            [
+                'tranche recovery: stage 2/3 \u2014 deploying from USDC reserve...',
+                '$327.50 re-entered market via tranche (50% \u2192 100% recovery)',
+                '3-stage tranche DCA: 25% \u2192 50% \u2192 100% calibrated deployment',
+                '$6,550 total tranche-deployed across 106 DCA events'
+            ],
+            [
+                'backtest validation: 3,184 days (ADA/BTC/XRP) \u2014 8.7 years...',
+                'DL: $227,630 (1862%) vs B&H: $115,662 (897%) \u2014 2\u00d7 the return',
+                'risk-adjusted: Sharpe 0.72 / Calmar 0.79 vs B&H 0.34 / 0.35',
+                'max drawdown 51.2% vs 86.5% \u2014 40% less pain, 2\u00d7 the gain'
+            ],
+            [
+                'privacy audit: processing portfolio in-memory...',
+                '0 bytes persisted \u2014 no wallet, no account, no data stored',
+                'ephemeral processing: data received \u2192 computed \u2192 discarded',
+                'your portfolio stays in your browser. we never see it.'
+            ]
         ];
         var idx = 0;
         setInterval(function() {
-            idx = (idx + 1) % riskSets.length;
-            riskLine.style.opacity = '0';
-            allocLine.style.opacity = '0';
+            idx = (idx + 1) % sets.length;
+            cmd.style.opacity = '0';
+            result.style.opacity = '0';
+            status.style.opacity = '0';
+            detail.style.opacity = '0';
             setTimeout(function() {
-                riskLine.textContent = riskSets[idx];
-                allocLine.textContent = allocSets[idx];
-                riskLine.style.opacity = '1';
-                allocLine.style.opacity = '1';
+                cmd.textContent = sets[idx][0];
+                result.textContent = sets[idx][1];
+                status.textContent = sets[idx][2];
+                detail.textContent = sets[idx][3];
+                cmd.style.opacity = '1';
+                result.style.opacity = '1';
+                status.style.opacity = '1';
+                detail.style.opacity = '1';
             }, 400);
-        }, 3500);
-        riskLine.style.transition = 'opacity 0.4s';
-        allocLine.style.transition = 'opacity 0.4s';
+        }, 4000);
+        [cmd, result, status, detail].forEach(function(el) {
+            el.style.transition = 'opacity 0.4s';
+        });
     })();
     </script>
 
