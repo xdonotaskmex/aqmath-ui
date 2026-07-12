@@ -1404,7 +1404,8 @@ async function optimizePortfolio() {
             body: JSON.stringify({
                 tokens,
                 deleverage_enabled: deleverageEnabled,
-                shield_state: shieldState
+                shield_state: shieldState,
+                total_equity: totalValue()  // Real portfolio value for tranche exposure calc
             })
         });
         const result = await resp.json();
