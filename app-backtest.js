@@ -309,16 +309,16 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
     var shT = [], expT = [], gDdT = [], eDdT = [], dsVT = [], pkVT = [], gapT = [];
     var events = [];
     var shDays = 0, dcaN = 0;
+    var prevScale = cfg.risk_budget / cfg.risk_budget;  // FIX #2: start at full exposure
 
     for (var i = 0; i < portRet.length; i++) {
         var sub = portRet.slice(0, i + 1);
-        var totalEquity = eqA[eqA.length - 1];  // Bug 1+3 FIX: Pass portfolio value for tranche conversion
+        var totalEquity = eqA[eqA.length - 1];
         var res = evaluateShield(sub, sOn, lMd, pDv, cfg, usdcR, t1Done, t2Done, totalEquity);
         sOn = res.shield_active; lMd = res.local_max_dd; pDv = res.peak_ds_vol;
         usdcR = res.usdc_reserve; t1Done = res.tranche_1_executed; t2Done = res.tranche_2_executed;
 
         // EMERGENCY BRAKE: On shield entry, force floor exposure INSTANTLY.
-        // Bypass max_delta, ignore prev_exposure. Auditor requirement.
         var eff;
         if (res.entry_triggered && res.shield_active) {
             eff = cfg.floor_exposure;
@@ -331,24 +331,32 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
             }
         }
         pExp = eff;
-        var scale = Math.max(0, Math.min(1, eff / cfg.risk_budget));
+        var todayScale = Math.max(0, Math.min(1, eff / cfg.risk_budget));
+
+        // FIX #1b: Neutralize tranche exposure boost from scale.
+        // Tranches now buy actual units, so the boost would double-count.
+        if (res.tranche_amount > 0 && totalEquity > 0) {
+            var trancheBoost = (res.tranche_amount / totalEquity) / cfg.risk_budget;
+            todayScale = Math.max(0, Math.min(1, todayScale - trancheBoost));
+        }
+
+        // FIX #2 (Look-ahead): Apply YESTERDAY's exposure to today's return.
+        // Shield state computed from today's data determines TOMORROW's exposure.
+        navA *= (1 + portRet[i] * prevScale);
 
         // Rebalance fee: when exposure changes, model the trading cost
-        if (pExp !== null && i > 0) {
-            var prevEff = sim_expT_prev;
-            var prevScale = Math.max(0, Math.min(1, prevEff / cfg.risk_budget));
-            var scaleDelta = Math.abs(scale - prevScale);
+        if (sim_expT_prev !== null && i > 0) {
+            var scaleDelta = Math.abs(todayScale - prevScale);
             if (scaleDelta > 1e-6) {
-                var tradeVal = scaleDelta * unitsA * navA;  // dollar amount traded
+                var tradeVal = scaleDelta * (unitsA * navA);
                 var fee = tradeVal * cfg.fee_rate;
                 totalFees += fee;
                 rebN++;
-                navA *= (1 - fee / (unitsA * navA));  // deduct fee from portfolio
+                navA *= (1 - fee / (unitsA * navA));
             }
         }
         sim_expT_prev = eff;
-
-        navA *= (1 + portRet[i] * scale);
+        prevScale = todayScale;  // FIX #2: today's scale applies from tomorrow
 
         var dayNum = i + 1;
         var isDca = dcaAmt > 0 && dayNum % dcaInt === 0;
@@ -369,22 +377,29 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
             }
         }
 
+        // FIX #1 (Phantom capital): Tranche actually buys units at current NAV.
+        // Without this, tranche $ leaves USDC but never enters tokens,
+        // while the exposure boost creates phantom compounding.
         if (res.tranche_amount > 0) {
             var trFee = res.tranche_amount * cfg.fee_rate;
             totalFees += trFee;
             totalDep += res.tranche_amount;
+            var trNet = res.tranche_amount - trFee;
+            if (trNet > 0 && navA > 0) {
+                unitsA += trNet / navA;  // Actually buy tokens
+            }
             var evType = res.tranche_event.indexOf('tranche_1') >= 0 && res.tranche_event.indexOf('tranche_2') >= 0 ? 'T1+T2'
                 : res.tranche_event.indexOf('tranche_1') >= 0 ? 'T1'
                 : res.tranche_event.indexOf('tranche_2') >= 0 ? 'T2'
                 : 'FINAL';
-            events.push({ day: dayNum, type: evType, gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '$' + res.tranche_amount.toFixed(0) + ' deployed (' + res.tranche_event + ', fee $' + trFee.toFixed(2) + ')' });
+            events.push({ day: dayNum, type: evType, gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '$' + res.tranche_amount.toFixed(0) + ' \u2192 tokens (' + res.tranche_event + ', fee $' + trFee.toFixed(2) + ')' });
         }
 
         if (res.entry_triggered) events.push({ day: dayNum, type: 'ENTRY', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '\u26A0 Emergency Brake \u2014 exposure \u2192 ' + (cfg.floor_exposure * 100).toFixed(0) + '% instantly' });
         if (res.exit_reason) events.push({ day: dayNum, type: 'FINAL', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: 'EXIT: ' + res.exit_reason });
         if (res.exit_blocked) events.push({ day: dayNum, type: 'BLOCKED', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: res.exit_block_reason });
 
-        eqA.push(unitsA * navA + usdcR);  // FIX: include USDC reserve in total equity
+        eqA.push(unitsA * navA + usdcR);
         invA.push(totalInv);
         usdcT.push(usdcR);
         shT.push(sOn ? 1 : 0);
