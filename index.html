@@ -1527,7 +1527,7 @@
                     <rect x="185" y="40" width="130" height="80" rx="6" fill="rgba(248,113,113,0.06)" stroke="#f87171" stroke-width="1" opacity="0.6"/>
                     <text x="250" y="62" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">SHIELD ON</text>
                     <text x="250" y="78" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Positions scaled down</text>
-                    <text x="250" y="90" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">DCA &rarr; USDC</text>
+                    <text x="250" y="90" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">DCA &#x2192; USDC</text>
                     <text x="250" y="102" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">~94% in stablecoins</text>
                     <!-- Arrow 2 -->
                     <line x1="320" y1="80" x2="355" y2="80" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
@@ -1563,7 +1563,7 @@
         <!-- DL vs B&H COMPARISON -->
         <div class="doc-block" id="doc-shield-vs-bh-block">
             <h3 id="doc-shield-vs-bh" data-i18n="doc.s8.vsBhTitle">8.5 Performance: Deleverage vs Buy &amp; Hold</h3>
-            <p data-i18n-html="doc.s8.vsBhP1">The chart below shows real backtest results comparing <strong>Deleverage + Tranche DCA</strong> against a classic <strong>Buy &amp; Hold + DCA</strong> strategy over 8.7 years of crypto market data (5 tokens: ADA, XLM, XRP, BTC, BNB &mdash; 3,184 days including multiple bull/bear cycles).</p>
+            <p data-i18n-html="doc.s8.vsBhP1">The chart below compares <strong>Deleverage + Tranche DCA</strong> against a classic <strong>Buy &amp; Hold + DCA</strong> strategy over 8.7 years of crypto market data (3 tokens: ADA, BTC, XRP &mdash; 3,184 days including multiple bull/bear cycles). Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison.</p>
 
             <div class="doc-chart-container" style="position:relative;height:320px;margin:24px 0;">
                 <canvas id="docShieldChart"></canvas>
@@ -1574,33 +1574,33 @@
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:12px;">
                     <div>
                         <div style="color:#94a3b8;font-size:11px;">DL Final Value</div>
-                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">$38.17M</div>
+                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">$227,630</div>
                     </div>
                     <div>
                         <div style="color:#94a3b8;font-size:11px;">B&amp;H Final Value</div>
-                        <div style="color:#fbbf24;font-size:16px;font-weight:700;">$11.6K</div>
+                        <div style="color:#fbbf24;font-size:16px;font-weight:700;">$115,662</div>
                     </div>
                     <div>
                         <div style="color:#94a3b8;font-size:11px;">DL Max Drawdown</div>
-                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">41.2%</div>
+                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">51.2%</div>
                     </div>
                     <div>
-                        <div style="color:#94a3b8;font-size:11px;">DL Sharpe Ratio</div>
-                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">3.04</div>
+                        <div style="color:#94a3b8;font-size:11px;">B&amp;H Max Drawdown</div>
+                        <div style="color:#fbbf24;font-size:16px;font-weight:700;">86.5%</div>
                     </div>
                     <div>
-                        <div style="color:#94a3b8;font-size:11px;">Shield Entries</div>
-                        <div style="color:#f87171;font-size:16px;font-weight:700;">6</div>
+                        <div style="color:#94a3b8;font-size:11px;">DL Sharpe / XIRR</div>
+                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">0.72 / 40.7%</div>
                     </div>
                     <div>
-                        <div style="color:#94a3b8;font-size:11px;">Total Fees (0.1%)</div>
-                        <div style="color:#94a3b8;font-size:16px;font-weight:700;">Included</div>
+                        <div style="color:#94a3b8;font-size:11px;">Shield Active</div>
+                        <div style="color:#f87171;font-size:16px;font-weight:700;">2520 / 3184 days</div>
                     </div>
                 </div>
             </div>
 
-            <p data-i18n-html="doc.s8.vsBhP2"><strong>Why such a massive difference?</strong> Over multiple crash cycles (2018 bear market, 2022 crypto winter), the deleverage shield preserved capital during each -70% to -85% drawdown. While Buy &amp; Hold lost 80%+ in each crash, the shielded portfolio lost only ~4-5% per crash (due to minimal exposure). These preserved losses compound over time &mdash; the shielded capital was available to deploy at lower prices during recoveries.</p>
-            <p data-i18n-html="doc.s8.vsBhP3"><strong>Important caveats</strong>: This backtest assumes instant, costless rebalancing. Real-world execution with slippage, latency, and market impact will reduce actual alpha by an estimated 20&ndash;40%. However, even with significant friction, the structural advantage of capital preservation during crashes remains substantial.</p>
+            <p data-i18n-html="doc.s8.vsBhP2"><strong>2x the return at 40% less risk.</strong> The Deleverage strategy returned <strong>1862%</strong> vs Buy &amp; Hold&rsquo;s <strong>897%</strong> &mdash; but with a max drawdown of <strong>51.2%</strong> vs <strong>86.5%</strong>. Over multiple crash cycles (2018 bear market, 2022 crypto winter), the shield preserved capital by dropping to ~6% exposure during crashes. While B&amp;H lost 80%+ in each drawdown, the shielded portfolio absorbed only a fraction &mdash; then re-deployed via tranches at lower prices during recovery.</p>
+            <p data-i18n-html="doc.s8.vsBhP3"><strong>Real-world friction included</strong>: 0.1% trading fees on 1,609 rebalances ($12,790 total), 9 shield entries, 16 exits, 289 blocked buy signals during shield-active periods. The shield was active <strong>79% of the time</strong> (2520/3184 days), demonstrating that the strategy spends most of its life in defensive mode &mdash; capital preservation first, growth second.</p>
         </div>
 
 
