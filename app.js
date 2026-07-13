@@ -507,14 +507,17 @@ function calcPortfolioVol() {
 }
 
 function checkCircuitBreaker() {
-    const currentVal = totalValue();
-    const ath = parseFloat(localStorage.getItem(ATH_KEY) || currentVal.toString());
-    if (ath <= 0) return { tripped: false, drawdown: 0, threshold: 0.4, currentVal, ath };
-    const drawdown = 1 - (currentVal / ath);
-    // Dynamic threshold: 1 - (vol * 3), floor at 50% drawdown
-    const vol = calcPortfolioVol();
-    const threshold = Math.max(0.40, Math.min(0.55, 1 - (vol * 2.5)));
-    return { tripped: drawdown >= threshold, drawdown, threshold, currentVal, ath, vol };
+    // Circuit Breaker listens to Deleverage Shield status
+    // Only blocks DCA during extreme crash events (Shield ACTIVE)
+    // Auto-recovery when Shield returns to NORMAL
+    const shieldState = getDeleverageShieldState();
+    const shieldActive = shieldState && shieldState.shield_active;
+    
+    return {
+        tripped: !!shieldActive,  // Lockout only when Shield detects crash
+        shieldActive: !!shieldActive,
+        reason: shieldActive ? 'Deleverage Shield detected extreme crash' : null
+    };
 }
 
 // ============ HARD CAPS POST-PROCESSING ============
@@ -1191,24 +1194,18 @@ async function distribuirajDca() {
     const active = activeTokens();
     if (active.length === 0) return showToast('no active tokens.', 'warning');
 
-    let breaker = { drawdown: 0, threshold: 0, tripped: false, vol: 0 };
+    let breaker = { tripped: false, shieldActive: false, reason: null };
     if (isPro) {
-        // Circuit Breaker — Pro only
-        updatePortfolioATH();
+        // Circuit Breaker — Pro only (listens to Deleverage Shield)
         breaker = checkCircuitBreaker();
         if (breaker.tripped) {
             return showToast(
-                `circuit breaker activated.\n\n` +
-                `portfolio drawdown: ${(breaker.drawdown * 100).toFixed(1)}% from ATH ($${fmtUSD(breaker.ath)})\n` +
-                `current value: $${fmtUSD(breaker.currentVal)}\n` +
-                `threshold: ${(breaker.threshold * 100).toFixed(0)}% (dynamic, based on 30d vol: ${(breaker.vol * 100).toFixed(1)}%)\n\n` +
-                `dca is paused to protect capital during extreme market stress.\n` +
-                `resume when drawdown recovers below threshold.`,
+                `circuit breaker activated — dca lockout.\n\n` +
+                `deleverage shield detected extreme market crash.\n` +
+                `dca is paused to protect capital during flash crash or volatility spike.\n\n` +
+                `dca will automatically resume when the shield returns to normal.`,
                 'error'
             );
-        }
-        if (breaker.drawdown > 0.15) {
-            console.log(`[DCA] Drawdown warning: ${(breaker.drawdown * 100).toFixed(1)}% (threshold: ${(breaker.threshold * 100).toFixed(0)}%) — safety factor will reduce buys`);
         }
     }
 
@@ -1366,9 +1363,9 @@ async function distribuirajDca() {
             msg += '\n\nstructural limits applied:\n' + capped.join('\n');
         }
 
-        // Circuit breaker status
-        if (breaker.drawdown > 0.10) {
-            msg += `\n\ndrawdown: ${(breaker.drawdown * 100).toFixed(1)}% from ATH (breaker at ${(breaker.threshold * 100).toFixed(0)}%)`;
+        // Circuit breaker status (Shield-aligned)
+        if (breaker.shieldActive) {
+            msg += `\n\ncircuit breaker: lockout active (shield detected extreme crash)`;
         }
 
         showToast(msg, 'success', [

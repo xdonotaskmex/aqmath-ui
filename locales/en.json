@@ -23,7 +23,7 @@
     "privLabel": "--privacy",
     "privCopy": "Amounts, targets, and allocation weights stay in your browser's localStorage. Data sent to the backend is processed in-memory and discarded immediately — nothing is persisted.",
     "shieldLabel": "--deleverage-shield",
-    "shieldCopy": "Emergency Brake: on crash detection, exposure drops to floor instantly — all positions scaled down, DCA rerouted to USDC. Capital re-enters via 3-stage tranche recovery.",
+    "shieldCopy": "Emergency Brake: on crash detection, exposure drops to floor instantly — DCA locked via Circuit Breaker. Capital re-enters via 3-stage tranche recovery when the Shield returns to NORMAL.",
     "shieldLink": "[ see 8.7-year backtest ]"
   },
   "beta": {
@@ -282,7 +282,7 @@
       "title": "5. DCA Safety Pipeline",
       "p1": "AQMath implements a multi-layer safety pipeline for DCA allocation designed for crypto markets. Traditional systems would halt trading on a 15% dip — but in crypto, 15–20% pullbacks happen regularly and are often excellent buying opportunities. Each layer operates independently and in strict sequence. <strong>Note:</strong> This pipeline governs only how new DCA capital is allocated — it does not trim or sell existing positions.",
       "l1Title": "L1 — Circuit Breaker",
-      "l1P": "The circuit breaker halts <strong>all</strong> DCA distribution when portfolio drawdown from its all-time high is severe. The threshold adapts to current market volatility — higher in volatile markets to prevent false positives, lower in calm markets for tighter protection.",
+      "l1P": "The circuit breaker halts <strong>all</strong> DCA distribution only when the Deleverage Shield detects an extreme market crash (flash crash or volatility spike). It acts as a slave to the Shield — blocking DCA during emergency events and automatically resuming when the Shield returns to NORMAL. Unlike traditional drawdown-based breakers, it never blocks DCA during extended bear markets.",
       "l2Title": "L2 — Safety Factor",
       "l2P": "A per-token risk adjustment that reduces buy size for high-volatility assets. More volatile tokens receive proportionally less capital, ensuring that risky positions don’t get outsized allocations even when they’re the most underweight.",
       "l3Title": "L3 — Trend Filter",
@@ -300,7 +300,7 @@
     },
     "s6": {
       "title": "6. Volatility Calculation",
-      "p1": "Volatility is the foundational risk metric used throughout AQMath. It feeds into the safety factor, the circuit breaker threshold, and (in Black) the covariance matrix. The system computes a rolling volatility estimate for each token by measuring the magnitude of daily price swings — a standard approach in quantitative finance.",
+      "p1": "Volatility is the foundational risk metric used throughout AQMath. It feeds into the safety factor, the Deleverage Shield's downside detection, and (in Black) the covariance matrix. The system computes a rolling volatility estimate for each token by measuring the magnitude of daily price swings — a standard approach in quantitative finance.",
       "pvTitle": "6.1 Portfolio Volatility",
       "pvP": "Portfolio-level volatility is a weighted aggregate of each token’s individual volatility, proportional to its share of total portfolio value. Safe-haven tokens and frozen positions are excluded since they have near-zero volatility by definition. This portfolio-level metric drives adaptive thresholds across the entire safety pipeline.",
       "covTitle": "📘 COVARIANCE MATRIX (Black Feature)",
