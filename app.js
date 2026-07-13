@@ -1238,11 +1238,6 @@ async function distribuirajDca() {
         updated.forEach(up => {
             const idx = portfolio.findIndex(t => t.sym === up.symbol);
             if (idx >= 0) {
-                // Protect safe-haven tokens: never reduce amounts during DCA
-                if (portfolio[idx].safeHaven && up.amount < portfolio[idx].amount) {
-                    console.log(`[DCA] Protected safe-haven ${up.symbol} from reduction: ${up.amount} → keeping ${portfolio[idx].amount}`);
-                    up.amount = portfolio[idx].amount;
-                }
                 console.log(`DCA: ${up.symbol} amount ${portfolio[idx].amount} → ${up.amount}`);
                 portfolio[idx].amount = up.amount;
                 portfolio[idx].costBasis = up.costBasis || portfolio[idx].costBasis;
