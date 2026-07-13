@@ -26,6 +26,7 @@ function hideProModal() { document.getElementById('proModal').classList.add('hid
 // ============ LEGAL MODALS ============
 function showImpressum() { document.getElementById('impressumModal').classList.remove('hidden'); }
 function showPrivacyPolicy() { document.getElementById('privacyModal').classList.remove('hidden'); }
+function showTerms() { document.getElementById('termsModal').classList.remove('hidden'); }
 function hideLegalModal(id) { document.getElementById(id).classList.add('hidden'); }
 
 // ============ TOAST NOTIFICATIONS ============
@@ -1806,7 +1807,7 @@ function render() {
         reminderTxt.innerHTML = days > 0 ? `Next rebalance in <strong>${days} days</strong> (${next.toLocaleDateString('en-US')})` : '<strong>ðŸ”” TIME TO REBALANCE!</strong>';
     }
 
-    // Quantum Engine is locked for free tier - shows "PRO Coming Soon" modal
+    // Quantum Engine is locked for free tier - shows "Black Access" modal
     updateSafeHavenUI();
     updateDeleverageUI();
 }
@@ -1910,7 +1911,7 @@ function initDocsChart() {
 // ============ EXPOSE TO GLOBAL SCOPE (for HTML onclick handlers) ============
 Object.assign(window, {
     showProModal, hideProModal, showToast, hideToast,
-    showImpressum, showPrivacyPolicy, hideLegalModal,
+    showImpressum, showPrivacyPolicy, showTerms, hideLegalModal,
     activateBeta, deactivateBeta,
     saveSnapshot, toggleGlobalSafeHaven, deployUSDC, toggleDeleverage,
     osvjeziSveCijene, importCSV, dodajToken,
