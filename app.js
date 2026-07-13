@@ -192,10 +192,10 @@ function updateProButtons() {
     if (engineBtn) {
         if (isPro) {
             engineBtn.className = 'btn amber';
-            engineBtn.textContent = 'AQMath Engine â€” OPTIMIZE';
+            engineBtn.textContent = 'AQMath Engine — OPTIMIZE';
         } else {
             engineBtn.className = 'btn amber';
-            engineBtn.textContent = 'AQMath Engine â€” PRO';
+            engineBtn.textContent = 'AQMath Engine — PRO';
         }
     }
     if (refreshBtn) {
@@ -206,7 +206,7 @@ function updateProButtons() {
         } else {
             refreshBtn.className = 'btn ghost';
             refreshBtn.disabled = true;
-            refreshBtn.textContent = 'Refresh History â€” PRO';
+            refreshBtn.textContent = 'Refresh History — PRO';
         }
     }
 }
@@ -223,8 +223,8 @@ function checkBetaUI() {
 
 // ========== BACKEND API URLs ==========
 // Set these to your deployed Railway URLs
-const API_URL = 'https://aqmath-engine-production.up.railway.app';   // aqmath-engine (Risk Parity + KKT) â€” Pro only
-const DCA_API_URL = 'https://dca-engine-production.up.railway.app'; // dca-engine on Railway â€” DCA distribution only
+const API_URL = 'https://aqmath-engine-production.up.railway.app';   // aqmath-engine (Risk Parity + KKT) — Pro only
+const DCA_API_URL = 'https://dca-engine-production.up.railway.app'; // dca-engine on Railway — DCA distribution only
 
 let portfolioHistory = [];
 
@@ -1181,7 +1181,7 @@ function obrisiSve() {
 // ============ DCA DISTRIBUTION ============
 // Free tier: manual CSV upload only (client-side)
 // Pro tier: backend API with data-pipeline + AQMath engine
-// DCA safety pipeline: Circuit Breaker â†’ Safety Factor â†’ Trend Filter â†’ Hard Caps â†’ Risk Budget
+// DCA safety pipeline: Circuit Breaker → Safety Factor → Trend Filter → Hard Caps → Risk Budget
 async function distribuirajDca() {
     if (Math.abs(totalTarget() - 100) > 0.01) {
         return showToast('dca is locked until total target allocation equals 100%.', 'warning');
@@ -1193,7 +1193,7 @@ async function distribuirajDca() {
 
     let breaker = { drawdown: 0, threshold: 0, tripped: false, vol: 0 };
     if (isPro) {
-        // Circuit Breaker â€” Pro only
+        // Circuit Breaker — Pro only
         updatePortfolioATH();
         breaker = checkCircuitBreaker();
         if (breaker.tripped) {
@@ -1208,7 +1208,7 @@ async function distribuirajDca() {
             );
         }
         if (breaker.drawdown > 0.15) {
-            console.log(`[DCA] Drawdown warning: ${(breaker.drawdown * 100).toFixed(1)}% (threshold: ${(breaker.threshold * 100).toFixed(0)}%) â€” safety factor will reduce buys`);
+            console.log(`[DCA] Drawdown warning: ${(breaker.drawdown * 100).toFixed(1)}% (threshold: ${(breaker.threshold * 100).toFixed(0)}%) — safety factor will reduce buys`);
         }
     }
 
@@ -1253,7 +1253,7 @@ async function distribuirajDca() {
 
         let capped = [];
         if (isPro) {
-            // Hard caps + risk budget + stablecoin redirect â€” Pro only
+            // Hard caps + risk budget + stablecoin redirect — Pro only
             const hardCapResult = applyHardCaps(updated, dcaAmount);
             capped = hardCapResult.capped;
             if (capped.length > 0) {
@@ -1266,10 +1266,10 @@ async function distribuirajDca() {
             if (idx >= 0) {
                 // Protect safe-haven tokens: never reduce amounts during DCA
                 if (portfolio[idx].safeHaven && up.amount < portfolio[idx].amount) {
-                    console.log(`[DCA] Protected safe-haven ${up.symbol} from reduction: ${up.amount} â†’ keeping ${portfolio[idx].amount}`);
+                    console.log(`[DCA] Protected safe-haven ${up.symbol} from reduction: ${up.amount} → keeping ${portfolio[idx].amount}`);
                     up.amount = portfolio[idx].amount;
                 }
-                console.log(`DCA: ${up.symbol} amount ${portfolio[idx].amount} â†’ ${up.amount}`);
+                console.log(`DCA: ${up.symbol} amount ${portfolio[idx].amount} → ${up.amount}`);
                 portfolio[idx].amount = up.amount;
                 portfolio[idx].costBasis = up.costBasis || portfolio[idx].costBasis;
                 portfolio[idx].totalTokens = up.totalTokens || portfolio[idx].totalTokens;
@@ -1311,9 +1311,9 @@ async function distribuirajDca() {
         if (remaining > 0.01) {
             if (buySummary.length === 0 && totalAlloc < 0.01) {
                 msg += `warning: $${remaining.toFixed(2)} remaining despite underweight positions.\n`;
-                msg += `possible DCA engine issue â€” check Railway logs.\n\n`;
+                msg += `possible DCA engine issue — check Railway logs.\n\n`;
             } else {
-                msg += `remaining $${remaining.toFixed(2)} not allocated â€” all tokens at optimal targets.\n\n`;
+                msg += `remaining $${remaining.toFixed(2)} not allocated — all tokens at optimal targets.\n\n`;
             }
         }
 
@@ -1347,7 +1347,7 @@ async function distribuirajDca() {
         if (warnings.length > 0) {
             const tokenWarnings = {};
             warnings.forEach(w => {
-                const m = w.match(/^(âš ï¸?\s*)(\w+):\s*Buying above avg cost \(\$([\d.]+)\)/);
+                const m = w.match(/^(⚠️?\s*)(\w+):\s*Buying above avg cost \(\$([\d.]+)\)/);
                 if (m) {
                     const sym = m[2];
                     const cost = parseFloat(m[3]);
@@ -1380,7 +1380,7 @@ async function distribuirajDca() {
     }
 }
 
-// ============ AQMath ENGINE OPTIMIZATION (data-pipeline /optimize) â€” PRO ONLY ============
+// ============ AQMath ENGINE OPTIMIZATION (data-pipeline /optimize) — PRO ONLY ============
 async function optimizePortfolio() {
     if (!isPro) { showProModal(); return; }
 
@@ -1516,7 +1516,7 @@ async function optimizePortfolio() {
                 if (dlInfo.peak_ds_vol > 0.01) {
                     msg += `  Peak DS vol: ${peakVol}% (lockout threshold: ${lockout}%)\n`;
                 } else {
-                    msg += `  Peak DS vol: ${peakVol}% (decayed â€” lockout cleared)\n`;
+                    msg += `  Peak DS vol: ${peakVol}% (decayed — lockout cleared)\n`;
                 }
             }
             if (dlInfo.exit_reason) msg += `  Exit reason: ${dlInfo.exit_reason}\n`;
@@ -1712,7 +1712,7 @@ function render() {
     document.getElementById('hTotal').textContent = `$${fmtUSD(portVal)}`;
     document.getElementById('hPos').textContent = allTokens.length;
     const hStatus = document.getElementById('hStatus');
-    if (!allTokens.length) { hStatus.textContent = 'â€”'; hStatus.className = 'hstat-v'; }
+    if (!allTokens.length) { hStatus.textContent = '—'; hStatus.className = 'hstat-v'; }
     else if (tgt > 100.01) { hStatus.textContent = 'OVER'; hStatus.className = 'hstat-v col-red'; }
     else if (!allocationOk) { hStatus.textContent = 'DRIFT'; hStatus.className = 'hstat-v col-red'; }
     else { hStatus.textContent = 'SYNCED'; hStatus.className = 'hstat-v col-green'; }
@@ -1720,9 +1720,9 @@ function render() {
     const bar = document.getElementById('statusBar');
     const txt = document.getElementById('statusTxt');
     if (!allTokens.length) { bar.className = 'status idle'; txt.textContent = 'Add positions or import CSV/JSON.'; }
-    else if (tgt > 100.01) { bar.className = 'status warn'; txt.textContent = `Overallocation ${tgt}% â€“ DCA frozen.`; }
-    else if (!allocationOk) { bar.className = 'status warn'; txt.textContent = `Allocation ${tgt}% â€“ DCA frozen.`; }
-    else { bar.className = 'status ok'; txt.textContent = 'Portfolio synced â€“ DCA active.'; }
+    else if (tgt > 100.01) { bar.className = 'status warn'; txt.textContent = `Overallocation ${tgt}% — DCA frozen.`; }
+    else if (!allocationOk) { bar.className = 'status warn'; txt.textContent = `Allocation ${tgt}% — DCA frozen.`; }
+    else { bar.className = 'status ok'; txt.textContent = 'Portfolio synced — DCA active.'; }
 
     const dcaBtn = document.getElementById('btnDca');
     const canDca = activeTokens().length > 0 && allocationOk;
@@ -1738,7 +1738,7 @@ function render() {
     remEl.textContent = rem > 0.005 ? `Remaining: ${rem}%` : (Math.abs(rem) < 0.01 ? 'Allocation full' : `Overage by ${Math.abs(rem)}%`);
 
     if (myChart) { myChart.destroy(); myChart = null; }
-    document.getElementById('cCV').textContent = allTokens.length || 'â€”';
+    document.getElementById('cCV').textContent = allTokens.length || '—';
     document.getElementById('legend').innerHTML = '';
     if (allTokens.length) {
         const data = allTokens.map(t => portVal > 0 ? r2((t.amount * t.price / portVal) * 100, 2) : t.target);
@@ -1751,7 +1751,7 @@ function render() {
     }
 
     document.getElementById('sTotalVal').textContent = `$${fmtUSD(portVal)}`;
-    if (!allTokens.length) { ['sPnl','sLargest','sMaxDrift','sNeedReb','sAllocSt'].forEach(id => document.getElementById(id).textContent = 'â€”'); }
+    if (!allTokens.length) { ['sPnl','sLargest','sMaxDrift','sNeedReb','sAllocSt'].forEach(id => document.getElementById(id).textContent = '—'); }
     else {
         let cost = 0, curTot = 0;
         allTokens.forEach(t => { if (t.entry) { cost += t.amount * t.entry; curTot += t.amount * t.price; } });
@@ -1767,17 +1767,17 @@ function render() {
 
     const wrap = document.getElementById('tblWrap');
     if (!allTokens.length) {
-        wrap.innerHTML = `<div class="empty"><div class="empty-ico">[âˆ…]</div><div class="empty-txt">Portfolio empty</div></div>`;
+        wrap.innerHTML = `<div class="empty"><div class="empty-ico">[∅]</div><div class="empty-txt">Portfolio empty</div></div>`;
     } else {
         const rows = allTokens.map((t, i) => {
             const c = calcToken(t, portVal);
             const barW = Math.min(c.curPct, 100), barT = Math.min(t.target, 100);
-            const pnlStr = c.pnl !== null ? `${c.pnl >= 0 ? '+' : ''}${c.pnl.toFixed(2)}%` : 'â€”';
-            const avgStr = c.avgPrice ? `$${fmtPrice(c.avgPrice)} (${c.avgType === 'down' ? 'â†“' : c.avgType === 'up' ? 'â†‘' : 'â†’'})` : 'â€”';
+            const pnlStr = c.pnl !== null ? `${c.pnl >= 0 ? '+' : ''}${c.pnl.toFixed(2)}%` : '—';
+            const avgStr = c.avgPrice ? `$${fmtPrice(c.avgPrice)} (${c.avgType === 'down' ? '→' : c.avgType === 'up' ? '→' : '→'})` : '—';
             const ygStr = c.yieldGap >= 0 ? `+${c.yieldGap.toFixed(1)}%` : `${c.yieldGap.toFixed(1)}%`;
-            const frozenIcon = t.frozen ? 'â„ï¸' : 'ðŸ”¥';
-            const warnIcon = t.insufficientHistory ? `<span class="warn-icon" title="Less than 180 days of history â€“ unreliable data"></span>` : '';
-            const safeIcon = t.safeHaven ? `<span style="color:var(--green);font-size:0.6rem;margin-left:4px;" title="Safe-haven (stablecoin) â€” exempt from filters">ðŸ›¡</span>` : '';
+            const frozenIcon = t.frozen ? '❄️' : '🔥';
+            const warnIcon = t.insufficientHistory ? `<span class="warn-icon" title="Less than 180 days of history — unreliable data"></span>` : '';
+            const safeIcon = t.safeHaven ? `<span style="color:var(--green);font-size:0.6rem;margin-left:4px;" title="Safe-haven (stablecoin) — exempt from filters">🛡</span>` : '';
             return `<tr${t.safeHaven ? ' class="row-safe-haven"' : ''}>
                 <td><span class="sym" style="color:${colors[i]}">${t.sym}${warnIcon}${safeIcon}</span></td>
                 <td>${fmtQty(t.amount, t.price)}</td>
@@ -1804,7 +1804,7 @@ function render() {
     else {
         const next = new Date(lastDcaDate + 180 * 86400000);
         const days = Math.ceil((next - Date.now()) / 86400000);
-        reminderTxt.innerHTML = days > 0 ? `Next rebalance in <strong>${days} days</strong> (${next.toLocaleDateString('en-US')})` : '<strong>ðŸ”” TIME TO REBALANCE!</strong>';
+        reminderTxt.innerHTML = days > 0 ? `Next rebalance in <strong>${days} days</strong> (${next.toLocaleDateString('en-US')})` : '<strong>⏳ TIME TO REBALANCE!</strong>';
     }
 
     // Quantum Engine is locked for free tier - shows "Black Access" modal
