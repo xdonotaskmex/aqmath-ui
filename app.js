@@ -506,20 +506,6 @@ function calcPortfolioVol() {
     return blendedVol;
 }
 
-function checkCircuitBreaker() {
-    // Circuit Breaker listens to Deleverage Shield status
-    // Only blocks DCA during extreme crash events (Shield ACTIVE)
-    // Auto-recovery when Shield returns to NORMAL
-    const shieldState = getDeleverageShieldState();
-    const shieldActive = shieldState && shieldState.shield_active;
-    
-    return {
-        tripped: !!shieldActive,  // Lockout only when Shield detects crash
-        shieldActive: !!shieldActive,
-        reason: shieldActive ? 'Deleverage Shield detected extreme crash' : null
-    };
-}
-
 // ============ HARD CAPS POST-PROCESSING ============
 function applyHardCaps(updated, dcaAmount) {
     const portVal = totalValue();
@@ -1184,7 +1170,7 @@ function obrisiSve() {
 // ============ DCA DISTRIBUTION ============
 // Free tier: manual CSV upload only (client-side)
 // Pro tier: backend API with data-pipeline + AQMath engine
-// DCA safety pipeline: Circuit Breaker → Safety Factor → Trend Filter → Hard Caps → Risk Budget
+// DCA safety pipeline: backend handles Circuit Breaker (Shield-aligned) → Safety Factor → Trend Filter → Hard Caps → Risk Budget
 async function distribuirajDca() {
     if (Math.abs(totalTarget() - 100) > 0.01) {
         return showToast('dca is locked until total target allocation equals 100%.', 'warning');
@@ -1194,20 +1180,8 @@ async function distribuirajDca() {
     const active = activeTokens();
     if (active.length === 0) return showToast('no active tokens.', 'warning');
 
-    let breaker = { tripped: false, shieldActive: false, reason: null };
-    if (isPro) {
-        // Circuit Breaker — Pro only (listens to Deleverage Shield)
-        breaker = checkCircuitBreaker();
-        if (breaker.tripped) {
-            return showToast(
-                `circuit breaker activated — dca lockout.\n\n` +
-                `deleverage shield detected extreme market crash.\n` +
-                `dca is paused to protect capital during flash crash or volatility spike.\n\n` +
-                `dca will automatically resume when the shield returns to normal.`,
-                'error'
-            );
-        }
-    }
+    // Circuit Breaker is handled by backend (dca-engine) — Shield-aligned logic
+    // Backend returns error if Shield detects extreme crash (DCA lockout)
 
     showLoading('REBALANCING', 'Calculating optimal DCA distribution...');
 
@@ -1224,11 +1198,14 @@ async function distribuirajDca() {
         safeHaven: t.safeHaven || false
     }));
 
+    // Send Shield state to backend for Circuit Breaker (Shield-aligned logic)
+    const shieldState = isPro ? getDeleverageShieldState() : null;
+
     try {
         const resp = await fetch(`${DCA_API_URL}/dca`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ positions, dca_amount: dcaAmount })
+            body: JSON.stringify({ positions, dca_amount: dcaAmount, shield_state: shieldState })
         });
         if (!resp.ok) {
             hideLoading();
@@ -1361,11 +1338,6 @@ async function distribuirajDca() {
         // Structural limits: hard caps + risk budget notifications
         if (capped.length > 0) {
             msg += '\n\nstructural limits applied:\n' + capped.join('\n');
-        }
-
-        // Circuit breaker status (Shield-aligned)
-        if (breaker.shieldActive) {
-            msg += `\n\ncircuit breaker: lockout active (shield detected extreme crash)`;
         }
 
         showToast(msg, 'success', [
