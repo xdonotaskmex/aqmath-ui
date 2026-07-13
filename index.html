@@ -105,7 +105,7 @@
         </svg>
         <h1 data-i18n="hero.title">quantitative <span class="gradient-text">portfolio rebalancer</span></h1>
         <h2 data-i18n="hero.subtitle">No emotions. No human error. Structural limits on every DCA dollar you deploy.</h2>
-        <p data-i18n="hero.description">AQMath processes complex covariance matrices on our secure backend engine. Your holdings are processed in-memory and never stored on our servers &mdash; only your browser&rsquo;s localStorage keeps your data.</p>
+        <p data-i18n-html="hero.description">AQMath processes complex covariance matrices on our secure backend engine. Your holdings are processed in-memory and never stored on our servers &mdash; only your browser&rsquo;s localStorage keeps your data.</p>
         <div class="lp-hero-shield">
             <span class="lp-shield-icon">&#9888;</span>
             <span class="lp-shield-text">Emergency Brake: Instant de-risk to stablecoins when crash detected</span>
@@ -227,11 +227,11 @@
             <div class="lp-math-box lp-card">
                 <div class="card-title" data-i18n="math.sectionTitle">--mathematical-core</div>
                 <div class="lp-math-heading" data-i18n="math.heading">The Math Behind Your Portfolio</div>
-                <p class="lp-math-lead" data-i18n="math.lead">The covariance matrix runs on our secure backend. All computation is stateless &mdash; data is processed in-memory and discarded immediately. Nothing is written to disk.</p>
+                <p class="lp-math-lead" data-i18n-html="math.lead">The covariance matrix runs on our secure backend. All computation is stateless &mdash; data is processed in-memory and discarded immediately. Nothing is written to disk.</p>
                 <ul class="lp-math-rules">
-                    <li data-i18n="math.rule1">High-variance assets receive <strong>smaller dynamic caps</strong></li>
-                    <li data-i18n="math.rule2">Correlated assets are <strong>penalized through covariance</strong></li>
-                    <li data-i18n="math.rule3">Underweight assets are <strong>prioritized only when they improve</strong> the risk-balanced structure</li>
+                    <li data-i18n-html="math.rule1">High-variance assets receive <strong>smaller dynamic caps</strong></li>
+                    <li data-i18n-html="math.rule2">Correlated assets are <strong>penalized through covariance</strong></li>
+                    <li data-i18n-html="math.rule3">Underweight assets are <strong>prioritized only when they improve</strong> the risk-balanced structure</li>
                 </ul>
                 <div class="lp-math-grid">
                     <div class="lp-math-metric">
@@ -248,7 +248,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">01</span></div>
                         <div class="metric-label" data-i18n="math.riskLabel">--risk-model</div>
-                        <div class="metric-copy" data-i18n="math.riskCopy">The covariance matrix estimates how assets move together. Risk Parity then targets equal risk contribution &mdash; so no single token dominates your volatility.</div>
+                        <div class="metric-copy" data-i18n-html="math.riskCopy">The covariance matrix estimates how assets move together. Risk Parity then targets equal risk contribution &mdash; so no single token dominates your volatility.</div>
                         <a href="#/docs" class="doc-formula-link" data-i18n="math.riskLink">[ read mathematical proof in docs ]</a>
                     </div>
                     <div class="lp-math-metric">
@@ -263,7 +263,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">02</span></div>
                         <div class="metric-label" data-i18n="math.optLabel">--optimization</div>
-                        <div class="metric-copy" data-i18n="math.optCopy">KKT projection keeps allocations inside volatility caps and prevents oversized high-risk positions. When drawdown is severe, the <strong>Deleverage Shield</strong> instantly cuts exposure &mdash; stopping you from buying into a crash.</div>
+                        <div class="metric-copy" data-i18n-html="math.optCopy">KKT projection keeps allocations inside volatility caps and prevents oversized high-risk positions. When drawdown is severe, the <strong>Deleverage Shield</strong> instantly cuts exposure &mdash; stopping you from buying into a crash.</div>
                         <a href="#/docs" class="doc-formula-link" data-i18n="math.optLink">[ view formula ]</a>
                     </div>
                     <div class="lp-math-metric">
@@ -275,7 +275,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">03</span></div>
                         <div class="metric-label" data-i18n="math.privLabel">--privacy</div>
-                        <div class="metric-copy" data-i18n="math.privCopy">Amounts, targets, and allocation weights stay in your browser&rsquo;s localStorage. Data sent to the backend is processed in-memory and discarded immediately &mdash; nothing is persisted.</div>
+                        <div class="metric-copy" data-i18n-html="math.privCopy">Amounts, targets, and allocation weights stay in your browser&rsquo;s localStorage. Data sent to the backend is processed in-memory and discarded immediately &mdash; nothing is persisted.</div>
                     </div>
                     <div class="lp-math-metric">
                         <svg viewBox="0 0 44 44" class="mc-icon" xmlns="http://www.w3.org/2000/svg">
@@ -285,7 +285,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">04</span></div>
                         <div class="metric-label" data-i18n="math.shieldLabel">--deleverage-shield</div>
-                        <div class="metric-copy" data-i18n="math.shieldCopy">Emergency Brake: on crash detection, exposure drops to floor <strong>instantly</strong> &mdash; all positions scaled down, DCA rerouted to USDC. Capital re-enters via 3-stage tranche recovery.</div>
+                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Emergency Brake: on crash detection, exposure drops to floor <strong>instantly</strong> &mdash; all positions scaled down, DCA rerouted to USDC. Capital re-enters via 3-stage tranche recovery.</div>
                         <a href="#/backtest" class="doc-formula-link" data-i18n="math.shieldLink">[ see 8.7-year backtest ]</a>
                     </div>
                 </div>
@@ -334,7 +334,7 @@
                 <div class="lp-card lp-plan-card pro">
                     <div class="lp-plan-title" data-i18n-html="plans.proTitle">BLACK <span class="lp-plan-badge">Apply Required</span></div>
                     <div class="lp-plan-price pro" data-i18n="plans.proPrice">ANNUAL SUBSCRIPTION</div>
-                    <div class="lp-plan-subtitle" data-i18n="plans.proSubtitle">Exclusive annual access. Pricing disclosed upon successful screening. USDC &amp; EURC only.</div>
+                    <div class="lp-plan-subtitle" data-i18n-html="plans.proSubtitle">Exclusive annual access. Pricing disclosed upon successful screening. USDC &amp; EURC only.</div>
                     <ul class="lp-feature-list">
                         <li data-i18n-html="plans.blackF1">Risk Parity optimization with full Covariance &amp; Variance Matrix</li>
                         <li data-i18n-html="plans.blackF2">Deleverage Shield with Emergency Brake crash protection</li>
@@ -600,7 +600,7 @@
         <p><em data-i18n="terms.updated">Last updated: July 2026</em></p>
         <p data-i18n-html="terms.intro">Welcome to aqmath.xyz (the "Website"). By accessing our Website, using our Web Application, or applying for our services, you agree to comply with and be bound by the following Terms of Service.</p>
 
-        <h3 data-i18n="terms.s1Title">1. Exclusive Annual Access &amp; No Refunds</h3>
+        <h3 data-i18n-html="terms.s1Title">1. Exclusive Annual Access &amp; No Refunds</h3>
         <p data-i18n-html="terms.s1">AQMATH operates strictly on an elite, selection-based Annual Subscription model. We do not offer monthly, quarterly, or semi-annual plans. Access is granted manually to approved users. Due to the immediate delivery of digital access, data insights, and the highly exclusive nature of this digital assistant service, ALL SALES ARE FINAL. We operate under a strict NO REFUND policy. By making an annual payment via USDC or EURC, you explicitly acknowledge and agree that you waive any right to a refund, partial refund, or chargeback.</p>
 
         <h3 data-i18n="terms.s2Title">2. Web Application Only (No Mobile App)</h3>
@@ -609,13 +609,13 @@
         <h3 data-i18n="terms.s3Title">3. Not a Trading Bot / No Automated Execution</h3>
         <p data-i18n-html="terms.s3">AQMATH is a premium "White Glove" digital assistant and analytical Web Application. AQMATH IS NOT A TRADING BOT, automated trading system, or algorithmic trade execution software. We do not manage funds, execute trades on behalf of users, or provide software that interacts with crypto exchanges or smart contracts.</p>
 
-        <h3 data-i18n="terms.s4Title">4. User Selection &amp; Network Integrity</h3>
+        <h3 data-i18n-html="terms.s4Title">4. User Selection &amp; Network Integrity</h3>
         <p data-i18n-html="terms.s4">To maintain maximum infrastructure performance and service quality, access to the AQMATH Web App is strictly throttled and limited to a selective user base (Quality over Quantity). We reserve the absolute right to deny access, reject applications, or terminate service for any user at our sole discretion, without providing prior notice, to safeguard our network integrity.</p>
 
         <h3 data-i18n="terms.s5Title">5. Payment and Pricing</h3>
         <p data-i18n-html="terms.s5">Official annual subscription pricing is confidential and only disclosed to users who successfully pass our screening process. All official payments are accepted and processed exclusively in USDC and EURC stablecoins.</p>
 
-        <h3 data-i18n="terms.s6Title">6. Risk Disclaimer &amp; No Financial Advice</h3>
+        <h3 data-i18n-html="terms.s6Title">6. Risk Disclaimer &amp; No Financial Advice</h3>
         <p data-i18n-html="terms.s6">The tools, data, and assistance provided by the AQMATH Web App are for informational and educational purposes only. We DO NOT provide financial advice, investment advice, or capital management. Cryptocurrencies and Web3 markets involve extreme volatility and high risk. You are solely responsible for your financial decisions and any capital losses incurred.</p>
 
         <button class="legal-modal-close" onclick="hideLegalModal('termsModal')" data-i18n="terms.close">[ Close ]</button>
@@ -1222,12 +1222,12 @@
         <!-- INTRODUCTION -->
         <div class="doc-block" id="doc-intro">
             <h2 id="doc-what" data-i18n="doc.s1.title">1. What is AQMath?</h2>
-            <p data-i18n="doc.s1.p1">AQMath is a quantitative portfolio rebalancer purpose-built for the crypto market. It combines institutional-grade mathematical models &mdash; the same class of optimization used by multi-billion-dollar hedge funds &mdash; with a privacy-first architecture that ensures your financial data never leaves your control.</p>
+            <p data-i18n-html="doc.s1.p1">AQMath is a quantitative portfolio rebalancer purpose-built for the crypto market. It combines institutional-grade mathematical models &mdash; the same class of optimization used by multi-billion-dollar hedge funds &mdash; with a privacy-first architecture that ensures your financial data never leaves your control.</p>
             <p data-i18n-html="doc.s1.p2">At its core, AQMath solves a deceptively complex problem: <strong>when you add new capital to your crypto portfolio, which tokens should you buy, and how much of each?</strong> A naive approach (split equally) ignores that some positions are already overweight while others are dangerously underweight. AQMath&rsquo;s DCA engine uses smart proportional allocation, filtered through a DCA safety pipeline, to ensure every dollar you invest moves your portfolio closer to its optimal structure.</p>
             <p data-i18n-html="doc.s1.p3">The system operates on a <strong>hybrid architecture</strong>: your portfolio data (token amounts, entry prices, targets) is stored exclusively in your browser&rsquo;s localStorage, while computationally intensive math (covariance matrices, iterative DCA optimization, volatility analysis) runs on our secure backend engine. This means you get institutional-quality analysis without your holdings being stored on any server.</p>
             <div class="doc-callout purple">
-                <div class="doc-ct" data-i18n="doc.s1.privTitle">&#128272; NON-CUSTODIAL PRIVACY</div>
-                <p data-i18n="doc.s1.privP">AQMath&rsquo;s privacy model is non-custodial by design: the backend receives position data in-memory during a single DCA request, computes the result, and discards everything. No persistence. No logs of your amounts. No user database. Your financial state lives exclusively in your browser&rsquo;s localStorage &mdash; the server never retains it.</p>
+                <div class="doc-ct" data-i18n-html="doc.s1.privTitle">&#128272; NON-CUSTODIAL PRIVACY</div>
+                <p data-i18n-html="doc.s1.privP">AQMath&rsquo;s privacy model is non-custodial by design: the backend receives position data in-memory during a single DCA request, computes the result, and discards everything. No persistence. No logs of your amounts. No user database. Your financial state lives exclusively in your browser&rsquo;s localStorage &mdash; the server never retains it.</p>
             </div>
 
             <h3 id="doc-who" data-i18n="doc.s1.whoTitle">1.1 Who Is AQMath For?</h3>
@@ -1295,7 +1295,7 @@
             </div>
 
             <h3 id="doc-dataflow" data-i18n="doc.s2.dfTitle">2.1 Data Flow</h3>
-            <p data-i18n="doc.s2.dfP">Understanding the data flow is critical to understanding AQMath&rsquo;s privacy guarantees. Every interaction follows the same pattern: your browser sends the minimum information needed for computation, and the backend returns results without retaining any state.</p>
+            <p data-i18n-html="doc.s2.dfP">Understanding the data flow is critical to understanding AQMath&rsquo;s privacy guarantees. Every interaction follows the same pattern: your browser sends the minimum information needed for computation, and the backend returns results without retaining any state.</p>
             <ol>
                 <li data-i18n-html="doc.s2.df1"><strong>User enters tokens + targets</strong> &rarr; stored exclusively in browser localStorage. No network request is made.</li>
                 <li data-i18n-html="doc.s2.df2"><strong>SYNC clicked</strong> &rarr; prices are fetched directly from Binance via WebSocket &mdash; no backend call needed. Your holdings are never transmitted.</li>
@@ -1305,7 +1305,7 @@
             </ol>
 
             <h3 id="doc-cleaning" data-i18n="doc.s2.cleanTitle">2.2 Data Cleaning Pipeline</h3>
-            <p data-i18n="doc.s2.cleanP">Before price data reaches the optimization engine, it passes through a multi-stage cleaning pipeline that ensures mathematical integrity. Raw market data from multiple sources (CoinGecko, Kraken, Coinbase) is often noisy &mdash; containing duplicates, exchange-specific outliers, and occasional gaps. The cleaning pipeline applies four sequential filters:</p>
+            <p data-i18n-html="doc.s2.cleanP">Before price data reaches the optimization engine, it passes through a multi-stage cleaning pipeline that ensures mathematical integrity. Raw market data from multiple sources (CoinGecko, Kraken, Coinbase) is often noisy &mdash; containing duplicates, exchange-specific outliers, and occasional gaps. The cleaning pipeline applies four sequential filters:</p>
             <ol>
                 <li data-i18n-html="doc.s2.clean1"><strong>Deduplication</strong> &mdash; removes duplicate timestamps, keeping the latest entry per date.</li>
                 <li data-i18n-html="doc.s2.clean2"><strong>Outlier Removal</strong> &mdash; rejects prices that deviate more than 2 standard deviations from a 7-day rolling window, eliminating flash-crash spikes and stale quotes.</li>
@@ -1315,17 +1315,17 @@
             <p data-i18n="doc.s2.cleanP2">This pipeline runs daily at 01:00 UTC via a scheduled cron job. The result is a clean, continuous price series suitable for covariance and volatility calculations.</p>
 
             <h3 id="doc-zk" data-i18n="doc.s2.zkTitle">2.3 Non-Custodial Privacy Model</h3>
-            <p data-i18n="doc.s2.zkP">AQMath&rsquo;s privacy architecture is non-custodial by design. The backend processes your DCA request statelessly &mdash; it receives position data, computes optimal allocation, returns results, and discards everything from memory. No persistent record of your holdings is ever created server-side:</p>
+            <p data-i18n-html="doc.s2.zkP">AQMath&rsquo;s privacy architecture is non-custodial by design. The backend processes your DCA request statelessly &mdash; it receives position data, computes optimal allocation, returns results, and discards everything from memory. No persistent record of your holdings is ever created server-side:</p>
             <ul>
-                <li data-i18n="doc.s2.zk1">No user database exists &mdash; there is nothing to hack, leak, or subpoena</li>
+                <li data-i18n-html="doc.s2.zk1">No user database exists &mdash; there is nothing to hack, leak, or subpoena</li>
                 <li data-i18n="doc.s2.zk2">No portfolio amounts are logged or stored server-side after a DCA response</li>
                 <li data-i18n="doc.s2.zk3">No wallet addresses, API keys, or identity information is ever collected</li>
-                <li data-i18n="doc.s2.zk4">The backend cannot reconstruct your portfolio even if it wanted to &mdash; it simply doesn&rsquo;t retain the data</li>
-                <li data-i18n="doc.s2.zk5">Your browser&rsquo;s localStorage is the single source of truth for your financial state</li>
+                <li data-i18n-html="doc.s2.zk4">The backend cannot reconstruct your portfolio even if it wanted to &mdash; it simply doesn&rsquo;t retain the data</li>
+                <li data-i18n-html="doc.s2.zk5">Your browser&rsquo;s localStorage is the single source of truth for your financial state</li>
             </ul>
             <div class="doc-callout purple">
-                <div class="doc-ct" data-i18n="doc.s2.zkWhy">&#128272; WHY THIS MATTERS</div>
-                <p data-i18n="doc.s2.zkWhyP">In 2023&ndash;2025, multiple centralized portfolio trackers suffered data breaches exposing user holdings. With AQMath, a server breach would reveal nothing about your portfolio &mdash; because there is nothing to find. Your financial sovereignty is guaranteed by architecture, not by promises.</p>
+                <div class="doc-ct" data-i18n-html="doc.s2.zkWhy">&#128272; WHY THIS MATTERS</div>
+                <p data-i18n-html="doc.s2.zkWhyP">In 2023&ndash;2025, multiple centralized portfolio trackers suffered data breaches exposing user holdings. With AQMath, a server breach would reveal nothing about your portfolio &mdash; because there is nothing to find. Your financial sovereignty is guaranteed by architecture, not by promises.</p>
             </div>
         </div>
 
@@ -1333,7 +1333,7 @@
         <!-- PORTFOLIO -->
         <div class="doc-block" id="doc-portfolio">
             <h2 id="doc-metrics" data-i18n="doc.s3.title">3. Portfolio Tracking</h2>
-            <p data-i18n="doc.s3.p1">Your portfolio is a collection of token positions stored entirely in your browser&rsquo;s localStorage. For each token, AQMath tracks your holdings, target allocation percentage, current price, staking yield, entry price history, and DCA cost basis. Together, these parameters form the complete state of your portfolio and drive every calculation in the system &mdash; from allocation metrics to risk budget enforcement.</p>
+            <p data-i18n-html="doc.s3.p1">Your portfolio is a collection of token positions stored entirely in your browser&rsquo;s localStorage. For each token, AQMath tracks your holdings, target allocation percentage, current price, staking yield, entry price history, and DCA cost basis. Together, these parameters form the complete state of your portfolio and drive every calculation in the system &mdash; from allocation metrics to risk budget enforcement.</p>
 
             <div class="doc-diagram">
                 <div class="doc-fl">Portfolio Position Overview (example)</div>
@@ -1432,8 +1432,8 @@
             <h3 id="doc-small-dca" data-i18n="doc.s4.smallTitle">4.2 Small DCA Rule</h3>
             <p data-i18n-html="doc.s4.smallP">When the DCA budget is very small, the engine allocates the <strong>entire amount</strong> to the single most underweight eligible token.</p>
             <div class="doc-callout green">
-                <div class="doc-ct" data-i18n="doc.s4.smallWhy">&#128202; WHY SINGLE-TOKEN FOR SMALL AMOUNTS</div>
-                <p data-i18n="doc.s4.smallWhyP">If you DCA $20 across 5 tokens, each gets $4 &mdash; likely below exchange minimums, and fees would consume a significant percentage. The small DCA rule puts the full $20 into the token that needs it most. Over multiple DCA cycles, the algorithm naturally balances across all tokens.</p>
+                <div class="doc-ct" data-i18n-html="doc.s4.smallWhy">&#128202; WHY SINGLE-TOKEN FOR SMALL AMOUNTS</div>
+                <p data-i18n-html="doc.s4.smallWhyP">If you DCA $20 across 5 tokens, each gets $4 &mdash; likely below exchange minimums, and fees would consume a significant percentage. The small DCA rule puts the full $20 into the token that needs it most. Over multiple DCA cycles, the algorithm naturally balances across all tokens.</p>
             </div>
         </div>
 
@@ -1499,7 +1499,7 @@
             <h3 id="doc-hardcaps" data-i18n="doc.s5.l5Title">L5 &mdash; Hard Caps</h3>
             <p data-i18n="doc.s5.l5P">No single risky token can exceed a structural concentration limit. If allocation would push a token beyond this cap, the excess is trimmed and redirected to the surplus pool.</p>
             <div class="doc-callout blue">
-                <div class="doc-ct" data-i18n="doc.s5.l5Pro">&#128295; DYNAMIC CAPS (Pro Feature)</div>
+                <div class="doc-ct" data-i18n-html="doc.s5.l5Pro">&#128295; DYNAMIC CAPS (Pro Feature)</div>
                 <p data-i18n-html="doc.s5.l5ProP">The Pro engine replaces the flat cap with <strong>volatility-adaptive limits</strong>: high-volatility tokens receive smaller caps (as low as 10%), while low-volatility tokens can hold larger positions (up to 40%). Each token&rsquo;s maximum weight is dynamically scaled between 10% and 40% based on how volatile it is relative to the most volatile token in the portfolio. The more volatile a token, the tighter its cap.</p>
             </div>
 
@@ -1519,7 +1519,7 @@
             <h3 id="doc-portvol" data-i18n="doc.s6.pvTitle">6.1 Portfolio Volatility</h3>
             <p data-i18n="doc.s6.pvP">Portfolio-level volatility is a weighted aggregate of each token&rsquo;s individual volatility, proportional to its share of total portfolio value. Safe-haven tokens and frozen positions are excluded since they have near-zero volatility by definition. This portfolio-level metric drives adaptive thresholds across the entire safety pipeline.</p>
             <div class="doc-callout blue">
-                <div class="doc-ct" data-i18n="doc.s6.covTitle">&#128216; COVARIANCE MATRIX (Pro Feature)</div>
+                <div class="doc-ct" data-i18n-html="doc.s6.covTitle">&#128216; COVARIANCE MATRIX (Pro Feature)</div>
                 <p data-i18n-html="doc.s6.covP">The Pro engine computes a full covariance matrix estimating how assets move <em>together</em>. Two tokens with moderate individual volatility but high correlation (like ETH and SOL) have amplified combined risk. The optimizer uses this to ensure each asset contributes equal risk &mdash; preventing hidden concentration through correlation.</p>
             </div>
         </div>
@@ -1588,8 +1588,8 @@
                 <li data-i18n-html="doc.s8.corr4"><strong>Per-token diagnostics</strong> &mdash; ERC weight, KKT weight, risk contribution, volatility, dynamic cap, and capped status</li>
             </ul>
             <div class="doc-callout green">
-                <div class="doc-ct" data-i18n="doc.s8.rpWhy">&#128200; WHY RISK PARITY MATTERS</div>
-                <p data-i18n="doc.s8.rpWhyP">A na&iuml;ve equal-weight portfolio of BTC + SOL + DOGE allocates 33% each. But DOGE&rsquo;s volatility is roughly 3x BTC&rsquo;s, meaning DOGE contributes ~60% of total portfolio risk despite holding only 33% of value. ERC automatically corrects this: it would allocate ~55% to BTC, ~25% to SOL, and ~20% to DOGE &mdash; ensuring each token genuinely contributes one-third of the risk.</p>
+                <div class="doc-ct" data-i18n-html="doc.s8.rpWhy">&#128200; WHY RISK PARITY MATTERS</div>
+                <p data-i18n-html="doc.s8.rpWhyP">A na&iuml;ve equal-weight portfolio of BTC + SOL + DOGE allocates 33% each. But DOGE&rsquo;s volatility is roughly 3x BTC&rsquo;s, meaning DOGE contributes ~60% of total portfolio risk despite holding only 33% of value. ERC automatically corrects this: it would allocate ~55% to BTC, ~25% to SOL, and ~20% to DOGE &mdash; ensuring each token genuinely contributes one-third of the risk.</p>
             </div>
         </div>
 
@@ -1814,7 +1814,7 @@
             <p data-i18n="doc.s9.p1">AQMath&rsquo;s privacy is not a feature bolted onto the product &mdash; it&rsquo;s the foundational architectural principle. The system is designed so that your financial data is mathematically isolated from the computation layer.</p>
             <div class="doc-privacy-grid">
                 <div class="doc-privacy-col">
-                    <h4 style="color:var(--blue);" data-i18n="doc.s9.staysTitle">&#128309; Stays in Browser (localStorage)</h4>
+                    <h4 style="color:var(--blue);" data-i18n-html="doc.s9.staysTitle">&#128309; Stays in Browser (localStorage)</h4>
                     <ul>
                         <li data-i18n="doc.s9.stays1">All token amounts and quantities</li>
                         <li data-i18n="doc.s9.stays2">Entry prices and cost basis</li>
@@ -1827,7 +1827,7 @@
                     </ul>
                 </div>
                 <div class="doc-privacy-col">
-                    <h4 style="color:var(--green);" data-i18n="doc.s9.backendTitle">&#128994; Backend Receives (DCA Only, Ephemeral)</h4>
+                    <h4 style="color:var(--green);" data-i18n-html="doc.s9.backendTitle">&#128994; Backend Receives (DCA Only, Ephemeral)</h4>
                     <ul>
                         <li data-i18n="doc.s9.backend1">Token symbols (e.g., BTC, ETH)</li>
                         <li data-i18n="doc.s9.backend2">Current amounts and prices</li>
@@ -1842,7 +1842,7 @@
             <h3 id="doc-backend-never" data-i18n="doc.s9.bnTitle">9.1 What the Backend NEVER Sees</h3>
             <p data-i18n="doc.s9.bnP">This is the most critical section. The following data is architecturally impossible for the backend to access:</p>
             <div class="doc-callout red">
-                <div class="doc-ct" data-i18n="doc.s9.bnCt">&#128274; ARCHITECTURAL PRIVACY GUARANTEES</div>
+                <div class="doc-ct" data-i18n-html="doc.s9.bnCt">&#128274; ARCHITECTURAL PRIVACY GUARANTEES</div>
                 <p data-i18n-html="doc.s9.bnCtP">No database table maps users to portfolios. No log file records your holdings. Even with full server access, an attacker would find <strong>zero information</strong> about any user&rsquo;s financial state.</p>
             </div>
             <table class="doc-table">
