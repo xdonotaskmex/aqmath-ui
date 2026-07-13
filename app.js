@@ -417,10 +417,6 @@ function updateDeleverageUI() {
     row.className = on ? 'dl-row' : 'dl-row off';
 }
 
-// ============ STRUCTURAL LIMITS ============
-const HARD_CAP_PER_TOKEN = 0.20;  // 20% max per risky token
-const RISK_BUDGET_TOTAL = 0.60;   // 60% max in risky assets
-
 // ============ CIRCUIT BREAKER ============
 const ATH_KEY = 'aqmath_portfolio_ath';
 
@@ -504,71 +500,6 @@ function calcPortfolioVol() {
     const weightedRmsVol = Math.sqrt(active.reduce((s, a) => s + (a.weight * a.annVol) ** 2, 0));
     const blendedVol = weightedRmsVol * (1 - avgCorr) + weightedAvgVol * avgCorr;
     return blendedVol;
-}
-
-// ============ HARD CAPS POST-PROCESSING ============
-function applyHardCaps(updated, dcaAmount) {
-    const portVal = totalValue();
-    if (portVal <= 0) return { updated, surplus: 0, capped: [] };
-    let surplus = 0;
-    const capped = [];
-
-    // Step 5: Per-token hard cap (20%)
-    updated.forEach(up => {
-        const token = portfolio.find(t => t.sym === up.symbol);
-        if (!token || token.safeHaven || token.frozen) return;
-        const newValue = up.amount * up.price;
-        const weight = newValue / portVal;
-        if (weight > HARD_CAP_PER_TOKEN) {
-            const cappedValue = HARD_CAP_PER_TOKEN * portVal;
-            const cappedAmount = cappedValue / up.price;
-            const excess = (up.amount - cappedAmount) * up.price;
-            surplus += excess;
-            up.amount = cappedAmount;
-            capped.push(`${up.symbol}: capped at ${(HARD_CAP_PER_TOKEN*100)}% ($${excess.toFixed(2)} redirected)`);
-        }
-    });
-
-    // Step 6: Total risk budget (60%)
-    const riskyTotal = updated
-        .filter(up => { const t = portfolio.find(p => p.sym === up.symbol); return t && !t.safeHaven && !t.frozen; })
-        .reduce((s, up) => s + (up.amount * up.price), 0);
-    if (riskyTotal > RISK_BUDGET_TOTAL * portVal) {
-        const scale = (RISK_BUDGET_TOTAL * portVal) / riskyTotal;
-        updated.forEach(up => {
-            const token = portfolio.find(t => t.sym === up.symbol);
-            if (!token || token.safeHaven || token.frozen) return;
-            const reduction = up.amount * (1 - scale);
-            up.amount *= scale;
-            surplus += reduction * up.price;
-            capped.push(`${up.symbol}: risk budget scaled (${(scale*100).toFixed(1)}%)`);
-        });
-    }
-
-    // Step 7: Redirect surplus to stablecoin
-    if (surplus > 0.01) {
-        const stablecoin = portfolio.find(t => t.safeHaven && !t.frozen);
-        if (stablecoin) {
-            const stableUp = updated.find(up => up.symbol === stablecoin.sym);
-            if (stableUp) {
-                // Use protected amount (never reduced) + surplus
-                stableUp.amount = Math.max(stableUp.amount, stablecoin.amount) + surplus;
-                capped.push(`safe-haven: +$${surplus.toFixed(2)} redirected to ${stablecoin.sym}`);
-            } else {
-                // Stablecoin not in updated array, add it with original + surplus
-                updated.push({
-                    symbol: stablecoin.sym,
-                    amount: stablecoin.amount + surplus,
-                    price: stablecoin.price,
-                    costBasis: stablecoin.costBasis,
-                    totalTokens: stablecoin.totalTokens
-                });
-                capped.push(`safe-haven: +$${surplus.toFixed(2)} redirected to ${stablecoin.sym}`);
-            }
-        }
-    }
-
-    return { updated, surplus, capped };
 }
 
 function genColors(n) {
@@ -1223,21 +1154,24 @@ async function distribuirajDca() {
         }
 
         const updated = result.updated_positions || [];
-        console.log('DCA updated_positions count:', updated.length);
-
-        let capped = [];
-        if (isPro) {
-            // Hard caps + risk budget + stablecoin redirect — Pro only
-            const hardCapResult = applyHardCaps(updated, dcaAmount);
-            capped = hardCapResult.capped;
-            if (capped.length > 0) {
-                console.log('[DCA] Hard caps applied:', capped);
-            }
+        console.log('DCA updated positions count:', updated.length);
+        
+        // Backend already applies hard caps + risk budget + stablecoin redirect
+        // Just use the structural_limits returned by backend (no duplicate processing)
+        const capped = result.structural_limits || [];
+        if (capped.length > 0) {
+            console.log('[DCA] Structural limits from backend:', capped);
         }
-
+        
         updated.forEach(up => {
             const idx = portfolio.findIndex(t => t.sym === up.symbol);
             if (idx >= 0) {
+                // Protect safe-haven tokens: never reduce amounts during DCA
+                // (DCA adds external money, should not touch existing USDC balance)
+                if (portfolio[idx].safeHaven && up.amount < portfolio[idx].amount) {
+                    console.log(`[DCA] Protected safe-haven ${up.symbol} from reduction: ${up.amount} → keeping ${portfolio[idx].amount}`);
+                    up.amount = portfolio[idx].amount;
+                }
                 console.log(`DCA: ${up.symbol} amount ${portfolio[idx].amount} → ${up.amount}`);
                 portfolio[idx].amount = up.amount;
                 portfolio[idx].costBasis = up.costBasis || portfolio[idx].costBasis;
