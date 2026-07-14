@@ -412,7 +412,7 @@
     }
   },
   "bt": {
-    "intro": "<strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage state machine (v10.6) used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. <strong>Buy &amp; Hold</strong> buys tokens unconditionally. <strong>Deleverage</strong> parks DCA in USDC when the shield is ON, then deploys via tranches: T1 (25% when vol calms), T2 (50% when gap &lt;15%), Final (100% on shield exit).",
+    "intro": "<strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage state machine <strong>(v11.0 — institutional-grade)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. <strong>Buy &amp; Hold</strong> buys tokens unconditionally. <strong>Deleverage</strong> parks DCA in USDC when the shield is ON, then deploys via tranches: T1 (25% when vol calms), T2 (50% when gap &lt;15%), Final (100% on shield exit).",
     "csvFormat": "<strong>CSV format:</strong> Header with date column (<code>event_date</code>/<code>date</code>/<code>Date</code>) + price column (<code>close_price_usd</code>/<code>Close</code>/<code>price</code>). Equal-weighted portfolio.",
     "navBacktest": "backtest"
   },

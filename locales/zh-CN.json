@@ -412,7 +412,7 @@
     }
   },
   "bt": {
-    "intro": "<strong>工作原理：</strong>上传代币的历史价格 CSV（最多 5 个）。引擎运行与生产环境完全相同的去杠杆状态机（v10.6）。两种策略接收<strong>完全相同的 DCA 资金</strong>和相同的时间表，确保方法论上的公平比较。<strong>买入持有</strong>无条件购买代币。<strong>去杠杆</strong>在防护罩开启时将 DCA 停泊在 USDC 中，然后通过分批部署：T1（波动平静时 25%）、T2（差距 &lt;15% 时 50%）、最终（防护罩退出时 100%）。",
+    "intro": "<strong>工作原理：</strong>上传代币的历史价格 CSV（最多 5 个）。引擎运行与生产环境完全相同的去杠杆状态机<strong>（v11.0 — 机构级）</strong>。两种策略接收<strong>完全相同的 DCA 资金</strong>和相同的时间表，确保方法论上的公平比较。<strong>买入持有</strong>无条件购买代币。<strong>去杠杆</strong>在防护罩开启时将 DCA 停泊在 USDC 中，然后通过分批部署：T1（波动平静时 25%）、T2（差距 &lt;15% 时 50%）、最终（防护罩退出时 100%）。",
     "csvFormat": "<strong>CSV 格式：</strong>包含日期列（<code>event_date</code>/<code>date</code>/<code>Date</code>）+ 价格列（<code>close_price_usd</code>/<code>Close</code>/<code>price</code>）的表头。等权重组合。",
     "navBacktest": "回测"
   },

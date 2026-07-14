@@ -359,7 +359,7 @@ function btShowStatus(msg, type) {
 }
 
 function btReadCfg() {
-    // Production deleverage v10.6 defaults — hardcoded, no user-configurable engine params
+    // Production deleverage v11.0 defaults — hardcoded, no user-configurable engine params
     return {
         dd_window: DL.DD_WINDOW,
         exit_window: DL.EXIT_WINDOW,
