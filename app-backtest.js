@@ -140,9 +140,9 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         exit_blocked: false, exit_block_reason: null,
         tranche_1_executed: t1Done, tranche_2_executed: t2Done,
         tranche_amount: 0, tranche_event: null,
-        usdc_reserve: +(usdcReserve || 0).toFixed(4)
+        usdc_reserve: +(usdcReserve || 0).toFixed(4),
+        exit_tranche: exitTranche
     };
-    var exitTranche = -1;  // -1 = not in sell-down
     if (!rets || rets.length < ddWindow) return E;
 
     // Global equity curve
