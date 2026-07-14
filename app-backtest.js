@@ -12,7 +12,7 @@ const DL = {
     DD_THRESHOLD: 0.12,
     DS_VOL_HIGH: 0.48,
     DS_VOL_LOW: 0.30,
-    FLOOR_EXPOSURE: 0.05,
+    FLOOR_EXPOSURE: 0.0,
     RISK_BUDGET: 0.85,
     PARTIAL_SELL: 0.50,
     VOL_HALFLIFE: 30,
@@ -22,6 +22,7 @@ const DL = {
     TRANCHE_2_PCT: 0.50,
     TRANCHE_2_GAP: 0.15,
     FEE_RATE: 0.001,  // 10 bps per trade (rebalance, DCA, tranche)
+    EXIT_TRANCHES: [0.50, 0.25, 0.0],  // sell-down schedule: 50% → 25% → 0%
 };
 
 function computeDownsideVol(rets, window) {
@@ -64,8 +65,9 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
     var tp2 = cfg.tranche_2_pct !== undefined ? cfg.tranche_2_pct : DL.TRANCHE_2_PCT;
     var t2g = cfg.tranche_2_gap !== undefined ? cfg.tranche_2_gap : DL.TRANCHE_2_GAP;
 
+    var exitTranches = cfg.exit_tranches || DL.EXIT_TRANCHES;
     var E = {
-        shield_active: false, target_exposure: floorExp,  // Bug 5 FIX: Conservative default
+        shield_active: false, target_exposure: riskBudget,  // v10.8: default to full risk
         global_dd: 0, window_dd: 0, exit_dd: 0, ds_vol: 0,
         local_max_dd: 0, peak_ds_vol: peakDsVol,
         exit_reason: null, entry_triggered: false,
@@ -74,6 +76,7 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         tranche_amount: 0, tranche_event: null,
         usdc_reserve: +(usdcReserve || 0).toFixed(4)
     };
+    var exitTranche = -1;  // -1 = not in sell-down
     if (!rets || rets.length < ddWindow) return E;
 
     // Global equity curve
@@ -110,18 +113,28 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         if (peakDsVol > 0.01) hOk = dsV > peakDsVol * 0.70;
         if (gDd > ddThresh && dsV > dsVolHigh && hOk) {
             shieldActive = true; localMaxDd = eDd; peakDsVol = dsV; entry = true;
-            tExp = floorExp;  // Bug 2 FIX: Instant de-risk to floor on entry
+            exitTranche = 1;  // start sell-down
+            tExp = (exitTranches[0] || 0) * riskBudget;  // first tranche target
         } else {
             tExp = riskBudget;
         }
     } else {
         if (eDd > localMaxDd) localMaxDd = eDd;
         if (dsV > peakDsVol) peakDsVol = dsV;
-        // Bug 4 FIX: Don't increase exposure if DD is still deepening
-        var rf = localMaxDd > 0.001 ? (localMaxDd - eDd) / localMaxDd : 0;
-        if (eDd > localMaxDd * 0.80) rf = 0;  // Still near worst - no recovery
-        rf = Math.max(0, Math.min(1, rf));
-        tExp = Math.min(riskBudget, floorExp + rf * (riskBudget - floorExp));
+        // v10.8: Sell-down tranches (gradual de-risk over multiple bars)
+        if (exitTranche > 0 && exitTranche < exitTranches.length) {
+            tExp = exitTranches[exitTranche - 1] * riskBudget;
+            exitTranche += 1;
+        } else if (exitTranche >= exitTranches.length) {
+            exitTranche = -1;  // sell-down complete
+        }
+
+        if (exitTranche === -1) {
+            // Recovery factor (linear, no clamp)
+            var rf = localMaxDd > 0.001 ? (localMaxDd - eDd) / localMaxDd : 0;
+            rf = Math.max(0, Math.min(1, rf));
+            tExp = Math.min(riskBudget, floorExp + rf * (riskBudget - floorExp));
+        }
 
         var isDdHealed = eDd < 0.001;
         var isVolCalm = dsV < dsVolLow;
@@ -318,10 +331,10 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
         sOn = res.shield_active; lMd = res.local_max_dd; pDv = res.peak_ds_vol;
         usdcR = res.usdc_reserve; t1Done = res.tranche_1_executed; t2Done = res.tranche_2_executed;
 
-        // EMERGENCY BRAKE: On shield entry, force floor exposure INSTANTLY.
+        // v10.8: On entry, use first tranche target (not floor) — sell-down is gradual
         var eff;
         if (res.entry_triggered && res.shield_active) {
-            eff = cfg.floor_exposure;
+            eff = res.target_exposure;  // first sell-down tranche (e.g. 50% × riskBudget)
         } else {
             eff = res.target_exposure;
             if (pExp !== null) {
@@ -395,7 +408,7 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
             events.push({ day: dayNum, type: evType, gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '$' + res.tranche_amount.toFixed(0) + ' \u2192 tokens (' + res.tranche_event + ', fee $' + trFee.toFixed(2) + ')' });
         }
 
-        if (res.entry_triggered) events.push({ day: dayNum, type: 'ENTRY', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '\u26A0 Emergency Brake \u2014 exposure \u2192 ' + (cfg.floor_exposure * 100).toFixed(0) + '% instantly' });
+        if (res.entry_triggered) events.push({ day: dayNum, type: 'ENTRY', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '\u26A0 Emergency Brake \u2014 sell-down started, exposure \u2192 ' + (eff * 100).toFixed(1) + '%' });
         if (res.exit_reason) events.push({ day: dayNum, type: 'FINAL', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: 'EXIT: ' + res.exit_reason });
         if (res.exit_blocked) events.push({ day: dayNum, type: 'BLOCKED', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: res.exit_block_reason });
 

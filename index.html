@@ -156,7 +156,7 @@
             ],
             [
                 'deleverage shield: scanning 180d volatility...',
-                '\u26a0 SHIELD ACTIVE \u2014 drawdown 34.2% detected, exposure cut to 5%',
+                '\u26a0 SHIELD ACTIVE \u2014 drawdown 34.2% detected, 3-stage sell-down started',
                 'rerouting DCA to USDC reserve...',
                 'capital preserved \u2014 shield active 34% of backtest (1067/3184 days)'
             ],
@@ -285,7 +285,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">04</span></div>
                         <div class="metric-label" data-i18n="math.shieldLabel">--deleverage-shield</div>
-                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Emergency Brake: on crash detection, exposure drops to floor <strong>instantly</strong> &mdash; all positions scaled down, DCA rerouted to USDC. Capital re-enters via 3-stage tranche recovery.</div>
+                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Emergency Brake: on crash detection, exposure drops via 3-stage sell-down to <strong>0%</strong> (full stablecoins) &mdash; DCA rerouted to USDC. Capital re-enters via 3-stage tranche recovery.</div>
                         <a href="#/backtest" class="doc-formula-link" data-i18n="math.shieldLink">[ see 8.7-year backtest ]</a>
                     </div>
                 </div>
@@ -1104,7 +1104,7 @@
         <div class="tc bt-card">
             <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--event-log</span></div>
             <div class="tc-body" style="padding:0;">
-                <div class="bt-explain bt-explain-sm" style="margin:12px 16px 0;"><span style="color:var(--red);font-weight:700">&#x26A0; BRAKE</span> (red) = Emergency Brake &mdash; instant de-risk to floor | DCA (cyan) = periodic contribution | T1 (purple) = Tranche 1 | T2 (pink) = Tranche 2 | <span style="color:var(--green);font-weight:600">FINAL</span> (green) = shield exit + 100% deploy | BLOCKED (orange) = divergence guard</div>
+                <div class="bt-explain bt-explain-sm" style="margin:12px 16px 0;"><span style="color:var(--red);font-weight:700">&#x26A0; BRAKE</span> (red) = Emergency Brake &mdash; 3-stage sell-down to 0% | DCA (cyan) = periodic contribution | T1 (purple) = Tranche 1 | T2 (pink) = Tranche 2 | <span style="color:var(--green);font-weight:600">FINAL</span> (green) = shield exit + 100% deploy | BLOCKED (orange) = divergence guard</div>
                 <div style="max-height:400px;overflow-y:auto;padding:0 16px 16px;">
                     <table class="bt-events-table" id="btEventsTable">
                         <thead><tr><th>Date</th><th>Day</th><th>Event</th><th>Global DD</th><th>Exit DD</th><th>Gap</th><th>DS Vol</th><th>Exposure</th><th>USDC</th><th>Detail</th></tr></thead>
@@ -1606,7 +1606,7 @@
             <h4 data-i18n="doc.s8.shieldHow">How It Works</h4>
             <ul>
                 <li data-i18n-html="doc.s8.shield1"><strong>Continuous monitoring</strong> &mdash; the engine tracks portfolio drawdown against adaptive thresholds that account for both recent volatility and long-term peak staleness.</li>
-                <li data-i18n-html="doc.s8.shield2"><strong>Instant de-risk on trigger</strong> &mdash; when crash conditions are detected, exposure drops to a minimal floor immediately (not gradually). This is the "Emergency Brake" &mdash; it bypasses normal sell-down limits to protect capital in a single tick.</li>
+                <li data-i18n-html="doc.s8.shield2"><strong>3-stage sell-down on trigger</strong> &mdash; when crash conditions are detected, exposure drops gradually via 3 tranches: 50% &rarr; 25% &rarr; 0% (full stablecoins). This prevents whipsaw from hard step functions while still protecting capital fast.</li>
                 <li data-i18n-html="doc.s8.shield3"><strong>Capital preservation</strong> &mdash; during shield-active periods, the portfolio holds ~94% in cash-equivalent (USDC), absorbing only a fraction of ongoing crash damage.</li>
                 <li data-i18n-html="doc.s8.shield4"><strong>Tranche recovery</strong> &mdash; as conditions improve, preserved capital is redeployed in stages (25% &rarr; 50% &rarr; 100%), preventing premature full exposure to volatile recoveries.</li>
             </ul>
@@ -1686,7 +1686,7 @@
                     <line x1="60" y1="40" x2="700" y2="40" stroke="#34d399" stroke-width="0.3" opacity="0.3" stroke-dasharray="2,4"/>
                     <text x="700" y="38" text-anchor="end" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="6" opacity="0.5">risk budget</text>
                     <line x1="60" y1="180" x2="700" y2="180" stroke="#f87171" stroke-width="0.3" opacity="0.3" stroke-dasharray="2,4"/>
-                    <text x="700" y="178" text-anchor="end" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="6" opacity="0.5">~5% floor</text>
+                    <text x="700" y="178" text-anchor="end" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="6" opacity="0.5">~0% floor (full stablecoins)</text>
                     <!-- Normal operation (flat exposure ~87%) -->
                     <polyline fill="none" stroke="#06b6d4" stroke-width="2" opacity="0.9"
                         points="60,52 120,52 180,52 220,52"/>

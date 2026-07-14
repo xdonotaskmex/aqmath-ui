@@ -23,7 +23,7 @@
     "privLabel": "--privacy",
     "privCopy": "Amounts, targets, and allocation weights stay in your browser's localStorage. Data sent to the backend is processed in-memory and discarded immediately — nothing is persisted.",
     "shieldLabel": "--deleverage-shield",
-    "shieldCopy": "Emergency Brake: on crash detection, exposure drops to floor instantly — DCA locked via Circuit Breaker. Capital re-enters via 3-stage tranche recovery when the Shield returns to NORMAL.",
+    "shieldCopy": "Emergency Brake: on crash detection, exposure drops via 3-stage sell-down to 0% (full stablecoins) — DCA locked via Circuit Breaker. Capital re-enters via 3-stage tranche recovery when the Shield returns to NORMAL.",
     "shieldLink": "[ see 8.7-year backtest ]"
   },
   "beta": {
