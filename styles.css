@@ -2062,7 +2062,7 @@
     .bt-setting { display: flex; flex-direction: column; gap: 3px; }
     .bt-setting label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-family: var(--mono); }
     .bt-setting input, .bt-setting select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 8px; border-radius: 4px; font-size: 0.78rem; width: 100px; font-family: var(--mono); }
-    .bt-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
+    .bt-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
 
     /* Status */
     .bt-status { padding: 8px 14px; border-radius: 6px; font-size: 0.8rem; margin-bottom: 12px; display: none; font-family: var(--mono); }
