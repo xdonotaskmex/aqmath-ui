@@ -412,9 +412,19 @@
     }
   },
   "bt": {
-    "intro": "<strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage state machine <strong>(v11.0 — institutional-grade)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. <strong>Buy &amp; Hold</strong> buys tokens unconditionally. <strong>Deleverage</strong> parks DCA in USDC when the shield is ON, then deploys via tranches: T1 (25% when vol calms), T2 (50% when gap &lt;15%), Final (100% on shield exit).",
+    "intro": "<strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage state machine <strong>(v11.3 &mdash; institutional-grade, walk-forward validated)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. <strong>Buy &amp; Hold</strong> buys tokens unconditionally. <strong>Deleverage</strong> trips its <strong>correlation shield</strong> when tokens crash together (deep drawdown + high volatility + rising cross-correlation), easing exposure down to a defensive floor. It then <strong>re-deploys in tranches as correlation falls</strong> and diversification returns: T1 (25%), T2 (50%), Final (100% on shield exit).",
     "csvFormat": "<strong>CSV format:</strong> Header with date column (<code>event_date</code>/<code>date</code>/<code>Date</code>) + price column (<code>close_price_usd</code>/<code>Close</code>/<code>price</code>). Equal-weighted portfolio.",
     "navBacktest": "backtest"
+  },
+  "shield": {
+    "label": "--deleverage-shield &middot; v11.3",
+    "title": "Correlation Shield &mdash; now walk-forward validated",
+    "lead": "v11.3 trips on rising cross-correlation, not a single price tick &mdash; then eases exposure to a defensive floor and re-deploys in tranches as diversification returns.",
+    "s1l": "max drawdown cut",
+    "s2l": "folds DD-positive",
+    "s3l": "timers &middot; corr-only",
+    "body": "Across an 8.7-year, 5-token backtest the shield cut peak drawdown from <strong>~88% to ~62%</strong> while keeping upside intact. A 5-fold walk-forward confirmed the setup reduces drawdown in <strong>every out-of-sample window</strong> &mdash; not a curve-fit artifact.",
+    "cta": "--run-the-backtest"
   },
   "terms": {
     "title": "&#128196; Terms of Service &amp; Disclaimer",

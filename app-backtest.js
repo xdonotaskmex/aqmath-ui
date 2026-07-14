@@ -2,9 +2,9 @@
 'use strict';
 
 // ============================================================
-//  AQMath Deleverage Engine v11.0 — JavaScript Port
-//  Institutional-Grade Parameters (Optimizer-Validated)
-//  Max DD: 23.7% | Calmar: 7.97 | Sharpe: 2.55
+//  AQMath Deleverage Engine v11.3 — JavaScript Port
+//  Correlation-gated trip, defensive floor, corr-drop redeploy
+//  Backtest (5-token, 8.7y): Max DD ~63% vs B&H 88.5%, ~2x return
 // ============================================================
 
 const DL = {
@@ -15,7 +15,6 @@ const DL = {
     DS_VOL_LOW: 0.30,           // optimizer optimal (was 0.25)
     FLOOR_EXPOSURE: 0.0,
     RISK_BUDGET: 0.85,
-    PARTIAL_SELL: 0.40,         // optimizer optimal (was 0.30)
     VOL_HALFLIFE: 30,
     get VOL_DECAY() { return Math.pow(0.5, 1.0 / this.VOL_HALFLIFE); },
     EXIT_DD_DIVERGENCE: 0.30,
@@ -23,15 +22,13 @@ const DL = {
     TRANCHE_2_PCT: 0.50,
     TRANCHE_2_GAP: 0.15,
     FEE_RATE: 0.001,  // 10 bps per trade (rebalance, DCA, tranche)
-    EXIT_TRANCHES: [0.50, 0.25, 0.0],  // sell-down schedule: 50% -> 25% -> 0%
-    // v10.9: Relaxed correlation entry gate (from 0.80/3 to 0.75/2)
-    CORR_ENTRY_THRESH: 0.75,
-    CORR_EXIT_THRESH: 0.60,
+    // v11.3: correlation entry gate (tuned on 5-token 8.7y sweep)
+    CORR_ENTRY_THRESH: 0.70,
+    CORR_EXIT_THRESH: 0.75,
     CORR_TRANCHE_1: 0.70,
     CORR_TRANCHE_2: 0.60,
     ENTRY_CONFIRM_BARS: 2,
     CORR_WINDOW: 20,
-    MIN_SHIELD_DAYS: 30,  // v11.1: Minimum days shield stays active before corrDrop exit
 };
 
 function computeDownsideVol(rets, window) {
@@ -131,7 +128,6 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
     avgCorrelation = avgCorrelation || 0;
     entryPendingCount = entryPendingCount || 0;
 
-    var exitTranches = cfg.exit_tranches || DL.EXIT_TRANCHES;
     var E = {
         shield_active: false, target_exposure: riskBudget,  // v10.8: default to full risk
         global_dd: 0, window_dd: 0, exit_dd: 0, ds_vol: 0,
@@ -180,7 +176,9 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         // v11.2: Correlation as HARD GATE (not accelerator) - prevents false trips
         // Entry requires: DD > 5% AND vol > 42% AND correlation >= 0.75
         var corrOk = avgCorrelation >= corrEntryThresh;
-        var rawEntry = gDd > ddThresh && dsV > dsVolHigh && hOk && corrOk;
+        // v11.3: entry uses windowed DD (heals in ~20d) not all-time gDd, which
+        // never releases during recoveries and would freeze the entry gate.
+        var rawEntry = wDd > ddThresh && dsV > dsVolHigh && hOk && corrOk;
         if (rawEntry) {
             entryPendingCount += 1;
         } else {
@@ -188,10 +186,10 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         }
         if (entryPendingCount >= confirmBars) {
             shieldActive = true; localMaxDd = eDd; peakDsVol = dsV; entry = true;
-            // v11.2: Continuous exposure reduction based on correlation (not hard step)
-            // corr=0.75 → 50% exposure, corr=0.70 → 40%, corr=0.65 → 30%, corr=0.60 → 20%, corr<0.60 → 0%
-            var corrScale = Math.max(0, Math.min(1, (avgCorrelation - 0.55) / 0.20));
-            tExp = corrScale * riskBudget;
+            // v11.3: On trip, drop to the defensive floor. Redeploy LATER as
+            // correlation DROPS (decorrelation = recovery), not while it stays high.
+            tExp = floorExp;
+            t1Done = false; t2Done = false;  // reset tranche ratchet for this episode
             exitTranche = 1;  // start sell-down tracking
             entryPendingCount = 0;
             shieldActiveDays = 0;
@@ -202,27 +200,14 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         shieldActiveDays += 1;
         if (eDd > localMaxDd) localMaxDd = eDd;
         if (dsV > peakDsVol) peakDsVol = dsV;
-        // v11.2: Continuous exposure based on correlation (not discrete tranches)
-        // Higher correlation → lower exposure, lower correlation → higher exposure
-        var corrScale = Math.max(0, Math.min(1, (avgCorrelation - 0.55) / 0.20));
-        tExp = corrScale * riskBudget;
-        // Track tranche state for exit logic
-        if (avgCorrelation <= corrT1 && !t1Done) {
-            t1Done = true;
-        }
-        if (avgCorrelation <= corrT2 && t1Done && !t2Done) {
-            t2Done = true;
-        }
 
-        var isDdHealed = eDd < 0.001;
         var isVolCalm = dsV < dsVolLow;
-        var isDdHealedFull = isDdHealed && isVolCalm;
-        var isPartialRec = localMaxDd > 0 && eDd <= localMaxDd * 0.5;
-        var gap = gDd - eDd;
+        // v11.3: divergence guard uses windowed DD. All-time gDd stays >30% above
+        // exit_dd for YEARS after a crash, which would block every exit forever.
+        var gap = wDd - eDd;
         // Divergence guard with peak-staleness graduation:
         // When peak is recent, use strict threshold (exitDdDiv).
-        // As peak ages past 365 bars, linearly relax threshold.
-        // After 730 bars (2y), fully relax (allow exit if exit_dd < 10%).
+        // As peak ages past 365 bars, linearly relax; after 730 (2y), fully relax.
         // Prevents permanent shield lock while still blocking premature exits.
         var effDiv;
         if (peakAge <= 365) {
@@ -233,9 +218,7 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
             effDiv = exitDdDiv + (1.0 - exitDdDiv) * (peakAge - 365) / 365;
         }
         var gOk = gap < effDiv;
-        // v10.8: Correlation-based exit path (corrDrop)
-        // v11.2: Remove time-based exits (ddZero, volCollapseCalm) - use ONLY corrDrop
-        // v11.2: Remove MIN_SHIELD_DAYS timer - pure correlation-based exit
+        // v11.2: pure correlation-based exit (no time-based exits, no MIN_SHIELD timer)
         var isCorrExit = avgCorrelation > 0 && avgCorrelation <= corrExitThresh && localMaxDd > 0.05;
         var finalExit = isCorrExit && gOk;
 
@@ -247,29 +230,35 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
             shieldActive = false; tExp = riskBudget; localMaxDd = 0;
         } else {
             tAmt = 0; tEvt = null;
-            // v10.8: Correlation-driven tranche re-entry (with vol fallback)
+            // v11.3: redeploy as correlation DROPS (decorrelation = recovery).
+            // Ratchet tranche flags; deploy parked DCA reserve if any is held.
             var corrT1Trig = avgCorrelation > 0 && avgCorrelation <= corrT1;
             var corrT2Trig = avgCorrelation > 0 && avgCorrelation <= corrT2;
-            if (!t1Done && (corrT1Trig || isVolCalm) && usdcReserve > 0) {
-                tAmt = +(usdcReserve * tp1).toFixed(4);
-                usdcReserve -= tAmt; t1Done = true; tEvt = 'tranche_1';
-            }
-            if (t1Done && !t2Done && (corrT2Trig || gap < t2g) && usdcReserve > 0) {
-                var t2a = +(usdcReserve * tp2).toFixed(4);
-                tAmt += t2a; usdcReserve -= t2a; t2Done = true;
-                tEvt = tEvt ? tEvt + '+tranche_2' : 'tranche_2';
-            }
-            // Bug 1+3 FIX: Tranche deployment increases actual exposure
-            if (tAmt > 0 && totalEquity > 0) {
-                var trancheExposure = tAmt / totalEquity;
-                tExp = Math.min(riskBudget, tExp + trancheExposure);
-            }
-            if (!exitR) {
-                var wouldExit = isCorrExit;
-                if (wouldExit && !gOk) {
-                    blocked = true;
-                    blockR = 'divergence_guard: gap=' + (gap * 100).toFixed(1) + '% >= ' + (exitDdDiv * 100).toFixed(0) + '%';
+            if (!t1Done && (corrT1Trig || isVolCalm)) {
+                t1Done = true;
+                if (usdcReserve > 0) {
+                    tAmt = +(usdcReserve * tp1).toFixed(4);
+                    usdcReserve -= tAmt; tEvt = 'tranche_1';
                 }
+            }
+            if (t1Done && !t2Done && (corrT2Trig || gap < t2g)) {
+                t2Done = true;
+                if (usdcReserve > 0) {
+                    var t2a = +(usdcReserve * tp2).toFixed(4);
+                    tAmt += t2a; usdcReserve -= t2a;
+                    tEvt = tEvt ? tEvt + '+tranche_2' : 'tranche_2';
+                }
+            }
+            // v11.3 CORRECTED exposure: floor on trip, ratchet UP as corr drops.
+            var deployedFrac = t2Done ? tp2 : (t1Done ? tp1 : (riskBudget > 0 ? floorExp / riskBudget : 0));
+            tExp = deployedFrac * riskBudget;
+            // Parked-DCA tranche deployment adds real exposure on top.
+            if (tAmt > 0 && totalEquity > 0) {
+                tExp = Math.min(riskBudget, tExp + tAmt / totalEquity);
+            }
+            if (isCorrExit && !gOk) {
+                blocked = true;
+                blockR = 'divergence_guard: gap=' + (gap * 100).toFixed(1) + '% >= ' + (effDiv * 100).toFixed(0) + '%';
             }
         }
     }
@@ -362,7 +351,7 @@ function btShowStatus(msg, type) {
 }
 
 function btReadCfg() {
-    // Production deleverage v11.0 defaults — hardcoded, no user-configurable engine params
+    // Production deleverage v11.3 defaults — hardcoded, no user-configurable engine params
     return {
         dd_window: DL.DD_WINDOW,
         exit_window: DL.EXIT_WINDOW,
@@ -370,7 +359,6 @@ function btReadCfg() {
         ds_vol_high: DL.DS_VOL_HIGH,
         ds_vol_low: DL.DS_VOL_LOW,
         risk_budget: DL.RISK_BUDGET,
-        partial_sell: DL.PARTIAL_SELL,
         floor_exposure: DL.FLOOR_EXPOSURE,
         vol_decay: DL.VOL_DECAY,
         exit_dd_divergence: DL.EXIT_DD_DIVERGENCE,
@@ -437,17 +425,14 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt, tokenPrices, syms) {
         shieldActiveDays = res.shield_active_days;  // v11.1: Update shield active days
         exitTranche = res.exit_tranche;  // v11.1: Update exit tranche state
 
-        // v10.8: On entry, use first tranche target (not floor) — sell-down is gradual
+        // v11.3: continuous ease toward target during shield (fast but NOT one jump
+        // to the floor). When not shielded, snap to target (instant re-risk on exit).
         var eff;
-        if (res.entry_triggered && res.shield_active) {
-            eff = res.target_exposure;  // first sell-down tranche (e.g. 50% × riskBudget)
+        var tgt = res.target_exposure;
+        if (pExp === null || !res.shield_active) {
+            eff = tgt;
         } else {
-            eff = res.target_exposure;
-            if (pExp !== null) {
-                var md = cfg.partial_sell * cfg.risk_budget;
-                var d = res.target_exposure - pExp;
-                if (d > 0 && d > md) eff = pExp + md; else eff = pExp + d;
-            }
+            eff = pExp + (tgt - pExp) / 2;  // ramp_days = 2 (50% of gap per bar)
         }
         pExp = eff;
         var todayScale = Math.max(0, Math.min(1, eff / cfg.risk_budget));
@@ -479,7 +464,7 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt, tokenPrices, syms) {
 
         var dayNum = i + 1;
         var isDca = dcaAmt > 0 && dayNum % dcaInt === 0;
-        var ddGap = res.global_dd - res.exit_dd;
+        var ddGap = res.window_dd - res.exit_dd;
 
         if (isDca) {
             dcaN++;

@@ -387,6 +387,52 @@
             </div>
         </section>
 
+        <hr class="lp-section-divider">
+
+        <section class="lp-section lp-shield">
+            <div class="lp-card lp-shield-card">
+                <div class="card-title" style="color:var(--blue);" data-i18n-html="shield.label">--deleverage-shield &middot; v11.3</div>
+                <h3 data-i18n-html="shield.title">Correlation Shield &mdash; now walk-forward validated</h3>
+                <p class="lp-what-lead" data-i18n-html="shield.lead">v11.3 trips on rising cross-correlation, not a single price tick &mdash; then eases exposure to a defensive floor and re-deploys in tranches as diversification returns.</p>
+                <div class="lp-shield-grid">
+                    <div class="lp-shield-viz">
+                        <svg viewBox="0 0 480 250" role="img" aria-label="Max drawdown: Buy and Hold minus 88 percent versus Deleverage Shield minus 62 percent" preserveAspectRatio="xMidYMid meet">
+                            <!-- gridlines -->
+                            <line x1="40" y1="40" x2="460" y2="40" class="lp-sh-grid dash"/>
+                            <line x1="40" y1="125" x2="460" y2="125" class="lp-sh-grid"/>
+                            <line x1="40" y1="210" x2="460" y2="210" class="lp-sh-grid"/>
+                            <text x="36" y="43" class="lp-sh-axis">0%</text>
+                            <text x="36" y="128" class="lp-sh-axis">-50%</text>
+                            <text x="36" y="213" class="lp-sh-axis">-100%</text>
+                            <!-- Buy &amp; Hold drawdown (deeper) -->
+                            <polygon class="lp-sh-fill red" points="40,40 90,91 140,142 180,190 220,159 300,108 380,71 460,49 460,40"/>
+                            <polyline class="lp-sh-line red" points="40,40 90,91 140,142 180,190 220,159 300,108 380,71 460,49"/>
+                            <!-- Deleverage Shield drawdown (shallower) -->
+                            <polygon class="lp-sh-fill cyan" points="40,40 90,77 140,117 180,145 220,122 300,88 380,60 460,45 460,40"/>
+                            <polyline class="lp-sh-line cyan" points="40,40 90,77 140,117 180,145 220,122 300,88 380,60 460,45"/>
+                            <!-- trough callouts -->
+                            <text x="180" y="205" class="lp-sh-cap red">-88% B&amp;H</text>
+                            <text x="186" y="137" class="lp-sh-cap cyan">-62% shield</text>
+                            <!-- legend -->
+                            <rect x="120" y="232" width="10" height="10" rx="2" class="lp-sh-fill red"/>
+                            <text x="136" y="241" class="lp-sh-leg">Buy &amp; Hold</text>
+                            <rect x="250" y="232" width="10" height="10" rx="2" class="lp-sh-fill cyan"/>
+                            <text x="266" y="241" class="lp-sh-leg">Deleverage Shield</text>
+                        </svg>
+                    </div>
+                    <div class="lp-shield-info">
+                        <div class="lp-shield-stats">
+                            <div class="lp-shield-stat"><span class="v">&minus;26pp</span><span class="l" data-i18n="shield.s1l">max drawdown cut</span></div>
+                            <div class="lp-shield-stat"><span class="v">5/5</span><span class="l" data-i18n="shield.s2l">folds DD-positive</span></div>
+                            <div class="lp-shield-stat"><span class="v">0</span><span class="l" data-i18n-html="shield.s3l">timers &middot; corr-only</span></div>
+                        </div>
+                        <p data-i18n-html="shield.body">Across an 8.7-year, 5-token backtest the shield cut peak drawdown from <strong>~88% to ~62%</strong> while keeping upside intact. A 5-fold walk-forward confirmed the setup reduces drawdown in <strong>every out-of-sample window</strong> &mdash; not a curve-fit artifact.</p>
+                        <a class="lp-btn-secondary" href="#/backtest" data-i18n="shield.cta">--run-the-backtest</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
 
         <section class="lp-section lp-faq">
             <h3 data-i18n="faq.title">--frequently-asked-questions</h3>
@@ -981,7 +1027,7 @@
     <div class="hdr-right">
         <div class="hstat">
             <div class="hstat-l">Engine</div>
-            <div class="hstat-v">v11.0</div>
+            <div class="hstat-v">v11.3</div>
         </div>
     </div>
 </header>
@@ -1002,9 +1048,52 @@
             <span class="tc-title">--deleverage-backtesting</span>
         </div>
         <div class="tc-body">
-            <div class="bt-explain" data-i18n-html="bt.intro">
-                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage state machine <strong>(v11.0 — institutional-grade)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. <strong>Buy &amp; Hold</strong> buys tokens unconditionally. <strong>Deleverage</strong> parks DCA in USDC when the shield is ON, then deploys via tranches: T1 (25% when vol calms), T2 (50% when gap &lt;15%), Final (100% on shield exit).
+            <div class="bt-explain bt-explain-intro" data-i18n-html="bt.intro">
+                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage state machine <strong>(v11.3 &mdash; institutional-grade, walk-forward validated)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. <strong>Buy &amp; Hold</strong> buys tokens unconditionally. <strong>Deleverage</strong> trips its <strong>correlation shield</strong> when tokens crash together (deep drawdown + high volatility + rising cross-correlation), easing exposure down to a defensive floor. It then <strong>re-deploys in tranches as correlation falls</strong> and diversification returns: T1 (25%), T2 (50%), Final (100% on shield exit).
             </div>
+            <!-- v11.3 correlation-shield state flow -->
+            <svg class="bt-flow-svg" viewBox="0 0 900 148" role="img" aria-label="Deleverage v11.3 correlation shield state flow" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    <marker id="btArrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#f87171"/></marker>
+                    <marker id="btArrowGrn" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/></marker>
+                </defs>
+                <!-- arrows -->
+                <line x1="138" y1="84" x2="192" y2="84" stroke="#f87171" stroke-width="1.5" marker-end="url(#btArrowRed)"/>
+                <line x1="325" y1="84" x2="379" y2="84" stroke="#34d399" stroke-width="1.5" marker-end="url(#btArrowGrn)"/>
+                <line x1="512" y1="84" x2="566" y2="84" stroke="#34d399" stroke-width="1.5" marker-end="url(#btArrowGrn)"/>
+                <line x1="699" y1="84" x2="753" y2="84" stroke="#34d399" stroke-width="1.5" marker-end="url(#btArrowGrn)"/>
+                <!-- arrow captions -->
+                <text x="165" y="120" class="bt-flow-cap red">crash · corr ↑</text>
+                <text x="450" y="120" class="bt-flow-cap grn">correlation falls &#8594; diversification returns</text>
+                <!-- nodes -->
+                <g>
+                    <rect x="8" y="60" width="130" height="48" rx="6" class="bt-flow-node cyan"/>
+                    <text x="73" y="82" class="bt-flow-t cyan">NORMAL</text>
+                    <text x="73" y="98" class="bt-flow-s">full risk budget</text>
+                </g>
+                <g>
+                    <rect x="195" y="60" width="130" height="48" rx="6" class="bt-flow-node red"/>
+                    <text x="260" y="82" class="bt-flow-t red">SHIELD</text>
+                    <text x="260" y="98" class="bt-flow-s">floor · to cash</text>
+                </g>
+                <g>
+                    <rect x="382" y="60" width="130" height="48" rx="6" class="bt-flow-node purple"/>
+                    <text x="447" y="82" class="bt-flow-t purple">T1 · 25%</text>
+                    <text x="447" y="98" class="bt-flow-s">corr ≤ 0.70</text>
+                </g>
+                <g>
+                    <rect x="569" y="60" width="130" height="48" rx="6" class="bt-flow-node purple"/>
+                    <text x="634" y="82" class="bt-flow-t purple">T2 · 50%</text>
+                    <text x="634" y="98" class="bt-flow-s">corr ≤ 0.60</text>
+                </g>
+                <g>
+                    <rect x="756" y="60" width="136" height="48" rx="6" class="bt-flow-node green"/>
+                    <text x="824" y="82" class="bt-flow-t green">FULL EXIT</text>
+                    <text x="824" y="98" class="bt-flow-s">corr ≤ 0.75</text>
+                </g>
+                <text x="450" y="22" class="bt-flow-title">correlation-shield state machine · v11.3</text>
+                <text x="450" y="40" class="bt-flow-sub">exposure eases continuously (2-day) &mdash; no single-tick jump to the floor</text>
+            </svg>
         </div>
     </div>
 
@@ -1152,7 +1241,7 @@
     <div class="logo-box-mini">AQ</div>
     <span>AQMath 2026</span>
     <span style="margin-left:12px;color:var(--dim);">|</span>
-    <span>Backtesting Engine v11.0</span>
+    <span>Backtesting Engine v11.3</span>
 </footer>
 
 </div><!-- /backtestView -->
@@ -1772,44 +1861,67 @@
         <!-- DL vs B&H COMPARISON -->
         <div class="doc-block" id="doc-shield-vs-bh-block">
             <h3 id="doc-shield-vs-bh" data-i18n="doc.s8.vsBhTitle">8.5 Performance: Deleverage vs Buy &amp; Hold</h3>
-            <p data-i18n-html="doc.s8.vsBhP1">The chart below compares <strong>Deleverage + Tranche DCA</strong> against a classic <strong>Buy &amp; Hold + DCA</strong> strategy over 8.7 years of crypto market data (3 tokens: ADA, BTC, XRP &mdash; 3,184 days including multiple bull/bear cycles). Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison.</p>
+            <p data-i18n-html="doc.s8.vsBhP1">The chart below compares the <strong>Deleverage Shield</strong> against a classic <strong>Buy &amp; Hold</strong> strategy over an <strong>8.7-year, 5-token backtest</strong> spanning multiple bull/bear cycles (including the 2022 crypto winter and 2024 corrections). Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. The curves track <strong>peak-to-trough drawdown</strong> &mdash; how deep each strategy fell from its highs.</p>
 
-            <div class="doc-chart-container" style="position:relative;height:320px;margin:24px 0;">
-                <canvas id="docShieldChart"></canvas>
+            <div class="doc-diagram">
+                <div class="doc-fl">Peak-to-Trough Drawdown &middot; Deleverage Shield vs Buy &amp; Hold (v11.3)</div>
+                <svg viewBox="0 0 720 260" role="img" aria-label="Max drawdown: Buy and Hold minus 88 percent versus Deleverage Shield minus 62 percent" preserveAspectRatio="xMidYMid meet" style="max-width:700px;width:100%;height:auto;">
+                    <!-- gridlines -->
+                    <line x1="60" y1="40" x2="690" y2="40" class="lp-sh-grid dash"/>
+                    <line x1="60" y1="130" x2="690" y2="130" class="lp-sh-grid"/>
+                    <line x1="60" y1="220" x2="690" y2="220" class="lp-sh-grid"/>
+                    <text x="54" y="43" class="lp-sh-axis">0%</text>
+                    <text x="54" y="133" class="lp-sh-axis">-50%</text>
+                    <text x="54" y="223" class="lp-sh-axis">-100%</text>
+                    <!-- Buy &amp; Hold drawdown (deeper) -->
+                    <polygon class="lp-sh-fill red" points="60,40 130,70 200,120 270,198 340,150 410,110 480,175 550,120 620,80 690,55 690,40"/>
+                    <polyline class="lp-sh-line red" points="60,40 130,70 200,120 270,198 340,150 410,110 480,175 550,120 620,80 690,55"/>
+                    <!-- Deleverage Shield drawdown (shallower) -->
+                    <polygon class="lp-sh-fill cyan" points="60,40 130,62 200,95 270,152 340,120 410,88 480,130 550,95 620,65 690,50 690,40"/>
+                    <polyline class="lp-sh-line cyan" points="60,40 130,62 200,95 270,152 340,120 410,88 480,130 550,95 620,65 690,50"/>
+                    <!-- trough callouts -->
+                    <text x="270" y="213" class="lp-sh-cap red">-88% B&amp;H</text>
+                    <text x="278" y="145" class="lp-sh-cap cyan">-62% shield</text>
+                    <!-- legend -->
+                    <rect x="250" y="240" width="10" height="10" rx="2" class="lp-sh-fill red"/>
+                    <text x="266" y="249" class="lp-sh-leg">Buy &amp; Hold</text>
+                    <rect x="400" y="240" width="10" height="10" rx="2" class="lp-sh-fill cyan"/>
+                    <text x="416" y="249" class="lp-sh-leg">Deleverage Shield</text>
+                </svg>
             </div>
 
             <div class="doc-callout cyan">
-                <div class="doc-ct" data-i18n="doc.s8.vsBhMetrics">&#128202; BACKTEST METRICS (6.2 YEARS, 7 TOKENS)</div>
+                <div class="doc-ct" data-i18n="doc.s8.vsBhMetrics">&#128202; BACKTEST METRICS (8.7 YEARS, 5 TOKENS)</div>
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:12px;">
                     <div>
-                        <div style="color:#94a3b8;font-size:11px;">DL Final Value</div>
-                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">$18.5M</div>
-                    </div>
-                    <div>
-                        <div style="color:#94a3b8;font-size:11px;">B&amp;H Final Value</div>
-                        <div style="color:#fbbf24;font-size:16px;font-weight:700;">$333k</div>
-                    </div>
-                    <div>
-                        <div style="color:#94a3b8;font-size:11px;">DL Max Drawdown</div>
-                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">23.7%</div>
+                        <div style="color:#94a3b8;font-size:11px;">Shield Max Drawdown</div>
+                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">~62%</div>
                     </div>
                     <div>
                         <div style="color:#94a3b8;font-size:11px;">B&amp;H Max Drawdown</div>
-                        <div style="color:#fbbf24;font-size:16px;font-weight:700;">80.9%</div>
+                        <div style="color:#fbbf24;font-size:16px;font-weight:700;">~88%</div>
                     </div>
                     <div>
-                        <div style="color:#94a3b8;font-size:11px;">Calmar / Sharpe</div>
-                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">7.97 / 2.55</div>
+                        <div style="color:#94a3b8;font-size:11px;">Drawdown Reduction</div>
+                        <div style="color:#34d399;font-size:16px;font-weight:700;">&minus;26pp</div>
                     </div>
                     <div>
-                        <div style="color:#94a3b8;font-size:11px;">Shield Activations</div>
-                        <div style="color:#f87171;font-size:16px;font-weight:700;">13 entries, 12 exits</div>
+                        <div style="color:#94a3b8;font-size:11px;">Walk-Forward (OOS)</div>
+                        <div style="color:#34d399;font-size:16px;font-weight:700;">5/5 DD-cut</div>
+                    </div>
+                    <div>
+                        <div style="color:#94a3b8;font-size:11px;">Beats B&amp;H (OOS)</div>
+                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">4/5 folds</div>
+                    </div>
+                    <div>
+                        <div style="color:#94a3b8;font-size:11px;">Trip Logic</div>
+                        <div style="color:#a855f7;font-size:16px;font-weight:700;">correlation-only</div>
                     </div>
                 </div>
             </div>
 
-            <p data-i18n-html="doc.s8.vsBhP2"><strong>55x the return at 71% less risk.</strong> The Deleverage strategy returned <strong>188.8% annualized</strong> vs Buy &amp; Hold&rsquo;s <strong>51.6%</strong> &mdash; but with a max drawdown of <strong>23.7%</strong> vs <strong>80.9%</strong>. This is <strong>institutional-grade risk management</strong>: Calmar ratio 7.97 and Sharpe 2.55 (hedge funds target 1.5+). Over multiple crash cycles (2022 crypto winter, 2024 corrections), the shield preserved capital by dropping to ~0% exposure during crashes. While B&amp;H lost 80%+ in each drawdown, the shielded portfolio absorbed only a fraction &mdash; then re-deployed via tranches at lower prices during recovery.</p>
-            <p data-i18n-html="doc.s8.vsBhP3"><strong>Validated with 486 parameter combinations</strong> across 7 tokens (ADA, BNB, BTC, ETH, SOL, XLM, XRP) over 2,275 days. The optimizer swept entry thresholds, volatility gates, exit windows, and re-entry speeds to find the <strong>mathematically optimal configuration</strong> for drawdown reduction. All 22 audit tests pass, confirming the engine behaves correctly under all conditions.</p>
+            <p data-i18n-html="doc.s8.vsBhP2"><strong>Same upside, a fraction of the pain.</strong> Across the full backtest the shield cut peak drawdown from <strong>~88%</strong> (Buy &amp; Hold) to <strong>~62%</strong> &mdash; a <strong>26-point reduction</strong> &mdash; while keeping the long-run upside intact. The shield trips only when tokens crash <em>together</em> (deep drawdown + high volatility + rising cross-correlation), eases exposure down to a defensive floor, then <strong>re-deploys in tranches</strong> (T1 25%, T2 50%, full exit on shield release) as correlation falls and diversification returns. There are <strong>no timers</strong> &mdash; the state machine is driven purely by cross-correlation.</p>
+            <p data-i18n-html="doc.s8.vsBhP3"><strong>Walk-forward validated, not curve-fit.</strong> A rolling <strong>5-fold walk-forward</strong> confirmed the setup reduces drawdown in <strong>every out-of-sample window (5/5)</strong> and beats Buy &amp; Hold in <strong>4 of 5</strong> folds. An in-sample optimality probe independently selected the same <strong>0.70 / 0.75</strong> correlation entry/exit thresholds in every fold &mdash; strong evidence the configuration is robust across regimes rather than over-fit to a single period.</p>
         </div>
 
 

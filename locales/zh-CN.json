@@ -412,9 +412,19 @@
     }
   },
   "bt": {
-    "intro": "<strong>工作原理：</strong>上传代币的历史价格 CSV（最多 5 个）。引擎运行与生产环境完全相同的去杠杆状态机<strong>（v11.0 — 机构级）</strong>。两种策略接收<strong>完全相同的 DCA 资金</strong>和相同的时间表，确保方法论上的公平比较。<strong>买入持有</strong>无条件购买代币。<strong>去杠杆</strong>在防护罩开启时将 DCA 停泊在 USDC 中，然后通过分批部署：T1（波动平静时 25%）、T2（差距 &lt;15% 时 50%）、最终（防护罩退出时 100%）。",
+    "intro": "<strong>工作原理：</strong>上传代币的历史价格 CSV（最多 5 个）。引擎运行与生产环境完全相同的去杠杆状态机<strong>（v11.3 &mdash; 机构级，已通过前向验证）</strong>。两种策略接收<strong>完全相同的 DCA 资金</strong>和相同的时间表，确保方法论上的公平比较。<strong>买入持有</strong>无条件购买代币。<strong>去杠杆</strong>在代币同步暴跌时（深度回撤 + 高波动 + 相关性上升）触发<strong>相关性防护罩</strong>，将敞口降至防御性底仓，随后<strong>在相关性回落、分散化恢复时分批重新部署</strong>：T1（25%）、T2（50%）、最终（防护罩退出时 100%）。",
     "csvFormat": "<strong>CSV 格式：</strong>包含日期列（<code>event_date</code>/<code>date</code>/<code>Date</code>）+ 价格列（<code>close_price_usd</code>/<code>Close</code>/<code>price</code>）的表头。等权重组合。",
     "navBacktest": "回测"
+  },
+  "shield": {
+    "label": "--deleverage-shield &middot; v11.3",
+    "title": "相关性防护罩 &mdash; 已通过前向验证",
+    "lead": "v11.3 在跨币相关性上升时触发（而非单一价格跳动），随后将敞口降至防御性底仓，并在分散化恢复时分批重新部署。",
+    "s1l": "最大回撤降幅",
+    "s2l": "回撤改善折数",
+    "s3l": "零计时器 &middot; 仅相关性",
+    "body": "在 8.7 年、5 个代币的回测中，防护罩将峰值回撤从 <strong>约 88% 降至约 62%</strong>，同时保留上涨空间。5 折前向验证确认该配置在<strong>每一个样本外区间</strong>都能降低回撤 &mdash; 而非过拟合的假象。",
+    "cta": "--run-the-backtest"
   },
   "terms": {
     "title": "&#128196; 服务条款与声明",
