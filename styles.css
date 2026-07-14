@@ -171,6 +171,8 @@
     .btn.amber:hover { background: var(--amber); color: #000; box-shadow: 0 0 16px rgba(251,191,36,0.2); }
     .btn.purple { border: 1px solid rgba(168,85,247,0.35); color: var(--purple); }
     .btn.purple:hover { background: var(--purple); color: #000; box-shadow: 0 0 16px rgba(168,85,247,0.2); }
+    .btn.red { border: 1px solid rgba(248,113,113,0.35); color: var(--red); }
+    .btn.red:hover { background: var(--red); color: #000; box-shadow: 0 0 16px rgba(248,113,113,0.2); }
     .btn.ghost { border: 1px solid var(--border); color: var(--muted); opacity: 0.5; font-size: 0.6rem; }
     .btn.ghost:disabled { cursor: not-allowed; }
     .btn:disabled { opacity: 0.4; cursor: not-allowed; }
