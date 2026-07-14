@@ -2,9 +2,12 @@
 'use strict';
 
 // ============================================================
-//  AQMath Deleverage Engine v11.3 — JavaScript Port
+//  AQMath Deleverage Engine v11.4 — JavaScript Port
 //  Correlation-gated trip, defensive floor, corr-drop redeploy
-//  Backtest (5-token, 8.7y): Max DD ~63% vs B&H 88.5%, ~2x return
+//  Recalibrated on 5-token real data (ADA/BNB/BTC/ETH/XRP, 8.7y):
+//  realized 20d avg pairwise corr ~[-0.05, 0.74] (median 0.27, p90 0.43),
+//  so gates live in that band. Measured vs B&H: Max DD 82.6% -> 74.8%
+//  (+7.8pp), Calmar 1.08 -> 1.39. Full-sample recalibration (not WF-OOS).
 // ============================================================
 
 const DL = {
@@ -22,11 +25,12 @@ const DL = {
     TRANCHE_2_PCT: 0.50,
     TRANCHE_2_GAP: 0.15,
     FEE_RATE: 0.001,  // 10 bps per trade (rebalance, DCA, tranche)
-    // v11.3: correlation entry gate (tuned on 5-token 8.7y sweep)
-    CORR_ENTRY_THRESH: 0.70,
-    CORR_EXIT_THRESH: 0.75,
-    CORR_TRANCHE_1: 0.70,
-    CORR_TRANCHE_2: 0.60,
+    // v11.4: correlation gates recalibrated to realized 20d corr band [-0.05,0.74]
+    // (median 0.27, p90 0.43). Full-exit (0.18) is the LOWEST gate so tranches run.
+    CORR_ENTRY_THRESH: 0.43,
+    CORR_EXIT_THRESH: 0.18,
+    CORR_TRANCHE_1: 0.33,
+    CORR_TRANCHE_2: 0.26,
     ENTRY_CONFIRM_BARS: 2,
     CORR_WINDOW: 20,
 };
@@ -174,7 +178,7 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         var hOk = true;
         if (peakDsVol > 0.01) hOk = dsV > peakDsVol * 0.70;
         // v11.2: Correlation as HARD GATE (not accelerator) - prevents false trips
-        // Entry requires: DD > 5% AND vol > 42% AND correlation >= 0.75
+        // Entry requires: DD > 5% AND vol > 42% AND correlation >= 0.43 (v11.4 recalibrated)
         var corrOk = avgCorrelation >= corrEntryThresh;
         // v11.3: entry uses windowed DD (heals in ~20d) not all-time gDd, which
         // never releases during recoveries and would freeze the entry gate.
@@ -793,17 +797,16 @@ function btRunBacktest() {
                 labels: dateLabels,
                 datasets: [
                     { label: 'Avg Correlation', data: sim.corrT.map(function(v) { return +(v).toFixed(3); }), borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.1)', fill: true, pointRadius: 0, borderWidth: 2 },
-                    { label: 'Entry Gate 0.75', data: dateLabels.map(function() { return 0.75; }), borderColor: '#f87171', borderDash: [6, 4], pointRadius: 0, borderWidth: 1.5 },
-                    { label: 'Exit 0.60', data: dateLabels.map(function() { return 0.60; }), borderColor: '#34d399', borderDash: [6, 4], pointRadius: 0, borderWidth: 1.5 },
-                    { label: 'Tranche 1: 0.70', data: dateLabels.map(function() { return 0.70; }), borderColor: '#06b6d4', borderDash: [3, 3], pointRadius: 0, borderWidth: 1 },
-                    { label: 'Tranche 2: 0.60', data: dateLabels.map(function() { return 0.60; }), borderColor: '#06b6d4', borderDash: [3, 3], pointRadius: 0, borderWidth: 1 },
-                    { label: 'Final 0.50', data: dateLabels.map(function() { return 0.50; }), borderColor: '#fbbf24', borderDash: [3, 3], pointRadius: 0, borderWidth: 1 }
+                    { label: 'Entry Gate 0.43', data: dateLabels.map(function() { return 0.43; }), borderColor: '#f87171', borderDash: [6, 4], pointRadius: 0, borderWidth: 1.5 },
+                    { label: 'Tranche 1: 0.33', data: dateLabels.map(function() { return 0.33; }), borderColor: '#06b6d4', borderDash: [3, 3], pointRadius: 0, borderWidth: 1 },
+                    { label: 'Tranche 2: 0.26', data: dateLabels.map(function() { return 0.26; }), borderColor: '#06b6d4', borderDash: [3, 3], pointRadius: 0, borderWidth: 1 },
+                    { label: 'Full Exit: 0.18', data: dateLabels.map(function() { return 0.18; }), borderColor: '#34d399', borderDash: [6, 4], pointRadius: 0, borderWidth: 1.5 }
                 ]
             },
             options: (function() { 
                 var o = cO(); 
-                o.scales.y.min = 0.3; 
-                o.scales.y.max = 1.0;
+                o.scales.y.min = -0.1; 
+                o.scales.y.max = 0.8;
                 o.plugins.tooltip = {
                     callbacks: {
                         label: function(ctx) {

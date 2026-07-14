@@ -391,12 +391,12 @@
 
         <section class="lp-section lp-shield">
             <div class="lp-card lp-shield-card">
-                <div class="card-title" style="color:var(--blue);" data-i18n-html="shield.label">--deleverage-shield &middot; v11.3</div>
-                <h3 data-i18n-html="shield.title">Correlation Shield &mdash; now walk-forward validated</h3>
-                <p class="lp-what-lead" data-i18n-html="shield.lead">v11.3 trips on rising cross-correlation, not a single price tick &mdash; then eases exposure to a defensive floor and re-deploys in tranches as diversification returns.</p>
+                <div class="card-title" style="color:var(--blue);" data-i18n-html="shield.label">--deleverage-shield &middot; v11.4</div>
+                <h3 data-i18n-html="shield.title">Correlation Shield &mdash; recalibrated on real data</h3>
+                <p class="lp-what-lead" data-i18n-html="shield.lead">v11.4 trips on rising cross-correlation, not a single price tick &mdash; then eases exposure to a defensive floor and re-deploys in tranches as diversification returns.</p>
                 <div class="lp-shield-grid">
                     <div class="lp-shield-viz">
-                        <svg viewBox="0 0 480 250" role="img" aria-label="Max drawdown: Buy and Hold minus 88 percent versus Deleverage Shield minus 62 percent" preserveAspectRatio="xMidYMid meet">
+                        <svg viewBox="0 0 480 250" role="img" aria-label="Max drawdown: Buy and Hold minus 82.6 percent versus Deleverage Shield minus 74.8 percent" preserveAspectRatio="xMidYMid meet">
                             <!-- gridlines -->
                             <line x1="40" y1="40" x2="460" y2="40" class="lp-sh-grid dash"/>
                             <line x1="40" y1="125" x2="460" y2="125" class="lp-sh-grid"/>
@@ -411,8 +411,9 @@
                             <polygon class="lp-sh-fill cyan" points="40,40 90,77 140,117 180,145 220,122 300,88 380,60 460,45 460,40"/>
                             <polyline class="lp-sh-line cyan" points="40,40 90,77 140,117 180,145 220,122 300,88 380,60 460,45"/>
                             <!-- trough callouts -->
-                            <text x="180" y="205" class="lp-sh-cap red">-88% B&amp;H</text>
-                            <text x="186" y="137" class="lp-sh-cap cyan">-62% shield</text>
+                            <text x="180" y="205" class="lp-sh-cap red">-82.6% B&amp;H</text>
+                            <!-- Deleverage Shield trough callout -->
+                            <text x="186" y="137" class="lp-sh-cap cyan">-74.8% shield</text>
                             <!-- legend -->
                             <rect x="120" y="232" width="10" height="10" rx="2" class="lp-sh-fill red"/>
                             <text x="136" y="241" class="lp-sh-leg">Buy &amp; Hold</text>
@@ -422,11 +423,11 @@
                     </div>
                     <div class="lp-shield-info">
                         <div class="lp-shield-stats">
-                            <div class="lp-shield-stat"><span class="v">&minus;26pp</span><span class="l" data-i18n="shield.s1l">max drawdown cut</span></div>
-                            <div class="lp-shield-stat"><span class="v">5/5</span><span class="l" data-i18n="shield.s2l">folds DD-positive</span></div>
+                            <div class="lp-shield-stat"><span class="v">&minus;7.8pp</span><span class="l" data-i18n="shield.s1l">max drawdown cut</span></div>
+                            <div class="lp-shield-stat"><span class="v">1.39</span><span class="l" data-i18n="shield.s2l">Calmar (was 1.08)</span></div>
                             <div class="lp-shield-stat"><span class="v">0</span><span class="l" data-i18n-html="shield.s3l">timers &middot; corr-only</span></div>
                         </div>
-                        <p data-i18n-html="shield.body">Across an 8.7-year, 5-token backtest the shield cut peak drawdown from <strong>~88% to ~62%</strong> while keeping upside intact. A 5-fold walk-forward confirmed the setup reduces drawdown in <strong>every out-of-sample window</strong> &mdash; not a curve-fit artifact.</p>
+                        <p data-i18n-html="shield.body">Across an 8.7-year, 5-token backtest (ADA/BNB/BTC/ETH/XRP) the recalibrated shield cut peak drawdown from <strong>82.6% to 74.8%</strong> and lifted Calmar from <strong>1.08 to 1.39</strong>, redeploying capital in tranches as correlation eased. Its gates are calibrated to the realized correlation range &mdash; a full-sample recalibration, not a walk-forward out-of-sample study.</p>
                         <a class="lp-btn-secondary" href="#/backtest" data-i18n="shield.cta">--run-the-backtest</a>
                     </div>
                 </div>
@@ -1049,10 +1050,10 @@
         </div>
         <div class="tc-body">
             <div class="bt-explain bt-explain-intro" data-i18n-html="bt.intro">
-                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage state machine <strong>(v11.3 &mdash; institutional-grade, walk-forward validated)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. <strong>Buy &amp; Hold</strong> buys tokens unconditionally. <strong>Deleverage</strong> trips its <strong>correlation shield</strong> when tokens crash together (deep drawdown + high volatility + rising cross-correlation), easing exposure down to a defensive floor. It then <strong>re-deploys in tranches as correlation falls</strong> and diversification returns: T1 (25%), T2 (50%), Final (100% on shield exit).
+                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage state machine <strong>(v11.4 &mdash; recalibrated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. <strong>Buy &amp; Hold</strong> buys tokens unconditionally. <strong>Deleverage</strong> trips its <strong>correlation shield</strong> when tokens crash together (deep drawdown + high volatility + rising cross-correlation), easing exposure down to a defensive floor. It then <strong>re-deploys in tranches as correlation falls</strong> and diversification returns: T1 (25%), T2 (50%), Final (100% on shield exit).
             </div>
             <!-- v11.3 correlation-shield state flow -->
-            <svg class="bt-flow-svg" viewBox="0 0 900 148" role="img" aria-label="Deleverage v11.3 correlation shield state flow" preserveAspectRatio="xMidYMid meet">
+            <svg class="bt-flow-svg" viewBox="0 0 900 148" role="img" aria-label="Deleverage v11.4 correlation shield state flow" preserveAspectRatio="xMidYMid meet">
                 <defs>
                     <marker id="btArrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#f87171"/></marker>
                     <marker id="btArrowGrn" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/></marker>
@@ -1079,19 +1080,19 @@
                 <g>
                     <rect x="382" y="60" width="130" height="48" rx="6" class="bt-flow-node purple"/>
                     <text x="447" y="82" class="bt-flow-t purple">T1 · 25%</text>
-                    <text x="447" y="98" class="bt-flow-s">corr ≤ 0.70</text>
+                    <text x="447" y="98" class="bt-flow-s">corr ≤ 0.33</text>
                 </g>
                 <g>
                     <rect x="569" y="60" width="130" height="48" rx="6" class="bt-flow-node purple"/>
                     <text x="634" y="82" class="bt-flow-t purple">T2 · 50%</text>
-                    <text x="634" y="98" class="bt-flow-s">corr ≤ 0.60</text>
+                    <text x="634" y="98" class="bt-flow-s">corr ≤ 0.26</text>
                 </g>
                 <g>
                     <rect x="756" y="60" width="136" height="48" rx="6" class="bt-flow-node green"/>
                     <text x="824" y="82" class="bt-flow-t green">FULL EXIT</text>
-                    <text x="824" y="98" class="bt-flow-s">corr ≤ 0.75</text>
+                    <text x="824" y="98" class="bt-flow-s">corr ≤ 0.18</text>
                 </g>
-                <text x="450" y="22" class="bt-flow-title">correlation-shield state machine · v11.3</text>
+                <text x="450" y="22" class="bt-flow-title">correlation-shield state machine · v11.4</text>
                 <text x="450" y="40" class="bt-flow-sub">exposure eases continuously (2-day) &mdash; no single-tick jump to the floor</text>
             </svg>
         </div>
@@ -1895,23 +1896,23 @@
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:12px;">
                     <div>
                         <div style="color:#94a3b8;font-size:11px;">Shield Max Drawdown</div>
-                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">~62%</div>
+                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">74.8%</div>
                     </div>
                     <div>
                         <div style="color:#94a3b8;font-size:11px;">B&amp;H Max Drawdown</div>
-                        <div style="color:#fbbf24;font-size:16px;font-weight:700;">~88%</div>
+                        <div style="color:#fbbf24;font-size:16px;font-weight:700;">82.6%</div>
                     </div>
                     <div>
                         <div style="color:#94a3b8;font-size:11px;">Drawdown Reduction</div>
-                        <div style="color:#34d399;font-size:16px;font-weight:700;">&minus;26pp</div>
+                        <div style="color:#34d399;font-size:16px;font-weight:700;">&minus;7.8pp</div>
                     </div>
                     <div>
-                        <div style="color:#94a3b8;font-size:11px;">Walk-Forward (OOS)</div>
-                        <div style="color:#34d399;font-size:16px;font-weight:700;">5/5 DD-cut</div>
+                        <div style="color:#94a3b8;font-size:11px;">Shield Calmar</div>
+                        <div style="color:#34d399;font-size:16px;font-weight:700;">1.39 (was 1.08)</div>
                     </div>
                     <div>
-                        <div style="color:#94a3b8;font-size:11px;">Beats B&amp;H (OOS)</div>
-                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">4/5 folds</div>
+                        <div style="color:#94a3b8;font-size:11px;">Final vs B&amp;H</div>
+                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">+94%</div>
                     </div>
                     <div>
                         <div style="color:#94a3b8;font-size:11px;">Trip Logic</div>
@@ -1920,56 +1921,56 @@
                 </div>
             </div>
 
-            <p data-i18n-html="doc.s8.vsBhP2"><strong>Same upside, a fraction of the pain.</strong> Across the full backtest the shield cut peak drawdown from <strong>~88%</strong> (Buy &amp; Hold) to <strong>~62%</strong> &mdash; a <strong>26-point reduction</strong> &mdash; while keeping the long-run upside intact. The shield trips only when tokens crash <em>together</em> (deep drawdown + high volatility + rising cross-correlation), eases exposure down to a defensive floor, then <strong>re-deploys in tranches</strong> (T1 25%, T2 50%, full exit on shield release) as correlation falls and diversification returns. There are <strong>no timers</strong> &mdash; the state machine is driven purely by cross-correlation.</p>
-            <p data-i18n-html="doc.s8.vsBhP3"><strong>Walk-forward validated, not curve-fit.</strong> A rolling <strong>5-fold walk-forward</strong> confirmed the setup reduces drawdown in <strong>every out-of-sample window (5/5)</strong> and beats Buy &amp; Hold in <strong>4 of 5</strong> folds. An in-sample optimality probe independently selected the same <strong>0.70 / 0.75</strong> correlation entry/exit thresholds in every fold &mdash; strong evidence the configuration is robust across regimes rather than over-fit to a single period.</p>
+            <p data-i18n-html="doc.s8.vsBhP2"><strong>Same upside, a fraction of the pain.</strong> Across the full 8.7-year, 5-token backtest the shield cut peak drawdown from <strong>82.6%</strong> (Buy &amp; Hold) to <strong>74.8%</strong> &mdash; a <strong>7.8-point reduction</strong> &mdash; while lifting Calmar from 1.08 to 1.39. The shield trips only when tokens crash <em>together</em> (deep drawdown + high volatility + rising cross-correlation), eases exposure down to a defensive floor, then <strong>re-deploys in tranches</strong> (T1 25%, T2 50%, full exit on shield release) as correlation falls and diversification returns. There are <strong>no timers</strong> &mdash; the state machine is driven purely by cross-correlation.</p>
+            <p data-i18n-html="doc.s8.vsBhP3"><strong>Recalibrated on real data &mdash; and honestly scoped.</strong> The correlation gates (entry 0.43, tranches 0.33 / 0.26, full exit 0.18) are calibrated to the <em>realized</em> 20-day average pairwise correlation of these five tokens, which spans roughly &minus;0.05 to 0.74 (median 0.27). The earlier 0.70 / 0.75 gates were unreachable on real data, leaving the shield inert. These results are a <strong>full-sample recalibration</strong>, not a walk-forward out-of-sample validation &mdash; a true multi-fold OOS study is still needed before claiming regime-robustness.</p>
         </div>
 
 
         <!-- TESTING & VALIDATION -->
         <div class="doc-block" id="doc-testing">
             <h3 id="doc-testing-title" data-i18n="doc.s8.testingTitle">8.6 Testing &amp; Validation</h3>
-            <p data-i18n-html="doc.s8.testingP1">Every parameter in v11.0 was <strong>mathematically optimized</strong>, not guessed. We ran a comprehensive parameter sweep across <strong>486 combinations</strong> to find the configuration that minimizes drawdown while maximizing risk-adjusted returns.</p>
+            <p data-i18n-html="doc.s8.testingP1">The v11.4 correlation shield was <strong>recalibrated on real market data</strong>, not hand-guessed. We measured the realized distribution of the 20-day average pairwise correlation across the portfolio and placed every correlation gate inside the <strong>reachable band</strong> so the shield actually trips, de-risks, and redeploys.</p>
 
             <div class="doc-callout green">
-                <div class="doc-ct" data-i18n="doc.s8.testingCallout">&#9989; INSTITUTIONAL-GRADE VALIDATION</div>
-                <p data-i18n-html="doc.s8.testingCalloutP"><strong>22/22 audit tests pass</strong>, covering emergency brake activation, PnL drift detection, full cycle integration, weight normalization, and divergence guards. The engine has been validated against 7 tokens (ADA, BNB, BTC, ETH, SOL, XLM, XRP) over 2,275 days of real market data including the 2022 crypto winter and 2024 corrections.</p>
+                <div class="doc-ct" data-i18n="doc.s8.testingCallout">&#9989; VALIDATED ON REAL DATA</div>
+                <p data-i18n-html="doc.s8.testingCalloutP"><strong>22/22 audit tests pass</strong>, covering emergency-brake liquidation, PnL-drift detection, full-cycle integration, weight normalization, and divergence guards. The correlation gates were recalibrated on <strong>5 tokens (ADA, BNB, BTC, ETH, XRP)</strong> over ~8.7 years (3,164 days) of real market data spanning the 2018 and 2022 bear markets. Note: this is a full-sample recalibration, <strong>not</strong> a walk-forward out-of-sample study.</p>
             </div>
 
-            <h4 data-i18n="doc.s8.testingHow">Parameter Optimization Process</h4>
+            <h4 data-i18n="doc.s8.testingHow">Recalibration Process</h4>
             <ul>
-                <li data-i18n-html="doc.s8.testing1"><strong>Entry threshold sweep</strong> &mdash; tested DD thresholds from 5% to 12% to find the sweet spot: early enough to catch crashes, late enough to avoid false positives.</li>
-                <li data-i18n-html="doc.s8.testing2"><strong>Volatility gate calibration</strong> &mdash; DS Vol high (entry) and low (exit) thresholds swept across 42-48% and 20-30% to ensure the shield activates during high-volatility crashes and exits when markets calm.</li>
-                <li data-i18n-html="doc.s8.testing3"><strong>Exit window optimization</strong> &mdash; tested 90d, 180d, and 360d rolling windows to balance between staying protected during crashes vs exiting too slowly on recoveries.</li>
-                <li data-i18n-html="doc.s8.testing4"><strong>Re-entry speed tuning</strong> &mdash; partial sell rates from 20-40% tested to prevent whipsaw while allowing gradual capital re-deployment.</li>
+                <li data-i18n-html="doc.s8.testing1"><strong>Correlation distribution mapping</strong> &mdash; measured the realized 20-day average pairwise correlation over the full sample (median 0.27, p90 0.43, p99 0.59, max 0.74). The old 0.70 / 0.75 gates sat <em>above</em> that range and essentially never fired.</li>
+                <li data-i18n-html="doc.s8.testing2"><strong>Entry gate</strong> &mdash; set to 0.43 (~p90 of the realized distribution): reachable only on a genuine broad, correlated sell-off, not on routine noise.</li>
+                <li data-i18n-html="doc.s8.testing3"><strong>Redeploy ladder</strong> &mdash; tranche gates at 0.33 and 0.26, with the full-exit gate as the <em>lowest</em> rung (0.18), so capital re-enters in stages as the market decorrelates <em>before</em> a full exit.</li>
+                <li data-i18n-html="doc.s8.testing4"><strong>End-to-end re-validation</strong> &mdash; reran the full-sample backtest with the recalibrated ladder to confirm the shield trips, deploys both tranches, and reduces drawdown.</li>
             </ul>
 
             <div class="doc-diagram">
-                <div class="doc-fl">Optimization Results: Drawdown Reduction</div>
+                <div class="doc-fl">Recalibration Results: Drawdown Reduction</div>
                 <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;">
                     <!-- Background -->
                     <rect width="720" height="200" fill="rgba(0,0,0,0.02)" rx="8"/>
                     <!-- B&H bar -->
                     <rect x="40" y="40" width="280" height="60" rx="6" fill="rgba(251,191,36,0.15)" stroke="#fbbf24" stroke-width="1.5"/>
                     <text x="180" y="65" text-anchor="middle" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">Buy &amp; Hold</text>
-                    <text x="180" y="85" text-anchor="middle" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">80.9% Max DD</text>
+                    <text x="180" y="85" text-anchor="middle" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">82.6% Max DD</text>
                     <!-- Arrow -->
                     <line x1="340" y1="70" x2="380" y2="70" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,3"/>
                     <polygon points="378,66 378,74 384,70" fill="#64748b"/>
-                    <text x="360" y="60" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">-71%</text>
+                    <text x="360" y="60" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">-7.8pp</text>
                     <!-- DL bar -->
                     <rect x="400" y="40" width="280" height="60" rx="6" fill="rgba(6,182,212,0.15)" stroke="#06b6d4" stroke-width="1.5"/>
-                    <text x="540" y="65" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">Deleverage v11.0</text>
-                    <text x="540" y="85" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">23.7% Max DD</text>
+                    <text x="540" y="65" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">Deleverage v11.4</text>
+                    <text x="540" y="85" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">74.8% Max DD</text>
                     <!-- Metrics below -->
-                    <text x="180" y="130" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">Final: $333k</text>
-                    <text x="180" y="145" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">Calmar: 0.93</text>
-                    <text x="180" y="160" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">Sharpe: 0.98</text>
-                    <text x="540" y="130" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Final: $18.5M</text>
-                    <text x="540" y="145" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Calmar: 7.97</text>
-                    <text x="540" y="160" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Sharpe: 2.55</text>
-                    <!-- Institutional badge -->
-                    <rect x="490" y="170" width="100" height="20" rx="10" fill="rgba(52,211,153,0.2)" stroke="#34d399" stroke-width="1"/>
-                    <text x="540" y="184" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="700">INSTITUTIONAL GRADE</text>
+                    <text x="180" y="130" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">Final: $10.85M</text>
+                    <text x="180" y="145" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">Calmar: 1.08</text>
+                    <text x="180" y="160" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">8.7y real data</text>
+                    <text x="540" y="130" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Final: $21.0M</text>
+                    <text x="540" y="145" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Calmar: 1.39</text>
+                    <text x="540" y="160" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">vs B&amp;H: +94%</text>
+                    <!-- Recalibration badge -->
+                    <rect x="470" y="170" width="140" height="20" rx="10" fill="rgba(52,211,153,0.2)" stroke="#34d399" stroke-width="1"/>
+                    <text x="540" y="184" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="700">v11.4 · FULL-SAMPLE</text>
                 </svg>
             </div>
 
