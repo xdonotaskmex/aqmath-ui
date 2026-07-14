@@ -31,6 +31,7 @@ const DL = {
     CORR_TRANCHE_2: 0.60,
     ENTRY_CONFIRM_BARS: 2,
     CORR_WINDOW: 20,
+    MIN_SHIELD_DAYS: 30,  // v11.1: Minimum days shield stays active before corrDrop exit
 };
 
 function computeDownsideVol(rets, window) {
@@ -108,7 +109,7 @@ function computeAvgCorrelation(tokenPrices, syms, endIdx, window) {
     return sum / corrs.length;
 }
 
-function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcReserve, t1Done, t2Done, totalEquity, avgCorrelation, entryPendingCount) {
+function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcReserve, t1Done, t2Done, totalEquity, avgCorrelation, entryPendingCount, exitTranche, shieldActiveDays) {
     cfg = cfg || {};
     var ddWindow = cfg.dd_window || DL.DD_WINDOW;
     var exitWindow = cfg.exit_window || DL.EXIT_WINDOW;
@@ -191,10 +192,12 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
             exitTranche = 1;  // start sell-down
             tExp = (exitTranches[0] || 0) * riskBudget;  // first tranche target
             entryPendingCount = 0;
+            shieldActiveDays = 0;  // v11.1: Reset day counter on entry
         } else {
             tExp = riskBudget;
         }
     } else {
+        shieldActiveDays += 1;  // v11.1: Increment day counter while shield is active
         if (eDd > localMaxDd) localMaxDd = eDd;
         if (dsV > peakDsVol) peakDsVol = dsV;
         // v10.8: Sell-down tranches (gradual de-risk over multiple bars)
@@ -232,7 +235,8 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         }
         var gOk = gap < effDiv;
         // v10.8: Correlation-based exit path (corrDrop)
-        var isCorrExit = avgCorrelation > 0 && avgCorrelation <= corrExitThresh && localMaxDd > 0.05;
+        // v11.1: Only allow corrDrop exit if shield has been active for at least MIN_SHIELD_DAYS (prevents whipsaw)
+        var isCorrExit = avgCorrelation > 0 && avgCorrelation <= corrExitThresh && localMaxDd > 0.05 && shieldActiveDays >= DL.MIN_SHIELD_DAYS;
         var finalExit = (isDdHealedFull && gOk) || (isVolCalm && isPartialRec && gOk);
         if (!finalExit && isCorrExit && gOk) finalExit = true;
 
@@ -284,7 +288,8 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         tranche_amount: tAmt > 0 ? +tAmt.toFixed(4) : 0,
         tranche_event: tEvt, usdc_reserve: +usdcReserve.toFixed(4),
         entry_pending_count: entryPendingCount,
-        avg_correlation: +avgCorrelation.toFixed(4)
+        avg_correlation: +avgCorrelation.toFixed(4),
+        shield_active_days: shieldActiveDays  // v11.1: Shield active days
     };
 }
 
@@ -415,6 +420,7 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt, tokenPrices, syms) {
     var shDays = 0, dcaN = 0;
     var prevScale = cfg.risk_budget / cfg.risk_budget;  // FIX #2: start at full exposure
     var entryPendingCount = 0;  // v10.8: correlation entry confirmation counter
+    var shieldActiveDays = 0;  // v11.1: shield active days counter (prevents corrDrop whipsaw)
     var hasCorr = tokenPrices && syms && syms.length >= 2;
 
     for (var i = 0; i < portRet.length; i++) {
@@ -425,10 +431,11 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt, tokenPrices, syms) {
         if (hasCorr && i >= DL.CORR_WINDOW) {
             avgCorr = computeAvgCorrelation(tokenPrices, syms, i + 1, DL.CORR_WINDOW);
         }
-        var res = evaluateShield(sub, sOn, lMd, pDv, cfg, usdcR, t1Done, t2Done, totalEquity, avgCorr, entryPendingCount);
+        var res = evaluateShield(sub, sOn, lMd, pDv, cfg, usdcR, t1Done, t2Done, totalEquity, avgCorr, entryPendingCount, exitTranche, shieldActiveDays);
         sOn = res.shield_active; lMd = res.local_max_dd; pDv = res.peak_ds_vol;
         usdcR = res.usdc_reserve; t1Done = res.tranche_1_executed; t2Done = res.tranche_2_executed;
         entryPendingCount = res.entry_pending_count;
+        shieldActiveDays = res.shield_active_days;  // v11.1: Update shield active days
 
         // v10.8: On entry, use first tranche target (not floor) — sell-down is gradual
         var eff;
