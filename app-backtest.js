@@ -23,6 +23,13 @@ const DL = {
     TRANCHE_2_GAP: 0.15,
     FEE_RATE: 0.001,  // 10 bps per trade (rebalance, DCA, tranche)
     EXIT_TRANCHES: [0.50, 0.25, 0.0],  // sell-down schedule: 50% → 25% → 0%
+    // v10.8: Correlation-based exit + tranche re-entry
+    CORR_ENTRY_THRESH: 0.80,
+    CORR_EXIT_THRESH: 0.60,
+    CORR_TRANCHE_1: 0.70,
+    CORR_TRANCHE_2: 0.60,
+    ENTRY_CONFIRM_BARS: 3,
+    CORR_WINDOW: 20,
 };
 
 function computeDownsideVol(rets, window) {
@@ -50,20 +57,77 @@ function computeDrawdownFromPeak(equity, window) {
     return [Math.max(0, curDd), Math.max(0, maxDd)];
 }
 
-function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcReserve, t1Done, t2Done, totalEquity) {
+// v10.8: Compute average pairwise correlation from per-token log returns
+function computeAvgCorrelation(tokenPrices, syms, endIdx, window) {
+    window = window || DL.CORR_WINDOW;
+    var n = syms.length;
+    if (n < 2) return 0.5;
+    var start = Math.max(1, endIdx - window + 1);
+    if (endIdx - start < 5) return 0.5;
+    // Compute log returns per token
+    var logRets = {};
+    for (var s = 0; s < n; s++) {
+        var sym = syms[s];
+        var rets = [];
+        for (var i = start; i <= endIdx; i++) {
+            var p = tokenPrices[sym][i - 1], c = tokenPrices[sym][i];
+            if (p > 0 && c > 0) rets.push(Math.log(c / p));
+            else rets.push(0);
+        }
+        logRets[sym] = rets;
+    }
+    var minLen = logRets[syms[0]].length;
+    if (minLen < 5) return 0.5;
+    // Means
+    var means = {};
+    for (var s = 0; s < n; s++) {
+        var sum = 0;
+        for (var k = 0; k < minLen; k++) sum += logRets[syms[s]][k];
+        means[syms[s]] = sum / minLen;
+    }
+    // Pairwise correlations
+    var corrs = [];
+    for (var i = 0; i < n; i++) {
+        for (var j = i + 1; j < n; j++) {
+            var si = syms[i], sj = syms[j];
+            var cov = 0, vi = 0, vj = 0;
+            for (var k = 0; k < minLen; k++) {
+                var di = logRets[si][k] - means[si];
+                var dj = logRets[sj][k] - means[sj];
+                cov += di * dj; vi += di * di; vj += dj * dj;
+            }
+            cov /= (minLen - 1); vi /= (minLen - 1); vj /= (minLen - 1);
+            var denom = Math.sqrt(vi * vj);
+            corrs.push(denom > 1e-12 ? cov / denom : 0);
+        }
+    }
+    if (!corrs.length) return 0.5;
+    var sum = 0;
+    for (var c = 0; c < corrs.length; c++) sum += corrs[c];
+    return sum / corrs.length;
+}
+
+function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcReserve, t1Done, t2Done, totalEquity, avgCorrelation, entryPendingCount) {
     cfg = cfg || {};
     var ddWindow = cfg.dd_window || DL.DD_WINDOW;
     var exitWindow = cfg.exit_window || DL.EXIT_WINDOW;
     var ddThresh = cfg.dd_threshold || DL.DD_THRESHOLD;
     var dsVolHigh = cfg.ds_vol_high || DL.DS_VOL_HIGH;
     var dsVolLow = cfg.ds_vol_low || DL.DS_VOL_LOW;
-    var floorExp = cfg.floor_exposure || DL.FLOOR_EXPOSURE;
+    var floorExp = cfg.floor_exposure !== undefined ? cfg.floor_exposure : DL.FLOOR_EXPOSURE;
     var riskBudget = cfg.risk_budget || DL.RISK_BUDGET;
     var volDecay = cfg.vol_decay || DL.VOL_DECAY;
     var exitDdDiv = cfg.exit_dd_divergence || DL.EXIT_DD_DIVERGENCE;
     var tp1 = cfg.tranche_1_pct !== undefined ? cfg.tranche_1_pct : DL.TRANCHE_1_PCT;
     var tp2 = cfg.tranche_2_pct !== undefined ? cfg.tranche_2_pct : DL.TRANCHE_2_PCT;
     var t2g = cfg.tranche_2_gap !== undefined ? cfg.tranche_2_gap : DL.TRANCHE_2_GAP;
+    var corrEntryThresh = cfg.corr_entry_thresh !== undefined ? cfg.corr_entry_thresh : DL.CORR_ENTRY_THRESH;
+    var corrExitThresh = cfg.corr_exit_thresh !== undefined ? cfg.corr_exit_thresh : DL.CORR_EXIT_THRESH;
+    var corrT1 = cfg.corr_tranche_1 !== undefined ? cfg.corr_tranche_1 : DL.CORR_TRANCHE_1;
+    var corrT2 = cfg.corr_tranche_2 !== undefined ? cfg.corr_tranche_2 : DL.CORR_TRANCHE_2;
+    var confirmBars = cfg.entry_confirm_bars || DL.ENTRY_CONFIRM_BARS;
+    avgCorrelation = avgCorrelation || 0;
+    entryPendingCount = entryPendingCount || 0;
 
     var exitTranches = cfg.exit_tranches || DL.EXIT_TRANCHES;
     var E = {
@@ -111,10 +175,19 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         if (peakDsVol > 0.001) peakDsVol *= volDecay;
         var hOk = true;
         if (peakDsVol > 0.01) hOk = dsV > peakDsVol * 0.70;
-        if (gDd > ddThresh && dsV > dsVolHigh && hOk) {
+        // v10.8: Correlation-gated entry with sustained confirmation
+        var rawEntry = gDd > ddThresh && dsV > dsVolHigh && hOk;
+        var corrGate = avgCorrelation >= corrEntryThresh;
+        if (rawEntry && corrGate) {
+            entryPendingCount += 1;
+        } else {
+            entryPendingCount = 0;
+        }
+        if (entryPendingCount >= confirmBars) {
             shieldActive = true; localMaxDd = eDd; peakDsVol = dsV; entry = true;
             exitTranche = 1;  // start sell-down
             tExp = (exitTranches[0] || 0) * riskBudget;  // first tranche target
+            entryPendingCount = 0;
         } else {
             tExp = riskBudget;
         }
@@ -155,21 +228,29 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
             effDiv = exitDdDiv + (1.0 - exitDdDiv) * (peakAge - 365) / 365;
         }
         var gOk = gap < effDiv;
+        // v10.8: Correlation-based exit path (corrDrop)
+        var isCorrExit = avgCorrelation > 0 && avgCorrelation <= corrExitThresh && localMaxDd > 0.05;
         var finalExit = (isDdHealedFull && gOk) || (isVolCalm && isPartialRec && gOk);
+        if (!finalExit && isCorrExit && gOk) finalExit = true;
 
         if (finalExit) {
-            exitR = isDdHealedFull ? 'ddZero' : 'volCollapseCalm';
+            if (isDdHealedFull) exitR = 'ddZero';
+            else if (isCorrExit) exitR = 'corrDrop';
+            else exitR = 'volCollapseCalm';
             tAmt = usdcReserve > 0 ? +usdcReserve.toFixed(4) : 0;
             tEvt = tAmt > 0 ? 'final' : null;
             usdcReserve = 0; t1Done = false; t2Done = false;
             shieldActive = false; tExp = riskBudget; localMaxDd = 0;
         } else {
             tAmt = 0; tEvt = null;
-            if (!t1Done && isVolCalm && usdcReserve > 0) {
+            // v10.8: Correlation-driven tranche re-entry (with vol fallback)
+            var corrT1Trig = avgCorrelation > 0 && avgCorrelation <= corrT1;
+            var corrT2Trig = avgCorrelation > 0 && avgCorrelation <= corrT2;
+            if (!t1Done && (corrT1Trig || isVolCalm) && usdcReserve > 0) {
                 tAmt = +(usdcReserve * tp1).toFixed(4);
                 usdcReserve -= tAmt; t1Done = true; tEvt = 'tranche_1';
             }
-            if (t1Done && !t2Done && gap < t2g && usdcReserve > 0) {
+            if (t1Done && !t2Done && (corrT2Trig || gap < t2g) && usdcReserve > 0) {
                 var t2a = +(usdcReserve * tp2).toFixed(4);
                 tAmt += t2a; usdcReserve -= t2a; t2Done = true;
                 tEvt = tEvt ? tEvt + '+tranche_2' : 'tranche_2';
@@ -198,7 +279,9 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         exit_blocked: blocked, exit_block_reason: blockR,
         tranche_1_executed: t1Done, tranche_2_executed: t2Done,
         tranche_amount: tAmt > 0 ? +tAmt.toFixed(4) : 0,
-        tranche_event: tEvt, usdc_reserve: +usdcReserve.toFixed(4)
+        tranche_event: tEvt, usdc_reserve: +usdcReserve.toFixed(4),
+        entry_pending_count: entryPendingCount,
+        avg_correlation: +avgCorrelation.toFixed(4)
     };
 }
 
@@ -288,7 +371,12 @@ function btReadCfg() {
         tranche_1_pct: DL.TRANCHE_1_PCT,
         tranche_2_pct: DL.TRANCHE_2_PCT,
         tranche_2_gap: DL.TRANCHE_2_GAP,
-        fee_rate: DL.FEE_RATE
+        fee_rate: DL.FEE_RATE,
+        corr_entry_thresh: DL.CORR_ENTRY_THRESH,
+        corr_exit_thresh: DL.CORR_EXIT_THRESH,
+        corr_tranche_1: DL.CORR_TRANCHE_1,
+        corr_tranche_2: DL.CORR_TRANCHE_2,
+        entry_confirm_bars: DL.ENTRY_CONFIRM_BARS
     };
 }
 
@@ -309,10 +397,10 @@ function btGetPortReturns() {
         }
         rets.push(r);
     }
-    return { rets: rets, dates: dates, syms: syms, n: n, minLen: minLen };
+    return { rets: rets, dates: dates, syms: syms, n: n, minLen: minLen, tokenPrices: pm };
 }
 
-function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
+function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt, tokenPrices, syms) {
     var sOn = false, lMd = 0, pDv = 0, pExp = null;
     var unitsA = startCap, navA = 1.0, usdcR = 0, totalInv = startCap, totalDep = 0;
     var t1Done = false, t2Done = false;
@@ -323,13 +411,21 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt) {
     var events = [];
     var shDays = 0, dcaN = 0;
     var prevScale = cfg.risk_budget / cfg.risk_budget;  // FIX #2: start at full exposure
+    var entryPendingCount = 0;  // v10.8: correlation entry confirmation counter
+    var hasCorr = tokenPrices && syms && syms.length >= 2;
 
     for (var i = 0; i < portRet.length; i++) {
         var sub = portRet.slice(0, i + 1);
         var totalEquity = eqA[eqA.length - 1];
-        var res = evaluateShield(sub, sOn, lMd, pDv, cfg, usdcR, t1Done, t2Done, totalEquity);
+        // v10.8: Compute avg pairwise correlation from token prices
+        var avgCorr = 0;
+        if (hasCorr && i >= DL.CORR_WINDOW) {
+            avgCorr = computeAvgCorrelation(tokenPrices, syms, i + 1, DL.CORR_WINDOW);
+        }
+        var res = evaluateShield(sub, sOn, lMd, pDv, cfg, usdcR, t1Done, t2Done, totalEquity, avgCorr, entryPendingCount);
         sOn = res.shield_active; lMd = res.local_max_dd; pDv = res.peak_ds_vol;
         usdcR = res.usdc_reserve; t1Done = res.tranche_1_executed; t2Done = res.tranche_2_executed;
+        entryPendingCount = res.entry_pending_count;
 
         // v10.8: On entry, use first tranche target (not floor) — sell-down is gradual
         var eff;
@@ -485,7 +581,7 @@ function btRunBacktest() {
     var dcaAmt = +document.getElementById('btDcaAmount').value || 100;
     var dcaInt = +document.getElementById('btDcaInterval').value || 30;
     var pr = btGetPortReturns();
-    var sim = btSimulate(pr.rets, cfg, startCap, dcaAmt, dcaInt);
+    var sim = btSimulate(pr.rets, cfg, startCap, dcaAmt, dcaInt, pr.tokenPrices, pr.syms);
     var years = pr.rets.length / 365.25;
     var m1 = btCalcMetrics(sim.eqA, sim.totalInv, years);
     var m2 = btCalcMetrics(sim.eqB, sim.totalInvB, years);
@@ -750,7 +846,7 @@ function btRunWFGrid() {
             else cfg[crossP] = cr.values[ci];
             if (sweep === 'vol_halflife') cfg.vol_decay = Math.pow(0.5, 1.0 / sw.values[si]);
             else cfg[sw.key] = sw.values[si];
-            var sim = btSimulate(pr.rets, cfg, startCap, dcaAmt, dcaInt);
+            var sim = btSimulate(pr.rets, cfg, startCap, dcaAmt, dcaInt, pr.tokenPrices, pr.syms);
             var m = btCalcMetrics(sim.eqA, sim.totalInv, years);
             var mB = btCalcMetrics(sim.eqB, sim.totalInvB, years);
             results.push({ sv: sw.values[si], cv: cr.values[ci], final: m.final, calmar: m.cal, maxdd: m.mdd, sharpe: m.sh, alpha: m.final - mB.final, entries: sim.events.filter(function(e) { return e.type === 'ENTRY'; }).length, shDays: sim.shDays, dep: sim.totalDep });
