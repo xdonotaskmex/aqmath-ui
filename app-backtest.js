@@ -175,11 +175,13 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         if (peakDsVol > 0.001) peakDsVol *= volDecay;
         var hOk = true;
         if (peakDsVol > 0.01) hOk = dsV > peakDsVol * 0.70;
-        // v10.8: Correlation-gated entry with sustained confirmation
+        // v10.9: Correlation as accelerator, not hard gate
+        // High corr (>=0.75): fast entry (+2 per bar)
+        // Low corr (<0.75): slower entry (+1 per bar)
         var rawEntry = gDd > ddThresh && dsV > dsVolHigh && hOk;
-        var corrGate = avgCorrelation >= corrEntryThresh;
-        if (rawEntry && corrGate) {
-            entryPendingCount += 1;
+        if (rawEntry) {
+            var corrBoost = avgCorrelation >= corrEntryThresh ? 2 : 1;
+            entryPendingCount += corrBoost;
         } else {
             entryPendingCount = 0;
         }
@@ -407,7 +409,7 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt, tokenPrices, syms) {
     var totalFees = 0, rebN = 0;  // Fee tracking
     var sim_expT_prev = null;  // Track previous exposure for rebalance fee
     var eqA = [startCap], invA = [startCap], usdcT = [0];
-    var shT = [], expT = [], gDdT = [], eDdT = [], dsVT = [], pkVT = [], gapT = [];
+    var shT = [], expT = [], gDdT = [], eDdT = [], dsVT = [], pkVT = [], gapT = [], corrT = [];
     var events = [];
     var shDays = 0, dcaN = 0;
     var prevScale = cfg.risk_budget / cfg.risk_budget;  // FIX #2: start at full exposure
@@ -518,6 +520,7 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt, tokenPrices, syms) {
         dsVT.push(res.ds_vol);
         pkVT.push(res.peak_ds_vol);
         gapT.push(ddGap);
+        corrT.push(avgCorr);
         if (sOn) shDays++;
     }
 
@@ -536,7 +539,7 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt, tokenPrices, syms) {
         invB.push(totalInvB);
     }
 
-    return { eqA: eqA, invA: invA, eqB: eqB, invB: invB, usdcT: usdcT, shT: shT, expT: expT, gDdT: gDdT, eDdT: eDdT, dsVT: dsVT, pkVT: pkVT, gapT: gapT, events: events, totalInv: totalInv, totalInvB: totalInvB, totalDep: totalDep, shDays: shDays, dcaN: dcaN, totalFees: totalFees, rebN: rebN, bhFees: bhFees };
+    return { eqA: eqA, invA: invA, eqB: eqB, invB: invB, usdcT: usdcT, shT: shT, expT: expT, gDdT: gDdT, eDdT: eDdT, dsVT: dsVT, pkVT: pkVT, gapT: gapT, corrT: corrT, events: events, totalInv: totalInv, totalInvB: totalInvB, totalDep: totalDep, shDays: shDays, dcaN: dcaN, totalFees: totalFees, rebN: rebN, bhFees: bhFees };
 }
 
 function btCalcMetrics(eq, totalIn, years) {
@@ -785,11 +788,44 @@ function btRunBacktest() {
             labels: dateLabels,
             datasets: [
                 { label: 'Global DD', data: sim.gDdT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#f87171', backgroundColor: 'rgba(248,113,113,0.15)', fill: true, pointRadius: 0, borderWidth: 1.5 },
-                { label: 'Exit DD 180d', data: sim.eDdT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#06b6d4', pointRadius: 0, borderWidth: 1.5 }
+                { label: 'Exit DD 180d', data: sim.eDdT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#06b6d4', pointRadius: 0, borderWidth: 1.5 },
+                { label: 'Entry 12%', data: dateLabels.map(function() { return 12; }), borderColor: '#fbbf24', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
             ]
         },
         options: (function() { var o = cO(); o.scales.y.ticks.callback = function(v) { return v + '%'; }; return o; })()
     });
+
+    // Correlation (v10.9: NEW detailed chart)
+    if (sim.corrT && sim.corrT.length > 0) {
+        btCharts.corr = new Chart(document.getElementById('btCorrChart'), {
+            type: 'line',
+            data: {
+                labels: dateLabels,
+                datasets: [
+                    { label: 'Avg Correlation', data: sim.corrT.map(function(v) { return +(v).toFixed(3); }), borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.1)', fill: true, pointRadius: 0, borderWidth: 2 },
+                    { label: 'Entry Gate 0.75', data: dateLabels.map(function() { return 0.75; }), borderColor: '#f87171', borderDash: [6, 4], pointRadius: 0, borderWidth: 1.5 },
+                    { label: 'Exit 0.60', data: dateLabels.map(function() { return 0.60; }), borderColor: '#34d399', borderDash: [6, 4], pointRadius: 0, borderWidth: 1.5 },
+                    { label: 'Tranche 1: 0.70', data: dateLabels.map(function() { return 0.70; }), borderColor: '#06b6d4', borderDash: [3, 3], pointRadius: 0, borderWidth: 1 },
+                    { label: 'Tranche 2: 0.60', data: dateLabels.map(function() { return 0.60; }), borderColor: '#06b6d4', borderDash: [3, 3], pointRadius: 0, borderWidth: 1 },
+                    { label: 'Final 0.50', data: dateLabels.map(function() { return 0.50; }), borderColor: '#fbbf24', borderDash: [3, 3], pointRadius: 0, borderWidth: 1 }
+                ]
+            },
+            options: (function() { 
+                var o = cO(); 
+                o.scales.y.min = 0.3; 
+                o.scales.y.max = 1.0;
+                o.plugins.tooltip = {
+                    callbacks: {
+                        label: function(ctx) {
+                            return ctx.dataset.label + ': ' + ctx.raw.toFixed(3);
+                        }
+                    }
+                };
+                return o; 
+            })(),
+            plugins: [emergencyBrakePlugin]
+        });
+    }
 
     // Event log
     sim.events.sort(function(a, b) { return a.day - b.day; });
