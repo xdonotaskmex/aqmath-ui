@@ -8,13 +8,13 @@
 
 const DL = {
     DD_WINDOW: 20,
-    EXIT_WINDOW: 180,
-    DD_THRESHOLD: 0.12,
+    EXIT_WINDOW: 270,
+    DD_THRESHOLD: 0.08,
     DS_VOL_HIGH: 0.48,
-    DS_VOL_LOW: 0.30,
+    DS_VOL_LOW: 0.25,
     FLOOR_EXPOSURE: 0.0,
     RISK_BUDGET: 0.85,
-    PARTIAL_SELL: 0.50,
+    PARTIAL_SELL: 0.30,
     VOL_HALFLIFE: 30,
     get VOL_DECAY() { return Math.pow(0.5, 1.0 / this.VOL_HALFLIFE); },
     EXIT_DD_DIVERGENCE: 0.30,
@@ -744,25 +744,22 @@ function btRunBacktest() {
         options: (function() { var o = cO(); o.scales.y.stacked = true; o.scales.y.ticks.callback = function(v) { return '$' + v.toLocaleString(); }; return o; })()
     });
 
-    // Shield status
-    btCharts.sh = new Chart(document.getElementById('btShieldChart'), {
-        type: 'line',
-        data: {
-            labels: dateLabels,
-            datasets: [{ label: 'Shield', data: sim.shT, borderColor: function(ctx) { return ctx.raw ? '#f87171' : '#34d399'; }, backgroundColor: function(ctx) { return ctx.raw ? 'rgba(248,113,113,0.25)' : 'rgba(52,211,153,0.1)'; }, fill: true, pointRadius: 0, borderWidth: 1.5, stepped: true }]
-        },
-        options: (function() { var o = cO(); o.scales.y.min = -0.15; o.scales.y.max = 1.3; o.scales.y.ticks.callback = function(v) { return v >= 0.5 ? 'ON' : 'OFF'; }; return o; })(),
-        plugins: [emergencyBrakePlugin]
-    });
-
-    // Exposure — stepped:'before' makes hard-switch a VERTICAL drop (instant), not diagonal
+    // Exposure + Shield status (merged) — stepped:'before' for instant transitions
     btCharts.exp = new Chart(document.getElementById('btExposureChart'), {
         type: 'line',
         data: {
             labels: dateLabels,
-            datasets: [{ label: 'Exposure', data: sim.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.15)', fill: true, pointRadius: 0, borderWidth: 1.5, stepped: 'before' }]
+            datasets: [
+                { label: 'Exposure', data: sim.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.15)', fill: true, pointRadius: 0, borderWidth: 1.5, stepped: 'before', yAxisID: 'y' },
+                { label: 'Shield', data: sim.shT, borderColor: function(ctx) { return ctx.raw ? '#f87171' : '#34d399'; }, backgroundColor: function(ctx) { return ctx.raw ? 'rgba(248,113,113,0.2)' : 'rgba(52,211,153,0.05)'; }, fill: true, pointRadius: 0, borderWidth: 1, stepped: true, yAxisID: 'y1' }
+            ]
         },
-        options: (function() { var o = cO(); o.scales.y.min = 0; o.scales.y.max = 100; o.scales.y.ticks.callback = function(v) { return v + '%'; }; return o; })(),
+        options: (function() { 
+            var o = cO(); 
+            o.scales.y = { min: 0, max: 100, ticks: { color: '#8b949e', callback: function(v) { return v + '%'; } }, grid: { color: '#1c2128' } };
+            o.scales.y1 = { position: 'right', min: -0.1, max: 1.2, ticks: { color: '#8b949e', callback: function(v) { return v >= 0.5 ? 'ON' : 'OFF'; } }, grid: { display: false } };
+            return o; 
+        })(),
         plugins: [emergencyBrakePlugin]
     });
 
@@ -775,7 +772,7 @@ function btRunBacktest() {
                 { label: 'DS Vol', data: sim.dsVT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#06b6d4', pointRadius: 0, borderWidth: 1.5 },
                 { label: 'Peak DS Vol', data: sim.pkVT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#fbbf24', pointRadius: 0, borderWidth: 1.5 },
                 { label: 'Entry 48%', data: dateLabels.map(function() { return 48; }), borderColor: '#f87171', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 },
-                { label: 'Exit 30%', data: dateLabels.map(function() { return 30; }), borderColor: '#34d399', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
+                { label: 'Exit 25%', data: dateLabels.map(function() { return 25; }), borderColor: '#34d399', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
             ]
         },
         options: (function() { var o = cO(); o.scales.y.ticks.callback = function(v) { return v + '%'; }; return o; })()
@@ -788,8 +785,8 @@ function btRunBacktest() {
             labels: dateLabels,
             datasets: [
                 { label: 'Global DD', data: sim.gDdT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#f87171', backgroundColor: 'rgba(248,113,113,0.15)', fill: true, pointRadius: 0, borderWidth: 1.5 },
-                { label: 'Exit DD 180d', data: sim.eDdT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#06b6d4', pointRadius: 0, borderWidth: 1.5 },
-                { label: 'Entry 12%', data: dateLabels.map(function() { return 12; }), borderColor: '#fbbf24', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
+                { label: 'Exit DD 270d', data: sim.eDdT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#06b6d4', pointRadius: 0, borderWidth: 1.5 },
+                { label: 'Entry 8%', data: dateLabels.map(function() { return 8; }), borderColor: '#fbbf24', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
             ]
         },
         options: (function() { var o = cO(); o.scales.y.ticks.callback = function(v) { return v + '%'; }; return o; })()
