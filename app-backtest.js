@@ -177,42 +177,41 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         if (peakDsVol > 0.001) peakDsVol *= volDecay;
         var hOk = true;
         if (peakDsVol > 0.01) hOk = dsV > peakDsVol * 0.70;
-        // v10.9: Correlation as accelerator, not hard gate
-        // High corr (>=0.75): fast entry (+2 per bar)
-        // Low corr (<0.75): slower entry (+1 per bar)
-        var rawEntry = gDd > ddThresh && dsV > dsVolHigh && hOk;
+        // v11.2: Correlation as HARD GATE (not accelerator) - prevents false trips
+        // Entry requires: DD > 5% AND vol > 42% AND correlation >= 0.75
+        var corrOk = avgCorrelation >= corrEntryThresh;
+        var rawEntry = gDd > ddThresh && dsV > dsVolHigh && hOk && corrOk;
         if (rawEntry) {
-            var corrBoost = avgCorrelation >= corrEntryThresh ? 2 : 1;
-            entryPendingCount += corrBoost;
+            entryPendingCount += 1;
         } else {
             entryPendingCount = 0;
         }
         if (entryPendingCount >= confirmBars) {
             shieldActive = true; localMaxDd = eDd; peakDsVol = dsV; entry = true;
-            exitTranche = 1;  // start sell-down
-            tExp = (exitTranches[0] || 0) * riskBudget;  // first tranche target
+            // v11.2: Continuous exposure reduction based on correlation (not hard step)
+            // corr=0.75 → 50% exposure, corr=0.70 → 40%, corr=0.65 → 30%, corr=0.60 → 20%, corr<0.60 → 0%
+            var corrScale = Math.max(0, Math.min(1, (avgCorrelation - 0.55) / 0.20));
+            tExp = corrScale * riskBudget;
+            exitTranche = 1;  // start sell-down tracking
             entryPendingCount = 0;
-            shieldActiveDays = 0;  // v11.1: Reset day counter on entry
+            shieldActiveDays = 0;
         } else {
             tExp = riskBudget;
         }
     } else {
-        shieldActiveDays += 1;  // v11.1: Increment day counter while shield is active
+        shieldActiveDays += 1;
         if (eDd > localMaxDd) localMaxDd = eDd;
         if (dsV > peakDsVol) peakDsVol = dsV;
-        // v10.8: Sell-down tranches (gradual de-risk over multiple bars)
-        if (exitTranche > 0 && exitTranche < exitTranches.length) {
-            tExp = exitTranches[exitTranche - 1] * riskBudget;
-            exitTranche += 1;
-        } else if (exitTranche >= exitTranches.length) {
-            exitTranche = -1;  // sell-down complete
+        // v11.2: Continuous exposure based on correlation (not discrete tranches)
+        // Higher correlation → lower exposure, lower correlation → higher exposure
+        var corrScale = Math.max(0, Math.min(1, (avgCorrelation - 0.55) / 0.20));
+        tExp = corrScale * riskBudget;
+        // Track tranche state for exit logic
+        if (avgCorrelation <= corrT1 && !t1Done) {
+            t1Done = true;
         }
-
-        if (exitTranche === -1) {
-            // Recovery factor (linear, no clamp)
-            var rf = localMaxDd > 0.001 ? (localMaxDd - eDd) / localMaxDd : 0;
-            rf = Math.max(0, Math.min(1, rf));
-            tExp = Math.min(riskBudget, floorExp + rf * (riskBudget - floorExp));
+        if (avgCorrelation <= corrT2 && t1Done && !t2Done) {
+            t2Done = true;
         }
 
         var isDdHealed = eDd < 0.001;
