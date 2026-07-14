@@ -23,12 +23,12 @@ const DL = {
     TRANCHE_2_GAP: 0.15,
     FEE_RATE: 0.001,  // 10 bps per trade (rebalance, DCA, tranche)
     EXIT_TRANCHES: [0.50, 0.25, 0.0],  // sell-down schedule: 50% → 25% → 0%
-    // v10.8: Correlation-based exit + tranche re-entry
-    CORR_ENTRY_THRESH: 0.80,
+    // v10.9: Relaxed correlation entry gate (from 0.80/3 to 0.75/2)
+    CORR_ENTRY_THRESH: 0.75,
     CORR_EXIT_THRESH: 0.60,
     CORR_TRANCHE_1: 0.70,
     CORR_TRANCHE_2: 0.60,
-    ENTRY_CONFIRM_BARS: 3,
+    ENTRY_CONFIRM_BARS: 2,
     CORR_WINDOW: 20,
 };
 

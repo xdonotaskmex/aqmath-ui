@@ -1,5 +1,9 @@
 ﻿(function() {
 'use strict';
+
+// ============ BACKEND API URLs ============
+const BETA_AUTH_URL = 'https://aqmath-beta-auth-production.up.railway.app';
+
 // ============ ROUTING ============
 function handleRoute() {
     const hash = window.location.hash;
@@ -19,6 +23,24 @@ function handleRoute() {
     }
 }
 window.addEventListener('hashchange', handleRoute);
+
+// ============ BETA SLOT COUNTER ============
+async function updateSlotCounter() {
+    try {
+        const resp = await fetch(`${BETA_AUTH_URL}/api/slots`);
+        if (resp.ok) {
+            const data = await resp.json();
+            const el = document.getElementById('slotCounter');
+            if (el) el.textContent = data.remaining;
+        }
+    } catch (e) {
+        console.warn('[Slots] Could not fetch slot info:', e);
+    }
+}
+// Fetch slots on landing page load
+if (!window.location.hash || window.location.hash === '#/' || window.location.hash === '#') {
+    updateSlotCounter();
+}
 
 function showProModal() { document.getElementById('proModal').classList.remove('hidden'); }
 function hideProModal() { document.getElementById('proModal').classList.add('hidden'); }
@@ -115,7 +137,6 @@ let isPro = isBetaActive();
 
 
 // ========== BETA AUTH ==========
-const BETA_AUTH_URL = 'https://aqmath-beta-auth-production.up.railway.app';
 
 async function pipelineFetch(url, options = {}) {
     const token = getBetaToken();
@@ -794,12 +815,7 @@ async function importCSV(event) {
                 frozen: false, insufficientHistory: false
             });
         }
-        if (!isPro && portfolio.length + newPortfolio.length > 4) {
-            showToast('free version allows max 4 tokens.', 'pro-lock');
-            hideLoading();
-            event.target.value = '';
-            return;
-        }
+        // Beta users have full access — no token limit
         for (const nt of newPortfolio) {
             const existIdx = portfolio.findIndex(t => t.sym === nt.sym);
             if (existIdx >= 0) {
@@ -977,13 +993,6 @@ async function dodajToken() {
     const safeHaven = isStablecoin(sym);
     if (isNaN(amount) || amount <= 0) return showToast('quantity must be > 0.', 'warning');
     if (isNaN(target) || target <= 0) return showToast('allocation must be > 0%.', 'warning');
-
-    // Free-tier limit check BEFORE any processing (CSV save, API calls)
-    if (!editMode && !isPro && portfolio.filter(t => !t.frozen).length >= 4) {
-        console.log('[AQMath] Token blocked: isPro=' + isPro + ', tokens=' + portfolio.filter(t => !t.frozen).length);
-        showToast('free version allows max 4 tokens.', 'pro-lock');
-        return;
-    }
 
     const coinId = sym.toLowerCase();  // use sym as coinId
     const btn = document.getElementById('btnAdd');

@@ -31,7 +31,7 @@
     <meta name="twitter:description" content="Risk Parity math + Deleverage Shield crash protection. Auto-de-risk during market crashes. Non-custodial, private, no data collected.">
     <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png">
     <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer with Deleverage Shield">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"AQMath","url":"https://aqmath.xyz/","description":"Quantitative crypto portfolio rebalancer with Deleverage Shield crash protection. Risk Parity mathematics, DCA optimization, and automatic de-risking during market crashes.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","name":"Free Tier","price":"0","priceCurrency":"USD"},"featureList":["Risk Parity Optimization","Deleverage Shield Crash Protection","DCA Distribution","Non-Custodial Privacy","Emergency Brake Auto De-Risk"]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"AQMath","url":"https://aqmath.xyz/","description":"Quantitative crypto portfolio rebalancer with Deleverage Shield crash protection. Risk Parity mathematics, DCA optimization, and automatic de-risking during market crashes.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":[{"@type":"Offer","name":"Beta Access","price":"0","priceCurrency":"USD","description":"Limited slots, audit required"},{"@type":"Offer","name":"Black Annual Access","priceCurrency":"USD","description":"Exclusive annual subscription"}],"featureList":["Risk Parity Optimization","Deleverage Shield Crash Protection","DCA Distribution","Non-Custodial Privacy","Emergency Brake Auto De-Risk"]}</script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="styles.css">
@@ -316,23 +316,27 @@
         <section class="lp-section">
             <div class="lp-section-label" data-i18n="plans.sectionTitle">--access-tiers</div>
             <div class="lp-plan-grid">
-                <div class="lp-card lp-plan-card free">
-                    <div class="lp-plan-title" data-i18n="plans.freeTitle">FREE</div>
-                    <div class="lp-plan-price">$0</div>
-                    <div class="lp-plan-subtitle" data-i18n="plans.freeSubtitle">No account. No wallet. Just math.</div>
+                <div class="lp-card lp-plan-card beta">
+                    <div class="lp-plan-title" data-i18n="plans.betaTitle">BETA ACCESS</div>
+                    <div class="lp-plan-slots">
+                        <span id="slotCounter" class="lp-slots-count">8</span>
+                        <span data-i18n="plans.betaSlotsLabel">slots remaining</span>
+                    </div>
+                    <div class="lp-plan-subtitle" data-i18n="plans.betaSubtitle">Limited slots. Audit required. Full access.</div>
                     <ul class="lp-feature-list">
-                        <li data-i18n="plans.freeF1">Up to 4 tokens for manual portfolio tracking</li>
-                        <li data-i18n="plans.freeF2">DCA distribution with manual CSV history upload</li>
-                        <li data-i18n="plans.freeF3">Binance price sync for supported symbols</li>
-                        <li data-i18n="plans.freeF4">Portfolio export/import with local browser storage</li>
-                        <li data-i18n="plans.freeF5">USDC safe-haven for surplus absorption</li>
-                        <li data-i18n="plans.freeF6">Click-to-load Demo Portfolio</li>
-                        <li data-i18n="plans.freeF7">No sign-up, no wallet connect, no server-stored portfolio</li>
+                        <li data-i18n="plans.betaF1">Full Risk Parity optimization (same as Black)</li>
+                        <li data-i18n="plans.betaF2">Deleverage Shield with Emergency Brake protection</li>
+                        <li data-i18n="plans.betaF3">Unlimited tokens and portfolio optimization</li>
+                        <li data-i18n="plans.betaF4">Automatic 180-day historical data pipeline</li>
+                        <li data-i18n="plans.betaF5">DCA distribution with full safety pipeline</li>
+                        <li data-i18n="plans.betaF6">Non-custodial privacy — no server stores your portfolio</li>
+                        <li data-i18n="plans.betaF7">365-day access from activation</li>
+                        <li data-i18n="plans.betaF8">Invitation only — audit required for slot assignment</li>
                     </ul>
-                    <a class="lp-btn-primary" href="#/app" style="width:100%;text-align:center;" data-i18n="plans.openApp">Open App</a>
+                    <a class="lp-btn-secondary" href="mailto:info@aqmath.xyz?subject=Beta%20Access%20Request" style="width:100%;text-align:center;" data-i18n="plans.betaApplyCta">Request Audit</a>
                 </div>
                 <div class="lp-card lp-plan-card pro">
-                    <div class="lp-plan-title" data-i18n-html="plans.proTitle">BLACK <span class="lp-plan-badge">Apply Required</span></div>
+                    <div class="lp-plan-title" data-i18n-html="plans.proTitle">BLACK <span class="lp-plan-badge">Annual Access</span></div>
                     <div class="lp-plan-price pro" data-i18n="plans.proPrice">ANNUAL SUBSCRIPTION</div>
                     <div class="lp-plan-subtitle" data-i18n-html="plans.proSubtitle">Exclusive annual access. Pricing disclosed upon successful screening. USDC &amp; EURC only.</div>
                     <ul class="lp-feature-list">

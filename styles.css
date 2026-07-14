@@ -1613,14 +1613,33 @@
         letter-spacing: 0.5px;
     }
 
-    /* ===== LANDING – FREE VS PRO ===== */
+    /* ===== LANDING – BETA VS BLACK ===== */
     .lp-plan-grid,
     .lp-pricing { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: none; padding: 0; align-items: stretch; }
-    .lp-plan-card.free { border-top: 3px solid var(--green); display: flex; flex-direction: column; height: 100%; }
+    .lp-plan-card.beta { border-top: 3px solid var(--cyan); display: flex; flex-direction: column; height: 100%; }
     .lp-plan-card.pro,
     .lp-price-card.pro { border-top: 3px solid var(--amber); border-color: var(--border); }
     .lp-plan-card.pro { display: flex; flex-direction: column; height: 100%; }
     .lp-plan-title { font-size: 0.68rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; }
+    .lp-plan-slots {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        margin-bottom: 12px;
+        font-family: var(--mono);
+    }
+    .lp-slots-count {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--cyan);
+        line-height: 1;
+    }
+    .lp-plan-slots span:last-child {
+        font-size: 0.65rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--text-dim);
+    }
     .lp-plan-price {
         font-family: var(--mono);
         font-size: 2rem;
@@ -1660,7 +1679,7 @@
         vertical-align: middle;
         text-transform: uppercase;
     }
-    .lp-plan-card.free .lp-plan-title { color: var(--green); }
+    .lp-plan-card.beta .lp-plan-title { color: var(--cyan); }
     .lp-plan-card.pro .lp-plan-title { color: var(--amber); }
     .lp-feature-list { list-style: none; margin: 0 0 22px; padding: 0; flex: 1; }
     .lp-feature-list li {
@@ -1672,7 +1691,7 @@
         border-bottom: 1px solid rgba(255,255,255,0.05);
     }
     .lp-feature-list li::before { content: "✓ "; font-family: var(--mono); font-weight: 600; }
-    .lp-plan-card.free .lp-feature-list li::before { color: var(--green); }
+    .lp-plan-card.beta .lp-feature-list li::before { color: var(--cyan); }
     .lp-plan-card.pro .lp-feature-list li::before { color: var(--amber); }
 
     /* ===== LANDING – WHY AQMATH ===== */
