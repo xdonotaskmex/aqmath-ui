@@ -235,15 +235,13 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         }
         var gOk = gap < effDiv;
         // v10.8: Correlation-based exit path (corrDrop)
-        // v11.1: Only allow corrDrop exit if shield has been active for at least MIN_SHIELD_DAYS (prevents whipsaw)
-        var isCorrExit = avgCorrelation > 0 && avgCorrelation <= corrExitThresh && localMaxDd > 0.05 && shieldActiveDays >= DL.MIN_SHIELD_DAYS;
-        var finalExit = (isDdHealedFull && gOk) || (isVolCalm && isPartialRec && gOk);
-        if (!finalExit && isCorrExit && gOk) finalExit = true;
+        // v11.2: Remove time-based exits (ddZero, volCollapseCalm) - use ONLY corrDrop
+        // v11.2: Remove MIN_SHIELD_DAYS timer - pure correlation-based exit
+        var isCorrExit = avgCorrelation > 0 && avgCorrelation <= corrExitThresh && localMaxDd > 0.05;
+        var finalExit = isCorrExit && gOk;
 
         if (finalExit) {
-            if (isDdHealedFull) exitR = 'ddZero';
-            else if (isCorrExit) exitR = 'corrDrop';
-            else exitR = 'volCollapseCalm';
+            exitR = 'corrDrop';
             tAmt = usdcReserve > 0 ? +usdcReserve.toFixed(4) : 0;
             tEvt = tAmt > 0 ? 'final' : null;
             usdcReserve = 0; t1Done = false; t2Done = false;
@@ -268,7 +266,7 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
                 tExp = Math.min(riskBudget, tExp + trancheExposure);
             }
             if (!exitR) {
-                var wouldExit = (isDdHealedFull) || (isVolCalm && isPartialRec);
+                var wouldExit = isCorrExit;
                 if (wouldExit && !gOk) {
                     blocked = true;
                     blockR = 'divergence_guard: gap=' + (gap * 100).toFixed(1) + '% >= ' + (exitDdDiv * 100).toFixed(0) + '%';
