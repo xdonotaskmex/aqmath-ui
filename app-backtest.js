@@ -289,7 +289,8 @@ function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcRese
         tranche_event: tEvt, usdc_reserve: +usdcReserve.toFixed(4),
         entry_pending_count: entryPendingCount,
         avg_correlation: +avgCorrelation.toFixed(4),
-        shield_active_days: shieldActiveDays  // v11.1: Shield active days
+        shield_active_days: shieldActiveDays,  // v11.1: Shield active days
+        exit_tranche: exitTranche  // v11.1: Exit tranche state
     };
 }
 
@@ -421,6 +422,7 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt, tokenPrices, syms) {
     var prevScale = cfg.risk_budget / cfg.risk_budget;  // FIX #2: start at full exposure
     var entryPendingCount = 0;  // v10.8: correlation entry confirmation counter
     var shieldActiveDays = 0;  // v11.1: shield active days counter (prevents corrDrop whipsaw)
+    var exitTranche = -1;  // v11.1: exit tranche state (-1 = not in sell-down)
     var hasCorr = tokenPrices && syms && syms.length >= 2;
 
     for (var i = 0; i < portRet.length; i++) {
@@ -436,6 +438,7 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt, tokenPrices, syms) {
         usdcR = res.usdc_reserve; t1Done = res.tranche_1_executed; t2Done = res.tranche_2_executed;
         entryPendingCount = res.entry_pending_count;
         shieldActiveDays = res.shield_active_days;  // v11.1: Update shield active days
+        exitTranche = res.exit_tranche;  // v11.1: Update exit tranche state
 
         // v10.8: On entry, use first tranche target (not floor) — sell-down is gradual
         var eff;
