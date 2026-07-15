@@ -22,8 +22,8 @@
     "optLink": "[ 查看公式 ]",
     "privLabel": "--隐私",
     "privCopy": "金额、目标和配置权重保存在浏览器的 localStorage 中。发送到后端的数据在内存中处理并立即丢弃 — 不做任何持久化。",
-    "shieldLabel": "--去杠杆护盾",
-    "shieldCopy": "紧急制动：检测到崩盘时，敞口通过 3 阶段卖出降至 0%（全额稳定币）— DCA 通过断路器锁定。当护盾恢复正常时，资金通过 3 阶段分批恢复重新入场。",
+    "shieldLabel": "--去杠杆调节器",
+    "shieldCopy": "连续市场调节器：随着回撤和下行波动率上升，敞口连续下调 — 无技术指标、无计时器、无相关性门控。快速去风险（每根 K 线收敛 50% 的差距），缓慢重新入场（每根 6%），无硬性底仓；当敞口恢复至 50% 以上时，闲置的 DCA 资金重新部署。",
     "shieldLink": "[ 查看 8.7 年回测 ]"
   },
   "beta": {
@@ -45,7 +45,7 @@
     "applyNow": "申请访问权限",
     "openApp": "输入内测密钥",
     "betaF1": "完整风险平价优化（与 Black 相同）",
-    "betaF2": "去杠杆护盾，配备紧急制动保护",
+    "betaF2": "去杠杆调节器，连续回撤保护",
     "betaF3": "无限代币与投资组合优化",
     "betaF4": "自动 180 天历史数据管道",
     "betaF5": "DCA 分配，配备完整安全管道",
@@ -53,7 +53,7 @@
     "betaF7": "自激活起 365 天访问权限",
     "betaF8": "仅限邀请 — 需要审核分配名额",
     "blackF1": "风险平价优化，完整协方差与方差矩阵",
-    "blackF2": "去杠杆护盾，配备紧急制动崩盘保护",
+    "blackF2": "去杠杆调节器，连续回撤崩盘保护",
     "blackF3": "基于波动率的动态分配上限",
     "blackF4": "自动 180 天历史数据管道",
     "blackF5": "无限代币支持与投资组合优化",
@@ -412,18 +412,18 @@
     }
   },
   "bt": {
-    "intro": "<strong>工作原理：</strong>上传代币的历史价格 CSV（最多 5 个）。引擎运行与生产环境完全相同的去杠杆状态机<strong>（v11.4 &mdash; 基于 5 币种 8.7 年真实数据重新校准）</strong>。两种策略接收<strong>完全相同的 DCA 资金</strong>和相同的时间表，确保方法论上的公平比较。<strong>买入持有</strong>无条件购买代币。<strong>去杠杆</strong>在代币同步暴跌时（深度回撤 + 高波动 + 相关性上升）触发<strong>相关性防护罩</strong>，将敞口降至防御性底仓，随后<strong>在相关性回落、分散化恢复时分批重新部署</strong>：T1（25%）、T2（50%）、最终（防护罩退出时 100%）。",
+    "intro": "<strong>工作原理：</strong>上传代币的历史价格 CSV（最多 5 个）。引擎运行与生产环境完全相同的去杠杆调节器<strong>（v12.0 &mdash; 基于 5 币种 8.7 年真实数据验证）</strong>。两种策略接收<strong>完全相同的 DCA 资金</strong>和相同的时间表。<strong>买入持有</strong>无条件购买代币并保持满仓敞口。<strong>去杠杆</strong>根据回撤上升和下行波动率上升<strong>连续</strong>调节敞口 &mdash; 无技术指标、无计时器、无相关性门控。它<strong>快速去风险（每根 K 线收敛 50% 的差距），缓慢重新入场（每根 6%）</strong>，无硬性底仓，当敞口恢复至 50% 以上时重新部署闲置的 DCA 资金。评分依据 <strong>Calmar 与 Sharpe</strong>，而非是否跑赢买入持有。",
     "csvFormat": "<strong>CSV 格式：</strong>包含日期列（<code>event_date</code>/<code>date</code>/<code>Date</code>）+ 价格列（<code>close_price_usd</code>/<code>Close</code>/<code>price</code>）的表头。等权重组合。",
     "navBacktest": "回测"
   },
   "shield": {
-    "label": "--deleverage-shield &middot; v11.4",
-    "title": "相关性防护罩 &mdash; 基于真实数据重新校准",
-    "lead": "v11.4 在跨币相关性上升时触发（而非单一价格跳动），随后将敞口降至防御性底仓，并在分散化恢复时分批重新部署。",
+    "label": "--deleverage-modulator &middot; v12.0",
+    "title": "去杠杆调节器 &mdash; 基于真实数据验证",
+    "lead": "v12.0 根据回撤上升和下行波动率上升连续调节敞口 &mdash; 无技术指标、无计时器、无相关性门控。快速去风险，缓慢重新入场。",
     "s1l": "最大回撤降幅",
-    "s2l": "Calmar（原为 1.08）",
-    "s3l": "零计时器 &middot; 仅相关性",
-    "body": "在 8.7 年、5 个代币（ADA/BNB/BTC/ETH/XRP）的回测中，重新校准后的防护罩将峰值回撤从 <strong>82.6% 降至 74.8%</strong>，并将 Calmar 从 <strong>1.08 提升至 1.39</strong>，在相关性回落时分批重新部署资金。其阈值依据实测相关性区间校准 &mdash; 属于全样本重新校准，而非前向样本外验证。",
+    "s2l": "Calmar（买入持有 1.07）",
+    "s3l": "Sharpe（买入持有 0.77）",
+    "body": "在 8.7 年、5 个代币（ADA/BNB/ETH/XRP/XLM）的回测中，调节器将峰值回撤控制在 <strong>35.8%</strong>，而买入持有为 <strong>83.8%</strong>，在约 31% 的平均敞口下取得 <strong>Calmar 1.43</strong> 与 <strong>Sharpe 0.98</strong>（对比 1.07 / 0.77）。评分依据风险调整后收益 &mdash; Calmar 与 Sharpe &mdash; 而非是否跑赢买入持有。",
     "cta": "--run-the-backtest"
   },
   "terms": {

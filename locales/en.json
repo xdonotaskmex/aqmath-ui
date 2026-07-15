@@ -22,8 +22,8 @@
     "optLink": "[ view formula ]",
     "privLabel": "--privacy",
     "privCopy": "Amounts, targets, and allocation weights stay in your browser's localStorage. Data sent to the backend is processed in-memory and discarded immediately — nothing is persisted.",
-    "shieldLabel": "--deleverage-shield",
-    "shieldCopy": "Emergency Brake: on crash detection, exposure drops via 3-stage sell-down to 0% (full stablecoins) — DCA locked via Circuit Breaker. Capital re-enters via 3-stage tranche recovery when the Shield returns to NORMAL.",
+    "shieldLabel": "--deleverage-modulator",
+    "shieldCopy": "Continuous regime modulator: exposure scales down as drawdown and downside volatility rise — no indicators, no timers, no correlation gate. It de-risks fast (closes 50% of the gap per bar) and re-enters slowly (6% per bar) with no hard floor; parked DCA cash redeploys once exposure recovers above 50%.",
     "shieldLink": "[ see 8.7-year backtest ]"
   },
   "beta": {
@@ -45,7 +45,7 @@
     "applyNow": "Apply for Access",
     "openApp": "Enter Beta Key",
     "betaF1": "Full Risk Parity optimization (same as Black)",
-    "betaF2": "Deleverage Shield with Emergency Brake protection",
+    "betaF2": "Deleverage Modulator with continuous drawdown protection",
     "betaF3": "Unlimited tokens and portfolio optimization",
     "betaF4": "Automatic 180-day historical data pipeline",
     "betaF5": "DCA distribution with full safety pipeline",
@@ -53,7 +53,7 @@
     "betaF7": "365-day access from activation",
     "betaF8": "Invitation only \u2014 audit required for slot assignment",
     "blackF1": "Risk Parity optimization with full Covariance &amp; Variance Matrix",
-    "blackF2": "Deleverage Shield with Emergency Brake crash protection",
+    "blackF2": "Deleverage Modulator with continuous drawdown protection",
     "blackF3": "Dynamic volatility-based allocation caps",
     "blackF4": "Automatic 180-day historical data pipeline",
     "blackF5": "Unlimited token support and portfolio optimization",
@@ -412,18 +412,18 @@
     }
   },
   "bt": {
-    "intro": "<strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage state machine <strong>(v11.4 &mdash; recalibrated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. <strong>Buy &amp; Hold</strong> buys tokens unconditionally. <strong>Deleverage</strong> trips its <strong>correlation shield</strong> when tokens crash together (deep drawdown + high volatility + rising cross-correlation), easing exposure down to a defensive floor. It then <strong>re-deploys in tranches as correlation falls</strong> and diversification returns: T1 (25%), T2 (50%), Final (100% on shield exit).",
+    "intro": "<strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage modulator <strong>(v12.0 &mdash; validated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule. <strong>Buy &amp; Hold</strong> buys tokens unconditionally and stays fully exposed. <strong>Deleverage</strong> scales exposure <strong>continuously</strong> off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It <strong>de-risks fast (closes 50% of the gap per bar) and re-enters slowly (6% per bar)</strong>, with no hard floor, redeploying parked DCA cash once exposure recovers above 50%. It is scored on <strong>Calmar and Sharpe</strong>, not on beating Buy &amp; Hold.",
     "csvFormat": "<strong>CSV format:</strong> Header with date column (<code>event_date</code>/<code>date</code>/<code>Date</code>) + price column (<code>close_price_usd</code>/<code>Close</code>/<code>price</code>). Equal-weighted portfolio.",
     "navBacktest": "backtest"
   },
   "shield": {
-    "label": "--deleverage-shield &middot; v11.4",
-    "title": "Correlation Shield &mdash; recalibrated on real data",
-    "lead": "v11.4 trips on rising cross-correlation, not a single price tick &mdash; then eases exposure to a defensive floor and re-deploys in tranches as diversification returns.",
+    "label": "--deleverage-modulator &middot; v12.0",
+    "title": "Deleverage Modulator &mdash; validated on real data",
+    "lead": "v12.0 scales exposure continuously off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It de-risks fast and re-enters slowly.",
     "s1l": "max drawdown cut",
-    "s2l": "Calmar (was 1.08)",
-    "s3l": "timers &middot; corr-only",
-    "body": "Across an 8.7-year, 5-token backtest (ADA/BNB/BTC/ETH/XRP) the recalibrated shield cut peak drawdown from <strong>82.6% to 74.8%</strong> and lifted Calmar from <strong>1.08 to 1.39</strong>, redeploying capital in tranches as correlation eased. Its gates are calibrated to the realized correlation range &mdash; a full-sample recalibration, not a walk-forward out-of-sample study.",
+    "s2l": "Calmar (B&amp;H 1.07)",
+    "s3l": "Sharpe (B&amp;H 0.77)",
+    "body": "Across an 8.7-year, 5-token backtest (ADA/BNB/ETH/XRP/XLM) the modulator held peak drawdown to <strong>35.8%</strong> versus <strong>83.8%</strong> for Buy &amp; Hold, scoring <strong>Calmar 1.43</strong> and <strong>Sharpe 0.98</strong> (vs 1.07 / 0.77) at ~31% average exposure. It is scored on risk-adjusted return &mdash; Calmar and Sharpe &mdash; not on beating Buy &amp; Hold.",
     "cta": "--run-the-backtest"
   },
   "terms": {

@@ -2,37 +2,27 @@
 'use strict';
 
 // ============================================================
-//  AQMath Deleverage Engine v11.4 — JavaScript Port
-//  Correlation-gated trip, defensive floor, corr-drop redeploy
-//  Recalibrated on 5-token real data (ADA/BNB/BTC/ETH/XRP, 8.7y):
-//  realized 20d avg pairwise corr ~[-0.05, 0.74] (median 0.27, p90 0.43),
-//  so gates live in that band. Measured vs B&H: Max DD 82.6% -> 74.8%
-//  (+7.8pp), Calmar 1.08 -> 1.39. Full-sample recalibration (not WF-OOS).
+//  AQMath Deleverage Engine v12.0 — JavaScript Port
+//  Continuous DD + downside-vol regime modulator. No state machine,
+//  no correlation gate, no timers. PRIMARY signal: rising drawdown +
+//  rising downside volatility -> continuously scale exposure down.
+//  Exit fast (close 50% of gap/bar), re-enter slow (6%/bar), no hard
+//  floor. Validated on 5-token real data (ADA/BNB/ETH/XRP/XLM, ~8.7y):
+//  Max DD ~36.0%, Calmar ~1.42, Sharpe ~0.98, avg exposure ~0.31.
 // ============================================================
 
 const DL = {
-    DD_WINDOW: 20,
-    EXIT_WINDOW: 180,           // optimizer optimal (was 270)
-    DD_THRESHOLD: 0.05,         // optimizer optimal (was 0.08)
-    DS_VOL_HIGH: 0.42,          // optimizer optimal (was 0.48)
-    DS_VOL_LOW: 0.30,           // optimizer optimal (was 0.25)
-    FLOOR_EXPOSURE: 0.0,
+    DD_WINDOW: 20,          // trailing window for downside-vol
+    DD_REF: 0.30,           // drawdown mapping to full de-risk (dd_sig = 1)
+    VOL_LOW: 0.30,          // downside-vol where vol_sig starts rising
+    VOL_HIGH: 0.90,         // downside-vol where vol_sig saturates
+    W_DD: 0.70,             // weight on drawdown signal
+    W_VOL: 0.30,            // weight on downside-vol signal
+    EXIT_SPEED: 0.50,       // fast: close 50% of gap toward a LOWER target/bar
+    ENTRY_SPEED: 0.06,      // slow: close 6% of gap toward a HIGHER target/bar
+    REDEPLOY_THRESH: 0.50,  // exposure below this == defensive (park DCA)
     RISK_BUDGET: 0.85,
-    VOL_HALFLIFE: 30,
-    get VOL_DECAY() { return Math.pow(0.5, 1.0 / this.VOL_HALFLIFE); },
-    EXIT_DD_DIVERGENCE: 0.30,
-    TRANCHE_1_PCT: 0.25,
-    TRANCHE_2_PCT: 0.50,
-    TRANCHE_2_GAP: 0.15,
-    FEE_RATE: 0.001,  // 10 bps per trade (rebalance, DCA, tranche)
-    // v11.4: correlation gates recalibrated to realized 20d corr band [-0.05,0.74]
-    // (median 0.27, p90 0.43). Full-exit (0.18) is the LOWEST gate so tranches run.
-    CORR_ENTRY_THRESH: 0.43,
-    CORR_EXIT_THRESH: 0.18,
-    CORR_TRANCHE_1: 0.33,
-    CORR_TRANCHE_2: 0.26,
-    ENTRY_CONFIRM_BARS: 2,
-    CORR_WINDOW: 20,
+    FEE_RATE: 0.001,        // 10 bps per trade (rebalance, DCA, redeploy)
 };
 
 function computeDownsideVol(rets, window) {
@@ -60,228 +50,78 @@ function computeDrawdownFromPeak(equity, window) {
     return [Math.max(0, curDd), Math.max(0, maxDd)];
 }
 
-// v10.8: Compute average pairwise correlation from per-token log returns
-function computeAvgCorrelation(tokenPrices, syms, endIdx, window) {
-    window = window || DL.CORR_WINDOW;
-    var n = syms.length;
-    if (n < 2) return 0.5;
-    var start = Math.max(1, endIdx - window + 1);
-    if (endIdx - start < 5) return 0.5;
-    // Compute log returns per token
-    var logRets = {};
-    for (var s = 0; s < n; s++) {
-        var sym = syms[s];
-        var rets = [];
-        for (var i = start; i <= endIdx; i++) {
-            var p = tokenPrices[sym][i - 1], c = tokenPrices[sym][i];
-            if (p > 0 && c > 0) rets.push(Math.log(c / p));
-            else rets.push(0);
-        }
-        logRets[sym] = rets;
-    }
-    var minLen = logRets[syms[0]].length;
-    if (minLen < 5) return 0.5;
-    // Means
-    var means = {};
-    for (var s = 0; s < n; s++) {
-        var sum = 0;
-        for (var k = 0; k < minLen; k++) sum += logRets[syms[s]][k];
-        means[syms[s]] = sum / minLen;
-    }
-    // Pairwise correlations
-    var corrs = [];
-    for (var i = 0; i < n; i++) {
-        for (var j = i + 1; j < n; j++) {
-            var si = syms[i], sj = syms[j];
-            var cov = 0, vi = 0, vj = 0;
-            for (var k = 0; k < minLen; k++) {
-                var di = logRets[si][k] - means[si];
-                var dj = logRets[sj][k] - means[sj];
-                cov += di * dj; vi += di * di; vj += dj * dj;
-            }
-            cov /= (minLen - 1); vi /= (minLen - 1); vj /= (minLen - 1);
-            var denom = Math.sqrt(vi * vj);
-            corrs.push(denom > 1e-12 ? cov / denom : 0);
-        }
-    }
-    if (!corrs.length) return 0.5;
-    var sum = 0;
-    for (var c = 0; c < corrs.length; c++) sum += corrs[c];
-    return sum / corrs.length;
-}
+// v12.0: correlation is intentionally NOT a regime signal (empirically not
+// predictive) — the old computeAvgCorrelation helper was removed.
 
-function evaluateShield(rets, shieldActive, localMaxDd, peakDsVol, cfg, usdcReserve, t1Done, t2Done, totalEquity, avgCorrelation, entryPendingCount, exitTranche, shieldActiveDays) {
+
+function evaluateShield(rets, cfg, prevExpFrac) {
+    // Continuous DD + downside-vol regime modulator (mirrors deleverage.py).
+    // Signal is look-ahead safe: caller passes returns through day i-1 and the
+    // previous exposure fraction; the returned fraction applies to day i.
     cfg = cfg || {};
     var ddWindow = cfg.dd_window || DL.DD_WINDOW;
-    var exitWindow = cfg.exit_window || DL.EXIT_WINDOW;
-    var ddThresh = cfg.dd_threshold || DL.DD_THRESHOLD;
-    var dsVolHigh = cfg.ds_vol_high || DL.DS_VOL_HIGH;
-    var dsVolLow = cfg.ds_vol_low || DL.DS_VOL_LOW;
-    var floorExp = cfg.floor_exposure !== undefined ? cfg.floor_exposure : DL.FLOOR_EXPOSURE;
+    var ddRef = cfg.dd_ref !== undefined ? cfg.dd_ref : DL.DD_REF;
+    var volLow = cfg.vol_low !== undefined ? cfg.vol_low : DL.VOL_LOW;
+    var volHigh = cfg.vol_high !== undefined ? cfg.vol_high : DL.VOL_HIGH;
+    var wDd = cfg.w_dd !== undefined ? cfg.w_dd : DL.W_DD;
+    var wVol = cfg.w_vol !== undefined ? cfg.w_vol : DL.W_VOL;
+    var exitSpeed = cfg.exit_speed !== undefined ? cfg.exit_speed : DL.EXIT_SPEED;
+    var entrySpeed = cfg.entry_speed !== undefined ? cfg.entry_speed : DL.ENTRY_SPEED;
+    var redeployThresh = cfg.redeploy_thresh !== undefined ? cfg.redeploy_thresh : DL.REDEPLOY_THRESH;
     var riskBudget = cfg.risk_budget || DL.RISK_BUDGET;
-    var volDecay = cfg.vol_decay || DL.VOL_DECAY;
-    var exitDdDiv = cfg.exit_dd_divergence || DL.EXIT_DD_DIVERGENCE;
-    var tp1 = cfg.tranche_1_pct !== undefined ? cfg.tranche_1_pct : DL.TRANCHE_1_PCT;
-    var tp2 = cfg.tranche_2_pct !== undefined ? cfg.tranche_2_pct : DL.TRANCHE_2_PCT;
-    var t2g = cfg.tranche_2_gap !== undefined ? cfg.tranche_2_gap : DL.TRANCHE_2_GAP;
-    var corrEntryThresh = cfg.corr_entry_thresh !== undefined ? cfg.corr_entry_thresh : DL.CORR_ENTRY_THRESH;
-    var corrExitThresh = cfg.corr_exit_thresh !== undefined ? cfg.corr_exit_thresh : DL.CORR_EXIT_THRESH;
-    var corrT1 = cfg.corr_tranche_1 !== undefined ? cfg.corr_tranche_1 : DL.CORR_TRANCHE_1;
-    var corrT2 = cfg.corr_tranche_2 !== undefined ? cfg.corr_tranche_2 : DL.CORR_TRANCHE_2;
-    var confirmBars = cfg.entry_confirm_bars || DL.ENTRY_CONFIRM_BARS;
-    avgCorrelation = avgCorrelation || 0;
-    entryPendingCount = entryPendingCount || 0;
+    var prevFrac = Math.max(0, Math.min(1, prevExpFrac === undefined ? 1.0 : prevExpFrac));
 
-    var E = {
-        shield_active: false, target_exposure: riskBudget,  // v10.8: default to full risk
-        global_dd: 0, window_dd: 0, exit_dd: 0, ds_vol: 0,
-        local_max_dd: 0, peak_ds_vol: peakDsVol,
-        exit_reason: null, entry_triggered: false,
-        exit_blocked: false, exit_block_reason: null,
-        tranche_1_executed: t1Done, tranche_2_executed: t2Done,
-        tranche_amount: 0, tranche_event: null,
-        usdc_reserve: +(usdcReserve || 0).toFixed(4),
-        exit_tranche: exitTranche
-    };
-    if (!rets || rets.length < ddWindow) return E;
-
-    // Global equity curve
-    var gEq = [1];
-    for (var i = 0; i < rets.length; i++) gEq.push(gEq[gEq.length - 1] * (1 + rets[i]));
-    var pk = gEq[0], gDd = 0, pkIdx = 0;
-    for (var i = 0; i < gEq.length; i++) {
-        if (gEq[i] > pk) { pk = gEq[i]; pkIdx = i; }
-        var dd = pk > 0 ? (pk - gEq[i]) / pk : 0;
-        if (dd > gDd) gDd = dd;
-    }
-    // Peak staleness: how many bars since the all-time peak
-    var peakAge = gEq.length - 1 - pkIdx;
-
-    // Short window equity
-    var wR = rets.slice(-ddWindow);
-    var wEq = [1];
-    for (var i = 0; i < wR.length; i++) wEq.push(wEq[wEq.length - 1] * (1 + wR[i]));
-    var wDd = computeDrawdownFromPeak(wEq, ddWindow)[0];
-
-    // Exit window equity
-    var eR = rets.length >= exitWindow ? rets.slice(-exitWindow) : rets.slice();
-    var eEq = [1];
-    for (var i = 0; i < eR.length; i++) eEq.push(eEq[eEq.length - 1] * (1 + eR[i]));
-    var eDd = computeDrawdownFromPeak(eEq, exitWindow)[0];
-
-    var dsV = computeDownsideVol(rets, ddWindow);
-    var entry = false, exitR = null, blocked = false, blockR = null;
-    var tAmt = 0, tEvt = null, tExp = riskBudget;
-
-    if (!shieldActive) {
-        if (peakDsVol > 0.001) peakDsVol *= volDecay;
-        var hOk = true;
-        if (peakDsVol > 0.01) hOk = dsV > peakDsVol * 0.70;
-        // v11.2: Correlation as HARD GATE (not accelerator) - prevents false trips
-        // Entry requires: DD > 5% AND vol > 42% AND correlation >= 0.43 (v11.4 recalibrated)
-        var corrOk = avgCorrelation >= corrEntryThresh;
-        // v11.3: entry uses windowed DD (heals in ~20d) not all-time gDd, which
-        // never releases during recoveries and would freeze the entry gate.
-        var rawEntry = wDd > ddThresh && dsV > dsVolHigh && hOk && corrOk;
-        if (rawEntry) {
-            entryPendingCount += 1;
-        } else {
-            entryPendingCount = 0;
-        }
-        if (entryPendingCount >= confirmBars) {
-            shieldActive = true; localMaxDd = eDd; peakDsVol = dsV; entry = true;
-            // v11.3: On trip, drop to the defensive floor. Redeploy LATER as
-            // correlation DROPS (decorrelation = recovery), not while it stays high.
-            tExp = floorExp;
-            t1Done = false; t2Done = false;  // reset tranche ratchet for this episode
-            exitTranche = 1;  // start sell-down tracking
-            entryPendingCount = 0;
-            shieldActiveDays = 0;
-        } else {
-            tExp = riskBudget;
-        }
-    } else {
-        shieldActiveDays += 1;
-        if (eDd > localMaxDd) localMaxDd = eDd;
-        if (dsV > peakDsVol) peakDsVol = dsV;
-
-        var isVolCalm = dsV < dsVolLow;
-        // v11.3: divergence guard uses windowed DD. All-time gDd stays >30% above
-        // exit_dd for YEARS after a crash, which would block every exit forever.
-        var gap = wDd - eDd;
-        // Divergence guard with peak-staleness graduation:
-        // When peak is recent, use strict threshold (exitDdDiv).
-        // As peak ages past 365 bars, linearly relax; after 730 (2y), fully relax.
-        // Prevents permanent shield lock while still blocking premature exits.
-        var effDiv;
-        if (peakAge <= 365) {
-            effDiv = exitDdDiv;
-        } else if (peakAge >= 730) {
-            effDiv = 1.0;
-        } else {
-            effDiv = exitDdDiv + (1.0 - exitDdDiv) * (peakAge - 365) / 365;
-        }
-        var gOk = gap < effDiv;
-        // v11.2: pure correlation-based exit (no time-based exits, no MIN_SHIELD timer)
-        var isCorrExit = avgCorrelation > 0 && avgCorrelation <= corrExitThresh && localMaxDd > 0.05;
-        var finalExit = isCorrExit && gOk;
-
-        if (finalExit) {
-            exitR = 'corrDrop';
-            tAmt = usdcReserve > 0 ? +usdcReserve.toFixed(4) : 0;
-            tEvt = tAmt > 0 ? 'final' : null;
-            usdcReserve = 0; t1Done = false; t2Done = false;
-            shieldActive = false; tExp = riskBudget; localMaxDd = 0;
-        } else {
-            tAmt = 0; tEvt = null;
-            // v11.3: redeploy as correlation DROPS (decorrelation = recovery).
-            // Ratchet tranche flags; deploy parked DCA reserve if any is held.
-            var corrT1Trig = avgCorrelation > 0 && avgCorrelation <= corrT1;
-            var corrT2Trig = avgCorrelation > 0 && avgCorrelation <= corrT2;
-            if (!t1Done && (corrT1Trig || isVolCalm)) {
-                t1Done = true;
-                if (usdcReserve > 0) {
-                    tAmt = +(usdcReserve * tp1).toFixed(4);
-                    usdcReserve -= tAmt; tEvt = 'tranche_1';
-                }
-            }
-            if (t1Done && !t2Done && (corrT2Trig || gap < t2g)) {
-                t2Done = true;
-                if (usdcReserve > 0) {
-                    var t2a = +(usdcReserve * tp2).toFixed(4);
-                    tAmt += t2a; usdcReserve -= t2a;
-                    tEvt = tEvt ? tEvt + '+tranche_2' : 'tranche_2';
-                }
-            }
-            // v11.3 CORRECTED exposure: floor on trip, ratchet UP as corr drops.
-            var deployedFrac = t2Done ? tp2 : (t1Done ? tp1 : (riskBudget > 0 ? floorExp / riskBudget : 0));
-            tExp = deployedFrac * riskBudget;
-            // Parked-DCA tranche deployment adds real exposure on top.
-            if (tAmt > 0 && totalEquity > 0) {
-                tExp = Math.min(riskBudget, tExp + tAmt / totalEquity);
-            }
-            if (isCorrExit && !gOk) {
-                blocked = true;
-                blockR = 'divergence_guard: gap=' + (gap * 100).toFixed(1) + '% >= ' + (effDiv * 100).toFixed(0) + '%';
-            }
-        }
+    function result(expFrac, curDd, dsVol, ddSig, volSig, baseRisk, isDef) {
+        return {
+            shield_active: isDef,
+            target_exposure: +(expFrac * riskBudget).toFixed(6),
+            exposure_frac: +expFrac.toFixed(6),
+            global_dd: +curDd.toFixed(4), window_dd: +curDd.toFixed(4), exit_dd: 0,
+            ds_vol: +dsVol.toFixed(4), dd_sig: +ddSig.toFixed(4),
+            vol_sig: +volSig.toFixed(4), base_risk: +baseRisk.toFixed(4),
+            local_max_dd: 0, peak_ds_vol: 0,
+            exit_reason: null, entry_triggered: false,
+            exit_blocked: false, exit_block_reason: null,
+            tranche_1_executed: false, tranche_2_executed: false,
+            tranche_amount: 0, tranche_event: null, usdc_reserve: 0,
+            entry_pending_count: 0, exit_tranche: -1,
+            avg_correlation: 0, corr_gate_blocked: false, shield_active_days: 0
+        };
     }
 
-    return {
-        shield_active: shieldActive, target_exposure: +tExp.toFixed(4),
-        global_dd: +gDd.toFixed(4), window_dd: +wDd.toFixed(4),
-        exit_dd: +eDd.toFixed(4), ds_vol: +dsV.toFixed(4),
-        local_max_dd: +localMaxDd.toFixed(4), peak_ds_vol: +peakDsVol.toFixed(4),
-        exit_reason: exitR, entry_triggered: entry,
-        exit_blocked: blocked, exit_block_reason: blockR,
-        tranche_1_executed: t1Done, tranche_2_executed: t2Done,
-        tranche_amount: tAmt > 0 ? +tAmt.toFixed(4) : 0,
-        tranche_event: tEvt, usdc_reserve: +usdcReserve.toFixed(4),
-        entry_pending_count: entryPendingCount,
-        avg_correlation: +avgCorrelation.toFixed(4),
-        shield_active_days: shieldActiveDays,  // v11.1: Shield active days
-        exit_tranche: exitTranche  // v11.1: Exit tranche state
-    };
+    if (!rets || rets.length === 0) return result(1.0, 0, 0, 0, 0, 0, false);
+
+    // Current drawdown from the all-time peak of the equity curve.
+    var equity = 1.0, peak = 1.0;
+    for (var i = 0; i < rets.length; i++) {
+        equity *= (1 + rets[i]);
+        if (equity > peak) peak = equity;
+    }
+    var curDd = peak > 0 ? (peak - equity) / peak : 0;
+    curDd = Math.max(0, curDd);
+
+    // Trailing annualized downside deviation (divides by full segment length).
+    var seg = rets.slice(-ddWindow);
+    var dsVol = 0;
+    if (seg.length >= 2) {
+        var ss = 0;
+        for (var k = 0; k < seg.length; k++) { if (seg[k] < 0) ss += seg[k] * seg[k]; }
+        dsVol = Math.sqrt(ss / seg.length) * Math.sqrt(365.25);
+    }
+
+    var ddSig = ddRef > 0 ? Math.max(0, Math.min(1, curDd / ddRef)) : 0;
+    var volSig = volHigh > volLow ? Math.max(0, Math.min(1, (dsVol - volLow) / (volHigh - volLow))) : 0;
+    var baseRisk = Math.max(0, Math.min(1, wDd * ddSig + wVol * volSig));
+    var tgt = 1.0 - baseRisk;
+
+    // Asymmetric ramp: exit fast toward a lower target, re-enter slowly.
+    var expFrac;
+    if (tgt < prevFrac) expFrac = prevFrac + (tgt - prevFrac) * exitSpeed;
+    else expFrac = prevFrac + (tgt - prevFrac) * entrySpeed;
+    expFrac = Math.max(0, Math.min(1, expFrac));
+
+    var isDef = expFrac < redeployThresh;
+    return result(expFrac, curDd, dsVol, ddSig, volSig, baseRisk, isDef);
 }
 
 // ============================================================
@@ -355,26 +195,19 @@ function btShowStatus(msg, type) {
 }
 
 function btReadCfg() {
-    // Production deleverage v11.3 defaults — hardcoded, no user-configurable engine params
+    // Production deleverage v12.0 modulator defaults — hardcoded, no user-configurable engine params
     return {
         dd_window: DL.DD_WINDOW,
-        exit_window: DL.EXIT_WINDOW,
-        dd_threshold: DL.DD_THRESHOLD,
-        ds_vol_high: DL.DS_VOL_HIGH,
-        ds_vol_low: DL.DS_VOL_LOW,
+        dd_ref: DL.DD_REF,
+        vol_low: DL.VOL_LOW,
+        vol_high: DL.VOL_HIGH,
+        w_dd: DL.W_DD,
+        w_vol: DL.W_VOL,
+        exit_speed: DL.EXIT_SPEED,
+        entry_speed: DL.ENTRY_SPEED,
+        redeploy_thresh: DL.REDEPLOY_THRESH,
         risk_budget: DL.RISK_BUDGET,
-        floor_exposure: DL.FLOOR_EXPOSURE,
-        vol_decay: DL.VOL_DECAY,
-        exit_dd_divergence: DL.EXIT_DD_DIVERGENCE,
-        tranche_1_pct: DL.TRANCHE_1_PCT,
-        tranche_2_pct: DL.TRANCHE_2_PCT,
-        tranche_2_gap: DL.TRANCHE_2_GAP,
-        fee_rate: DL.FEE_RATE,
-        corr_entry_thresh: DL.CORR_ENTRY_THRESH,
-        corr_exit_thresh: DL.CORR_EXIT_THRESH,
-        corr_tranche_1: DL.CORR_TRANCHE_1,
-        corr_tranche_2: DL.CORR_TRANCHE_2,
-        entry_confirm_bars: DL.ENTRY_CONFIRM_BARS
+        fee_rate: DL.FEE_RATE
     };
 }
 
@@ -399,113 +232,64 @@ function btGetPortReturns() {
 }
 
 function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt, tokenPrices, syms) {
-    var sOn = false, lMd = 0, pDv = 0, pExp = null;
     var unitsA = startCap, navA = 1.0, usdcR = 0, totalInv = startCap, totalDep = 0;
-    var t1Done = false, t2Done = false;
     var totalFees = 0, rebN = 0;  // Fee tracking
-    var sim_expT_prev = null;  // Track previous exposure for rebalance fee
     var eqA = [startCap], invA = [startCap], usdcT = [0];
-    var shT = [], expT = [], gDdT = [], eDdT = [], dsVT = [], pkVT = [], gapT = [], corrT = [];
+    var shT = [], expT = [], gDdT = [], eDdT = [], dsVT = [], pkVT = [], gapT = [], corrT = [], bRiskT = [];
     var events = [];
     var shDays = 0, dcaN = 0;
-    var prevScale = cfg.risk_budget / cfg.risk_budget;  // FIX #2: start at full exposure
-    var entryPendingCount = 0;  // v10.8: correlation entry confirmation counter
-    var shieldActiveDays = 0;  // v11.1: shield active days counter (prevents corrDrop whipsaw)
-    var exitTranche = -1;  // v11.1: exit tranche state (-1 = not in sell-down)
-    var hasCorr = tokenPrices && syms && syms.length >= 2;
+    var prevFrac = 1.0;  // previous exposure fraction (look-ahead safe)
+    var redeploy = cfg.redeploy_thresh !== undefined ? cfg.redeploy_thresh : DL.REDEPLOY_THRESH;
 
     for (var i = 0; i < portRet.length; i++) {
-        var sub = portRet.slice(0, i + 1);
-        var totalEquity = eqA[eqA.length - 1];
-        // v10.8: Compute avg pairwise correlation from token prices
-        var avgCorr = 0;
-        if (hasCorr && i >= DL.CORR_WINDOW) {
-            avgCorr = computeAvgCorrelation(tokenPrices, syms, i + 1, DL.CORR_WINDOW);
-        }
-        var res = evaluateShield(sub, sOn, lMd, pDv, cfg, usdcR, t1Done, t2Done, totalEquity, avgCorr, entryPendingCount, exitTranche, shieldActiveDays);
-        sOn = res.shield_active; lMd = res.local_max_dd; pDv = res.peak_ds_vol;
-        usdcR = res.usdc_reserve; t1Done = res.tranche_1_executed; t2Done = res.tranche_2_executed;
-        entryPendingCount = res.entry_pending_count;
-        shieldActiveDays = res.shield_active_days;  // v11.1: Update shield active days
-        exitTranche = res.exit_tranche;  // v11.1: Update exit tranche state
+        // Look-ahead safe: decide exposure from data through day i-1.
+        var sub = portRet.slice(0, i);
+        var res = evaluateShield(sub, cfg, prevFrac);
+        var expFrac = res.exposure_frac;
+        var eff = res.target_exposure;   // = expFrac * risk_budget (for display)
+        var sOn = res.shield_active;      // defensive == expFrac < redeploy
 
-        // v11.3: continuous ease toward target during shield (fast but NOT one jump
-        // to the floor). When not shielded, snap to target (instant re-risk on exit).
-        var eff;
-        var tgt = res.target_exposure;
-        if (pExp === null || !res.shield_active) {
-            eff = tgt;
-        } else {
-            eff = pExp + (tgt - pExp) / 2;  // ramp_days = 2 (50% of gap per bar)
-        }
-        pExp = eff;
-        var todayScale = Math.max(0, Math.min(1, eff / cfg.risk_budget));
-
-        // FIX #1b: Neutralize tranche exposure boost from scale.
-        // Tranches now buy actual units, so the boost would double-count.
-        if (res.tranche_amount > 0 && totalEquity > 0) {
-            var trancheBoost = (res.tranche_amount / totalEquity) / cfg.risk_budget;
-            todayScale = Math.max(0, Math.min(1, todayScale - trancheBoost));
+        // Rebalance fee on exposure change (charged before today's return).
+        var delta = Math.abs(expFrac - prevFrac);
+        if (delta > 1e-6 && unitsA * navA > 0) {
+            var tradeVal = delta * (unitsA * navA);
+            var fee = tradeVal * cfg.fee_rate;
+            totalFees += fee; rebN++;
+            navA *= (1 - fee / (unitsA * navA));
         }
 
-        // FIX #2 (Look-ahead): Apply YESTERDAY's exposure to today's return.
-        // Shield state computed from today's data determines TOMORROW's exposure.
-        navA *= (1 + portRet[i] * prevScale);
-
-        // Rebalance fee: when exposure changes, model the trading cost
-        if (sim_expT_prev !== null && i > 0) {
-            var scaleDelta = Math.abs(todayScale - prevScale);
-            if (scaleDelta > 1e-6) {
-                var tradeVal = scaleDelta * (unitsA * navA);
-                var fee = tradeVal * cfg.fee_rate;
-                totalFees += fee;
-                rebN++;
-                navA *= (1 - fee / (unitsA * navA));
-            }
-        }
-        sim_expT_prev = eff;
-        prevScale = todayScale;  // FIX #2: today's scale applies from tomorrow
+        // Look-ahead: apply YESTERDAY's exposure to today's return.
+        navA *= (1 + portRet[i] * prevFrac);
 
         var dayNum = i + 1;
         var isDca = dcaAmt > 0 && dayNum % dcaInt === 0;
-        var ddGap = res.window_dd - res.exit_dd;
 
         if (isDca) {
             dcaN++;
-            if (!sOn) {
+            if (expFrac >= redeploy) {
                 var dcaFee = dcaAmt * cfg.fee_rate;
                 totalFees += dcaFee;
                 unitsA += (dcaAmt - dcaFee) / navA;
                 totalInv += dcaAmt;
-                events.push({ day: dayNum, type: 'DCA', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '+$' + dcaAmt + ' \u2192 tokens (fee $' + dcaFee.toFixed(2) + ')' });
+                events.push({ day: dayNum, type: 'DCA', gdd: res.global_dd, edd: 0, gap: 0, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '+$' + dcaAmt + ' \u2192 tokens (fee $' + dcaFee.toFixed(2) + ')' });
             } else {
                 usdcR += dcaAmt;
                 totalInv += dcaAmt;
-                events.push({ day: dayNum, type: 'DCA', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '+$' + dcaAmt + ' \u2192 USDC (shield ON)' });
+                events.push({ day: dayNum, type: 'DCA', gdd: res.global_dd, edd: 0, gap: 0, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '+$' + dcaAmt + ' \u2192 USDC (defensive, exp ' + (expFrac * 100).toFixed(0) + '%)' });
             }
         }
 
-        // FIX #1 (Phantom capital): Tranche actually buys units at current NAV.
-        // Without this, tranche $ leaves USDC but never enters tokens,
-        // while the exposure boost creates phantom compounding.
-        if (res.tranche_amount > 0) {
-            var trFee = res.tranche_amount * cfg.fee_rate;
-            totalFees += trFee;
-            totalDep += res.tranche_amount;
-            var trNet = res.tranche_amount - trFee;
-            if (trNet > 0 && navA > 0) {
-                unitsA += trNet / navA;  // Actually buy tokens
-            }
-            var evType = res.tranche_event.indexOf('tranche_1') >= 0 && res.tranche_event.indexOf('tranche_2') >= 0 ? 'T1+T2'
-                : res.tranche_event.indexOf('tranche_1') >= 0 ? 'T1'
-                : res.tranche_event.indexOf('tranche_2') >= 0 ? 'T2'
-                : 'FINAL';
-            events.push({ day: dayNum, type: evType, gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '$' + res.tranche_amount.toFixed(0) + ' \u2192 tokens (' + res.tranche_event + ', fee $' + trFee.toFixed(2) + ')' });
+        // Redeploy parked cash on the cross-up back into a risk-on regime.
+        if (expFrac >= redeploy && usdcR > 0 && navA > 0) {
+            var rdFee = usdcR * cfg.fee_rate;
+            totalFees += rdFee;
+            totalDep += usdcR;
+            unitsA += (usdcR - rdFee) / navA;
+            events.push({ day: dayNum, type: 'REDEPLOY', gdd: res.global_dd, edd: 0, gap: 0, dsv: res.ds_vol, eff: eff, usdc: 0, detail: '$' + usdcR.toFixed(0) + ' parked cash \u2192 tokens (fee $' + rdFee.toFixed(2) + ')' });
+            usdcR = 0;
         }
 
-        if (res.entry_triggered) events.push({ day: dayNum, type: 'ENTRY', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '\u26A0 Emergency Brake \u2014 sell-down started, exposure \u2192 ' + (eff * 100).toFixed(1) + '%' });
-        if (res.exit_reason) events.push({ day: dayNum, type: 'FINAL', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: 'EXIT: ' + res.exit_reason });
-        if (res.exit_blocked) events.push({ day: dayNum, type: 'BLOCKED', gdd: res.global_dd, edd: res.exit_dd, gap: ddGap, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: res.exit_block_reason });
+        prevFrac = expFrac;
 
         eqA.push(unitsA * navA + usdcR);
         invA.push(totalInv);
@@ -513,11 +297,12 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt, tokenPrices, syms) {
         shT.push(sOn ? 1 : 0);
         expT.push(eff);
         gDdT.push(res.global_dd);
-        eDdT.push(res.exit_dd);
+        eDdT.push(0);
         dsVT.push(res.ds_vol);
-        pkVT.push(res.peak_ds_vol);
-        gapT.push(ddGap);
-        corrT.push(avgCorr);
+        pkVT.push(0);
+        gapT.push(0);
+        corrT.push(0);
+        bRiskT.push(res.base_risk);
         if (sOn) shDays++;
     }
 
@@ -536,7 +321,7 @@ function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt, tokenPrices, syms) {
         invB.push(totalInvB);
     }
 
-    return { eqA: eqA, invA: invA, eqB: eqB, invB: invB, usdcT: usdcT, shT: shT, expT: expT, gDdT: gDdT, eDdT: eDdT, dsVT: dsVT, pkVT: pkVT, gapT: gapT, corrT: corrT, events: events, totalInv: totalInv, totalInvB: totalInvB, totalDep: totalDep, shDays: shDays, dcaN: dcaN, totalFees: totalFees, rebN: rebN, bhFees: bhFees };
+    return { eqA: eqA, invA: invA, eqB: eqB, invB: invB, usdcT: usdcT, shT: shT, expT: expT, gDdT: gDdT, eDdT: eDdT, dsVT: dsVT, pkVT: pkVT, gapT: gapT, corrT: corrT, bRiskT: bRiskT, events: events, totalInv: totalInv, totalInvB: totalInvB, totalDep: totalDep, shDays: shDays, dcaN: dcaN, totalFees: totalFees, rebN: rebN, bhFees: bhFees };
 }
 
 function btCalcMetrics(eq, totalIn, years) {
@@ -587,44 +372,40 @@ function btRunBacktest() {
     var m2 = btCalcMetrics(sim.eqB, sim.totalInvB, years);
     var dateLabels = pr.dates.slice(1);
 
-    var entries = sim.events.filter(function(e) { return e.type === 'ENTRY'; });
-    var exits = sim.events.filter(function(e) { return e.type === 'FINAL'; });
-    var blocked = sim.events.filter(function(e) { return e.type === 'BLOCKED'; });
-    var t1evts = sim.events.filter(function(e) { return e.type === 'T1' || e.type === 'T1+T2'; });
-    var t2evts = sim.events.filter(function(e) { return e.type === 'T2' || e.type === 'T1+T2'; });
+    var redeploys = sim.events.filter(function(e) { return e.type === 'REDEPLOY'; });
+    var expFracs = sim.expT.map(function(v) { return cfg.risk_budget > 0 ? v / cfg.risk_budget : 0; });
+    var avgExp = expFracs.length ? expFracs.reduce(function(s, v) { return s + v; }, 0) / expFracs.length : 0;
+    var minExp = expFracs.length ? Math.min.apply(null, expFracs) : 0;
 
-    btShowStatus('Done: ' + pr.rets.length + ' days, ' + pr.n + ' tokens (' + pr.syms.join(', ') + '), ' + sim.dcaN + ' DCA, $' + sim.totalDep.toFixed(0) + ' tranched', 'success');
+    btShowStatus('Done: ' + pr.rets.length + ' days, ' + pr.n + ' tokens (' + pr.syms.join(', ') + '), ' + sim.dcaN + ' DCA, ' + sim.shDays + ' defensive days', 'success');
 
-    // Strategy comparison
+    // Strategy comparison — scored on Calmar + Sharpe (B&H shown as reference only)
     var sr = document.getElementById('btStrategyRow');
     sr.innerHTML = '';
-    var best = m1.final >= m2.final;
     var c1 = document.createElement('div');
-    c1.className = 'bt-strategy-card' + (best ? ' bt-best' : '');
-    c1.innerHTML = '<h3>Shield + Tranche DCA' + (best ? ' \u2605' : '') + '</h3>'
-        + '<div class="bt-big" style="color:var(--' + (best ? 'green' : 'blue') + ')">$' + m1.final.toLocaleString(undefined, { maximumFractionDigits: 0 }) + '</div>'
-        + '<div class="bt-sub">Invested: $' + m1.totalIn.toLocaleString() + ' | Return: ' + (m1.ret * 100).toFixed(1) + '%</div>'
-        + '<div class="bt-sub">Max DD: ' + (m1.mdd * 100).toFixed(1) + '% | Calmar: ' + m1.cal.toFixed(2) + ' | Sharpe: ' + m1.sh.toFixed(2) + '</div>'
-        + '<div class="bt-sub">XIRR: ' + (m1.xi * 100).toFixed(1) + '% | Shield: ' + sim.shDays + '/' + pr.rets.length + ' days</div>'
-        + '<div class="bt-sub">Tranches: $' + sim.totalDep.toFixed(0) + ' | DCA: ' + sim.dcaN + '</div>'
-        + '<div class="bt-sub" style="color:var(--amber)">Fees: $' + sim.totalFees.toFixed(0) + ' (' + sim.rebN + ' rebalances)</div>';
+    c1.className = 'bt-strategy-card bt-best';
+    c1.innerHTML = '<h3>Deleverage Modulator \u2605</h3>'
+        + '<div class="bt-big" style="color:var(--blue)">Calmar ' + m1.cal.toFixed(2) + '</div>'
+        + '<div class="bt-sub">Max DD: ' + (m1.mdd * 100).toFixed(1) + '% | Sharpe: ' + m1.sh.toFixed(2) + '</div>'
+        + '<div class="bt-sub">Final: $' + m1.final.toLocaleString(undefined, { maximumFractionDigits: 0 }) + ' | Return: ' + (m1.ret * 100).toFixed(1) + '%</div>'
+        + '<div class="bt-sub">Avg exposure: ' + (avgExp * 100).toFixed(0) + '% | Defensive: ' + sim.shDays + '/' + pr.rets.length + ' days</div>'
+        + '<div class="bt-sub" style="color:var(--amber)">Fees: $' + sim.totalFees.toFixed(0) + ' (' + sim.rebN + ' rebalances, ' + redeploys.length + ' redeploys)</div>';
     sr.appendChild(c1);
 
     var c2 = document.createElement('div');
-    c2.className = 'bt-strategy-card' + (!best ? ' bt-best' : '');
-    c2.innerHTML = '<h3>Buy & Hold + DCA' + (!best ? ' \u2605' : '') + '</h3>'
-        + '<div class="bt-big" style="color:var(--' + (!best ? 'green' : 'amber') + ')">$' + m2.final.toLocaleString(undefined, { maximumFractionDigits: 0 }) + '</div>'
-        + '<div class="bt-sub">Invested: $' + m2.totalIn.toLocaleString() + ' | Return: ' + (m2.ret * 100).toFixed(1) + '%</div>'
-        + '<div class="bt-sub">Max DD: ' + (m2.mdd * 100).toFixed(1) + '% | Calmar: ' + m2.cal.toFixed(2) + ' | Sharpe: ' + m2.sh.toFixed(2) + '</div>'
-        + '<div class="bt-sub">XIRR: ' + (m2.xi * 100).toFixed(1) + '%</div>'
+    c2.className = 'bt-strategy-card';
+    c2.innerHTML = '<h3>Buy &amp; Hold + DCA (reference)</h3>'
+        + '<div class="bt-big" style="color:var(--amber)">Calmar ' + m2.cal.toFixed(2) + '</div>'
+        + '<div class="bt-sub">Max DD: ' + (m2.mdd * 100).toFixed(1) + '% | Sharpe: ' + m2.sh.toFixed(2) + '</div>'
+        + '<div class="bt-sub">Final: $' + m2.final.toLocaleString(undefined, { maximumFractionDigits: 0 }) + ' | Return: ' + (m2.ret * 100).toFixed(1) + '%</div>'
         + '<div class="bt-sub" style="color:var(--amber)">Fees: $' + sim.bhFees.toFixed(0) + ' (DCA only)</div>';
     sr.appendChild(c2);
 
-    var alpha = m2.final > 0 ? ((m1.final / m2.final - 1) * 100).toFixed(1) : '?';
-    document.getElementById('btCompareExplain').innerHTML = 'Both received <strong>identical DCA</strong> ($' + dcaAmt + ' every ' + dcaInt + 'd, total $' + (sim.dcaN * dcaAmt).toLocaleString() + '). Deleverage ' + (best ? 'outperformed' : 'underperformed') + ' B&H by <strong>' + Math.abs(alpha) + '%</strong>. Max DD reduced by <strong>' + (Math.abs(m2.mdd - m1.mdd) * 100).toFixed(1) + 'pp</strong>. Tranche deploys: ' + t1evts.length + ' T1, ' + t2evts.length + ' T2.';
+    var ddCut = ((m2.mdd - m1.mdd) * 100).toFixed(1);
+    document.getElementById('btCompareExplain').innerHTML = 'Scored on <strong>Calmar</strong> and <strong>Sharpe</strong> (not on beating Buy &amp; Hold). Modulator Calmar <strong>' + m1.cal.toFixed(2) + '</strong>, Sharpe <strong>' + m1.sh.toFixed(2) + '</strong>, Max DD <strong>' + (m1.mdd * 100).toFixed(1) + '%</strong> — a <strong>' + ddCut + 'pp</strong> drawdown reduction vs the B&amp;H reference (' + (m2.mdd * 100).toFixed(1) + '%). Both received identical DCA ($' + dcaAmt + ' every ' + dcaInt + 'd, total $' + (sim.dcaN * dcaAmt).toLocaleString() + ').';
 
     // Summary explain
-    document.getElementById('btSummaryExplain').innerHTML = '<strong>' + pr.n + ' tokens</strong> (' + pr.syms.join(', ') + ') over <strong>' + pr.rets.length + ' days</strong> (~' + years.toFixed(1) + 'y). Shield active <strong>' + sim.shDays + '</strong>/' + pr.rets.length + ' days. <strong>' + entries.length + '</strong> entries, <strong>' + exits.length + '</strong> exits' + (blocked.length > 0 ? ', <strong>' + blocked.length + '</strong> blocked' : '') + '. <strong>' + sim.dcaN + '</strong> DCA events, <strong>$' + sim.totalDep.toFixed(0) + '</strong> tranche-deployed.';
+    document.getElementById('btSummaryExplain').innerHTML = '<strong>' + pr.n + ' tokens</strong> (' + pr.syms.join(', ') + ') over <strong>' + pr.rets.length + ' days</strong> (~' + years.toFixed(1) + 'y). Defensive (exposure &lt; ' + (cfg.redeploy_thresh * 100).toFixed(0) + '%) on <strong>' + sim.shDays + '</strong>/' + pr.rets.length + ' days. Avg exposure <strong>' + (avgExp * 100).toFixed(0) + '%</strong>, min <strong>' + (minExp * 100).toFixed(0) + '%</strong>. <strong>' + sim.dcaN + '</strong> DCA events, <strong>' + redeploys.length + '</strong> cash redeploys.';
 
     // Metrics grid
     var mg = document.getElementById('btMetricsGrid');
@@ -637,13 +418,13 @@ function btRunBacktest() {
         { l: 'Ann. Return', v: (m1.ann * 100).toFixed(1) + '%', c: '' },
         { l: 'XIRR', v: (m1.xi * 100).toFixed(1) + '%', c: '' },
         { l: 'Max DD', v: (m1.mdd * 100).toFixed(1) + '%', c: m1.mdd > 0.40 ? 'bad' : m1.mdd > 0.25 ? 'warn' : 'good' },
-        { l: 'Calmar', v: m1.cal.toFixed(2), c: m1.cal > 4 ? 'good' : '' },
-        { l: 'Sharpe', v: m1.sh.toFixed(2), c: m1.sh > 2 ? 'good' : '' },
+        { l: 'Calmar', v: m1.cal.toFixed(2), c: m1.cal > 1.5 ? 'good' : m1.cal > 1 ? 'warn' : '' },
+        { l: 'Sharpe', v: m1.sh.toFixed(2), c: m1.sh > 1 ? 'good' : '' },
+        { l: 'Avg Exposure', v: (avgExp * 100).toFixed(0) + '%', c: '' },
+        { l: 'Min Exposure', v: (minExp * 100).toFixed(0) + '%', c: '' },
+        { l: 'Defensive Days', v: sim.shDays, c: '' },
         { l: 'DCA Events', v: sim.dcaN, c: '' },
-        { l: 'Tranche Deploys', v: '$' + sim.totalDep.toFixed(0), c: '' },
-        { l: 'Shield Entries', v: entries.length, c: '' },
-        { l: 'Exits', v: exits.length, c: '' },
-        { l: 'Blocked', v: blocked.length, c: blocked.length > 0 ? 'warn' : '' },
+        { l: 'Cash Redeploys', v: redeploys.length, c: '' },
         { l: 'Total Fees', v: '$' + sim.totalFees.toFixed(0), c: sim.totalFees > 0 ? 'warn' : '' }
     ];
     metrics.forEach(function(it) {
@@ -657,10 +438,14 @@ function btRunBacktest() {
     Object.keys(btCharts).forEach(function(k) { if (btCharts[k]) btCharts[k].destroy(); });
     btCharts = {};
 
-    // Collect ENTRY event indices for Emergency Brake annotation lines
-    var entryDays = entries.map(function(e) { return e.day - 1; });  // 0-based index into dateLabels
+    // Collect defensive-onset indices (exposure crosses below redeploy threshold)
+    // for the de-risk annotation lines.
+    var entryDays = [];
+    for (var di = 1; di < sim.shT.length; di++) {
+        if (sim.shT[di] === 1 && sim.shT[di - 1] === 0) entryDays.push(di);
+    }
 
-    // Custom Chart.js plugin: draw red dashed vertical lines at Emergency Brake entry points
+    // Custom Chart.js plugin: draw dashed vertical lines where the modulator turns defensive
     var emergencyBrakePlugin = {
         id: 'emergencyBrakeLines',
         afterDraw: function(chart) {
@@ -691,7 +476,7 @@ function btRunBacktest() {
                     ctx.fillStyle = '#f87171';
                     ctx.textAlign = 'left';
                     ctx.textBaseline = 'top';
-                    var label = '\u26A0 EMERGENCY BRAKE';
+                    var label = '\u25BC DE-RISK';
                     var lx = x0 + 4;
                     if (lx + ctx.measureText(label).width > chart.chartArea.right) lx = x0 - ctx.measureText(label).width - 4;
                     ctx.fillText(label, lx, yTop + 4);
@@ -718,7 +503,7 @@ function btRunBacktest() {
         data: {
             labels: dateLabels,
             datasets: [
-                { label: 'Deleverage + Tranche DCA', data: sim.eqA.slice(1), borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.08)', fill: true, pointRadius: 0, borderWidth: 2 },
+                { label: 'Deleverage Modulator', data: sim.eqA.slice(1), borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.08)', fill: true, pointRadius: 0, borderWidth: 2 },
                 { label: 'Buy & Hold + DCA', data: sim.eqB.slice(1), borderColor: '#fbbf24', fill: false, pointRadius: 0, borderWidth: 1.5 }
             ]
         },
@@ -767,9 +552,8 @@ function btRunBacktest() {
             labels: dateLabels,
             datasets: [
                 { label: 'DS Vol (20d)', data: sim.dsVT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#06b6d4', pointRadius: 0, borderWidth: 1.5 },
-                { label: 'Peak DS Vol', data: sim.pkVT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#fbbf24', pointRadius: 0, borderWidth: 1.5, borderDash: [4, 3] },
-                { label: 'Entry 42%', data: dateLabels.map(function() { return 42; }), borderColor: '#f87171', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 },
-                { label: 'Exit 30%', data: dateLabels.map(function() { return 30; }), borderColor: '#34d399', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
+                { label: 'Vol Low 30% (de-risk starts)', data: dateLabels.map(function() { return 30; }), borderColor: '#34d399', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 },
+                { label: 'Vol High 90% (full de-risk)', data: dateLabels.map(function() { return 90; }), borderColor: '#f87171', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
             ]
         },
         options: (function() { var o = cO(); o.scales.y.ticks.callback = function(v) { return v + '%'; }; return o; })()
@@ -781,40 +565,31 @@ function btRunBacktest() {
         data: {
             labels: dateLabels,
             datasets: [
-                { label: 'Global DD (20d)', data: sim.gDdT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#f87171', backgroundColor: 'rgba(248,113,113,0.15)', fill: true, pointRadius: 0, borderWidth: 1.5 },
-                { label: 'Exit DD (180d)', data: sim.eDdT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#06b6d4', pointRadius: 0, borderWidth: 1.5 },
-                { label: 'Entry 5%', data: dateLabels.map(function() { return 5; }), borderColor: '#fbbf24', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
+                { label: 'Drawdown from peak', data: sim.gDdT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#f87171', backgroundColor: 'rgba(248,113,113,0.15)', fill: true, pointRadius: 0, borderWidth: 1.5 },
+                { label: 'DD Ref 30% (full de-risk)', data: dateLabels.map(function() { return 30; }), borderColor: '#fbbf24', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
             ]
         },
         options: (function() { var o = cO(); o.scales.y.ticks.callback = function(v) { return v + '%'; }; return o; })()
     });
 
-    // Correlation (v10.9: NEW detailed chart)
-    if (sim.corrT && sim.corrT.length > 0) {
+    // Regime de-risk signal: base_risk (0..1) drives target exposure = 1 - base_risk
+    if (sim.bRiskT && sim.bRiskT.length > 0) {
         btCharts.corr = new Chart(document.getElementById('btCorrChart'), {
             type: 'line',
             data: {
                 labels: dateLabels,
                 datasets: [
-                    { label: 'Avg Correlation', data: sim.corrT.map(function(v) { return +(v).toFixed(3); }), borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.1)', fill: true, pointRadius: 0, borderWidth: 2 },
-                    { label: 'Entry Gate 0.43', data: dateLabels.map(function() { return 0.43; }), borderColor: '#f87171', borderDash: [6, 4], pointRadius: 0, borderWidth: 1.5 },
-                    { label: 'Tranche 1: 0.33', data: dateLabels.map(function() { return 0.33; }), borderColor: '#06b6d4', borderDash: [3, 3], pointRadius: 0, borderWidth: 1 },
-                    { label: 'Tranche 2: 0.26', data: dateLabels.map(function() { return 0.26; }), borderColor: '#06b6d4', borderDash: [3, 3], pointRadius: 0, borderWidth: 1 },
-                    { label: 'Full Exit: 0.18', data: dateLabels.map(function() { return 0.18; }), borderColor: '#34d399', borderDash: [6, 4], pointRadius: 0, borderWidth: 1.5 }
+                    { label: 'De-risk signal (base_risk)', data: sim.bRiskT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#f87171', backgroundColor: 'rgba(248,113,113,0.12)', fill: true, pointRadius: 0, borderWidth: 2 },
+                    { label: 'Exposure', data: sim.expT.map(function(v) { return +((cfg.risk_budget > 0 ? v / cfg.risk_budget : 0) * 100).toFixed(1); }), borderColor: '#a855f7', pointRadius: 0, borderWidth: 1.5, stepped: 'before' },
+                    { label: 'Redeploy 50%', data: dateLabels.map(function() { return 50; }), borderColor: '#34d399', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
                 ]
             },
-            options: (function() { 
-                var o = cO(); 
-                o.scales.y.min = -0.1; 
-                o.scales.y.max = 0.8;
-                o.plugins.tooltip = {
-                    callbacks: {
-                        label: function(ctx) {
-                            return ctx.dataset.label + ': ' + ctx.raw.toFixed(3);
-                        }
-                    }
-                };
-                return o; 
+            options: (function() {
+                var o = cO();
+                o.scales.y.min = 0;
+                o.scales.y.max = 100;
+                o.scales.y.ticks.callback = function(v) { return v + '%'; };
+                return o;
             })(),
             plugins: [emergencyBrakePlugin]
         });
@@ -827,7 +602,7 @@ function btRunBacktest() {
     sim.events.forEach(function(e) {
         var tr = document.createElement('tr');
         var dt = dateLabels[e.day - 1] || ('day ' + e.day);
-        tr.innerHTML = '<td>' + dt + '</td><td>' + e.day + '</td><td class="bt-ev-' + e.type.toLowerCase().replace('+', '-') + '">' + (e.type === 'ENTRY' ? '\u26A0 BRAKE' : e.type) + '</td><td>' + (e.gdd * 100).toFixed(1) + '%</td><td>' + (e.edd * 100).toFixed(1) + '%</td><td>' + ((e.gap || 0) * 100).toFixed(1) + '%</td><td>' + (e.dsv * 100).toFixed(1) + '%</td><td>' + (e.eff * 100).toFixed(1) + '%</td><td>$' + (e.usdc || 0).toFixed(0) + '</td><td>' + e.detail + '</td>';
+        tr.innerHTML = '<td>' + dt + '</td><td>' + e.day + '</td><td class="bt-ev-' + e.type.toLowerCase().replace('+', '-') + '">' + e.type + '</td><td>' + (e.gdd * 100).toFixed(1) + '%</td><td>' + (e.dsv * 100).toFixed(1) + '%</td><td>' + (e.eff * 100).toFixed(1) + '%</td><td>$' + (e.usdc || 0).toFixed(0) + '</td><td>' + e.detail + '</td>';
         tbody.appendChild(tr);
     });
 
@@ -855,14 +630,15 @@ function btRunWFGrid() {
     var years = pr.rets.length / 365.25;
 
     var ranges = {
-        dd_threshold: { label: 'DD Threshold', values: [0.08, 0.10, 0.12, 0.15, 0.18, 0.20], key: 'dd_threshold', fmt: function(v) { return (v * 100).toFixed(0) + '%'; } },
-        ds_vol_high: { label: 'DS Vol High', values: [0.35, 0.40, 0.45, 0.48, 0.55, 0.60], key: 'ds_vol_high', fmt: function(v) { return (v * 100).toFixed(0) + '%'; } },
-        exit_dd_divergence: { label: 'Divergence', values: [0.15, 0.20, 0.25, 0.30, 0.40, 0.50], key: 'exit_dd_divergence', fmt: function(v) { return (v * 100).toFixed(0) + '%'; } },
-        exit_window: { label: 'Exit Window', values: [90, 120, 150, 180, 240, 300], key: 'exit_window', fmt: function(v) { return v + 'd'; } },
-        vol_halflife: { label: 'Vol Half-Life', values: [15, 20, 30, 45, 60, 90], key: 'vol_halflife', fmt: function(v) { return v + 'd'; } }
+        dd_ref: { label: 'DD Ref', values: [0.20, 0.25, 0.30, 0.35, 0.40, 0.50], key: 'dd_ref', fmt: function(v) { return (v * 100).toFixed(0) + '%'; } },
+        vol_low: { label: 'Vol Low', values: [0.20, 0.25, 0.30, 0.35, 0.40, 0.45], key: 'vol_low', fmt: function(v) { return (v * 100).toFixed(0) + '%'; } },
+        vol_high: { label: 'Vol High', values: [0.60, 0.70, 0.80, 0.90, 1.00, 1.20], key: 'vol_high', fmt: function(v) { return (v * 100).toFixed(0) + '%'; } },
+        w_dd: { label: 'DD Weight', values: [0.50, 0.60, 0.70, 0.80, 0.90, 1.00], key: 'w_dd', fmt: function(v) { return v.toFixed(2); } },
+        exit_speed: { label: 'Exit Speed', values: [0.30, 0.40, 0.50, 0.60, 0.75, 1.00], key: 'exit_speed', fmt: function(v) { return v.toFixed(2); } },
+        entry_speed: { label: 'Entry Speed', values: [0.03, 0.06, 0.10, 0.15, 0.20, 0.30], key: 'entry_speed', fmt: function(v) { return v.toFixed(2); } }
     };
-    var sw = ranges[sweep];
-    var crossP = sweep !== 'ds_vol_high' ? 'ds_vol_high' : 'dd_threshold';
+    var sw = ranges[sweep] || ranges.dd_ref;
+    var crossP = sw.key !== 'vol_high' ? 'vol_high' : 'dd_ref';
     var cr = ranges[crossP];
 
     btShowStatus('WF grid: ' + sw.label + ' x ' + cr.label + ' (' + (sw.values.length * cr.values.length) + ' sims)...', 'running');
@@ -871,14 +647,14 @@ function btRunWFGrid() {
     for (var si = 0; si < sw.values.length; si++) {
         for (var ci = 0; ci < cr.values.length; ci++) {
             var cfg = btReadCfg();
-            if (crossP === 'vol_halflife') cfg.vol_decay = Math.pow(0.5, 1.0 / cr.values[ci]);
-            else cfg[crossP] = cr.values[ci];
-            if (sweep === 'vol_halflife') cfg.vol_decay = Math.pow(0.5, 1.0 / sw.values[si]);
-            else cfg[sw.key] = sw.values[si];
+            cfg[cr.key] = cr.values[ci];
+            cfg[sw.key] = sw.values[si];
+            // Keep DD/vol weights complementary when sweeping w_dd.
+            cfg.w_vol = Math.max(0, 1 - cfg.w_dd);
             var sim = btSimulate(pr.rets, cfg, startCap, dcaAmt, dcaInt, pr.tokenPrices, pr.syms);
             var m = btCalcMetrics(sim.eqA, sim.totalInv, years);
-            var mB = btCalcMetrics(sim.eqB, sim.totalInvB, years);
-            results.push({ sv: sw.values[si], cv: cr.values[ci], final: m.final, calmar: m.cal, maxdd: m.mdd, sharpe: m.sh, alpha: m.final - mB.final, entries: sim.events.filter(function(e) { return e.type === 'ENTRY'; }).length, shDays: sim.shDays, dep: sim.totalDep });
+            var redeployN = sim.events.filter(function(e) { return e.type === 'REDEPLOY'; }).length;
+            results.push({ sv: sw.values[si], cv: cr.values[ci], final: m.final, calmar: m.cal, maxdd: m.mdd, sharpe: m.sh, defDays: sim.shDays, redeploys: redeployN });
         }
     }
 
@@ -894,7 +670,7 @@ function btRunWFGrid() {
 
     var html = '<table class="bt-wf-grid"><thead><tr><th>' + sw.label + ' / ' + cr.label + '</th>';
     for (var ci = 0; ci < cr.values.length; ci++) html += '<th>' + cr.fmt(cr.values[ci]) + '</th>';
-    html += '<th>Entries</th><th>Shield Days</th><th>$ Deployed</th><th>Alpha vs B&H</th></tr></thead><tbody>';
+    html += '<th>Def Days</th><th>Redeploys</th></tr></thead><tbody>';
     for (var si = 0; si < sw.values.length; si++) {
         var row = results.filter(function(r) { return r.sv === sw.values[si]; });
         var rowVals = row.map(function(r) { return r[met.key]; });
@@ -908,13 +684,12 @@ function btRunWFGrid() {
             html += '<td class="' + cls + '">' + met.fmt(v) + '</td>';
         }
         var any = row[0];
-        html += '<td>' + any.entries + '</td><td>' + any.shDays + '</td><td>$' + any.dep.toFixed(0) + '</td>';
-        html += '<td style="color:var(--' + (any.alpha > 0 ? 'green' : 'red') + ')">' + (any.alpha > 0 ? '+' : '') + '$' + any.alpha.toLocaleString(undefined, { maximumFractionDigits: 0 }) + '</td></tr>';
+        html += '<td>' + any.defDays + '</td><td>' + any.redeploys + '</td></tr>';
     }
     html += '</tbody></table>';
 
     var best = results.find(function(r) { return r[met.key] === bestVal; });
-    html += '<div class="bt-explain" style="margin-top:12px"><strong>Best:</strong> ' + sw.label + '=' + sw.fmt(best.sv) + ', ' + cr.label + '=' + cr.fmt(best.cv) + ' \u2192 ' + met.label + ': ' + met.fmt(bestVal) + ' | alpha: <strong style="color:var(--' + (best.alpha > 0 ? 'green' : 'red') + ')">' + (best.alpha > 0 ? '+' : '') + '$' + best.alpha.toLocaleString(undefined, { maximumFractionDigits: 0 }) + '</strong></div>';
+    html += '<div class="bt-explain" style="margin-top:12px"><strong>Best:</strong> ' + sw.label + '=' + sw.fmt(best.sv) + ', ' + cr.label + '=' + cr.fmt(best.cv) + ' \u2192 ' + met.label + ': ' + met.fmt(bestVal) + ' (scored on Calmar / Sharpe / Max DD, not on beating B&amp;H).</div>';
 
     document.getElementById('btWfGridContainer').innerHTML = html;
     document.getElementById('btWfSection').classList.remove('hidden');

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AQMath — Quantitative Crypto Portfolio Rebalancer | Risk Parity | Deleverage Shield</title>
     <meta name="description" content="AQMath is a non-custodial crypto portfolio rebalancer with Deleverage Shield crash protection. Track holdings, distribute DCA, optimize with Risk Parity math, and auto-de-risk during market crashes. Private. No wallet, no account.">
-    <meta name="keywords" content="crypto portfolio, risk parity, DCA, dollar cost averaging, portfolio rebalancer, quantitative finance, non-custodial, privacy, DeFi, Bitcoin, Ethereum, deleverage shield, crash protection, emergency brake, drawdown protection, stablecoin hedge">
+    <meta name="keywords" content="crypto portfolio, risk parity, DCA, dollar cost averaging, portfolio rebalancer, quantitative finance, non-custodial, privacy, DeFi, Bitcoin, Ethereum, deleverage modulator, drawdown protection, downside volatility, crash protection, stablecoin hedge">
     <meta name="author" content="AQMath">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://aqmath.xyz/">
@@ -31,7 +31,7 @@
     <meta name="twitter:description" content="Risk Parity math + Deleverage Shield crash protection. Auto-de-risk during market crashes. Non-custodial, private, no data collected.">
     <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png">
     <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer with Deleverage Shield">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"AQMath","url":"https://aqmath.xyz/","description":"Quantitative crypto portfolio rebalancer with Deleverage Shield crash protection. Risk Parity mathematics, DCA optimization, and automatic de-risking during market crashes.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":[{"@type":"Offer","name":"Beta Access","price":"0","priceCurrency":"USD","description":"Limited slots, audit required"},{"@type":"Offer","name":"Black Annual Access","priceCurrency":"USD","description":"Exclusive annual subscription"}],"featureList":["Risk Parity Optimization","Deleverage Shield Crash Protection","DCA Distribution","Non-Custodial Privacy","Emergency Brake Auto De-Risk"]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"AQMath","url":"https://aqmath.xyz/","description":"Quantitative crypto portfolio rebalancer with Deleverage Modulator drawdown protection. Risk Parity mathematics, DCA optimization, and automatic de-risking during market crashes.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":[{"@type":"Offer","name":"Beta Access","price":"0","priceCurrency":"USD","description":"Limited slots, audit required"},{"@type":"Offer","name":"Black Annual Access","priceCurrency":"USD","description":"Exclusive annual subscription"}],"featureList":["Risk Parity Optimization","Deleverage Modulator Drawdown Protection","DCA Distribution","Non-Custodial Privacy","Continuous Auto De-Risk"]}</script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="styles.css">
@@ -108,7 +108,7 @@
         <p data-i18n-html="hero.description">AQMath processes complex covariance matrices on our secure backend engine. Your holdings are processed in-memory and never stored on our servers &mdash; only your browser&rsquo;s localStorage keeps your data.</p>
         <div class="lp-hero-shield">
             <span class="lp-shield-icon">&#9888;</span>
-            <span class="lp-shield-text">Emergency Brake: Instant de-risk to stablecoins when crash detected</span>
+            <span class="lp-shield-text">Continuous de-risk: exposure scales down as drawdown and downside volatility rise</span>
         </div>
         <div class="lp-cta-group">
             <a class="lp-btn-primary" href="#/app" data-i18n="hero.cta">--try-free-no-registration</a>
@@ -151,26 +151,26 @@
             [
                 'computing risk parity weights...',
                 'covariance matrix computed (ADA\u00d7BTC\u00d7XRP) \u2014 KKT projection running...',
-                'scanning shield conditions...',
+                'computing regime signal (drawdown + downside vol)...',
                 'risk parity weights locked \u2014 exposure: 87.3% risky / 12.7% USDC'
             ],
             [
-                'deleverage shield: scanning 180d volatility...',
-                '\u26a0 SHIELD ACTIVE \u2014 drawdown 34.2% detected, 3-stage sell-down started',
-                'rerouting DCA to USDC reserve...',
-                'capital preserved \u2014 shield active 34% of backtest (1067/3184 days)'
+                'deleverage modulator: tracking drawdown + downside volatility...',
+                '\u26a0 DE-RISK \u2014 drawdown + downside vol rising, exposure scaled down fast',
+                'rerouting DCA to USDC reserve while defensive...',
+                'capital preserved \u2014 ~31% avg exposure across 3,184-day backtest'
             ],
             [
-                'tranche recovery: stage 2/3 \u2014 deploying from USDC reserve...',
-                '$327.50 re-entered market via tranche (50% \u2192 100% recovery)',
-                '3-stage tranche DCA: 25% \u2192 50% \u2192 100% calibrated deployment',
-                '$380 total tranche-deployed across 106 DCA events'
+                'regime clearing: drawdown/vol easing \u2014 re-entering slowly (6%/bar)...',
+                'parked USDC redeployed to tokens as exposure recovers \u2265 50%',
+                'continuous exposure control \u2014 no timers, no correlation gate',
+                'exposure fully data-driven across 106 DCA events'
             ],
             [
-                'backtest validation: 3,184 days (ADA/BTC/XRP) \u2014 8.7 years...',
-                'DL: $8,431 (627%) vs B&H: $3,854 (232%) \u2014 2.2\u00d7 the return',
-                'risk-adjusted: Sharpe 1.62 / Calmar 0.62 vs B&H 1.12 / 0.18',
-                'max drawdown 41.3% vs 82.0% \u2014 50% less pain, 2.2\u00d7 the gain'
+                'backtest validation: 3,184 days (ADA/BNB/ETH/XRP/XLM) \u2014 8.7 years...',
+                'scored on risk-adjusted return, not on beating buy & hold',
+                'Calmar 1.43 vs B&H 1.07 \u2014 Sharpe 0.98 vs B&H 0.77',
+                'max drawdown 35.8% vs 83.8% \u2014 less than half the pain'
             ],
             [
                 'privacy audit: processing portfolio in-memory...',
@@ -284,8 +284,8 @@
                             <text x="22" y="26" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="700" opacity="0.8">&#9888;</text>
                         </svg>
                         <div class="mc-head"><span class="mc-num">04</span></div>
-                        <div class="metric-label" data-i18n="math.shieldLabel">--deleverage-shield</div>
-                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Emergency Brake: on crash detection, exposure drops via 3-stage sell-down to <strong>0%</strong> (full stablecoins) &mdash; DCA rerouted to USDC. Capital re-enters via 3-stage tranche recovery.</div>
+                        <div class="metric-label" data-i18n="math.shieldLabel">--deleverage-modulator</div>
+                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Continuous regime modulator: exposure scales down as drawdown and downside volatility rise &mdash; no indicators, no timers, no correlation gate. It de-risks fast and re-enters slowly, with <strong>no hard floor</strong>; parked DCA cash redeploys once exposure recovers above 50%.</div>
                         <a href="#/backtest" class="doc-formula-link" data-i18n="math.shieldLink">[ see 8.7-year backtest ]</a>
                     </div>
                 </div>
@@ -325,7 +325,7 @@
                     <div class="lp-plan-subtitle" data-i18n="plans.betaSubtitle">Limited slots. Audit required. Full access.</div>
                     <ul class="lp-feature-list">
                         <li data-i18n="plans.betaF1">Full Risk Parity optimization (same as Black)</li>
-                        <li data-i18n="plans.betaF2">Deleverage Shield with Emergency Brake protection</li>
+                        <li data-i18n="plans.betaF2">Deleverage Modulator with continuous drawdown protection</li>
                         <li data-i18n="plans.betaF3">Unlimited tokens and portfolio optimization</li>
                         <li data-i18n="plans.betaF4">Automatic 180-day historical data pipeline</li>
                         <li data-i18n="plans.betaF5">DCA distribution with full safety pipeline</li>
@@ -341,7 +341,7 @@
                     <div class="lp-plan-subtitle" data-i18n-html="plans.proSubtitle">Exclusive annual access. Pricing disclosed upon successful screening. USDC &amp; EURC only.</div>
                     <ul class="lp-feature-list">
                         <li data-i18n-html="plans.blackF1">Risk Parity optimization with full Covariance &amp; Variance Matrix</li>
-                        <li data-i18n-html="plans.blackF2">Deleverage Shield with Emergency Brake crash protection</li>
+                        <li data-i18n-html="plans.blackF2">Deleverage Modulator with continuous drawdown protection</li>
                         <li data-i18n-html="plans.blackF3">Dynamic volatility-based allocation caps</li>
                         <li data-i18n-html="plans.blackF4">Automatic 180-day historical data pipeline</li>
                         <li data-i18n-html="plans.blackF5">Unlimited token support and portfolio optimization</li>
@@ -391,12 +391,12 @@
 
         <section class="lp-section lp-shield">
             <div class="lp-card lp-shield-card">
-                <div class="card-title" style="color:var(--blue);" data-i18n-html="shield.label">--deleverage-shield &middot; v11.4</div>
-                <h3 data-i18n-html="shield.title">Correlation Shield &mdash; recalibrated on real data</h3>
-                <p class="lp-what-lead" data-i18n-html="shield.lead">v11.4 trips on rising cross-correlation, not a single price tick &mdash; then eases exposure to a defensive floor and re-deploys in tranches as diversification returns.</p>
+                <div class="card-title" style="color:var(--blue);" data-i18n-html="shield.label">--deleverage-modulator &middot; v12.0</div>
+                <h3 data-i18n-html="shield.title">Deleverage Modulator &mdash; validated on real data</h3>
+                <p class="lp-what-lead" data-i18n-html="shield.lead">v12.0 scales exposure continuously off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It de-risks fast and re-enters slowly.</p>
                 <div class="lp-shield-grid">
                     <div class="lp-shield-viz">
-                        <svg viewBox="0 0 480 250" role="img" aria-label="Max drawdown: Buy and Hold minus 82.6 percent versus Deleverage Shield minus 74.8 percent" preserveAspectRatio="xMidYMid meet">
+                        <svg viewBox="0 0 480 250" role="img" aria-label="Max drawdown: Buy and Hold minus 83.8 percent versus Deleverage Modulator minus 35.8 percent" preserveAspectRatio="xMidYMid meet">
                             <!-- gridlines -->
                             <line x1="40" y1="40" x2="460" y2="40" class="lp-sh-grid dash"/>
                             <line x1="40" y1="125" x2="460" y2="125" class="lp-sh-grid"/>
@@ -405,29 +405,29 @@
                             <text x="36" y="128" class="lp-sh-axis">-50%</text>
                             <text x="36" y="213" class="lp-sh-axis">-100%</text>
                             <!-- Buy &amp; Hold drawdown (deeper) -->
-                            <polygon class="lp-sh-fill red" points="40,40 90,91 140,142 180,190 220,159 300,108 380,71 460,49 460,40"/>
-                            <polyline class="lp-sh-line red" points="40,40 90,91 140,142 180,190 220,159 300,108 380,71 460,49"/>
-                            <!-- Deleverage Shield drawdown (shallower) -->
-                            <polygon class="lp-sh-fill cyan" points="40,40 90,77 140,117 180,145 220,122 300,88 380,60 460,45 460,40"/>
-                            <polyline class="lp-sh-line cyan" points="40,40 90,77 140,117 180,145 220,122 300,88 380,60 460,45"/>
+                            <polygon class="lp-sh-fill red" points="40,40 90,96 140,150 180,183 220,150 300,104 380,70 460,52 460,40"/>
+                            <polyline class="lp-sh-line red" points="40,40 90,96 140,150 180,183 220,150 300,104 380,70 460,52"/>
+                            <!-- Deleverage Modulator drawdown (shallower) -->
+                            <polygon class="lp-sh-fill cyan" points="40,40 90,66 140,92 180,101 220,90 300,68 380,54 460,47 460,40"/>
+                            <polyline class="lp-sh-line cyan" points="40,40 90,66 140,92 180,101 220,90 300,68 380,54 460,47"/>
                             <!-- trough callouts -->
-                            <text x="180" y="205" class="lp-sh-cap red">-82.6% B&amp;H</text>
-                            <!-- Deleverage Shield trough callout -->
-                            <text x="186" y="137" class="lp-sh-cap cyan">-74.8% shield</text>
+                            <text x="168" y="199" class="lp-sh-cap red">-83.8% B&amp;H</text>
+                            <!-- Deleverage Modulator trough callout -->
+                            <text x="186" y="118" class="lp-sh-cap cyan">-35.8% modulator</text>
                             <!-- legend -->
                             <rect x="120" y="232" width="10" height="10" rx="2" class="lp-sh-fill red"/>
                             <text x="136" y="241" class="lp-sh-leg">Buy &amp; Hold</text>
                             <rect x="250" y="232" width="10" height="10" rx="2" class="lp-sh-fill cyan"/>
-                            <text x="266" y="241" class="lp-sh-leg">Deleverage Shield</text>
+                            <text x="266" y="241" class="lp-sh-leg">Deleverage Modulator</text>
                         </svg>
                     </div>
                     <div class="lp-shield-info">
                         <div class="lp-shield-stats">
-                            <div class="lp-shield-stat"><span class="v">&minus;7.8pp</span><span class="l" data-i18n="shield.s1l">max drawdown cut</span></div>
-                            <div class="lp-shield-stat"><span class="v">1.39</span><span class="l" data-i18n="shield.s2l">Calmar (was 1.08)</span></div>
-                            <div class="lp-shield-stat"><span class="v">0</span><span class="l" data-i18n-html="shield.s3l">timers &middot; corr-only</span></div>
+                            <div class="lp-shield-stat"><span class="v">&minus;48.0pp</span><span class="l" data-i18n="shield.s1l">max drawdown cut</span></div>
+                            <div class="lp-shield-stat"><span class="v">1.43</span><span class="l" data-i18n-html="shield.s2l">Calmar (B&amp;H 1.07)</span></div>
+                            <div class="lp-shield-stat"><span class="v">0.98</span><span class="l" data-i18n-html="shield.s3l">Sharpe (B&amp;H 0.77)</span></div>
                         </div>
-                        <p data-i18n-html="shield.body">Across an 8.7-year, 5-token backtest (ADA/BNB/BTC/ETH/XRP) the recalibrated shield cut peak drawdown from <strong>82.6% to 74.8%</strong> and lifted Calmar from <strong>1.08 to 1.39</strong>, redeploying capital in tranches as correlation eased. Its gates are calibrated to the realized correlation range &mdash; a full-sample recalibration, not a walk-forward out-of-sample study.</p>
+                        <p data-i18n-html="shield.body">Across an 8.7-year, 5-token backtest (ADA/BNB/ETH/XRP/XLM) the modulator held peak drawdown to <strong>35.8%</strong> versus <strong>83.8%</strong> for Buy &amp; Hold, scoring <strong>Calmar 1.43</strong> and <strong>Sharpe 0.98</strong> (vs 1.07 / 0.77) at ~31% average exposure. It is scored on risk-adjusted return &mdash; Calmar and Sharpe &mdash; not on beating Buy &amp; Hold.</p>
                         <a class="lp-btn-secondary" href="#/backtest" data-i18n="shield.cta">--run-the-backtest</a>
                     </div>
                 </div>
@@ -1028,7 +1028,7 @@
     <div class="hdr-right">
         <div class="hstat">
             <div class="hstat-l">Engine</div>
-            <div class="hstat-v">v11.3</div>
+            <div class="hstat-v">v12.0</div>
         </div>
     </div>
 </header>
@@ -1050,50 +1050,44 @@
         </div>
         <div class="tc-body">
             <div class="bt-explain bt-explain-intro" data-i18n-html="bt.intro">
-                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage state machine <strong>(v11.4 &mdash; recalibrated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. <strong>Buy &amp; Hold</strong> buys tokens unconditionally. <strong>Deleverage</strong> trips its <strong>correlation shield</strong> when tokens crash together (deep drawdown + high volatility + rising cross-correlation), easing exposure down to a defensive floor. It then <strong>re-deploys in tranches as correlation falls</strong> and diversification returns: T1 (25%), T2 (50%), Final (100% on shield exit).
+                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage modulator <strong>(v12.0 &mdash; validated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule. <strong>Buy &amp; Hold</strong> buys tokens unconditionally and stays fully exposed. <strong>Deleverage</strong> scales exposure <strong>continuously</strong> off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It <strong>de-risks fast (closes 50% of the gap per bar) and re-enters slowly (6% per bar)</strong>, with no hard floor, redeploying parked DCA cash once exposure recovers above 50%. It is scored on <strong>Calmar and Sharpe</strong>, not on beating Buy &amp; Hold.
             </div>
-            <!-- v11.3 correlation-shield state flow -->
-            <svg class="bt-flow-svg" viewBox="0 0 900 148" role="img" aria-label="Deleverage v11.4 correlation shield state flow" preserveAspectRatio="xMidYMid meet">
+            <!-- v12.0 continuous DD + downside-vol modulator flow -->
+            <svg class="bt-flow-svg" viewBox="0 0 900 148" role="img" aria-label="Deleverage v12.0 continuous drawdown and downside-volatility modulator flow" preserveAspectRatio="xMidYMid meet">
                 <defs>
                     <marker id="btArrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#f87171"/></marker>
                     <marker id="btArrowGrn" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/></marker>
                 </defs>
                 <!-- arrows -->
-                <line x1="138" y1="84" x2="192" y2="84" stroke="#f87171" stroke-width="1.5" marker-end="url(#btArrowRed)"/>
-                <line x1="325" y1="84" x2="379" y2="84" stroke="#34d399" stroke-width="1.5" marker-end="url(#btArrowGrn)"/>
-                <line x1="512" y1="84" x2="566" y2="84" stroke="#34d399" stroke-width="1.5" marker-end="url(#btArrowGrn)"/>
-                <line x1="699" y1="84" x2="753" y2="84" stroke="#34d399" stroke-width="1.5" marker-end="url(#btArrowGrn)"/>
+                <line x1="196" y1="84" x2="232" y2="84" stroke="#f87171" stroke-width="1.5" marker-end="url(#btArrowRed)"/>
+                <line x1="426" y1="84" x2="462" y2="84" stroke="#8b93a7" stroke-width="1.5" marker-end="url(#btArrowGrn)"/>
+                <line x1="656" y1="84" x2="692" y2="84" stroke="#34d399" stroke-width="1.5" marker-end="url(#btArrowGrn)"/>
                 <!-- arrow captions -->
-                <text x="165" y="120" class="bt-flow-cap red">crash · corr ↑</text>
-                <text x="450" y="120" class="bt-flow-cap grn">correlation falls &#8594; diversification returns</text>
+                <text x="214" y="120" class="bt-flow-cap red">weighted 0.7 / 0.3</text>
+                <text x="560" y="120" class="bt-flow-cap grn">exit fast · re-enter slow</text>
                 <!-- nodes -->
                 <g>
-                    <rect x="8" y="60" width="130" height="48" rx="6" class="bt-flow-node cyan"/>
-                    <text x="73" y="82" class="bt-flow-t cyan">NORMAL</text>
-                    <text x="73" y="98" class="bt-flow-s">full risk budget</text>
+                    <rect x="8" y="60" width="186" height="48" rx="6" class="bt-flow-node cyan"/>
+                    <text x="101" y="82" class="bt-flow-t cyan">REGIME SIGNAL</text>
+                    <text x="101" y="98" class="bt-flow-s">drawdown ↑ + downside vol ↑</text>
                 </g>
                 <g>
-                    <rect x="195" y="60" width="130" height="48" rx="6" class="bt-flow-node red"/>
-                    <text x="260" y="82" class="bt-flow-t red">SHIELD</text>
-                    <text x="260" y="98" class="bt-flow-s">floor · to cash</text>
+                    <rect x="238" y="60" width="186" height="48" rx="6" class="bt-flow-node red"/>
+                    <text x="331" y="82" class="bt-flow-t red">base_risk</text>
+                    <text x="331" y="98" class="bt-flow-s">0.7·dd_sig + 0.3·vol_sig</text>
                 </g>
                 <g>
-                    <rect x="382" y="60" width="130" height="48" rx="6" class="bt-flow-node purple"/>
-                    <text x="447" y="82" class="bt-flow-t purple">T1 · 25%</text>
-                    <text x="447" y="98" class="bt-flow-s">corr ≤ 0.33</text>
+                    <rect x="468" y="60" width="186" height="48" rx="6" class="bt-flow-node purple"/>
+                    <text x="561" y="82" class="bt-flow-t purple">target = 1 − risk</text>
+                    <text x="561" y="98" class="bt-flow-s">continuous · no floor</text>
                 </g>
                 <g>
-                    <rect x="569" y="60" width="130" height="48" rx="6" class="bt-flow-node purple"/>
-                    <text x="634" y="82" class="bt-flow-t purple">T2 · 50%</text>
-                    <text x="634" y="98" class="bt-flow-s">corr ≤ 0.26</text>
+                    <rect x="698" y="60" width="194" height="48" rx="6" class="bt-flow-node green"/>
+                    <text x="795" y="82" class="bt-flow-t green">EXPOSURE</text>
+                    <text x="795" y="98" class="bt-flow-s">exit 50%/bar · enter 6%/bar</text>
                 </g>
-                <g>
-                    <rect x="756" y="60" width="136" height="48" rx="6" class="bt-flow-node green"/>
-                    <text x="824" y="82" class="bt-flow-t green">FULL EXIT</text>
-                    <text x="824" y="98" class="bt-flow-s">corr ≤ 0.18</text>
-                </g>
-                <text x="450" y="22" class="bt-flow-title">correlation-shield state machine · v11.4</text>
-                <text x="450" y="40" class="bt-flow-sub">exposure eases continuously (2-day) &mdash; no single-tick jump to the floor</text>
+                <text x="450" y="22" class="bt-flow-title">continuous DD + downside-vol modulator · v12.0</text>
+                <text x="450" y="40" class="bt-flow-sub">no indicators · no timers · no correlation gate</text>
             </svg>
         </div>
     </div>
@@ -1191,17 +1185,17 @@
         </div>
 
         <div class="tc bt-card">
-            <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--correlation</span></div>
+            <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--regime-signal</span></div>
             <div class="tc-body"><div class="bt-chart-wrap"><canvas id="btCorrChart"></canvas></div></div>
         </div>
 
         <div class="tc bt-card">
             <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--event-log</span></div>
             <div class="tc-body" style="padding:0;">
-                <div class="bt-explain bt-explain-sm" style="margin:12px 16px 0;"><span style="color:var(--red);font-weight:700">&#x26A0; BRAKE</span> (red) = Emergency Brake &mdash; 3-stage sell-down to 0% | DCA (cyan) = periodic contribution | T1 (purple) = Tranche 1 | T2 (pink) = Tranche 2 | <span style="color:var(--green);font-weight:600">FINAL</span> (green) = shield exit + 100% deploy | BLOCKED (orange) = divergence guard</div>
+                <div class="bt-explain bt-explain-sm" style="margin:12px 16px 0;"><span style="color:var(--cyan);font-weight:700">DCA</span> (cyan) = periodic contribution &mdash; buys tokens when risk-on, parks to USDC when defensive (exposure &lt; 50%) | <span style="color:var(--green);font-weight:600">REDEPLOY</span> (green) = parked cash returns to tokens once exposure recovers &ge; 50%.</div>
                 <div style="max-height:400px;overflow-y:auto;padding:0 16px 16px;">
                     <table class="bt-events-table" id="btEventsTable">
-                        <thead><tr><th>Date</th><th>Day</th><th>Event</th><th>Global DD</th><th>Exit DD</th><th>Gap</th><th>DS Vol</th><th>Exposure</th><th>USDC</th><th>Detail</th></tr></thead>
+                        <thead><tr><th>Date</th><th>Day</th><th>Event</th><th>Drawdown</th><th>DS Vol</th><th>Exposure</th><th>USDC</th><th>Detail</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
@@ -1217,10 +1211,12 @@
             <div class="bt-wf-controls">
                 <div class="bt-setting"><label>Sweep Parameter</label>
                     <select id="btWfSweep" onchange="btRunWFGrid()">
-                        <option value="dd_threshold">DD Threshold</option>
-                        <option value="ds_vol_high">DS Vol High</option>
-                        <option value="exit_dd_divergence">Divergence Guard</option>
-                        <option value="exit_window">Exit Window</option>
+                        <option value="dd_ref">DD Reference</option>
+                        <option value="vol_low">Vol Low</option>
+                        <option value="vol_high">Vol High</option>
+                        <option value="w_dd">DD Weight</option>
+                        <option value="exit_speed">Exit Speed</option>
+                        <option value="entry_speed">Entry Speed</option>
                     </select>
                 </div>
                 <div class="bt-setting"><label>Metric</label>
@@ -1242,7 +1238,7 @@
     <div class="logo-box-mini">AQ</div>
     <span>AQMath 2026</span>
     <span style="margin-left:12px;color:var(--dim);">|</span>
-    <span>Backtesting Engine v11.3</span>
+    <span>Backtesting Engine v12.0</span>
 </footer>
 
 </div><!-- /backtestView -->
@@ -1690,65 +1686,65 @@
 
         <!-- DELEVERAGE SHIELD -->
         <div class="doc-block" id="doc-shield-block">
-            <h3 id="doc-shield" data-i18n="doc.s8.shieldTitle">8.4 Deleverage Shield</h3>
-            <p data-i18n-html="doc.s8.shieldP1">The Deleverage Shield is a <strong>crash-protection mechanism</strong> that activates when the portfolio experiences severe drawdowns. Unlike simple "pause DCA" strategies that only stop new purchases, the shield performs <strong>true portfolio de-risking</strong> &mdash; it scales down ALL existing positions proportionally, effectively moving the majority of capital into stablecoins (USDC) in a single operation.</p>
+            <h3 id="doc-shield" data-i18n="doc.s8.shieldTitle">8.4 Deleverage Modulator</h3>
+            <p data-i18n-html="doc.s8.shieldP1">The Deleverage Modulator is a <strong>continuous de-risking mechanism</strong> that scales exposure down as portfolio <strong>drawdown</strong> and <strong>downside volatility</strong> rise &mdash; no indicators, no timers, no correlation gate. Unlike simple "pause DCA" strategies that only stop new purchases, the modulator performs <strong>true portfolio de-risking</strong> &mdash; it scales down ALL existing positions proportionally, moving capital into stablecoins (USDC) as the regime deteriorates.</p>
 
             <div class="doc-callout red">
-                <div class="doc-ct" data-i18n="doc.s8.shieldCallout">&#9888; TRUE SHIELD vs PAUSE BUTTON</div>
-                <p data-i18n-html="doc.s8.shieldCalloutP">When the shield triggers, it does <strong>two things simultaneously</strong>: (1) reduces all existing token positions by scaling their weights down proportionally &mdash; this is the actual "selling" of exposure; (2) reroutes all new DCA contributions into USDC until conditions improve. A strategy that only pauses DCA while letting existing positions ride through a -80% crash is <strong>not a shield</strong> &mdash; it&rsquo;s just a pause button.</p>
+                <div class="doc-ct" data-i18n="doc.s8.shieldCallout">&#9888; TRUE DE-RISK vs PAUSE BUTTON</div>
+                <p data-i18n-html="doc.s8.shieldCalloutP">As the regime deteriorates, the modulator does <strong>two things simultaneously</strong>: (1) reduces all existing token positions by scaling their weights down proportionally &mdash; this is the actual "selling" of exposure; (2) reroutes all new DCA contributions into USDC while defensive. A strategy that only pauses DCA while letting existing positions ride through a -80% crash is <strong>not a shield</strong> &mdash; it&rsquo;s just a pause button.</p>
             </div>
 
             <h4 data-i18n="doc.s8.shieldHow">How It Works</h4>
             <ul>
-                <li data-i18n-html="doc.s8.shield1"><strong>Continuous monitoring</strong> &mdash; the engine tracks portfolio drawdown against adaptive thresholds that account for both recent volatility and long-term peak staleness.</li>
-                <li data-i18n-html="doc.s8.shield2"><strong>3-stage sell-down on trigger</strong> &mdash; when crash conditions are detected, exposure drops gradually via 3 tranches: 50% &rarr; 25% &rarr; 0% (full stablecoins). This prevents whipsaw from hard step functions while still protecting capital fast.</li>
-                <li data-i18n-html="doc.s8.shield3"><strong>Capital preservation</strong> &mdash; during shield-active periods, the portfolio holds ~94% in cash-equivalent (USDC), absorbing only a fraction of ongoing crash damage.</li>
-                <li data-i18n-html="doc.s8.shield4"><strong>Tranche recovery</strong> &mdash; as conditions improve, preserved capital is redeployed in stages (25% &rarr; 50% &rarr; 100%), preventing premature full exposure to volatile recoveries.</li>
+                <li data-i18n-html="doc.s8.shield1"><strong>Two-signal regime read</strong> &mdash; the engine tracks only rising <strong>drawdown</strong> and rising <strong>downside volatility</strong> over a 20-day window. No moving averages, no timers, no correlation gate.</li>
+                <li data-i18n-html="doc.s8.shield2"><strong>Continuous scaling</strong> &mdash; target exposure = 1 &minus; (0.7&middot;dd_sig + 0.3&middot;vol_sig), a smooth 0&ndash;100% dial rather than discrete tranches. There is <strong>no hard floor</strong>: in a deep, volatile crash exposure can approach zero.</li>
+                <li data-i18n-html="doc.s8.shield3"><strong>Capital preservation</strong> &mdash; while defensive the portfolio holds the majority in cash-equivalent (USDC), absorbing only a fraction of ongoing crash damage. Average exposure across the 8.7-year backtest was <strong>~31%</strong>.</li>
+                <li data-i18n-html="doc.s8.shield4"><strong>Exit fast, re-enter slow</strong> &mdash; exposure drops at up to 50% of the gap per bar when the regime worsens, but re-enters at only 6% per bar as it heals (hysteresis). Parked DCA cash redeploys once exposure recovers above 50%.</li>
             </ul>
 
             <div class="doc-diagram">
-                <div class="doc-fl">Deleverage Shield Lifecycle</div>
+                <div class="doc-fl">Deleverage Modulator Lifecycle</div>
                 <svg viewBox="0 0 720 180" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;">
                     <!-- Normal -->
                     <rect x="10" y="30" width="130" height="100" rx="6" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="1" opacity="0.6"/>
                     <text x="75" y="55" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">NORMAL</text>
-                    <text x="75" y="72" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Full exposure</text>
+                    <text x="75" y="72" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">High exposure</text>
                     <text x="75" y="84" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">DCA active</text>
-                    <text x="75" y="100" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">exposure: 87%</text>
-                    <text x="75" y="112" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="6">risk budget: 100%</text>
+                    <text x="75" y="100" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">low dd + vol</text>
+                    <text x="75" y="112" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="6">risk budget: 85%</text>
                     <!-- Arrow 1 -->
                     <line x1="145" y1="80" x2="180" y2="80" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
                     <polygon points="178,76 178,84 184,80" fill="#64748b" opacity="0.5"/>
-                    <text x="162" y="68" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">CRASH</text>
-                    <text x="162" y="96" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="6">entry triggers</text>
+                    <text x="162" y="68" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">dd&#x2191; vol&#x2191;</text>
+                    <text x="162" y="96" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="6">exit fast</text>
                     <!-- Shield Active -->
                     <rect x="185" y="30" width="130" height="100" rx="6" fill="rgba(248,113,113,0.06)" stroke="#f87171" stroke-width="1" opacity="0.6"/>
-                    <text x="250" y="52" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">SHIELD ON</text>
+                    <text x="250" y="52" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">DE-RISK</text>
                     <text x="250" y="68" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Positions scaled down</text>
                     <text x="250" y="80" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">DCA &#x2192; USDC</text>
-                    <text x="250" y="96" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">1067 days (34%)</text>
-                    <text x="250" y="108" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="6">shield active</text>
+                    <text x="250" y="96" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">50% of gap / bar</text>
+                    <text x="250" y="108" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="6">no hard floor</text>
                     <!-- Arrow 2 -->
                     <line x1="320" y1="80" x2="355" y2="80" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
                     <polygon points="353,76 353,84 359,80" fill="#64748b" opacity="0.5"/>
                     <text x="337" y="68" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">HEAL</text>
-                    <text x="337" y="96" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="6">exit recovery</text>
-                    <!-- Tranche 1 -->
+                    <text x="337" y="96" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="6">regime eases</text>
+                    <!-- Re-enter slow -->
                     <rect x="360" y="30" width="100" height="100" rx="6" fill="rgba(56,189,248,0.06)" stroke="#38bdf8" stroke-width="1" opacity="0.6"/>
-                    <text x="410" y="52" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">TRANCHE 1</text>
-                    <text x="410" y="68" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">25% deployed</text>
-                    <text x="410" y="80" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Cautious entry</text>
-                    <text x="410" y="96" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">$380 deployed</text>
-                    <text x="410" y="108" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="6">stage 1 of 3</text>
+                    <text x="410" y="52" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">RE-ENTER</text>
+                    <text x="410" y="68" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">6% of gap / bar</text>
+                    <text x="410" y="80" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Slow ramp-up</text>
+                    <text x="410" y="96" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">hysteresis</text>
+                    <text x="410" y="108" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="6">no whipsaw</text>
                     <!-- Arrow 3 -->
                     <line x1="465" y1="80" x2="490" y2="80" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
                     <polygon points="488,76 488,84 494,80" fill="#64748b" opacity="0.5"/>
-                    <!-- Tranche 2 -->
+                    <!-- Redeploy -->
                     <rect x="495" y="30" width="100" height="100" rx="6" fill="rgba(168,85,247,0.06)" stroke="#a855f7" stroke-width="1" opacity="0.6"/>
-                    <text x="545" y="52" text-anchor="middle" fill="#a855f7" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">TRANCHE 2</text>
-                    <text x="545" y="68" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">50% deployed</text>
+                    <text x="545" y="52" text-anchor="middle" fill="#a855f7" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">REDEPLOY</text>
+                    <text x="545" y="68" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Parked USDC back in</text>
                     <text x="545" y="80" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Building position</text>
-                    <text x="545" y="96" text-anchor="middle" fill="#a855f7" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">$380 total</text>
+                    <text x="545" y="96" text-anchor="middle" fill="#a855f7" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">exposure &#x2265; 50%</text>
                     <text x="545" y="108" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="6">106 DCA events</text>
                     <!-- Arrow 4 -->
                     <line x1="600" y1="80" x2="625" y2="80" stroke="#64748b" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
@@ -1758,14 +1754,14 @@
                     <text x="670" y="52" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">FULL</text>
                     <text x="670" y="68" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">100% deployed</text>
                     <text x="670" y="80" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="7">Normal ops</text>
-                    <text x="670" y="96" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">$8,431</text>
-                    <text x="670" y="108" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="6">final value</text>
+                    <text x="670" y="96" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">risk on</text>
+                    <text x="670" y="108" text-anchor="middle" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="6">low dd + vol</text>
                 </svg>
             </div>
 
-            <!-- EMERGENCY BRAKE TIMELINE -->
+            <!-- MODULATOR EXPOSURE/USDC TIMELINE -->
             <div class="doc-diagram">
-                <div class="doc-fl">Emergency Brake: Exposure &amp; USDC Timeline</div>
+                <div class="doc-fl">Deleverage Modulator: Exposure &amp; USDC Timeline</div>
                 <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;">
                     <!-- Grid lines -->
                     <line x1="60" y1="30" x2="60" y2="240" stroke="#1c2128" stroke-width="0.5"/>
@@ -1773,7 +1769,7 @@
                     <!-- Y-axis labels: Exposure -->
                     <text x="8" y="44" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">100%</text>
                     <text x="8" y="114" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">50%</text>
-                    <text x="8" y="184" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">floor</text>
+                    <text x="8" y="184" fill="#64748b" font-family="'JetBrains Mono',monospace" font-size="7">~0%</text>
                     <text x="30" y="20" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="600">EXPOSURE</text>
                     <!-- Y-axis labels: USDC -->
                     <text x="30" y="200" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="600">USDC</text>
@@ -1781,7 +1777,7 @@
                     <line x1="60" y1="40" x2="700" y2="40" stroke="#34d399" stroke-width="0.3" opacity="0.3" stroke-dasharray="2,4"/>
                     <text x="700" y="38" text-anchor="end" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="6" opacity="0.5">risk budget</text>
                     <line x1="60" y1="180" x2="700" y2="180" stroke="#f87171" stroke-width="0.3" opacity="0.3" stroke-dasharray="2,4"/>
-                    <text x="700" y="178" text-anchor="end" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="6" opacity="0.5">~0% floor (full stablecoins)</text>
+                    <text x="700" y="178" text-anchor="end" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="6" opacity="0.5">~0% (no hard floor)</text>
                     <!-- Normal operation (flat exposure ~87%) -->
                     <polyline fill="none" stroke="#06b6d4" stroke-width="2" opacity="0.9"
                         points="60,52 120,52 180,52 220,52"/>
@@ -1790,15 +1786,15 @@
                         points="220,52 225,180 260,180"/>
                     <!-- Brake label -->
                     <line x1="222" y1="30" x2="222" y2="240" stroke="#f87171" stroke-width="0.5" opacity="0.3" stroke-dasharray="3,3"/>
-                    <text x="222" y="26" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">&#x26A0; BRAKE</text>
-                    <!-- Tranche recovery stage 1 (25%) -->
+                    <text x="222" y="26" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">DE-RISK</text>
+                    <!-- Re-enter stage 1 -->
                     <polyline fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.8"
                         points="260,180 265,148 310,148"/>
-                    <text x="287" y="144" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="6">T1: 25%</text>
-                    <!-- Tranche stage 2 (50%) -->
+                    <text x="287" y="144" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="6">re-enter</text>
+                    <!-- Redeploy stage 2 -->
                     <polyline fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.8"
                         points="310,148 315,110 370,110"/>
-                    <text x="342" y="106" text-anchor="middle" fill="#a855f7" font-family="'JetBrains Mono',monospace" font-size="6">T2: 50%</text>
+                    <text x="342" y="106" text-anchor="middle" fill="#a855f7" font-family="'JetBrains Mono',monospace" font-size="6">redeploy</text>
                     <!-- Full recovery to normal -->
                     <polyline fill="none" stroke="#34d399" stroke-width="1.5" opacity="0.8"
                         points="370,110 375,52 420,52"/>
@@ -1810,8 +1806,8 @@
                     <polyline fill="none" stroke="#f87171" stroke-width="2" opacity="0.9"
                         points="480,52 485,180 530,180"/>
                     <line x1="482" y1="30" x2="482" y2="240" stroke="#f87171" stroke-width="0.5" opacity="0.3" stroke-dasharray="3,3"/>
-                    <text x="482" y="26" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">&#x26A0; BRAKE</text>
-                    <!-- Tranche recovery again -->
+                    <text x="482" y="26" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">DE-RISK</text>
+                    <!-- Re-enter again -->
                     <polyline fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.8"
                         points="530,180 535,148 565,148"/>
                     <polyline fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.8"
@@ -1827,7 +1823,7 @@
                     <text x="242" y="228" text-anchor="middle" fill="#f87171" font-family="'JetBrains Mono',monospace" font-size="6" font-weight="600">USDC &#x2191;</text>
                     <!-- Recovery: USDC drains -->
                     <rect x="265" y="222" width="110" height="18" rx="2" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="0.5" opacity="0.4"/>
-                    <text x="320" y="234" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="6" opacity="0.6">tranche deploying &#x2192; USDC drains</text>
+                    <text x="320" y="234" text-anchor="middle" fill="#38bdf8" font-family="'JetBrains Mono',monospace" font-size="6" opacity="0.6">re-entering &#x2192; USDC drains</text>
                     <!-- Normal again -->
                     <rect x="375" y="228" width="105" height="12" rx="2" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.4"/>
                     <!-- Second brake USDC spike -->
@@ -1846,11 +1842,11 @@
                     <line x1="80" y1="272" x2="100" y2="272" stroke="#06b6d4" stroke-width="2"/>
                     <text x="104" y="275" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">normal exposure</text>
                     <line x1="210" y1="272" x2="230" y2="272" stroke="#f87171" stroke-width="2"/>
-                    <text x="234" y="275" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">emergency brake</text>
+                    <text x="234" y="275" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">de-risk (fast)</text>
                     <line x1="340" y1="272" x2="360" y2="272" stroke="#38bdf8" stroke-width="1.5"/>
-                    <text x="364" y="275" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">tranche 25%</text>
+                    <text x="364" y="275" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">re-enter (slow)</text>
                     <line x1="440" y1="272" x2="460" y2="272" stroke="#a855f7" stroke-width="1.5"/>
-                    <text x="464" y="275" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">tranche 50%</text>
+                    <text x="464" y="275" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">redeploy</text>
                     <line x1="540" y1="272" x2="560" y2="272" stroke="#34d399" stroke-width="1.5"/>
                     <text x="564" y="275" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="6">full recovery</text>
                 </svg>
@@ -1861,12 +1857,12 @@
 
         <!-- DL vs B&H COMPARISON -->
         <div class="doc-block" id="doc-shield-vs-bh-block">
-            <h3 id="doc-shield-vs-bh" data-i18n="doc.s8.vsBhTitle">8.5 Performance: Deleverage vs Buy &amp; Hold</h3>
-            <p data-i18n-html="doc.s8.vsBhP1">The chart below compares the <strong>Deleverage Shield</strong> against a classic <strong>Buy &amp; Hold</strong> strategy over an <strong>8.7-year, 5-token backtest</strong> spanning multiple bull/bear cycles (including the 2022 crypto winter and 2024 corrections). Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. The curves track <strong>peak-to-trough drawdown</strong> &mdash; how deep each strategy fell from its highs.</p>
+            <h3 id="doc-shield-vs-bh" data-i18n="doc.s8.vsBhTitle">8.5 Performance: Drawdown &amp; Risk-Adjusted Scoring</h3>
+            <p data-i18n-html="doc.s8.vsBhP1">The chart below compares the <strong>Deleverage Modulator</strong> against a classic <strong>Buy &amp; Hold</strong> strategy over an <strong>8.7-year, 5-token backtest</strong> spanning multiple bull/bear cycles (including the 2022 crypto winter and 2024 corrections). Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. The curves track <strong>peak-to-trough drawdown</strong> &mdash; how deep each strategy fell from its highs. The modulator is scored on <strong>risk-adjusted return</strong> (Calmar, Sharpe) and drawdown, not on beating Buy &amp; Hold in raw dollars.</p>
 
             <div class="doc-diagram">
-                <div class="doc-fl">Peak-to-Trough Drawdown &middot; Deleverage Shield vs Buy &amp; Hold (v11.3)</div>
-                <svg viewBox="0 0 720 260" role="img" aria-label="Max drawdown: Buy and Hold minus 88 percent versus Deleverage Shield minus 62 percent" preserveAspectRatio="xMidYMid meet" style="max-width:700px;width:100%;height:auto;">
+                <div class="doc-fl">Peak-to-Trough Drawdown &middot; Deleverage Modulator vs Buy &amp; Hold (v12.0)</div>
+                <svg viewBox="0 0 720 260" role="img" aria-label="Max drawdown: Buy and Hold minus 83.8 percent versus Deleverage Modulator minus 35.8 percent" preserveAspectRatio="xMidYMid meet" style="max-width:700px;width:100%;height:auto;">
                     <!-- gridlines -->
                     <line x1="60" y1="40" x2="690" y2="40" class="lp-sh-grid dash"/>
                     <line x1="60" y1="130" x2="690" y2="130" class="lp-sh-grid"/>
@@ -1874,20 +1870,20 @@
                     <text x="54" y="43" class="lp-sh-axis">0%</text>
                     <text x="54" y="133" class="lp-sh-axis">-50%</text>
                     <text x="54" y="223" class="lp-sh-axis">-100%</text>
-                    <!-- Buy &amp; Hold drawdown (deeper) -->
-                    <polygon class="lp-sh-fill red" points="60,40 130,70 200,120 270,198 340,150 410,110 480,175 550,120 620,80 690,55 690,40"/>
-                    <polyline class="lp-sh-line red" points="60,40 130,70 200,120 270,198 340,150 410,110 480,175 550,120 620,80 690,55"/>
-                    <!-- Deleverage Shield drawdown (shallower) -->
-                    <polygon class="lp-sh-fill cyan" points="60,40 130,62 200,95 270,152 340,120 410,88 480,130 550,95 620,65 690,50 690,40"/>
-                    <polyline class="lp-sh-line cyan" points="60,40 130,62 200,95 270,152 340,120 410,88 480,130 550,95 620,65 690,50"/>
+                    <!-- Buy &amp; Hold drawdown (deeper, trough -83.8%) -->
+                    <polygon class="lp-sh-fill red" points="60,40 130,75 200,130 270,191 340,150 410,120 480,165 550,125 620,85 690,60 690,40"/>
+                    <polyline class="lp-sh-line red" points="60,40 130,75 200,130 270,191 340,150 410,120 480,165 550,125 620,85 690,60"/>
+                    <!-- Deleverage Modulator drawdown (shallower, trough -35.8%) -->
+                    <polygon class="lp-sh-fill cyan" points="60,40 130,60 200,88 270,104 340,90 410,74 480,96 550,78 620,60 690,50 690,40"/>
+                    <polyline class="lp-sh-line cyan" points="60,40 130,60 200,88 270,104 340,90 410,74 480,96 550,78 620,60 690,50"/>
                     <!-- trough callouts -->
-                    <text x="270" y="213" class="lp-sh-cap red">-88% B&amp;H</text>
-                    <text x="278" y="145" class="lp-sh-cap cyan">-62% shield</text>
+                    <text x="248" y="206" class="lp-sh-cap red">-83.8% B&amp;H</text>
+                    <text x="285" y="120" class="lp-sh-cap cyan">-35.8% modulator</text>
                     <!-- legend -->
                     <rect x="250" y="240" width="10" height="10" rx="2" class="lp-sh-fill red"/>
                     <text x="266" y="249" class="lp-sh-leg">Buy &amp; Hold</text>
                     <rect x="400" y="240" width="10" height="10" rx="2" class="lp-sh-fill cyan"/>
-                    <text x="416" y="249" class="lp-sh-leg">Deleverage Shield</text>
+                    <text x="416" y="249" class="lp-sh-leg">Deleverage Modulator</text>
                 </svg>
             </div>
 
@@ -1895,93 +1891,93 @@
                 <div class="doc-ct" data-i18n="doc.s8.vsBhMetrics">&#128202; BACKTEST METRICS (8.7 YEARS, 5 TOKENS)</div>
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:12px;">
                     <div>
-                        <div style="color:#94a3b8;font-size:11px;">Shield Max Drawdown</div>
-                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">74.8%</div>
+                        <div style="color:#94a3b8;font-size:11px;">Modulator Max Drawdown</div>
+                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">35.8%</div>
                     </div>
                     <div>
                         <div style="color:#94a3b8;font-size:11px;">B&amp;H Max Drawdown</div>
-                        <div style="color:#fbbf24;font-size:16px;font-weight:700;">82.6%</div>
+                        <div style="color:#fbbf24;font-size:16px;font-weight:700;">83.8%</div>
                     </div>
                     <div>
                         <div style="color:#94a3b8;font-size:11px;">Drawdown Reduction</div>
-                        <div style="color:#34d399;font-size:16px;font-weight:700;">&minus;7.8pp</div>
+                        <div style="color:#34d399;font-size:16px;font-weight:700;">&minus;48.0pp</div>
                     </div>
                     <div>
-                        <div style="color:#94a3b8;font-size:11px;">Shield Calmar</div>
-                        <div style="color:#34d399;font-size:16px;font-weight:700;">1.39 (was 1.08)</div>
+                        <div style="color:#94a3b8;font-size:11px;">Calmar (Modulator vs B&amp;H)</div>
+                        <div style="color:#34d399;font-size:16px;font-weight:700;">1.43 vs 1.07</div>
                     </div>
                     <div>
-                        <div style="color:#94a3b8;font-size:11px;">Final vs B&amp;H</div>
-                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">+94%</div>
+                        <div style="color:#94a3b8;font-size:11px;">Sharpe (Modulator vs B&amp;H)</div>
+                        <div style="color:#06b6d4;font-size:16px;font-weight:700;">0.98 vs 0.77</div>
                     </div>
                     <div>
-                        <div style="color:#94a3b8;font-size:11px;">Trip Logic</div>
-                        <div style="color:#a855f7;font-size:16px;font-weight:700;">correlation-only</div>
+                        <div style="color:#94a3b8;font-size:11px;">Regime Signal</div>
+                        <div style="color:#a855f7;font-size:16px;font-weight:700;">drawdown + downside vol</div>
                     </div>
                 </div>
             </div>
 
-            <p data-i18n-html="doc.s8.vsBhP2"><strong>Same upside, a fraction of the pain.</strong> Across the full 8.7-year, 5-token backtest the shield cut peak drawdown from <strong>82.6%</strong> (Buy &amp; Hold) to <strong>74.8%</strong> &mdash; a <strong>7.8-point reduction</strong> &mdash; while lifting Calmar from 1.08 to 1.39. The shield trips only when tokens crash <em>together</em> (deep drawdown + high volatility + rising cross-correlation), eases exposure down to a defensive floor, then <strong>re-deploys in tranches</strong> (T1 25%, T2 50%, full exit on shield release) as correlation falls and diversification returns. There are <strong>no timers</strong> &mdash; the state machine is driven purely by cross-correlation.</p>
-            <p data-i18n-html="doc.s8.vsBhP3"><strong>Recalibrated on real data &mdash; and honestly scoped.</strong> The correlation gates (entry 0.43, tranches 0.33 / 0.26, full exit 0.18) are calibrated to the <em>realized</em> 20-day average pairwise correlation of these five tokens, which spans roughly &minus;0.05 to 0.74 (median 0.27). The earlier 0.70 / 0.75 gates were unreachable on real data, leaving the shield inert. These results are a <strong>full-sample recalibration</strong>, not a walk-forward out-of-sample validation &mdash; a true multi-fold OOS study is still needed before claiming regime-robustness.</p>
+            <p data-i18n-html="doc.s8.vsBhP2"><strong>A fraction of the pain, scored on risk-adjusted return.</strong> Across the full 8.7-year, 5-token backtest the modulator cut peak drawdown from <strong>83.8%</strong> (Buy &amp; Hold) to <strong>35.8%</strong> &mdash; a <strong>48-point reduction</strong> &mdash; while lifting Calmar from <strong>1.07 to 1.43</strong> and Sharpe from <strong>0.77 to 0.98</strong>. Exposure is a continuous 0&ndash;100% dial driven only by drawdown and downside volatility: it de-risks fast (up to 50% of the gap per bar), re-enters slowly (6% per bar), and redeploys parked USDC once exposure recovers above 50%. There are <strong>no timers, no tranches, and no correlation gate</strong>.</p>
+            <p data-i18n-html="doc.s8.vsBhP3"><strong>Honestly scoped: this does not beat Buy &amp; Hold on raw dollars.</strong> Buy &amp; Hold ends the sample higher in absolute value because it stays fully exposed through the bull run &mdash; the modulator is not designed to win that race. Its edge is <em>risk-adjusted</em>: less than half the drawdown, higher Calmar, higher Sharpe. These results are a <strong>full-sample backtest</strong>, not a walk-forward out-of-sample validation &mdash; a true multi-fold OOS study is still needed before claiming regime-robustness.</p>
         </div>
 
 
         <!-- TESTING & VALIDATION -->
         <div class="doc-block" id="doc-testing">
             <h3 id="doc-testing-title" data-i18n="doc.s8.testingTitle">8.6 Testing &amp; Validation</h3>
-            <p data-i18n-html="doc.s8.testingP1">The v11.4 correlation shield was <strong>recalibrated on real market data</strong>, not hand-guessed. We measured the realized distribution of the 20-day average pairwise correlation across the portfolio and placed every correlation gate inside the <strong>reachable band</strong> so the shield actually trips, de-risks, and redeploys.</p>
+            <p data-i18n-html="doc.s8.testingP1">The v12.0 Deleverage Modulator was <strong>measured on real market data</strong>, not hand-guessed. We replayed the full 8.7-year, 5-token price history through the exact production formula &mdash; a continuous exposure dial driven only by drawdown and downside volatility &mdash; and scored it on <strong>drawdown, Calmar, and Sharpe</strong>.</p>
 
             <div class="doc-callout green">
                 <div class="doc-ct" data-i18n="doc.s8.testingCallout">&#9989; VALIDATED ON REAL DATA</div>
-                <p data-i18n-html="doc.s8.testingCalloutP"><strong>22/22 audit tests pass</strong>, covering emergency-brake liquidation, PnL-drift detection, full-cycle integration, weight normalization, and divergence guards. The correlation gates were recalibrated on <strong>5 tokens (ADA, BNB, BTC, ETH, XRP)</strong> over ~8.7 years (3,164 days) of real market data spanning the 2018 and 2022 bear markets. Note: this is a full-sample recalibration, <strong>not</strong> a walk-forward out-of-sample study.</p>
+                <p data-i18n-html="doc.s8.testingCalloutP">Over ~8.7 years (3,184 days) of real market data across <strong>5 tokens (ADA, BNB, ETH, XRP, XLM)</strong> &mdash; spanning the 2018 and 2022 bear markets &mdash; the modulator cut peak drawdown from <strong>83.8% to 35.8%</strong>, lifting Calmar from <strong>1.07 to 1.43</strong> and Sharpe from <strong>0.77 to 0.98</strong> at ~31% average exposure. Note: this is a full-sample backtest, <strong>not</strong> a walk-forward out-of-sample study.</p>
             </div>
 
-            <h4 data-i18n="doc.s8.testingHow">Recalibration Process</h4>
+            <h4 data-i18n="doc.s8.testingHow">Validation Process</h4>
             <ul>
-                <li data-i18n-html="doc.s8.testing1"><strong>Correlation distribution mapping</strong> &mdash; measured the realized 20-day average pairwise correlation over the full sample (median 0.27, p90 0.43, p99 0.59, max 0.74). The old 0.70 / 0.75 gates sat <em>above</em> that range and essentially never fired.</li>
-                <li data-i18n-html="doc.s8.testing2"><strong>Entry gate</strong> &mdash; set to 0.43 (~p90 of the realized distribution): reachable only on a genuine broad, correlated sell-off, not on routine noise.</li>
-                <li data-i18n-html="doc.s8.testing3"><strong>Redeploy ladder</strong> &mdash; tranche gates at 0.33 and 0.26, with the full-exit gate as the <em>lowest</em> rung (0.18), so capital re-enters in stages as the market decorrelates <em>before</em> a full exit.</li>
-                <li data-i18n-html="doc.s8.testing4"><strong>End-to-end re-validation</strong> &mdash; reran the full-sample backtest with the recalibrated ladder to confirm the shield trips, deploys both tranches, and reduces drawdown.</li>
+                <li data-i18n-html="doc.s8.testing1"><strong>Signal construction</strong> &mdash; each bar we compute rolling drawdown from the running equity peak and downside volatility over a 20-day window, then map each to a 0&ndash;1 signal (dd_sig, vol_sig).</li>
+                <li data-i18n-html="doc.s8.testing2"><strong>Exposure formula</strong> &mdash; target exposure = 1 &minus; (0.7&middot;dd_sig + 0.3&middot;vol_sig), a continuous dial with no hard floor and no correlation gate.</li>
+                <li data-i18n-html="doc.s8.testing3"><strong>Hysteresis</strong> &mdash; exposure moves toward target at up to 50% of the gap per bar when de-risking, but only 6% per bar when re-entering, preventing whipsaw. Parked USDC redeploys once exposure recovers above 50%.</li>
+                <li data-i18n-html="doc.s8.testing4"><strong>Engine/UI parity</strong> &mdash; the same formula runs in the Python engine (deleverage.py) and the in-browser backtester, verified to produce matching drawdown and Calmar on the full sample.</li>
             </ul>
 
             <div class="doc-diagram">
-                <div class="doc-fl">Recalibration Results: Drawdown Reduction</div>
+                <div class="doc-fl">Backtest Results: Drawdown Reduction</div>
                 <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;">
                     <!-- Background -->
                     <rect width="720" height="200" fill="rgba(0,0,0,0.02)" rx="8"/>
                     <!-- B&H bar -->
                     <rect x="40" y="40" width="280" height="60" rx="6" fill="rgba(251,191,36,0.15)" stroke="#fbbf24" stroke-width="1.5"/>
                     <text x="180" y="65" text-anchor="middle" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">Buy &amp; Hold</text>
-                    <text x="180" y="85" text-anchor="middle" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">82.6% Max DD</text>
+                    <text x="180" y="85" text-anchor="middle" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">83.8% Max DD</text>
                     <!-- Arrow -->
                     <line x1="340" y1="70" x2="380" y2="70" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,3"/>
                     <polygon points="378,66 378,74 384,70" fill="#64748b"/>
-                    <text x="360" y="60" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">-7.8pp</text>
+                    <text x="360" y="60" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">-48.0pp</text>
                     <!-- DL bar -->
                     <rect x="400" y="40" width="280" height="60" rx="6" fill="rgba(6,182,212,0.15)" stroke="#06b6d4" stroke-width="1.5"/>
-                    <text x="540" y="65" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">Deleverage v11.4</text>
-                    <text x="540" y="85" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">74.8% Max DD</text>
+                    <text x="540" y="65" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">Deleverage v12.0</text>
+                    <text x="540" y="85" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">35.8% Max DD</text>
                     <!-- Metrics below -->
-                    <text x="180" y="130" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">Final: $10.85M</text>
-                    <text x="180" y="145" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">Calmar: 1.08</text>
+                    <text x="180" y="130" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">Calmar: 1.07</text>
+                    <text x="180" y="145" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">Sharpe: 0.77</text>
                     <text x="180" y="160" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono',monospace" font-size="9">8.7y real data</text>
-                    <text x="540" y="130" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Final: $21.0M</text>
-                    <text x="540" y="145" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Calmar: 1.39</text>
-                    <text x="540" y="160" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">vs B&amp;H: +94%</text>
+                    <text x="540" y="130" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Calmar: 1.43</text>
+                    <text x="540" y="145" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Sharpe: 0.98</text>
+                    <text x="540" y="160" text-anchor="middle" fill="#06b6d4" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">~31% avg exposure</text>
                     <!-- Recalibration badge -->
                     <rect x="470" y="170" width="140" height="20" rx="10" fill="rgba(52,211,153,0.2)" stroke="#34d399" stroke-width="1"/>
-                    <text x="540" y="184" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="700">v11.4 · FULL-SAMPLE</text>
+                    <text x="540" y="184" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="700">v12.0 · FULL-SAMPLE</text>
                 </svg>
             </div>
 
-            <h4 data-i18n="doc.s8.testingAudit">Audit Test Suite</h4>
-            <p data-i18n-html="doc.s8.testingAuditP">The engine passes <strong>22 comprehensive tests</strong> covering all critical behaviors:</p>
+            <h4 data-i18n="doc.s8.testingAudit">Validation Checks</h4>
+            <p data-i18n-html="doc.s8.testingAuditP">The modulator is validated through the following checks on the full 8.7-year, 5-token sample:</p>
             <ul>
-                <li data-i18n-html="doc.s8.testingAudit1"><strong>Emergency Brake</strong> (4 tests) &mdash; immediate liquidation, hard-switch bypass, max delta override</li>
-                <li data-i18n-html="doc.s8.testingAudit2"><strong>PnL Drift</strong> (3 tests) &mdash; incremental vs proxy equity tracking, async data divergence detection</li>
-                <li data-i18n-html="doc.s8.testingAudit3"><strong>Full Cycle Integration</strong> (5 tests) &mdash; shield activation, tranche deployment, USDC reserve management, exit triggers</li>
-                <li data-i18n-html="doc.s8.testingAudit4"><strong>Weight Normalization</strong> (4 tests) &mdash; auto-renormalization, weight sum validation, equity echo</li>
-                <li data-i18n-html="doc.s8.testingAudit5"><strong>Divergence Guard</strong> (6 tests) &mdash; staleness thresholds, long-series exit behavior, peak age tracking</li>
+                <li data-i18n-html="doc.s8.testingAudit1"><strong>Formula parity</strong> &mdash; the Python engine (deleverage.py) and the in-browser backtester produce matching exposure, drawdown, and Calmar.</li>
+                <li data-i18n-html="doc.s8.testingAudit2"><strong>Drawdown reduction</strong> &mdash; peak drawdown cut from 83.8% (Buy &amp; Hold) to 35.8%.</li>
+                <li data-i18n-html="doc.s8.testingAudit3"><strong>Risk-adjusted uplift</strong> &mdash; Calmar 1.07 &rarr; 1.43, Sharpe 0.77 &rarr; 0.98.</li>
+                <li data-i18n-html="doc.s8.testingAudit4"><strong>Hysteresis behavior</strong> &mdash; fast exit (50% of gap/bar) and slow re-entry (6%/bar) confirmed with no whipsaw; ~31% average exposure.</li>
+                <li data-i18n-html="doc.s8.testingAudit5"><strong>Known limitation</strong> &mdash; full-sample only; a walk-forward multi-fold out-of-sample study is still pending.</li>
             </ul>
         </div>
 
