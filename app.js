@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
 'use strict';
 
 // ============ BACKEND API URLs ============
@@ -1319,6 +1319,15 @@ async function optimizePortfolio() {
 
         if (result.detail) {
             hideLoading();
+            // Parse cooldown message and display user-friendly time remaining
+            const secMatch = (result.detail || '').match(/(\d+)s remaining/);
+            if (secMatch) {
+                const secs = parseInt(secMatch[1]);
+                const h = Math.floor(secs / 3600);
+                const m = Math.floor((secs % 3600) / 60);
+                const timeStr = h > 0 ? `${h}h ${m}min` : `${m} min`;
+                return showToast(`\u23f3 Next optimization available in ${timeStr}`, 'notice');
+            }
             return showToast(result.detail, 'error');
         }
 
