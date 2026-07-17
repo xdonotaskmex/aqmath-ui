@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com;">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -40,11 +41,7 @@
 
 <!-- ============ LANDING PAGE VIEW ============ -->
 <div id="landingView">
-    <div class="status-bar">
-        <div>[aqmath.xyz] status: <span class="sb-status">online</span> // active_nodes: 14 // latency: 12ms</div>
-        <div class="sb-env">env: production_mainnet_v2.0</div>
-    </div>
-    <nav class="lp-nav">
+    <header class="hdr">
         <div class="logo">
             <div class="logo-box">AQ</div>
             <div>
@@ -52,19 +49,14 @@
                 <div class="logo-tag">quantitative portfolio rebalancing</div>
             </div>
         </div>
-        <div class="lp-nav-links">
-            <a class="lp-nav-link lp-nav-tab active" href="#/">[ --home ]</a>
-            <a class="lp-nav-link lp-nav-tab" href="#/docs">[ --docs ]</a>
-            <a class="lp-nav-link lp-nav-tab" href="#/backtest">[ --backtest ]</a>
-            <a class="lp-nav-link lp-nav-cta" href="#/app">open app</a>
-            <a class="lp-nav-link lp-nav-tab" href="https://x.com/aqmathapp" target="_blank" rel="noopener">[ x ]</a>
-            <a class="lp-nav-link lp-nav-tab" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">[ tg ]</a>
-            <div class="lp-lang-wrap">
-                <button type="button" class="lp-lang-btn lp-lang-active" data-lang="en" onclick="switchLang('en')">[ en ]</button>
-                <button type="button" class="lp-lang-btn" data-lang="zh-CN" onclick="switchLang('zh-CN')">[ 中文 ]</button>
-            </div>
+        <div class="hdr-nav">
+            <button class="hdr-nav-btn active" onclick="location.hash='#/'">landing</button>
+            <button class="hdr-nav-btn" onclick="location.hash='#/app'">app</button>
+            <button class="hdr-nav-btn" onclick="location.hash='#/backtest'">backtest</button>
+            <button class="hdr-nav-btn" onclick="location.hash='#/docs'">docs</button>
         </div>
-    </nav>
+        <div class="hdr-right"></div>
+    </header>
 
     <div class="lp-ticker" id="priceTicker">
         <div class="lp-ticker-track">
@@ -111,7 +103,7 @@
             <span class="lp-shield-text">Continuous de-risk: exposure scales down as drawdown and downside volatility rise</span>
         </div>
         <div class="lp-cta-group">
-            <a class="lp-btn-primary" href="#/app" data-i18n="hero.cta">--try-free-no-registration</a>
+            <a class="lp-btn-primary" href="#/app" data-i18n="hero.cta">Enter Beta Key</a>
             <a class="lp-btn-secondary" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener" data-i18n="hero.proBeta">Apply for Black Access</a>
         </div>
         <div class="lp-community" data-i18n-html="hero.follow">follow for updates &amp; news: <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">[ x ]</a> &middot; <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">[ telegram ]</a></div>
@@ -304,7 +296,7 @@
                 <text x="35" y="42" text-anchor="middle" fill="#fbbf24" font-family="'JetBrains Mono',monospace" font-size="5.5" letter-spacing="1.5" opacity="0.8">ACCESS</text>
             </svg>
             <div class="lp-beta-recruit-tag" data-i18n="beta.tag">// annual access</div>
-            <h2 data-i18n-html="beta.title">Exclusive <span class="gradient-text">Annual Access</span></h2>
+            <h2 data-i18n-html="beta.title">Transparent <span class="gradient-text">Annual Access</span></h2>
             <p data-i18n="beta.description">AQMath costs <strong>€999 / year</strong> (~$1,090 USD). Access is limited to a small number of users — not to be exclusive, but to keep compute fast and support direct. We accept USDC and EURC only, because we don't want your name, card number, or bank details. Send us a message and we'll review your request within 48 hours. No call required.</p>
             <a class="lp-btn-primary lp-beta-cta" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener" data-i18n="beta.cta">--request-access</a>
             <div class="lp-beta-recruit-note" data-i18n="beta.note">€999 / year · ~$1,090 USD · USDC &amp; EURC · No call required · Reply within 48h</div>
@@ -416,7 +408,7 @@
                         <p data-i18n-html="what.howP">1. Add your tokens and target allocations (or let the engine calculate them using 180-day historical volatility).<br><br>
                         2. Click SYNC to get live prices from Binance &mdash; price data is fetched directly from Binance via WebSocket.<br><br>
                         3. Use DCA Distribution to invest new capital only into underweight tokens, filtered by volatility and trend.<br><br>
-                        4. (Pro) Run the Quantum Engine to re-compute optimal weights using full covariance matrix and KKT projection.</p>
+                        4. (Black) Run the AQMath Engine to re-compute optimal weights using full covariance matrix and KKT projection.</p>
                     </div>
                     <div class="lp-card">
                         <div class="card-title" style="color:var(--blue);" data-i18n="what.whyTitle">--why</div>
@@ -424,7 +416,7 @@
                         &rarr; Institutional-grade math (same concepts used by multi-billion funds)<br>
                         &rarr; Non-Custodial &mdash; your portfolio stays in your browser&rsquo;s localStorage, backend processing is ephemeral<br>
                         &rarr; Transparent, auditable logic (no black boxes)<br>
-                        &rarr; Exclusive annual access &mdash; selection-based, processed via USDC &amp; EURC<br><br>
+                        &rarr; €999 / year &mdash; transparent pricing, processed via USDC &amp; EURC<br><br>
                         Your balances are ephemeral &mdash; processed in-memory, never stored. No exchange API keys required. No data to sell.</p>
                     </div>
                 </div>
@@ -435,7 +427,7 @@
 
         <section class="lp-section lp-shield">
             <div class="lp-card lp-shield-card">
-                <div class="card-title" style="color:var(--blue);" data-i18n-html="shield.label">--deleverage-modulator &middot; v12.0</div>
+                <div class="card-title" style="color:var(--purple);text-align:center;" data-i18n-html="shield.label">--deleverage-modulator &middot; v12.0</div>
                 <h3 data-i18n-html="shield.title">Deleverage Modulator &mdash; validated on real data</h3>
                 <p class="lp-what-lead" data-i18n-html="shield.lead">v12.0 scales exposure continuously off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It de-risks fast and re-enters slowly.</p>
                 <div class="lp-shield-grid">
@@ -490,8 +482,8 @@
                 <div class="lp-faq-a" data-i18n-html="faq.a2">We don&rsquo;t track your wallet and we don&rsquo;t have a user database. Your token balances are stored only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. Your financial privacy is architecturally enforced. <a href="#/docs" style="color:#a78bfa;">Read the full privacy architecture in our [Documentation].</a></div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q3">What's included in Free vs Black?</div>
-                <div class="lp-faq-a" data-i18n="faq.a3">The free version is fully functional for manual portfolio tracking, CSV-based historical prices, DCA distribution, and browser-local export/import. Black adds automated historical data pipeline, full Risk Parity optimization, Deleverage Shield crash protection, and unlimited token support.</div>
+                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q3">What's included in Beta vs Black?</div>
+                <div class="lp-faq-a" data-i18n="faq.a3">Beta access includes the full engine — Risk Parity optimization, Deleverage Shield, DCA distribution, unlimited tokens, and the automated data pipeline. It's the same math as Black, limited to 10 slots with a 365-day activation period. Black adds annual renewals and direct support.</div>
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q4">Why are market widgets separated from features?</div>
@@ -573,7 +565,7 @@
         </div>
         <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;">
             <div style="color:#94a3b8;font-size:0.65rem;text-align:center;line-height:1.6;">
-                AQMath is a premium digital assistant, <strong>not</strong> a trading bot.<br>
+                AQMath is an analytical web application, <strong>not</strong> a trading bot.<br>
                 Annual Access Only &middot; No Mobile App &middot; Web Application Only
             </div>
         </div>
@@ -943,7 +935,7 @@
                 <div class="faq-a" data-i18n="app.faq.a2">You enter a total budget, and the app allocates it to tokens below their target allocation, considering risk and average cost.</div>
             </div>
             <div class="faq-item" onclick="this.classList.toggle('open')">
-                <div class="faq-q" data-i18n="app.faq.q3">What does the Quantum Engine do?</div>
+                <div class="faq-q" data-i18n="app.faq.q3">What does the AQMath Engine do?</div>
                 <div class="faq-a" data-i18n="app.faq.a3">It uses 180 days of price history to compute optimal allocation weights (Risk Parity) so each token contributes equally to portfolio risk.</div>
             </div>
             <div class="faq-item" onclick="this.classList.toggle('open')">
@@ -1081,12 +1073,7 @@
         <button class="hdr-nav-btn active" onclick="location.hash='#/backtest'">backtest</button>
         <button class="hdr-nav-btn" onclick="location.hash='#/docs'">docs</button>
     </div>
-    <div class="hdr-right">
-        <div class="hstat">
-            <div class="hstat-l">Engine</div>
-            <div class="hstat-v">v12.0</div>
-        </div>
-    </div>
+    <div class="hdr-right"></div>
 </header>
 
 <div class="bt-main">
@@ -1301,11 +1288,7 @@
 
 <!-- ============ DOC VIEW ============ -->
 <div id="docView">
-    <div class="status-bar">
-        <div>[aqmath.xyz] status: <span class="sb-status">online</span> // doc_engine: active</div>
-        <div class="sb-env">env: documentation_v2.0</div>
-    </div>
-    <nav class="lp-nav">
+    <header class="hdr">
         <div class="logo">
             <div class="logo-box">AQ</div>
             <div>
@@ -1313,13 +1296,14 @@
                 <div class="logo-tag" data-i18n="doc.logoTag">system documentation</div>
             </div>
         </div>
-        <div class="lp-nav-links">
-            <a class="lp-nav-link lp-nav-tab" href="#/">[ --home ]</a>
-            <a class="lp-nav-link lp-nav-tab active" href="#/docs">[ --docs ]</a>
-            <a class="lp-nav-link lp-nav-tab" href="#/backtest">[ --backtest ]</a>
-            <a class="lp-nav-link lp-nav-cta" href="#/app">open app</a>
+        <div class="hdr-nav">
+            <button class="hdr-nav-btn" onclick="location.hash='#/'">landing</button>
+            <button class="hdr-nav-btn" onclick="location.hash='#/app'">app</button>
+            <button class="hdr-nav-btn" onclick="location.hash='#/backtest'">backtest</button>
+            <button class="hdr-nav-btn active" onclick="location.hash='#/docs'">docs</button>
         </div>
-    </nav>
+        <div class="hdr-right"></div>
+    </header>
 
     <nav class="doc-nav-sidebar">
         <a href="#doc-intro" class="doc-nav-head" data-i18n="doc.nav.intro">Introduction</a>
@@ -1346,7 +1330,7 @@
         <a href="#doc-riskbudget" class="doc-nav-sub" data-i18n="doc.nav.riskbudget">L6 — Risk Budget</a>
         <a href="#doc-safehaven" class="doc-nav-sub" data-i18n="doc.nav.safehaven">L7 — Safe-Haven</a>
         <a href="#doc-volatility" class="doc-nav-head" data-i18n="doc.nav.volatility">Volatility</a>
-        <a href="#doc-aqmath" class="doc-nav-head" data-i18n="doc.nav.aqmath">AQMath Engine (Pro)</a>
+        <a href="#doc-aqmath" class="doc-nav-head" data-i18n="doc.nav.aqmath">AQMath Engine (Black)</a>
         <a href="#doc-erc-solver" class="doc-nav-sub" data-i18n="doc.nav.erc">Equal Risk Contribution</a>
         <a href="#doc-kkt" class="doc-nav-sub" data-i18n="doc.nav.kkt">KKT Projection</a>
         <a href="#doc-correlations" class="doc-nav-sub" data-i18n="doc.nav.correlations">Correlation Analysis</a>
@@ -1419,7 +1403,7 @@
                     <rect x="340" y="88" width="200" height="32" rx="3" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
                     <text x="440" y="108" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">DCA Distribution Engine</text>
                     <rect x="340" y="128" width="200" height="32" rx="3" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
-                    <text x="440" y="148" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">AQMath Engine (Pro)</text>
+                    <text x="440" y="148" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">AQMath Engine (Black)</text>
                     <rect x="340" y="168" width="200" height="32" rx="3" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
                     <text x="440" y="188" text-anchor="middle" fill="#e2e8f0" font-family="'JetBrains Mono',monospace" font-size="9">Circuit Breaker + Hard Caps</text>
                     <rect x="340" y="208" width="200" height="32" rx="3" fill="rgba(52,211,153,0.08)" stroke="#34d399" stroke-width="0.5" opacity="0.5"/>
@@ -1646,8 +1630,8 @@
             <h3 id="doc-hardcaps" data-i18n="doc.s5.l5Title">L5 &mdash; Hard Caps</h3>
             <p data-i18n="doc.s5.l5P">No single risky token can exceed a structural concentration limit. If allocation would push a token beyond this cap, the excess is trimmed and redirected to the surplus pool.</p>
             <div class="doc-callout blue">
-                <div class="doc-ct" data-i18n-html="doc.s5.l5Pro">&#128295; DYNAMIC CAPS (Pro Feature)</div>
-                <p data-i18n-html="doc.s5.l5ProP">The Pro engine replaces the flat cap with <strong>volatility-adaptive limits</strong>: high-volatility tokens receive smaller caps (as low as 10%), while low-volatility tokens can hold larger positions (up to 40%). Each token&rsquo;s maximum weight is dynamically scaled between 10% and 40% based on how volatile it is relative to the most volatile token in the portfolio. The more volatile a token, the tighter its cap.</p>
+                <div class="doc-ct" data-i18n-html="doc.s5.l5Pro">&#128295; DYNAMIC CAPS (Black Feature)</div>
+                <p data-i18n-html="doc.s5.l5ProP">The Black engine replaces the flat cap with <strong>volatility-adaptive limits</strong>: high-volatility tokens receive smaller caps (as low as 10%), while low-volatility tokens can hold larger positions (up to 40%). Each token&rsquo;s maximum weight is dynamically scaled between 10% and 40% based on how volatile it is relative to the most volatile token in the portfolio. The more volatile a token, the tighter its cap.</p>
             </div>
 
             <h3 id="doc-riskbudget" data-i18n="doc.s5.l6Title">L6 &mdash; Risk Budget</h3>
@@ -1661,21 +1645,21 @@
         <!-- VOLATILITY -->
         <div class="doc-block" id="doc-volatility">
             <h2 id="doc-logreturns" data-i18n="doc.s6.title">6. Volatility Calculation</h2>
-            <p data-i18n="doc.s6.p1">Volatility is the foundational risk metric used throughout AQMath. It feeds into the safety factor, the circuit breaker threshold, and (in Pro) the covariance matrix. The system computes a rolling volatility estimate for each token by measuring the magnitude of daily price swings &mdash; a standard approach in quantitative finance.</p>
+            <p data-i18n="doc.s6.p1">Volatility is the foundational risk metric used throughout AQMath. It feeds into the safety factor, the circuit breaker threshold, and (in Black) the covariance matrix. The system computes a rolling volatility estimate for each token by measuring the magnitude of daily price swings &mdash; a standard approach in quantitative finance.</p>
 
             <h3 id="doc-portvol" data-i18n="doc.s6.pvTitle">6.1 Portfolio Volatility</h3>
             <p data-i18n="doc.s6.pvP">Portfolio-level volatility is a weighted aggregate of each token&rsquo;s individual volatility, proportional to its share of total portfolio value. Safe-haven tokens and frozen positions are excluded since they have near-zero volatility by definition. This portfolio-level metric drives adaptive thresholds across the entire safety pipeline.</p>
             <div class="doc-callout blue">
-                <div class="doc-ct" data-i18n-html="doc.s6.covTitle">&#128216; COVARIANCE MATRIX (Pro Feature)</div>
-                <p data-i18n-html="doc.s6.covP">The Pro engine computes a full covariance matrix estimating how assets move <em>together</em>. Two tokens with moderate individual volatility but high correlation (like ETH and SOL) have amplified combined risk. The optimizer uses this to ensure each asset contributes equal risk &mdash; preventing hidden concentration through correlation.</p>
+                <div class="doc-ct" data-i18n-html="doc.s6.covTitle">&#128216; COVARIANCE MATRIX (Black Feature)</div>
+                <p data-i18n-html="doc.s6.covP">The Black engine computes a full covariance matrix estimating how assets move <em>together</em>. Two tokens with moderate individual volatility but high correlation (like ETH and SOL) have amplified combined risk. The optimizer uses this to ensure each asset contributes equal risk &mdash; preventing hidden concentration through correlation.</p>
             </div>
         </div>
 
 
         <!-- AQMATH ENGINE (BLACK) -->
         <div class="doc-block" id="doc-aqmath">
-            <h2 id="doc-erc" data-i18n="doc.s8.title">8. AQMath Engine (Pro)</h2>
-            <p data-i18n-html="doc.s8.p1">The AQMath Engine is the Pro-tier optimization layer that sits alongside the DCA engine. While the DCA engine distributes a fixed dollar budget, the AQMath Engine answers a deeper question: <strong>what should the target weights themselves be?</strong> It uses institutional-grade quantitative methods &mdash; the same class of algorithms deployed by multi-billion-dollar hedge funds &mdash; to compute mathematically optimal portfolio weights from first principles.</p>
+            <h2 id="doc-erc" data-i18n="doc.s8.title">8. AQMath Engine (Black)</h2>
+            <p data-i18n-html="doc.s8.p1">The AQMath Engine is the Black-tier optimization layer that sits alongside the DCA engine. While the DCA engine distributes a fixed dollar budget, the AQMath Engine answers a deeper question: <strong>what should the target weights themselves be?</strong> It uses institutional-grade quantitative methods &mdash; the same class of algorithms deployed by multi-billion-dollar hedge funds &mdash; to compute mathematically optimal portfolio weights from first principles.</p>
             <p data-i18n="doc.s8.p2">The engine runs a three-stage pipeline: it builds a full covariance matrix from 180 days of cleaned price history, solves for Equal Risk Contribution (true Risk Parity), and applies KKT projection with dynamic volatility caps to enforce structural limits.</p>
 
             <div class="doc-diagram">
