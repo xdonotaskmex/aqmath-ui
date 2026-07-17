@@ -107,7 +107,7 @@ let historyChart = null;
 let editMode = null;
 const chartCtx = document.getElementById('chart').getContext('2d');
 const historyCtx = document.getElementById('historyChart').getContext('2d');
-Chart.defaults.color = '#64748b';
+Chart.defaults.color = '#7a8ba5';
 Chart.defaults.font.family = "'IBM Plex Mono', monospace";
 
 // Beta mode: check for valid JWT token in localStorage (with sessionStorage migration)
@@ -1575,7 +1575,7 @@ function renderHistoryChart() {
         const ctx = document.getElementById('historyChart').getContext('2d');
         historyChart = new Chart(ctx, {
             type: 'line',
-            data: { labels: [], datasets: [{ label: 'Portfolio Value', data: [], borderColor: '#38bdf8', backgroundColor: 'rgba(56,189,248,0.05)', fill: true }] },
+            data: { labels: [], datasets: [{ label: 'Portfolio Value', data: [], borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.05)', fill: true }] },
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { ticks: { callback: v => '$' + v.toFixed(0) } } } }
         });
         return;
@@ -1592,7 +1592,7 @@ function renderHistoryChart() {
             datasets: [{
                 label: 'Portfolio Value',
                 data: values,
-                borderColor: '#38bdf8',
+                borderColor: '#06b6d4',
                 backgroundColor: 'rgba(56,189,248,0.05)',
                 fill: true,
                 tension: 0.2,
@@ -1608,8 +1608,8 @@ function renderHistoryChart() {
                 tooltip: { callbacks: { label: ctx => '$' + ctx.raw.toFixed(2) } }
             },
             scales: {
-                x: { ticks: { color: '#475569', font: { size: 9 } }, grid: { display: false } },
-                y: { ticks: { callback: v => '$' + v.toFixed(0), color: '#475569', font: { size: 9 } }, grid: { color: 'rgba(56,189,248,0.08)' } }
+                x: { ticks: { color: '#7a8ba5', font: { size: 9 } }, grid: { display: false } },
+                y: { ticks: { callback: v => '$' + v.toFixed(0), color: '#7a8ba5', font: { size: 9 } }, grid: { color: 'rgba(6,182,212,0.08)' } }
             }
         }
     });

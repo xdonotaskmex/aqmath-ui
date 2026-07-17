@@ -489,10 +489,10 @@ function btRunBacktest() {
     var cO = function() {
         return {
             responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { labels: { color: '#c9d1d9', font: { size: 11 } } } },
+            plugins: { legend: { labels: { color: '#e2e8f0', font: { size: 11 } } } },
             scales: {
-                x: { ticks: { color: '#8b949e', maxTicksLimit: 12 }, grid: { color: '#1c2128' } },
-                y: { ticks: { color: '#8b949e' }, grid: { color: '#1c2128' } }
+                x: { ticks: { color: '#7a8ba5', maxTicksLimit: 12 }, grid: { color: '#1c2128' } },
+                y: { ticks: { color: '#7a8ba5' }, grid: { color: '#1c2128' } }
             }
         };
     };
@@ -538,8 +538,8 @@ function btRunBacktest() {
         },
         options: (function() { 
             var o = cO(); 
-            o.scales.y = { min: 0, max: 100, ticks: { color: '#8b949e', callback: function(v) { return v + '%'; } }, grid: { color: '#1c2128' } };
-            o.scales.y1 = { position: 'right', min: -0.1, max: 1.2, ticks: { color: '#8b949e', callback: function(v) { return v >= 0.5 ? 'ON' : 'OFF'; } }, grid: { display: false } };
+            o.scales.y = { min: 0, max: 100, ticks: { color: '#7a8ba5', callback: function(v) { return v + '%'; } }, grid: { color: '#1c2128' } };
+            o.scales.y1 = { position: 'right', min: -0.1, max: 1.2, ticks: { color: '#7a8ba5', callback: function(v) { return v >= 0.5 ? 'ON' : 'OFF'; } }, grid: { display: false } };
             return o; 
         })(),
         plugins: [emergencyBrakePlugin]

@@ -644,9 +644,18 @@
     .doc-callout.blue { border-left-color: var(--blue); background: rgba(56,189,248,0.04); }
     .doc-callout.green { border-left-color: var(--green); background: rgba(52,211,153,0.04); }
     .doc-callout.red { border-left-color: var(--red); background: rgba(248,113,113,0.04); }
-    .doc-callout.purple { border-left-color: #a78bfa; background: rgba(167,139,250,0.04); }
-    .doc-callout .doc-ct { font-family: var(--mono); font-size: 0.55rem; letter-spacing: 1px; margin-bottom: 5px; }
+    .doc-callout.cyan { border-left-color: var(--blue); background: rgba(6,182,212,0.04); }
+    .doc-callout.purple { border-left-color: var(--purple); background: rgba(168,85,247,0.04); }
+    .doc-callout .doc-ct { font-family: var(--mono); font-size: 0.55rem; letter-spacing: 1px; margin-bottom: 5px; color: var(--amber); }
+    .doc-callout.purple .doc-ct { color: var(--purple); }
+    .doc-callout.blue .doc-ct { color: var(--blue); }
+    .doc-callout.green .doc-ct { color: var(--green); }
+    .doc-callout.red .doc-ct { color: var(--red); }
+    .doc-callout.cyan .doc-ct { color: var(--blue); }
     .doc-callout p { font-size: 0.78rem; margin: 0; line-height: 1.7; }
+    .doc-metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 12px; }
+    .doc-metric-label { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); margin-bottom: 2px; }
+    .doc-metric-value { font-family: var(--mono); font-size: 1rem; font-weight: 700; }
     .doc-diagram { background: var(--s2); border: 1px solid var(--border); border-radius: 4px;
         padding: 20px; margin: 20px 0; text-align: center; overflow-x: auto; }
     .doc-diagram .doc-fl { font-family: var(--mono); font-size: 0.5rem; color: var(--amber);
@@ -673,13 +682,13 @@
     .doc-step-body .doc-st { font-family: var(--mono); font-size: 0.68rem; color: var(--green); margin-bottom: 3px; }
     .doc-step-body p { font-size: 0.78rem; margin: 0; }
     .doc-zk-badge { display: inline-block; font-family: var(--mono); font-size: 0.45rem;
-        padding: 2px 7px; border: 1px solid #a78bfa; border-radius: 3px;
-        color: #a78bfa; letter-spacing: 1px; vertical-align: middle; margin-left: 6px; }
+        padding: 2px 7px; border: 1px solid var(--purple); border-radius: 3px;
+        color: var(--purple); letter-spacing: 1px; vertical-align: middle; margin-left: 6px; }
     .doc-privacy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; }
     .doc-privacy-col { background: var(--s2); border: 1px solid var(--border); border-radius: 4px; padding: 16px; }
     .doc-privacy-col h4 { font-family: var(--mono); font-size: 0.65rem; margin-bottom: 10px; }
     .doc-formula-link { display: inline-block; margin-top: 8px; font-family: var(--mono); font-size: 0.72rem;
-        color: #a78bfa; letter-spacing: 0.5px; text-decoration: none; opacity: 0.7; transition: all 0.2s; }
+        color: var(--purple); letter-spacing: 0.5px; text-decoration: none; opacity: 0.7; transition: all 0.2s; }
     .doc-formula-link:hover { opacity: 1; color: var(--blue); }
     @media (max-width: 900px) {
         .doc-nav-sidebar { display: none; }
@@ -1663,7 +1672,7 @@
     /* ===== LANDING – BETA VS BLACK ===== */
     .lp-plan-grid,
     .lp-pricing { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: none; padding: 0; align-items: stretch; }
-    .lp-plan-card.beta { border-top: 3px solid var(--cyan); display: flex; flex-direction: column; height: 100%; }
+    .lp-plan-card.beta { border-top: 3px solid var(--blue); display: flex; flex-direction: column; height: 100%; }
     .lp-plan-card.pro,
     .lp-price-card.pro { border-top: 3px solid var(--amber); border-color: var(--border); }
     .lp-plan-card.pro { display: flex; flex-direction: column; height: 100%; }
@@ -1678,7 +1687,7 @@
     .lp-slots-count {
         font-size: 2.2rem;
         font-weight: 700;
-        color: var(--cyan);
+        color: var(--blue);
         line-height: 1;
     }
     .lp-plan-slots span:last-child {
@@ -1726,7 +1735,7 @@
         vertical-align: middle;
         text-transform: uppercase;
     }
-    .lp-plan-card.beta .lp-plan-title { color: var(--cyan); }
+    .lp-plan-card.beta .lp-plan-title { color: var(--blue); }
     .lp-plan-card.pro .lp-plan-title { color: var(--amber); }
     .lp-feature-list { list-style: none; margin: 0 0 22px; padding: 0; flex: 1; }
     .lp-feature-list li {
@@ -1738,7 +1747,7 @@
         border-bottom: 1px solid rgba(255,255,255,0.05);
     }
     .lp-feature-list li::before { content: "✓ "; font-family: var(--mono); font-weight: 600; }
-    .lp-plan-card.beta .lp-feature-list li::before { color: var(--cyan); }
+    .lp-plan-card.beta .lp-feature-list li::before { color: var(--blue); }
     .lp-plan-card.pro .lp-feature-list li::before { color: var(--amber); }
 
     /* ===== LANDING – WHY AQMATH ===== */
