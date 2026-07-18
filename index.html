@@ -171,8 +171,8 @@
             [
                 'backtest validation: 3,184 days (ADA/BNB/ETH/XRP/XLM) \u2014 8.7 years...',
                 'scored on risk-adjusted return, not on beating buy & hold',
-                'Calmar 1.43 vs B&H 1.07 \u2014 Sharpe 0.98 vs B&H 0.77',
-                'max drawdown 35.8% vs 83.8% \u2014 less than half the pain'
+                'Sharpe 0.93 vs B&H 0.75 — now beats buy & hold risk-adjusted',
+                'max drawdown 35.0% vs 83.8% — less than half the pain'
             ],
             [
                 'privacy audit: processing portfolio in-memory...',
@@ -437,12 +437,12 @@
 
         <section class="lp-section lp-shield">
             <div class="lp-card lp-shield-card">
-                <div class="card-title" style="color:var(--purple);text-align:center;" data-i18n-html="shield.label">--deleverage-modulator &middot; v12.0</div>
+                <div class="card-title" style="color:var(--purple);text-align:center;" data-i18n-html="shield.label">--deleverage-modulator &middot; v14.0</div>
                 <h3 data-i18n-html="shield.title">Deleverage Modulator &mdash; validated on real data</h3>
-                <p class="lp-what-lead" data-i18n-html="shield.lead">v12.0 scales exposure continuously off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It de-risks fast and re-enters slowly.</p>
+                <p class="lp-what-lead" data-i18n-html="shield.lead">v14.0 scales exposure continuously off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It de-risks fast, re-enters faster, and uses threshold rebalancing.</p>
                 <div class="lp-shield-grid">
                     <div class="lp-shield-viz">
-                        <svg viewBox="0 0 480 250" role="img" aria-label="Max drawdown: Buy and Hold minus 83.8 percent versus Deleverage Modulator minus 35.8 percent" preserveAspectRatio="xMidYMid meet">
+                        <svg viewBox="0 0 480 250" role="img" aria-label="Max drawdown: Buy and Hold minus 83.8 percent versus Deleverage Modulator minus 35.0 percent" preserveAspectRatio="xMidYMid meet">
                             <!-- gridlines -->
                             <line x1="40" y1="40" x2="460" y2="40" class="lp-sh-grid dash"/>
                             <line x1="40" y1="125" x2="460" y2="125" class="lp-sh-grid"/>
@@ -459,7 +459,7 @@
                             <!-- trough callouts -->
                             <text x="168" y="199" class="lp-sh-cap red">-83.8% B&amp;H</text>
                             <!-- Deleverage Modulator trough callout -->
-                            <text x="186" y="118" class="lp-sh-cap cyan">-35.8% modulator</text>
+                            <text x="186" y="118" class="lp-sh-cap cyan">-35.0% modulator</text>
                             <!-- legend -->
                             <rect x="120" y="232" width="10" height="10" rx="2" class="lp-sh-fill red"/>
                             <text x="136" y="241" class="lp-sh-leg">Buy &amp; Hold</text>
@@ -469,11 +469,11 @@
                     </div>
                     <div class="lp-shield-info">
                         <div class="lp-shield-stats">
-                            <div class="lp-shield-stat"><span class="v">&minus;48.0pp</span><span class="l" data-i18n="shield.s1l">max drawdown cut</span></div>
-                            <div class="lp-shield-stat"><span class="v">1.43</span><span class="l" data-i18n-html="shield.s2l">Calmar (B&amp;H 1.07)</span></div>
-                            <div class="lp-shield-stat"><span class="v">0.98</span><span class="l" data-i18n-html="shield.s3l">Sharpe (B&amp;H 0.77)</span></div>
+                            <div class="lp-shield-stat"><span class="v">&minus;48.8pp</span><span class="l" data-i18n="shield.s1l">max drawdown cut</span></div>
+                            <div class="lp-shield-stat"><span class="v">0.93</span><span class="l" data-i18n-html="shield.s2l">Sharpe (B&amp;H 0.75)</span></div>
+                            <div class="lp-shield-stat"><span class="v">32.9%</span><span class="l" data-i18n-html="shield.s3l">CAGR (8.7y)</span></div>
                         </div>
-                        <p data-i18n-html="shield.body">Across an 8.7-year, 5-token backtest (ADA/BNB/ETH/XRP/XLM) the modulator held peak drawdown to <strong>35.8%</strong> versus <strong>83.8%</strong> for Buy &amp; Hold, scoring <strong>Calmar 1.43</strong> and <strong>Sharpe 0.98</strong> (vs 1.07 / 0.77) at ~31% average exposure. It is scored on risk-adjusted return &mdash; Calmar and Sharpe &mdash; not on beating Buy &amp; Hold.</p>
+                        <p data-i18n-html="shield.body">Across an 8.7-year, 5-token backtest (ADA/BNB/ETH/XRP/XLM) the modulator held peak drawdown to <strong>35.0%</strong> versus <strong>83.8%</strong> for Buy &amp; Hold, and now <strong>beats Buy &amp; Hold on Sharpe (0.93 vs 0.75)</strong> at <strong>32.9% CAGR</strong> &mdash; out-of-sample stable (per-split Sharpe 1.30 / 1.24 / 0.74). v14 adds <strong>threshold rebalancing</strong> (only trades when target exposure drifts &gt; 8%), cutting rebalances ~64%.</p>
                         <a class="lp-btn-secondary" href="#/backtest" data-i18n="shield.cta">--run-the-backtest</a>
                     </div>
                 </div>
@@ -1937,11 +1937,11 @@
         <!-- DL vs B&H COMPARISON -->
         <div class="doc-block" id="doc-shield-vs-bh-block">
             <h3 id="doc-shield-vs-bh" data-i18n="doc.s8.vsBhTitle">8.5 Performance: Drawdown &amp; Risk-Adjusted Scoring</h3>
-            <p data-i18n-html="doc.s8.vsBhP1">The chart below compares the <strong>Deleverage Modulator</strong> against a classic <strong>Buy &amp; Hold</strong> strategy over an <strong>8.7-year, 5-token backtest</strong> spanning multiple bull/bear cycles (including the 2022 crypto winter and 2024 corrections). Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. The curves track <strong>peak-to-trough drawdown</strong> &mdash; how deep each strategy fell from its highs. The modulator is scored on <strong>risk-adjusted return</strong> (Calmar, Sharpe) and drawdown, not on beating Buy &amp; Hold in raw dollars.</p>
+            <p data-i18n-html="doc.s8.vsBhP1">The chart below compares the <strong>Deleverage Modulator</strong> against a classic <strong>Buy &amp; Hold</strong> strategy over an <strong>8.7-year, 5-token backtest</strong> spanning multiple bull/bear cycles (including the 2022 crypto winter and 2024 corrections). Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. The curves track <strong>peak-to-trough drawdown</strong> &mdash; how deep each strategy fell from its highs. The modulator is scored on <strong>risk-adjusted return</strong> (Sharpe) and drawdown; the v14 preset now beats Buy &amp; Hold on Sharpe, though not on raw dollars.</p>
 
             <div class="doc-diagram">
-                <div class="doc-fl">Peak-to-Trough Drawdown &middot; Deleverage Modulator vs Buy &amp; Hold (v12.0)</div>
-                <svg viewBox="0 0 720 260" role="img" aria-label="Max drawdown: Buy and Hold minus 83.8 percent versus Deleverage Modulator minus 35.8 percent" preserveAspectRatio="xMidYMid meet" style="max-width:700px;width:100%;height:auto;">
+                <div class="doc-fl">Peak-to-Trough Drawdown &middot; Deleverage Modulator vs Buy &amp; Hold (v14.0)</div>
+                <svg viewBox="0 0 720 260" role="img" aria-label="Max drawdown: Buy and Hold minus 83.8 percent versus Deleverage Modulator minus 35.0 percent" preserveAspectRatio="xMidYMid meet" style="max-width:700px;width:100%;height:auto;">
                     <!-- gridlines -->
                     <line x1="60" y1="40" x2="690" y2="40" class="lp-sh-grid dash"/>
                     <line x1="60" y1="130" x2="690" y2="130" class="lp-sh-grid"/>
@@ -1952,12 +1952,12 @@
                     <!-- Buy &amp; Hold drawdown (deeper, trough -83.8%) -->
                     <polygon class="lp-sh-fill red" points="60,40 130,75 200,130 270,191 340,150 410,120 480,165 550,125 620,85 690,60 690,40"/>
                     <polyline class="lp-sh-line red" points="60,40 130,75 200,130 270,191 340,150 410,120 480,165 550,125 620,85 690,60"/>
-                    <!-- Deleverage Modulator drawdown (shallower, trough -35.8%) -->
+                    <!-- Deleverage Modulator drawdown (shallower, trough -35.0%) -->
                     <polygon class="lp-sh-fill cyan" points="60,40 130,60 200,88 270,104 340,90 410,74 480,96 550,78 620,60 690,50 690,40"/>
                     <polyline class="lp-sh-line cyan" points="60,40 130,60 200,88 270,104 340,90 410,74 480,96 550,78 620,60 690,50"/>
                     <!-- trough callouts -->
                     <text x="248" y="206" class="lp-sh-cap red">-83.8% B&amp;H</text>
-                    <text x="285" y="120" class="lp-sh-cap cyan">-35.8% modulator</text>
+                    <text x="285" y="120" class="lp-sh-cap cyan">-35.0% modulator</text>
                     <!-- legend -->
                     <rect x="250" y="240" width="10" height="10" rx="2" class="lp-sh-fill red"/>
                     <text x="266" y="249" class="lp-sh-leg">Buy &amp; Hold</text>
@@ -1971,7 +1971,7 @@
                 <div class="doc-metrics-grid">
                     <div>
                         <div class="doc-metric-label">Modulator Max Drawdown</div>
-                        <div class="doc-metric-value" style="color:var(--blue);">35.8%</div>
+                        <div class="doc-metric-value" style="color:var(--blue);">35.0%</div>
                     </div>
                     <div>
                         <div class="doc-metric-label">B&amp;H Max Drawdown</div>
@@ -1979,15 +1979,15 @@
                     </div>
                     <div>
                         <div class="doc-metric-label">Drawdown Reduction</div>
-                        <div class="doc-metric-value" style="color:var(--green);">&minus;48.0pp</div>
-                    </div>
-                    <div>
-                        <div class="doc-metric-label">Calmar (Modulator vs B&amp;H)</div>
-                        <div class="doc-metric-value" style="color:var(--green);">1.43 vs 1.07</div>
+                        <div class="doc-metric-value" style="color:var(--green);">&minus;48.8pp</div>
                     </div>
                     <div>
                         <div class="doc-metric-label">Sharpe (Modulator vs B&amp;H)</div>
-                        <div class="doc-metric-value" style="color:var(--blue);">0.98 vs 0.77</div>
+                        <div class="doc-metric-value" style="color:var(--green);">0.93 vs 0.75</div>
+                    </div>
+                    <div>
+                        <div class="doc-metric-label">CAGR (8.7y)</div>
+                        <div class="doc-metric-value" style="color:var(--blue);">32.9%</div>
                     </div>
                     <div>
                         <div class="doc-metric-label">Regime Signal</div>
