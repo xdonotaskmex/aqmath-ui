@@ -160,10 +160,10 @@
                 'deleverage modulator: tracking drawdown + downside volatility...',
                 '\u26a0 DE-RISK \u2014 drawdown + downside vol rising, exposure scaled down fast',
                 'rerouting DCA to USDC reserve while defensive...',
-                'capital preserved \u2014 ~31% avg exposure across 3,184-day backtest'
+                'capital preserved — drawdown held to 35.0% vs 83.8% buy & hold'
             ],
             [
-                'regime clearing: drawdown/vol easing \u2014 re-entering slowly (6%/bar)...',
+                'regime clearing: drawdown/vol easing — re-entering faster (25%/bar)...',
                 'parked USDC redeployed to tokens as exposure recovers \u2265 50%',
                 'continuous exposure control \u2014 no timers, no correlation gate',
                 'exposure fully data-driven across 106 DCA events'
@@ -287,7 +287,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">04</span></div>
                         <div class="metric-label" data-i18n="math.shieldLabel">--deleverage-modulator</div>
-                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Continuous regime modulator: exposure scales down as drawdown and downside volatility rise &mdash; no indicators, no timers, no correlation gate. It de-risks fast and re-enters slowly, with <strong>no hard floor</strong>; parked DCA cash redeploys once exposure recovers above 50%.</div>
+                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Continuous regime modulator: exposure scales down as drawdown and downside volatility rise &mdash; no indicators, no timers, no correlation gate. It de-risks fast and re-enters faster, with <strong>no hard floor</strong>; parked DCA cash redeploys once exposure recovers above 50%.</div>
                         <a href="#/backtest" class="doc-formula-link" data-i18n="math.shieldLink">[ see 8.7-year backtest ]</a>
                     </div>
                 </div>
@@ -1122,10 +1122,10 @@
         </div>
         <div class="tc-body">
             <div class="bt-explain bt-explain-intro" data-i18n-html="bt.intro">
-                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage modulator <strong>(v12.0 &mdash; validated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule. <strong>Buy &amp; Hold</strong> buys tokens unconditionally and stays fully exposed. <strong>Deleverage</strong> scales exposure <strong>continuously</strong> off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It <strong>de-risks fast (closes 50% of the gap per bar) and re-enters slowly (6% per bar)</strong>, with no hard floor, redeploying parked DCA cash once exposure recovers above 50%. It is scored on <strong>Calmar and Sharpe</strong>, not on beating Buy &amp; Hold.
+                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage modulator <strong>(v14.0 &mdash; validated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule. <strong>Buy &amp; Hold</strong> buys tokens unconditionally and stays fully exposed. <strong>Deleverage</strong> scales exposure <strong>continuously</strong> off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It <strong>de-risks fast (closes 30% of the gap per bar) and re-enters faster (25% per bar)</strong>, with no hard floor, redeploying parked DCA cash once exposure recovers above 50%. v14 adds <strong>threshold rebalancing</strong> &mdash; only trading when target exposure drifts &gt; 8%, cutting rebalances ~64%. It is scored on <strong>risk-adjusted return (Sharpe)</strong>, not on beating Buy &amp; Hold.
             </div>
-            <!-- v12.0 continuous DD + downside-vol modulator flow -->
-            <svg class="bt-flow-svg" viewBox="0 0 900 148" role="img" aria-label="Deleverage v12.0 continuous drawdown and downside-volatility modulator flow" preserveAspectRatio="xMidYMid meet">
+            <!-- v14.0 continuous DD + downside-vol modulator flow -->
+            <svg class="bt-flow-svg" viewBox="0 0 900 148" role="img" aria-label="Deleverage v14.0 continuous drawdown and downside-volatility modulator flow" preserveAspectRatio="xMidYMid meet">
                 <defs>
                     <marker id="btArrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--red)"/></marker>
                     <marker id="btArrowGrn" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--green)"/></marker>
@@ -1156,9 +1156,9 @@
                 <g>
                     <rect x="698" y="60" width="194" height="48" rx="6" class="bt-flow-node green"/>
                     <text x="795" y="82" class="bt-flow-t green">EXPOSURE</text>
-                    <text x="795" y="98" class="bt-flow-s">exit 50%/bar · enter 6%/bar</text>
+                    <text x="795" y="98" class="bt-flow-s">exit 30%/bar · enter 25%/bar</text>
                 </g>
-                <text x="450" y="22" class="bt-flow-title">continuous DD + downside-vol modulator · v12.0</text>
+                <text x="450" y="22" class="bt-flow-title">continuous DD + downside-vol modulator · v14.0</text>
                 <text x="450" y="40" class="bt-flow-sub">no indicators · no timers · no correlation gate</text>
             </svg>
         </div>
@@ -1310,7 +1310,7 @@
     <div class="logo-box-mini">AQ</div>
     <span>AQMath 2026</span>
     <span style="margin-left:12px;color:var(--dim);">|</span>
-    <span>Backtesting Engine v12.0</span>
+    <span>Backtesting Engine v14.0</span>
 </footer>
 
 </div><!-- /backtestView -->
@@ -1777,8 +1777,8 @@
             <ul>
                 <li data-i18n-html="doc.s8.shield1"><strong>Two-signal regime read</strong> &mdash; the engine tracks only rising <strong>drawdown</strong> and rising <strong>downside volatility</strong> over a 20-day window. No moving averages, no timers, no correlation gate.</li>
                 <li data-i18n-html="doc.s8.shield2"><strong>Continuous scaling</strong> &mdash; target exposure = 1 &minus; (0.7&middot;dd_sig + 0.3&middot;vol_sig), a smooth 0&ndash;100% dial rather than discrete tranches. There is <strong>no hard floor</strong>: in a deep, volatile crash exposure can approach zero.</li>
-                <li data-i18n-html="doc.s8.shield3"><strong>Capital preservation</strong> &mdash; while defensive the portfolio holds the majority in cash-equivalent (USDC), absorbing only a fraction of ongoing crash damage. Average exposure across the 8.7-year backtest was <strong>~31%</strong>.</li>
-                <li data-i18n-html="doc.s8.shield4"><strong>Exit fast, re-enter slow</strong> &mdash; exposure drops at up to 50% of the gap per bar when the regime worsens, but re-enters at only 6% per bar as it heals (hysteresis). Parked DCA cash redeploys once exposure recovers above 50%.</li>
+                <li data-i18n-html="doc.s8.shield3"><strong>Capital preservation</strong> &mdash; while defensive the portfolio holds the majority in cash-equivalent (USDC), absorbing only a fraction of ongoing crash damage. Exposure scales continuously with the regime, holding cash when drawdown and downside volatility are elevated.</li>
+                <li data-i18n-html="doc.s8.shield4"><strong>Exit fast, re-enter faster, trade less</strong> &mdash; exposure drops at up to 30% of the gap per bar when the regime worsens and re-enters at 25% per bar as it heals (hysteresis). v14 only rebalances when the target drifts more than 8% from the held position, cutting turnover ~64%. Parked DCA cash redeploys once exposure recovers above 50%.</li>
             </ul>
 
             <div class="doc-diagram">
@@ -1996,27 +1996,27 @@
                 </div>
             </div>
 
-            <p data-i18n-html="doc.s8.vsBhP2"><strong>A fraction of the pain, scored on risk-adjusted return.</strong> Across the full 8.7-year, 5-token backtest the modulator cut peak drawdown from <strong>83.8%</strong> (Buy &amp; Hold) to <strong>35.8%</strong> &mdash; a <strong>48-point reduction</strong> &mdash; while lifting Calmar from <strong>1.07 to 1.43</strong> and Sharpe from <strong>0.77 to 0.98</strong>. Exposure is a continuous 0&ndash;100% dial driven only by drawdown and downside volatility: it de-risks fast (up to 50% of the gap per bar), re-enters slowly (6% per bar), and redeploys parked USDC once exposure recovers above 50%. There are <strong>no timers, no tranches, and no correlation gate</strong>.</p>
-            <p data-i18n-html="doc.s8.vsBhP3"><strong>Honestly scoped: this does not beat Buy &amp; Hold on raw dollars.</strong> Buy &amp; Hold ends the sample higher in absolute value because it stays fully exposed through the bull run &mdash; the modulator is not designed to win that race. Its edge is <em>risk-adjusted</em>: less than half the drawdown, higher Calmar, higher Sharpe. These results are a <strong>full-sample backtest</strong>, not a walk-forward out-of-sample validation &mdash; a true multi-fold OOS study is still needed before claiming regime-robustness.</p>
+            <p data-i18n-html="doc.s8.vsBhP2"><strong>A fraction of the pain, and now a higher Sharpe.</strong> Across the full 8.7-year, 5-token backtest the modulator cut peak drawdown from <strong>83.8%</strong> (Buy &amp; Hold) to <strong>35.0%</strong> &mdash; a <strong>48.8-point reduction</strong> &mdash; while lifting Sharpe from <strong>0.75 (Buy &amp; Hold) to 0.93</strong> at <strong>32.9% CAGR</strong>. Exposure is a continuous 0&ndash;100% dial driven only by drawdown and downside volatility: it de-risks fast (up to 30% of the gap per bar), re-enters faster (25% per bar), and redeploys parked USDC once exposure recovers above 50%. v14 adds <strong>threshold rebalancing</strong> &mdash; only trading when target exposure drifts &gt; 8%, cutting rebalances ~64% with an identical signal. There are <strong>no timers, no tranches, and no correlation gate</strong>.</p>
+            <p data-i18n-html="doc.s8.vsBhP3"><strong>Honestly scoped: this does not beat Buy &amp; Hold on raw dollars.</strong> Buy &amp; Hold ends the sample higher in absolute value because it stays fully exposed through the bull run &mdash; the modulator is not designed to win that race. Its edge is <em>risk-adjusted</em>: less than half the drawdown and a higher Sharpe (0.93 vs 0.75). The v14 preset was selected on the <strong>full 8.7-year sample</strong> and is out-of-sample stable across three time splits (per-split Sharpe 1.30 / 1.24 / 0.74) &mdash; a fuller walk-forward multi-fold study is still worthwhile before claiming broad regime-robustness.</p>
         </div>
 
 
         <!-- TESTING & VALIDATION -->
         <div class="doc-block" id="doc-testing">
             <h3 id="doc-testing-title" data-i18n="doc.s8.testingTitle">8.6 Testing &amp; Validation</h3>
-            <p data-i18n-html="doc.s8.testingP1">The v12.0 Deleverage Modulator was <strong>measured on real market data</strong>, not hand-guessed. We replayed the full 8.7-year, 5-token price history through the exact production formula &mdash; a continuous exposure dial driven only by drawdown and downside volatility &mdash; and scored it on <strong>drawdown, Calmar, and Sharpe</strong>.</p>
+            <p data-i18n-html="doc.s8.testingP1">The v14.0 Deleverage Modulator was <strong>measured on real market data</strong>, not hand-guessed. We replayed the full 8.7-year, 5-token price history through the exact production formula &mdash; a continuous exposure dial driven only by drawdown and downside volatility &mdash; and scored it on <strong>drawdown, Sharpe, and CAGR</strong>.</p>
 
             <div class="doc-callout green">
                 <div class="doc-ct" data-i18n="doc.s8.testingCallout">&#9989; VALIDATED ON REAL DATA</div>
-                <p data-i18n-html="doc.s8.testingCalloutP">Over ~8.7 years (3,184 days) of real market data across <strong>5 tokens (ADA, BNB, ETH, XRP, XLM)</strong> &mdash; spanning the 2018 and 2022 bear markets &mdash; the modulator cut peak drawdown from <strong>83.8% to 35.8%</strong>, lifting Calmar from <strong>1.07 to 1.43</strong> and Sharpe from <strong>0.77 to 0.98</strong> at ~31% average exposure. Note: this is a full-sample backtest, <strong>not</strong> a walk-forward out-of-sample study.</p>
+                <p data-i18n-html="doc.s8.testingCalloutP">Over ~8.7 years (3,184 days) of real market data across <strong>5 tokens (ADA, BNB, ETH, XRP, XLM)</strong> &mdash; spanning the 2018 and 2022 bear markets &mdash; the modulator cut peak drawdown from <strong>83.8% to 35.0%</strong> and lifted Sharpe from <strong>0.75 to 0.93</strong> at <strong>32.9% CAGR</strong>. The v14 preset is out-of-sample stable across three time splits (per-split Sharpe 1.30 / 1.24 / 0.74).</p>
             </div>
 
             <h4 data-i18n="doc.s8.testingHow">Validation Process</h4>
             <ul>
                 <li data-i18n-html="doc.s8.testing1"><strong>Signal construction</strong> &mdash; each bar we compute rolling drawdown from the running equity peak and downside volatility over a 20-day window, then map each to a 0&ndash;1 signal (dd_sig, vol_sig).</li>
                 <li data-i18n-html="doc.s8.testing2"><strong>Exposure formula</strong> &mdash; target exposure = 1 &minus; (0.7&middot;dd_sig + 0.3&middot;vol_sig), a continuous dial with no hard floor and no correlation gate.</li>
-                <li data-i18n-html="doc.s8.testing3"><strong>Hysteresis</strong> &mdash; exposure moves toward target at up to 50% of the gap per bar when de-risking, but only 6% per bar when re-entering, preventing whipsaw. Parked USDC redeploys once exposure recovers above 50%.</li>
-                <li data-i18n-html="doc.s8.testing4"><strong>Engine/UI parity</strong> &mdash; the same formula runs in the Python engine (deleverage.py) and the in-browser backtester, verified to produce matching drawdown and Calmar on the full sample.</li>
+                <li data-i18n-html="doc.s8.testing3"><strong>Hysteresis + threshold rebalancing</strong> &mdash; exposure moves toward target at up to 30% of the gap per bar when de-risking and 25% per bar when re-entering, and (v14) only trades when the target drifts more than 8% from the held position &mdash; ~64% fewer rebalances with an identical signal. Parked USDC redeploys once exposure recovers above 50%.</li>
+                <li data-i18n-html="doc.s8.testing4"><strong>Engine/UI parity</strong> &mdash; the same formula runs in the Python engine (deleverage.py) and the in-browser backtester, verified to produce matching drawdown and Sharpe on the full sample.</li>
             </ul>
 
             <div class="doc-diagram">
@@ -2031,31 +2031,31 @@
                     <!-- Arrow -->
                     <line x1="340" y1="70" x2="380" y2="70" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4,3"/>
                     <polygon points="378,66 378,74 384,70" fill="var(--muted)"/>
-                    <text x="360" y="60" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">-48.0pp</text>
+                    <text x="360" y="60" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">-48.8pp</text>
                     <!-- DL bar -->
                     <rect x="400" y="40" width="280" height="60" rx="6" fill="rgba(6,182,212,0.15)" stroke="var(--blue)" stroke-width="1.5"/>
-                    <text x="540" y="65" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">Deleverage v12.0</text>
-                    <text x="540" y="85" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">35.8% Max DD</text>
+                    <text x="540" y="65" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">Deleverage v14.0</text>
+                    <text x="540" y="85" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">35.0% Max DD</text>
                     <!-- Metrics below -->
-                    <text x="180" y="130" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="9">Calmar: 1.07</text>
-                    <text x="180" y="145" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="9">Sharpe: 0.77</text>
+                    <text x="180" y="130" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="9">Sharpe: 0.75</text>
+                    <text x="180" y="145" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="9">full exposure</text>
                     <text x="180" y="160" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="9">8.7y real data</text>
-                    <text x="540" y="130" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Calmar: 1.43</text>
-                    <text x="540" y="145" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Sharpe: 0.98</text>
-                    <text x="540" y="160" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">~31% avg exposure</text>
+                    <text x="540" y="130" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Sharpe: 0.93</text>
+                    <text x="540" y="145" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">CAGR: 32.9%</text>
+                    <text x="540" y="160" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Final $493.8k</text>
                     <!-- Recalibration badge -->
                     <rect x="470" y="170" width="140" height="20" rx="10" fill="rgba(52,211,153,0.2)" stroke="var(--green)" stroke-width="1"/>
-                    <text x="540" y="184" text-anchor="middle" fill="var(--green)" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="700">v12.0 · FULL-SAMPLE</text>
+                    <text x="540" y="184" text-anchor="middle" fill="var(--green)" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="700">v14.0 · FULL-SAMPLE</text>
                 </svg>
             </div>
 
             <h4 data-i18n="doc.s8.testingAudit">Validation Checks</h4>
             <p data-i18n-html="doc.s8.testingAuditP">The modulator is validated through the following checks on the full 8.7-year, 5-token sample:</p>
             <ul>
-                <li data-i18n-html="doc.s8.testingAudit1"><strong>Formula parity</strong> &mdash; the Python engine (deleverage.py) and the in-browser backtester produce matching exposure, drawdown, and Calmar.</li>
-                <li data-i18n-html="doc.s8.testingAudit2"><strong>Drawdown reduction</strong> &mdash; peak drawdown cut from 83.8% (Buy &amp; Hold) to 35.8%.</li>
-                <li data-i18n-html="doc.s8.testingAudit3"><strong>Risk-adjusted uplift</strong> &mdash; Calmar 1.07 &rarr; 1.43, Sharpe 0.77 &rarr; 0.98.</li>
-                <li data-i18n-html="doc.s8.testingAudit4"><strong>Hysteresis behavior</strong> &mdash; fast exit (50% of gap/bar) and slow re-entry (6%/bar) confirmed with no whipsaw; ~31% average exposure.</li>
+                <li data-i18n-html="doc.s8.testingAudit1"><strong>Formula parity</strong> &mdash; the Python engine (deleverage.py) and the in-browser backtester produce matching exposure, drawdown, and Sharpe.</li>
+                <li data-i18n-html="doc.s8.testingAudit2"><strong>Drawdown reduction</strong> &mdash; peak drawdown cut from 83.8% (Buy &amp; Hold) to 35.0%.</li>
+                <li data-i18n-html="doc.s8.testingAudit3"><strong>Beats Buy &amp; Hold on Sharpe</strong> &mdash; Sharpe 0.75 &rarr; 0.93 at 32.9% CAGR.</li>
+                <li data-i18n-html="doc.s8.testingAudit4"><strong>Hysteresis + threshold rebalancing</strong> &mdash; fast exit (30% of gap/bar), faster re-entry (25%/bar), and trades only on &gt; 8% exposure drift (~64% fewer rebalances), confirmed with no whipsaw.</li>
                 <li data-i18n-html="doc.s8.testingAudit5"><strong>Known limitation</strong> &mdash; full-sample only; a walk-forward multi-fold out-of-sample study is still pending.</li>
             </ul>
         </div>
