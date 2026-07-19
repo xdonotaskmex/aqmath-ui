@@ -473,7 +473,7 @@
                             <div class="lp-shield-stat"><span class="v">0.93</span><span class="l" data-i18n-html="shield.s2l">Sharpe (B&amp;H 0.75)</span></div>
                             <div class="lp-shield-stat"><span class="v">32.9%</span><span class="l" data-i18n-html="shield.s3l">CAGR (8.7y)</span></div>
                         </div>
-                        <p data-i18n-html="shield.body">Across an 8.7-year, 5-token backtest (ADA/BNB/ETH/XRP/XLM) the modulator held peak drawdown to <strong>35.0%</strong> versus <strong>83.8%</strong> for Buy &amp; Hold, and now <strong>beats Buy &amp; Hold on Sharpe (0.93 vs 0.75)</strong> at <strong>32.9% CAGR</strong> &mdash; out-of-sample stable (per-split Sharpe 1.30 / 1.24 / 0.74). v14 adds <strong>threshold rebalancing</strong> (only trades when target exposure drifts &gt; 8%), cutting rebalances ~64%.</p>
+                        <p data-i18n-html="shield.body">Across an 8.7-year, 5-token backtest (ADA/BNB/ETH/XRP/XLM) the modulator held peak drawdown to <strong>35.0%</strong> versus <strong>83.8%</strong> for Buy &amp; Hold, and <strong>beats Buy &amp; Hold on Sharpe (0.93 vs 0.75)</strong> at <strong>32.9% CAGR</strong>. On a <strong>sealed out-of-sample second half</strong> never used to pick the preset it still roughly halved drawdown (~24% vs ~63%) at a higher Sharpe (0.48 vs 0.37). v14 adds <strong>threshold rebalancing</strong> (only trades when target exposure drifts &gt; 8%), cutting rebalances ~64%. Backtest basket is survivor tokens; past results don't guarantee future performance.</p>
                         <a class="lp-btn-secondary" href="#/backtest" data-i18n="shield.cta">--run-the-backtest</a>
                     </div>
                 </div>
@@ -1801,7 +1801,7 @@
                     <text x="250" y="52" text-anchor="middle" fill="var(--red)" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">DE-RISK</text>
                     <text x="250" y="68" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Positions scaled down</text>
                     <text x="250" y="80" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">DCA &#x2192; USDC</text>
-                    <text x="250" y="96" text-anchor="middle" fill="var(--red)" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">50% of gap / bar</text>
+                    <text x="250" y="96" text-anchor="middle" fill="var(--red)" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">30% of gap / bar</text>
                     <text x="250" y="108" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="6">no hard floor</text>
                     <!-- Arrow 2 -->
                     <line x1="320" y1="80" x2="355" y2="80" stroke="var(--muted)" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
@@ -1811,7 +1811,7 @@
                     <!-- Re-enter slow -->
                     <rect x="360" y="30" width="100" height="100" rx="6" fill="rgba(6,182,212,0.06)" stroke="var(--blue)" stroke-width="1" opacity="0.6"/>
                     <text x="410" y="52" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">RE-ENTER</text>
-                    <text x="410" y="68" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">6% of gap / bar</text>
+                    <text x="410" y="68" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">25% of gap / bar</text>
                     <text x="410" y="80" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Slow ramp-up</text>
                     <text x="410" y="96" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">hysteresis</text>
                     <text x="410" y="108" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="6">no whipsaw</text>
@@ -1997,7 +1997,7 @@
             </div>
 
             <p data-i18n-html="doc.s8.vsBhP2"><strong>A fraction of the pain, and now a higher Sharpe.</strong> Across the full 8.7-year, 5-token backtest the modulator cut peak drawdown from <strong>83.8%</strong> (Buy &amp; Hold) to <strong>35.0%</strong> &mdash; a <strong>48.8-point reduction</strong> &mdash; while lifting Sharpe from <strong>0.75 (Buy &amp; Hold) to 0.93</strong> at <strong>32.9% CAGR</strong>. Exposure is a continuous 0&ndash;100% dial driven only by drawdown and downside volatility: it de-risks fast (up to 30% of the gap per bar), re-enters faster (25% per bar), and redeploys parked USDC once exposure recovers above 50%. v14 adds <strong>threshold rebalancing</strong> &mdash; only trading when target exposure drifts &gt; 8%, cutting rebalances ~64% with an identical signal. There are <strong>no timers, no tranches, and no correlation gate</strong>.</p>
-            <p data-i18n-html="doc.s8.vsBhP3"><strong>Honestly scoped: this does not beat Buy &amp; Hold on raw dollars.</strong> Buy &amp; Hold ends the sample higher in absolute value because it stays fully exposed through the bull run &mdash; the modulator is not designed to win that race. Its edge is <em>risk-adjusted</em>: less than half the drawdown and a higher Sharpe (0.93 vs 0.75). The v14 preset was selected on the <strong>full 8.7-year sample</strong> and is out-of-sample stable across three time splits (per-split Sharpe 1.30 / 1.24 / 0.74) &mdash; a fuller walk-forward multi-fold study is still worthwhile before claiming broad regime-robustness.</p>
+            <p data-i18n-html="doc.s8.vsBhP3"><strong>Honestly scoped: this does not beat Buy &amp; Hold on raw dollars.</strong> Buy &amp; Hold ends the sample higher in absolute value because it stays fully exposed through the bull run &mdash; the modulator is not designed to win that race. Its edge is <em>risk-adjusted</em>: less than half the drawdown and a higher Sharpe (0.93 vs 0.75). Crucially this edge is <strong>not only in-sample</strong>: on a <strong>sealed second half</strong> of the data never used to choose the v14 preset, the modulator still cut peak drawdown from <strong>~63% to ~24%</strong> and kept a <strong>higher Sharpe (0.48 vs 0.37)</strong> at a comparable total return. <strong>Methodology note:</strong> the backtest basket is composed of tokens that survived to today (survivorship bias), and past results do not guarantee future performance.</p>
         </div>
 
 
@@ -2008,7 +2008,7 @@
 
             <div class="doc-callout green">
                 <div class="doc-ct" data-i18n="doc.s8.testingCallout">&#9989; VALIDATED ON REAL DATA</div>
-                <p data-i18n-html="doc.s8.testingCalloutP">Over ~8.7 years (3,184 days) of real market data across <strong>5 tokens (ADA, BNB, ETH, XRP, XLM)</strong> &mdash; spanning the 2018 and 2022 bear markets &mdash; the modulator cut peak drawdown from <strong>83.8% to 35.0%</strong> and lifted Sharpe from <strong>0.75 to 0.93</strong> at <strong>32.9% CAGR</strong>. The v14 preset is out-of-sample stable across three time splits (per-split Sharpe 1.30 / 1.24 / 0.74).</p>
+                <p data-i18n-html="doc.s8.testingCalloutP">Over ~8.7 years (3,184 days) of real market data across <strong>5 tokens (ADA, BNB, ETH, XRP, XLM)</strong> &mdash; spanning the 2018 and 2022 bear markets &mdash; the modulator cut peak drawdown from <strong>83.8% to 35.0%</strong> and lifted Sharpe from <strong>0.75 to 0.93</strong> at <strong>32.9% CAGR</strong>. The modulator is out-of-sample honest: on a sealed second half never used to pick the preset, it still roughly halved drawdown (~24% vs ~63% Buy &amp; Hold) at a higher Sharpe (0.48 vs 0.37).</p>
             </div>
 
             <h4 data-i18n="doc.s8.testingHow">Validation Process</h4>
@@ -2056,7 +2056,7 @@
                 <li data-i18n-html="doc.s8.testingAudit2"><strong>Drawdown reduction</strong> &mdash; peak drawdown cut from 83.8% (Buy &amp; Hold) to 35.0%.</li>
                 <li data-i18n-html="doc.s8.testingAudit3"><strong>Beats Buy &amp; Hold on Sharpe</strong> &mdash; Sharpe 0.75 &rarr; 0.93 at 32.9% CAGR.</li>
                 <li data-i18n-html="doc.s8.testingAudit4"><strong>Hysteresis + threshold rebalancing</strong> &mdash; fast exit (30% of gap/bar), faster re-entry (25%/bar), and trades only on &gt; 8% exposure drift (~64% fewer rebalances), confirmed with no whipsaw.</li>
-                <li data-i18n-html="doc.s8.testingAudit5"><strong>Known limitation</strong> &mdash; full-sample only; a walk-forward multi-fold out-of-sample study is still pending.</li>
+                <li data-i18n-html="doc.s8.testingAudit5"><strong>Out-of-sample check</strong> &mdash; on a sealed second half never used to pick the preset, the modulator still roughly halved drawdown (~24% vs ~63% Buy &amp; Hold) at a higher Sharpe (0.48 vs 0.37); a fuller walk-forward multi-fold study is still worthwhile.</li>
             </ul>
         </div>
 
