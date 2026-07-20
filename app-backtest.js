@@ -6,7 +6,7 @@
 //  Continuous DD + downside-vol regime modulator. No state machine,
 //  no correlation gate, no timers. PRIMARY signal: rising drawdown +
 //  rising downside volatility -> continuously scale exposure down.
-//  Exit fast (30% of gap/bar), re-enter faster (25%/bar), no hard floor.
+//  Exit fast (30% of gap/bar), re-enter more gradually (25%/bar), no hard floor.
 //  v14 adds THRESHOLD rebalancing: only trade when the target exposure
 //  drifts > 8% from the held position (~64% fewer rebalances, far lower
 //  fees, identical signal). Full-sample tuned on 5-token real data

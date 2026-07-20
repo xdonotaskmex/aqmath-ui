@@ -163,7 +163,7 @@
                 'capital preserved — drawdown held to 35.0% vs 83.8% buy & hold'
             ],
             [
-                'regime clearing: drawdown/vol easing — re-entering faster (25%/bar)...',
+                'regime clearing: drawdown/vol easing — re-entering more gradually (25%/bar)...',
                 'parked USDC redeployed to tokens as exposure recovers \u2265 50%',
                 'continuous exposure control \u2014 no timers, no correlation gate',
                 'exposure fully data-driven across 106 DCA events'
@@ -287,7 +287,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">04</span></div>
                         <div class="metric-label" data-i18n="math.shieldLabel">--deleverage-modulator</div>
-                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Continuous regime modulator: exposure scales down as drawdown and downside volatility rise &mdash; no indicators, no timers, no correlation gate. It de-risks fast and re-enters faster, with <strong>no hard floor</strong>; parked DCA cash redeploys once exposure recovers above 50%.</div>
+                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Continuous regime modulator: exposure scales down as drawdown and downside volatility rise &mdash; no indicators, no timers, no correlation gate. It de-risks fast and re-enters more gradually, with <strong>no hard floor</strong>; parked DCA cash redeploys once exposure recovers above 50%.</div>
                         <a href="#/backtest" class="doc-formula-link" data-i18n="math.shieldLink">[ see 8.7-year backtest ]</a>
                     </div>
                 </div>
@@ -439,7 +439,7 @@
             <div class="lp-card lp-shield-card">
                 <div class="card-title" style="color:var(--purple);text-align:center;" data-i18n-html="shield.label">--deleverage-modulator &middot; v14.0</div>
                 <h3 data-i18n-html="shield.title">Deleverage Modulator &mdash; validated on real data</h3>
-                <p class="lp-what-lead" data-i18n-html="shield.lead">v14.0 scales exposure continuously off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It de-risks fast, re-enters faster, and uses threshold rebalancing.</p>
+                <p class="lp-what-lead" data-i18n-html="shield.lead">v14.0 scales exposure continuously off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It de-risks fast, re-enters more gradually, and uses threshold rebalancing.</p>
                 <div class="lp-shield-grid">
                     <div class="lp-shield-viz">
                         <svg viewBox="0 0 480 250" role="img" aria-label="Max drawdown: Buy and Hold minus 83.8 percent versus Deleverage Modulator minus 35.0 percent" preserveAspectRatio="xMidYMid meet">
@@ -1122,7 +1122,7 @@
         </div>
         <div class="tc-body">
             <div class="bt-explain bt-explain-intro" data-i18n-html="bt.intro">
-                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage modulator <strong>(v14.0 &mdash; validated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule. <strong>Buy &amp; Hold</strong> buys tokens unconditionally and stays fully exposed. <strong>Deleverage</strong> scales exposure <strong>continuously</strong> off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It <strong>de-risks fast (closes 30% of the gap per bar) and re-enters faster (25% per bar)</strong>, with no hard floor, redeploying parked DCA cash once exposure recovers above 50%. v14 adds <strong>threshold rebalancing</strong> &mdash; only trading when target exposure drifts &gt; 8%, cutting rebalances ~64%. It is scored on <strong>risk-adjusted return (Sharpe)</strong>, not on beating Buy &amp; Hold.
+                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage modulator <strong>(v14.0 &mdash; validated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule. <strong>Buy &amp; Hold</strong> buys tokens unconditionally and stays fully exposed. <strong>Deleverage</strong> scales exposure <strong>continuously</strong> off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It <strong>de-risks fast (closes 30% of the gap per bar) and re-enters more gradually (25% per bar)</strong>, with no hard floor, redeploying parked DCA cash once exposure recovers above 50%. v14 adds <strong>threshold rebalancing</strong> &mdash; only trading when target exposure drifts &gt; 8%, cutting rebalances ~64%. It is scored on <strong>risk-adjusted return (Sharpe)</strong>, not on beating Buy &amp; Hold.
             </div>
             <!-- v14.0 continuous DD + downside-vol modulator flow -->
             <svg class="bt-flow-svg" viewBox="0 0 900 148" role="img" aria-label="Deleverage v14.0 continuous drawdown and downside-volatility modulator flow" preserveAspectRatio="xMidYMid meet">
@@ -1603,7 +1603,7 @@
             <p data-i18n-html="doc.s4.smallP">When the DCA budget is very small, the engine allocates the <strong>entire amount</strong> to the single most underweight eligible token.</p>
             <div class="doc-callout green">
                 <div class="doc-ct" data-i18n-html="doc.s4.smallWhy">&#128202; WHY SINGLE-TOKEN FOR SMALL AMOUNTS</div>
-                <p data-i18n-html="doc.s4.smallWhyP">If you DCA $20 across 5 tokens, each gets $4 &mdash; likely below exchange minimums, and fees would consume a significant percentage. The small DCA rule puts the full $20 into the token that needs it most. Over multiple DCA cycles, the algorithm naturally balances across all tokens.</p>
+                <p data-i18n-html="doc.s4.smallWhyP">If you DCA $20 across 5 tokens, each gets $4 &mdash; likely below exchange minimums, and fees would consume a significant percentage. The small DCA rule puts the full $20 into the token that needs it most. Over multiple DCA cycles, the algorithm naturally balances across all tokens. The same fee-avoidance logic applies to larger budgets: every buy must clear a configurable per-token minimum (default $20) &mdash; any token whose share would fall below that floor is skipped and its budget redistributed to the more underweight tokens, so even a $500 DCA never places tiny sub-dollar buys.</p>
             </div>
         </div>
 
@@ -1619,7 +1619,7 @@
                     <circle cx="48" cy="26" r="12" fill="rgba(248,113,113,0.15)" stroke="var(--red)" stroke-width="0.5"/>
                     <text x="48" y="30" text-anchor="middle" fill="var(--red)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L1</text>
                     <text x="72" y="30" fill="var(--text)" font-family="'JetBrains Mono',monospace" font-size="10">Circuit Breaker</text>
-                    <text x="440" y="30" text-anchor="end" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">halts DCA during extreme crashes (Shield-aligned)</text>
+                    <text x="440" y="30" text-anchor="end" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">pauses DCA while Shield is defensive (exposure below redeploy)</text>
                     <rect x="20" y="50" width="440" height="32" rx="4" fill="rgba(251,191,36,0.06)" stroke="var(--amber)" stroke-width="0.8" opacity="0.6"/>
                     <circle cx="48" cy="66" r="12" fill="rgba(251,191,36,0.15)" stroke="var(--amber)" stroke-width="0.5"/>
                     <text x="48" y="70" text-anchor="middle" fill="var(--amber)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L2</text>
@@ -1655,7 +1655,7 @@
             </div>
 
             <h3 id="doc-circuit" data-i18n="doc.s5.l1Title">L1 &mdash; Circuit Breaker</h3>
-            <p data-i18n="doc.s5.l1P">The circuit breaker halts <strong>all</strong> DCA distribution when portfolio drawdown from its all-time high is severe. The threshold adapts to current market volatility &mdash; higher in volatile markets to prevent false positives, lower in calm markets for tighter protection.</p>
+            <p data-i18n-html="doc.s5.l1P">The circuit breaker halts <strong>all</strong> DCA distribution whenever the Deleverage Shield is in its <strong>defensive state</strong> &mdash; when target exposure drops below the redeploy threshold (~50% of the risk budget). Because exposure is driven mostly by drawdown and downside volatility, it engages during any meaningful downturn, not only brief flash crashes, and stays paused through a sustained bear market. It resumes automatically once exposure recovers back above the threshold.</p>
 
             <h3 id="doc-safety" data-i18n="doc.s5.l2Title">L2 &mdash; Safety Factor</h3>
             <p data-i18n="doc.s5.l2P">A per-token risk adjustment that reduces buy size for high-volatility assets. More volatile tokens receive proportionally less capital, ensuring that risky positions don&rsquo;t get outsized allocations even when they&rsquo;re the most underweight.</p>
@@ -1778,7 +1778,7 @@
                 <li data-i18n-html="doc.s8.shield1"><strong>Two-signal regime read</strong> &mdash; the engine tracks only rising <strong>drawdown</strong> and rising <strong>downside volatility</strong> over a 20-day window. No moving averages, no timers, no correlation gate.</li>
                 <li data-i18n-html="doc.s8.shield2"><strong>Continuous scaling</strong> &mdash; target exposure = 1 &minus; (0.7&middot;dd_sig + 0.3&middot;vol_sig), a smooth 0&ndash;100% dial rather than discrete tranches. There is <strong>no hard floor</strong>: in a deep, volatile crash exposure can approach zero.</li>
                 <li data-i18n-html="doc.s8.shield3"><strong>Capital preservation</strong> &mdash; while defensive the portfolio holds the majority in cash-equivalent (USDC), absorbing only a fraction of ongoing crash damage. Exposure scales continuously with the regime, holding cash when drawdown and downside volatility are elevated.</li>
-                <li data-i18n-html="doc.s8.shield4"><strong>Exit fast, re-enter faster, trade less</strong> &mdash; exposure drops at up to 30% of the gap per bar when the regime worsens and re-enters at 25% per bar as it heals (hysteresis). v14 only rebalances when the target drifts more than 8% from the held position, cutting turnover ~64%. Parked DCA cash redeploys once exposure recovers above 50%.</li>
+                <li data-i18n-html="doc.s8.shield4"><strong>Exit fast, re-enter more gradually, trade less</strong> &mdash; exposure drops at up to 30% of the gap per bar when the regime worsens and re-enters at 25% per bar as it heals (hysteresis). v14 only rebalances when the target drifts more than 8% from the held position, cutting turnover ~64%. Parked DCA cash redeploys once exposure recovers above 50%.</li>
             </ul>
 
             <div class="doc-diagram">
@@ -1996,8 +1996,8 @@
                 </div>
             </div>
 
-            <p data-i18n-html="doc.s8.vsBhP2"><strong>A fraction of the pain, and now a higher Sharpe.</strong> Across the full 8.7-year, 5-token backtest the modulator cut peak drawdown from <strong>83.8%</strong> (Buy &amp; Hold) to <strong>35.0%</strong> &mdash; a <strong>48.8-point reduction</strong> &mdash; while lifting Sharpe from <strong>0.75 (Buy &amp; Hold) to 0.93</strong> at <strong>32.9% CAGR</strong>. Exposure is a continuous 0&ndash;100% dial driven only by drawdown and downside volatility: it de-risks fast (up to 30% of the gap per bar), re-enters faster (25% per bar), and redeploys parked USDC once exposure recovers above 50%. v14 adds <strong>threshold rebalancing</strong> &mdash; only trading when target exposure drifts &gt; 8%, cutting rebalances ~64% with an identical signal. There are <strong>no timers, no tranches, and no correlation gate</strong>.</p>
-            <p data-i18n-html="doc.s8.vsBhP3"><strong>Honestly scoped: this does not beat Buy &amp; Hold on raw dollars.</strong> Buy &amp; Hold ends the sample higher in absolute value because it stays fully exposed through the bull run &mdash; the modulator is not designed to win that race. Its edge is <em>risk-adjusted</em>: less than half the drawdown and a higher Sharpe (0.93 vs 0.75). Crucially this edge is <strong>not only in-sample</strong>: on a <strong>sealed second half</strong> of the data never used to choose the v14 preset, the modulator still cut peak drawdown from <strong>~63% to ~24%</strong> and kept a <strong>higher Sharpe (0.48 vs 0.37)</strong> at a comparable total return. <strong>Methodology note:</strong> the backtest basket is composed of tokens that survived to today (survivorship bias), and past results do not guarantee future performance.</p>
+            <p data-i18n-html="doc.s8.vsBhP2"><strong>A fraction of the pain, and now a higher Sharpe.</strong> Across the full 8.7-year, 5-token backtest the modulator cut peak drawdown from <strong>83.8%</strong> (Buy &amp; Hold) to <strong>35.0%</strong> &mdash; a <strong>48.8-point reduction</strong> &mdash; while lifting Sharpe from <strong>0.75 (Buy &amp; Hold) to 0.93</strong> at <strong>32.9% CAGR</strong>. Exposure is a continuous 0&ndash;100% dial driven only by drawdown and downside volatility: it de-risks fast (up to 30% of the gap per bar), re-enters more gradually (25% per bar), and redeploys parked USDC once exposure recovers above 50%. v14 adds <strong>threshold rebalancing</strong> &mdash; only trading when target exposure drifts &gt; 8%, cutting rebalances ~64% with an identical signal. There are <strong>no timers, no tranches, and no correlation gate</strong>.</p>
+            <p data-i18n-html="doc.s8.vsBhP3"><strong>Honestly scoped: this does not beat Buy &amp; Hold on raw dollars.</strong> Buy &amp; Hold ends the sample higher in absolute value because it stays fully exposed through the bull run &mdash; the modulator is not designed to win that race. Its edge is <em>risk-adjusted</em>: less than half the drawdown and a higher Sharpe (0.93 vs 0.75). Crucially this edge is <strong>not only in-sample</strong>: on a <strong>sealed second half</strong> of the data never used to choose the v14 preset, the modulator still cut peak drawdown from <strong>~63% to ~24%</strong> and kept a <strong>higher Sharpe (0.48 vs 0.37)</strong> at a comparable total return. <strong>Methodology note:</strong> the backtest basket is composed of tokens that survived to today (survivorship bias); we stress-tested that directly by dropping a dead token &mdash; Terra Classic (LUNC), which fell from ~$121 to ~$0 &mdash; into the basket, and the modulator&rsquo;s peak drawdown barely moved (~23%) while Buy &amp; Hold&rsquo;s worsened by up to ~18 points. Past results do not guarantee future performance.</p>
         </div>
 
 
@@ -2055,8 +2055,9 @@
                 <li data-i18n-html="doc.s8.testingAudit1"><strong>Formula parity</strong> &mdash; the Python engine (deleverage.py) and the in-browser backtester produce matching exposure, drawdown, and Sharpe.</li>
                 <li data-i18n-html="doc.s8.testingAudit2"><strong>Drawdown reduction</strong> &mdash; peak drawdown cut from 83.8% (Buy &amp; Hold) to 35.0%.</li>
                 <li data-i18n-html="doc.s8.testingAudit3"><strong>Beats Buy &amp; Hold on Sharpe</strong> &mdash; Sharpe 0.75 &rarr; 0.93 at 32.9% CAGR.</li>
-                <li data-i18n-html="doc.s8.testingAudit4"><strong>Hysteresis + threshold rebalancing</strong> &mdash; fast exit (30% of gap/bar), faster re-entry (25%/bar), and trades only on &gt; 8% exposure drift (~64% fewer rebalances), confirmed with no whipsaw.</li>
+                <li data-i18n-html="doc.s8.testingAudit4"><strong>Hysteresis + threshold rebalancing</strong> &mdash; fast exit (30% of gap/bar), more gradual re-entry (25%/bar), and trades only on &gt; 8% exposure drift (~64% fewer rebalances), confirmed with no whipsaw.</li>
                 <li data-i18n-html="doc.s8.testingAudit5"><strong>Out-of-sample check</strong> &mdash; on a sealed second half never used to pick the preset, the modulator still roughly halved drawdown (~24% vs ~63% Buy &amp; Hold) at a higher Sharpe (0.48 vs 0.37); a fuller walk-forward multi-fold study is still worthwhile.</li>
+                <li data-i18n-html="doc.s8.testingAudit6"><strong>Survivorship stress (dead token)</strong> &mdash; adding Terra Classic (LUNC), which collapsed from ~$121 to ~$0, to the basket left the modulator&rsquo;s peak drawdown essentially unchanged (~23%), while Buy &amp; Hold&rsquo;s worsened by up to ~18 points; on the same window the modulator still cut drawdown ~49 points versus Buy &amp; Hold. The drawdown defense does not depend on hand-picking surviving tokens (though raw return figures remain flattered by crypto&rsquo;s post-crash rebounds).</li>
             </ul>
         </div>
 
