@@ -287,7 +287,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">04</span></div>
                         <div class="metric-label" data-i18n="math.shieldLabel">--deleverage-modulator</div>
-                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Continuous regime modulator: exposure scales down as drawdown and downside volatility rise &mdash; no indicators, no timers, no correlation gate. It de-risks fast and re-enters more gradually, with <strong>no hard floor</strong>; parked DCA cash redeploys once exposure recovers above 50%.</div>
+                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Continuous regime modulator: exposure scales down as drawdown and downside volatility rise &mdash; no indicators, no timers, no correlation gate. It moves exposure toward its target at 30% of the gap per bar in either direction, with <strong>no hard floor</strong>; parked DCA cash redeploys once exposure recovers above 40%.</div>
                         <a href="#/backtest" class="doc-formula-link" data-i18n="math.shieldLink">[ see 8.7-year backtest ]</a>
                     </div>
                 </div>
@@ -439,7 +439,7 @@
             <div class="lp-card lp-shield-card">
                 <div class="card-title" style="color:var(--purple);text-align:center;" data-i18n-html="shield.label">--deleverage-modulator &middot; v14.0</div>
                 <h3 data-i18n-html="shield.title">Deleverage Modulator &mdash; validated on real data</h3>
-                <p class="lp-what-lead" data-i18n-html="shield.lead">v14.0 scales exposure continuously off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It de-risks fast, re-enters more gradually, and uses threshold rebalancing.</p>
+                <p class="lp-what-lead" data-i18n-html="shield.lead">v14.0 scales exposure continuously off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It ramps exposure toward its target steadily in either direction, and uses threshold rebalancing.</p>
                 <div class="lp-shield-grid">
                     <div class="lp-shield-viz">
                         <svg viewBox="0 0 480 250" role="img" aria-label="Max drawdown: Buy and Hold minus 83.8 percent versus Deleverage Modulator minus 35.0 percent" preserveAspectRatio="xMidYMid meet">
@@ -595,7 +595,7 @@
         <p data-i18n-html="impressum.deContactVal">Telefon: +49 176 61366696<br>E-Mail: momo.demirov@gmail.com</p>
         <h3 data-i18n="impressum.deDiscTitle">Haftungsausschluss (Disclaimer):</h3>
         <p data-i18n-html="impressum.deDisc">Die Inhalte unserer Seiten wurden mit gr&ouml;&szlig;ter Sorgfalt erstellt. F&uuml;r die Richtigkeit, Vollst&auml;ndigkeit und Aktualit&auml;t der Inhalte k&ouml;nnen wir jedoch keine Gew&auml;hr &uuml;bernehmen. Als Diensteanbieter sind wir gem&auml;&szlig; &sect; 5 TMG i.V.m. &sect; 7 Abs.1 TMG f&uuml;r eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach &sect;&sect; 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, &uuml;bermittelte oder gespeicherte fremde Informationen zu &uuml;berwachen oder nach Umst&auml;nden zu forschen, die auf eine rechtswidrige T&auml;tigkeit hinweisen.</p>
-        <h3 data-i18n="impressum.deLinksTitle">Haftung f&uuml;r Links:</h3>
+        <h3 data-i18n-html="impressum.deLinksTitle">Haftung f&uuml;r Links:</h3>
         <p data-i18n-html="impressum.deLinks">Unser Angebot enth&auml;lt Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb k&ouml;nnen wir f&uuml;r diese fremden Inhalte auch keine Gew&auml;hr &uuml;bernehmen. F&uuml;r die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf m&ouml;gliche Rechtsverst&ouml;&szlig;e &uuml;berpr&uuml;ft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.</p>
         <h3 data-i18n="impressum.deCopyTitle">Urheberrecht:</h3>
         <p data-i18n-html="impressum.deCopy">Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielf&auml;ltigung, Bearbeitung, Verbreitung und jede Art der Verwertung au&szlig;erhalb der Grenzen des Urheberrechtes bed&uuml;rfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur f&uuml;r den privaten, nicht-kommerziellen Gebrauch gestattet.</p>
@@ -625,7 +625,7 @@
 
         <h3 data-i18n-html="privacy.deTitle">&#127465;&#127466; DEUTSCHE VERSION</h3>
 
-        <h3 data-i18n="privacy.deS1Title">1. Allgemeine Grunds&auml;tze und Datensparsamkeit</h3>
+        <h3 data-i18n-html="privacy.deS1Title">1. Allgemeine Grunds&auml;tze und Datensparsamkeit</h3>
         <p data-i18n-html="privacy.deS1">Dies &bdquo;Privacy-by-Design&ldquo;-Ansatz. Es gibt keine Benutzerkonten, keine Wallets und keine serverseitigen Datenbanken. Wir speichern, protokollieren oder persistieren Ihre pers&ouml;nlichen Portfolio- oder Finanzdaten zu keinem Zeitpunkt auf unserer Infrastruktur.</p>
 
         <h3 data-i18n="privacy.deS2Title">2. Kurzzeitige serverseitige Verarbeitung (In-Memory Processing)</h3>
@@ -652,7 +652,7 @@
         <h3 data-i18n="privacy.deS6Title">6. Drittanbieter-APIs (Marktdaten)</h3>
         <p data-i18n-html="privacy.deS6">Zur ruft Ihr Browser Kursdaten direkt von &ouml;ffentlichen APIs (z.&nbsp;B. Binance) ab. Hierbei wird Ihre IP-Adresse vom jeweiligen API-Anbieter verarbeitet, um die Anfrage zu beantworten. Es werden keine Portfolio-Daten an diese APIs gesendet.</p>
 
-        <h3 data-i18n="privacy.deS7Title">7. Haftungsausschluss f&uuml;r Finanzen &amp; Legacy Policy</h3>
+        <h3 data-i18n-html="privacy.deS7Title">7. Haftungsausschluss f&uuml;r Finanzen &amp; Legacy Policy</h3>
         <p data-i18n-html="privacy.deS7P1"><strong>Haftungsausschluss:</strong>&ldquo; (as is) zur Verf&uuml;gung gestellt. Alle finanziellen Entscheidungen liegen in der alleinigen Verantwortung des Nutzers. Es wird keine Haftung f&uuml;r Verluste oder Sch&auml;den &uuml;bernommen, die aus der Nutzung dieses Dienstes resultieren.</p>
         <p data-i18n-html="privacy.deS7P2"><strong>Legacy Policy:</strong> Einstellung dieses Dienstes verbleiben keinerlei Benutzerdaten auf unseren Systemen, da serverseitig nichts gespeichert wird. Die im LocalStorage gesicherten Daten verbleiben auf Ihrem eigenen Ger&auml;t und k&ouml;nnen von Ihnen jederzeit gel&ouml;scht werden.</p>
 
@@ -663,7 +663,7 @@
 
         <h3 data-i18n-html="privacy.enTitle">&#127468;&#127463; ENGLISH VERSION</h3>
 
-        <h3 data-i18n="privacy.enS1Title">1. General Principles &amp; Data Minimization</h3>
+        <h3 data-i18n-html="privacy.enS1Title">1. General Principles &amp; Data Minimization</h3>
         <p data-i18n-html="privacy.enS1">This principles: no user accounts, no wallets, and no server-side databases. We do not store, log, or persist your financial or portfolio data on our infrastructure.</p>
 
         <h3 data-i18n="privacy.enS2Title">2. Transient Server-Side Processing (Ephemeral Processing)</h3>
@@ -677,7 +677,7 @@
         <h3 data-i18n="privacy.enS3Title">3. Privacy-Friendly Web Analytics (Simple Analytics)</h3>
         <p data-i18n-html="privacy.enS3">To without invading your privacy, we use Simple Analytics (Simple Analytics BV, Netherlands) on their Free Plan. This tool does not use cookies, does not use local storage, and does not collect IP addresses or any personal identifiers. It only provides us with completely anonymous, aggregated data showing which countries our visitors originate from and what devices/browsers they use. Because no personal data is tracked, no cookie consent banner is legally required under the GDPR or ePrivacy directive.</p>
 
-        <h3 data-i18n="privacy.enS4Title">4. Hosting &amp; Infrastructure</h3>
+        <h3 data-i18n-html="privacy.enS4Title">4. Hosting &amp; Infrastructure</h3>
         <p data-i18n-html="privacy.enS4">Our of two parts:</p>
         <ul>
             <li data-i18n-html="privacy.enS4Li1"><strong>Frontend Hosting (GitHub Pages):</strong> Our static website files are hosted on GitHub Pages (GitHub, Inc., USA). GitHub automatically collects standard server log files (including your IP address, browser type, and time of access) to ensure security and stability based on Art. 6 (1) (f) GDPR.</li>
@@ -690,7 +690,7 @@
         <h3 data-i18n="privacy.enS6Title">6. Third-Party APIs (Market Data)</h3>
         <p data-i18n-html="privacy.enS6">To, this website fetches data from public APIs (such as Binance). When your browser connects to these APIs, your IP address is processed by the respective provider to deliver the market prices. No portfolio data is transmitted during this process.</p>
 
-        <h3 data-i18n="privacy.enS7Title">7. Disclaimer of Liability &amp; Legacy Policy</h3>
+        <h3 data-i18n-html="privacy.enS7Title">7. Disclaimer of Liability &amp; Legacy Policy</h3>
         <p data-i18n-html="privacy.enS7P1"><strong>Disclaimer:</strong> without warranties of any kind. All financial decisions remain the responsibility of the user. No liability is assumed for losses or damages resulting from the use of this service.</p>
         <p data-i18n-html="privacy.enS7P2"><strong>Legacy Policy:</strong>, abandonment, or shutdown of this service, no user data will remain on our infrastructure, as nothing is ever logged or stored server-side. Any portfolio configurations or preferences saved in your browser&rsquo;s localStorage remain solely on your own device. Users retain full control of this data locally and can erase it at any moment by clearing their browser.</p>
 
@@ -1122,7 +1122,7 @@
         </div>
         <div class="tc-body">
             <div class="bt-explain bt-explain-intro" data-i18n-html="bt.intro">
-                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage modulator <strong>(v14.0 &mdash; validated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule. <strong>Buy &amp; Hold</strong> buys tokens unconditionally and stays fully exposed. <strong>Deleverage</strong> scales exposure <strong>continuously</strong> off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It <strong>de-risks fast (closes 30% of the gap per bar) and re-enters more gradually (25% per bar)</strong>, with no hard floor, redeploying parked DCA cash once exposure recovers above 50%. v14 adds <strong>threshold rebalancing</strong> &mdash; only trading when target exposure drifts &gt; 8%, cutting rebalances ~64%. It is scored on <strong>risk-adjusted return (Sharpe)</strong>, not on beating Buy &amp; Hold.
+                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage modulator <strong>(v14.0 &mdash; validated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule. <strong>Buy &amp; Hold</strong> buys tokens unconditionally and stays fully exposed. <strong>Deleverage</strong> scales exposure <strong>continuously</strong> off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It <strong>moves exposure toward its target at 30% of the gap per bar</strong> in either direction, with no hard floor, redeploying parked DCA cash once exposure recovers above 40%. v14 adds <strong>threshold rebalancing</strong> &mdash; only trading when target exposure drifts &gt; 8%, cutting rebalances ~64%. It is scored on <strong>risk-adjusted return (Sharpe)</strong>, not on beating Buy &amp; Hold.
             </div>
             <!-- v14.0 continuous DD + downside-vol modulator flow -->
             <svg class="bt-flow-svg" viewBox="0 0 900 148" role="img" aria-label="Deleverage v14.0 continuous drawdown and downside-volatility modulator flow" preserveAspectRatio="xMidYMid meet">
@@ -1264,7 +1264,7 @@
         <div class="tc bt-card">
             <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--event-log</span></div>
             <div class="tc-body" style="padding:0;">
-                <div class="bt-explain bt-explain-sm" style="margin:12px 16px 0;"><span style="color:var(--blue);font-weight:700">DCA</span> (cyan) = periodic contribution &mdash; buys tokens when risk-on, parks to USDC when defensive (exposure &lt; 50%) | <span style="color:var(--green);font-weight:600">REDEPLOY</span> (green) = parked cash returns to tokens once exposure recovers &ge; 50%.</div>
+                <div class="bt-explain bt-explain-sm" style="margin:12px 16px 0;"><span style="color:var(--blue);font-weight:700">DCA</span> (cyan) = periodic contribution &mdash; buys tokens when risk-on, parks to USDC when defensive (exposure &lt; 40%) | <span style="color:var(--green);font-weight:600">REDEPLOY</span> (green) = parked cash returns to tokens once exposure recovers &ge; 40%.</div>
                 <div style="max-height:400px;overflow-y:auto;padding:0 16px 16px;">
                     <table class="bt-events-table" id="btEventsTable">
                         <thead><tr><th>Date</th><th>Day</th><th>Event</th><th>Drawdown</th><th>DS Vol</th><th>Exposure</th><th>USDC</th><th>Detail</th></tr></thead>
@@ -1394,7 +1394,7 @@
             <h2 id="doc-what" data-i18n="doc.s1.title">1. What is AQMath?</h2>
             <p data-i18n-html="doc.s1.p1">AQMath is a quantitative portfolio rebalancer purpose-built for the crypto market. It combines institutional-grade mathematical models &mdash; the same class of optimization used by multi-billion-dollar hedge funds &mdash; with a privacy-first architecture that ensures your financial data never leaves your control.</p>
             <p data-i18n-html="doc.s1.p2">At its core, AQMath solves a deceptively complex problem: <strong>when you add new capital to your crypto portfolio, which tokens should you buy, and how much of each?</strong> A naive approach (split equally) ignores that some positions are already overweight while others are dangerously underweight. AQMath&rsquo;s DCA engine uses smart proportional allocation, filtered through a DCA safety pipeline, to ensure every dollar you invest moves your portfolio closer to its optimal structure.</p>
-            <p data-i18n-html="doc.s1.p3">The system operates on a <strong>hybrid architecture</strong>: your portfolio data (token amounts, entry prices, targets) is stored exclusively in your browser&rsquo;s localStorage, while computationally intensive math (covariance matrices, iterative DCA optimization, volatility analysis) runs on our secure backend engine. This means you get institutional-quality analysis without your holdings being stored on any server.</p>
+            <p data-i18n-html="doc.s1.p3">The system operates on a <strong>hybrid architecture</strong>: your portfolio data (token amounts, entry prices, targets) is stored exclusively in your browser&rsquo;s localStorage, while computationally intensive math (covariance matrices, DCA allocation planning, volatility analysis) runs on our secure backend engine. This means you get institutional-quality analysis without your holdings being stored on any server.</p>
             <div class="doc-callout purple">
                 <div class="doc-ct" data-i18n-html="doc.s1.privTitle">&#128272; NON-CUSTODIAL PRIVACY</div>
                 <p data-i18n-html="doc.s1.privP">AQMath&rsquo;s privacy model is non-custodial by design: the backend receives position data in-memory during a single DCA request, computes the result, and discards everything. No persistence. No logs of your amounts. No user database. Your financial state lives exclusively in your browser&rsquo;s localStorage &mdash; the server never retains it.</p>
@@ -1470,7 +1470,7 @@
                 <li data-i18n-html="doc.s2.df1"><strong>User enters tokens + targets</strong> &rarr; stored exclusively in browser localStorage. No network request is made.</li>
                 <li data-i18n-html="doc.s2.df2"><strong>SYNC clicked</strong> &rarr; prices are fetched directly from Binance via WebSocket &mdash; no backend call needed. Your holdings are never transmitted.</li>
                 <li data-i18n-html="doc.s2.df3"><strong>DCA Distribute clicked</strong> &rarr; positions (including amounts) and DCA budget are sent to the backend engine via a single HTTPS POST request.</li>
-                <li data-i18n-html="doc.s2.df4"><strong>Backend computes</strong> &rarr; the DCA engine runs iterative allocation with the full safety pipeline. All computation happens in-memory. Nothing is written to disk or database.</li>
+                <li data-i18n-html="doc.s2.df4"><strong>Backend computes</strong> &rarr; the DCA engine builds a plan-based proportional allocation, filtered through the full safety pipeline. All computation happens in-memory. Nothing is written to disk or database.</li>
                 <li data-i18n-html="doc.s2.df5"><strong>Results returned</strong> &rarr; updated token amounts are sent back to the browser and written to localStorage. The backend discards the request data immediately after responding.</li>
             </ol>
 
@@ -1557,7 +1557,7 @@
         <div class="doc-block" id="doc-dca">
             <h2 id="doc-dca-overview" data-i18n="doc.s4.title">4. DCA Distribution Engine</h2>
             <p data-i18n="doc.s4.p1">The DCA engine is the heart of AQMath. Given a budget (e.g., $500), it determines exactly how to distribute that capital across your portfolio&rsquo;s underweight tokens &mdash; not equally, not randomly, but proportionally to how far each token is from its target, adjusted for risk.</p>
-            <p data-i18n-html="doc.s4.p2">The engine uses an <strong>iterative allocation</strong> algorithm that converges over multiple rounds. In each round, it distributes the remaining budget to the most underweight tokens, removes tokens that have reached their target, and redistributes the freed-up share to remaining candidates. This process repeats until the entire budget is allocated or all eligible tokens are fulfilled.</p>
+            <p data-i18n-html="doc.s4.p2">The engine builds an <strong>allocation plan</strong> without ever touching your actual tokens: it hands each token a share of the budget in proportion to how far it sits below its target, adjusted for risk. Tokens that reach their target drop out and their share is redistributed to the rest. Every planned buy must clear a per-token minimum (default $20) &mdash; any buy that would fall below that floor is dropped and its budget re-planned across the remaining tokens, so you never place fee-eating sub-dollar buys.</p>
 
             <div class="doc-diagram">
                 <div class="doc-fl">DCA Budget Flow (example: $500)</div>
@@ -1570,7 +1570,7 @@
                     <rect x="200" y="40" width="130" height="90" rx="6" fill="rgba(52,211,153,0.06)" stroke="var(--green)" stroke-width="1.5" opacity="0.6"/>
                     <text x="265" y="68" text-anchor="middle" fill="var(--green)" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">DCA ENGINE</text>
                     <text x="265" y="84" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">DCA safety pipeline</text>
-                    <text x="265" y="98" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">iterative allocation</text>
+                    <text x="265" y="98" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">plan-based allocation</text>
                     <text x="265" y="118" text-anchor="middle" fill="var(--purple)" font-family="'JetBrains Mono',monospace" font-size="7" opacity="0.7">non-custodial</text>
                     <line x1="335" y1="60" x2="400" y2="35" stroke="var(--muted)" stroke-width="0.8" opacity="0.4"/>
                     <line x1="335" y1="75" x2="400" y2="70" stroke="var(--muted)" stroke-width="0.8" opacity="0.4"/>
@@ -1655,7 +1655,7 @@
             </div>
 
             <h3 id="doc-circuit" data-i18n="doc.s5.l1Title">L1 &mdash; Circuit Breaker</h3>
-            <p data-i18n-html="doc.s5.l1P">The circuit breaker halts <strong>all</strong> DCA distribution whenever the Deleverage Shield is in its <strong>defensive state</strong> &mdash; when target exposure drops below the redeploy threshold (~50% of the risk budget). Because exposure is driven mostly by drawdown and downside volatility, it engages during any meaningful downturn, not only brief flash crashes, and stays paused through a sustained bear market. It resumes automatically once exposure recovers back above the threshold.</p>
+            <p data-i18n-html="doc.s5.l1P">The circuit breaker halts <strong>all</strong> DCA distribution whenever the Deleverage Shield is in its <strong>defensive state</strong> &mdash; when target exposure drops below the redeploy threshold (~40% of the risk budget). Because exposure is driven mostly by drawdown and downside volatility, it engages during any meaningful downturn, not only brief flash crashes, and stays paused through a sustained bear market. It resumes automatically once exposure recovers back above the threshold.</p>
 
             <h3 id="doc-safety" data-i18n="doc.s5.l2Title">L2 &mdash; Safety Factor</h3>
             <p data-i18n="doc.s5.l2P">A per-token risk adjustment that reduces buy size for high-volatility assets. More volatile tokens receive proportionally less capital, ensuring that risky positions don&rsquo;t get outsized allocations even when they&rsquo;re the most underweight.</p>
@@ -1769,7 +1769,7 @@
             <p data-i18n-html="doc.s8.shieldP1">The Deleverage Modulator is a <strong>continuous de-risking mechanism</strong> that scales exposure down as portfolio <strong>drawdown</strong> and <strong>downside volatility</strong> rise &mdash; no indicators, no timers, no correlation gate. Unlike simple "pause DCA" strategies that only stop new purchases, the modulator performs <strong>true portfolio de-risking</strong> &mdash; it scales down ALL existing positions proportionally, moving capital into stablecoins (USDC) as the regime deteriorates.</p>
 
             <div class="doc-callout red">
-                <div class="doc-ct" data-i18n="doc.s8.shieldCallout">&#9888; TRUE DE-RISK vs PAUSE BUTTON</div>
+                <div class="doc-ct" data-i18n-html="doc.s8.shieldCallout">&#9888; TRUE DE-RISK vs PAUSE BUTTON</div>
                 <p data-i18n-html="doc.s8.shieldCalloutP">As the regime deteriorates, the modulator does <strong>two things simultaneously</strong>: (1) reduces all existing token positions by scaling their weights down proportionally &mdash; this is the actual "selling" of exposure; (2) reroutes all new DCA contributions into USDC while defensive. A strategy that only pauses DCA while letting existing positions ride through a -80% crash is <strong>not a shield</strong> &mdash; it&rsquo;s just a pause button.</p>
             </div>
 
@@ -1778,7 +1778,7 @@
                 <li data-i18n-html="doc.s8.shield1"><strong>Two-signal regime read</strong> &mdash; the engine tracks only rising <strong>drawdown</strong> and rising <strong>downside volatility</strong> over a 20-day window. No moving averages, no timers, no correlation gate.</li>
                 <li data-i18n-html="doc.s8.shield2"><strong>Continuous scaling</strong> &mdash; target exposure = 1 &minus; (0.7&middot;dd_sig + 0.3&middot;vol_sig), a smooth 0&ndash;100% dial rather than discrete tranches. There is <strong>no hard floor</strong>: in a deep, volatile crash exposure can approach zero.</li>
                 <li data-i18n-html="doc.s8.shield3"><strong>Capital preservation</strong> &mdash; while defensive the portfolio holds the majority in cash-equivalent (USDC), absorbing only a fraction of ongoing crash damage. Exposure scales continuously with the regime, holding cash when drawdown and downside volatility are elevated.</li>
-                <li data-i18n-html="doc.s8.shield4"><strong>Exit fast, re-enter more gradually, trade less</strong> &mdash; exposure drops at up to 30% of the gap per bar when the regime worsens and re-enters at 25% per bar as it heals (hysteresis). v14 only rebalances when the target drifts more than 8% from the held position, cutting turnover ~64%. Parked DCA cash redeploys once exposure recovers above 50%.</li>
+                <li data-i18n-html="doc.s8.shield4"><strong>Steady ramp, trade less</strong> &mdash; exposure moves toward its target at 30% of the gap per bar, whether de-risking or re-entering. To avoid over-trading, v14 only rebalances when the target drifts more than 8% from the position it is holding &mdash; this deadband (not a slower re-entry) is what prevents whipsaw, cutting turnover ~64%. Parked DCA cash redeploys once exposure recovers above 40%.</li>
             </ul>
 
             <div class="doc-diagram">
@@ -1790,7 +1790,7 @@
                     <text x="75" y="72" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">High exposure</text>
                     <text x="75" y="84" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">DCA active</text>
                     <text x="75" y="100" text-anchor="middle" fill="var(--green)" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">low dd + vol</text>
-                    <text x="75" y="112" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="6">risk budget: 85%</text>
+                    <text x="75" y="112" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="6">risk budget: 95%</text>
                     <!-- Arrow 1 -->
                     <line x1="145" y1="80" x2="180" y2="80" stroke="var(--muted)" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
                     <polygon points="178,76 178,84 184,80" fill="var(--muted)" opacity="0.5"/>
@@ -1811,8 +1811,8 @@
                     <!-- Re-enter slow -->
                     <rect x="360" y="30" width="100" height="100" rx="6" fill="rgba(6,182,212,0.06)" stroke="var(--blue)" stroke-width="1" opacity="0.6"/>
                     <text x="410" y="52" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">RE-ENTER</text>
-                    <text x="410" y="68" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">25% of gap / bar</text>
-                    <text x="410" y="80" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Slow ramp-up</text>
+                    <text x="410" y="68" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">30% of gap / bar</text>
+                    <text x="410" y="80" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Steady ramp</text>
                     <text x="410" y="96" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">hysteresis</text>
                     <text x="410" y="108" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="6">no whipsaw</text>
                     <!-- Arrow 3 -->
@@ -1823,7 +1823,7 @@
                     <text x="545" y="52" text-anchor="middle" fill="var(--purple)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">REDEPLOY</text>
                     <text x="545" y="68" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Parked USDC back in</text>
                     <text x="545" y="80" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Building position</text>
-                    <text x="545" y="96" text-anchor="middle" fill="var(--purple)" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">exposure &#x2265; 50%</text>
+                    <text x="545" y="96" text-anchor="middle" fill="var(--purple)" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">exposure &#x2265; 40%</text>
                     <text x="545" y="108" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="6">106 DCA events</text>
                     <!-- Arrow 4 -->
                     <line x1="600" y1="80" x2="625" y2="80" stroke="var(--muted)" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
@@ -1921,9 +1921,9 @@
                     <line x1="80" y1="272" x2="100" y2="272" stroke="var(--blue)" stroke-width="2"/>
                     <text x="104" y="275" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="6">normal exposure</text>
                     <line x1="210" y1="272" x2="230" y2="272" stroke="var(--red)" stroke-width="2"/>
-                    <text x="234" y="275" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="6">de-risk (fast)</text>
+                    <text x="234" y="275" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="6">de-risk</text>
                     <line x1="340" y1="272" x2="360" y2="272" stroke="var(--blue)" stroke-width="1.5"/>
-                    <text x="364" y="275" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="6">re-enter (slow)</text>
+                    <text x="364" y="275" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="6">re-enter</text>
                     <line x1="440" y1="272" x2="460" y2="272" stroke="var(--purple)" stroke-width="1.5"/>
                     <text x="464" y="275" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="6">redeploy</text>
                     <line x1="540" y1="272" x2="560" y2="272" stroke="var(--green)" stroke-width="1.5"/>
@@ -1936,7 +1936,7 @@
 
         <!-- DL vs B&H COMPARISON -->
         <div class="doc-block" id="doc-shield-vs-bh-block">
-            <h3 id="doc-shield-vs-bh" data-i18n="doc.s8.vsBhTitle">8.5 Performance: Drawdown &amp; Risk-Adjusted Scoring</h3>
+            <h3 id="doc-shield-vs-bh" data-i18n-html="doc.s8.vsBhTitle">8.5 Performance: Drawdown &amp; Risk-Adjusted Scoring</h3>
             <p data-i18n-html="doc.s8.vsBhP1">The chart below compares the <strong>Deleverage Modulator</strong> against a classic <strong>Buy &amp; Hold</strong> strategy over an <strong>8.7-year, 5-token backtest</strong> spanning multiple bull/bear cycles (including the 2022 crypto winter and 2024 corrections). Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. The curves track <strong>peak-to-trough drawdown</strong> &mdash; how deep each strategy fell from its highs. The modulator is scored on <strong>risk-adjusted return</strong> (Sharpe) and drawdown; the v14 preset now beats Buy &amp; Hold on Sharpe, though not on raw dollars.</p>
 
             <div class="doc-diagram">
@@ -1967,7 +1967,7 @@
             </div>
 
             <div class="doc-callout cyan">
-                <div class="doc-ct" data-i18n="doc.s8.vsBhMetrics">&#128202; BACKTEST METRICS (8.7 YEARS, 5 TOKENS)</div>
+                <div class="doc-ct" data-i18n-html="doc.s8.vsBhMetrics">&#128202; BACKTEST METRICS (8.7 YEARS, 5 TOKENS)</div>
                 <div class="doc-metrics-grid">
                     <div>
                         <div class="doc-metric-label">Modulator Max Drawdown</div>
@@ -1996,18 +1996,18 @@
                 </div>
             </div>
 
-            <p data-i18n-html="doc.s8.vsBhP2"><strong>A fraction of the pain, and now a higher Sharpe.</strong> Across the full 8.7-year, 5-token backtest the modulator cut peak drawdown from <strong>83.8%</strong> (Buy &amp; Hold) to <strong>35.0%</strong> &mdash; a <strong>48.8-point reduction</strong> &mdash; while lifting Sharpe from <strong>0.75 (Buy &amp; Hold) to 0.93</strong> at <strong>32.9% CAGR</strong>. Exposure is a continuous 0&ndash;100% dial driven only by drawdown and downside volatility: it de-risks fast (up to 30% of the gap per bar), re-enters more gradually (25% per bar), and redeploys parked USDC once exposure recovers above 50%. v14 adds <strong>threshold rebalancing</strong> &mdash; only trading when target exposure drifts &gt; 8%, cutting rebalances ~64% with an identical signal. There are <strong>no timers, no tranches, and no correlation gate</strong>.</p>
+            <p data-i18n-html="doc.s8.vsBhP2"><strong>A fraction of the pain, and now a higher Sharpe.</strong> Across the full 8.7-year, 5-token backtest the modulator cut peak drawdown from <strong>83.8%</strong> (Buy &amp; Hold) to <strong>35.0%</strong> &mdash; a <strong>48.8-point reduction</strong> &mdash; while lifting Sharpe from <strong>0.75 (Buy &amp; Hold) to 0.93</strong> at <strong>32.9% CAGR</strong>. Exposure is a continuous 0&ndash;100% dial driven only by drawdown and downside volatility: it moves toward its target at 30% of the gap per bar in either direction, and redeploys parked USDC once exposure recovers above 40%. v14 adds <strong>threshold rebalancing</strong> &mdash; only trading when target exposure drifts &gt; 8%, cutting rebalances ~64% with an identical signal. There are <strong>no timers, no tranches, and no correlation gate</strong>.</p>
             <p data-i18n-html="doc.s8.vsBhP3"><strong>Honestly scoped: this does not beat Buy &amp; Hold on raw dollars.</strong> Buy &amp; Hold ends the sample higher in absolute value because it stays fully exposed through the bull run &mdash; the modulator is not designed to win that race. Its edge is <em>risk-adjusted</em>: less than half the drawdown and a higher Sharpe (0.93 vs 0.75). Crucially this edge is <strong>not only in-sample</strong>: on a <strong>sealed second half</strong> of the data never used to choose the v14 preset, the modulator still cut peak drawdown from <strong>~63% to ~24%</strong> and kept a <strong>higher Sharpe (0.48 vs 0.37)</strong> at a comparable total return. <strong>Methodology note:</strong> the backtest basket is composed of tokens that survived to today (survivorship bias); we stress-tested that directly by dropping a dead token &mdash; Terra Classic (LUNC), which fell from ~$121 to ~$0 &mdash; into the basket, and the modulator&rsquo;s peak drawdown barely moved (~23%) while Buy &amp; Hold&rsquo;s worsened by up to ~18 points. Past results do not guarantee future performance.</p>
         </div>
 
 
         <!-- TESTING & VALIDATION -->
         <div class="doc-block" id="doc-testing">
-            <h3 id="doc-testing-title" data-i18n="doc.s8.testingTitle">8.6 Testing &amp; Validation</h3>
+            <h3 id="doc-testing-title" data-i18n-html="doc.s8.testingTitle">8.6 Testing &amp; Validation</h3>
             <p data-i18n-html="doc.s8.testingP1">The v14.0 Deleverage Modulator was <strong>measured on real market data</strong>, not hand-guessed. We replayed the full 8.7-year, 5-token price history through the exact production formula &mdash; a continuous exposure dial driven only by drawdown and downside volatility &mdash; and scored it on <strong>drawdown, Sharpe, and CAGR</strong>.</p>
 
             <div class="doc-callout green">
-                <div class="doc-ct" data-i18n="doc.s8.testingCallout">&#9989; VALIDATED ON REAL DATA</div>
+                <div class="doc-ct" data-i18n-html="doc.s8.testingCallout">&#9989; VALIDATED ON REAL DATA</div>
                 <p data-i18n-html="doc.s8.testingCalloutP">Over ~8.7 years (3,184 days) of real market data across <strong>5 tokens (ADA, BNB, ETH, XRP, XLM)</strong> &mdash; spanning the 2018 and 2022 bear markets &mdash; the modulator cut peak drawdown from <strong>83.8% to 35.0%</strong> and lifted Sharpe from <strong>0.75 to 0.93</strong> at <strong>32.9% CAGR</strong>. The modulator is out-of-sample honest: on a sealed second half never used to pick the preset, it still roughly halved drawdown (~24% vs ~63% Buy &amp; Hold) at a higher Sharpe (0.48 vs 0.37).</p>
             </div>
 
@@ -2015,8 +2015,8 @@
             <ul>
                 <li data-i18n-html="doc.s8.testing1"><strong>Signal construction</strong> &mdash; each bar we compute rolling drawdown from the running equity peak and downside volatility over a 20-day window, then map each to a 0&ndash;1 signal (dd_sig, vol_sig).</li>
                 <li data-i18n-html="doc.s8.testing2"><strong>Exposure formula</strong> &mdash; target exposure = 1 &minus; (0.7&middot;dd_sig + 0.3&middot;vol_sig), a continuous dial with no hard floor and no correlation gate.</li>
-                <li data-i18n-html="doc.s8.testing3"><strong>Hysteresis + threshold rebalancing</strong> &mdash; exposure moves toward target at up to 30% of the gap per bar when de-risking and 25% per bar when re-entering, and (v14) only trades when the target drifts more than 8% from the held position &mdash; ~64% fewer rebalances with an identical signal. Parked USDC redeploys once exposure recovers above 50%.</li>
-                <li data-i18n-html="doc.s8.testing4"><strong>Engine/UI parity</strong> &mdash; the same formula runs in the Python engine (deleverage.py) and the in-browser backtester, verified to produce matching drawdown and Sharpe on the full sample.</li>
+                <li data-i18n-html="doc.s8.testing3"><strong>Hysteresis + threshold rebalancing</strong> &mdash; exposure moves toward target at 30% of the gap per bar in either direction, and (v14) only trades when the target drifts more than 8% from the held position &mdash; ~64% fewer rebalances with an identical signal. Parked USDC redeploys once exposure recovers above 40%.</li>
+                <li data-i18n-html="doc.s8.testing4"><strong>Engine/backtester parity</strong> &mdash; the same formula runs in the Python engine (deleverage.py) and the server-side backtester, verified to produce matching drawdown and Sharpe on the full sample.</li>
             </ul>
 
             <div class="doc-diagram">
@@ -2052,10 +2052,10 @@
             <h4 data-i18n="doc.s8.testingAudit">Validation Checks</h4>
             <p data-i18n-html="doc.s8.testingAuditP">The modulator is validated through the following checks on the full 8.7-year, 5-token sample:</p>
             <ul>
-                <li data-i18n-html="doc.s8.testingAudit1"><strong>Formula parity</strong> &mdash; the Python engine (deleverage.py) and the in-browser backtester produce matching exposure, drawdown, and Sharpe.</li>
+                <li data-i18n-html="doc.s8.testingAudit1"><strong>Formula parity</strong> &mdash; the Python engine (deleverage.py) and the server-side backtester produce matching exposure, drawdown, and Sharpe.</li>
                 <li data-i18n-html="doc.s8.testingAudit2"><strong>Drawdown reduction</strong> &mdash; peak drawdown cut from 83.8% (Buy &amp; Hold) to 35.0%.</li>
                 <li data-i18n-html="doc.s8.testingAudit3"><strong>Beats Buy &amp; Hold on Sharpe</strong> &mdash; Sharpe 0.75 &rarr; 0.93 at 32.9% CAGR.</li>
-                <li data-i18n-html="doc.s8.testingAudit4"><strong>Hysteresis + threshold rebalancing</strong> &mdash; fast exit (30% of gap/bar), more gradual re-entry (25%/bar), and trades only on &gt; 8% exposure drift (~64% fewer rebalances), confirmed with no whipsaw.</li>
+                <li data-i18n-html="doc.s8.testingAudit4"><strong>Threshold rebalancing</strong> &mdash; a steady 30% of gap/bar ramp in either direction, trading only on &gt; 8% exposure drift (~64% fewer rebalances), confirmed with no whipsaw.</li>
                 <li data-i18n-html="doc.s8.testingAudit5"><strong>Out-of-sample check</strong> &mdash; on a sealed second half never used to pick the preset, the modulator still roughly halved drawdown (~24% vs ~63% Buy &amp; Hold) at a higher Sharpe (0.48 vs 0.37); a fuller walk-forward multi-fold study is still worthwhile.</li>
                 <li data-i18n-html="doc.s8.testingAudit6"><strong>Survivorship stress (dead token)</strong> &mdash; adding Terra Classic (LUNC), which collapsed from ~$121 to ~$0, to the basket left the modulator&rsquo;s peak drawdown essentially unchanged (~23%), while Buy &amp; Hold&rsquo;s worsened by up to ~18 points; on the same window the modulator still cut drawdown ~49 points versus Buy &amp; Hold. The drawdown defense does not depend on hand-picking surviving tokens (though raw return figures remain flattered by crypto&rsquo;s post-crash rebounds).</li>
             </ul>
@@ -2081,7 +2081,7 @@
                     </ul>
                 </div>
                 <div class="doc-privacy-col">
-                    <h4 style="color:var(--green);" data-i18n-html="doc.s9.backendTitle">&#128994; Backend Receives (DCA Only, Ephemeral)</h4>
+                    <h4 style="color:var(--green);" data-i18n-html="doc.s9.backendTitle">&#128994; Backend Receives (DCA &amp; Backtest, Ephemeral)</h4>
                     <ul>
                         <li data-i18n="doc.s9.backend1">Token symbols (e.g., BTC, ETH)</li>
                         <li data-i18n="doc.s9.backend2">Current amounts and prices</li>
@@ -2089,6 +2089,7 @@
                         <li data-i18n="doc.s9.backend4">DCA budget amount</li>
                         <li data-i18n="doc.s9.backend5">Cost basis and total tokens</li>
                         <li data-i18n="doc.s9.backend6">Frozen and safe-haven flags</li>
+                        <li data-i18n="doc.s9.backend7">Backtest price series (CSV you upload) &mdash; processed in-memory, then discarded</li>
                     </ul>
                 </div>
             </div>

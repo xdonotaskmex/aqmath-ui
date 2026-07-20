@@ -142,7 +142,7 @@ async function pipelineFetch(url, options = {}) {
     if (!token) {
         isPro = false;
         checkBetaUI();
-        showToast('beta token missing -- please re-enter your beta key', 'warning');
+        showToast('Please re-enter your beta key to continue.', 'warning');
         throw new Error('beta token missing');
     }
     const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
@@ -157,7 +157,8 @@ async function pipelineFetch(url, options = {}) {
             checkBetaUI();
             render();
         }
-        showToast('AQMath Engine auth: ' + detail, 'warning');
+        console.warn('[AQMath] engine auth rejected:', detail);
+        showToast(detail.toLowerCase().includes('expired') ? 'Your beta session expired — please re-enter your key.' : 'Beta access needed — please re-enter your beta key.', 'warning');
         throw new Error(detail);
     }
     return res;
@@ -165,7 +166,7 @@ async function pipelineFetch(url, options = {}) {
 
 async function activateBeta() {
     const key = document.getElementById('iBetaKey').value.trim();
-    if (!key) return showToast('enter a beta key', 'warning');
+    if (!key) return showToast('Enter your beta key first.', 'warning');
     const btn = document.getElementById('btnBeta');
     btn.textContent = '[ verifying... ]';
     btn.disabled = true;
@@ -185,11 +186,12 @@ async function activateBeta() {
         console.log('[AQMath] Beta activated: isPro=' + isPro);
         document.getElementById('betaSection').classList.add('hidden');
         document.getElementById('betaActive').classList.remove('hidden');
-        showToast('beta activated -- pipeline unlocked', 'success');
+        showToast("You're in — beta access unlocked.", 'success');
         updateProButtons();
         render();
     } catch(e) {
-        showToast('beta activation failed: ' + e.message, 'error');
+        console.error('[AQMath] beta activation failed:', e.message);
+        showToast("That beta key didn't work — please double-check it and try again.", 'error');
     } finally {
         btn.textContent = '[ Activate Beta ]';
         btn.disabled = false;
@@ -201,7 +203,7 @@ function deactivateBeta() {
     isPro = false;
     document.getElementById('betaSection').classList.remove('hidden');
     document.getElementById('betaActive').classList.add('hidden');
-    showToast('beta deactivated', 'notice');
+    showToast('Beta access turned off.', 'notice');
     updateProButtons();
     render();
 }
@@ -379,7 +381,7 @@ function updateSafeHavenUI() {
 function deployUSDC() {
     const usdc = portfolio.find(t => t.sym === 'USDC');
     if (!usdc || usdc.amount * usdc.price < 0.01) {
-        return showToast('no USDC balance to deploy.', 'warning');
+        return showToast('No USDC available to deploy.', 'warning');
     }
     const val = usdc.amount * usdc.price;
     const dcaInput = document.getElementById('iDcaAmount');
@@ -389,7 +391,7 @@ function deployUSDC() {
     saveState();
     updateSafeHavenUI();
     render();
-    showToast(`$${val.toFixed(2)} USDC moved to DCA input. click DISTRIBUTE to deploy.`, 'success');
+    showToast(`$${val.toFixed(2)} USDC moved to your DCA amount — click DISTRIBUTE to deploy.`, 'success');
 }
 
 // ============ DELEVERAGE TOGGLE (PRO) ============
@@ -696,7 +698,7 @@ async function fetchCoinGeckoBatch() {
 }
 
 async function osvjeziSveCijene() {
-    if (portfolio.length === 0) return showToast('no positions.', 'warning');
+    if (portfolio.length === 0) return showToast('Add a position first.', 'warning');
     const btn = document.getElementById('btnSyncAll');
     const originalText = btn.textContent;
     btn.textContent = "[ SYNC... ]";
@@ -726,8 +728,12 @@ async function osvjeziSveCijene() {
         render();
         updatePortfolioATH();
         const cgCount = Object.keys(cgPrices).length;
-        showToast(`synced ${cnt} prices (${cgCount} from CoinGecko, rest from Binance).`, 'success');
-    } catch(e) { showToast('sync error: ' + e.message, 'error'); }
+        console.log(`[AQMath] synced ${cnt} prices (${cgCount} from CoinGecko, rest from Binance)`);
+        showToast(`Prices updated for ${cnt} ${cnt === 1 ? 'coin' : 'coins'}.`, 'success');
+    } catch(e) {
+        console.error('[AQMath] price sync failed:', e.message);
+        showToast("Couldn't refresh prices — please try again.", 'error');
+    }
     finally {
         btn.textContent = originalText;
         btn.disabled = true;
@@ -829,10 +835,13 @@ async function importCSV(event) {
         }
         saveState();
         render();
-        let msg = `imported ${newPortfolio.length} tokens.`;
+        let msg = `Imported ${newPortfolio.length} ${newPortfolio.length === 1 ? 'token' : 'tokens'}.`;
         if (skipped.length > 0) msg += `\nskipped: ${skipped.join(', ')}`;
         showToast(msg, 'success');
-    } catch(e) { showToast('csv import error: ' + e.message, 'error'); }
+    } catch(e) {
+        console.error('[AQMath] CSV import failed:', e.message);
+        showToast("Couldn't read that CSV — check the format and try again.", 'error');
+    }
     finally { hideLoading(); event.target.value = ''; }
 }
 
@@ -914,14 +923,14 @@ async function fetchPrices(symbol, forceRefresh = false) {
 
 async function refreshAllHistory() {
     const tokens = activeTokens();
-    if (tokens.length === 0) return showToast('no active tokens.', 'warning');
+    if (tokens.length === 0) return showToast('Add a token first.', 'warning');
     showLoading('REFRESHING HISTORY', 'Fetching 180-day data for all tokens...');
     for (const token of tokens) {
         await fetchPrices(token.sym, true);
         await sleep(2000);
     }
     hideLoading();
-    showToast('history refreshed.', 'success');
+    showToast('Price history updated.', 'success');
 }
 
 // ============ QUANTITATIVE HELPERS (VOLATILITY, CAP, TREND) ============
@@ -1056,7 +1065,8 @@ async function dodajToken() {
         resetForme();
         render();
     } catch(e) {
-        showToast(e.message, 'error');
+        console.error('[AQMath] add token failed:', e.message);
+        showToast("Couldn't add that token — please check the details and try again.", 'error');
         editMode = null;
         resetForme();
     }
@@ -1112,12 +1122,12 @@ function obrisiSve() {
 // DCA safety pipeline: backend handles Circuit Breaker (Shield-aligned) → Safety Factor → Trend Filter → Hard Caps → Risk Budget
 async function distribuirajDca() {
     if (Math.abs(totalTarget() - 100) > 0.01) {
-        return showToast('dca is locked until total target allocation equals 100%.', 'warning');
+        return showToast('Set your target allocations to total 100% before running DCA.', 'warning');
     }
     const dcaAmount = parseFloat(document.getElementById('iDcaAmount').value);
-    if (isNaN(dcaAmount) || dcaAmount <= 0) return showToast('enter an amount > 0.', 'warning');
+    if (isNaN(dcaAmount) || dcaAmount <= 0) return showToast('Enter a DCA amount greater than $0.', 'warning');
     const active = activeTokens();
-    if (active.length === 0) return showToast('no active tokens.', 'warning');
+    if (active.length === 0) return showToast('Add a token first.', 'warning');
 
     // Circuit Breaker is handled by backend (dca-engine) — Shield-aligned logic
     // Backend returns error if Shield detects extreme crash (DCA lockout)
@@ -1148,7 +1158,8 @@ async function distribuirajDca() {
         });
         if (!resp.ok) {
             hideLoading();
-            return showToast('dca service error (HTTP ' + resp.status + '). please try again later.', 'error');
+            console.error('[DCA] service HTTP', resp.status);
+            return showToast('The DCA service is unavailable right now — please try again shortly.', 'error');
         }
         const result = await resp.json();
 
@@ -1157,8 +1168,12 @@ async function distribuirajDca() {
 
         if (result.error) {
             hideLoading();
-            console.error('DCA API returned error:', result.error);
-            return showToast(result.error, 'error');
+            console.error('[DCA] engine returned error:', result.error);
+            const errText = String(result.error).toLowerCase();
+            if (errText.includes('defensive') || errText.includes('shield') || errText.includes('circuit') || errText.includes('paused') || errText.includes('lockout') || errText.includes('breaker')) {
+                return showToast("DCA paused: your portfolio is in defensive mode — it'll resume automatically when markets recover.", 'notice');
+            }
+            return showToast("Couldn't run DCA right now — please try again shortly.", 'error');
         }
 
         const updated = result.updated_positions || [];
@@ -1214,67 +1229,37 @@ async function distribuirajDca() {
 
         hideLoading();
 
-        // Build detailed notification
-        let msg = `budget: $${dcaAmount.toFixed(2)}\n`;
-        msg += `allocated: $${totalAlloc.toFixed(2)}\n`;
-        msg += `remaining: $${remaining.toFixed(2)}\n`;
-
-        if (remaining > 0.01) {
-            if (buySummary.length === 0 && totalAlloc < 0.01) {
-                msg += `warning: $${remaining.toFixed(2)} remaining despite underweight positions.\n`;
-                msg += `possible DCA engine issue — check Railway logs.\n\n`;
-            } else {
-                msg += `remaining $${remaining.toFixed(2)} not allocated — all tokens at optimal targets.\n\n`;
+        // Aggregate buys per token for logging + summary (sum $ and tokens, filter dust)
+        const tokenTotals = {};
+        let dustTotal = 0;
+        buySummary.forEach(b => {
+            const m = b.match(/^(\w+):\s*\+\$([\d.]+)\s*\(([\d.]+)\s*tokens?\)/);
+            if (m) {
+                const sym = m[1];
+                const usd = parseFloat(m[2]);
+                const tokens = parseFloat(m[3]);
+                if (usd < 0.05) { dustTotal += usd; return; }
+                if (!tokenTotals[sym]) tokenTotals[sym] = { usd: 0, tokens: 0 };
+                tokenTotals[sym].usd += usd;
+                tokenTotals[sym].tokens += tokens;
             }
-        }
+        });
+        const coinCount = Object.keys(tokenTotals).length;
 
-        // Aggregate buys per token (sum $ and tokens), filter dust
-        if (buySummary.length > 0) {
-            const tokenTotals = {};
-            let dustTotal = 0;
-            buySummary.forEach(b => {
-                const m = b.match(/^(\w+):\s*\+\$([\d.]+)\s*\(([\d.]+)\s*tokens?\)/);
-                if (m) {
-                    const sym = m[1];
-                    const usd = parseFloat(m[2]);
-                    const tokens = parseFloat(m[3]);
-                    if (usd < 0.05) { dustTotal += usd; return; }
-                    if (!tokenTotals[sym]) tokenTotals[sym] = { usd: 0, tokens: 0 };
-                    tokenTotals[sym].usd += usd;
-                    tokenTotals[sym].tokens += tokens;
-                }
-            });
-            const aggBuys = Object.entries(tokenTotals)
-                .map(([sym, t]) => `${sym}: +$${t.usd.toFixed(2)} (${t.tokens.toFixed(6)} tokens)`);
-            if (aggBuys.length > 0) {
-                msg += `buys:\n` + aggBuys.join('\n') + '\n';
-            }
-            if (dustTotal > 0) {
-                msg += `+ $${dustTotal.toFixed(2)} in dust filtered (< $0.05 per entry)\n`;
-            }
-        }
+        // Full breakdown (buys, warnings, structural limits) -> console only
+        console.log('[DCA] breakdown', {
+            budget: dcaAmount, allocated: totalAlloc, remaining,
+            buys: Object.entries(tokenTotals).map(([sym, t]) => `${sym}: +$${t.usd.toFixed(2)} (${t.tokens} tokens)`),
+            dustFiltered: dustTotal, warnings, structuralLimits: capped
+        });
 
-        // Consolidate warnings: one per token, keep the highest avg cost
-        if (warnings.length > 0) {
-            const tokenWarnings = {};
-            warnings.forEach(w => {
-                const m = w.match(/^(⚠️?\s*)(\w+):\s*Buying above avg cost \(\$([\d.]+)\)/);
-                if (m) {
-                    const sym = m[2];
-                    const cost = parseFloat(m[3]);
-                    if (!tokenWarnings[sym] || cost > tokenWarnings[sym]) {
-                        tokenWarnings[sym] = cost;
-                    }
-                }
-            });
-            const consolidatedWarnings = Object.entries(tokenWarnings)
-                .map(([sym, cost]) => `warning: ${sym} buying above avg cost ($${cost.toFixed(6)}), raises average.`);
-            msg += '\n' + consolidatedWarnings.join('\n');
-        }
-
-        // Structural limits: hard caps + risk budget notifications
-        if (capped.length > 0) {
-            msg += '\n\nstructural limits applied:\n' + capped.join('\n');
+        // Friendly, outcome-focused summary
+        let msg;
+        if (totalAlloc >= 0.01 && coinCount > 0) {
+            msg = `Added $${totalAlloc.toFixed(2)} across ${coinCount} ${coinCount === 1 ? 'coin' : 'coins'}.`;
+            if (remaining > 0.01) msg += ` $${remaining.toFixed(2)} parked in USDC for next time.`;
+        } else {
+            msg = `Your portfolio is already at its targets — $${dcaAmount.toFixed(2)} parked in USDC for next time.`;
         }
 
         showToast(msg, 'success', [
@@ -1282,7 +1267,8 @@ async function distribuirajDca() {
         ]);
     } catch(e) {
         hideLoading();
-        showToast('dca rebalancing failed: ' + e.message + '\n\nplease try again or check your connection.', 'error');
+        console.error('[DCA] rebalancing failed:', e.message);
+        showToast("DCA couldn't complete — please check your connection and try again.", 'error');
     }
 }
 
@@ -1291,7 +1277,7 @@ async function optimizePortfolio() {
     if (!isPro) { showProModal(); return; }
 
     const unfrozen = portfolio.filter(t => !t.frozen && !t.safeHaven);
-    if (unfrozen.length < 2) return showToast('Need at least 2 unfrozen risky tokens.', 'warning');
+    if (unfrozen.length < 2) return showToast('Add at least 2 unfrozen risky tokens to optimize.', 'warning');
 
     showLoading('AQMath Engine', 'Building covariance matrix + ERC optimization...');
 
@@ -1328,13 +1314,14 @@ async function optimizePortfolio() {
                 const timeStr = h > 0 ? `${h}h ${m}min` : `${m} min`;
                 return showToast(`\u23f3 Next optimization available in ${timeStr}`, 'notice');
             }
-            return showToast(result.detail, 'error');
+            console.error('[Optimize] engine detail:', result.detail);
+            return showToast("Couldn't optimize right now — please try again shortly.", 'error');
         }
 
         const weights = result.weights || [];
         if (weights.length === 0) {
             hideLoading();
-            return showToast('Optimization returned no weights.', 'error');
+            return showToast("Optimization didn't return any allocations — please try again.", 'error');
         }
 
         // Apply weights as new targets
@@ -1441,10 +1428,20 @@ async function optimizePortfolio() {
             msg += `  Risky total: ${dlInfo.risky_total}%  |  USDC: ${dlInfo.usdc_remainder}%\n`;
         }
 
-        showToast(msg, 'success');
+        // Full technical breakdown (method, weights, correlations, KKT, shield diagnostics) -> console only
+        console.log('[Optimize] details:\n' + msg);
+
+        // Friendly, outcome-focused summary
+        const coinCount = weights.filter(w => w.weight > 0).length;
+        let summary = `Portfolio optimized — new targets set for ${coinCount} ${coinCount === 1 ? 'coin' : 'coins'}.`;
+        if (usdcTarget > 0) summary += ` ${usdcTarget}% kept in USDC.`;
+        if (dlInfo && dlInfo.shield_active) summary += "\n\nDefensive mode is on — exposure is dialed back while markets are shaky. It'll ease back automatically as they recover.";
+        if (insufficient.length > 0) summary += `\n\nNot enough price history yet for: ${insufficient.join(', ')}.`;
+        showToast(summary, 'success');
     } catch(e) {
         hideLoading();
-        showToast('AQMath Engine error: ' + e.message, 'error');
+        console.error('[Optimize] failed:', e.message);
+        showToast("Optimization couldn't complete — please check your connection and try again.", 'error');
     }
 }
 
@@ -1561,10 +1558,11 @@ async function refreshHistory() {
 
         await sleep(1500);
         hideLoading();
-        showToast(`history rebuilt: ${history.length} data points from ${syms.length} tokens`, 'success');
+        showToast(`History rebuilt — ${history.length} data points from ${syms.length} ${syms.length === 1 ? 'token' : 'tokens'}.`, 'success');
     } catch(e) {
         hideLoading();
-        showToast('history refresh failed: ' + e.message, 'error');
+        console.error('[AQMath] history rebuild failed:', e.message);
+        showToast("Couldn't rebuild history — please try again.", 'error');
     }
 }
 

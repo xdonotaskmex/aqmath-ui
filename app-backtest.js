@@ -2,134 +2,12 @@
 'use strict';
 
 // ============================================================
-//  AQMath Deleverage Engine v14.0 — JavaScript Port
-//  Continuous DD + downside-vol regime modulator. No state machine,
-//  no correlation gate, no timers. PRIMARY signal: rising drawdown +
-//  rising downside volatility -> continuously scale exposure down.
-//  Exit fast (30% of gap/bar), re-enter more gradually (25%/bar), no hard floor.
-//  v14 adds THRESHOLD rebalancing: only trade when the target exposure
-//  drifts > 8% from the held position (~64% fewer rebalances, far lower
-//  fees, identical signal). Full-sample tuned on 5-token real data
-//  (ADA/BNB/ETH/XRP/XLM, ~8.7y): Sharpe 0.93 vs Buy & Hold 0.75,
-//  Max DD 35.0%, CAGR 32.9%, out-of-sample stable.
-// ============================================================
-
-const DL = {
-    DD_WINDOW: 20,          // trailing window for downside-vol
-    DD_REF: 0.15,           // drawdown mapping to full de-risk (v14: 0.30->0.15)
-    VOL_LOW: 0.30,          // downside-vol where vol_sig starts rising
-    VOL_HIGH: 0.90,         // downside-vol where vol_sig saturates
-    W_DD: 0.70,             // weight on drawdown signal
-    W_VOL: 0.30,            // weight on downside-vol signal
-    EXIT_SPEED: 0.30,       // fast: close 30% of gap toward a LOWER target/bar (v14: 0.50->0.30)
-    ENTRY_SPEED: 0.25,      // faster re-entry: close 25% of gap toward a HIGHER target/bar (v14: 0.06->0.25)
-    REBAL_THRESH: 0.08,     // v14: only trade when |target-held| exposure > 8%
-    REDEPLOY_THRESH: 0.50,  // exposure below this == defensive (park DCA)
-    RISK_BUDGET: 0.85,
-    FEE_RATE: 0.001,        // 10 bps per trade (rebalance, DCA, redeploy)
-};
-
-function computeDownsideVol(rets, window) {
-    if (!rets || rets.length < window) return 0;
-    var s = rets.slice(-window);
-    var neg = [];
-    for (var i = 0; i < s.length; i++) { if (s[i] < 0) neg.push(s[i]); }
-    if (!neg.length) return 0;
-    var sumSq = 0;
-    for (var j = 0; j < neg.length; j++) sumSq += neg[j] * neg[j];
-    return Math.sqrt(sumSq / s.length) * Math.sqrt(365.25);
-}
-
-function computeDrawdownFromPeak(equity, window) {
-    if (!equity || equity.length < 2) return [0, 0];
-    var subset = equity.length > window ? equity.slice(-(window + 1)) : equity.slice();
-    if (subset.length < 2) return [0, 0];
-    var peak = subset[0], maxDd = 0;
-    for (var i = 0; i < subset.length; i++) {
-        if (subset[i] > peak) peak = subset[i];
-        var dd = peak > 0 ? (peak - subset[i]) / peak : 0;
-        if (dd > maxDd) maxDd = dd;
-    }
-    var curDd = peak > 0 ? (peak - subset[subset.length - 1]) / peak : 0;
-    return [Math.max(0, curDd), Math.max(0, maxDd)];
-}
-
-// v12.0: correlation is intentionally NOT a regime signal (empirically not
-// predictive) — the old computeAvgCorrelation helper was removed.
-
-
-function evaluateShield(rets, cfg, prevExpFrac) {
-    // Continuous DD + downside-vol regime modulator (mirrors deleverage.py).
-    // Signal is look-ahead safe: caller passes returns through day i-1 and the
-    // previous exposure fraction; the returned fraction applies to day i.
-    cfg = cfg || {};
-    var ddWindow = cfg.dd_window || DL.DD_WINDOW;
-    var ddRef = cfg.dd_ref !== undefined ? cfg.dd_ref : DL.DD_REF;
-    var volLow = cfg.vol_low !== undefined ? cfg.vol_low : DL.VOL_LOW;
-    var volHigh = cfg.vol_high !== undefined ? cfg.vol_high : DL.VOL_HIGH;
-    var wDd = cfg.w_dd !== undefined ? cfg.w_dd : DL.W_DD;
-    var wVol = cfg.w_vol !== undefined ? cfg.w_vol : DL.W_VOL;
-    var exitSpeed = cfg.exit_speed !== undefined ? cfg.exit_speed : DL.EXIT_SPEED;
-    var entrySpeed = cfg.entry_speed !== undefined ? cfg.entry_speed : DL.ENTRY_SPEED;
-    var redeployThresh = cfg.redeploy_thresh !== undefined ? cfg.redeploy_thresh : DL.REDEPLOY_THRESH;
-    var riskBudget = cfg.risk_budget || DL.RISK_BUDGET;
-    var prevFrac = Math.max(0, Math.min(1, prevExpFrac === undefined ? 1.0 : prevExpFrac));
-
-    function result(expFrac, curDd, dsVol, ddSig, volSig, baseRisk, isDef) {
-        return {
-            shield_active: isDef,
-            target_exposure: +(expFrac * riskBudget).toFixed(6),
-            exposure_frac: +expFrac.toFixed(6),
-            global_dd: +curDd.toFixed(4), window_dd: +curDd.toFixed(4), exit_dd: 0,
-            ds_vol: +dsVol.toFixed(4), dd_sig: +ddSig.toFixed(4),
-            vol_sig: +volSig.toFixed(4), base_risk: +baseRisk.toFixed(4),
-            local_max_dd: 0, peak_ds_vol: 0,
-            exit_reason: null, entry_triggered: false,
-            exit_blocked: false, exit_block_reason: null,
-            tranche_1_executed: false, tranche_2_executed: false,
-            tranche_amount: 0, tranche_event: null, usdc_reserve: 0,
-            entry_pending_count: 0, exit_tranche: -1,
-            avg_correlation: 0, corr_gate_blocked: false, shield_active_days: 0
-        };
-    }
-
-    if (!rets || rets.length === 0) return result(1.0, 0, 0, 0, 0, 0, false);
-
-    // Current drawdown from the all-time peak of the equity curve.
-    var equity = 1.0, peak = 1.0;
-    for (var i = 0; i < rets.length; i++) {
-        equity *= (1 + rets[i]);
-        if (equity > peak) peak = equity;
-    }
-    var curDd = peak > 0 ? (peak - equity) / peak : 0;
-    curDd = Math.max(0, curDd);
-
-    // Trailing annualized downside deviation (divides by full segment length).
-    var seg = rets.slice(-ddWindow);
-    var dsVol = 0;
-    if (seg.length >= 2) {
-        var ss = 0;
-        for (var k = 0; k < seg.length; k++) { if (seg[k] < 0) ss += seg[k] * seg[k]; }
-        dsVol = Math.sqrt(ss / seg.length) * Math.sqrt(365.25);
-    }
-
-    var ddSig = ddRef > 0 ? Math.max(0, Math.min(1, curDd / ddRef)) : 0;
-    var volSig = volHigh > volLow ? Math.max(0, Math.min(1, (dsVol - volLow) / (volHigh - volLow))) : 0;
-    var baseRisk = Math.max(0, Math.min(1, wDd * ddSig + wVol * volSig));
-    var tgt = 1.0 - baseRisk;
-
-    // Asymmetric ramp: exit fast toward a lower target, re-enter slowly.
-    var expFrac;
-    if (tgt < prevFrac) expFrac = prevFrac + (tgt - prevFrac) * exitSpeed;
-    else expFrac = prevFrac + (tgt - prevFrac) * entrySpeed;
-    expFrac = Math.max(0, Math.min(1, expFrac));
-
-    var isDef = expFrac < redeployThresh;
-    return result(expFrac, curDd, dsVol, ddSig, volSig, baseRisk, isDef);
-}
-
-// ============================================================
-//  BACKTEST UI
+//  AQMath Backtest — UI only
+//  The Deleverage engine (parameters + modulator math) lives on the
+//  server. This file only: parses CSVs in the browser, uploads the
+//  parsed price series to the JWT-gated /backtest endpoint, and renders
+//  the returned result with Chart.js. No engine parameters ship here.
+//  Uploaded series are processed in-memory on the server and discarded.
 // ============================================================
 
 var btSlots = [null, null, null, null, null];
@@ -198,171 +76,42 @@ function btShowStatus(msg, type) {
     el.className = 'bt-status ' + type;
 }
 
-function btReadCfg() {
-    // Production deleverage v14.0 modulator defaults — hardcoded, no user-configurable engine params
+// --- Helpers ---------------------------------------------------------------
+
+// Collect the parsed slots into the payload the server expects.
+function btActiveTokens() {
+    return btSlots
+        .filter(function(s) { return s !== null; })
+        .map(function(s) { return { name: s.name, dates: s.dates, prices: s.prices }; });
+}
+
+function btInputs() {
     return {
-        dd_window: DL.DD_WINDOW,
-        dd_ref: DL.DD_REF,
-        vol_low: DL.VOL_LOW,
-        vol_high: DL.VOL_HIGH,
-        w_dd: DL.W_DD,
-        w_vol: DL.W_VOL,
-        exit_speed: DL.EXIT_SPEED,
-        entry_speed: DL.ENTRY_SPEED,
-        rebal_thresh: DL.REBAL_THRESH,
-        redeploy_thresh: DL.REDEPLOY_THRESH,
-        risk_budget: DL.RISK_BUDGET,
-        fee_rate: DL.FEE_RATE
+        start_capital: +document.getElementById('btStartCapital').value || 1000,
+        dca_amount: +document.getElementById('btDcaAmount').value || 100,
+        dca_interval: +document.getElementById('btDcaInterval').value || 30
     };
 }
 
-function btGetPortReturns() {
-    var active = btSlots.filter(function(s) { return s !== null; });
-    var minLen = Math.min.apply(null, active.map(function(s) { return s.prices.length; }));
-    var pm = {};
-    active.forEach(function(s) { pm[s.name] = s.prices.slice(-minLen); });
-    var dates = active[0].dates.slice(-minLen);
-    var syms = Object.keys(pm);
-    var n = syms.length;
-    var rets = [];
-    for (var i = 1; i < minLen; i++) {
-        var r = 0;
-        for (var j = 0; j < syms.length; j++) {
-            var p = pm[syms[j]][i - 1], c = pm[syms[j]][i];
-            if (p > 0) r += (c - p) / p / n;
-        }
-        rets.push(r);
-    }
-    return { rets: rets, dates: dates, syms: syms, n: n, minLen: minLen, tokenPrices: pm };
+// Friendly beta gate: backtest runs on the server, so it needs a beta key
+// (same gate as the DCA / Optimize engines).
+function btRequireBeta() {
+    if (typeof isBetaActive === 'function' && isBetaActive()) return true;
+    btShowStatus('Enter your beta key above to run a backtest \u2014 the engine runs securely on our server.', 'notice');
+    if (typeof showToast === 'function') showToast('Enter your beta key to run a backtest', 'notice');
+    return false;
 }
 
-function btSimulate(portRet, cfg, startCap, dcaAmt, dcaInt, tokenPrices, syms) {
-    var unitsA = startCap, navA = 1.0, usdcR = 0, totalInv = startCap, totalDep = 0;
-    var totalFees = 0, rebN = 0;  // Fee tracking
-    var eqA = [startCap], invA = [startCap], usdcT = [0];
-    var shT = [], expT = [], gDdT = [], eDdT = [], dsVT = [], pkVT = [], gapT = [], corrT = [], bRiskT = [];
-    var events = [];
-    var shDays = 0, dcaN = 0;
-    // Two-state exposure (v14): `rampPrev` is the CONTINUOUS ramp fed back into
-    // evaluateShield (it evolves every bar); `held` is the actually-traded
-    // position that only jumps to the target when it drifts past rebalThresh.
-    var rampPrev = 1.0;
-    var held = 1.0;
-    var redeploy = cfg.redeploy_thresh !== undefined ? cfg.redeploy_thresh : DL.REDEPLOY_THRESH;
-    var rebalThresh = cfg.rebal_thresh !== undefined ? cfg.rebal_thresh : DL.REBAL_THRESH;
-    
-    for (var i = 0; i < portRet.length; i++) {
-        // Look-ahead safe: decide exposure from data through day i-1.
-        var sub = portRet.slice(0, i);
-        var res = evaluateShield(sub, cfg, rampPrev);
-        var target = res.exposure_frac;   // continuous ramp target
-    
-        // Threshold rebalancing: only trade (and pay fees) when the target
-        // drifts more than rebalThresh from what we currently hold. The
-        // exposure applied to today's return is the position we ALREADY held
-        // (look-ahead safe); we rebalance for the next bar.
-        var appliedFrac = held;
-        if (Math.abs(target - held) > rebalThresh) {
-            var delta = Math.abs(target - held);
-            if (delta > 1e-6 && unitsA * navA > 0) {
-                var tradeVal = delta * (unitsA * navA);
-                var fee = tradeVal * cfg.fee_rate;
-                totalFees += fee; rebN++;
-                navA *= (1 - fee / (unitsA * navA));
-            }
-            held = target;
-        }
-        var expFrac = held;              // position now carried
-        var eff = held * (cfg.risk_budget || DL.RISK_BUDGET);  // for display
-        var sOn = held < redeploy;       // defensive == held < redeploy
-    
-        // Look-ahead: apply the PREVIOUSLY held exposure to today's return.
-        navA *= (1 + portRet[i] * appliedFrac);
-    
-        var dayNum = i + 1;
-        var isDca = dcaAmt > 0 && dayNum % dcaInt === 0;
-    
-        if (isDca) {
-            dcaN++;
-            if (expFrac >= redeploy) {
-                var dcaFee = dcaAmt * cfg.fee_rate;
-                totalFees += dcaFee;
-                unitsA += (dcaAmt - dcaFee) / navA;
-                totalInv += dcaAmt;
-                events.push({ day: dayNum, type: 'DCA', gdd: res.global_dd, edd: 0, gap: 0, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '+$' + dcaAmt + ' → tokens (fee $' + dcaFee.toFixed(2) + ')' });
-            } else {
-                usdcR += dcaAmt;
-                totalInv += dcaAmt;
-                events.push({ day: dayNum, type: 'DCA', gdd: res.global_dd, edd: 0, gap: 0, dsv: res.ds_vol, eff: eff, usdc: usdcR, detail: '+$' + dcaAmt + ' → USDC (defensive, exp ' + (expFrac * 100).toFixed(0) + '%)' });
-            }
-        }
-    
-        // Redeploy parked cash on the cross-up back into a risk-on regime.
-        if (expFrac >= redeploy && usdcR > 0 && navA > 0) {
-            var rdFee = usdcR * cfg.fee_rate;
-            totalFees += rdFee;
-            totalDep += usdcR;
-            unitsA += (usdcR - rdFee) / navA;
-            events.push({ day: dayNum, type: 'REDEPLOY', gdd: res.global_dd, edd: 0, gap: 0, dsv: res.ds_vol, eff: eff, usdc: 0, detail: '$' + usdcR.toFixed(0) + ' parked cash → tokens (fee $' + rdFee.toFixed(2) + ')' });
-            usdcR = 0;
-        }
-    
-        rampPrev = target;
-
-        eqA.push(unitsA * navA + usdcR);
-        invA.push(totalInv);
-        usdcT.push(usdcR);
-        shT.push(sOn ? 1 : 0);
-        expT.push(eff);
-        gDdT.push(res.global_dd);
-        eDdT.push(0);
-        dsVT.push(res.ds_vol);
-        pkVT.push(0);
-        gapT.push(0);
-        corrT.push(0);
-        bRiskT.push(res.base_risk);
-        if (sOn) shDays++;
+// POST parsed series to a JWT-gated engine endpoint and return parsed JSON.
+async function btPost(path, body) {
+    if (typeof pipelineFetch !== 'function') throw new Error('auth helper unavailable');
+    var res = await pipelineFetch(API_URL + path, { method: 'POST', body: JSON.stringify(body) });
+    if (!res.ok) {
+        var err = await res.json().catch(function() { return {}; });
+        throw new Error(err.detail || ('request failed (' + res.status + ')'));
     }
-
-    // Buy & Hold: DCA unconditional (with trading fees)
-    var unitsB = startCap, navB = 1.0, totalInvB = startCap, bhFees = 0;
-    var eqB = [startCap], invB = [startCap];
-    for (var i = 0; i < portRet.length; i++) {
-        navB *= (1 + portRet[i]);
-        if (dcaAmt > 0 && (i + 1) % dcaInt === 0) {
-            var bhFee = dcaAmt * cfg.fee_rate;
-            bhFees += bhFee;
-            unitsB += (dcaAmt - bhFee) / navB;
-            totalInvB += dcaAmt;
-        }
-        eqB.push(unitsB * navB);
-        invB.push(totalInvB);
-    }
-
-    return { eqA: eqA, invA: invA, eqB: eqB, invB: invB, usdcT: usdcT, shT: shT, expT: expT, gDdT: gDdT, eDdT: eDdT, dsVT: dsVT, pkVT: pkVT, gapT: gapT, corrT: corrT, bRiskT: bRiskT, events: events, totalInv: totalInv, totalInvB: totalInvB, totalDep: totalDep, shDays: shDays, dcaN: dcaN, totalFees: totalFees, rebN: rebN, bhFees: bhFees };
+    return res.json();
 }
-
-function btCalcMetrics(eq, totalIn, years) {
-    var f = eq[eq.length - 1];
-    var ret = f / totalIn - 1;
-    var ann = years > 0 ? Math.pow(1 + ret, 1 / years) - 1 : 0;
-    var pk = eq[0], mdd = 0;
-    for (var i = 0; i < eq.length; i++) { if (eq[i] > pk) pk = eq[i]; var d = pk > 0 ? (pk - eq[i]) / pk : 0; if (d > mdd) mdd = d; }
-    var cal = mdd > 0 ? ann / mdd : 0;
-    var rs = [];
-    for (var i = 1; i < eq.length; i++) rs.push(eq[i] / eq[i - 1] - 1);
-    var mn = rs.reduce(function(s, r) { return s + r; }, 0) / rs.length;
-    var vr = rs.reduce(function(s, r) { return s + (r - mn) * (r - mn); }, 0) / rs.length;
-    var av = Math.sqrt(vr * 365.25);
-    var sh = av > 0 ? (ann - 0.05) / av : 0;
-    var irr = Math.pow(f / totalIn, 1 / (eq.length - 1)) - 1;
-    var xi = Math.pow(1 + irr, 365.25) - 1;
-    return { final: f, totalIn: totalIn, ret: ret, ann: ann, mdd: mdd, cal: cal, sh: sh, xi: xi };
-}
-
-// ============================================================
-//  MAIN BACKTEST RUNNER
-// ============================================================
 
 function btShowLoading() {
     var el = document.getElementById('btLoading');
@@ -374,20 +123,38 @@ function btHideLoading() {
     if (el) el.classList.add('hidden');
 }
 
-function btRunBacktest() {
+// ============================================================
+//  MAIN BACKTEST RUNNER
+// ============================================================
+
+async function btRunBacktest() {
+    if (!btRequireBeta()) return;
+    var tokens = btActiveTokens();
+    if (tokens.length < 2) { btShowStatus('Load at least 2 token CSVs to run a backtest.', 'error'); return; }
+
     btShowLoading();
-    setTimeout(function() {
-        try {
-            btShowStatus('Running backtest...', 'running');
-    var cfg = btReadCfg();
-    var startCap = +document.getElementById('btStartCapital').value || 1000;
-    var dcaAmt = +document.getElementById('btDcaAmount').value || 100;
-    var dcaInt = +document.getElementById('btDcaInterval').value || 30;
-    var pr = btGetPortReturns();
-    var sim = btSimulate(pr.rets, cfg, startCap, dcaAmt, dcaInt, pr.tokenPrices, pr.syms);
-    var years = pr.rets.length / 365.25;
-    var m1 = btCalcMetrics(sim.eqA, sim.totalInv, years);
-    var m2 = btCalcMetrics(sim.eqB, sim.totalInvB, years);
+    btShowStatus('Running backtest...', 'running');
+    try {
+        var inp = btInputs();
+        var data = await btPost('/backtest', {
+            tokens: tokens,
+            start_capital: inp.start_capital,
+            dca_amount: inp.dca_amount,
+            dca_interval: inp.dca_interval
+        });
+        btRenderBacktest(data, inp);
+    } catch (e) {
+        console.error(e);
+        btShowStatus('Could not run backtest: ' + e.message, 'error');
+    }
+    btHideLoading();
+}
+
+function btRenderBacktest(data, inp) {
+    var pr = data.pr, sim = data.sim, m1 = data.m1, m2 = data.m2, cfg = data.cfg;
+    var days = pr.rets_length;
+    var years = days / 365.25;
+    var dcaAmt = inp.dca_amount, dcaInt = inp.dca_interval;
     var dateLabels = pr.dates.slice(1);
 
     var redeploys = sim.events.filter(function(e) { return e.type === 'REDEPLOY'; });
@@ -395,7 +162,7 @@ function btRunBacktest() {
     var avgExp = expFracs.length ? expFracs.reduce(function(s, v) { return s + v; }, 0) / expFracs.length : 0;
     var minExp = expFracs.length ? Math.min.apply(null, expFracs) : 0;
 
-    btShowStatus('Done: ' + pr.rets.length + ' days, ' + pr.n + ' tokens (' + pr.syms.join(', ') + '), ' + sim.dcaN + ' DCA, ' + sim.shDays + ' defensive days', 'success');
+    btShowStatus('Done: ' + days + ' days, ' + pr.n + ' tokens (' + pr.syms.join(', ') + '), ' + sim.dcaN + ' DCA, ' + sim.shDays + ' defensive days', 'success');
 
     // Strategy comparison — scored on Calmar + Sharpe (B&H shown as reference only)
     var sr = document.getElementById('btStrategyRow');
@@ -406,7 +173,7 @@ function btRunBacktest() {
         + '<div class="bt-big" style="color:var(--blue)">Calmar ' + m1.cal.toFixed(2) + '</div>'
         + '<div class="bt-sub">Max DD: ' + (m1.mdd * 100).toFixed(1) + '% | Sharpe: ' + m1.sh.toFixed(2) + '</div>'
         + '<div class="bt-sub">Final: $' + m1.final.toLocaleString(undefined, { maximumFractionDigits: 0 }) + ' | Return: ' + (m1.ret * 100).toFixed(1) + '%</div>'
-        + '<div class="bt-sub">Avg exposure: ' + (avgExp * 100).toFixed(0) + '% | Defensive: ' + sim.shDays + '/' + pr.rets.length + ' days</div>'
+        + '<div class="bt-sub">Avg exposure: ' + (avgExp * 100).toFixed(0) + '% | Defensive: ' + sim.shDays + '/' + days + ' days</div>'
         + '<div class="bt-sub" style="color:var(--amber)">Fees: $' + sim.totalFees.toFixed(0) + ' (' + sim.rebN + ' rebalances, ' + redeploys.length + ' redeploys)</div>';
     sr.appendChild(c1);
 
@@ -423,7 +190,7 @@ function btRunBacktest() {
     document.getElementById('btCompareExplain').innerHTML = 'Scored on <strong>Calmar</strong> and <strong>Sharpe</strong> (not on beating Buy &amp; Hold). Modulator Calmar <strong>' + m1.cal.toFixed(2) + '</strong>, Sharpe <strong>' + m1.sh.toFixed(2) + '</strong>, Max DD <strong>' + (m1.mdd * 100).toFixed(1) + '%</strong> — a <strong>' + ddCut + 'pp</strong> drawdown reduction vs the B&amp;H reference (' + (m2.mdd * 100).toFixed(1) + '%). Both received identical DCA ($' + dcaAmt + ' every ' + dcaInt + 'd, total $' + (sim.dcaN * dcaAmt).toLocaleString() + ').';
 
     // Summary explain
-    document.getElementById('btSummaryExplain').innerHTML = '<strong>' + pr.n + ' tokens</strong> (' + pr.syms.join(', ') + ') over <strong>' + pr.rets.length + ' days</strong> (~' + years.toFixed(1) + 'y). Defensive (exposure &lt; ' + (cfg.redeploy_thresh * 100).toFixed(0) + '%) on <strong>' + sim.shDays + '</strong>/' + pr.rets.length + ' days. Avg exposure <strong>' + (avgExp * 100).toFixed(0) + '%</strong>, min <strong>' + (minExp * 100).toFixed(0) + '%</strong>. <strong>' + sim.dcaN + '</strong> DCA events, <strong>' + redeploys.length + '</strong> cash redeploys.';
+    document.getElementById('btSummaryExplain').innerHTML = '<strong>' + pr.n + ' tokens</strong> (' + pr.syms.join(', ') + ') over <strong>' + days + ' days</strong> (~' + years.toFixed(1) + 'y). Defensive (exposure &lt; ' + (cfg.redeploy_thresh * 100).toFixed(0) + '%) on <strong>' + sim.shDays + '</strong>/' + days + ' days. Avg exposure <strong>' + (avgExp * 100).toFixed(0) + '%</strong>, min <strong>' + (minExp * 100).toFixed(0) + '%</strong>. <strong>' + sim.dcaN + '</strong> DCA events, <strong>' + redeploys.length + '</strong> cash redeploys.';
 
     // Metrics grid
     var mg = document.getElementById('btMetricsGrid');
@@ -554,37 +321,40 @@ function btRunBacktest() {
                 { label: 'Shield', data: sim.shT, borderColor: function(ctx) { return ctx.raw ? '#f87171' : '#34d399'; }, backgroundColor: function(ctx) { return ctx.raw ? 'rgba(248,113,113,0.2)' : 'rgba(52,211,153,0.05)'; }, fill: true, pointRadius: 0, borderWidth: 1, stepped: true, yAxisID: 'y1' }
             ]
         },
-        options: (function() { 
-            var o = cO(); 
+        options: (function() {
+            var o = cO();
             o.scales.y = { min: 0, max: 100, ticks: { color: '#7a8ba5', callback: function(v) { return v + '%'; } }, grid: { color: '#1c2128' } };
             o.scales.y1 = { position: 'right', min: -0.1, max: 1.2, ticks: { color: '#7a8ba5', callback: function(v) { return v >= 0.5 ? 'ON' : 'OFF'; } }, grid: { display: false } };
-            return o; 
+            return o;
         })(),
         plugins: [emergencyBrakePlugin]
     });
 
-    // Volatility
+    // Volatility (reference lines driven by the server's authoritative config)
+    var volLowPct = (cfg.vol_low * 100).toFixed(0);
+    var volHighPct = (cfg.vol_high * 100).toFixed(0);
     btCharts.vol = new Chart(document.getElementById('btVolChart'), {
         type: 'line',
         data: {
             labels: dateLabels,
             datasets: [
                 { label: 'DS Vol (20d)', data: sim.dsVT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#06b6d4', pointRadius: 0, borderWidth: 1.5 },
-                { label: 'Vol Low 30% (de-risk starts)', data: dateLabels.map(function() { return 30; }), borderColor: '#34d399', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 },
-                { label: 'Vol High 90% (full de-risk)', data: dateLabels.map(function() { return 90; }), borderColor: '#f87171', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
+                { label: 'Vol Low ' + volLowPct + '% (de-risk starts)', data: dateLabels.map(function() { return +volLowPct; }), borderColor: '#34d399', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 },
+                { label: 'Vol High ' + volHighPct + '% (full de-risk)', data: dateLabels.map(function() { return +volHighPct; }), borderColor: '#f87171', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
             ]
         },
         options: (function() { var o = cO(); o.scales.y.ticks.callback = function(v) { return v + '%'; }; return o; })()
     });
 
-    // Drawdowns
+    // Drawdowns (DD Ref line driven by server config)
+    var ddRefPct = (cfg.dd_ref * 100).toFixed(0);
     btCharts.dd = new Chart(document.getElementById('btDdChart'), {
         type: 'line',
         data: {
             labels: dateLabels,
             datasets: [
                 { label: 'Drawdown from peak', data: sim.gDdT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#f87171', backgroundColor: 'rgba(248,113,113,0.15)', fill: true, pointRadius: 0, borderWidth: 1.5 },
-                { label: 'DD Ref 30% (full de-risk)', data: dateLabels.map(function() { return 30; }), borderColor: '#fbbf24', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
+                { label: 'DD Ref ' + ddRefPct + '% (full de-risk)', data: dateLabels.map(function() { return +ddRefPct; }), borderColor: '#fbbf24', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
             ]
         },
         options: (function() { var o = cO(); o.scales.y.ticks.callback = function(v) { return v + '%'; }; return o; })()
@@ -592,6 +362,7 @@ function btRunBacktest() {
 
     // Regime de-risk signal: base_risk (0..1) drives target exposure = 1 - base_risk
     if (sim.bRiskT && sim.bRiskT.length > 0) {
+        var redeployPct = (cfg.redeploy_thresh * 100).toFixed(0);
         btCharts.corr = new Chart(document.getElementById('btCorrChart'), {
             type: 'line',
             data: {
@@ -599,7 +370,7 @@ function btRunBacktest() {
                 datasets: [
                     { label: 'De-risk signal (base_risk)', data: sim.bRiskT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#f87171', backgroundColor: 'rgba(248,113,113,0.12)', fill: true, pointRadius: 0, borderWidth: 2 },
                     { label: 'Exposure', data: sim.expT.map(function(v) { return +((cfg.risk_budget > 0 ? v / cfg.risk_budget : 0) * 100).toFixed(1); }), borderColor: '#a855f7', pointRadius: 0, borderWidth: 1.5, stepped: 'before' },
-                    { label: 'Redeploy 50%', data: dateLabels.map(function() { return 50; }), borderColor: '#34d399', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
+                    { label: 'Redeploy ' + redeployPct + '%', data: dateLabels.map(function() { return +redeployPct; }), borderColor: '#34d399', borderDash: [6, 4], pointRadius: 0, borderWidth: 1 }
                 ]
             },
             options: (function() {
@@ -626,96 +397,86 @@ function btRunBacktest() {
 
     document.getElementById('btResultsSection').classList.remove('hidden');
     document.getElementById('btResultsSection').scrollIntoView({ behavior: 'smooth' });
-        } catch(e) { console.error(e); btShowStatus('Error: ' + e.message, 'error'); }
-        btHideLoading();
-    }, 50);
 }
 
 // ============================================================
 //  WALK-FORWARD GRID
 // ============================================================
 
-function btRunWFGrid() {
+async function btRunWFGrid() {
+    // Ignore the <select> onchange handlers until a grid can actually run.
+    if (btActiveTokens().length < 2) return;
+    if (!btRequireBeta()) return;
+
     btShowLoading();
-    setTimeout(function() {
-        try {
-            var pr = btGetPortReturns();
-    var startCap = +document.getElementById('btStartCapital').value || 1000;
-    var dcaAmt = +document.getElementById('btDcaAmount').value || 100;
-    var dcaInt = +document.getElementById('btDcaInterval').value || 30;
-    var sweep = document.getElementById('btWfSweep').value;
-    var metricKey = document.getElementById('btWfMetric').value;
-    var years = pr.rets.length / 365.25;
+    try {
+        var inp = btInputs();
+        var sweep = document.getElementById('btWfSweep').value;
+        var metric = document.getElementById('btWfMetric').value;
+        btShowStatus('Running walk-forward grid...', 'running');
+        var data = await btPost('/backtest/wf-grid', {
+            tokens: btActiveTokens(),
+            start_capital: inp.start_capital,
+            dca_amount: inp.dca_amount,
+            dca_interval: inp.dca_interval,
+            sweep: sweep,
+            metric: metric
+        });
+        btRenderWFGrid(data);
+    } catch (e) {
+        console.error(e);
+        btShowStatus('Could not run walk-forward grid: ' + e.message, 'error');
+    }
+    btHideLoading();
+}
 
-    var ranges = {
-        dd_ref: { label: 'DD Ref', values: [0.20, 0.25, 0.30, 0.35, 0.40, 0.50], key: 'dd_ref', fmt: function(v) { return (v * 100).toFixed(0) + '%'; } },
-        vol_low: { label: 'Vol Low', values: [0.20, 0.25, 0.30, 0.35, 0.40, 0.45], key: 'vol_low', fmt: function(v) { return (v * 100).toFixed(0) + '%'; } },
-        vol_high: { label: 'Vol High', values: [0.60, 0.70, 0.80, 0.90, 1.00, 1.20], key: 'vol_high', fmt: function(v) { return (v * 100).toFixed(0) + '%'; } },
-        w_dd: { label: 'DD Weight', values: [0.50, 0.60, 0.70, 0.80, 0.90, 1.00], key: 'w_dd', fmt: function(v) { return v.toFixed(2); } },
-        exit_speed: { label: 'Exit Speed', values: [0.30, 0.40, 0.50, 0.60, 0.75, 1.00], key: 'exit_speed', fmt: function(v) { return v.toFixed(2); } },
-        entry_speed: { label: 'Entry Speed', values: [0.03, 0.06, 0.10, 0.15, 0.20, 0.30], key: 'entry_speed', fmt: function(v) { return v.toFixed(2); } }
-    };
-    var sw = ranges[sweep] || ranges.dd_ref;
-    var crossP = sw.key !== 'vol_high' ? 'vol_high' : 'dd_ref';
-    var cr = ranges[crossP];
-
-    btShowStatus('WF grid: ' + sw.label + ' x ' + cr.label + ' (' + (sw.values.length * cr.values.length) + ' sims)...', 'running');
-
-    var results = [];
-    for (var si = 0; si < sw.values.length; si++) {
-        for (var ci = 0; ci < cr.values.length; ci++) {
-            var cfg = btReadCfg();
-            cfg[cr.key] = cr.values[ci];
-            cfg[sw.key] = sw.values[si];
-            // Keep DD/vol weights complementary when sweeping w_dd.
-            cfg.w_vol = Math.max(0, 1 - cfg.w_dd);
-            var sim = btSimulate(pr.rets, cfg, startCap, dcaAmt, dcaInt, pr.tokenPrices, pr.syms);
-            var m = btCalcMetrics(sim.eqA, sim.totalInv, years);
-            var redeployN = sim.events.filter(function(e) { return e.type === 'REDEPLOY'; }).length;
-            results.push({ sv: sw.values[si], cv: cr.values[ci], final: m.final, calmar: m.cal, maxdd: m.mdd, sharpe: m.sh, defDays: sim.shDays, redeploys: redeployN });
-        }
+function btRenderWFGrid(data) {
+    // Value formatters mirror the server-declared format tags (no engine math here).
+    function mkFmt(tag) {
+        return tag === 'pct'
+            ? function(v) { return (v * 100).toFixed(0) + '%'; }
+            : function(v) { return v.toFixed(2); };
+    }
+    var swFmt = mkFmt(data.sweep_fmt);
+    var crFmt = mkFmt(data.cross_fmt);
+    function metFmt(v) {
+        if (data.metric_key === 'final') return '$' + v.toLocaleString(undefined, { maximumFractionDigits: 0 });
+        if (data.metric_key === 'maxdd') return (v * 100).toFixed(1) + '%';
+        return v.toFixed(2);
     }
 
-    var metricMap = {
-        final: { key: 'final', label: 'Final $', fmt: function(v) { return '$' + v.toLocaleString(undefined, { maximumFractionDigits: 0 }); }, hi: true },
-        calmar: { key: 'calmar', label: 'Calmar', fmt: function(v) { return v.toFixed(2); }, hi: true },
-        maxdd: { key: 'maxdd', label: 'Max DD', fmt: function(v) { return (v * 100).toFixed(1) + '%'; }, hi: false },
-        sharpe: { key: 'sharpe', label: 'Sharpe', fmt: function(v) { return v.toFixed(2); }, hi: true }
-    };
-    var met = metricMap[metricKey];
-    var vals = results.map(function(r) { return r[met.key]; });
-    var bestVal = met.hi ? Math.max.apply(null, vals) : Math.min.apply(null, vals);
+    var results = data.results;
+    var bestVal = data.best_val;
+    var mk = data.metric_key;
 
-    var html = '<table class="bt-wf-grid"><thead><tr><th>' + sw.label + ' / ' + cr.label + '</th>';
-    for (var ci = 0; ci < cr.values.length; ci++) html += '<th>' + cr.fmt(cr.values[ci]) + '</th>';
+    var html = '<table class="bt-wf-grid"><thead><tr><th>' + data.sweep_label + ' / ' + data.cross_label + '</th>';
+    for (var ci = 0; ci < data.cross_values.length; ci++) html += '<th>' + crFmt(data.cross_values[ci]) + '</th>';
     html += '<th>Def Days</th><th>Redeploys</th></tr></thead><tbody>';
-    for (var si = 0; si < sw.values.length; si++) {
-        var row = results.filter(function(r) { return r.sv === sw.values[si]; });
-        var rowVals = row.map(function(r) { return r[met.key]; });
-        var rowBest = met.hi ? Math.max.apply(null, rowVals) : Math.min.apply(null, rowVals);
+    for (var si = 0; si < data.sweep_values.length; si++) {
+        var sv = data.sweep_values[si];
+        var row = results.filter(function(r) { return r.sv === sv; });
+        var rowVals = row.map(function(r) { return r[mk]; });
+        var rowBest = data.metric_hi ? Math.max.apply(null, rowVals) : Math.min.apply(null, rowVals);
         var isBestRow = rowBest === bestVal;
-        html += '<tr' + (isBestRow ? ' class="bt-best-row"' : '') + '><th>' + sw.fmt(sw.values[si]) + '</th>';
+        html += '<tr' + (isBestRow ? ' class="bt-best-row"' : '') + '><th>' + swFmt(sv) + '</th>';
         for (var ri = 0; ri < row.length; ri++) {
-            var v = row[ri][met.key];
+            var v = row[ri][mk];
             var isB = v === bestVal;
-            var cls = isB ? 'bt-cell-good' : (metricKey === 'maxdd' && v > 0.5 ? 'bt-cell-bad' : 'bt-cell-mid');
-            html += '<td class="' + cls + '">' + met.fmt(v) + '</td>';
+            var cls = isB ? 'bt-cell-good' : (mk === 'maxdd' && v > 0.5 ? 'bt-cell-bad' : 'bt-cell-mid');
+            html += '<td class="' + cls + '">' + metFmt(v) + '</td>';
         }
         var any = row[0];
-        html += '<td>' + any.defDays + '</td><td>' + any.redeploys + '</td></tr>';
+        html += '<td>' + (any ? any.defDays : 0) + '</td><td>' + (any ? any.redeploys : 0) + '</td></tr>';
     }
     html += '</tbody></table>';
 
-    var best = results.find(function(r) { return r[met.key] === bestVal; });
-    html += '<div class="bt-explain" style="margin-top:12px"><strong>Best:</strong> ' + sw.label + '=' + sw.fmt(best.sv) + ', ' + cr.label + '=' + cr.fmt(best.cv) + ' \u2192 ' + met.label + ': ' + met.fmt(bestVal) + ' (scored on Calmar / Sharpe / Max DD, not on beating B&amp;H).</div>';
+    var best = data.best;
+    html += '<div class="bt-explain" style="margin-top:12px"><strong>Best:</strong> ' + data.sweep_label + '=' + swFmt(best.sv) + ', ' + data.cross_label + '=' + crFmt(best.cv) + ' \u2192 ' + data.metric_label + ': ' + metFmt(bestVal) + ' (scored on Calmar / Sharpe / Max DD, not on beating B&amp;H).</div>';
 
     document.getElementById('btWfGridContainer').innerHTML = html;
     document.getElementById('btWfSection').classList.remove('hidden');
-    btShowStatus('WF grid: ' + (sw.values.length * cr.values.length) + ' sims done. Best: ' + sw.label + '=' + sw.fmt(best.sv), 'success');
+    btShowStatus('Walk-forward grid done. Best: ' + data.sweep_label + '=' + swFmt(best.sv), 'success');
     document.getElementById('btWfSection').scrollIntoView({ behavior: 'smooth' });
-        } catch(e) { console.error(e); btShowStatus('Error: ' + e.message, 'error'); }
-        btHideLoading();
-    }, 50);
 }
 
 function btResetAll() {
