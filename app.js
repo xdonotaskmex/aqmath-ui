@@ -1749,6 +1749,7 @@ Object.assign(window, {
     showProModal, hideProModal, showToast, hideToast,
     showImpressum, showPrivacyPolicy, showTerms, hideLegalModal,
     activateBeta, deactivateBeta,
+    isBetaActive, getBetaToken, pipelineFetch,
     saveSnapshot, toggleGlobalSafeHaven, deployUSDC, toggleDeleverage,
     osvjeziSveCijene, importCSV, dodajToken,
     obrisiSve, distribuirajDca, optimizePortfolio,
