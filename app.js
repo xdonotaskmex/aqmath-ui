@@ -7,7 +7,7 @@ const BETA_AUTH_URL = 'https://aqmath-beta-auth-production.up.railway.app';
 // ============ ROUTING ============
 function handleRoute() {
     const hash = window.location.hash;
-    document.body.classList.remove('route-landing', 'route-app', 'route-doc', 'route-backtest');
+    document.body.classList.remove('route-landing', 'route-app', 'route-doc', 'route-backtest', 'route-results');
     if (hash === '#/app') {
         document.body.classList.add('route-app');
         // Load market widgets for app view
@@ -16,6 +16,8 @@ function handleRoute() {
         document.body.classList.add('route-doc');
     } else if (hash === '#/backtest') {
         document.body.classList.add('route-backtest');
+    } else if (hash === '#/results') {
+        document.body.classList.add('route-results');
     } else {
         document.body.classList.add('route-landing');
         loadAllWidgets();
@@ -335,6 +337,13 @@ const totalTarget = () => r2(portfolio.filter(t => !t.frozen).reduce((s, t) => s
 const totalValue = () => portfolio.reduce((s, t) => s + t.amount * t.price, 0);
 const activeTokens = () => portfolio.filter(t => !t.frozen);
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+// Format a token quantity with sensible precision (more decimals for small amounts)
+function fmtTokens(n) {
+    if (!isFinite(n)) return '0';
+    const abs = Math.abs(n);
+    const dp = abs >= 1000 ? 2 : abs >= 1 ? 4 : 6;
+    return n.toLocaleString('en-US', { maximumFractionDigits: dp });
+}
 
 // ============ STABLECOIN SAFE-HAVEN ============
 const STABLECOINS = new Set(['USDC', 'USDT', 'DAI', 'TUSD', 'BUSD', 'FDUSD', 'USDP', 'PYUSD', 'EURC', 'GUSD']);
@@ -1258,6 +1267,11 @@ async function distribuirajDca() {
         if (totalAlloc >= 0.01 && coinCount > 0) {
             msg = `Added $${totalAlloc.toFixed(2)} across ${coinCount} ${coinCount === 1 ? 'coin' : 'coins'}.`;
             if (remaining > 0.01) msg += ` $${remaining.toFixed(2)} parked in USDC for next time.`;
+            // Task 1: show the actual buys (tokens + USD) per coin
+            msg += '\n\nBought:';
+            Object.entries(tokenTotals).forEach(([sym, t]) => {
+                msg += `\n  ${sym}: +${fmtTokens(t.tokens)} tokens (~$${t.usd.toFixed(2)})`;
+            });
         } else {
             msg = `Your portfolio is already at its targets — $${dcaAmount.toFixed(2)} parked in USDC for next time.`;
         }
@@ -1435,7 +1449,43 @@ async function optimizePortfolio() {
         const coinCount = weights.filter(w => w.weight > 0).length;
         let summary = `Portfolio optimized — new targets set for ${coinCount} ${coinCount === 1 ? 'coin' : 'coins'}.`;
         if (usdcTarget > 0) summary += ` ${usdcTarget}% kept in USDC.`;
-        if (dlInfo && dlInfo.shield_active) summary += "\n\nDefensive mode is on — exposure is dialed back while markets are shaky. It'll ease back automatically as they recover.";
+
+        // Task 1: implied rebalance trades to reach the new targets
+        // (the engine sets target weights, it does not execute the buys/sells)
+        const equity = totalValue();
+        const trades = [];
+        const sells = [];
+        let sellUsdTotal = 0;
+        unfrozen.forEach(t => {
+            if (t.safeHaven || !t.price || t.price <= 0) return;
+            const targetVal = (t.target / 100) * equity;
+            const curVal = t.amount * t.price;
+            const delta = targetVal - curVal;
+            if (Math.abs(delta) < 0.05) return;
+            const qty = Math.abs(delta) / t.price;
+            if (delta > 0) {
+                trades.push(`  ${t.sym}: BUY ${fmtTokens(qty)} tokens (~$${Math.abs(delta).toFixed(2)})`);
+            } else {
+                trades.push(`  ${t.sym}: SELL ${fmtTokens(qty)} tokens (~$${Math.abs(delta).toFixed(2)})`);
+                sells.push(`  ${t.sym}: sell ${fmtTokens(qty)} tokens (~$${Math.abs(delta).toFixed(2)})`);
+                sellUsdTotal += Math.abs(delta);
+            }
+        });
+        if (trades.length > 0) summary += '\n\nSuggested trades:\n' + trades.join('\n');
+
+        // Task 2: deleverage status + (when active) what to sell into USDC
+        if (dlInfo) {
+            summary += `\n\nDeleverage: ${dlInfo.shield_active ? 'ACTIVE' : 'INACTIVE'}`;
+            if (dlInfo.shield_active) {
+                summary += "\nDefensive mode is on — exposure is dialed back while markets are shaky. It'll ease back automatically as they recover.";
+                if (sells.length > 0) {
+                    summary += '\n\nRecommended to sell into USDC:\n' + sells.join('\n');
+                    summary += `\n  Total to USDC: ~$${sellUsdTotal.toFixed(2)}`;
+                }
+            }
+        } else {
+            summary += '\n\nDeleverage: OFF';
+        }
         if (insufficient.length > 0) summary += `\n\nNot enough price history yet for: ${insufficient.join(', ')}.`;
         showToast(summary, 'success');
     } catch(e) {
