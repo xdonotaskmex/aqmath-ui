@@ -1453,6 +1453,9 @@ async function optimizePortfolio() {
         // Task 1: implied rebalance trades to reach the new targets
         // (the engine sets target weights, it does not execute the buys/sells)
         const equity = totalValue();
+        // Sells are only ever suggested while the deleverage shield is ACTIVE.
+        // With deleverage off/inactive we only surface the BUY side.
+        const shieldActive = !!(dlInfo && dlInfo.shield_active);
         const trades = [];
         const sells = [];
         let sellUsdTotal = 0;
@@ -1465,7 +1468,7 @@ async function optimizePortfolio() {
             const qty = Math.abs(delta) / t.price;
             if (delta > 0) {
                 trades.push(`  ${t.sym}: BUY ${fmtTokens(qty)} tokens (~$${Math.abs(delta).toFixed(2)})`);
-            } else {
+            } else if (shieldActive) {
                 trades.push(`  ${t.sym}: SELL ${fmtTokens(qty)} tokens (~$${Math.abs(delta).toFixed(2)})`);
                 sells.push(`  ${t.sym}: sell ${fmtTokens(qty)} tokens (~$${Math.abs(delta).toFixed(2)})`);
                 sellUsdTotal += Math.abs(delta);
@@ -1475,8 +1478,8 @@ async function optimizePortfolio() {
 
         // Task 2: deleverage status + (when active) what to sell into USDC
         if (dlInfo) {
-            summary += `\n\nDeleverage: ${dlInfo.shield_active ? 'ACTIVE' : 'INACTIVE'}`;
-            if (dlInfo.shield_active) {
+            summary += `\n\nDeleverage: ${shieldActive ? 'ACTIVE' : 'INACTIVE'}`;
+            if (shieldActive) {
                 summary += "\nDefensive mode is on — exposure is dialed back while markets are shaky. It'll ease back automatically as they recover.";
                 if (sells.length > 0) {
                     summary += '\n\nRecommended to sell into USDC:\n' + sells.join('\n');
