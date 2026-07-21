@@ -283,7 +283,8 @@ function loadState() {
                 portfolio = data.portfolio.map(t => ({
                     ...t,
                     frozen: t.frozen || false,
-                    insufficientHistory: t.insufficientHistory || false
+                    // Ne perzistiraj stari history-warning flag preko reloada — ponovno se izračuna na sljedeći /optimize
+                    insufficientHistory: false
                 }));
             } else {
                 portfolio = [];
@@ -1356,10 +1357,14 @@ async function optimizePortfolio() {
             usdc.target = usdcTarget;
         }
 
-        // Track tokens with insufficient data
+        // Track tokens with insufficient history: engine 'insufficient_data' error ILI stvarna pokrivenost < 180 dana.
+        // Reset radimo za SVE tokene (osim safe-havena), ne samo unfrozen, da se stari flag ne zaglavi.
+        const dataPoints = result.data_points || {};
         const insufficient = weights.filter(w => w.error === 'insufficient_data').map(w => w.sym);
-        unfrozen.forEach(t => {
-            t.insufficientHistory = insufficient.includes(t.sym);
+        portfolio.forEach(t => {
+            if (t.safeHaven) { t.insufficientHistory = false; return; }
+            const dp = dataPoints[t.sym];
+            t.insufficientHistory = insufficient.includes(t.sym) || (dp != null && dp < 180);
         });
 
         // Deleverage: persist shield state for next call
