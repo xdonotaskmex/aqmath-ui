@@ -450,7 +450,9 @@
   "bt": {
     "intro": "<strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage modulator <strong>(v14.0 &mdash; validated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule. <strong>Buy &amp; Hold</strong> buys tokens unconditionally and stays fully exposed. <strong>Deleverage</strong> scales exposure <strong>continuously</strong> off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It <strong>moves exposure toward its target at 30% of the gap per bar</strong> in either direction, with no hard floor, only rebalancing when target exposure drifts more than 8% from the held position (threshold rebalancing), and redeploying parked DCA cash once exposure recovers above 40%. It is scored on <strong>Sharpe and drawdown</strong>.",
     "csvFormat": "<strong>CSV format:</strong> Header with date column (<code>event_date</code>/<code>date</code>/<code>Date</code>) + price column (<code>close_price_usd</code>/<code>Close</code>/<code>price</code>). Equal-weighted portfolio.",
-    "navBacktest": "backtest"
+    "navBacktest": "backtest",
+    "changelogIntro": "<strong>Change log.</strong> A dated record of engine updates, so any result you see can be traced back to the exact version that produced it.",
+    "changelog": "<li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>Engine settings frozen (v14.0).</strong> The modulator's settings were locked on this date. Every result from this day onward comes from this exact, unchanged engine.</span></li><li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>Recurring contribution can be zero.</strong> You can now set the <strong>DCA Amount</strong> to <strong>0</strong> to test a one-time, lump-sum start. Earlier results are unaffected.</span></li>"
   },
   "shield": {
     "label": "--deleverage-modulator &middot; v14.0",

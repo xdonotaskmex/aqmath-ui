@@ -450,7 +450,9 @@
   "bt": {
     "intro": "<strong>工作原理：</strong>上传代币的历史价格 CSV（最多 5 个）。引擎运行与生产环境完全相同的去杠杆调节器<strong>（v14.0 &mdash; 基于 5 币种 8.7 年真实数据验证）</strong>。两种策略接收<strong>完全相同的 DCA 资金</strong>和相同的时间表。<strong>买入持有</strong>无条件购买代币并保持满仓敞口。<strong>去杠杆</strong>根据回撤上升和下行波动率上升<strong>连续</strong>调节敞口 &mdash; 无技术指标、无计时器、无相关性门控。它<strong>以每根 K 线 30% 的差距速度将敞口移向目标</strong>（双向），无硬性底仓，当敞口恢复至 40% 以上时重新部署闲置的 DCA 资金。v14 新增<strong>阈值再平衡</strong>——仅当目标偏离持仓超过 8% 时才交易，将再平衡次数减少约 64%。评分依据风险调整后收益（Sharpe），而非是否跑赢买入持有。",
     "csvFormat": "<strong>CSV 格式：</strong>包含日期列（<code>event_date</code>/<code>date</code>/<code>Date</code>）+ 价格列（<code>close_price_usd</code>/<code>Close</code>/<code>price</code>）的表头。等权重组合。",
-    "navBacktest": "回测"
+    "navBacktest": "回测",
+    "changelogIntro": "<strong>更新日志。</strong>引擎更新的带日期记录，让您看到的任何结果都能追溯到产生它的确切版本。",
+    "changelog": "<li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>引擎设置已冻结（v14.0）。</strong>调节器的设置已于当日锁定。从这一天起的每个结果都来自这个完全相同、未改动的引擎。</span></li><li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>定投金额可为零。</strong>现在可将 <strong>DCA 金额</strong>设为 <strong>0</strong>，以测试一次性、整笔起始的投入。此前的结果不受影响。</span></li>"
   },
   "shield": {
     "label": "--deleverage-modulator &middot; v14.0",
