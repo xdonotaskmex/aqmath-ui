@@ -85,11 +85,19 @@ function btActiveTokens() {
         .map(function(s) { return { name: s.name, dates: s.dates, prices: s.prices }; });
 }
 
+function btNum(id, dflt) {
+    var el = document.getElementById(id);
+    var raw = el ? String(el.value).trim() : '';
+    if (raw === '') return dflt;      // empty -> default
+    var n = Number(raw);
+    return isNaN(n) ? dflt : n;       // explicit 0 is kept (no more `|| default`)
+}
+
 function btInputs() {
     return {
-        start_capital: +document.getElementById('btStartCapital').value || 1000,
-        dca_amount: +document.getElementById('btDcaAmount').value || 100,
-        dca_interval: +document.getElementById('btDcaInterval').value || 30
+        start_capital: btNum('btStartCapital', 1000),
+        dca_amount: btNum('btDcaAmount', 100),   // 0 = no DCA (lump-sum only)
+        dca_interval: btNum('btDcaInterval', 30)
     };
 }
 
