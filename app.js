@@ -1455,13 +1455,15 @@ async function optimizePortfolio() {
         let summary = `Portfolio optimized — new targets set for ${coinCount} ${coinCount === 1 ? 'coin' : 'coins'}.`;
         if (usdcTarget > 0) summary += ` ${usdcTarget}% kept in USDC.`;
 
-        // Task 1: implied rebalance trades to reach the new targets
+        // Implied rebalance trades to reach the new targets.
         // (the engine sets target weights, it does not execute the buys/sells)
+        // Fee-avoidance: skip any trade below $20 notional.
+        // Defensive (shield ACTIVE): deleverage only REDUCES exposure — never buy; DCA is paused.
+        // Normal (shield inactive/off): only BUY drifted-underweight positions — no sells.
         const equity = totalValue();
-        // Sells are only ever suggested while the deleverage shield is ACTIVE.
-        // With deleverage off/inactive we only surface the BUY side.
         const shieldActive = !!(dlInfo && dlInfo.shield_active);
-        const trades = [];
+        const MIN_TRADE_USD = 20;
+        const buys = [];
         const sells = [];
         let sellUsdTotal = 0;
         unfrozen.forEach(t => {
@@ -1469,30 +1471,36 @@ async function optimizePortfolio() {
             const targetVal = (t.target / 100) * equity;
             const curVal = t.amount * t.price;
             const delta = targetVal - curVal;
-            if (Math.abs(delta) < 0.05) return;
-            const qty = Math.abs(delta) / t.price;
-            if (delta > 0) {
-                trades.push(`  ${t.sym}: BUY ${fmtTokens(qty)} tokens (~$${Math.abs(delta).toFixed(2)})`);
-            } else if (shieldActive) {
-                trades.push(`  ${t.sym}: SELL ${fmtTokens(qty)} tokens (~$${Math.abs(delta).toFixed(2)})`);
-                sells.push(`  ${t.sym}: sell ${fmtTokens(qty)} tokens (~$${Math.abs(delta).toFixed(2)})`);
-                sellUsdTotal += Math.abs(delta);
+            const usd = Math.abs(delta);
+            if (usd < MIN_TRADE_USD) return;
+            const qty = usd / t.price;
+            if (shieldActive) {
+                if (delta < 0) {
+                    sells.push(`  ${t.sym}: sell ${fmtTokens(qty)} tokens (~$${usd.toFixed(2)})`);
+                    sellUsdTotal += usd;
+                }
+            } else if (delta > 0) {
+                buys.push(`  ${t.sym}: BUY ${fmtTokens(qty)} tokens (~$${usd.toFixed(2)})`);
             }
         });
-        if (trades.length > 0) summary += '\n\nSuggested trades:\n' + trades.join('\n');
 
-        // Task 2: deleverage status + (when active) what to sell into USDC
+        // Deleverage status + a single (non-duplicated) trade block
         if (dlInfo) {
             summary += `\n\nDeleverage: ${shieldActive ? 'ACTIVE' : 'INACTIVE'}`;
             if (shieldActive) {
-                summary += "\nDefensive mode is on — exposure is dialed back while markets are shaky. It'll ease back automatically as they recover.";
+                summary += "\nDefensive mode is on — exposure is dialed back while markets are shaky. New DCA buys are paused; they'll resume automatically as markets recover.";
                 if (sells.length > 0) {
-                    summary += '\n\nRecommended to sell into USDC:\n' + sells.join('\n');
+                    summary += '\n\nReduce exposure — sell into USDC:\n' + sells.join('\n');
                     summary += `\n  Total to USDC: ~$${sellUsdTotal.toFixed(2)}`;
                 }
+            } else if (buys.length > 0) {
+                summary += '\n\nSuggested buys (drift rebalance):\n' + buys.join('\n');
             }
         } else {
             summary += '\n\nDeleverage: OFF';
+            if (buys.length > 0) {
+                summary += '\n\nSuggested buys (drift rebalance):\n' + buys.join('\n');
+            }
         }
         if (insufficient.length > 0) summary += `\n\nNot enough price history yet for: ${insufficient.join(', ')}.`;
         showToast(summary, 'success');
