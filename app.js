@@ -180,7 +180,16 @@ async function activateBeta() {
         });
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
-            throw new Error(err.detail || 'invalid key');
+            if (res.status === 429) {
+                // Rate limited — server tells us how long to wait.
+                const secs = Math.max(0, Math.round(Number(err.retry_after) || 0));
+                const wait = secs >= 60 ? Math.ceil(secs / 60) + ' min' : secs + ' sec';
+                showToast('Too many attempts. Please wait ' + wait + ' and try again.', 'warning');
+            } else {
+                // Server messages are already user-friendly (invalid / revoked / expired / in-use).
+                showToast(err.detail || "That beta key didn't work — please double-check it and try again.", 'error');
+            }
+            return;
         }
         const data = await res.json();
         localStorage.setItem('pro_token', data.token);
@@ -193,7 +202,7 @@ async function activateBeta() {
         render();
     } catch(e) {
         console.error('[AQMath] beta activation failed:', e.message);
-        showToast("That beta key didn't work — please double-check it and try again.", 'error');
+        showToast("Couldn't reach the activation service — please check your connection and try again.", 'error');
     } finally {
         btn.textContent = '[ Activate Beta ]';
         btn.disabled = false;

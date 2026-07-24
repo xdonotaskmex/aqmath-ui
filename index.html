@@ -493,6 +493,10 @@
                 <div class="lp-faq-a" data-i18n-html="faq.a2">We don&rsquo;t track your wallet and we don&rsquo;t have a user database. Your token balances are stored only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. Your financial privacy is architecturally enforced. <a href="#/docs" style="color:var(--purple);">Read the full privacy architecture in our [Documentation].</a></div>
             </div>
             <div class="lp-faq-item">
+                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q10">Do beta keys track my IP address?</div>
+                <div class="lp-faq-a" data-i18n-html="faq.a10">No &mdash; not in any readable form. A beta key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href="javascript:void(0)" onclick="showPrivacyPolicy()" style="color:var(--purple);">Privacy Policy</a>.</div>
+            </div>
+            <div class="lp-faq-item">
                 <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q3">What's included in Beta vs Black?</div>
                 <div class="lp-faq-a" data-i18n="faq.a3">Beta access includes the full engine — Risk Parity optimization, Deleverage Shield, DCA distribution, unlimited tokens, and the automated data pipeline. It's the same math as Black, limited to 10 slots with a 365-day activation period. Black adds annual renewals and direct support.</div>
             </div>
@@ -657,7 +661,17 @@
         <p data-i18n-html="privacy.deS7P1"><strong>Haftungsausschluss:</strong>&ldquo; (as is) zur Verf&uuml;gung gestellt. Alle finanziellen Entscheidungen liegen in der alleinigen Verantwortung des Nutzers. Es wird keine Haftung f&uuml;r Verluste oder Sch&auml;den &uuml;bernommen, die aus der Nutzung dieses Dienstes resultieren.</p>
         <p data-i18n-html="privacy.deS7P2"><strong>Legacy Policy:</strong> Einstellung dieses Dienstes verbleiben keinerlei Benutzerdaten auf unseren Systemen, da serverseitig nichts gespeichert wird. Die im LocalStorage gesicherten Daten verbleiben auf Ihrem eigenen Ger&auml;t und k&ouml;nnen von Ihnen jederzeit gel&ouml;scht werden.</p>
 
-        <h3 data-i18n="privacy.deS8Title">8. Ihre Rechte</h3>
+        <h3 data-i18n-html="privacy.deBetaTitle">8. Beta-Zug&auml;nge &amp; Missbrauchsschutz (nur f&uuml;r Beta-Teilnehmer)</h3>
+        <p data-i18n-html="privacy.deBeta">Dieser Abschnitt gilt nur, wenn Sie einen privaten Beta-Zugangsschl&uuml;ssel aktivieren. Wir speichern Ihren Beta-Schl&uuml;ssel oder Ihre IP-Adresse niemals in lesbarer Form.</p>
+        <ul>
+            <li data-i18n-html="privacy.deBetaLi1"><strong>Was gespeichert wird:</strong> ein unumkehrbarer SHA-256-Hash Ihres Beta-Schl&uuml;ssels und ein HMAC-SHA256-Fingerabdruck Ihrer IP-Adresse.</li>
+            <li data-i18n-html="privacy.deBetaLi2"><strong>Was NICHT gespeichert wird:</strong> Ihre echte IP-Adresse, Ihr Klartext-Schl&uuml;ssel, Name, E-Mail oder Portfolio-Daten.</li>
+            <li data-i18n-html="privacy.deBetaLi3"><strong>Zweck &amp; Rechtsgrundlage:</strong> Bindung eines Schl&uuml;ssels an ein Ger&auml;t/Netzwerk und Ratenbegrenzung &ndash; Art. 6 Abs. 1 lit. b und f DSGVO.</li>
+            <li data-i18n-html="privacy.deBetaLi4"><strong>Speicherdauer:</strong> 365-t&auml;giger G&uuml;ltigkeitszeitraum, danach gel&ouml;scht oder anonymisiert.</li>
+            <li data-i18n-html="privacy.deBetaLi5"><strong>Ihre Kontrolle:</strong> Bindung zur&uuml;cksetzen oder Datensatz l&ouml;schen &uuml;ber momo.demirov@gmail.com.</li>
+        </ul>
+
+        <h3 data-i18n="privacy.deS8Title">9. Ihre Rechte</h3>
         <p data-i18n-html="privacy.deS8">Da wir keine, k&ouml;nnen wir Ihnen keine Auskunft erteilen oder Daten l&ouml;schen &ndash; wir besitzen sie schlichtweg nicht. Bei Fragen zur fl&uuml;chtigen Verarbeitung Ihrer Verbindungsdaten k&ouml;nnen Sie uns unter momo.demirov@gmail.com kontaktieren.</p>
 
         <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;">
@@ -695,7 +709,17 @@
         <p data-i18n-html="privacy.enS7P1"><strong>Disclaimer:</strong> without warranties of any kind. All financial decisions remain the responsibility of the user. No liability is assumed for losses or damages resulting from the use of this service.</p>
         <p data-i18n-html="privacy.enS7P2"><strong>Legacy Policy:</strong>, abandonment, or shutdown of this service, no user data will remain on our infrastructure, as nothing is ever logged or stored server-side. Any portfolio configurations or preferences saved in your browser&rsquo;s localStorage remain solely on your own device. Users retain full control of this data locally and can erase it at any moment by clearing their browser.</p>
 
-        <h3 data-i18n="privacy.enS8Title">8. Your Rights</h3>
+        <h3 data-i18n-html="privacy.enBetaTitle">8. Beta Access Keys &amp; Anti-Abuse Protection (Beta Participants Only)</h3>
+        <p data-i18n-html="privacy.enBeta">This section applies only if you activate a private beta access key. We never store your beta key or your IP address in readable form.</p>
+        <ul>
+            <li data-i18n-html="privacy.enBetaLi1"><strong>What is stored:</strong> an irreversible SHA-256 hash of your beta key and an HMAC-SHA256 fingerprint of your IP address.</li>
+            <li data-i18n-html="privacy.enBetaLi2"><strong>What is NOT stored:</strong> your real IP address, your plain beta key, name, email, or any portfolio data.</li>
+            <li data-i18n-html="privacy.enBetaLi3"><strong>Purpose &amp; legal basis:</strong> to bind one key to one device/network and to apply rate-limiting &mdash; Art. 6 (1) (b) and (f) GDPR.</li>
+            <li data-i18n-html="privacy.enBetaLi4"><strong>Retention:</strong> kept for the 365-day validity window, then removed or anonymized.</li>
+            <li data-i18n-html="privacy.enBetaLi5"><strong>Your control:</strong> reset the binding or delete the record via momo.demirov@gmail.com.</li>
+        </ul>
+
+        <h3 data-i18n="privacy.enS8Title">9. Your Rights</h3>
         <p data-i18n-html="privacy.enS8">Since or portfolio data on our servers, we cannot provide information or delete data &mdash; we simply do not possess it. For questions regarding the transient processing of your connection data, you can contact us at momo.demirov@gmail.com.</p>
 
         <button class="legal-modal-close" onclick="hideLegalModal('privacyModal')" data-i18n="privacy.close">[ Close ]</button>
