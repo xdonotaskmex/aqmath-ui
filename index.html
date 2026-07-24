@@ -490,7 +490,7 @@
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q2">How is AQMath actually private?</div>
-                <div class="lp-faq-a" data-i18n-html="faq.a2">We don&rsquo;t track your wallet and we don&rsquo;t have a user database. Your token balances are stored only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. Your financial privacy is architecturally enforced. <a href="#/docs" style="color:var(--purple);">Read the full privacy architecture in our [Documentation].</a></div>
+                <div class="lp-faq-a" data-i18n-html="faq.a2">We don&rsquo;t track your wallet, and we never store your identity or portfolio in any database. Your token balances are stored only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. The only thing we keep server-side is a one-way hashed beta-activation record (see the beta-key question below) &mdash; never your financial data. Your financial privacy is architecturally enforced. <a href="#/docs" style="color:var(--purple);">Read the full privacy architecture in our [Documentation].</a></div>
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q10">Do beta keys track my IP address?</div>
@@ -631,7 +631,7 @@
         <h3 data-i18n-html="privacy.deTitle">&#127465;&#127466; DEUTSCHE VERSION</h3>
 
         <h3 data-i18n-html="privacy.deS1Title">1. Allgemeine Grunds&auml;tze und Datensparsamkeit</h3>
-        <p data-i18n-html="privacy.deS1">Dies &bdquo;Privacy-by-Design&ldquo;-Ansatz. Es gibt keine Benutzerkonten, keine Wallets und keine serverseitigen Datenbanken. Wir speichern, protokollieren oder persistieren Ihre pers&ouml;nlichen Portfolio- oder Finanzdaten zu keinem Zeitpunkt auf unserer Infrastruktur.</p>
+        <p data-i18n-html="privacy.deS1">Diese Website verfolgt einen strengen &bdquo;Privacy-by-Design&ldquo;-Ansatz. Es gibt keine Benutzerkonten, keine Wallets und keine serverseitigen Datenbanken. Wir speichern, protokollieren oder persistieren Ihre pers&ouml;nlichen Portfolio- oder Finanzdaten zu keinem Zeitpunkt auf unserer Infrastruktur. Die einzige Ausnahme ist unser privates Beta-Zugangssystem (siehe Abschnitt 8), das ausschlie&szlig;lich unumkehrbar gehashte Daten &ndash; niemals Ihre Portfolio- oder Finanzdaten &ndash; allein zur Zugangskontrolle speichert.</p>
 
         <h3 data-i18n="privacy.deS2Title">2. Kurzzeitige serverseitige Verarbeitung (In-Memory Processing)</h3>
         <p data-i18n-html="privacy.deS2">Wenn Website durchführen, werden die von Ihnen eingegebenen Daten (wie Token-Mengen oder Symbole) an unseren Server übertragen, um die mathematischen Operationen auszuführen.</p>
@@ -679,7 +679,7 @@
         <h3 data-i18n-html="privacy.enTitle">&#127468;&#127463; ENGLISH VERSION</h3>
 
         <h3 data-i18n-html="privacy.enS1Title">1. General Principles &amp; Data Minimization</h3>
-        <p data-i18n-html="privacy.enS1">This principles: no user accounts, no wallets, and no server-side databases. We do not store, log, or persist your financial or portfolio data on our infrastructure.</p>
+        <p data-i18n-html="privacy.enS1">This service is designed with privacy-first principles: no user accounts, no wallets, and no server-side databases. We do not store, log, or persist your financial or portfolio data on our infrastructure. The single exception is our private beta access system (see Section 8), which stores only irreversibly hashed data &mdash; never your portfolio or financial information &mdash; solely to control beta access.</p>
 
         <h3 data-i18n="privacy.enS2Title">2. Transient Server-Side Processing (Ephemeral Processing)</h3>
         <p data-i18n-html="privacy.enS2">When, the data you enter (such as token amounts or symbols) is transmitted to our backend server to perform the necessary math operations.</p>
@@ -707,7 +707,7 @@
 
         <h3 data-i18n-html="privacy.enS7Title">7. Disclaimer of Liability &amp; Legacy Policy</h3>
         <p data-i18n-html="privacy.enS7P1"><strong>Disclaimer:</strong> without warranties of any kind. All financial decisions remain the responsibility of the user. No liability is assumed for losses or damages resulting from the use of this service.</p>
-        <p data-i18n-html="privacy.enS7P2"><strong>Legacy Policy:</strong>, abandonment, or shutdown of this service, no user data will remain on our infrastructure, as nothing is ever logged or stored server-side. Any portfolio configurations or preferences saved in your browser&rsquo;s localStorage remain solely on your own device. Users retain full control of this data locally and can erase it at any moment by clearing their browser.</p>
+        <p data-i18n-html="privacy.enS7P2"><strong>Legacy Policy:</strong> In the event of discontinuation, abandonment, or shutdown of this service, no user data will remain on our infrastructure apart from the pseudonymized beta activation records (Section 8), which are irreversibly hashed, expire automatically, and contain no readable personal or portfolio data. Any portfolio configurations or preferences saved in your browser&rsquo;s localStorage remain solely on your own device. Users retain full control of this data locally and can erase it at any moment by clearing their browser.</p>
 
         <h3 data-i18n-html="privacy.enBetaTitle">8. Beta Access Keys &amp; Anti-Abuse Protection (Beta Participants Only)</h3>
         <p data-i18n-html="privacy.enBeta">This section applies only if you activate a private beta access key. We never store your beta key or your IP address in readable form.</p>
@@ -1001,7 +1001,7 @@
             </div>
             <div class="faq-item" onclick="this.classList.toggle('open')">
                 <div class="faq-q" data-i18n="app.faq.q8">Is my data safe?</div>
-                <div class="faq-a" data-i18n="app.faq.a8">Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in-memory, and discarded immediately. Non-custodial by design.</div>
+                <div class="faq-a" data-i18n="app.faq.a8">Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in-memory, and discarded immediately. The only server-side record is a one-way hashed beta-key activation (with a hashed IP fingerprint) used purely to protect beta access — never your portfolio. Non-custodial by design.</div>
             </div>
         </div>
     </aside>
@@ -1674,7 +1674,7 @@
             <p data-i18n-html="doc.s1.p3">The system operates on a <strong>hybrid architecture</strong>: your portfolio data (token amounts, entry prices, targets) is stored exclusively in your browser&rsquo;s localStorage, while computationally intensive math (covariance matrices, DCA allocation planning, volatility analysis) runs on our secure backend engine. This means you get institutional-quality analysis without your holdings being stored on any server.</p>
             <div class="doc-callout purple">
                 <div class="doc-ct" data-i18n-html="doc.s1.privTitle">&#128272; NON-CUSTODIAL PRIVACY</div>
-                <p data-i18n-html="doc.s1.privP">AQMath&rsquo;s privacy model is non-custodial by design: the backend receives position data in-memory during a single DCA request, computes the result, and discards everything. No persistence. No logs of your amounts. No user database. Your financial state lives exclusively in your browser&rsquo;s localStorage &mdash; the server never retains it.</p>
+                <p data-i18n-html="doc.s1.privP">AQMath&rsquo;s privacy model is non-custodial by design: the backend receives position data in-memory during a single DCA request, computes the result, and discards everything. No persistence. No logs of your amounts. No database of your identity or portfolio. Your financial state lives exclusively in your browser&rsquo;s localStorage &mdash; the server never retains it.</p>
             </div>
 
             <h3 id="doc-who" data-i18n="doc.s1.whoTitle">1.1 Who Is AQMath For?</h3>
@@ -1764,7 +1764,7 @@
             <h3 id="doc-zk" data-i18n="doc.s2.zkTitle">2.3 Non-Custodial Privacy Model</h3>
             <p data-i18n-html="doc.s2.zkP">AQMath&rsquo;s privacy architecture is non-custodial by design. The backend processes your DCA request statelessly &mdash; it receives position data, computes optimal allocation, returns results, and discards everything from memory. No persistent record of your holdings is ever created server-side:</p>
             <ul>
-                <li data-i18n-html="doc.s2.zk1">No user database exists &mdash; there is nothing to hack, leak, or subpoena</li>
+                <li data-i18n-html="doc.s2.zk1">No portfolio or financial database exists &mdash; there is nothing to hack, leak, or subpoena</li>
                 <li data-i18n="doc.s2.zk2">No portfolio amounts are logged or stored server-side after a DCA response</li>
                 <li data-i18n="doc.s2.zk3">No wallet addresses, API keys, or identity information is ever collected</li>
                 <li data-i18n-html="doc.s2.zk4">The backend cannot reconstruct your portfolio even if it wanted to &mdash; it simply doesn&rsquo;t retain the data</li>
