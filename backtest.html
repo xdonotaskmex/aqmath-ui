@@ -176,9 +176,9 @@
         var sets = [
             [
                 'computing risk parity weights...',
-                'covariance matrix computed (ATH\u00d7SUI\u00d7XMR) \u2014 KKT projection running...',
-                'computing regime signal (drawdown + downside vol)...',
-                'risk parity weights locked \u2014 exposure: 87.3% risky / 12.7% USDC'
+                'covariance matrix computed (BTC\u00d7SUI\u00d7XMR) \u2014 KKT projection converged',
+                'reading regime signal (drawdown + downside vol)...',
+                'regime healthy \u2014 exposure set: 87.3% risky / 12.7% USDC'
             ],
             [
                 'deleverage modulator: tracking drawdown + downside volatility...',
@@ -187,7 +187,7 @@
                 'capital preserved — drawdown held to 35.0% vs 83.8% buy & hold'
             ],
             [
-                'regime clearing: drawdown/vol easing — re-entering gradually (30% of gap/bar)...',
+                'regime clearing: drawdown/vol easing \u2014 re-entering gradually...',
                 'parked USDC redeployed to tokens as exposure recovers ≥ 40%',
                 'continuous exposure control \u2014 no timers, no correlation gate',
                 'exposure fully data-driven across 106 DCA events'
@@ -2206,7 +2206,7 @@
                     <text x="250" y="52" text-anchor="middle" fill="var(--red)" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">DE-RISK</text>
                     <text x="250" y="68" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Positions scaled down</text>
                     <text x="250" y="80" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">DCA &#x2192; USDC</text>
-                    <text x="250" y="96" text-anchor="middle" fill="var(--red)" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">30% of gap / bar</text>
+                    <text x="250" y="96" text-anchor="middle" fill="var(--red)" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">fast smooth ramp</text>
                     <text x="250" y="108" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="6">no hard floor</text>
                     <!-- Arrow 2 -->
                     <line x1="320" y1="80" x2="355" y2="80" stroke="var(--muted)" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
@@ -2216,7 +2216,7 @@
                     <!-- Re-enter slow -->
                     <rect x="360" y="30" width="100" height="100" rx="6" fill="rgba(6,182,212,0.06)" stroke="var(--blue)" stroke-width="1" opacity="0.6"/>
                     <text x="410" y="52" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">RE-ENTER</text>
-                    <text x="410" y="68" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">30% of gap / bar</text>
+                    <text x="410" y="68" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">gradual ramp</text>
                     <text x="410" y="80" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Steady ramp</text>
                     <text x="410" y="96" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="7" font-weight="600">hysteresis</text>
                     <text x="410" y="108" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="6">no whipsaw</text>
@@ -2460,7 +2460,7 @@
                 <li data-i18n-html="doc.s8.testingAudit1"><strong>Formula parity</strong> &mdash; the Python engine (deleverage.py) and the server-side backtester produce matching exposure, drawdown, and Sharpe.</li>
                 <li data-i18n-html="doc.s8.testingAudit2"><strong>Drawdown reduction</strong> &mdash; peak drawdown cut from 83.8% (Buy &amp; Hold) to 35.0%.</li>
                 <li data-i18n-html="doc.s8.testingAudit3"><strong>Beats Buy &amp; Hold on Sharpe</strong> &mdash; Sharpe 0.75 &rarr; 0.93 at 32.9% CAGR.</li>
-                <li data-i18n-html="doc.s8.testingAudit4"><strong>Threshold rebalancing</strong> &mdash; a steady 30% of gap/bar ramp in either direction, trading only on &gt; 8% exposure drift (~64% fewer rebalances), confirmed with no whipsaw.</li>
+                <li data-i18n-html="doc.s8.testingAudit4"><strong>Threshold rebalancing</strong> &mdash; a steady smooth ramp in either direction, trading only on meaningful exposure drift (~64% fewer rebalances), confirmed with no whipsaw.</li>
                 <li data-i18n-html="doc.s8.testingAudit5"><strong>Out-of-sample check</strong> &mdash; on a sealed second half never used to pick the preset, the modulator still roughly halved drawdown (~24% vs ~63% Buy &amp; Hold) at a higher Sharpe (0.48 vs 0.37); a fuller walk-forward multi-fold study is still worthwhile.</li>
                 <li data-i18n-html="doc.s8.testingAudit6"><strong>Survivorship stress (dead token)</strong> &mdash; adding Terra Classic (LUNC), which collapsed from ~$121 to ~$0, to the basket left the modulator&rsquo;s peak drawdown essentially unchanged (~23%), while Buy &amp; Hold&rsquo;s worsened by up to ~18 points; on the same window the modulator still cut drawdown ~49 points versus Buy &amp; Hold. The drawdown defense does not depend on hand-picking surviving tokens (though raw return figures remain flattered by crypto&rsquo;s post-crash rebounds).</li>
             </ul>
