@@ -2074,7 +2074,7 @@
             <p data-i18n="doc.s5.l5P">No single risky token can exceed a structural concentration limit. If allocation would push a token beyond this cap, the excess is trimmed and redirected to the surplus pool.</p>
             <div class="doc-callout blue">
                 <div class="doc-ct" data-i18n-html="doc.s5.l5Pro">&#128295; DYNAMIC CAPS (Black Feature)</div>
-                <p data-i18n-html="doc.s5.l5ProP">The Black engine replaces the flat cap with <strong>volatility-adaptive limits</strong>: high-volatility tokens receive smaller caps (as low as 10%), while low-volatility tokens can hold larger positions (up to 40%). Each token&rsquo;s maximum weight is dynamically scaled between 10% and 40% based on how volatile it is relative to the most volatile token in the portfolio. The more volatile a token, the tighter its cap.</p>
+                <p data-i18n-html="doc.s5.l5ProP">The Black engine replaces the flat cap with <strong>volatility-adaptive limits</strong>: high-volatility tokens receive tighter caps, while low-volatility tokens can hold larger positions (up to 40%). Each token&rsquo;s maximum weight is dynamically scaled based on how volatile it is relative to the most volatile token in the portfolio. The more volatile a token, the tighter its cap.</p>
             </div>
 
             <h3 id="doc-riskbudget" data-i18n="doc.s5.l6Title">L6 &mdash; Risk Budget</h3>
@@ -2122,8 +2122,8 @@
                     <polygon points="393,66 393,74 399,70" fill="var(--muted)" opacity="0.5"/>
                     <rect x="400" y="30" width="150" height="80" rx="6" fill="rgba(52,211,153,0.06)" stroke="var(--green)" stroke-width="1" opacity="0.6"/>
                     <text x="475" y="58" text-anchor="middle" fill="var(--green)" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">KKT PROJECT</text>
-                    <text x="475" y="74" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Dynamic caps (10&ndash;40%)</text>
-                    <text x="475" y="88" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">60% risk budget</text>
+                    <text x="475" y="74" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Volatility-scaled caps</text>
+                    <text x="475" y="88" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">budget-exact weights</text>
                     <line x1="555" y1="70" x2="590" y2="70" stroke="var(--muted)" stroke-width="0.8" opacity="0.5" stroke-dasharray="4,3"/>
                     <polygon points="588,66 588,74 594,70" fill="var(--muted)" opacity="0.5"/>
                     <rect x="595" y="40" width="115" height="60" rx="6" fill="rgba(251,191,36,0.08)" stroke="var(--amber)" stroke-width="1" opacity="0.6"/>
@@ -2134,23 +2134,23 @@
 
             <h3 id="doc-erc-solver" data-i18n="doc.s8.ercTitle">8.1 Equal Risk Contribution (ERC)</h3>
             <p data-i18n-html="doc.s8.ercP1">Traditional portfolio optimization (Markowitz mean-variance) requires estimating expected returns &mdash; a notoriously unreliable process that amplifies estimation errors into extreme allocations. Risk Parity sidesteps this entirely by optimizing for <strong>equal risk contribution</strong> rather than equal weight or maximum return.</p>
-            <p data-i18n="doc.s8.ercP2">The ERC solver uses a fixed-point iteration algorithm that converges to weights where each asset contributes exactly an equal share of total portfolio risk. The process works as follows:</p>
+            <p data-i18n="doc.s8.ercP2">The ERC solver uses projected gradient descent that converges to weights where each asset contributes an equal share of total portfolio risk. The process works as follows:</p>
             <ul>
                 <li data-i18n-html="doc.s8.erc1">Each token&rsquo;s <strong>risk contribution</strong> is calculated by multiplying its weight by its marginal contribution to overall portfolio volatility.</li>
                 <li data-i18n="doc.s8.erc2">The solver repeatedly adjusts weights &mdash; increasing allocation to tokens that contribute too little risk, decreasing those that contribute too much.</li>
-                <li data-i18n="doc.s8.erc3">The algorithm typically converges to a stable solution within 5&ndash;15 iterations.</li>
+                <li data-i18n="doc.s8.erc3">Every adjustment step is immediately re-projected onto the constraint set, so the weights stay valid while they converge to a stable solution.</li>
             </ul>
             <p data-i18n="doc.s8.ercP3">The result is a portfolio where BTC and a small-cap altcoin each contribute the same amount of risk &mdash; preventing any single asset from dominating your portfolio&rsquo;s volatility profile, even if it has the largest allocation.</p>
 
             <h3 id="doc-kkt" data-i18n="doc.s8.kktTitle">8.2 KKT Projection &amp; Structural Limits</h3>
             <p data-i18n="doc.s8.kktP">The raw ERC weights may violate real-world constraints (e.g., a 35% allocation to a single token). The KKT projection step enforces structural limits through iterative clipping:</p>
             <ul>
-                <li data-i18n-html="doc.s8.kkt1"><strong>Dynamic per-token caps</strong> &mdash; each token&rsquo;s maximum weight is computed from its volatility. The more volatile a token is compared to the rest of the portfolio, the tighter its cap (as low as 10%). Stable, low-volatility tokens can hold up to 40%.</li>
-                <li data-i18n-html="doc.s8.kkt2"><strong>Risk budget</strong> &mdash; total risky exposure is capped at 60%. If ERC weights exceed this, all allocations are scaled down proportionally.</li>
-                <li data-i18n-html="doc.s8.kkt3"><strong>Minimum floor</strong> &mdash; tokens below 1% are removed, preventing dust allocations.</li>
+                <li data-i18n-html="doc.s8.kkt1"><strong>Dynamic per-token caps</strong> &mdash; each token&rsquo;s maximum weight is computed from its volatility. The more volatile a token is compared to the rest of the portfolio, the tighter its cap. Stable, low-volatility tokens can hold up to 40%.</li>
+                <li data-i18n-html="doc.s8.kkt2"><strong>Allocation budget</strong> &mdash; the optimizer allocates exactly the total budget it is given, never more. Portfolio-level de-risking is handled separately by the Deleverage Modulator (95% risk budget).</li>
+                <li data-i18n-html="doc.s8.kkt3"><strong>No shorts</strong> &mdash; weights are clipped at zero; a token can be excluded entirely, but never sold short.</li>
                 <li data-i18n-html="doc.s8.kkt4"><strong>Surplus redistribution</strong> &mdash; capital freed by capping is redistributed to uncapped tokens proportionally.</li>
             </ul>
-            <p data-i18n="doc.s8.kktP2">The projection runs iteratively (up to 10 rounds) until all constraints are simultaneously satisfied.</p>
+            <p data-i18n="doc.s8.kktP2">The projection runs iteratively until all constraints are simultaneously satisfied.</p>
 
             <h3 id="doc-correlations" data-i18n="doc.s8.corrTitle">8.3 Correlation &amp; Covariance Analysis</h3>
             <p data-i18n-html="doc.s8.corrP1">The engine computes a full NxN covariance matrix from 180 days of cleaned, aligned price history. This matrix captures not just individual asset volatility but <strong>how assets move together</strong>. Two tokens with moderate individual volatility but high correlation (e.g., ETH and SOL tend to move in the same direction 85% of the time) have amplified combined risk &mdash; a relationship that simple weight-based allocation ignores entirely.</p>
