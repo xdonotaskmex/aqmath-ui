@@ -1,0 +1,17 @@
+{
+  "name": "aqmath-ui-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright visual regression tests for the 5 key AQMath pages.",
+  "scripts": {
+    "serve": "node tests/static-server.cjs",
+    "test": "playwright test",
+    "test:update": "playwright test --update-snapshots",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report",
+    "setup": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.0"
+  }
+}

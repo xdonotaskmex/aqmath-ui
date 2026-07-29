@@ -10,4 +10,13 @@ dca-engine/
 !favicon.png
 !apple-touch-icon.png
 !social-preview.png
+# Playwright visual-regression baselines must be versioned for diffing
+!tests/**/*.png
 *.bat
+
+# Playwright / Node test tooling
+node_modules/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/

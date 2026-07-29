@@ -185,13 +185,83 @@ let isPro = isBetaActive();
 
 // ========== BETA AUTH ==========
 
-async function pipelineFetch(url, options = {}) {
+// Beta access is a sliding 30-min idle session enforced server-side (beta-auth).
+// The token's own exp mirrors the session's idle deadline; we push both forward
+// by calling /auth/refresh on genuine activity. If the server says the session
+// has lapsed (401) we drop the token and ask for the key again.
+const SESSION_REFRESH_THRESHOLD = 15 * 60; // refresh once <15 min of life remain
+let _sessionRefreshing = false;
+let _lastActivityRefresh = 0;
+
+function tokenSecondsLeft(token) {
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return (payload.exp || 0) - Math.floor(Date.now() / 1000);
+    } catch { return 0; }
+}
+
+async function refreshBetaSession() {
     const token = getBetaToken();
+    if (!token || _sessionRefreshing) return;
+    _sessionRefreshing = true;
+    try {
+        const res = await fetch(BETA_AUTH_URL + '/auth/refresh', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (res.status === 401) {
+            // Server-side idle window lapsed — clear and prompt re-login.
+            localStorage.removeItem('pro_token');
+            isPro = false;
+            checkBetaUI();
+            render();
+            showToast('Your beta session expired — please re-enter your key.', 'warning');
+        } else if (res.ok) {
+            const data = await res.json().catch(() => null);
+            if (data && data.token) {
+                localStorage.setItem('pro_token', data.token);
+                isPro = true;
+            }
+        }
+    } catch (e) {
+        // Transient network error — keep the current token; a later tick retries.
+        console.warn('[AQMath] session refresh failed:', e.message);
+    } finally {
+        _sessionRefreshing = false;
+    }
+}
+
+// Ambient UI interaction counts as activity: slide the session (throttled) when
+// the token is past its halfway mark, so an active reader isn't logged out.
+function noteActivity() {
+    const token = getBetaToken();
+    if (!token) return;
+    const now = Date.now();
+    if (now - _lastActivityRefresh < 60000) return;
+    if (tokenSecondsLeft(token) >= SESSION_REFRESH_THRESHOLD) return;
+    _lastActivityRefresh = now;
+    refreshBetaSession();
+}
+
+async function pipelineFetch(url, options = {}) {
+    let token = getBetaToken();
     if (!token) {
         isPro = false;
         checkBetaUI();
         showToast('Please re-enter your beta key to continue.', 'warning');
         throw new Error('beta token missing');
+    }
+    // A pro call is genuine activity: keep the idle session alive if it's past
+    // halfway, and pick up the freshly-issued token before sending the request.
+    if (tokenSecondsLeft(token) < SESSION_REFRESH_THRESHOLD) {
+        await refreshBetaSession();
+        token = getBetaToken();
+        if (!token) {
+            isPro = false;
+            checkBetaUI();
+            showToast('Your beta session expired — please re-enter your key.', 'warning');
+            throw new Error('beta session expired');
+        }
     }
     const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
     headers['Authorization'] = 'Bearer ' + token;
@@ -1871,6 +1941,11 @@ function render() {
     render();
     updateProButtons();
     renderHistoryChart();
+
+    // Treat ambient interaction as activity so an active user's sliding beta
+    // session doesn't lapse; the handler is throttled and only fires near expiry.
+    ['pointerdown', 'keydown'].forEach(ev =>
+        document.addEventListener(ev, noteActivity, { passive: true }));
 })();
 
 // ============ EXPOSE TO GLOBAL SCOPE (for HTML onclick handlers) ============
