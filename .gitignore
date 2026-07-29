@@ -1,0 +1,13 @@
+.idea/
+.vscode/
+__pycache__/
+*.swp
+*.swo
+*~
+.DS_Store
+dca-engine/
+*.png
+!favicon.png
+!apple-touch-icon.png
+!social-preview.png
+*.bat
