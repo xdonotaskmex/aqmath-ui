@@ -1858,7 +1858,7 @@
     .lp-plan-card.free { border-top: 3px solid var(--green); display: flex; flex-direction: column; height: 100%; }
     .lp-plan-card.beta { border-top: 3px solid var(--blue); display: flex; flex-direction: column; height: 100%; }
     .lp-plan-card.pro,
-    .lp-price-card.pro { border-top: 3px solid var(--amber); border-color: var(--border); }
+    .lp-price-card.pro { border-color: var(--border); border-top: 3px solid var(--amber); }
     .lp-plan-card.pro { display: flex; flex-direction: column; height: 100%; }
     .lp-plan-title { font-size: 0.68rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; }
     .lp-plan-slots {
