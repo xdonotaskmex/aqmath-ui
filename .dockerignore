@@ -1,0 +1,8 @@
+# Dev/test tooling — never part of the served static site.
+.git
+.gitignore
+node_modules
+tests
+playwright.config.cjs
+package.json
+package-lock.json
