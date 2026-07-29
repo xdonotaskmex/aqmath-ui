@@ -1853,8 +1853,9 @@
     }
 
     /* ===== LANDING – BETA VS BLACK ===== */
-    .lp-plan-grid,
+    .lp-plan-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: none; padding: 0; align-items: stretch; }
     .lp-pricing { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: none; padding: 0; align-items: stretch; }
+    .lp-plan-card.free { border-top: 3px solid var(--green); display: flex; flex-direction: column; height: 100%; }
     .lp-plan-card.beta { border-top: 3px solid var(--blue); display: flex; flex-direction: column; height: 100%; }
     .lp-plan-card.pro,
     .lp-price-card.pro { border-top: 3px solid var(--amber); border-color: var(--border); }
@@ -1918,6 +1919,7 @@
         vertical-align: middle;
         text-transform: uppercase;
     }
+    .lp-plan-card.free .lp-plan-title { color: var(--green); }
     .lp-plan-card.beta .lp-plan-title { color: var(--blue); }
     .lp-plan-card.pro .lp-plan-title { color: var(--amber); }
     .lp-feature-list { list-style: none; margin: 0 0 22px; padding: 0; flex: 1; }
@@ -1930,6 +1932,7 @@
         border-bottom: 1px solid rgba(255,255,255,0.05);
     }
     .lp-feature-list li::before { content: "✓ "; font-family: var(--mono); font-weight: 600; }
+    .lp-plan-card.free .lp-feature-list li::before { color: var(--green); }
     .lp-plan-card.beta .lp-feature-list li::before { color: var(--blue); }
     .lp-plan-card.pro .lp-feature-list li::before { color: var(--amber); }
 
@@ -2014,6 +2017,7 @@
     /* ===== LANDING – RESPONSIVE ===== */
     @media (max-width: 1024px) {
         .lp-market-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .lp-plan-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 768px) {
         .lp-content { padding: 0 16px 36px; }
