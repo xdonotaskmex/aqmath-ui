@@ -1494,14 +1494,13 @@ async function optimizePortfolio() {
             }
             msg += `  Global DD: ${(dlInfo.global_dd * 100).toFixed(1)}%  |  Window DD: ${(dlInfo.current_dd * 100).toFixed(1)}%\n`;
             msg += `  Downside vol: ${(dlInfo.ds_vol * 100).toFixed(1)}%\n`;
-            // Gap 3: Show peak_ds_vol with lockout threshold
+            // Gap 3: Show peak_ds_vol
             if (dlInfo.peak_ds_vol != null) {
                 const peakVol = (dlInfo.peak_ds_vol * 100).toFixed(1);
-                const lockout = (dlInfo.peak_ds_vol * 0.70 * 100).toFixed(1);
                 if (dlInfo.peak_ds_vol > 0.01) {
-                    msg += `  Peak DS vol: ${peakVol}% (lockout threshold: ${lockout}%)\n`;
+                    msg += `  Peak DS vol: ${peakVol}%\n`;
                 } else {
-                    msg += `  Peak DS vol: ${peakVol}% (decayed — lockout cleared)\n`;
+                    msg += `  Peak DS vol: ${peakVol}% (decayed)\n`;
                 }
             }
             if (dlInfo.exit_reason) msg += `  Exit reason: ${dlInfo.exit_reason}\n`;

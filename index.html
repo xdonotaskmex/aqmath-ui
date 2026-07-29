@@ -1882,7 +1882,7 @@
             <p data-i18n-html="doc.s2.cleanP">Before price data reaches the optimization engine, it passes through a multi-stage cleaning pipeline that ensures mathematical integrity. Raw market data from multiple sources (CoinGecko, Kraken, Coinbase) is often noisy &mdash; containing duplicates, exchange-specific outliers, and occasional gaps. The cleaning pipeline applies four sequential filters:</p>
             <ol>
                 <li data-i18n-html="doc.s2.clean1"><strong>Deduplication</strong> &mdash; removes duplicate timestamps, keeping the latest entry per date.</li>
-                <li data-i18n-html="doc.s2.clean2"><strong>Outlier Removal</strong> &mdash; rejects prices that deviate more than 2 standard deviations from a 7-day rolling window, eliminating flash-crash spikes and stale quotes.</li>
+                <li data-i18n-html="doc.s2.clean2"><strong>Outlier Removal</strong> &mdash; rejects prices that deviate several standard deviations from a 7-day rolling window, eliminating flash-crash spikes and stale quotes.</li>
                 <li data-i18n-html="doc.s2.clean3"><strong>Gap Interpolation</strong> &mdash; fills gaps of 2 days or fewer using linear interpolation, preserving trend continuity.</li>
                 <li data-i18n-html="doc.s2.clean4"><strong>Multi-Source Merge</strong> &mdash; when the same token is collected from multiple exchanges, the median price is used to eliminate exchange-specific bias.</li>
             </ol>
@@ -2014,7 +2014,7 @@
         <!-- LAYERED DEFENSE -->
         <div class="doc-block" id="doc-defense">
             <h2 data-i18n="doc.s5.title">5. DCA Safety Pipeline</h2>
-            <p data-i18n-html="doc.s5.p1">AQMath implements a multi-layer safety pipeline for DCA allocation designed for crypto markets. Traditional systems would halt trading on a 15% dip &mdash; but in crypto, 15&ndash;20% pullbacks happen regularly and are often excellent buying opportunities. Each layer operates independently and in strict sequence. <strong>Note:</strong> This pipeline governs only how new DCA capital is allocated &mdash; it does not trim or sell existing positions.</p>
+            <p data-i18n-html="doc.s5.p1">AQMath implements a multi-layer safety pipeline for DCA allocation designed for crypto markets. Traditional systems would halt trading on a 10% dip &mdash; but in crypto, pullbacks of that size happen regularly and are often excellent buying opportunities. Each layer operates independently and in strict sequence. <strong>Note:</strong> This pipeline governs only how new DCA capital is allocated &mdash; it does not trim or sell existing positions.</p>
 
             <div class="doc-diagram">
                 <div class="doc-fl">DCA Safety Pipeline</div>
@@ -2549,7 +2549,7 @@
 </div><!-- /docView -->
 <script defer src="/app-widgets.js?v=20260801"></script>
 <script defer src="/app-backtest.js?v=20260801"></script>
-<script defer src="/app.js?v=20260801"></script>
+<script defer src="/app.js?v=20260802"></script>
 
 <!-- 100% privacy-first analytics -->
 <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>

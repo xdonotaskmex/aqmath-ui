@@ -263,7 +263,7 @@
       "cleanTitle": "2.2 Data Cleaning Pipeline",
       "cleanP": "Before price data reaches the optimization engine, it passes through a multi-stage cleaning pipeline that ensures mathematical integrity. Raw market data from multiple sources (CoinGecko, Kraken, Coinbase) is often noisy — containing duplicates, exchange-specific outliers, and occasional gaps. The cleaning pipeline applies four sequential filters:",
       "clean1": "<strong>Deduplication</strong> — removes duplicate timestamps, keeping the latest entry per date.",
-      "clean2": "<strong>Outlier Removal</strong> — rejects prices that deviate more than 2 standard deviations from a 7-day rolling window, eliminating flash-crash spikes and stale quotes.",
+      "clean2": "<strong>Outlier Removal</strong> — rejects prices that deviate several standard deviations from a 7-day rolling window, eliminating flash-crash spikes and stale quotes.",
       "clean3": "<strong>Gap Interpolation</strong> — fills gaps of 2 days or fewer using linear interpolation, preserving trend continuity.",
       "clean4": "<strong>Multi-Source Merge</strong> — when the same token is collected from multiple exchanges, the median price is used to eliminate exchange-specific bias.",
       "cleanP2": "This pipeline runs daily at 01:00 UTC via a scheduled cron job. The result is a clean, continuous price series suitable for covariance and volatility calculations.",
@@ -300,7 +300,7 @@
     },
     "s5": {
       "title": "5. DCA Safety Pipeline",
-      "p1": "AQMath implements a multi-layer safety pipeline for DCA allocation designed for crypto markets. Traditional systems would halt trading on a 15% dip — but in crypto, 15–20% pullbacks happen regularly and are often excellent buying opportunities. Each layer operates independently and in strict sequence. <strong>Note:</strong> This pipeline governs only how new DCA capital is allocated — it does not trim or sell existing positions.",
+      "p1": "AQMath implements a multi-layer safety pipeline for DCA allocation designed for crypto markets. Traditional systems would halt trading on a 10% dip — but in crypto, pullbacks of that size happen regularly and are often excellent buying opportunities. Each layer operates independently and in strict sequence. <strong>Note:</strong> This pipeline governs only how new DCA capital is allocated — it does not trim or sell existing positions.",
       "l1Title": "L1 — Circuit Breaker",
       "l1P": "The circuit breaker halts <strong>all</strong> DCA distribution whenever the Deleverage Shield is in its <strong>defensive state</strong> &mdash; that is, when target exposure has been cut below the redeploy threshold (~40% of the risk budget). Because exposure is driven mostly by drawdown (and downside volatility), the breaker engages during any meaningful downturn, not only brief flash crashes, and it keeps DCA paused for as long as a sustained bear market holds exposure below the threshold. It acts as a slave to the Shield: DCA resumes automatically once exposure recovers back above the threshold.",
       "l2Title": "L2 — Safety Factor",
