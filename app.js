@@ -243,6 +243,21 @@ function noteActivity() {
     refreshBetaSession();
 }
 
+// Watchdog: catch a token that expired while the tab sat idle (e.g. overnight)
+// so the UI doesn't keep showing a logged-in state the server no longer honours.
+// Unlimited (365-day) tokens never trip this. Runs every minute and immediately
+// when the tab becomes visible again, since browsers throttle background timers.
+function expiryWatchdog() {
+    const token = getBetaToken();
+    if (!token || isBetaActive()) return;
+    localStorage.removeItem('pro_token');
+    isPro = false;
+    checkBetaUI();
+    render();
+    updateProButtons();
+    showToast('Your beta session expired — please re-enter your key.', 'warning');
+}
+
 async function pipelineFetch(url, options = {}) {
     let token = getBetaToken();
     if (!token) {
@@ -1946,6 +1961,13 @@ function render() {
     // session doesn't lapse; the handler is throttled and only fires near expiry.
     ['pointerdown', 'keydown'].forEach(ev =>
         document.addEventListener(ev, noteActivity, { passive: true }));
+
+    // Flip the UI to logged-out as soon as an expired token is detected, even
+    // without any user interaction (idle tab, wake from sleep).
+    setInterval(expiryWatchdog, 60000);
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) expiryWatchdog();
+    });
 })();
 
 // ============ EXPOSE TO GLOBAL SCOPE (for HTML onclick handlers) ============
