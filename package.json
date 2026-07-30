@@ -9,9 +9,11 @@
     "test:update": "playwright test --update-snapshots",
     "test:ui": "playwright test --ui",
     "report": "playwright show-report",
-    "setup": "playwright install chromium"
+    "setup": "playwright install chromium",
+    "build": "python tools/minify_css.py && python tools/stamp_version.py && python tools/build_pages.py",
+    "verify": "python tools/check_i18n.py && python tools/stamp_version.py --check"
   },
   "devDependencies": {
-    "@playwright/test": "^1.47.0"
+    "@playwright/test": "1.62.1"
   }
 }
