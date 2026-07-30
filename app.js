@@ -810,7 +810,10 @@ async function dohvatiViseCijena(symbols) {
         tickerData.forEach(t => {
             if (t.symbol && t.symbol.endsWith('USDT')) {
                 const base = t.symbol.replace('USDT', '');
-                priceMap[base] = parseFloat(t.price);
+                // /api/binance/ticker proxies Binance /ticker/24hr, whose price
+                // field is lastPrice (there is no `price` key) — reading t.price
+                // yielded NaN, so every symbol was dropped as price<=0.
+                priceMap[base] = parseFloat(t.lastPrice);
             }
         });
         const result = {};

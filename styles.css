@@ -1610,6 +1610,10 @@
     .lp-term-line {
         color: var(--text);
         opacity: 0.85;
+        /* Reserve one row per line so empty dynamic lines (termLine1/termLine3)
+           don't collapse to 0 height while the typewriter is between sets —
+           that clear-then-refill collapse was the main vertical jump. */
+        min-height: 1.9em;
     }
     .lp-term-line.lp-term-ok {
         color: var(--green);
@@ -1631,6 +1635,13 @@
     }
     .lp-blink {
         animation: blink 1s step-end infinite;
+    }
+
+    /* Below ~520px each dynamic terminal line wraps to 2 rows; reserve both rows
+       so the terminal box height stays constant while the typewriter runs and
+       clears between sets (the text content is unchanged). */
+    @media (max-width: 560px) {
+        .lp-term-dyn { min-height: 3.8em; }
     }
 
     /* ===== LANDING – SECTION LABELS (--command style) ===== */
