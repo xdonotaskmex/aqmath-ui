@@ -76,7 +76,7 @@
     "blackF5": "无限代币支持与投资组合优化",
     "blackF6": "非托管隐私 — 无服务器存储您的投资组合",
     "blackF7": "仅限年度访问 — 无月度或季度计划",
-    "blackF8": "数字访问 — 激活后不予退款 <a href=\"#terms\" onclick=\"showTerms();return false\" style=\"color:var(--purple);font-size:0.85em\">[为什么?]</a>"
+    "blackF8": "数字访问 — 激活后不予退款 <a href=\"#terms\" data-action=\"showTerms\" style=\"color:var(--purple);font-size:0.85em\">[为什么?]</a>"
   },
   "what": {
     "title": "AQMath 是什么、如何运作、为什么",
@@ -113,12 +113,12 @@
     "q9": "是否有移动应用？",
     "a9": "没有。AQMath 仅提供 Web 应用。任何使用我们名称的 iOS 或 Android 应用均非我们所有，未经授权。",
     "q10": "Beta 密钥会追踪我的 IP 地址吗？",
-    "a10": "不会——不会以任何可读形式存储。Beta 密钥绑定到一台设备/网络以防止共享，但我们仅存储密钥的单向哈希和 IP 的单向 HMAC 指纹。两者都无法还原为您真实的密钥或 IP。它仅用于强制执行“一密钥一用户”并对暴力破解尝试进行速率限制——绝不用于追踪或画像。详情见我们<a href=\"#privacy\" onclick=\"showPrivacyPolicy();return false\" style=\"color:#a78bfa;\">隐私政策</a>第 8 节。"
+    "a10": "不会——不会以任何可读形式存储。Beta 密钥绑定到一台设备/网络以防止共享，但我们仅存储密钥的单向哈希和 IP 的单向 HMAC 指纹。两者都无法还原为您真实的密钥或 IP。它仅用于强制执行“一密钥一用户”并对暴力破解尝试进行速率限制——绝不用于追踪或画像。详情见我们<a href=\"#privacy\" data-action=\"showPrivacy\" style=\"color:#a78bfa;\">隐私政策</a>第 8 节。"
   },
   "community": {
     "title": "--社区信号"
   },
-  "disclaimer": "AQMath 不提供投资建议。所有计算基于历史数据和数学模型。<br>数学处理在安全后端运行；您的投资组合数据在内存中处理，从不持久化。<br>© 2026 AQMath — 安全后端引擎。隐私。非托管。<br><a href=\"/docs\">文档</a> · <a href=\"#impressum\" onclick=\"showImpressum();return false\">法律声明</a> · <a href=\"#privacy\" onclick=\"showPrivacyPolicy();return false\">隐私与遗留政策</a> · <a href=\"#terms\" onclick=\"showTerms();return false\">服务条款</a> · 关注：<a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">X (Twitter)</a>",
+  "disclaimer": "AQMath 不提供投资建议。所有计算基于历史数据和数学模型。<br>数学处理在安全后端运行；您的投资组合数据在内存中处理，从不持久化。<br>© 2026 AQMath — 安全后端引擎。隐私。非托管。<br><a href=\"/docs\">文档</a> · <a href=\"#impressum\" data-action=\"showImpressum\">法律声明</a> · <a href=\"#privacy\" data-action=\"showPrivacy\">隐私与遗留政策</a> · <a href=\"#terms\" data-action=\"showTerms\">服务条款</a> · 关注：<a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">X (Twitter)</a>",
   "footer": {
     "impressum": "法律声明",
     "privacyPolicy": "隐私与遗留政策"

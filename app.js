@@ -420,7 +420,8 @@ function loadState() {
         if (saved) {
             const data = JSON.parse(saved);
             if (data.portfolio && Array.isArray(data.portfolio)) {
-                portfolio = data.portfolio.map(t => ({
+                // Drop entries persisted before symbol validation existed.
+                portfolio = data.portfolio.filter(t => t && isValidSymbol(t.sym)).map(t => ({
                     ...t,
                     frozen: t.frozen || false,
                     // Ne perzistiraj stari history-warning flag preko reloada — ponovno se izračuna na sljedeći /optimize
@@ -948,13 +949,17 @@ async function importCSV(event) {
         const transactions = parseCSV(text);
         if (transactions.length === 0) throw new Error('No valid transactions.');
         const netMap = calculateNetTokens(transactions);
-        const symbols = Object.keys(netMap).filter(sym => netMap[sym].amount > 0);
+        const allSymbols = Object.keys(netMap).filter(sym => netMap[sym].amount > 0);
+        // An exchange CSV is untrusted input and its symbols end up inside inline
+        // onclick handlers, so anything outside the ticker charset is dropped.
+        const symbols = allSymbols.filter(isValidSymbol);
+        const rejected = allSymbols.filter(sym => !isValidSymbol(sym));
         if (symbols.length === 0) throw new Error('No token with a positive net quantity.');
         document.getElementById('loadingSub').textContent = 'Fetching prices from backend...';
         const prices = await dohvatiViseCijena(symbols);
         document.getElementById('loadingSub').textContent = 'Creating portfolio...';
         const newPortfolio = [];
-        const skipped = [];
+        const skipped = rejected.map(sym => `${sym} (invalid symbol)`);
         for (const sym of symbols) {
             const net = netMap[sym];
             const price = prices[sym] || 0;
@@ -1142,6 +1147,9 @@ async function dodajToken() {
     const input = document.getElementById('iSym').value.trim();
     if (!input) return showToast('enter a symbol or name.', 'warning');
     const sym = input.toUpperCase();
+    if (!isValidSymbol(sym)) {
+        return showToast('symbol may only contain letters, digits, dot, dash or underscore (max 20).', 'warning');
+    }
 
     const amount = parseFloat(document.getElementById('iAmt').value);
     let price = parseFloat(document.getElementById('iPrice').value);
@@ -1690,7 +1698,11 @@ function importJSON(event) {
         try {
             const data = JSON.parse(e.target.result);
             if (data.portfolio && Array.isArray(data.portfolio)) {
-                portfolio = data.portfolio.map(t => ({
+                // An imported file is untrusted: reject symbols outside the ticker
+                // charset before they reach the inline onclick handlers in render().
+                const accepted = data.portfolio.filter(t => t && isValidSymbol(t.sym));
+                const dropped = data.portfolio.length - accepted.length;
+                portfolio = accepted.map(t => ({
                     ...t, coinId: t.coinId || t.sym.toLowerCase(), frozen: t.frozen || false,
                     costBasis: t.costBasis || 0, totalTokens: t.totalTokens || 0,
                     insufficientHistory: t.insufficientHistory || false
@@ -1705,7 +1717,7 @@ function importJSON(event) {
                 saveHistory();
                 render();
                 renderHistoryChart();
-                showToast(`Portfolio imported (${portfolio.length} tokens).`, 'success');
+                showToast(`Portfolio imported (${portfolio.length} tokens).${dropped > 0 ? ` ${dropped} skipped: invalid symbol.` : ''}`, 'success');
             } else {
                 showToast('Invalid JSON file.', 'error');
             }
@@ -1874,7 +1886,7 @@ function render() {
             data: { labels: allTokens.map(t => t.sym), datasets: [{ data, backgroundColor: colors.map(c => c.replace('hsl(', 'hsla(').replace(')', ', 0.82)')), borderColor: '#060810', borderWidth: 2 }] },
             options: { responsive: true, maintainAspectRatio: false, cutout: '74%', plugins: { legend: { display: false } } }
         });
-        document.getElementById('legend').innerHTML = allTokens.map((t,i) => `<div class="leg-item"><div class="leg-dot" style="background:${colors[i]}"></div>${t.sym}</div>`).join('');
+        document.getElementById('legend').innerHTML = allTokens.map((t,i) => `<div class="leg-item"><div class="leg-dot" style="background:${colors[i]}"></div>${escapeHtml(t.sym)}</div>`).join('');
     }
 
     document.getElementById('sTotalVal').textContent = `$${fmtUSD(portVal)}`;
@@ -1906,7 +1918,7 @@ function render() {
             const warnIcon = t.insufficientHistory ? `<span class="warn-icon" title="Less than 180 days of history — unreliable data"></span>` : '';
             const safeIcon = t.safeHaven ? `<span style="color:var(--green);font-size:0.6rem;margin-left:4px;" title="Safe-haven (stablecoin) — exempt from filters">🛡</span>` : '';
             return `<tr${t.safeHaven ? ' class="row-safe-haven"' : ''}>
-                <td><span class="sym" style="color:${colors[i]}">${t.sym}${warnIcon}${safeIcon}</span></td>
+                <td><span class="sym" style="color:${colors[i]}">${escapeHtml(t.sym)}${warnIcon}${safeIcon}</span></td>
                 <td>${fmtQty(t.amount, t.price)}</td>
                 <td>$${fmtPrice(t.price)}</td>
                 <td>$${fmtUSD(c.curVal)}</td>
@@ -1918,9 +1930,9 @@ function render() {
                 <td><span class="yield-gap ${c.yieldGap >= 0 ? 'good' : 'bad'}">${ygStr}</span></td>
                 <td style="color:${c.avgType === 'down' ? 'var(--green)' : c.avgType === 'up' ? 'var(--red)' : 'var(--dim)'}">${avgStr}</td>
                 <td><span class="act ${c.actionClass}">${c.action}</span></td>
-                <td><span class="freeze" onclick="toggleFreeze('${t.sym}')">${frozenIcon}</span></td>
-                <td><button class="btn-edit" onclick="popuniFormu('${t.sym}')">EDIT</button></td>
-                <td><button class="btn-del" onclick="obrisiToken('${t.sym}')">DEL</button></td>
+                <td><span class="freeze" data-action="toggleFreeze" data-arg="${escapeHtml(t.sym)}">${frozenIcon}</span></td>
+                <td><button class="btn-edit" data-action="popuniFormu" data-arg="${escapeHtml(t.sym)}">EDIT</button></td>
+                <td><button class="btn-del" data-action="obrisiToken" data-arg="${escapeHtml(t.sym)}">DEL</button></td>
             </tr>`;
         }).join('');
         wrap.innerHTML = `<table><thead><tr><th>Token</th><th>Quantity</th><th>Price</th><th>Value</th><th>Curr%</th><th>Target%</th><th>Drift</th><th>P&amp;L</th><th>APY%</th><th>Yield Gap</th><th>Average</th><th>Action</th><th>Freeze</th><th></th><th></th></tr></thead><tbody>${rows}</tbody></table>`;

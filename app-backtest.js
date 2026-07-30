@@ -198,7 +198,7 @@ function btRenderBacktest(data, inp) {
     document.getElementById('btCompareExplain').innerHTML = 'Scored on <strong>Calmar</strong> and <strong>Sharpe</strong> (not on beating Buy &amp; Hold). Modulator Calmar <strong>' + m1.cal.toFixed(2) + '</strong>, Sharpe <strong>' + m1.sh.toFixed(2) + '</strong>, Max DD <strong>' + (m1.mdd * 100).toFixed(1) + '%</strong> — a <strong>' + ddCut + 'pp</strong> drawdown reduction vs the B&amp;H reference (' + (m2.mdd * 100).toFixed(1) + '%). Both received identical DCA ($' + dcaAmt + ' every ' + dcaInt + 'd, total $' + (sim.dcaN * dcaAmt).toLocaleString() + ').';
 
     // Summary explain
-    document.getElementById('btSummaryExplain').innerHTML = '<strong>' + pr.n + ' tokens</strong> (' + pr.syms.join(', ') + ') over <strong>' + days + ' days</strong> (~' + years.toFixed(1) + 'y). Defensive (exposure &lt; ' + (cfg.redeploy_thresh * 100).toFixed(0) + '%) on <strong>' + sim.shDays + '</strong>/' + days + ' days. Avg exposure <strong>' + (avgExp * 100).toFixed(0) + '%</strong>, min <strong>' + (minExp * 100).toFixed(0) + '%</strong>. <strong>' + sim.dcaN + '</strong> DCA events, <strong>' + redeploys.length + '</strong> cash redeploys.';
+    document.getElementById('btSummaryExplain').innerHTML = '<strong>' + pr.n + ' tokens</strong> (' + escapeHtml(pr.syms.join(', ')) + ') over <strong>' + days + ' days</strong> (~' + years.toFixed(1) + 'y). Defensive (exposure &lt; ' + (cfg.redeploy_thresh * 100).toFixed(0) + '%) on <strong>' + sim.shDays + '</strong>/' + days + ' days. Avg exposure <strong>' + (avgExp * 100).toFixed(0) + '%</strong>, min <strong>' + (minExp * 100).toFixed(0) + '%</strong>. <strong>' + sim.dcaN + '</strong> DCA events, <strong>' + redeploys.length + '</strong> cash redeploys.';
 
     // Metrics grid
     var mg = document.getElementById('btMetricsGrid');
@@ -346,7 +346,7 @@ function btRenderBacktest(data, inp) {
     sim.events.forEach(function(e) {
         var tr = document.createElement('tr');
         var dt = dateLabels[e.day - 1] || ('day ' + e.day);
-        tr.innerHTML = '<td>' + dt + '</td><td>' + e.day + '</td><td class="bt-ev-' + e.type.toLowerCase().replace('+', '-') + '">' + e.type + '</td><td>' + (e.eff * 100).toFixed(1) + '%</td><td>$' + (e.usdc || 0).toFixed(0) + '</td><td>' + e.detail + '</td>';
+        tr.innerHTML = '<td>' + dt + '</td><td>' + e.day + '</td><td class="bt-ev-' + escapeHtml(e.type.toLowerCase().replace('+', '-')) + '">' + escapeHtml(e.type) + '</td><td>' + (e.eff * 100).toFixed(1) + '%</td><td>$' + (e.usdc || 0).toFixed(0) + '</td><td>' + escapeHtml(e.detail) + '</td>';
         tbody.appendChild(tr);
     });
 

@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://scripts.simpleanalyticscdn.com 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https: wss:; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://scripts.simpleanalyticscdn.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https: wss:; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -70,8 +70,8 @@
                 <a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener">reddit</a>
             </div>
             <div class="lp-lang-wrap">
-                <button class="lp-lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
-                <button class="lp-lang-btn" data-lang="zh-CN" onclick="switchLang('zh-CN')">中文</button>
+                <button class="lp-lang-btn" data-lang="en" data-action="lang" data-arg="en">EN</button>
+                <button class="lp-lang-btn" data-lang="zh-CN" data-action="lang" data-arg="zh-CN">中文</button>
             </div>
         </div>
     </header>
@@ -163,88 +163,6 @@
         </div>
     </div>
 
-    <script>
-    (function() {
-        var els = [
-            document.getElementById('termLine0'),
-            document.getElementById('termLine1'),
-            document.getElementById('termLine2'),
-            document.getElementById('termLine3')
-        ];
-        if (!els[0] || !els[1] || !els[2] || !els[3]) return;
-
-        var sets = [
-            [
-                'computing risk parity weights...',
-                'covariance matrix computed (BTC\u00d7SUI\u00d7XMR) \u2014 KKT projection converged',
-                'reading regime signal (drawdown + downside vol)...',
-                'regime healthy \u2014 exposure set: 87.3% risky / 12.7% USDC'
-            ],
-            [
-                'deleverage modulator: tracking drawdown + downside volatility...',
-                '\u26a0 DE-RISK \u2014 drawdown + downside vol rising, exposure scaled down fast',
-                'rerouting DCA to USDC reserve while defensive...',
-                'capital preserved — drawdown held to 35.0% vs 83.8% buy & hold'
-            ],
-            [
-                'regime clearing: drawdown/vol easing \u2014 re-entering gradually...',
-                'parked USDC redeployed to tokens as exposure recovers ≥ 40%',
-                'continuous exposure control \u2014 no timers, no correlation gate',
-                'exposure fully data-driven across 106 DCA events'
-            ],
-            [
-                'backtest validation: 3,184 days (ADA/BNB/ETH/XRP/XLM) \u2014 8.7 years...',
-                'scored on risk-adjusted return, not on beating buy & hold',
-                'Sharpe 0.93 vs B&H 0.75 — now beats buy & hold risk-adjusted',
-                'max drawdown 35.0% vs 83.8% — less than half the pain'
-            ],
-            [
-                'privacy audit: processing portfolio in-memory...',
-                '0 bytes persisted \u2014 no wallet, no account, no data stored',
-                'ephemeral processing: data received \u2192 computed \u2192 discarded',
-                'your portfolio stays in your browser. we never see it.'
-            ]
-        ];
-
-        var CHAR_DELAY = 28;
-        var LINE_DELAY = 300;
-        var PAUSE_AFTER_SET = 3500;
-        var setIdx = 0;
-
-        function typeLine(lineIdx, text, charIdx, cb) {
-            if (charIdx <= text.length) {
-                els[lineIdx].textContent = text.substring(0, charIdx);
-                setTimeout(function() { typeLine(lineIdx, text, charIdx + 1, cb); }, CHAR_DELAY);
-            } else {
-                cb();
-            }
-        }
-
-        function typeSet(set, lineIdx, done) {
-            if (lineIdx >= set.length) return done();
-            els[lineIdx].textContent = '';
-            typeLine(lineIdx, set[lineIdx], 0, function() {
-                setTimeout(function() { typeSet(set, lineIdx + 1, done); }, LINE_DELAY);
-            });
-        }
-
-        function clearLines() {
-            for (var i = 0; i < els.length; i++) els[i].textContent = '';
-        }
-
-        function loop() {
-            clearLines();
-            typeSet(sets[setIdx], 0, function() {
-                setTimeout(function() {
-                    setIdx = (setIdx + 1) % sets.length;
-                    loop();
-                }, PAUSE_AFTER_SET);
-            });
-        }
-
-        loop();
-    })();
-    </script>
 
     <div class="lp-content">
         <section class="lp-section lp-what">
@@ -508,7 +426,7 @@
                         <li data-i18n-html="plans.blackF5">Unlimited token support and portfolio optimization</li>
                         <li data-i18n-html="plans.blackF6">Non-custodial privacy &mdash; no server stores your portfolio</li>
                         <li data-i18n-html="plans.blackF7">Annual access only &mdash; no monthly or quarterly plans</li>
-                        <li data-i18n-html="plans.blackF8">Digital access — no refunds after activation <a href="#terms" onclick="showTerms();return false" style="color:var(--purple);font-size:0.85em">[why?]</a></li>
+                        <li data-i18n-html="plans.blackF8">Digital access — no refunds after activation <a href="#terms" data-action="showTerms" style="color:var(--purple);font-size:0.85em">[why?]</a></li>
                     </ul>
                     <a class="lp-btn-secondary" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener" style="width:100%;display:block;text-align:center;" data-i18n="plans.applyNow">Apply for Access</a>
                 </div>
@@ -548,43 +466,43 @@
         <section class="lp-section lp-faq">
             <h3 data-i18n="faq.title">--frequently-asked-questions</h3>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q1">How does the engine calculate risk?</div>
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q1">How does the engine calculate risk?</div>
                 <div class="lp-faq-a" data-i18n-html="faq.a1">The Black engine uses a <strong>Variance Matrix</strong>, asset <strong>Covariance</strong>, volatility estimates, and KKT-style projection to calculate Risk Parity allocations where each asset contributes a controlled share of portfolio risk. <a href="/docs" style="color:var(--purple);">You can audit the full mathematical model in our [Documentation].</a></div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q2">How is AQMath actually private?</div>
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q2">How is AQMath actually private?</div>
                 <div class="lp-faq-a" data-i18n-html="faq.a2">We don&rsquo;t track your wallet, and we never store your identity or portfolio in any database. Your token balances are stored only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. The only thing we keep server-side is a one-way hashed beta-activation record (see the beta-key question below) &mdash; never your financial data. Your financial privacy is architecturally enforced. <a href="/docs" style="color:var(--purple);">Read the full privacy architecture in our [Documentation].</a></div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q10">Do beta keys track my IP address?</div>
-                <div class="lp-faq-a" data-i18n-html="faq.a10">No &mdash; not in any readable form. A beta key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href="#privacy" onclick="showPrivacyPolicy();return false" style="color:var(--purple);">Privacy Policy</a>.</div>
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q10">Do beta keys track my IP address?</div>
+                <div class="lp-faq-a" data-i18n-html="faq.a10">No &mdash; not in any readable form. A beta key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href="#privacy" data-action="showPrivacy" style="color:var(--purple);">Privacy Policy</a>.</div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q3">What's included in Beta vs Black?</div>
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q3">What's included in Beta vs Black?</div>
                 <div class="lp-faq-a" data-i18n="faq.a3">Beta access includes the full engine — Risk Parity optimization, Deleverage Shield, DCA distribution, unlimited tokens, and the automated data pipeline. It's the same math as Black, limited to 10 slots with a 365-day activation period. Black adds annual renewals and direct support.</div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q4">Why are market widgets separated from features?</div>
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q4">Why are market widgets separated from features?</div>
                 <div class="lp-faq-a" data-i18n="faq.a4">Live markets are informational context: ticker data, Fear &amp; Greed, BTC dominance, movers, and exchange status. They support decision-making but are intentionally separate from the product feature story.</div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q5">What is the Safe-Haven (USDC) feature?</div>
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q5">What is the Safe-Haven (USDC) feature?</div>
                 <div class="lp-faq-a" data-i18n="faq.a5">When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token.</div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q6">How do I apply for Black access?</div>
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q6">How do I apply for Black access?</div>
                 <div class="lp-faq-a" data-i18n-html="faq.a6">DM us on <a href="https://t.me/DoNotAskMex" target="_blank" style="color:var(--purple);">Telegram</a> or <a href="https://x.com/aqmathapp" target="_blank" style="color:var(--purple);">X</a>. Annual access is <strong>€999 / year (~$1,090 USD)</strong>. No call required — send a message, we review and send your activation key within 48h. Payments accepted exclusively in USDC and EURC.</div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q7">Do you offer monthly plans?</div>
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q7">Do you offer monthly plans?</div>
                 <div class="lp-faq-a" data-i18n-html="faq.a7">No. AQMath is annual only — €999/year, no monthly or quarterly plans. All sales are final after activation because digital access is delivered instantly and fully. There is nothing to "return" once your key is live. This is standard for any software that delivers immediately on payment.</div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q8">Is AQMath a trading bot?</div>
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q8">Is AQMath a trading bot?</div>
                 <div class="lp-faq-a" data-i18n-html="faq.a8">No. AQMath is an analytical web application. We do not execute trades, manage funds, or interact with any exchange or smart contract. You see the math, you make the decision.</div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" onclick="this.parentElement.classList.toggle('open')" data-i18n="faq.q9">Is there a mobile app?</div>
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q9">Is there a mobile app?</div>
                 <div class="lp-faq-a" data-i18n-html="faq.a9">No. AQMath is a web application only. Any app using our name on any app store is unauthorized and not affiliated with us.</div>
             </div>
         </section>
@@ -595,9 +513,9 @@
         Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted.<br>
         &copy; 2026 AQMath &mdash; Secure Backend Engine. Private. Non-Custodial.<br>
         <a href="/docs">Documentation</a> &middot;
-        <a href="#impressum" onclick="showImpressum();return false">Impressum</a> &middot;
-        <a href="#privacy" onclick="showPrivacyPolicy();return false">Privacy &amp; Legacy Policy</a> &middot;
-        <a href="#terms" onclick="showTerms();return false">Terms</a> &middot;
+        <a href="#impressum" data-action="showImpressum">Impressum</a> &middot;
+        <a href="#privacy" data-action="showPrivacy">Privacy &amp; Legacy Policy</a> &middot;
+        <a href="#terms" data-action="showTerms">Terms</a> &middot;
         Follow: <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">X (Twitter)</a>
     </div>
 </div>
@@ -621,13 +539,13 @@
                 Annual Access Only &middot; No Mobile App &middot; Web Application Only
             </div>
         </div>
-        <button class="lp-pro-close" onclick="hideProModal()" style="margin-top:12px;">[ Close ]</button>
+        <button class="lp-pro-close" data-action="hideProModal" style="margin-top:12px;">[ Close ]</button>
     </div>
 </div>
 
 <!-- ============ IMPRESSUM MODAL ============ -->
-<div class="legal-modal hidden" id="impressumModal" onclick="hideLegalModal('impressumModal')">
-    <div class="legal-modal-box" onclick="event.stopPropagation()">
+<div class="legal-modal hidden" id="impressumModal" data-action="hideLegal" data-arg="impressumModal">
+    <div class="legal-modal-box" data-action="stop">
         <h2 data-i18n-html="impressum.title">&#128196; Impressum</h2>
 
         <h3 data-i18n-html="impressum.deTitle">&#127465;&#127466; DEUTSCHE VERSION</h3>
@@ -656,13 +574,13 @@
         <h3 data-i18n="impressum.enCopyTitle">Copyright:</h3>
         <p data-i18n-html="impressum.enCopy">The content and works created by me on these pages are subject to German copyright law. Duplication, processing, distribution, or any form of commercialization of such material beyond the scope of copyright law requires my prior written consent. Downloads and copies of this site are only permitted for private, non-commercial use.</p>
 
-        <button class="legal-modal-close" onclick="hideLegalModal('impressumModal')" data-i18n="impressum.close">[ Close ]</button>
+        <button class="legal-modal-close" data-action="hideLegal" data-arg="impressumModal" data-i18n="impressum.close">[ Close ]</button>
     </div>
 </div>
 
 <!-- ============ PRIVACY &amp; LEGACY POLICY MODAL ============ -->
-<div class="legal-modal hidden" id="privacyModal" onclick="hideLegalModal('privacyModal')">
-    <div class="legal-modal-box" onclick="event.stopPropagation()">
+<div class="legal-modal hidden" id="privacyModal" data-action="hideLegal" data-arg="privacyModal">
+    <div class="legal-modal-box" data-action="stop">
         <h2 data-i18n-html="privacy.title">&#128196; Datenschutzerkl&auml;rung / Privacy &amp; Legacy Policy</h2>
 
         <h3 data-i18n-html="privacy.deTitle">&#127465;&#127466; DEUTSCHE VERSION</h3>
@@ -759,14 +677,14 @@
         <h3 data-i18n="privacy.enS8Title">9. Your Rights</h3>
         <p data-i18n-html="privacy.enS8">Since or portfolio data on our servers, we cannot provide information or delete data &mdash; we simply do not possess it. For questions regarding the transient processing of your connection data, you can contact us at momo.demirov@gmail.com.</p>
 
-        <button class="legal-modal-close" onclick="hideLegalModal('privacyModal')" data-i18n="privacy.close">[ Close ]</button>
+        <button class="legal-modal-close" data-action="hideLegal" data-arg="privacyModal" data-i18n="privacy.close">[ Close ]</button>
     </div>
 </div>
 
 
 <!-- ============ TERMS OF SERVICE MODAL ============ -->
-<div class="legal-modal hidden" id="termsModal" onclick="hideLegalModal('termsModal')">
-    <div class="legal-modal-box" onclick="event.stopPropagation()">
+<div class="legal-modal hidden" id="termsModal" data-action="hideLegal" data-arg="termsModal">
+    <div class="legal-modal-box" data-action="stop">
         <h2 data-i18n-html="terms.title">&#128196; Terms of Service &amp; Disclaimer</h2>
         <p><em data-i18n="terms.updated">Last updated: July 2026</em></p>
         <p data-i18n-html="terms.intro">Welcome to aqmath.xyz (the "Website"). By accessing our Website, using our Web Application, or applying for our services, you agree to comply with and be bound by the following Terms of Service.</p>
@@ -789,17 +707,17 @@
         <h3 data-i18n-html="terms.s6Title">6. Risk Disclaimer &amp; No Financial Advice</h3>
         <p data-i18n-html="terms.s6">The tools, data, and calculations provided by AQMath are for informational and educational purposes only. We do not provide financial advice, investment advice, or capital management services. Cryptocurrencies involve extreme volatility and high risk. You are solely responsible for all financial decisions and any losses incurred.</p>
 
-        <button class="legal-modal-close" onclick="hideLegalModal('termsModal')" data-i18n="terms.close">[ Close ]</button>
+        <button class="legal-modal-close" data-action="hideLegal" data-arg="termsModal" data-i18n="terms.close">[ Close ]</button>
     </div>
 </div>
 
 <!-- ============ TOAST NOTIFICATION ============ -->
-<div class="toast-overlay hidden" id="toastOverlay" onclick="hideToast(event)">
-    <div class="toast-box" id="toastBox" onclick="event.stopPropagation()">
+<div class="toast-overlay hidden" id="toastOverlay" data-action="hideToast">
+    <div class="toast-box" id="toastBox" data-action="stop">
         <div class="toast-title" id="toastTitle"></div>
         <div class="toast-msg" id="toastMsg"></div>
         <div class="toast-actions hidden" id="toastActions"></div>
-        <button class="toast-close" id="toastClose" onclick="hideToast()">[ close ]</button>
+        <button class="toast-close" id="toastClose" data-action="hideToast">[ close ]</button>
     </div>
 </div>
 
@@ -829,13 +747,13 @@
         <a class="hdr-nav-btn" href="/docs" data-i18n="app.navDocs">docs</a>
     </div>
     <div class="hdr-right">
-        <button class="hdr-btn" id="btnSyncAll" onclick="osvjeziSveCijene()" data-i18n="app.sync">SYNC</button>
-        <button class="hdr-btn c-amber" onclick="document.getElementById('csvFile').click()" data-i18n="app.csvImport">CSV IMPORT</button>
-        <input type="file" id="csvFile" accept=".csv" style="display:none" onchange="importCSV(event)">
-        <button class="hdr-btn c-amber" onclick="exportJSON()" data-i18n="app.export">EXPORT</button>
-        <button class="hdr-btn c-green" onclick="document.getElementById('importFile').click()" data-i18n="app.import">IMPORT</button>
-        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
-        <button class="hdr-btn c-red" onclick="obrisiSve()" data-i18n="app.reset">RESET</button>
+        <button class="hdr-btn" id="btnSyncAll" data-action="osvjeziSveCijene" data-i18n="app.sync">SYNC</button>
+        <button class="hdr-btn c-amber" data-action="clickEl" data-arg="csvFile" data-i18n="app.csvImport">CSV IMPORT</button>
+        <input type="file" id="csvFile" accept=".csv" style="display:none" data-change="importCSV">
+        <button class="hdr-btn c-amber" data-action="exportJSON" data-i18n="app.export">EXPORT</button>
+        <button class="hdr-btn c-green" data-action="clickEl" data-arg="importFile" data-i18n="app.import">IMPORT</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" data-change="importJSON">
+        <button class="hdr-btn c-red" data-action="obrisiSve" data-i18n="app.reset">RESET</button>
         <div class="hstat">
             <div class="hstat-l" data-i18n="app.statPortfolio">Portfolio</div>
             <div class="hstat-v" id="hTotal">$0.00</div>
@@ -862,7 +780,7 @@
             <div class="tc-body">
                 <div class="beta-active-row">
                     <span class="pro-badge"><span data-i18n="app.proActive">BLACK ACTIVE</span>
-                    <button class="btn-deact" onclick="deactivateBeta()">DEACTIVATE</button>
+                    <button class="btn-deact" data-action="deactivateBeta">DEACTIVATE</button>
                 </div>
             </div>
         </div>
@@ -881,7 +799,7 @@
                     <label data-i18n="app.betaKeyLabel">Beta Key</label>
                     <input type="text" id="iBetaKey" placeholder="AQMBETA-XXXX-XXXX" autocomplete="off">
                 </div>
-                <button class="btn purple" id="btnBeta" onclick="activateBeta()" data-i18n="app.activateBeta">Activate Beta</button>
+                <button class="btn purple" id="btnBeta" data-action="activateBeta" data-i18n="app.activateBeta">Activate Beta</button>
                 <div class="beta-hint" data-i18n="app.betaHint">unlocks pipeline prices, CSV parsing & engine</div>
                 <div class="beta-links">
                     <a class="beta-link" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">telegram</a>
@@ -934,7 +852,7 @@
                     </label>
                     <div class="fg-hint" data-i18n="app.csvFormat">Format: Date, Price (weekly or daily)</div>
                 </div>
-                <button class="btn blue" id="btnAdd" onclick="dodajToken()" data-i18n="app.load">Load</button>
+                <button class="btn blue" id="btnAdd" data-action="dodajToken" data-i18n="app.load">Load</button>
             </div>
         </div>
 
@@ -950,11 +868,11 @@
                         <label data-i18n="app.dcaAmount">DCA Amount ($)</label>
                         <input type="number" id="iDcaAmount" step="any" placeholder="500.00" min="0">
                     </div>
-                    <button class="btn green" id="btnDca" onclick="distribuirajDca()" data-i18n="app.distributeDca">Distribute DCA</button>
+                    <button class="btn green" id="btnDca" data-action="distribuirajDca" data-i18n="app.distributeDca">Distribute DCA</button>
                     <div class="fg-hint" data-i18n="app.smartAlloc">Smart allocation across positions</div>
-                    <button class="btn amber" id="btnEngine" onclick="optimizePortfolio()" data-i18n="app.engineBtn">AQMath Engine — Black</button>
+                    <button class="btn amber" id="btnEngine" data-action="optimizePortfolio" data-i18n="app.engineBtn">AQMath Engine — Black</button>
                     <div class="engine-hint" data-i18n="app.engineHint">180-day covariance + ERC analysis</div>
-                    <button class="btn ghost" id="btnRefreshHistory" onclick="refreshHistory()" disabled data-i18n="app.refreshHistory">Refresh History — Black</button>
+                    <button class="btn ghost" id="btnRefreshHistory" data-action="refreshHistory" disabled data-i18n="app.refreshHistory">Refresh History — Black</button>
                 </div>
             </div>
         </div>
@@ -966,7 +884,7 @@
                 <span class="tc-title" data-i18n="app.riskSettings">--risk-settings</span>
             </div>
             <div class="tc-body">
-                <div class="sh-row" id="shToggleRow" onclick="toggleGlobalSafeHaven()">
+                <div class="sh-row" id="shToggleRow" data-action="toggleGlobalSafeHaven">
                     <div class="sh-sw" id="shSwitch"></div>
                     <div>
                         <div class="sh-lbl" id="shLabel" data-i18n="app.safeHaven">SAFE-HAVEN (USDC)</div>
@@ -975,10 +893,10 @@
                 </div>
                 <div class="sh-deploy">
                     <span class="sh-bal" id="shBalance">$0.00</span>
-                    <button class="sh-dbtn" id="shDeployBtn" onclick="deployUSDC()" data-i18n="app.deployToDca">DEPLOY TO DCA</button>
+                    <button class="sh-dbtn" id="shDeployBtn" data-action="deployUSDC" data-i18n="app.deployToDca">DEPLOY TO DCA</button>
                 </div>
                 <!-- DELEVERAGE TOGGLE (BLACK) -->
-                <div class="dl-row" id="dlToggleRow" onclick="toggleDeleverage()" style="margin-top:8px">
+                <div class="dl-row" id="dlToggleRow" data-action="toggleDeleverage" style="margin-top:8px">
                     <div class="dl-sw off" id="dlSwitch"></div>
                     <div>
                         <div class="dl-lbl off" id="dlLabel">DELEVERAGE <span class="dl-pro-badge">BLACK</span></div>
@@ -999,35 +917,35 @@
         <!-- FAQ -->
         <div class="faq-section">
             <div class="section-label" data-i18n="app.faqTitle">--frequently-asked-questions</div>
-            <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q1">What is AQMath?</div>
                 <div class="faq-a" data-i18n="app.faq.a1">A non-custodial tool for long-term passive crypto portfolio management using DCA and quantitative optimization (Risk Parity).</div>
             </div>
-            <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q2">How does DCA distribution work?</div>
                 <div class="faq-a" data-i18n="app.faq.a2">You enter a total budget, and the app allocates it to tokens below their target allocation, considering risk and average cost.</div>
             </div>
-            <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q3">What does the AQMath Engine do?</div>
                 <div class="faq-a" data-i18n="app.faq.a3">It uses 180 days of price history to compute optimal allocation weights (Risk Parity) so each token contributes equally to portfolio risk.</div>
             </div>
-            <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q4">How to import data?</div>
                 <div class="faq-a" data-i18n="app.faq.a4">You can manually enter, import a CSV with transactions (Date, Type, Symbol, Amount) or load a previously exported JSON.</div>
             </div>
-            <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q">What do &#10052;&#65039; / &#128293; mean?</div>
                 <div class="faq-a">Freeze (&#10052;&#65039;) excludes the token from DCA and optimization; useful for positions you don&rsquo;t want to change.</div>
             </div>
-            <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q6">Why the &#9888;&#65039; warning?</div>
                 <div class="faq-a" data-i18n="app.faq.a6">The token has less than 180 days of price history – optimization results are less reliable.</div>
             </div>
-            <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q7">What is Safe-Haven (USDC)?</div>
                 <div class="faq-a" data-i18n="app.faq.a7">When enabled, USDC acts as a stablecoin buffer. Excess funds from hard caps and unallocated DCA budget flow into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token.</div>
             </div>
-            <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q8">Is my data safe?</div>
                 <div class="faq-a" data-i18n="app.faq.a8">Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in-memory, and discarded immediately. The only server-side record is a one-way hashed beta-key activation (with a hashed IP fingerprint) used purely to protect beta access — never your portfolio. Non-custodial by design.</div>
             </div>
@@ -1087,7 +1005,7 @@
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
                 <span class="tc-title" data-i18n="app.historyTitle">--portfolio-history</span>
                 <div class="tc-right">
-                    <button class="tc-action" onclick="saveSnapshot()" data-i18n="app.saveSnapshot">Save Snapshot</button>
+                    <button class="tc-action" data-action="saveSnapshot" data-i18n="app.saveSnapshot">Save Snapshot</button>
                 </div>
             </div>
             <div class="tc-body">
@@ -1119,11 +1037,11 @@
     <span style="margin-left:12px;color:var(--dim);">|</span>
     <span data-i18n="app.footerDisclaimer">AQMath does not provide financial advice.</span>
     <span style="margin-left:12px;color:var(--dim);">|</span>
-    <a href="#impressum" onclick="showImpressum();return false" style="color:var(--blue);text-decoration:none;">Impressum</a>
+    <a href="#impressum" data-action="showImpressum" style="color:var(--blue);text-decoration:none;">Impressum</a>
     <span style="margin-left:8px;color:var(--dim);">|</span>
-    <a href="#privacy" onclick="showPrivacyPolicy();return false" style="color:var(--blue);text-decoration:none;">Privacy &amp; Legacy Policy</a>
+    <a href="#privacy" data-action="showPrivacy" style="color:var(--blue);text-decoration:none;">Privacy &amp; Legacy Policy</a>
     <span style="margin-left:8px;color:var(--dim);">|</span>
-    <a href="#terms" onclick="showTerms();return false" style="color:var(--blue);text-decoration:none;">Terms</a>
+    <a href="#terms" data-action="showTerms" style="color:var(--blue);text-decoration:none;">Terms</a>
 </footer>
 
 </div><!-- /appView -->
@@ -1156,8 +1074,8 @@
             <a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener">reddit</a>
         </div>
         <div class="lp-lang-wrap">
-            <button class="lp-lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
-            <button class="lp-lang-btn" data-lang="zh-CN" onclick="switchLang('zh-CN')">中文</button>
+            <button class="lp-lang-btn" data-lang="en" data-action="lang" data-arg="en">EN</button>
+            <button class="lp-lang-btn" data-lang="zh-CN" data-action="lang" data-arg="zh-CN">中文</button>
         </div>
     </div>
 </header>
@@ -1232,11 +1150,11 @@
                 <strong>CSV format:</strong> Header with date column (<code>event_date</code>/<code>date</code>/<code>Date</code>) + price column (<code>close_price_usd</code>/<code>Close</code>/<code>price</code>). Equal-weighted portfolio.
             </div>
             <div class="bt-upload-grid">
-                <div class="bt-upload-slot" data-slot="0"><div class="bt-slot-sym">Token 1</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" onclick="btRemoveSlot(0)">&times;</button><input type="file" accept=".csv" onchange="btHandleFile(0,this)"></div>
-                <div class="bt-upload-slot" data-slot="1"><div class="bt-slot-sym">Token 2</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" onclick="btRemoveSlot(1)">&times;</button><input type="file" accept=".csv" onchange="btHandleFile(1,this)"></div>
-                <div class="bt-upload-slot" data-slot="2"><div class="bt-slot-sym">Token 3</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" onclick="btRemoveSlot(2)">&times;</button><input type="file" accept=".csv" onchange="btHandleFile(2,this)"></div>
-                <div class="bt-upload-slot" data-slot="3"><div class="bt-slot-sym">Token 4</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" onclick="btRemoveSlot(3)">&times;</button><input type="file" accept=".csv" onchange="btHandleFile(3,this)"></div>
-                <div class="bt-upload-slot" data-slot="4"><div class="bt-slot-sym">Token 5</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" onclick="btRemoveSlot(4)">&times;</button><input type="file" accept=".csv" onchange="btHandleFile(4,this)"></div>
+                <div class="bt-upload-slot" data-slot="0"><div class="bt-slot-sym">Token 1</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="0">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="0"></div>
+                <div class="bt-upload-slot" data-slot="1"><div class="bt-slot-sym">Token 2</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="1">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="1"></div>
+                <div class="bt-upload-slot" data-slot="2"><div class="bt-slot-sym">Token 3</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="2">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="2"></div>
+                <div class="bt-upload-slot" data-slot="3"><div class="bt-slot-sym">Token 4</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="3">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="3"></div>
+                <div class="bt-upload-slot" data-slot="4"><div class="bt-slot-sym">Token 5</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="4">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="4"></div>
             </div>
         </div>
     </div>
@@ -1254,9 +1172,9 @@
                 <div class="bt-setting"><label>DCA Interval (days)</label><input type="number" id="btDcaInterval" value="30" min="7" max="90"></div>
             </div>
             <div class="bt-controls">
-                <button class="btn blue" id="btRunBtn" onclick="btRunBacktest()" disabled>Run Backtest</button>
-                <button class="btn amber" id="btWfBtn" onclick="btRunWFGrid()" disabled>Run WF Grid</button>
-                <button class="btn red" onclick="btResetAll()">Reset All</button>
+                <button class="btn blue" id="btRunBtn" data-action="btRunBacktest" disabled>Run Backtest</button>
+                <button class="btn amber" id="btWfBtn" data-action="btRunWFGrid" disabled>Run WF Grid</button>
+                <button class="btn red" data-action="btResetAll">Reset All</button>
                 <span id="btLoadStatus" style="font-size:.8rem;color:var(--muted)"></span>
             </div>
         </div>
@@ -1324,7 +1242,7 @@
             <div class="bt-explain bt-explain-sm">Systematic sweep of key parameters. Best row highlighted. All runs use the same DCA schedule and production deleverage settings.</div>
             <div class="bt-wf-controls">
                 <div class="bt-setting"><label>Sweep Parameter</label>
-                    <select id="btWfSweep" onchange="btRunWFGrid()">
+                    <select id="btWfSweep" data-change="btRunWFGrid">
                         <option value="dd_ref">DD Reference</option>
                         <option value="vol_low">Vol Low</option>
                         <option value="vol_high">Vol High</option>
@@ -1334,7 +1252,7 @@
                     </select>
                 </div>
                 <div class="bt-setting"><label>Metric</label>
-                    <select id="btWfMetric" onchange="btRunWFGrid()">
+                    <select id="btWfMetric" data-change="btRunWFGrid">
                         <option value="final">Final Value</option>
                         <option value="calmar">Calmar Ratio</option>
                         <option value="maxdd">Max Drawdown</option>
@@ -1396,8 +1314,8 @@
             <a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener">reddit</a>
         </div>
         <div class="lp-lang-wrap">
-            <button class="lp-lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
-            <button class="lp-lang-btn" data-lang="zh-CN" onclick="switchLang('zh-CN')">中文</button>
+            <button class="lp-lang-btn" data-lang="en" data-action="lang" data-arg="en">EN</button>
+            <button class="lp-lang-btn" data-lang="zh-CN" data-action="lang" data-arg="zh-CN">中文</button>
         </div>
     </div>
 </header>
@@ -1708,19 +1626,6 @@
 </tbody></table></div>
 <p class="rv-disc">Paper trading &mdash; no real funds. Telemetry generated 2026-07-25 by the daily loop (deleverage v14.0, weights v1 frozen 2026-07-21). Past performance does not guarantee future results; not financial advice.</p>
 </div>
-<script>
-// Live Paper Trading: replace the bundled snapshot with the engine's live
-// fragment (regenerated server-side every day at 01:30 UTC). On any failure
-// the static snapshot above simply stays visible.
-(function () {
-  var box = document.getElementById('forwardLogLive');
-  if (!box || !window.fetch) return;
-  fetch('https://backtesting-production-be57.up.railway.app/forward-log')
-    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
-    .then(function (html) { box.innerHTML = html; })
-    .catch(function () { /* keep the bundled snapshot */ });
-})();
-</script>
 <!-- FORWARD_LOG_END -->
 </div>
 <footer class="footer">
@@ -1756,8 +1661,8 @@
                 <a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener">reddit</a>
             </div>
             <div class="lp-lang-wrap">
-                <button class="lp-lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
-                <button class="lp-lang-btn" data-lang="zh-CN" onclick="switchLang('zh-CN')">中文</button>
+                <button class="lp-lang-btn" data-lang="en" data-action="lang" data-arg="en">EN</button>
+                <button class="lp-lang-btn" data-lang="zh-CN" data-action="lang" data-arg="zh-CN">中文</button>
             </div>
         </div>
     </header>
@@ -2571,54 +2476,7 @@
 
 <!-- i18n — Localization -->
 <script src="https://unpkg.com/i18next@23.11.5/dist/umd/i18next.min.js"></script>
-<script>
-var i18nResources = {};
-var i18nReady = false;
-
-function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=20260730')
-        .then(function(r) { return r.ok ? r.json() : null; })
-        .catch(function() { return null; });
-}
-
-function switchLang(lang) {
-    // Update active button state
-    document.querySelectorAll('.lp-lang-btn').forEach(function(btn) {
-        btn.classList.toggle('lp-lang-active', btn.getAttribute('data-lang') === lang);
-    });
-    localStorage.setItem('aqmath-lang', lang);
-
-    loadLocale(lang).then(function(res) {
-        if (!res) return;
-        i18nResources[lang] = { translation: res };
-        i18next.init({ lng: lang, resources: i18nResources, fallbackLng: 'en' }, function(err) {
-            if (err) return;
-            i18nReady = true;
-            applyTranslations();
-        });
-    });
-}
-
-function applyTranslations() {
-    if (!i18nReady) return;
-    document.querySelectorAll('[data-i18n]').forEach(function(el) {
-        var key = el.getAttribute('data-i18n');
-        var t = i18next.t(key);
-        if (t && t !== key) el.textContent = t;
-    });
-    document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
-        var key = el.getAttribute('data-i18n-html');
-        var t = i18next.t(key);
-        if (t && t !== key) el.innerHTML = t;
-    });
-}
-
-// Init: load saved language or default to English
-(function() {
-    var savedLang = localStorage.getItem('aqmath-lang') || 'en';
-    switchLang(savedLang);
-})();
-</script>
+<script defer src="/app-boot.js?v=20260805"></script>
 
 </body>
 </html>

@@ -76,7 +76,7 @@
     "blackF5": "Unlimited token support and portfolio optimization",
     "blackF6": "Non-custodial privacy &mdash; no server stores your portfolio",
     "blackF7": "Annual access only &mdash; no monthly or quarterly plans",
-    "blackF8": "Digital access — no refunds after activation <a href=\"#terms\" onclick=\"showTerms();return false\" style=\"color:var(--purple);font-size:0.85em\">[why?]</a>"
+    "blackF8": "Digital access — no refunds after activation <a href=\"#terms\" data-action=\"showTerms\" style=\"color:var(--purple);font-size:0.85em\">[why?]</a>"
   },
   "what": {
     "title": "What is AQMath, How It Works & Why",
@@ -113,12 +113,12 @@
     "q9": "Is there a mobile app?",
     "a9": "No. AQMath is a web application only. Any app using our name on iOS or Android is not ours and is not authorized.",
     "q10": "Do beta keys track my IP address?",
-    "a10": "No &mdash; not in any readable form. A beta key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href=\"#privacy\" onclick=\"showPrivacyPolicy();return false\" style=\"color:#a78bfa;\">Privacy Policy</a>."
+    "a10": "No &mdash; not in any readable form. A beta key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href=\"#privacy\" data-action=\"showPrivacy\" style=\"color:#a78bfa;\">Privacy Policy</a>."
   },
   "community": {
     "title": "--community-signals"
   },
-  "disclaimer": "AQMath does not provide financial advice. All calculations are based on historical data and mathematical models.<br>Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted.<br>© 2026 AQMath — Secure Backend Engine. Private. Non-Custodial.<br><a href=\"/docs\">Documentation</a> · <a href=\"#impressum\" onclick=\"showImpressum();return false\">Impressum</a> · <a href=\"#privacy\" onclick=\"showPrivacyPolicy();return false\">Privacy & Legacy Policy</a> · <a href=\"#terms\" onclick=\"showTerms();return false\">Terms</a> · Follow: <a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">X (Twitter)</a>",
+  "disclaimer": "AQMath does not provide financial advice. All calculations are based on historical data and mathematical models.<br>Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted.<br>© 2026 AQMath — Secure Backend Engine. Private. Non-Custodial.<br><a href=\"/docs\">Documentation</a> · <a href=\"#impressum\" data-action=\"showImpressum\">Impressum</a> · <a href=\"#privacy\" data-action=\"showPrivacy\">Privacy & Legacy Policy</a> · <a href=\"#terms\" data-action=\"showTerms\">Terms</a> · Follow: <a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">X (Twitter)</a>",
   "footer": {
     "impressum": "Impressum",
     "privacyPolicy": "Privacy & Legacy Policy"

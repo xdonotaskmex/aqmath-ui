@@ -1,4 +1,63 @@
 // ============ RSS NEWS FEEDS ============
+// ── HTML/URL escaping helpers ──
+// Loaded first of the three app scripts, so these are global for app-backtest.js
+// and app.js too. Anything that reaches innerHTML and did not originate in this
+// codebase must pass through escapeHtml() first.
+function escapeHtml(value) {
+    return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+// Only http(s) survives -- blocks javascript:, data: and vbscript: hrefs.
+function safeUrl(url) {
+    try {
+        const parsed = new URL(String(url), window.location.href);
+        return (parsed.protocol === 'http:' || parsed.protocol === 'https:') ? parsed.href : '';
+    } catch (e) {
+        return '';
+    }
+}
+
+// Ticker symbols are rendered into inline onclick handlers, where HTML entity
+// escaping is decoded before the JS parser runs and therefore does not protect.
+// The only safe answer is to restrict the charset at the input boundary.
+function isValidSymbol(sym) {
+    return typeof sym === 'string' && /^[A-Z0-9][A-Z0-9._-]{0,19}$/.test(sym);
+}
+
+// Builds one news row from third-party RSS using DOM APIs only -- no string
+// interpolation reaches the HTML parser, so titles cannot inject markup.
+function buildNewsItem(item) {
+    const div = document.createElement('div');
+    div.className = 'lp-news-item';
+
+    const link = document.createElement('a');
+    const href = safeUrl(item.link);
+    if (href) {
+        link.href = href;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+    }
+    link.textContent = item.title || '(untitled)';
+    div.appendChild(link);
+
+    const src = document.createElement('div');
+    src.className = 'lp-news-src';
+    src.textContent = (item.source || '') + ' ';
+
+    const dateEl = document.createElement('span');
+    dateEl.className = 'lp-news-date';
+    dateEl.textContent = item.pubDate ? new Date(item.pubDate).toLocaleDateString() : '';
+    src.appendChild(dateEl);
+
+    div.appendChild(src);
+    return div;
+}
+
 async function loadNewsFeeds() {
     const leftCol = document.getElementById('appNewsLeft') || document.getElementById('newsLeft');
     const rightCol = document.getElementById('appNewsRight') || document.getElementById('newsRight');
@@ -35,20 +94,8 @@ async function loadNewsFeeds() {
         const top12 = allArticles.slice(0, 12);
 
         // Split: first 6 → left, next 6 → right
-        top12.slice(0, 6).forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'lp-news-item';
-            const date = item.pubDate ? new Date(item.pubDate).toLocaleDateString() : '';
-            div.innerHTML = `<a href="${item.link}" target="_blank" rel="noopener">${item.title}</a><div class="lp-news-src">${item.source} <span class="lp-news-date">${date}</span></div>`;
-            leftCol.appendChild(div);
-        });
-        top12.slice(6, 12).forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'lp-news-item';
-            const date = item.pubDate ? new Date(item.pubDate).toLocaleDateString() : '';
-            div.innerHTML = `<a href="${item.link}" target="_blank" rel="noopener">${item.title}</a><div class="lp-news-src">${item.source} <span class="lp-news-date">${date}</span></div>`;
-            rightCol.appendChild(div);
-        });
+        top12.slice(0, 6).forEach(item => leftCol.appendChild(buildNewsItem(item)));
+        top12.slice(6, 12).forEach(item => rightCol.appendChild(buildNewsItem(item)));
     } catch(e) {
         console.log('RSS feed error:', e);
     }

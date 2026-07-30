@@ -10,6 +10,22 @@
 :{$PORT:8080} {
 	root * /srv
 	encode gzip
+
+	# Response headers GitHub Pages cannot set (it only sends HSTS). These are the
+	# HTTP-level counterparts to the <meta> CSP in the HTML: frame-ancestors and
+	# X-Frame-Options are ignored inside a meta tag, so clickjacking can only be
+	# blocked from here. Only takes effect on the optional Caddy deploy.
+	header {
+		Strict-Transport-Security "max-age=63072000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Content-Security-Policy "frame-ancestors 'none'"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+		Cross-Origin-Opener-Policy "same-origin"
+		-Server
+	}
+
 	try_files {path} {path}.html {path}/ /index.html
 	file_server
 }
