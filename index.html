@@ -39,7 +39,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
-    <link rel="stylesheet" href="/styles.min.css?v=20260807">
+    <link rel="stylesheet" href="/styles.min.css?v=20260808">
 </head>
 <body>
 
@@ -430,7 +430,7 @@
                         <li data-i18n-html="plans.blackF5">Unlimited token support and portfolio optimization</li>
                         <li data-i18n-html="plans.blackF6">Non-custodial privacy &mdash; no server stores your portfolio</li>
                         <li data-i18n-html="plans.blackF7">Annual access only &mdash; no monthly or quarterly plans</li>
-                        <li data-i18n-html="plans.blackF8">Digital access — no refunds after activation <a href="#terms" data-action="showTerms" style="color:var(--purple);font-size:0.85em">[why?]</a></li>
+                        <li data-i18n-html="plans.blackF8">Digital access — no refunds after activation <a href="/terms" style="color:var(--purple);font-size:0.85em">[why?]</a></li>
                     </ul>
                     <a class="lp-btn-secondary" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener" style="width:100%;display:block;text-align:center;" data-i18n="plans.applyNow">Apply for Access</a>
                 </div>
@@ -479,7 +479,7 @@
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q10">Do beta keys track my IP address?</div>
-                <div class="lp-faq-a" data-i18n-html="faq.a10">No &mdash; not in any readable form. A beta key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href="#privacy" data-action="showPrivacy" style="color:var(--purple);">Privacy Policy</a>.</div>
+                <div class="lp-faq-a" data-i18n-html="faq.a10">No &mdash; not in any readable form. A beta key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href="/privacy" style="color:var(--purple);">Privacy Policy</a>.</div>
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q3">What's included in Beta vs Black?</div>
@@ -517,9 +517,6 @@
         Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted.<br>
         &copy; 2026 AQMath &mdash; Secure Backend Engine. Private. Non-Custodial.<br>
         <a href="/docs">Documentation</a> &middot;
-        <a href="#impressum" data-action="showImpressum">Impressum</a> &middot;
-        <a href="#privacy" data-action="showPrivacy">Privacy &amp; Legacy Policy</a> &middot;
-        <a href="#terms" data-action="showTerms">Terms</a> &middot;
         Follow: <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">X (Twitter)</a>
     </div>
 </div>
@@ -544,174 +541,6 @@
             </div>
         </div>
         <button class="lp-pro-close" data-action="hideProModal" style="margin-top:12px;">[ Close ]</button>
-    </div>
-</div>
-
-<!-- ============ IMPRESSUM MODAL ============ -->
-<div class="legal-modal hidden" id="impressumModal" data-action="hideLegal" data-arg="impressumModal">
-    <div class="legal-modal-box" data-action="stop">
-        <h2 data-i18n-html="impressum.title">&#128196; Impressum</h2>
-
-        <h3 data-i18n-html="impressum.deTitle">&#127465;&#127466; DEUTSCHE VERSION</h3>
-        <h3 data-i18n-html="impressum.deName">Angaben gem&auml;&szlig; &sect; 5 TMG:</h3>
-        <p data-i18n-html="impressum.deAddr">Momir Demirov<br>Rinnen&auml;ckerstr. 2<br>71332 Waiblingen<br>Deutschland</p>
-        <h3 data-i18n="impressum.deContact">Kontakt:</h3>
-        <p data-i18n-html="impressum.deContactVal">Telefon: +49 176 61366696<br>E-Mail: momo.demirov@gmail.com</p>
-        <h3 data-i18n="impressum.deDiscTitle">Haftungsausschluss (Disclaimer):</h3>
-        <p data-i18n-html="impressum.deDisc">Die Inhalte unserer Seiten wurden mit gr&ouml;&szlig;ter Sorgfalt erstellt. F&uuml;r die Richtigkeit, Vollst&auml;ndigkeit und Aktualit&auml;t der Inhalte k&ouml;nnen wir jedoch keine Gew&auml;hr &uuml;bernehmen. Als Diensteanbieter sind wir gem&auml;&szlig; &sect; 5 TMG i.V.m. &sect; 7 Abs.1 TMG f&uuml;r eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach &sect;&sect; 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, &uuml;bermittelte oder gespeicherte fremde Informationen zu &uuml;berwachen oder nach Umst&auml;nden zu forschen, die auf eine rechtswidrige T&auml;tigkeit hinweisen.</p>
-        <h3 data-i18n-html="impressum.deLinksTitle">Haftung f&uuml;r Links:</h3>
-        <p data-i18n-html="impressum.deLinks">Unser Angebot enth&auml;lt Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb k&ouml;nnen wir f&uuml;r diese fremden Inhalte auch keine Gew&auml;hr &uuml;bernehmen. F&uuml;r die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf m&ouml;gliche Rechtsverst&ouml;&szlig;e &uuml;berpr&uuml;ft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.</p>
-        <h3 data-i18n="impressum.deCopyTitle">Urheberrecht:</h3>
-        <p data-i18n-html="impressum.deCopy">Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielf&auml;ltigung, Bearbeitung, Verbreitung und jede Art der Verwertung au&szlig;erhalb der Grenzen des Urheberrechtes bed&uuml;rfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur f&uuml;r den privaten, nicht-kommerziellen Gebrauch gestattet.</p>
-
-        <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;">
-
-        <h3 data-i18n-html="impressum.enTitle">&#127468;&#127463; ENGLISH VERSION</h3>
-        <h3 data-i18n-html="impressum.enName">Responsible for content according to &sect; 5 TMG (German Telemedia Act):</h3>
-        <p data-i18n-html="impressum.enNameVal">Momir Demirov<br>Rinnen&auml;ckerstr. 2<br>71332 Waiblingen<br>Germany</p>
-        <h3 data-i18n="impressum.enContact">Contact Information:</h3>
-        <p data-i18n-html="impressum.enContactVal">Phone: +49 176 61366696<br>Email: momo.demirov@gmail.com</p>
-        <h3 data-i18n="impressum.enDiscTitle">Disclaimer:</h3>
-        <p data-i18n-html="impressum.enDisc">The content of this website has been created with the greatest possible care. However, I cannot guarantee the accuracy, completeness, or timeliness of the content. As a service provider, I am responsible for my own content on these pages under general laws (&sect; 7 Abs.1 TMG). According to &sect;&sect; 8 to 10 TMG, however, I am not obliged to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity. Obligations to remove or block the use of information under general laws remain unaffected. Liability in this regard is only possible from the time of knowledge of a specific infringement. Upon notification of such violations, I will remove the content immediately.</p>
-        <h3 data-i18n="impressum.enLinksTitle">Liability for Links:</h3>
-        <p data-i18n-html="impressum.enLinks">This website may contain links to external websites of third parties, over whose content I have no influence. Therefore, I cannot assume any liability for this external content. The respective provider or operator of the pages is always responsible for the content of the linked pages. The linked pages were checked for possible legal violations at the time of linking. Illegal content was not recognizable at the time of linking. However, permanent monitoring of the content of the linked pages is not reasonable without concrete evidence of a violation of the law. Upon notification of violations, I will remove such links immediately.</p>
-        <h3 data-i18n="impressum.enCopyTitle">Copyright:</h3>
-        <p data-i18n-html="impressum.enCopy">The content and works created by me on these pages are subject to German copyright law. Duplication, processing, distribution, or any form of commercialization of such material beyond the scope of copyright law requires my prior written consent. Downloads and copies of this site are only permitted for private, non-commercial use.</p>
-
-        <button class="legal-modal-close" data-action="hideLegal" data-arg="impressumModal" data-i18n="impressum.close">[ Close ]</button>
-    </div>
-</div>
-
-<!-- ============ PRIVACY &amp; LEGACY POLICY MODAL ============ -->
-<div class="legal-modal hidden" id="privacyModal" data-action="hideLegal" data-arg="privacyModal">
-    <div class="legal-modal-box" data-action="stop">
-        <h2 data-i18n-html="privacy.title">&#128196; Datenschutzerkl&auml;rung / Privacy &amp; Legacy Policy</h2>
-
-        <h3 data-i18n-html="privacy.deTitle">&#127465;&#127466; DEUTSCHE VERSION</h3>
-
-        <h3 data-i18n-html="privacy.deS1Title">1. Allgemeine Grunds&auml;tze und Datensparsamkeit</h3>
-        <p data-i18n-html="privacy.deS1">Diese Website verfolgt einen strengen &bdquo;Privacy-by-Design&ldquo;-Ansatz. Es gibt keine Benutzerkonten, keine Wallets und keine serverseitigen Datenbanken. Wir speichern, protokollieren oder persistieren Ihre pers&ouml;nlichen Portfolio- oder Finanzdaten zu keinem Zeitpunkt auf unserer Infrastruktur. Die einzige Ausnahme ist unser privates Beta-Zugangssystem (siehe Abschnitt 8), das ausschlie&szlig;lich unumkehrbar gehashte Daten &ndash; niemals Ihre Portfolio- oder Finanzdaten &ndash; allein zur Zugangskontrolle speichert.</p>
-
-        <h3 data-i18n="privacy.deS2Title">2. Kurzzeitige serverseitige Verarbeitung (In-Memory Processing)</h3>
-        <p data-i18n-html="privacy.deS2">Wenn Website durchführen, werden die von Ihnen eingegebenen Daten (wie Token-Mengen oder Symbole) an unseren Server übertragen, um die mathematischen Operationen auszuführen.</p>
-        <ul>
-            <li data-i18n-html="privacy.deS2Li1"><strong>Keine Speicherung:</strong> Die Verarbeitung erfolgt ausschlie&szlig;lich im fl&uuml;chtigen Arbeitsspeicher (RAM) des Servers.</li>
-            <li data-i18n-html="privacy.deS2Li2"><strong>Sofortige L&ouml;schung:</strong> Sobald die Berechnung abgeschlossen und das Ergebnis an Ihren Browser zur&uuml;ckgesendet wurde, werden alle Eingabedaten sofort und unwiderruflich aus dem Arbeitsspeicher gel&ouml;scht.</li>
-            <li data-i18n-html="privacy.deS2Li3"><strong>Keine Protokolle:</strong> Es erfolgt keine Speicherung in Datenbanken, auf Festplatten oder in Server-Logdateien.</li>
-        </ul>
-
-        <h3 data-i18n="privacy.deS3Title">3. Web-Analyse (Simple Analytics)</h3>
-        <p data-i18n-html="privacy.deS3">Wir Analyse unserer Website den Dienst Simple Analytics (Simple Analytics BV, Niederlande). Dieser Dienst wird in der kostenfreien Variante (Free Plan) betrieben. Simple Analytics verwendet keine Cookies, speichert nichts im LocalStorage Ihres Browsers und erfasst keine IP-Adressen oder personenbezogenen Daten. Es werden ausschlie&szlig;lich rein anonyme und aggregierte Metriken erhoben, um zu sehen, aus welchen L&auml;ndern unsere Besucher kommen und welche Ger&auml;te/Browser genutzt werden. Ein R&uuml;ckschluss auf einzelne Personen ist absolut unm&ouml;glich. Da keine personenbezogenen Daten verarbeitet werden, ist hierf&uuml;r kein Cookie-Banner erforderlich.</p>
-
-        <h3 data-i18n="privacy.deS4Title">4. Hosting und Infrastruktur</h3>
-        <p data-i18n-html="privacy.deS4">Unsere aufgeteilt:</p>
-        <ul>
-            <li data-i18n-html="privacy.deS4Li1"><strong>Frontend-Hosting (GitHub Pages):</strong> Die statischen Dateien der Website werden &uuml;ber GitHub Pages bereitgestellt (GitHub, Inc., USA). GitHub erhebt automatisch Server-Logfiles (IP-Adresse, Browsertyp, Uhrzeit), um die Sicherheit und Stabilit&auml;t des Dienstes zu gew&auml;hrleisten (Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO).</li>
-            <li data-i18n-html="privacy.deS4Li2"><strong>Backend-Server (Railway):</strong> Unser Berechnungsserver wird von Railway (Railway Corp., USA) auf Servern in Singapur gehostet. Bei der &Uuml;bertragung Ihrer Anfrage werden Ihre IP-Adresse und die Berechnungsdaten kurzzeitig im RAM verarbeitet. Da Singapur ein Drittland au&szlig;erhalb der EU ist, erfolgt die Daten&uuml;bertragung auf Grundlage der Standardvertragsklauseln (SCC) des Infrastrukturanbieters, um ein angemessenes Datenschutzniveau zu gew&auml;hrleisten (Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO &ndash; Vertragserf&uuml;llung).</li>
-        </ul>
-
-        <h3 data-i18n="privacy.deS5Title">5. Local Storage</h3>
-        <p data-i18n-html="privacy.deS5">Um und Pr&auml;ferenzen lokal zwischen den Sitzungen zu sichern, nutzt diese Website den &bdquo;localStorage&ldquo; Ihres Webbrowsers. Diese Daten verbleiben ausschlie&szlig;lich auf Ihrem eigenen Ger&auml;t. Da diese Speicherung technisch notwendig ist, um die von Ihnen gew&uuml;nschte Funktion bereitzustellen, ist sie nach &sect; 25 Abs. 2 TDDDG (ehemals TTDSG) ohne explizite Einwilligung zul&auml;ssig. Sie k&ouml;nnen diese Daten jederzeit selbst l&ouml;schen, indem Sie Ihren Browser-Cache leeren.</p>
-
-        <h3 data-i18n="privacy.deS6Title">6. Drittanbieter-APIs (Marktdaten)</h3>
-        <p data-i18n-html="privacy.deS6">Zur ruft Ihr Browser Kursdaten direkt von &ouml;ffentlichen APIs (z.&nbsp;B. Binance) ab. Hierbei wird Ihre IP-Adresse vom jeweiligen API-Anbieter verarbeitet, um die Anfrage zu beantworten. Es werden keine Portfolio-Daten an diese APIs gesendet.</p>
-
-        <h3 data-i18n-html="privacy.deS7Title">7. Haftungsausschluss f&uuml;r Finanzen &amp; Legacy Policy</h3>
-        <p data-i18n-html="privacy.deS7P1"><strong>Haftungsausschluss:</strong>&ldquo; (as is) zur Verf&uuml;gung gestellt. Alle finanziellen Entscheidungen liegen in der alleinigen Verantwortung des Nutzers. Es wird keine Haftung f&uuml;r Verluste oder Sch&auml;den &uuml;bernommen, die aus der Nutzung dieses Dienstes resultieren.</p>
-        <p data-i18n-html="privacy.deS7P2"><strong>Legacy Policy:</strong> Einstellung dieses Dienstes verbleiben keinerlei Benutzerdaten auf unseren Systemen, da serverseitig nichts gespeichert wird. Die im LocalStorage gesicherten Daten verbleiben auf Ihrem eigenen Ger&auml;t und k&ouml;nnen von Ihnen jederzeit gel&ouml;scht werden.</p>
-
-        <h3 data-i18n-html="privacy.deBetaTitle">8. Beta-Zug&auml;nge &amp; Missbrauchsschutz (nur f&uuml;r Beta-Teilnehmer)</h3>
-        <p data-i18n-html="privacy.deBeta">Dieser Abschnitt gilt nur, wenn Sie einen privaten Beta-Zugangsschl&uuml;ssel aktivieren. Wir speichern Ihren Beta-Schl&uuml;ssel oder Ihre IP-Adresse niemals in lesbarer Form.</p>
-        <ul>
-            <li data-i18n-html="privacy.deBetaLi1"><strong>Was gespeichert wird:</strong> ein unumkehrbarer SHA-256-Hash Ihres Beta-Schl&uuml;ssels und ein HMAC-SHA256-Fingerabdruck Ihrer IP-Adresse.</li>
-            <li data-i18n-html="privacy.deBetaLi2"><strong>Was NICHT gespeichert wird:</strong> Ihre echte IP-Adresse, Ihr Klartext-Schl&uuml;ssel, Name, E-Mail oder Portfolio-Daten.</li>
-            <li data-i18n-html="privacy.deBetaLi3"><strong>Zweck &amp; Rechtsgrundlage:</strong> Bindung eines Schl&uuml;ssels an ein Ger&auml;t/Netzwerk und Ratenbegrenzung &ndash; Art. 6 Abs. 1 lit. b und f DSGVO.</li>
-            <li data-i18n-html="privacy.deBetaLi4"><strong>Speicherdauer:</strong> 365-t&auml;giger G&uuml;ltigkeitszeitraum, danach gel&ouml;scht oder anonymisiert.</li>
-            <li data-i18n-html="privacy.deBetaLi5"><strong>Ihre Kontrolle:</strong> Bindung zur&uuml;cksetzen oder Datensatz l&ouml;schen &uuml;ber momo.demirov@gmail.com.</li>
-        </ul>
-
-        <h3 data-i18n="privacy.deS8Title">9. Ihre Rechte</h3>
-        <p data-i18n-html="privacy.deS8">Da wir keine, k&ouml;nnen wir Ihnen keine Auskunft erteilen oder Daten l&ouml;schen &ndash; wir besitzen sie schlichtweg nicht. Bei Fragen zur fl&uuml;chtigen Verarbeitung Ihrer Verbindungsdaten k&ouml;nnen Sie uns unter momo.demirov@gmail.com kontaktieren.</p>
-
-        <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;">
-
-        <h3 data-i18n-html="privacy.enTitle">&#127468;&#127463; ENGLISH VERSION</h3>
-
-        <h3 data-i18n-html="privacy.enS1Title">1. General Principles &amp; Data Minimization</h3>
-        <p data-i18n-html="privacy.enS1">This service is designed with privacy-first principles: no user accounts, no wallets, and no server-side databases. We do not store, log, or persist your financial or portfolio data on our infrastructure. The single exception is our private beta access system (see Section 8), which stores only irreversibly hashed data &mdash; never your portfolio or financial information &mdash; solely to control beta access.</p>
-
-        <h3 data-i18n="privacy.enS2Title">2. Transient Server-Side Processing (Ephemeral Processing)</h3>
-        <p data-i18n-html="privacy.enS2">When, the data you enter (such as token amounts or symbols) is transmitted to our backend server to perform the necessary math operations.</p>
-        <ul>
-            <li data-i18n-html="privacy.enS2Li1"><strong>Zero Retention:</strong> This data is processed strictly in-memory (RAM) on our server.</li>
-            <li data-i18n-html="privacy.enS2Li2"><strong>Immediate Deletion:</strong> As soon as the computation is finished and the result is sent back to your browser, all input data is immediately and permanently discarded from the server&rsquo;s memory.</li>
-            <li data-i18n-html="privacy.enS2Li3"><strong>No Logs:</strong> We do not write your portfolio data to any database, hard drive, or server log files.</li>
-        </ul>
-
-        <h3 data-i18n="privacy.enS3Title">3. Privacy-Friendly Web Analytics (Simple Analytics)</h3>
-        <p data-i18n-html="privacy.enS3">To without invading your privacy, we use Simple Analytics (Simple Analytics BV, Netherlands) on their Free Plan. This tool does not use cookies, does not use local storage, and does not collect IP addresses or any personal identifiers. It only provides us with completely anonymous, aggregated data showing which countries our visitors originate from and what devices/browsers they use. Because no personal data is tracked, no cookie consent banner is legally required under the GDPR or ePrivacy directive.</p>
-
-        <h3 data-i18n-html="privacy.enS4Title">4. Hosting &amp; Infrastructure</h3>
-        <p data-i18n-html="privacy.enS4">Our of two parts:</p>
-        <ul>
-            <li data-i18n-html="privacy.enS4Li1"><strong>Frontend Hosting (GitHub Pages):</strong> Our static website files are hosted on GitHub Pages (GitHub, Inc., USA). GitHub automatically collects standard server log files (including your IP address, browser type, and time of access) to ensure security and stability based on Art. 6 (1) (f) GDPR.</li>
-            <li data-i18n-html="privacy.enS4Li2"><strong>Backend Server (Railway):</strong> Our computation server is hosted by Railway (Railway Corp., USA) deployed in their Singapore data center. This server processes your connection data (IP address) and computation inputs strictly transiently in-memory for the duration of your request based on Art. 6 (1) (b) GDPR (performance of a service). Data transfer to Singapore is governed by standard contractual clauses provided by the infrastructure provider.</li>
-        </ul>
-
-        <h3 data-i18n="privacy.enS5Title">5. Local Storage</h3>
-        <p data-i18n-html="privacy.enS5">To directly on your device between sessions, this website uses your browser&rsquo;s &ldquo;localStorage&rdquo;. This data stays strictly on your device. Since this storage is technically necessary to provide the service you explicitly requested, it complies with &sect; 25 Abs. 2 TDDDG / ePrivacy Directive. You can delete it anytime via your browser settings.</p>
-
-        <h3 data-i18n="privacy.enS6Title">6. Third-Party APIs (Market Data)</h3>
-        <p data-i18n-html="privacy.enS6">To, this website fetches data from public APIs (such as Binance). When your browser connects to these APIs, your IP address is processed by the respective provider to deliver the market prices. No portfolio data is transmitted during this process.</p>
-
-        <h3 data-i18n-html="privacy.enS7Title">7. Disclaimer of Liability &amp; Legacy Policy</h3>
-        <p data-i18n-html="privacy.enS7P1"><strong>Disclaimer:</strong> without warranties of any kind. All financial decisions remain the responsibility of the user. No liability is assumed for losses or damages resulting from the use of this service.</p>
-        <p data-i18n-html="privacy.enS7P2"><strong>Legacy Policy:</strong> In the event of discontinuation, abandonment, or shutdown of this service, no user data will remain on our infrastructure apart from the pseudonymized beta activation records (Section 8), which are irreversibly hashed, expire automatically, and contain no readable personal or portfolio data. Any portfolio configurations or preferences saved in your browser&rsquo;s localStorage remain solely on your own device. Users retain full control of this data locally and can erase it at any moment by clearing their browser.</p>
-
-        <h3 data-i18n-html="privacy.enBetaTitle">8. Beta Access Keys &amp; Anti-Abuse Protection (Beta Participants Only)</h3>
-        <p data-i18n-html="privacy.enBeta">This section applies only if you activate a private beta access key. We never store your beta key or your IP address in readable form.</p>
-        <ul>
-            <li data-i18n-html="privacy.enBetaLi1"><strong>What is stored:</strong> an irreversible SHA-256 hash of your beta key and an HMAC-SHA256 fingerprint of your IP address.</li>
-            <li data-i18n-html="privacy.enBetaLi2"><strong>What is NOT stored:</strong> your real IP address, your plain beta key, name, email, or any portfolio data.</li>
-            <li data-i18n-html="privacy.enBetaLi3"><strong>Purpose &amp; legal basis:</strong> to bind one key to one device/network and to apply rate-limiting &mdash; Art. 6 (1) (b) and (f) GDPR.</li>
-            <li data-i18n-html="privacy.enBetaLi4"><strong>Retention:</strong> kept for the 365-day validity window, then removed or anonymized.</li>
-            <li data-i18n-html="privacy.enBetaLi5"><strong>Your control:</strong> reset the binding or delete the record via momo.demirov@gmail.com.</li>
-        </ul>
-
-        <h3 data-i18n="privacy.enS8Title">9. Your Rights</h3>
-        <p data-i18n-html="privacy.enS8">Since or portfolio data on our servers, we cannot provide information or delete data &mdash; we simply do not possess it. For questions regarding the transient processing of your connection data, you can contact us at momo.demirov@gmail.com.</p>
-
-        <button class="legal-modal-close" data-action="hideLegal" data-arg="privacyModal" data-i18n="privacy.close">[ Close ]</button>
-    </div>
-</div>
-
-
-<!-- ============ TERMS OF SERVICE MODAL ============ -->
-<div class="legal-modal hidden" id="termsModal" data-action="hideLegal" data-arg="termsModal">
-    <div class="legal-modal-box" data-action="stop">
-        <h2 data-i18n-html="terms.title">&#128196; Terms of Service &amp; Disclaimer</h2>
-        <p><em data-i18n="terms.updated">Last updated: July 2026</em></p>
-        <p data-i18n-html="terms.intro">Welcome to aqmath.xyz (the "Website"). By accessing our Website, using our Web Application, or applying for our services, you agree to comply with and be bound by the following Terms of Service.</p>
-
-        <h3 data-i18n-html="terms.s1Title">1. Annual Access &amp; No Refunds</h3>
-        <p data-i18n-html="terms.s1">AQMath operates on an annual subscription model at <strong>€999 per year (~$1,090 USD)</strong>. We do not offer monthly, quarterly, or semi-annual plans. Access is granted manually after an access review. Because digital access is delivered instantly upon activation — your key is live, the data pipeline starts, and your slot is reserved — all sales are final. No refunds, partial refunds, or chargebacks are possible after your activation key has been issued. By completing payment via USDC or EURC, you acknowledge and agree to this policy.</p>
-
-        <h3 data-i18n="terms.s2Title">2. Web Application Only (No Mobile App)</h3>
-        <p data-i18n-html="terms.s2">Your subscription grants access to the AQMath Web Application via compatible web browsers. AQMath does not offer, support, or distribute a mobile application. Any app using our name on any app store is unauthorized and not affiliated with us.</p>
-
-        <h3 data-i18n="terms.s3Title">3. Not a Trading Bot / No Automated Execution</h3>
-        <p data-i18n-html="terms.s3">AQMath is an analytical web application. It is not a trading bot, automated trading system, or algorithmic execution engine. We do not manage funds, execute trades on your behalf, or interact with any crypto exchange or smart contract. All decisions remain with the user.</p>
-
-        <h3 data-i18n-html="terms.s4Title">4. Access Review &amp; Infrastructure Integrity</h3>
-        <p data-i18n-html="terms.s4">To maintain computational performance and service quality, access is limited to a small number of active users. Our backend runs real covariance matrix computations and KKT optimization for every user — these operations scale with user count. Keeping the user base manageable ensures fast compute and reliable uptime for all members. We reserve the right to deny or terminate access at our discretion to protect infrastructure integrity.</p>
-
-        <h3 data-i18n="terms.s5Title">5. Payment and Pricing</h3>
-        <p data-i18n-html="terms.s5">Annual subscription is <strong>€999 / year (~$1,090 USD)</strong>. All payments are accepted exclusively in USDC and EURC stablecoins. We use stablecoin payments by design: to avoid collecting your name, card number, or banking details. Your financial privacy is protected by architecture, not by policy.</p>
-
-        <h3 data-i18n-html="terms.s6Title">6. Risk Disclaimer &amp; No Financial Advice</h3>
-        <p data-i18n-html="terms.s6">The tools, data, and calculations provided by AQMath are for informational and educational purposes only. We do not provide financial advice, investment advice, or capital management services. Cryptocurrencies involve extreme volatility and high risk. You are solely responsible for all financial decisions and any losses incurred.</p>
-
-        <button class="legal-modal-close" data-action="hideLegal" data-arg="termsModal" data-i18n="terms.close">[ Close ]</button>
     </div>
 </div>
 
@@ -1040,12 +869,6 @@
     <span>AQMath 2026</span>
     <span style="margin-left:12px;color:var(--dim);">|</span>
     <span data-i18n="app.footerDisclaimer">AQMath does not provide financial advice.</span>
-    <span style="margin-left:12px;color:var(--dim);">|</span>
-    <a href="#impressum" data-action="showImpressum" style="color:var(--blue);text-decoration:none;">Impressum</a>
-    <span style="margin-left:8px;color:var(--dim);">|</span>
-    <a href="#privacy" data-action="showPrivacy" style="color:var(--blue);text-decoration:none;">Privacy &amp; Legacy Policy</a>
-    <span style="margin-left:8px;color:var(--dim);">|</span>
-    <a href="#terms" data-action="showTerms" style="color:var(--blue);text-decoration:none;">Terms</a>
 </footer>
 
 </div><!-- /appView -->
@@ -2470,6 +2293,15 @@
 
     </div><!-- /doc-wrap -->
 </div><!-- /docView -->
+
+<!-- ============ GLOBAL LEGAL FOOTER ============
+     Outside every view container, so it renders on all five routes
+     (/, /app, /backtest, /results, /docs) and stays crawlable. -->
+<footer class="site-footer">
+    &copy; 2026 AQMath &mdash; Private. Non-Custodial.<br>
+    <a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a>
+</footer>
+
 <script defer src="/app-widgets.js?v=20260801"></script>
 <script defer src="/app-backtest.js?v=20260801"></script>
 <script defer src="/app.js?v=20260807"></script>

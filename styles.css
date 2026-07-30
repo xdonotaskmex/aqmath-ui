@@ -2075,45 +2075,71 @@
         line-height: 1.7; margin-bottom: 20px;
     }
 
-    /* ── Legal Modals (Impressum / Privacy) ── */
-    .legal-modal {
-        position: fixed; inset: 0; background: rgba(2,5,13,0.95);
-        backdrop-filter: blur(12px); z-index: 9998;
-        display: flex; align-items: center; justify-content: center;
-    }
-    .legal-modal.hidden { display: none; }
-    .legal-modal-box {
-        background: var(--s1); border: 1px solid var(--blue);
-        border-radius: 8px; padding: 40px 48px;
-        max-width: 680px; width: 90vw;
-        max-height: 80vh; overflow-y: auto;
+    /* ── Standalone legal pages (/impressum, /privacy, /terms) ──
+       Plain, crawlable text pages. No tabs, no nav: reachable only via the
+       global footer link, so search engines can index the real content. */
+    .legal-page {
+        max-width: 780px; margin: 0 auto; padding: 56px 24px 24px;
         text-align: left;
     }
-    .legal-modal-box h2 {
-        font-family: var(--mono); font-size: 0.9rem; letter-spacing: 3px;
-        color: var(--blue); margin: 0 0 20px; padding-bottom: 12px;
-        border-bottom: 1px solid var(--border);
+    .legal-page-brand {
+        display: inline-flex; align-items: center; gap: 10px;
+        text-decoration: none; margin-bottom: 32px;
     }
-    .legal-modal-box h3 {
+    .legal-page-brand .logo-box {
+        width: 30px; height: 30px; border-radius: 6px;
+        background: linear-gradient(135deg, var(--blue), var(--purple));
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+        color: #02050d; letter-spacing: 0;
+    }
+    .legal-page-brand span {
+        font-family: var(--mono); font-size: 0.68rem; letter-spacing: 3px;
+        color: var(--muted);
+    }
+    .legal-page-brand:hover span { color: var(--text); }
+    .legal-page h1 {
+        font-family: var(--mono); font-size: 0.95rem; letter-spacing: 3px;
+        color: var(--blue); margin: 0 0 8px; padding-bottom: 14px;
+        border-bottom: 1px solid var(--border); font-weight: 600;
+    }
+    .legal-page h2 {
+        font-family: var(--mono); font-size: 0.78rem; letter-spacing: 2px;
+        color: var(--blue); margin: 40px 0 4px; font-weight: 600;
+    }
+    .legal-page h3 {
         font-family: var(--mono); font-size: 0.7rem; letter-spacing: 2px;
-        color: var(--text); margin: 20px 0 8px;
+        color: var(--text); margin: 24px 0 8px; font-weight: 600;
     }
-    .legal-modal-box p,
-    .legal-modal-box li {
-        font-family: var(--sans); font-size: 0.72rem;
-        color: var(--dim); line-height: 1.8;
+    .legal-page p,
+    .legal-page li {
+        font-family: var(--sans); font-size: 0.78rem;
+        color: var(--dim); line-height: 1.85;
     }
-    .legal-modal-box ul { padding-left: 20px; margin: 8px 0; }
-    .legal-modal-box li { margin-bottom: 4px; }
-    .legal-modal-close {
-        display: block; width: 100%; margin-top: 24px;
-        font-family: var(--mono); font-size: 0.6rem; letter-spacing: 2px;
-        color: var(--muted); background: transparent;
-        border: 1px solid var(--border); border-radius: 4px;
-        padding: 10px; cursor: pointer; text-align: center;
-        transition: all 0.2s;
+    .legal-page p { margin: 8px 0; }
+    .legal-page ul { padding-left: 20px; margin: 10px 0; }
+    .legal-page li { margin-bottom: 6px; }
+    .legal-page a { color: var(--blue); text-decoration: none; }
+    .legal-page a:hover { text-decoration: underline; }
+    .legal-page hr {
+        border: none; border-top: 1px solid var(--border); margin: 44px 0;
     }
-    .legal-modal-close:hover { color: var(--text); border-color: var(--blue); }
+    .legal-page .legal-updated {
+        font-family: var(--mono); font-size: 0.6rem; letter-spacing: 1px;
+        color: var(--muted); margin-bottom: 8px;
+    }
+
+    /* ── Global legal footer (present on every route and every page) ── */
+    .site-footer {
+        border-top: 1px solid var(--border);
+        padding: 26px 20px 30px; margin-top: 40px;
+        text-align: center;
+        font-family: var(--mono); font-size: 0.62rem; letter-spacing: 1px;
+        color: var(--muted); line-height: 2.1;
+    }
+    .site-footer a { color: var(--muted); text-decoration: none; }
+    .site-footer a:hover { color: var(--blue); }
+    .site-footer .sep { opacity: 0.35; margin: 0 6px; }
     .lp-pro-close {
         background: transparent; border: 1px solid var(--muted);
         color: var(--muted); font-family: var(--mono); font-size: 0.6rem;
@@ -2275,10 +2301,13 @@
         .lp-pro-box h3 { font-size: 0.8rem; }
         .lp-pro-box p { font-size: 0.65rem; }
 
-        .legal-modal-box { width: 94%; padding: 24px 18px; }
-        .legal-modal-box h2 { font-size: 0.75rem; }
-        .legal-modal-box p,
-        .legal-modal-box li { font-size: 0.65rem; }
+        .legal-page { padding: 36px 18px 20px; }
+        .legal-page h1 { font-size: 0.8rem; }
+        .legal-page h2 { font-size: 0.7rem; margin-top: 32px; }
+        .legal-page p,
+        .legal-page li { font-size: 0.7rem; }
+        .site-footer { font-size: 0.55rem; padding: 22px 14px 26px; }
+        .site-footer .sep { margin: 0 3px; }
         .lp-lang-btn { font-size: 0.5rem; padding: 4px 7px; }
 
         .lp-math-box { padding: 14px 16px; margin: 0 auto 20px; }

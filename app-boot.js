@@ -215,16 +215,11 @@ function applyTranslations() {
         hideProModal: function () { hideProModal(); },
         // argument actions (arg comes from data-arg)
         lang: function (el, arg) { switchLang(arg); },
-        hideLegal: function (el, arg) { hideLegalModal(arg); },
         clickEl: function (el, arg) { var t = document.getElementById(arg); if (t) t.click(); },
         btRemoveSlot: function (el, arg) { btRemoveSlot(parseInt(arg, 10)); },
         toggleFreeze: function (el, arg) { toggleFreeze(arg); },
         popuniFormu: function (el, arg) { popuniFormu(arg); },
         obrisiToken: function (el, arg) { obrisiToken(arg); },
-        // legal links that previously used ";return false"
-        showTerms: function (el, arg, e) { e.preventDefault(); showTerms(); },
-        showPrivacy: function (el, arg, e) { e.preventDefault(); showPrivacyPolicy(); },
-        showImpressum: function (el, arg, e) { e.preventDefault(); showImpressum(); },
         // DOM-only behaviour (no app function)
         toggleParentOpen: function (el) { el.parentElement.classList.toggle('open'); },
         toggleOpen: function (el) { el.classList.toggle('open'); },
