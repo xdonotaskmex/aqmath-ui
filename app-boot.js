@@ -81,9 +81,22 @@
         for (var i = 0; i < els.length; i++) els[i].textContent = '';
     }
 
+    function renderFull(set) {
+        for (var i = 0; i < els.length; i++) els[i].textContent = set[i] || '';
+    }
+
+    // Persist the active set across reloads / SPA navigations so the terminal
+    // resumes where it left off instead of restarting from a blank frame — that
+    // blank-to-text jump on every page load is the flicker we want to kill.
+    var STORE_KEY = 'aqTermSet';
+    function persist(idx) {
+        try { sessionStorage.setItem(STORE_KEY, String(idx)); } catch (e) { /* storage disabled */ }
+    }
+
     function loop() {
         clearLines();
         typeSet(sets[setIdx], 0, function () {
+            persist(setIdx);
             setTimeout(function () {
                 setIdx = (setIdx + 1) % sets.length;
                 loop();
@@ -91,7 +104,23 @@
         });
     }
 
-    loop();
+    var cached = null;
+    try { cached = sessionStorage.getItem(STORE_KEY); } catch (e) { /* storage disabled */ }
+
+    if (cached !== null && sets[+cached]) {
+        // Returning within the session: paint the cached set instantly (no blank
+        // flash), hold it like a freshly-finished set, then continue typing.
+        setIdx = +cached;
+        renderFull(sets[setIdx]);
+        setTimeout(function () {
+            setIdx = (setIdx + 1) % sets.length;
+            loop();
+        }, PAUSE_AFTER_SET);
+    } else {
+        // First visit this session: full typewriter from the top.
+        setIdx = 0;
+        loop();
+    }
 })();
 
 // ---------------------------------------------------------------------------

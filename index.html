@@ -39,7 +39,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
-    <link rel="stylesheet" href="/styles.min.css?v=20260803">
+    <link rel="stylesheet" href="/styles.min.css?v=20260806">
 </head>
 <body>
 
@@ -151,6 +151,11 @@
             </div>
         </div>
         <div class="lp-terminal-aside">
+            <div class="lp-term-aside-dots" aria-hidden="true">
+                <span class="lp-terminal-dot red"></span>
+                <span class="lp-terminal-dot yellow"></span>
+                <span class="lp-terminal-dot green"></span>
+            </div>
             <div class="lp-term-aside-label" data-i18n="hero.termLabel">--what-you-are-watching</div>
             <h3 data-i18n="hero.termTitle">The engine loop, live</h3>
             <p data-i18n-html="hero.termDesc">A simulation of the exact cycle the engine runs on our backend: recompute the covariance matrix, read the drawdown / downside-volatility regime, scale exposure continuously. Every number shown is real &mdash; taken from the 8.7-year, 5-token validation backtest.</p>
@@ -2475,7 +2480,7 @@
 
 <!-- i18n — Localization -->
 <script src="https://unpkg.com/i18next@23.11.5/dist/umd/i18next.min.js"></script>
-<script defer src="/app-boot.js?v=20260805"></script>
+<script defer src="/app-boot.js?v=20260806"></script>
 
 </body>
 </html>
