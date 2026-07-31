@@ -36,9 +36,11 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # v7 of both actions runs on node24. v4/v5 target the deprecated node20 and
+      # were already being force-migrated by the runner.
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
