@@ -27,6 +27,11 @@ Usage:  python tools/refresh_forward_log.py [--check]
 
 Writes _src/index.html, then runs tools/build_pages.py to publish into
 results.html. Commit both.
+
+You normally do not need to run this: .github/workflows/forward-log-snapshot.yml
+does it on GitHub's runners twice a week, commits the result and asks Pages to
+rebuild. Run it by hand only to publish a snapshot ahead of the next cron, or
+when debugging the renderer.
 """
 import re
 import subprocess

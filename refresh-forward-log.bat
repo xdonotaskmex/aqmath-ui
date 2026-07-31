@@ -8,16 +8,20 @@ rem  /forward-log on every page load. This job maintains only the committed
 rem  FALLBACK copy - what visitors see if that fetch fails, and what crawlers
 rem  that do not run the fetch index.
 rem
-rem  Weekly is enough for a fallback, and it keeps the commit log quiet.
-rem  tools/audit_pages.py fails the build once the snapshot passes 10 days,
-rem  so a silently skipped run gets caught rather than going unnoticed.
+rem  NOT SCHEDULED FROM HERE ANY MORE. The schedule now lives in
+rem  .github/workflows/forward-log-snapshot.yml, which runs on GitHub's runners
+rem  (Mon+Thu 04:00 UTC), commits the snapshot and asks Pages to rebuild. A
+rem  scheduled task on this machine only advanced the fallback while the machine
+rem  happened to be powered on and logged in, and two schedulers committing the
+rem  same six files would collide - so do not re-register one.
 rem
-rem  Schedule (weekly, Mondays 04:00 local - after the 01:30 UTC service run):
-rem    schtasks /create /tn "AQMath forward-log snapshot" /tr "%~f0" ^
-rem             /sc weekly /d MON /st 04:00
+rem  What this is still for: running the refresh by hand - debugging the
+rem  renderer, or publishing a snapshot without waiting for the next cron.
+rem  tools/audit_pages.py fails the build once the snapshot passes 10 days, so a
+rem  silently skipped run gets caught rather than going unnoticed.
 rem
-rem  Nothing is pushed automatically: this ends by showing what changed so the
-rem  commit stays a deliberate act.
+rem  Nothing is pushed automatically from here: this ends by showing what
+rem  changed so a manual commit stays a deliberate act.
 rem =====================================================================
 setlocal
 cd /d "%~dp0"

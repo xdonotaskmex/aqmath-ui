@@ -1,0 +1,120 @@
+name: Forward Log snapshot
+
+# The telemetry itself already runs on the server: the paper trading loop lives
+# in the backtesting- Railway service (APScheduler, 01:30 UTC, state in Postgres)
+# and app-boot.js fetches /forward-log on every page load. What this workflow
+# maintains is the committed FALLBACK snapshot - what visitors see when that
+# fetch fails (service cold, offline) and what crawlers that never run the fetch
+# index.
+#
+# That fallback used to be refreshed by a Windows scheduled task on a single
+# desktop, so it only advanced while that machine happened to be powered on and
+# logged in. Nothing here depends on a local machine any more.
+
+on:
+  schedule:
+    # Mondays and Thursdays, 04:00 UTC - after the service's 01:30 UTC run.
+    # Twice weekly rather than weekly because GitHub delays or drops scheduled
+    # runs under load, and tools/audit_pages.py fails the build once the
+    # snapshot passes 10 days. Two chances per interval keeps a single dropped
+    # run from turning into a visible staleness failure.
+    - cron: "0 4 * * 1,4"
+  workflow_dispatch:
+
+# contents: to commit the refreshed snapshot.
+# pages:    to ask for the Pages build - see the request step for why.
+permissions:
+  contents: write
+  pages: write
+
+# Two of these committing to main at once would collide.
+concurrency:
+  group: forward-log-snapshot
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Every script in tools/ is standard-library only, so there is nothing to
+      # install and no lockfile to drift.
+      - name: Refresh the snapshot from the live service
+        run: python tools/refresh_forward_log.py
+
+      # Offline checks: snapshot age, asset stamps, internal links, sitemap,
+      # self-hosted fonts, simulated-results notices.
+      - name: Audit the result
+        run: python tools/audit_pages.py
+
+      - name: Check what changed
+        id: diff
+        run: |
+          changed=$(git diff --name-only)
+          echo "changed files:"
+          echo "$changed"
+          # refresh_forward_log.py writes _src/index.html, then build_pages.py
+          # regenerates the five entry pages. Anything else means something other
+          # than the snapshot moved, which is not a change to commit unattended.
+          unexpected=$(printf '%s\n' "$changed" | grep -vxE '_src/index\.html|index\.html|docs\.html|backtest\.html|results\.html|app\.html' || true)
+          if [ -n "$unexpected" ]; then
+            echo "::error::unexpected files changed, refusing to commit: $(echo $unexpected)"
+            exit 1
+          fi
+          if [ -z "$changed" ]; then
+            echo "snapshot already matches the service - nothing to commit"
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "committed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push
+        if: steps.diff.outputs.committed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add _src/index.html index.html docs.html backtest.html results.html app.html
+          stamp=$(grep -oE 'Telemetry generated [0-9]{4}-[0-9]{2}-[0-9]{2}' results.html | head -1 | awk '{print $3}')
+          git commit -m "Refresh Forward Log fallback snapshot (${stamp})"
+          git push
+
+      # A push made with GITHUB_TOKEN does not start a GitHub Pages build. Without
+      # this the commit would land and the live site would keep serving the old
+      # snapshot indefinitely - the exact silent staleness this whole chain exists
+      # to prevent. Requesting a build has the same effect as a manual push.
+      - name: Request the Pages build
+        if: steps.diff.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh api --method POST "repos/${{ github.repository }}/pages/builds"
+
+      # Requesting a build says nothing about whether it succeeded. Without this
+      # the workflow would report green over a Pages build that errored.
+      - name: Wait for the Pages build
+        if: steps.diff.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for i in $(seq 1 40); do
+            status=$(gh api "repos/${{ github.repository }}/pages/builds/latest" --jq .status)
+            echo "attempt ${i}: ${status}"
+            case "$status" in
+              built)
+                echo "Pages rebuilt - the live fallback now matches the service"
+                exit 0
+                ;;
+              errored)
+                gh api "repos/${{ github.repository }}/pages/builds/latest" --jq '.error.message'
+                echo "::error::Pages build errored"
+                exit 1
+                ;;
+            esac
+            sleep 15
+          done
+          echo "::error::Pages build did not finish within 10 minutes"
+          exit 1
