@@ -52,12 +52,14 @@ SIM_NOTICE = {
     "en": ("<strong>Simulated results &mdash; no real money.</strong> Every figure below is "
            "computed from historical price data by a backtest. No capital was invested and no "
            "orders were placed. Backtests apply a strategy to the past with full knowledge of how "
-           "that period turned out, and the figures exclude slippage and liquidity effects. "
+           "that period turned out, and the figures exclude slippage and liquidity effects, though a "
+           "simulated 0.1% exchange fee is charged on every rebalance, DCA buy and redeployment. "
            "Simulated and past performance is <strong>not a reliable indicator of future "
            "results</strong>. AQMath is software, not investment advice."),
     "zh-Hans": ("<strong>模拟结果 &mdash; 未使用真实资金。</strong>以下每一项数据均由回测根据历史价格数据计算得出。"
                 "未投入任何资金，也未下过任何订单。回测是在完全知晓该时段结果的前提下把策略套用于过去，"
-                "且数据不包含滑点与流动性影响。模拟表现与过往表现<strong>不能可靠地预示未来结果</strong>。"
+                "且数据不包含滑点与流动性影响，但会对每次再平衡、DCA 买入和资金重新部署收取 0.1% 的模拟交易所手续费。"
+                "模拟表现与过往表现<strong>不能可靠地预示未来结果</strong>。"
                 "AQMath 是软件，不是投资建议。"),
 }
 

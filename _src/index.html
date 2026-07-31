@@ -39,7 +39,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=39a64bab43">
+    <link rel="stylesheet" href="/styles.min.css?v=8a354d00fb">
 </head>
 <body>
 
@@ -499,7 +499,7 @@
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q7">Do you offer monthly plans?</div>
-                <div class="lp-faq-a" data-i18n-html="faq.a7">No. AQMath is annual only — €999/year, no monthly or quarterly plans. All sales are final after activation because digital access is delivered instantly and fully. There is nothing to "return" once your key is live. This is standard for any software that delivers immediately on payment.</div>
+                <div class="lp-faq-a" data-i18n-html="faq.a7">No. AQMath operates exclusively on an annual subscription model. We do not offer monthly, quarterly, or semi-annual plans. EU consumers keep the statutory 14-day right of withdrawal &mdash; see the <a href="/widerruf" style="color:#a78bfa;">withdrawal notice</a>; after that the annual term is firm and is not refunded pro rata on early cancellation.</div>
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q8">Is AQMath a trading bot?</div>
@@ -525,7 +525,7 @@
 <div class="lp-pro-modal hidden" id="proModal">
     <div class="lp-pro-box">
         <h3>&#128274; AQMath Black &mdash; Apply for Access</h3>
-        <p>AQMath Black is <strong>€999 / year (~$1,090 USD)</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card, no bank transfer, no personal data collected.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>All sales are final after activation — digital access is delivered instantly.</em></p>
+        <p>AQMath Black is <strong>€999 / year (~$1,090 USD)</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card, no bank transfer, no personal data collected.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
         <div class="lp-pro-beta">
             <div class="lp-pro-beta-label">Send a message to request access:</div>
             <div class="lp-pro-beta-links">
@@ -920,8 +920,8 @@
         <div class="bt-kicker">Interactive Walk-Forward Backtest</div>
         <h1 class="bt-title">Backtest the Deleverage Shield on Your Own Data</h1>
         <p class="bt-intro">Upload your own historical price CSVs for up to five tokens and run the <strong>exact deleverage modulator that ships in production (v14.0)</strong> against plain Buy &amp; Hold. Both strategies get identical DCA capital on the same schedule, so the only difference you see is the exposure control itself &mdash; how far drawdown and downside volatility pull risk off the table, and what that costs in upside.</p>
-        <p class="bt-intro">Everything runs <strong>in your browser</strong>: the CSVs you drop in are never uploaded, stored or logged. Results are scored on <strong>risk-adjusted return</strong> (Sharpe and Calmar), not on whether they beat Buy &amp; Hold in raw percent.</p>
-        <p class="sim-notice" data-i18n-html="bt.simNotice"><strong>Hypothetical results.</strong> This page computes a simulation from the price history you upload. A backtest applies a strategy to the past with complete knowledge of how that period turned out &mdash; knowledge nobody had at the time &mdash; and it ignores slippage, exchange fees, spreads and taxes. Hypothetical and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software for your own analysis: it is not investment advice, not a recommendation to buy or sell any asset, and it never places orders or holds funds.</p>
+        <p class="bt-intro">Your CSV file never leaves your machine: it is parsed <strong>in your browser</strong>, and only the resulting price series is sent to the engine, where it is processed in-memory and discarded &mdash; never stored, never logged. The run happens on the server because the modulator's parameters stay there and are never shipped to the browser. Results are scored on <strong>risk-adjusted return</strong> (Sharpe and Calmar), not on whether they beat Buy &amp; Hold in raw percent.</p>
+        <p class="sim-notice" data-i18n-html="bt.simNotice"><strong>Hypothetical results.</strong> This page computes a simulation from the price history you upload. A backtest applies a strategy to the past with complete knowledge of how that period turned out &mdash; knowledge nobody had at the time &mdash; and it ignores slippage, spreads and taxes, though it does charge a simulated 0.1% exchange fee on every rebalance, DCA buy and redeployment. Hypothetical and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software for your own analysis: it is not investment advice, not a recommendation to buy or sell any asset, and it never places orders or holds funds.</p>
     </div>
 
     <!-- LOADING OVERLAY -->
@@ -1169,7 +1169,7 @@
 <div class="rv-date">Generated 2026-07-21 &middot; production v14 &middot; no re-tuning</div>
 <p class="rv-intro">We re-ran the shipped AQMath Shield on a fresh batch of coins &mdash; including <strong>ATH, SUI and XMR, which were never used to build or tune the model</strong>. The question: on coins it has never seen, does the Shield still do its job &mdash; cut the deep crashes while keeping healthy long-run growth? Across <strong>182</strong> equal-weight baskets (3-, 4- and 5-coin combinations) plus dead-coin and short-history stress cases, the answer is yes.</p>
 <p class="rv-intro">Each basket is an equal-weight mix rebalanced on the same schedule, with an identical $1,000 start and $100 monthly top-up for both the Shield and plain Buy &amp; Hold. Nothing about the model was changed, re-fit or re-tuned for these coins &mdash; it is the exact configuration running in production today. That makes this a clean out-of-sample read, not a backtest polished after the fact.</p>
-<p class="sim-notice" data-i18n-html="rv.simNotice"><strong>Simulated results — no real money.</strong> Every figure on this page comes from backtests and from a paper-trading log: a simulation that runs against live market data with <strong>virtual capital</strong>. No client funds were ever invested, no orders were ever placed, and the numbers exclude slippage, exchange fees, spreads and taxes. Simulated and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software, not investment advice, and does not manage money on your behalf.</p>
+<p class="sim-notice" data-i18n-html="rv.simNotice"><strong>Simulated results — no real money.</strong> Every figure on this page comes from backtests and from a paper-trading log: a simulation that runs against live market data with <strong>virtual capital</strong>. No client funds were ever invested, no orders were ever placed, and the numbers exclude slippage, spreads and taxes, but do include a simulated 0.1% exchange fee on every rebalance, DCA buy and redeployment &mdash; charged to the Buy &amp; Hold benchmark on the same basis. Simulated and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software, not investment advice, and does not manage money on your behalf.</p>
 <!-- The full write-up of the earlier token-universe test lives at /research as a
      standalone document, methodology and caveats included. -->
 <p class="rv-intro" data-i18n-html="rv.researchLink">The full test report for the previous unseen-token run &mdash; methodology, all 16 baskets, dead-token stress cases and caveats &mdash; is published at <a href="/research/oos-v14-new-tokens">Research &amp; Validation</a>.</p>
@@ -2322,9 +2322,9 @@
     <a href="/about">About</a><span class="sep">|</span><a href="/research">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=39a64bab43"></script>
-<script defer src="/app-backtest.js?v=39a64bab43"></script>
-<script defer src="/app.js?v=39a64bab43"></script>
+<script defer src="/app-widgets.js?v=8a354d00fb"></script>
+<script defer src="/app-backtest.js?v=8a354d00fb"></script>
+<script defer src="/app.js?v=8a354d00fb"></script>
 
 <!-- 100% privacy-first analytics -->
 <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
@@ -2332,7 +2332,7 @@
 
 <!-- i18n — Localization -->
 <script src="https://unpkg.com/i18next@23.11.5/dist/umd/i18next.min.js"></script>
-<script defer src="/app-boot.js?v=39a64bab43"></script>
+<script defer src="/app-boot.js?v=8a354d00fb"></script>
 
 </body>
 </html>
