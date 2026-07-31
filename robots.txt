@@ -1,4 +1,12 @@
 ﻿User-agent: *
 Allow: /
 
+# Build sources for the generated pages: _src/ feeds the five entry pages,
+# _research/ holds the Markdown behind /research. Jekyll already excludes
+# _-prefixed directories from the published site; this is the fallback in case
+# Jekyll is ever disabled, so a source file can never be indexed as a duplicate
+# of the page it generates.
+Disallow: /_src/
+Disallow: /_research/
+
 Sitemap: https://aqmath.xyz/sitemap.xml

@@ -13,6 +13,13 @@ dca-engine/
 # Playwright visual-regression baselines must be versioned for diffing
 !tests/**/*.png
 *.bat
+# ...but the scheduled Forward Log job is part of the site's upkeep, not a
+# local scratch script, so it has to be versioned.
+!refresh-forward-log.bat
+
+# Local run logs. The _ prefix also keeps Jekyll from publishing them if an
+# uncommitted copy is ever present in a deploy.
+_logs/
 
 # Playwright / Node test tooling
 node_modules/

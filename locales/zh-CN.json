@@ -76,7 +76,7 @@
     "blackF5": "无限代币支持与投资组合优化",
     "blackF6": "非托管隐私 — 无服务器存储您的投资组合",
     "blackF7": "仅限年度访问 — 无月度或季度计划",
-    "blackF8": "数字访问 — 激活后不予退款 <a href=\"/terms\" style=\"color:var(--purple);font-size:0.85em\">[为什么?]</a>"
+    "blackF8": "欧盟 14 天法定撤回权 — 之后年度期限固定 <a href=\"/widerruf\" style=\"color:var(--purple);font-size:0.85em\">[详情]</a>"
   },
   "what": {
     "title": "AQMath 是什么、如何运作、为什么",
@@ -107,7 +107,7 @@
     "q6": "如何申请 Black 访问权限？",
     "a6": "通过 <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" style=\"color:#a78bfa;\">Telegram</a> 或 <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:#a78bfa;\">X</a> 私信我们。我们会亲自审核每位申请者 — €999 / 年。我们希望确保 AQMath 适合您后再付款。仅接受 USDC 和 EURC 付款。",
     "q7": "是否提供月度计划？",
-    "a7": "不提供。AQMath 仅采用年度订阅模式。不提供月度、季度或半年度计划。所有销售均为最终销售 — 不退款。",
+    "a7": "不提供。AQMath 仅采用年度订阅模式，不提供月度、季度或半年度计划。欧盟消费者享有 14 天法定撤回权 — 详见<a href=\"/widerruf\" style=\"color:#a78bfa;\">撤回权说明</a>；该期限过后，年度期限即为固定，提前取消不按比例退款。",
     "q8": "AQMath 是交易机器人吗？",
     "a8": "不是。AQMath 是分析型 Web 应用。我们不执行交易、管理资金或提供与加密交易所或智能合约交互的软件。",
     "q9": "是否有移动应用？",
@@ -120,6 +120,7 @@
   },
   "disclaimer": "AQMath 不提供投资建议。所有计算基于历史数据和数学模型。<br>数学处理在安全后端运行；您的投资组合数据在内存中处理，从不持久化。<br>© 2026 AQMath — 安全后端引擎。隐私。非托管。<br><a href=\"/docs\">文档</a> · 关注：<a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">X (Twitter)</a>",
   "app": {
+    "heading": "AQMath 投资组合再平衡器",
     "logoTag": "非托管 • AQMath 引擎",
     "navLanding": "首页",
     "navApp": "应用",
@@ -471,7 +472,12 @@
     "csvFormat": "<strong>CSV 格式：</strong>包含日期列（<code>event_date</code>/<code>date</code>/<code>Date</code>）+ 价格列（<code>close_price_usd</code>/<code>Close</code>/<code>price</code>）的表头。等权重组合。",
     "navBacktest": "回测",
     "changelogIntro": "<strong>更新日志。</strong>引擎更新的带日期记录，让您看到的任何结果都能追溯到产生它的确切版本。",
-    "changelog": "<li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>引擎设置已冻结（v14.0）。</strong>调节器的设置已于当日锁定。从这一天起的每个结果都来自这个完全相同、未改动的引擎。</span></li><li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>定投金额可为零。</strong>现在可将 <strong>DCA 金额</strong>设为 <strong>0</strong>，以测试一次性、整笔起始的投入。此前的结果不受影响。</span></li>"
+    "changelog": "<li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>引擎设置已冻结（v14.0）。</strong>调节器的设置已于当日锁定。从这一天起的每个结果都来自这个完全相同、未改动的引擎。</span></li><li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>定投金额可为零。</strong>现在可将 <strong>DCA 金额</strong>设为 <strong>0</strong>，以测试一次性、整笔起始的投入。此前的结果不受影响。</span></li>",
+    "simNotice": "<strong>假设性结果。</strong>本页面根据您上传的价格历史进行模拟计算。回测是在完全知晓该时段结果的前提下把策略套用于过去 &mdash; 而当时没有人拥有这种信息 &mdash; 并且忽略了滑点、交易所手续费、买卖价差和税费。假设性表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是供您自行分析的软件：它不是投资建议，不构成买入或卖出任何资产的推荐，也从不下单或持有资金。"
+  },
+  "rv": {
+    "simNotice": "<strong>模拟结果 &mdash; 未使用真实资金。</strong>本页面的每一项数据均来自回测以及模拟交易记录：一种以<strong>虚拟资金</strong>对接实时行情运行的模拟。从未投入客户资金，从未下过任何订单，数据也不包含滑点、交易所手续费、买卖价差和税费。模拟表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是软件，不是投资建议，也不代您管理资金。",
+    "researchLink": "上一轮未见代币测试的完整报告 &mdash; 包含方法论、全部 16 个组合、已归零代币压力测试与注意事项 &mdash; 已发布于<a href=\"/research/oos-v14-new-tokens-zh\">研究与验证</a>。"
   },
   "shield": {
     "label": "--deleverage-modulator &middot; v14.0",

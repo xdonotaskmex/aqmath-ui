@@ -27,7 +27,8 @@ Usage
     python tools/stamp_version.py --check    # verify only, exit 1 if stale
 
 Run this *before* tools/build_pages.py, so the generated per-route pages
-inherit the fresh stamp.
+inherit the fresh stamp. The stamp is written into _src/index.html (the SPA
+source), never into the generated root pages - those are overwritten anyway.
 """
 import hashlib
 import re
@@ -53,14 +54,16 @@ ASSETS = [
 # social-preview.png keeps its own hand-set stamp on purpose: it is consumed by
 # social-media scrapers, not by the running app, and has a separate lifecycle.
 TARGETS = [
-    ("index.html", r'(?<=href="/styles\.min\.css\?v=)([\w]+)(?=")'),
-    ("index.html", r'(?<=src="/app\.js\?v=)([\w]+)(?=")'),
-    ("index.html", r'(?<=src="/app-widgets\.js\?v=)([\w]+)(?=")'),
-    ("index.html", r'(?<=src="/app-backtest\.js\?v=)([\w]+)(?=")'),
-    ("index.html", r'(?<=src="/app-boot\.js\?v=)([\w]+)(?=")'),
+    ("_src/index.html", r'(?<=href="/styles\.min\.css\?v=)([\w]+)(?=")'),
+    ("_src/index.html", r'(?<=src="/app\.js\?v=)([\w]+)(?=")'),
+    ("_src/index.html", r'(?<=src="/app-widgets\.js\?v=)([\w]+)(?=")'),
+    ("_src/index.html", r'(?<=src="/app-backtest\.js\?v=)([\w]+)(?=")'),
+    ("_src/index.html", r'(?<=src="/app-boot\.js\?v=)([\w]+)(?=")'),
+    ("about.html", r'(?<=href="/styles\.min\.css\?v=)([\w]+)(?=")'),
     ("impressum.html", r'(?<=href="/styles\.min\.css\?v=)([\w]+)(?=")'),
     ("privacy.html", r'(?<=href="/styles\.min\.css\?v=)([\w]+)(?=")'),
     ("terms.html", r'(?<=href="/styles\.min\.css\?v=)([\w]+)(?=")'),
+    ("widerruf.html", r'(?<=href="/styles\.min\.css\?v=)([\w]+)(?=")'),
     # app-boot.js fetches the locale bundles at runtime.
     ("app-boot.js", r"(?<=\.json\?v=)([\w]+)(?=')"),
 ]

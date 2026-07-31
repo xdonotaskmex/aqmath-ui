@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="648" viewBox="0 0 820 648" font-family="Plus Jakarta Sans,Segoe UI,Arial,sans-serif">
+<rect width="820" height="648" fill="#050a18"/>
+<text x="40" y="30" font-size="18" font-weight="700" fill="#e2e8f0">Max Drawdown: Modulator vs Buy &amp; Hold (16 OOS baskets)</text>
+<text x="40" y="50" font-size="12" fill="#7a8ba5">Lower is better. Production v14, tokens never used for tuning.</text>
+<line x1="190.0" y1="58" x2="190.0" y2="608" stroke="#18223a" stroke-width="1"/>
+<text x="190.0" y="626" font-size="11" fill="#7a8ba5" text-anchor="middle">0%</text>
+<line x1="302.0" y1="58" x2="302.0" y2="608" stroke="#18223a" stroke-width="1"/>
+<text x="302.0" y="626" font-size="11" fill="#7a8ba5" text-anchor="middle">20%</text>
+<line x1="414.0" y1="58" x2="414.0" y2="608" stroke="#18223a" stroke-width="1"/>
+<text x="414.0" y="626" font-size="11" fill="#7a8ba5" text-anchor="middle">40%</text>
+<line x1="526.0" y1="58" x2="526.0" y2="608" stroke="#18223a" stroke-width="1"/>
+<text x="526.0" y="626" font-size="11" fill="#7a8ba5" text-anchor="middle">60%</text>
+<line x1="638.0" y1="58" x2="638.0" y2="608" stroke="#18223a" stroke-width="1"/>
+<text x="638.0" y="626" font-size="11" fill="#7a8ba5" text-anchor="middle">80%</text>
+<line x1="750.0" y1="58" x2="750.0" y2="608" stroke="#18223a" stroke-width="1"/>
+<text x="750.0" y="626" font-size="11" fill="#7a8ba5" text-anchor="middle">100%</text>
+<text x="180" y="84.0" font-size="11" fill="#e2e8f0" text-anchor="end">AVAX/CRO/DOGE</text>
+<rect x="190" y="68.0" width="467.1" height="11" fill="#f87171"/>
+<text x="661.1" y="77.0" font-size="10" fill="#f87171">83%</text>
+<rect x="190" y="81.0" width="172.3" height="11" fill="#34d399"/>
+<text x="366.3" y="90.0" font-size="10" fill="#34d399">31%</text>
+<text x="180" y="118.0" font-size="11" fill="#e2e8f0" text-anchor="end">AVAX/CRO/HBAR</text>
+<rect x="190" y="102.0" width="500.5" height="11" fill="#f87171"/>
+<text x="694.5" y="111.0" font-size="10" fill="#f87171">89%</text>
+<rect x="190" y="115.0" width="132.1" height="11" fill="#34d399"/>
+<text x="326.1" y="124.0" font-size="10" fill="#34d399">24%</text>
+<text x="180" y="152.0" font-size="11" fill="#e2e8f0" text-anchor="end">AVAX/CRO/LINK</text>
+<rect x="190" y="136.0" width="478.8" height="11" fill="#f87171"/>
+<text x="672.8" y="145.0" font-size="10" fill="#f87171">86%</text>
+<rect x="190" y="149.0" width="117.3" height="11" fill="#34d399"/>
+<text x="311.3" y="158.0" font-size="10" fill="#34d399">21%</text>
+<text x="180" y="186.0" font-size="11" fill="#e2e8f0" text-anchor="end">AVAX/DOGE/HBAR</text>
+<rect x="190" y="170.0" width="457.2" height="11" fill="#f87171"/>
+<text x="651.2" y="179.0" font-size="10" fill="#f87171">82%</text>
+<rect x="190" y="183.0" width="160.6" height="11" fill="#34d399"/>
+<text x="354.6" y="192.0" font-size="10" fill="#34d399">29%</text>
+<text x="180" y="220.0" font-size="11" fill="#e2e8f0" text-anchor="end">AVAX/DOGE/LINK</text>
+<rect x="190" y="204.0" width="427.5" height="11" fill="#f87171"/>
+<text x="621.5" y="213.0" font-size="10" fill="#f87171">76%</text>
+<rect x="190" y="217.0" width="155.0" height="11" fill="#34d399"/>
+<text x="349.0" y="226.0" font-size="10" fill="#34d399">28%</text>
+<text x="180" y="254.0" font-size="11" fill="#e2e8f0" text-anchor="end">AVAX/HBAR/LINK</text>
+<rect x="190" y="238.0" width="473.6" height="11" fill="#f87171"/>
+<text x="667.6" y="247.0" font-size="10" fill="#f87171">85%</text>
+<rect x="190" y="251.0" width="120.2" height="11" fill="#34d399"/>
+<text x="314.2" y="260.0" font-size="10" fill="#34d399">21%</text>
+<text x="180" y="288.0" font-size="11" fill="#e2e8f0" text-anchor="end">CRO/DOGE/HBAR</text>
+<rect x="190" y="272.0" width="469.8" height="11" fill="#f87171"/>
+<text x="663.8" y="281.0" font-size="10" fill="#f87171">84%</text>
+<rect x="190" y="285.0" width="189.4" height="11" fill="#34d399"/>
+<text x="383.4" y="294.0" font-size="10" fill="#34d399">34%</text>
+<text x="180" y="322.0" font-size="11" fill="#e2e8f0" text-anchor="end">CRO/DOGE/LINK</text>
+<rect x="190" y="306.0" width="447.5" height="11" fill="#f87171"/>
+<text x="641.5" y="315.0" font-size="10" fill="#f87171">80%</text>
+<rect x="190" y="319.0" width="186.2" height="11" fill="#34d399"/>
+<text x="380.2" y="328.0" font-size="10" fill="#34d399">33%</text>
+<text x="180" y="356.0" font-size="11" fill="#e2e8f0" text-anchor="end">CRO/HBAR/LINK</text>
+<rect x="190" y="340.0" width="487.8" height="11" fill="#f87171"/>
+<text x="681.8" y="349.0" font-size="10" fill="#f87171">87%</text>
+<rect x="190" y="353.0" width="147.8" height="11" fill="#34d399"/>
+<text x="341.8" y="362.0" font-size="10" fill="#34d399">26%</text>
+<text x="180" y="390.0" font-size="11" fill="#e2e8f0" text-anchor="end">DOGE/HBAR/LINK</text>
+<rect x="190" y="374.0" width="462.3" height="11" fill="#f87171"/>
+<text x="656.3" y="383.0" font-size="10" fill="#f87171">83%</text>
+<rect x="190" y="387.0" width="138.5" height="11" fill="#34d399"/>
+<text x="332.5" y="396.0" font-size="10" fill="#34d399">25%</text>
+<text x="180" y="424.0" font-size="11" fill="#e2e8f0" text-anchor="end">AVAX/CRO/DOGE/HBAR</text>
+<rect x="190" y="408.0" width="471.9" height="11" fill="#f87171"/>
+<text x="665.9" y="417.0" font-size="10" fill="#f87171">84%</text>
+<rect x="190" y="421.0" width="168.1" height="11" fill="#34d399"/>
+<text x="362.1" y="430.0" font-size="10" fill="#34d399">30%</text>
+<text x="180" y="458.0" font-size="11" fill="#e2e8f0" text-anchor="end">AVAX/CRO/DOGE/LINK</text>
+<rect x="190" y="442.0" width="451.5" height="11" fill="#f87171"/>
+<text x="645.5" y="451.0" font-size="10" fill="#f87171">81%</text>
+<rect x="190" y="455.0" width="146.5" height="11" fill="#34d399"/>
+<text x="340.5" y="464.0" font-size="10" fill="#34d399">26%</text>
+<text x="180" y="492.0" font-size="11" fill="#e2e8f0" text-anchor="end">AVAX/CRO/HBAR/LINK</text>
+<rect x="190" y="476.0" width="480.9" height="11" fill="#f87171"/>
+<text x="674.9" y="485.0" font-size="10" fill="#f87171">86%</text>
+<rect x="190" y="489.0" width="118.9" height="11" fill="#34d399"/>
+<text x="312.9" y="498.0" font-size="10" fill="#34d399">21%</text>
+<text x="180" y="526.0" font-size="11" fill="#e2e8f0" text-anchor="end">AVAX/DOGE/HBAR/LINK</text>
+<rect x="190" y="510.0" width="445.8" height="11" fill="#f87171"/>
+<text x="639.8" y="519.0" font-size="10" fill="#f87171">80%</text>
+<rect x="190" y="523.0" width="150.9" height="11" fill="#34d399"/>
+<text x="344.9" y="532.0" font-size="10" fill="#34d399">27%</text>
+<text x="180" y="560.0" font-size="11" fill="#e2e8f0" text-anchor="end">CRO/DOGE/HBAR/LINK</text>
+<rect x="190" y="544.0" width="458.2" height="11" fill="#f87171"/>
+<text x="652.2" y="553.0" font-size="10" fill="#f87171">82%</text>
+<rect x="190" y="557.0" width="177.0" height="11" fill="#34d399"/>
+<text x="371.0" y="566.0" font-size="10" fill="#34d399">32%</text>
+<text x="180" y="594.0" font-size="11" fill="#e2e8f0" text-anchor="end">AVAX/CRO/DOGE/HBAR/LINK</text>
+<rect x="190" y="578.0" width="459.4" height="11" fill="#f87171"/>
+<text x="653.4" y="587.0" font-size="10" fill="#f87171">82%</text>
+<rect x="190" y="591.0" width="158.3" height="11" fill="#34d399"/>
+<text x="352.3" y="600.0" font-size="10" fill="#34d399">28%</text>
+<rect x="600" y="36" width="12" height="12" fill="#34d399"/>
+<text x="616" y="46" font-size="12" fill="#e2e8f0">Modulator</text>
+<rect x="690" y="36" width="12" height="12" fill="#f87171"/>
+<text x="706" y="46" font-size="12" fill="#e2e8f0">Buy &amp; Hold</text>
+</svg>

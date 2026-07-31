@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About AQMath — Who Builds It and Why</title>
+    <meta name="description" content="AQMath is built and operated by Momir Demirov, a sole trader in Waiblingen, Germany. What the software does, what it deliberately does not do, how it is tested, and how to reach a human.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://aqmath.xyz/about">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aqmath.xyz/about">
+    <meta property="og:title" content="About AQMath — Who Builds It and Why">
+    <meta property="og:description" content="One person, one address, one phone number. Who is behind AQMath, what the software does, and what it deliberately does not do.">
+    <meta property="og:site_name" content="AQMath">
+    <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
+    <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/styles.min.css?v=39a64bab43">
+    <!-- Identity graph. The point of sameAs here is verifiability: every profile
+         listed is one a reader can open and check against this page, and the
+         Organization node repeats exactly the details in the /impressum. -->
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://aqmath.xyz/#organization","name":"AQMath","url":"https://aqmath.xyz/","description":"Quantitative, non-custodial crypto portfolio rebalancer: KKT Risk-Parity weighting and the Deleverage Modulator for drawdown protection.","email":"momo.demirov@gmail.com","telephone":"+49-176-61366696","address":{"@type":"PostalAddress","streetAddress":"Rinnenäckerstr. 2","postalCode":"71332","addressLocality":"Waiblingen","addressCountry":"DE"},"founder":{"@id":"https://aqmath.xyz/#momir-demirov"},"sameAs":["https://x.com/aqmathapp","https://t.me/DoNotAskMex","https://www.reddit.com/user/weaforex/"]},{"@type":"Person","@id":"https://aqmath.xyz/#momir-demirov","name":"Momir Demirov","jobTitle":"Founder and sole developer","email":"momo.demirov@gmail.com","worksFor":{"@id":"https://aqmath.xyz/#organization"},"address":{"@type":"PostalAddress","postalCode":"71332","addressLocality":"Waiblingen","addressCountry":"DE"},"knowsAbout":["Risk parity portfolio optimization","Drawdown control","Quantitative backtesting","Cryptocurrency portfolio construction"],"sameAs":["https://x.com/aqmathapp","https://t.me/DoNotAskMex","https://www.reddit.com/user/weaforex/"]},{"@type":"AboutPage","@id":"https://aqmath.xyz/about#page","url":"https://aqmath.xyz/about","name":"About AQMath — Who Builds It and Why","inLanguage":"en","about":{"@id":"https://aqmath.xyz/#organization"},"mainEntity":{"@id":"https://aqmath.xyz/#momir-demirov"},"publisher":{"@id":"https://aqmath.xyz/#organization"}}]}</script>
+</head>
+<body>
+
+<main class="legal-page">
+    <a class="legal-page-brand" href="/">
+        <div class="logo-box">AQ</div>
+        <div>
+            <div class="logo-name">AQMath</div>
+            <div class="logo-tag">&larr; aqmath.xyz</div>
+        </div>
+    </a>
+
+    <h1>About AQMath</h1>
+    <p class="legal-updated">Last updated: July 2026</p>
+
+    <h2>Who builds this</h2>
+    <p>AQMath is built and operated by <strong>Momir Demirov</strong>, working as a sole trader in
+    Waiblingen, Germany. Not a team page, not a fund, not a company with a marketing department: one
+    person, one address, one phone number, all of which are published in full in the
+    <a href="/impressum">Impressum</a> as German law requires. If something on this site is wrong or
+    unclear, the person who can fix it is the person who wrote it, and you can reach him directly.</p>
+    <p>Access requests are reviewed personally over
+    <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">Telegram</a> or
+    <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">X</a>. There is no sales team and
+    no call funnel &mdash; you send a message, it gets read by the developer.</p>
+
+    <h2>What the software actually does</h2>
+    <p>AQMath is a web application that answers two narrow questions about a crypto portfolio you
+    already hold:</p>
+    <ul>
+        <li><strong>How should the weights be distributed?</strong> The backend computes a real
+        covariance matrix over your assets and solves a KKT-constrained Risk-Parity allocation, so
+        each position contributes a comparable share of portfolio risk rather than a comparable share
+        of capital.</li>
+        <li><strong>How much should be exposed right now?</strong> The Deleverage Modulator scales
+        gross exposure continuously off rising drawdown and rising downside volatility. No
+        indicators, no timers, no correlation gate &mdash; it moves exposure toward a target every
+        bar, in either direction, and only trades when the target drifts meaningfully from the held
+        position.</li>
+    </ul>
+    <p>The mechanics are documented in full at <a href="/docs">/docs</a>, the test evidence is
+    published at <a href="/research">/research</a>, and you can run the same engine on your own price
+    history at <a href="/backtest">/backtest</a>.</p>
+
+    <h2>What it deliberately does not do</h2>
+    <ul>
+        <li><strong>It never holds your money.</strong> AQMath is non-custodial. There are no
+        exchange API keys, no withdrawal permissions, no smart-contract approvals.</li>
+        <li><strong>It never places an order.</strong> It is not a trading bot and not an execution
+        engine. It tells you what a rebalance would look like; you decide whether to act.</li>
+        <li><strong>It does not give financial advice.</strong> AQMath is software and mathematics.
+        Every decision, and every consequence of it, is yours.</li>
+        <li><strong>It does not store your portfolio.</strong> Position data is processed in memory
+        and is not persisted server-side. The reasoning is in the
+        <a href="/privacy">Privacy Policy</a>.</li>
+        <li><strong>It is not a mobile app.</strong> Any app store listing using this name is
+        unauthorised.</li>
+    </ul>
+
+    <h2>Why the results pages are so cautious</h2>
+    <p>Every performance figure on this site is <strong>simulated</strong> &mdash; produced by a
+    backtest over historical prices, or by a paper-trading log that runs against live market data
+    with virtual capital. No client funds have ever been invested through AQMath and no orders have
+    ever been placed. Backtests also have a structural advantage no live strategy has: they see how
+    the period ended. That is why the numbers are labelled where they are read rather than in a
+    footnote, and why <a href="/research">/research</a> publishes the caveats alongside the results
+    instead of after them.</p>
+    <p>The same instinct explains a result the marketing-minded version of this page would omit: on
+    median, across unseen token baskets, the modulator gives up roughly 12% of final equity versus
+    staying fully exposed. It is designed to cut drawdown, and that protection is paid for in upside.
+    A claim that it does both, always, would not survive the tests we publish.</p>
+
+    <h2>Business model, stated plainly</h2>
+    <p>Annual access costs <strong>&euro;999 per year</strong>, payable only in the stablecoins USDC
+    and EURC. Stablecoins are used for a specific reason: they let the service run without collecting
+    your name, card number or bank details. There is no free tier funded by selling data, no
+    affiliate revenue from exchanges, and no order flow to monetise &mdash; the only income is the
+    subscription, which is also why the number of active users is deliberately capped. Full terms,
+    including the digital-content withdrawal rules, are in the
+    <a href="/terms">Terms of Service</a> and the <a href="/widerruf">Widerrufsbelehrung</a>.</p>
+    <p>As a small business under &sect;&nbsp;19 UStG, VAT is not itemised separately; prices are final
+    prices.</p>
+
+    <h2>Contact</h2>
+    <p>Momir Demirov<br>Rinnen&auml;ckerstr. 2<br>71332 Waiblingen<br>Deutschland</p>
+    <p>E-Mail: <a href="mailto:momo.demirov@gmail.com">momo.demirov@gmail.com</a><br>
+    Telefon: +49 176 61366696</p>
+    <p>Public profiles:
+    <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">X (@aqmathapp)</a> &middot;
+    <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">Telegram</a> &middot;
+    <a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener">Reddit</a></p>
+</main>
+
+<footer class="site-footer">
+    &copy; 2026 AQMath &mdash; Private. Non-Custodial.<br>
+    <a href="/">Home</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
+</footer>
+
+</body>
+</html>

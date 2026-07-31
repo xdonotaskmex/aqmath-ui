@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Service — AQMath</title>
     <meta name="description" content="AQMath Terms of Service: annual access at €999/year, web application only, not a trading bot, stablecoin payment, withdrawal rights for digital content and risk disclaimer.">
@@ -16,10 +16,9 @@
     <meta property="og:title" content="Terms of Service — AQMath">
     <meta property="og:description" content="Terms of Service and risk disclaimer for the AQMath web application.">
     <meta property="og:site_name" content="AQMath">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="/styles.min.css?v=8217f1090a">
+    <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
+    <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/styles.min.css?v=39a64bab43">
 </head>
 <body>
 
@@ -45,27 +44,44 @@
     <h3>1. Annual Access</h3>
     <p>AQMath operates on an annual subscription model at <strong>&euro;999 per year
     (~$1,090 USD)</strong>. We do not offer monthly, quarterly, or semi-annual plans. Access is granted
-    manually after an access review. Digital access is delivered immediately upon activation &mdash;
-    your key goes live, the data pipeline starts, and your slot is reserved.</p>
+    manually after an access review. AQMath is a <strong>digital service</strong>: the engine computes
+    a fresh covariance matrix and a personalised allocation for your holdings on every run, and the
+    data pipeline is maintained continuously for the whole term. It is not a one-off file you download.</p>
+    <p>By default your activation key is issued <strong>after the 14-day withdrawal period has
+    expired</strong>. You may ask us to start earlier &mdash; see section&nbsp;2.</p>
 
-    <h3>2. Right of Withdrawal for Digital Content (EU Consumers)</h3>
-    <p>If you are a consumer resident in the European Union, you generally have a statutory
-    14-day right of withdrawal for distance contracts. Because AQMath is digital content that is
-    supplied immediately and not on a physical medium, this right lapses under
-    &sect;&nbsp;356 Abs.&nbsp;5 BGB (implementing Art.&nbsp;16(m) of Directive 2011/83/EU) once
-    performance has begun with your consent.</p>
-    <p>Accordingly, before your activation key is issued you will be asked to:</p>
+    <h3>2. Right of Withdrawal (EU Consumers)</h3>
+    <p>If you are a consumer resident in the European Union, you have a statutory 14-day right of
+    withdrawal for distance contracts. It runs from the day the contract is concluded
+    (&sect;&nbsp;355 Abs.&nbsp;2 BGB). Because AQMath is a digital service rather than digital content
+    supplied once, this right <em>does not</em> lapse merely because your key has been activated: for
+    services it lapses only on complete performance (&sect;&nbsp;356 Abs.&nbsp;5 Nr.&nbsp;2 BGB), and an
+    annual subscription is completely performed only at the end of the annual term.</p>
+    <p>You therefore have two options, and you choose which one applies:</p>
     <ul>
-        <li>expressly consent to us beginning performance before the withdrawal period has expired, and</li>
-        <li>confirm that you are aware that you thereby lose your right of withdrawal.</li>
+        <li><strong>Standard &mdash; activation after 14 days.</strong> Nothing is delivered during the
+        withdrawal period. If you withdraw within those 14 days you receive a <strong>full
+        refund</strong>, because no part of the service has been performed.</li>
+        <li><strong>On request &mdash; immediate activation.</strong> If you expressly request that we
+        begin performance before the withdrawal period expires, we activate your key straight away.
+        You keep the right of withdrawal for the remaining days, but you owe us compensation for the
+        part already performed, calculated pro rata on the agreed total price
+        (&sect;&nbsp;357a Abs.&nbsp;2 BGB). Example: withdrawal on day&nbsp;10 of a 365-day term leaves
+        roughly &euro;27 with us and about &euro;972 is refunded.</li>
     </ul>
-    <p>Once your activation key has been issued on this basis, the contract is fully performed and
-    no refunds, partial refunds, or chargebacks are possible. If you have <em>not</em> given this
-    consent and your key has not yet been issued, you may withdraw within 14 days by sending an
-    unambiguous statement to
-    <a href="mailto:momo.demirov@gmail.com">momo.demirov@gmail.com</a>.</p>
-    <p>If you are not acting as a consumer (business/professional use), the statutory right of
-    withdrawal does not apply and all sales are final upon activation.</p>
+    <p>To withdraw, send an unambiguous statement to
+    <a href="mailto:momo.demirov@gmail.com">momo.demirov@gmail.com</a>. The full statutory notice and
+    the model withdrawal form are on the <a href="/widerruf">Widerruf</a> page.</p>
+    <p><strong>After the withdrawal period.</strong> Once the 14 days have expired the annual term is
+    firm. We do not offer voluntary refunds beyond the statutory right, and cancelling early does not
+    entitle you to a pro-rata refund of the remaining term. The exception is section&nbsp;5: if
+    <em>we</em> terminate your access without cause during a paid term, we refund the unused pro-rata
+    portion.</p>
+    <p><strong>Business customers.</strong> The statutory right of withdrawal protects consumers only
+    (&sect;&sect;&nbsp;13, 14 BGB). During the access review we ask you to state whether you are
+    purchasing as a business or professional. If you are, no right of withdrawal applies and all sales
+    are final on activation. We record that statement; we do not verify it, and giving a false
+    statement to obtain access does not deprive an actual consumer of statutory rights.</p>
 
     <h3>3. Web Application Only (No Mobile App)</h3>
     <p>Your subscription grants access to the AQMath Web Application via compatible web browsers.
@@ -128,31 +144,53 @@
     <h3>1. Jahreszugang</h3>
     <p>AQMath wird als Jahresabonnement zum Preis von <strong>999&nbsp;&euro; pro Jahr
     (~1.090&nbsp;USD)</strong> angeboten. Monats-, Quartals- oder Halbjahrestarife bestehen nicht. Der
-    Zugang wird nach einer Pr&uuml;fung manuell freigeschaltet. Der digitale Zugang wird unmittelbar
-    mit der Aktivierung bereitgestellt &mdash; der Schl&uuml;ssel wird aktiv, die Datenpipeline
-    startet und der Platz wird reserviert.</p>
+    Zugang wird nach einer Pr&uuml;fung manuell freigeschaltet. AQMath ist eine <strong>digitale
+    Dienstleistung</strong>: die Engine berechnet bei jedem Lauf eine neue Kovarianzmatrix und eine
+    auf Ihre Positionen zugeschnittene Allokation, und die Datenpipeline wird w&auml;hrend der
+    gesamten Laufzeit fortlaufend gepflegt. Es handelt sich nicht um eine einmalig bereitgestellte
+    Datei.</p>
+    <p>Der Aktivierungsschl&uuml;ssel wird standardm&auml;&szlig;ig <strong>erst nach Ablauf der
+    14-t&auml;gigen Widerrufsfrist</strong> ausgegeben. Auf Wunsch beginnen wir fr&uuml;her &mdash;
+    siehe Ziffer&nbsp;2.</p>
 
-    <h3>2. Widerrufsrecht bei digitalen Inhalten (Verbraucher)</h3>
-    <p>Verbrauchern mit Wohnsitz in der Europ&auml;ischen Union steht bei Fernabsatzvertr&auml;gen
-    grunds&auml;tzlich ein 14-t&auml;giges Widerrufsrecht zu. Da AQMath ein nicht auf einem
-    k&ouml;rperlichen Datentr&auml;ger befindlicher digitaler Inhalt ist, der sofort bereitgestellt
-    wird, erlischt dieses Widerrufsrecht nach &sect;&nbsp;356 Abs.&nbsp;5 BGB, sobald mit der
-    Ausf&uuml;hrung des Vertrages mit Ihrer Zustimmung begonnen wurde.</p>
-    <p>Vor Ausgabe des Aktivierungsschl&uuml;ssels werden Sie daher gebeten,</p>
+    <h3>2. Widerrufsrecht (Verbraucher)</h3>
+    <p>Verbrauchern mit Wohnsitz in der Europ&auml;ischen Union steht bei Fernabsatzvertr&auml;gen ein
+    14-t&auml;giges Widerrufsrecht zu. Die Frist beginnt mit Vertragsschluss
+    (&sect;&nbsp;355 Abs.&nbsp;2 BGB). Da AQMath eine digitale Dienstleistung und kein einmalig
+    bereitgestellter digitaler Inhalt ist, erlischt dieses Recht <em>nicht</em> allein durch die
+    Freischaltung Ihres Schl&uuml;ssels: bei Dienstleistungen erlischt es erst mit
+    vollst&auml;ndiger Erbringung (&sect;&nbsp;356 Abs.&nbsp;5 Nr.&nbsp;2 BGB), und ein
+    Jahresabonnement ist erst am Ende der Laufzeit vollst&auml;ndig erbracht.</p>
+    <p>Sie haben daher zwei M&ouml;glichkeiten und entscheiden selbst, welche gilt:</p>
     <ul>
-        <li>ausdr&uuml;cklich zuzustimmen, dass wir mit der Ausf&uuml;hrung des Vertrages vor Ablauf
-        der Widerrufsfrist beginnen, und</li>
-        <li>zu best&auml;tigen, dass Sie Ihre Kenntnis vom Verlust des Widerrufsrechts bei Beginn der
-        Ausf&uuml;hrung erlangt haben.</li>
+        <li><strong>Standard &mdash; Freischaltung nach 14&nbsp;Tagen.</strong> W&auml;hrend der
+        Widerrufsfrist wird nichts geleistet. Widerrufen Sie innerhalb dieser 14&nbsp;Tage, erhalten
+        Sie den <strong>vollen Betrag</strong> zur&uuml;ck, da noch kein Teil der Leistung erbracht
+        wurde.</li>
+        <li><strong>Auf Verlangen &mdash; sofortige Freischaltung.</strong> Verlangen Sie
+        ausdr&uuml;cklich, dass wir vor Ablauf der Widerrufsfrist mit der Leistung beginnen, schalten
+        wir Ihren Schl&uuml;ssel sofort frei. Ihr Widerrufsrecht bleibt f&uuml;r die restlichen Tage
+        bestehen; Sie schulden uns jedoch Wertersatz f&uuml;r den bereits erbrachten Teil, berechnet
+        zeitanteilig auf den vereinbarten Gesamtpreis (&sect;&nbsp;357a Abs.&nbsp;2 BGB). Beispiel:
+        Bei einem Widerruf am 10.&nbsp;Tag einer 365-t&auml;gigen Laufzeit verbleiben rund
+        27&nbsp;&euro; bei uns, etwa 972&nbsp;&euro; werden zur&uuml;ckgezahlt.</li>
     </ul>
-    <p>Wurde der Aktivierungsschl&uuml;ssel auf dieser Grundlage ausgegeben, ist der Vertrag
-    vollst&auml;ndig erf&uuml;llt; eine R&uuml;ckerstattung, Teilr&uuml;ckerstattung oder
-    R&uuml;ckbuchung ist dann nicht m&ouml;glich. Haben Sie diese Zustimmung <em>nicht</em> erteilt
-    und ist der Schl&uuml;ssel noch nicht ausgegeben, k&ouml;nnen Sie den Vertrag binnen 14&nbsp;Tagen
-    durch eine eindeutige Erkl&auml;rung an
-    <a href="mailto:momo.demirov@gmail.com">momo.demirov@gmail.com</a> widerrufen.</p>
-    <p>Handeln Sie nicht als Verbraucher (unternehmerische Nutzung), besteht kein gesetzliches
-    Widerrufsrecht; der Vertrag ist mit der Aktivierung endg&uuml;ltig.</p>
+    <p>Zum Widerruf gen&uuml;gt eine eindeutige Erkl&auml;rung an
+    <a href="mailto:momo.demirov@gmail.com">momo.demirov@gmail.com</a>. Die vollst&auml;ndige
+    Widerrufsbelehrung und das Muster-Widerrufsformular finden Sie unter
+    <a href="/widerruf">Widerruf</a>.</p>
+    <p><strong>Nach Ablauf der Widerrufsfrist.</strong> Ist die Frist abgelaufen, ist die Jahreslaufzeit
+    verbindlich. Eine freiwillige Erstattung &uuml;ber das gesetzliche Widerrufsrecht hinaus bieten wir
+    nicht an, und eine vorzeitige K&uuml;ndigung begr&uuml;ndet keinen Anspruch auf zeitanteilige
+    R&uuml;ckzahlung der Restlaufzeit. Ausnahme ist Ziffer&nbsp;5: k&uuml;ndigen <em>wir</em> Ihren
+    Zugang ohne Grund w&auml;hrend einer bezahlten Laufzeit, erstatten wir den nicht genutzten Anteil
+    zeitanteilig.</p>
+    <p><strong>Unternehmerische Kunden.</strong> Das gesetzliche Widerrufsrecht sch&uuml;tzt nur
+    Verbraucher (&sect;&sect;&nbsp;13, 14 BGB). Im Rahmen der Zugangspr&uuml;fung bitten wir Sie
+    anzugeben, ob Sie als Unternehmer oder gewerblich kaufen. Ist das der Fall, besteht kein
+    Widerrufsrecht und der Kauf ist mit der Aktivierung endg&uuml;ltig. Wir dokumentieren diese
+    Angabe; wir pr&uuml;fen sie nicht, und eine falsche Angabe zur Erlangung des Zugangs nimmt einem
+    tats&auml;chlichen Verbraucher nicht seine gesetzlichen Rechte.</p>
 
     <h3>3. Ausschlie&szlig;lich Web-Anwendung (keine mobile App)</h3>
     <p>Das Abonnement berechtigt zur Nutzung der AQMath Web-Anwendung &uuml;ber kompatible
@@ -208,7 +246,7 @@
 
 <footer class="site-footer">
     &copy; 2026 AQMath &mdash; Private. Non-Custodial.<br>
-    <a href="/">Home</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a>
+    <a href="/">Home</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
 </body>

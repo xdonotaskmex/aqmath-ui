@@ -33,7 +33,7 @@ def main():
         for k in only_zh:
             print("  ", k)
 
-    html = io.open(os.path.join(BASE, "index.html"), encoding="utf-8").read()
+    html = io.open(os.path.join(BASE, "_src", "index.html"), encoding="utf-8").read()
     used = set(re.findall(r'data-i18n(?:-html|-placeholder)?="([^"]+)"', html))
     missing_en = sorted(k for k in used if k not in en)
     missing_zh = sorted(k for k in used if k not in zh)
@@ -47,7 +47,7 @@ def main():
             print("  ", k)
 
     if not (only_en or only_zh or missing_en or missing_zh):
-        print("i18n OK: %d keys in parity, %d keys used in index.html all resolve" % (len(en), len(used)))
+        print("i18n OK: %d keys in parity, %d keys used in _src/index.html all resolve" % (len(en), len(used)))
 
 
 if __name__ == "__main__":
