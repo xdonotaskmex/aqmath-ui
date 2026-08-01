@@ -101,7 +101,7 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-07-17",
-        "title": "Out-of-Sample Validation: Deleverage Modulator v14.0 on an Unseen Token Universe",
+        "title": "OOS Validation: Deleverage v14.0 on Unseen Tokens - AQMath",
         "shortTitle": "OOS Validation &mdash; v14.0 on Unseen Tokens",
         "description": ("Out-of-sample test of the shipped AQMath Deleverage Modulator v14.0 on 16 "
                         "baskets of tokens never used for tuning: median 54.3 pp drawdown "
