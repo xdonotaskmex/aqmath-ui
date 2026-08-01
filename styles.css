@@ -612,7 +612,12 @@
     }
 
     @media (max-width: 920px) {
-        .main { grid-template-columns: 1fr; }
+        /* minmax(0,1fr) + min-width:0 stop the grid blowing out: a 1fr track keeps
+           min-width:auto, so the 1200px-min holdings table would otherwise stretch
+           .content (and the whole page) past the viewport instead of scrolling
+           inside .tbl-wrap. */
+        .main { grid-template-columns: minmax(0, 1fr); }
+        .sidebar, .content { min-width: 0; }
         .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
         .top-row { grid-template-columns: 1fr; }
         .sum-grid { grid-template-columns: 1fr 1fr; }
@@ -627,6 +632,19 @@
         /* Header: reduce hdr-right min-width for smaller screens */
         .hdr-right { min-width: auto; }
         .logo { width: auto; }
+
+        /* App header: the desktop single row (logo | nav | controls) is wider than
+           a phone and never wraps, so space-between shoves .hdr-right off the right
+           edge where it stacks into a tall narrow column; align-items:center then
+           vertically centres the short logo and leaves a big blank band above it.
+           Stack the three groups so every control stays inside the viewport. */
+        #appView .hdr { flex-direction: column; align-items: stretch; gap: 10px; padding: 10px 16px; }
+        #appView .logo { width: auto; }
+        #appView .hdr-nav { margin-left: 0; flex-wrap: wrap; gap: 6px; }
+        #appView .hdr-right { margin-left: 0; justify-content: flex-start; gap: 8px; }
+        #appView .hdr-btn { flex: 1 1 auto; text-align: center; }
+        #appView .hstat { flex: 1 1 auto; text-align: left; }
+        #appView .content { padding: 16px; }
 
         /* App view: cards, status bar, sidebar padding */
         .card { padding: 14px 16px; }
@@ -665,6 +683,8 @@
         .sum-grid { grid-template-columns: 1fr; }
         .card { padding: 12px 14px; }
         .sidebar { padding: 14px; }
+        #appView .content { padding: 12px; }
+        #appView .hdr-btn { font-size: 0.55rem; padding: 6px 8px; letter-spacing: 1px; }
 
         /* Doc view: tighter padding */
         .doc-wrap { padding: 16px 12px 48px; }
