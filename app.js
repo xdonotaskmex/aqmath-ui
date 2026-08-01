@@ -146,7 +146,12 @@ function showToast(msg, type, actions) {
     }
 }
 function hideToast(e) {
-    if (e && e.target !== document.getElementById('toastOverlay')) return;
+    // Closes on: Escape / programmatic (no event), a backdrop click (target is
+    // the overlay itself), or the [ close ] button. Clicks inside the box carry
+    // data-action="stop" and never reach here, so the box stays open on its own
+    // content while both real dismiss paths work.
+    if (e && e.target !== document.getElementById('toastOverlay')
+          && !(e.target.closest && e.target.closest('#toastClose'))) return;
     document.getElementById('toastOverlay').classList.add('hidden');
     if (toastTimer) { clearTimeout(toastTimer); toastTimer = null; }
 }
