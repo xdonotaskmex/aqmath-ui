@@ -152,6 +152,11 @@
     "dcaEngine": "--DCA 引擎",
     "dcaAmount": "DCA 金额 ($)",
     "distributeDca": "分配 DCA",
+    "dcaPreview": {
+      "title": "DCA 预览 — 资金去向",
+      "confirm": "[ 确认 ]",
+      "cancel": "[ 取消 ]"
+    },
     "smartAlloc": "跨持仓智能分配",
     "engineBtn": "AQMath 引擎 — BLACK",
     "engineHint": "180 天协方差 + ERC 分析",

@@ -152,6 +152,11 @@
     "dcaEngine": "--dca-engine",
     "dcaAmount": "DCA Amount ($)",
     "distributeDca": "Distribute DCA",
+    "dcaPreview": {
+      "title": "DCA Preview — where your money goes",
+      "confirm": "[ confirm ]",
+      "cancel": "[ cancel ]"
+    },
     "smartAlloc": "Smart allocation across positions",
     "engineBtn": "AQMath Engine — BLACK",
     "engineHint": "180-day covariance + ERC analysis",

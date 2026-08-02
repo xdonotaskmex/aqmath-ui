@@ -144,7 +144,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=340ba9cb47')
+    return fetch('/locales/' + lang + '.json?v=d9e400c1ad')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -203,6 +203,8 @@ function applyTranslations() {
         activateBeta: function () { activateBeta(); },
         dodajToken: function () { dodajToken(); },
         distribuirajDca: function () { distribuirajDca(); },
+        confirmDca: function () { confirmDca(); },
+        cancelDca: function () { cancelDca(); },
         optimizePortfolio: function () { optimizePortfolio(); },
         refreshHistory: function () { refreshHistory(); },
         toggleGlobalSafeHaven: function () { toggleGlobalSafeHaven(); },

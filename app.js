@@ -155,7 +155,12 @@ function hideToast(e) {
     document.getElementById('toastOverlay').classList.add('hidden');
     if (toastTimer) { clearTimeout(toastTimer); toastTimer = null; }
 }
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') hideToast(); });
+document.addEventListener('keydown', function(e) {
+    if (e.key !== 'Escape') return;
+    const pv = document.getElementById('dcaPreviewOverlay');
+    if (pv && !pv.classList.contains('hidden')) return cancelDca();
+    hideToast();
+});
 
 // ============ STATE & CONSTANTS ============
 const STORAGE_KEY = 'aegis_pro_portfolio_v2';
@@ -1360,105 +1365,207 @@ async function distribuirajDca() {
             return showToast("Couldn't run DCA right now — please try again shortly.", 'error');
         }
 
-        const updated = result.updated_positions || [];
-        console.log('DCA updated positions count:', updated.length);
-        
-        // Backend already applies hard caps + risk budget + stablecoin redirect
-        // Just use the structural_limits returned by backend (no duplicate processing)
-        const capped = result.structural_limits || [];
-        if (capped.length > 0) {
-            console.log('[DCA] Structural limits from backend:', capped);
-        }
-        
-        updated.forEach(up => {
-            const idx = portfolio.findIndex(t => t.sym === up.symbol);
-            if (idx >= 0) {
-                // Protect safe-haven tokens: never reduce amounts during DCA
-                // (DCA adds external money, should not touch existing USDC balance)
-                if (portfolio[idx].safeHaven && up.amount < portfolio[idx].amount) {
-                    console.log(`[DCA] Protected safe-haven ${up.symbol} from reduction: ${up.amount} → keeping ${portfolio[idx].amount}`);
-                    up.amount = portfolio[idx].amount;
-                }
-                console.log(`DCA: ${up.symbol} amount ${portfolio[idx].amount} → ${up.amount}`);
-                portfolio[idx].amount = up.amount;
-                portfolio[idx].costBasis = up.costBasis || portfolio[idx].costBasis;
-                portfolio[idx].totalTokens = up.totalTokens || portfolio[idx].totalTokens;
-            }
-        });
-
-        lastDcaDate = Date.now();
-
-        const buySummary = result.buy_summary || [];
-        const warnings = result.warnings || [];
-        const totalAlloc = result.total_allocated || 0;
-        const remaining = result.remaining || 0;
-        console.log('DCA Result:', { budget: dcaAmount, totalAlloc, remaining, buySummary, warnings });
-
-        // Return unallocated DCA budget back to safe-haven USDC (prevents value loss)
-        if (remaining > 0.01) {
-            const usdc = portfolio.find(t => t.safeHaven && !t.frozen);
-            if (usdc) {
-                usdc.amount += remaining;
-                console.log(`[DCA] Returned $${remaining.toFixed(2)} remaining budget to ${usdc.sym}`);
-            }
-        }
-
-        saveState();
-        document.getElementById('iDcaAmount').value = '';
-        addSnapshot();
-        render();
-
-        // Artificial delay for "heavy math" feel
-        await sleep(1500);
-
+        // Do NOT touch the portfolio yet. The user confirms where the money
+        // goes first (preview modal); the plan is applied in confirmDca().
         hideLoading();
-
-        // Aggregate buys per token for logging + summary (sum $ and tokens, filter dust)
-        const tokenTotals = {};
-        let dustTotal = 0;
-        buySummary.forEach(b => {
-            const m = b.match(/^(\w+):\s*\+\$([\d.]+)\s*\(([\d.]+)\s*tokens?\)/);
-            if (m) {
-                const sym = m[1];
-                const usd = parseFloat(m[2]);
-                const tokens = parseFloat(m[3]);
-                if (usd < 0.05) { dustTotal += usd; return; }
-                if (!tokenTotals[sym]) tokenTotals[sym] = { usd: 0, tokens: 0 };
-                tokenTotals[sym].usd += usd;
-                tokenTotals[sym].tokens += tokens;
-            }
-        });
-        const coinCount = Object.keys(tokenTotals).length;
-
-        // Full breakdown (buys, warnings, structural limits) -> console only
-        console.log('[DCA] breakdown', {
-            budget: dcaAmount, allocated: totalAlloc, remaining,
-            buys: Object.entries(tokenTotals).map(([sym, t]) => `${sym}: +$${t.usd.toFixed(2)} (${t.tokens} tokens)`),
-            dustFiltered: dustTotal, warnings, structuralLimits: capped
-        });
-
-        // Friendly, outcome-focused summary
-        let msg;
-        if (totalAlloc >= 0.01 && coinCount > 0) {
-            msg = `Added $${totalAlloc.toFixed(2)} across ${coinCount} ${coinCount === 1 ? 'coin' : 'coins'}.`;
-            if (remaining > 0.01) msg += ` $${remaining.toFixed(2)} parked in USDC for next time.`;
-            // Task 1: show the actual buys (tokens + USD) per coin
-            msg += '\n\nBought:';
-            Object.entries(tokenTotals).forEach(([sym, t]) => {
-                msg += `\n  ${sym}: +${fmtTokens(t.tokens)} tokens (~$${t.usd.toFixed(2)})`;
-            });
-        } else {
-            msg = `Your portfolio is already at its targets — $${dcaAmount.toFixed(2)} parked in USDC for next time.`;
-        }
-
-        showToast(msg, 'success', [
-            { label: '[ export json ]', primary: true, onClick: () => exportJSON() }
-        ]);
+        pendingDca = { result, dcaAmount };
+        showDcaPreview(result, dcaAmount);
     } catch(e) {
         hideLoading();
         console.error('[DCA] rebalancing failed:', e.message);
         showToast("DCA couldn't complete — please check your connection and try again.", 'error');
     }
+}
+
+// ============ DCA PREVIEW (confirm before executing) ============
+// The engine's plan sits in pendingDca until the user confirms or cancels.
+let pendingDca = null;
+
+function showDcaPreview(result, dcaAmount) {
+    const buyMap = {};
+    (result.buy_summary || []).forEach(b => {
+        const m = b.match(/^(\w+):\s*\+\$([\d.]+)\s*\(([\d.]+)\s*tokens?\)/);
+        if (m) buyMap[m[1]] = { usd: parseFloat(m[2]), tokens: parseFloat(m[3]) };
+    });
+    const totalAlloc = result.total_allocated || 0;
+    const remaining = result.remaining || 0;
+    const portVal = totalValue();
+    const afterVal = portVal + dcaAmount;
+
+    const rowsEl = document.getElementById('dcaPreviewRows');
+    rowsEl.innerHTML = '';
+    portfolio.forEach(t => {
+        if (t.safeHaven) return; // the safe-haven row is built below
+        const buy = buyMap[t.sym] || null;
+        const c = calcToken(t, portVal);
+        const afterPct = afterVal > 0 ? ((c.curVal + (buy ? buy.usd : 0)) / afterVal) * 100 : 0;
+        let cls = 'dca-preview-row', amt = '$0.00', why = '';
+        if (buy && buy.usd >= 0.01) {
+            cls += ' buy';
+            amt = `+$${buy.usd.toFixed(2)}`;
+            why = `underweight — buy ${fmtTokens(buy.tokens)} tokens (${c.curPct}% → ${afterPct.toFixed(1)}%)`;
+        } else if (t.frozen) {
+            why = 'frozen — skipped';
+        } else if (c.drift >= -0.5) {
+            why = `target met (${c.curPct}% vs ${t.target}% target)`;
+        } else {
+            why = 'underweight, but filtered by the safety pipeline';
+        }
+        rowsEl.insertAdjacentHTML('beforeend',
+            `<div class="${cls}"><span class="sym">${escapeHtml(t.sym)}</span>` +
+            `<span class="amt">${amt}</span><span class="why">${why}</span></div>`);
+    });
+
+    // Safe-haven row: everything the engine did not allocate parks in USDC.
+    const usdc = portfolio.find(t => t.safeHaven && !t.frozen);
+    const usdcBuy = (usdc && buyMap[usdc.sym]) ? buyMap[usdc.sym].usd : 0;
+    const usdcGets = usdcBuy + remaining;
+    if (usdc && (usdcGets >= 0.01 || totalAlloc < 0.01)) {
+        const why = totalAlloc < 0.01
+            ? 'Safe-Haven — no underweight positions'
+            : 'Safe-Haven — leftover from caps and filters';
+        rowsEl.insertAdjacentHTML('beforeend',
+            `<div class="dca-preview-row safe"><span class="sym">${escapeHtml(usdc.sym)}</span>` +
+            `<span class="amt">+$${usdcGets.toFixed(2)}</span><span class="why">${why}</span></div>`);
+    }
+
+    const noteEl = document.getElementById('dcaPreviewNote');
+    if (totalAlloc < 0.01) {
+        noteEl.textContent = '\u26a0\ufe0f All targets fulfilled. New capital will park in the stablecoin.';
+        noteEl.classList.remove('hidden');
+    } else {
+        noteEl.classList.add('hidden');
+    }
+
+    // Backend caveats (caps, risk-budget scaling, price gaps) — verbatim.
+    const footEl = document.getElementById('dcaPreviewFoot');
+    const footLines = [...(result.structural_limits || []), ...(result.warnings || [])];
+    if (footLines.length > 0) {
+        footEl.textContent = footLines.join('\n');
+        footEl.classList.remove('hidden');
+    } else {
+        footEl.classList.add('hidden');
+    }
+
+    document.getElementById('dcaPreviewAmount').textContent = `$${dcaAmount.toFixed(2)}`;
+    document.getElementById('dcaPreviewOverlay').classList.remove('hidden');
+    // Static labels carry data-i18n; re-apply so the modal matches the UI language.
+    if (typeof applyTranslations === 'function') applyTranslations();
+}
+
+function confirmDca() {
+    const pending = pendingDca;
+    pendingDca = null;
+    document.getElementById('dcaPreviewOverlay').classList.add('hidden');
+    if (!pending) return;
+    applyDcaResult(pending.result, pending.dcaAmount);
+}
+
+function cancelDca() {
+    pendingDca = null;
+    document.getElementById('dcaPreviewOverlay').classList.add('hidden');
+    showToast('DCA cancelled — nothing was changed.', 'notice');
+}
+
+// Applies a confirmed engine plan to the local portfolio (was the second half
+// of distribuirajDca before the preview step existed).
+async function applyDcaResult(result, dcaAmount) {
+    showLoading('EXECUTING', 'Applying the confirmed DCA plan...');
+
+    const updated = result.updated_positions || [];
+    console.log('DCA updated positions count:', updated.length);
+
+    // Backend already applies hard caps + risk budget + stablecoin redirect
+    // Just use the structural_limits returned by backend (no duplicate processing)
+    const capped = result.structural_limits || [];
+    if (capped.length > 0) {
+        console.log('[DCA] Structural limits from backend:', capped);
+    }
+
+    updated.forEach(up => {
+        const idx = portfolio.findIndex(t => t.sym === up.symbol);
+        if (idx >= 0) {
+            // Protect safe-haven tokens: never reduce amounts during DCA
+            // (DCA adds external money, should not touch existing USDC balance)
+            if (portfolio[idx].safeHaven && up.amount < portfolio[idx].amount) {
+                console.log(`[DCA] Protected safe-haven ${up.symbol} from reduction: ${up.amount} → keeping ${portfolio[idx].amount}`);
+                up.amount = portfolio[idx].amount;
+            }
+            console.log(`DCA: ${up.symbol} amount ${portfolio[idx].amount} → ${up.amount}`);
+            portfolio[idx].amount = up.amount;
+            portfolio[idx].costBasis = up.costBasis || portfolio[idx].costBasis;
+            portfolio[idx].totalTokens = up.totalTokens || portfolio[idx].totalTokens;
+        }
+    });
+
+    lastDcaDate = Date.now();
+
+    const buySummary = result.buy_summary || [];
+    const warnings = result.warnings || [];
+    const totalAlloc = result.total_allocated || 0;
+    const remaining = result.remaining || 0;
+    console.log('DCA Result:', { budget: dcaAmount, totalAlloc, remaining, buySummary, warnings });
+
+    // Return unallocated DCA budget back to safe-haven USDC (prevents value loss)
+    if (remaining > 0.01) {
+        const usdc = portfolio.find(t => t.safeHaven && !t.frozen);
+        if (usdc) {
+            usdc.amount += remaining;
+            console.log(`[DCA] Returned $${remaining.toFixed(2)} remaining budget to ${usdc.sym}`);
+        }
+    }
+
+    saveState();
+    document.getElementById('iDcaAmount').value = '';
+    addSnapshot();
+    render();
+
+    // Artificial delay for "heavy math" feel
+    await sleep(1500);
+
+    hideLoading();
+
+    // Aggregate buys per token for logging + summary (sum $ and tokens, filter dust)
+    const tokenTotals = {};
+    let dustTotal = 0;
+    buySummary.forEach(b => {
+        const m = b.match(/^(\w+):\s*\+\$([\d.]+)\s*\(([\d.]+)\s*tokens?\)/);
+        if (m) {
+            const sym = m[1];
+            const usd = parseFloat(m[2]);
+            const tokens = parseFloat(m[3]);
+            if (usd < 0.05) { dustTotal += usd; return; }
+            if (!tokenTotals[sym]) tokenTotals[sym] = { usd: 0, tokens: 0 };
+            tokenTotals[sym].usd += usd;
+            tokenTotals[sym].tokens += tokens;
+        }
+    });
+    const coinCount = Object.keys(tokenTotals).length;
+
+    // Full breakdown (buys, warnings, structural limits) -> console only
+    console.log('[DCA] breakdown', {
+        budget: dcaAmount, allocated: totalAlloc, remaining,
+        buys: Object.entries(tokenTotals).map(([sym, t]) => `${sym}: +$${t.usd.toFixed(2)} (${t.tokens} tokens)`),
+        dustFiltered: dustTotal, warnings, structuralLimits: capped
+    });
+
+    // Friendly, outcome-focused summary
+    let msg;
+    if (totalAlloc >= 0.01 && coinCount > 0) {
+        msg = `Added $${totalAlloc.toFixed(2)} across ${coinCount} ${coinCount === 1 ? 'coin' : 'coins'}.`;
+        if (remaining > 0.01) msg += ` $${remaining.toFixed(2)} parked in USDC for next time.`;
+        // Task 1: show the actual buys (tokens + USD) per coin
+        msg += '\n\nBought:';
+        Object.entries(tokenTotals).forEach(([sym, t]) => {
+            msg += `\n  ${sym}: +${fmtTokens(t.tokens)} tokens (~$${t.usd.toFixed(2)})`;
+        });
+    } else {
+        msg = `Your portfolio is already at its targets — $${dcaAmount.toFixed(2)} parked in USDC for next time.`;
+    }
+
+    showToast(msg, 'success', [
+        { label: '[ export json ]', primary: true, onClick: () => exportJSON() }
+    ]);
 }
 
 // ============ AQMath ENGINE OPTIMIZATION (data-pipeline /optimize) — PRO ONLY ============
@@ -2020,7 +2127,7 @@ Object.assign(window, {
     isBetaActive, getBetaToken, pipelineFetch, API_URL,
     saveSnapshot, toggleGlobalSafeHaven, deployUSDC, toggleDeleverage,
     osvjeziSveCijene, importCSV, dodajToken,
-    obrisiSve, distribuirajDca, optimizePortfolio,
+    obrisiSve, distribuirajDca, confirmDca, cancelDca, optimizePortfolio,
     exportJSON, importJSON, refreshHistory,
     toggleFreeze, popuniFormu, obrisiToken
 });

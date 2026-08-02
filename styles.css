@@ -2378,6 +2378,91 @@
         text-transform: lowercase; transition: all 0.2s; border-radius: 4px;
     }
     .toast-action-btn.primary { border-color: var(--green); color: var(--green); background: rgba(52,211,153,0.06); }
+
+    /* DCA preview: same shell as the toast, but the body is an allocation
+       ledger, so the rows sit in a mono grid instead of prose. */
+    .dca-preview-overlay {
+        position: fixed; inset: 0; background: rgba(2,5,13,0.9);
+        backdrop-filter: blur(12px); z-index: 9999;
+        display: flex; align-items: center; justify-content: center;
+        padding: 16px;
+    }
+    .dca-preview-overlay.hidden { display: none; }
+    /* Grows with its content so a normal preview (5 rows + caveats) fits
+       without any scrolling; max-height 94vh only bites on tiny screens,
+       where the rows region scrolls instead of the whole card. */
+    .dca-preview-box {
+        background: var(--s1); border: 1px solid var(--green);
+        padding: 26px 30px; border-radius: 10px;
+        width: min(700px, 100%);
+        max-height: 94vh; display: flex; flex-direction: column;
+        animation: toastIn 0.2s ease-out;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 0 24px 60px -15px rgba(0,0,0,0.7), 0 0 20px rgba(52,211,153,0.1);
+    }
+    .dca-preview-kicker {
+        font-family: var(--mono); font-size: 0.6rem; letter-spacing: 3px;
+        text-transform: uppercase; color: var(--green); text-align: center;
+        opacity: 0.8;
+    }
+    .dca-preview-title {
+        font-family: var(--sans); font-size: 1.15rem; font-weight: 700;
+        letter-spacing: 0.5px; color: var(--text); text-align: center;
+        margin-top: 4px;
+    }
+    .dca-preview-amount {
+        font-family: var(--mono); font-size: 0.9rem; color: var(--green);
+        font-weight: 600; text-align: center; margin: 8px 0 16px;
+    }
+    .dca-preview-rows {
+        font-family: var(--mono); font-size: 0.8rem; line-height: 1.9;
+        border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+        padding: 10px 6px; margin-bottom: 14px;
+        overflow-y: auto; min-height: 0; flex: 0 1 auto;
+    }
+    .dca-preview-row { display: flex; gap: 10px; align-items: baseline; }
+    .dca-preview-row .sym { width: 78px; flex: none; color: var(--text); font-weight: 600; letter-spacing: 1px; }
+    .dca-preview-row .amt { width: 104px; flex: none; text-align: right; color: var(--muted); font-weight: 600; }
+    .dca-preview-row .why { flex: 1; color: var(--muted); }
+    .dca-preview-row.buy .amt { color: var(--green); }
+    .dca-preview-row.buy .why { color: var(--text); opacity: 0.85; }
+    .dca-preview-row.safe .amt { color: var(--green); }
+    .dca-preview-row.safe .sym { color: var(--green); }
+    .dca-preview-note {
+        font-family: var(--mono); font-size: 0.72rem; color: var(--amber);
+        line-height: 1.7; margin-bottom: 10px; white-space: pre-line;
+    }
+    .dca-preview-note.hidden { display: none; }
+    .dca-preview-foot {
+        font-family: var(--mono); font-size: 0.68rem; color: var(--muted);
+        line-height: 1.7; margin-bottom: 16px; white-space: pre-line;
+        overflow-y: auto; max-height: 22vh;
+    }
+    .dca-preview-foot.hidden { display: none; }
+    .dca-preview-actions { display: flex; gap: 12px; justify-content: center; flex: none; }
+    .dca-preview-actions .btn {
+        width: auto; flex: 1 1 0; max-width: 220px;
+        padding: 13px 10px; font-size: 0.72rem; letter-spacing: 3px;
+    }
+    /* The base .btn is transparent with no border, which makes a bare [ cancel ]
+       invisible on the dark panel - give it a visible outline (same strength as
+       the green confirm border, so both buttons read as equal choices). */
+    .dca-preview-actions .btn:not(.green) {
+        border: 1px solid rgba(255,255,255,0.35); color: var(--text);
+    }
+    .dca-preview-actions .btn:not(.green):hover {
+        border-color: var(--red); color: var(--red);
+        box-shadow: 0 0 16px rgba(248,113,113,0.15);
+    }
+    @media (max-width: 480px) {
+        .dca-preview-box { padding: 18px 14px; }
+        .dca-preview-row .sym { width: 56px; }
+        .dca-preview-row .amt { width: 78px; }
+        .dca-preview-row { font-size: 0.72rem; }
+        .dca-preview-actions { flex-direction: column; }
+        .dca-preview-actions .btn { max-width: none; }
+    }
     .toast-action-btn:hover { border-color: var(--text); color: var(--text); background: rgba(255,255,255,0.05); }
     .toast-action-btn.primary:hover { border-color: var(--green); background: rgba(52,211,153,0.12); }
 

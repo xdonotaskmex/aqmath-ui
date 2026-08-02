@@ -40,7 +40,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=340ba9cb47">
+    <link rel="stylesheet" href="/styles.min.css?v=d9e400c1ad">
 </head>
 <body>
 
@@ -77,6 +77,22 @@
         <div class="toast-msg" id="toastMsg"></div>
         <div class="toast-actions hidden" id="toastActions"></div>
         <button class="toast-close" id="toastClose" data-action="hideToast">[ close ]</button>
+    </div>
+</div>
+
+<!-- ============ DCA PREVIEW (where the money goes, before the click) ============ -->
+<div class="dca-preview-overlay hidden" id="dcaPreviewOverlay" data-action="cancelDca">
+    <div class="dca-preview-box" data-action="stop">
+        <div class="dca-preview-kicker">AQMath · Safe-Haven Protocol</div>
+        <div class="dca-preview-title" data-i18n="app.dcaPreview.title">DCA Preview</div>
+        <div class="dca-preview-amount" id="dcaPreviewAmount"></div>
+        <div class="dca-preview-rows" id="dcaPreviewRows"></div>
+        <div class="dca-preview-note hidden" id="dcaPreviewNote"></div>
+        <div class="dca-preview-foot hidden" id="dcaPreviewFoot"></div>
+        <div class="dca-preview-actions">
+            <button class="btn green" id="dcaPreviewConfirm" data-action="confirmDca" data-i18n="app.dcaPreview.confirm">[ confirm ]</button>
+            <button class="btn" id="dcaPreviewCancel" data-action="cancelDca" data-i18n="app.dcaPreview.cancel">[ cancel ]</button>
+        </div>
     </div>
 </div>
 
@@ -929,9 +945,9 @@
     <a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=340ba9cb47"></script>
-<script defer src="/app-backtest.js?v=340ba9cb47"></script>
-<script defer src="/app.js?v=340ba9cb47"></script>
+<script defer src="/app-widgets.js?v=d9e400c1ad"></script>
+<script defer src="/app-backtest.js?v=d9e400c1ad"></script>
+<script defer src="/app.js?v=d9e400c1ad"></script>
 
 <!-- 100% privacy-first analytics -->
 <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
@@ -939,7 +955,7 @@
 
 <!-- i18n — Localization -->
 <script src="https://unpkg.com/i18next@23.11.5/dist/umd/i18next.min.js"></script>
-<script defer src="/app-boot.js?v=340ba9cb47"></script>
+<script defer src="/app-boot.js?v=d9e400c1ad"></script>
 
 </body>
 </html>
