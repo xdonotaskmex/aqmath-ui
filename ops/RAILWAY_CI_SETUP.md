@@ -1,7 +1,8 @@
 # Railway CI + One-Click Rollback — postavljanje
 
 Svaki backend repo (beta-auth, engine, dca-engine, data-pipeline,
-3 collectora) ima dva workflowa:
+backtesting/paper-trading, 3 collectora — 8 Railway servisa + Postgres
+bez deploya + aqmath-ui na Pages) ima dva workflowa:
 - `.github/workflows/ci.yml` — test/smoke pa deploy (samo na main push)
 - `.github/workflows/rollback.yml` — jedan klik vraća prethodni deploy
 
@@ -51,6 +52,7 @@ postojeću sliku prethodnog deploya.
 | aqmath-engine | smoke import main + engine moduli |
 | -aqmath-beta-auth | smoke import main (fail-fast env provjera, JWT_SECRET ≥ 32 znaka) |
 | 3 collectora | smoke import main/collector/config |
+| backtesting- | smoke import main + trading moduli + credential scan |
 | aqmath-ui | `stamp_version.py --check` + `audit_pages.py` |
 
 `data-pipeline/test_deleverage.py` je lokalni harness (Desktop CSV-ovi,

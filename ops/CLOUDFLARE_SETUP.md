@@ -19,6 +19,7 @@ Cijena: 0 EUR. Vrijeme: ~30 min + DNS propagacija (do 24 h, obično minuta).
 | CNAME | `api-auth` | `aqmath-beta-auth-production.up.railway.app` | **Proxied (narančasti)** |
 | CNAME | `api-engine` | `aqmath-engine-production.up.railway.app` | **Proxied** |
 | CNAME | `api-dca` | `dca-engine-production.up.railway.app` | **Proxied** |
+| CNAME | `api-backtest` | `backtesting-production-be57.up.railway.app` | **Proxied** |
 
 GitHub Pages zapisi ostaju **DNS only** (Pages sam služi TLS).
 API zapisi moraju biti **Proxied** — samo tako promet prolazi kroz WAF.
@@ -31,7 +32,7 @@ Status prati u Cloudflare dashboards (čekaj "Active").
 
 ## 4. Railway custom domene (za TLS)
 
-Za svaki od 3 API servisa u Railway dashboardu:
+Za svaki od 4 API servisa u Railway dashboardu:
 1. Service → Settings → Networking → **Generate Domain** → upiši `api-auth.aqmath.xyz` (itd.)
 2. Railway traži CNAME na `<service>.up.railway.app` — to već imaš iz koraka 2
 3. Čekaj da TLS certifikat postane **Active** (par minuta)
@@ -56,6 +57,11 @@ Security → WAF → **Rate limiting rules** — napravi ove 3 pravila:
 - Rate: 30 requests per 1 minute per IP
 - Mitigation: Challenge, duration 10 min
 
+**R2b — Paper-trading log**
+- Matching: `(http.host eq "api-backtest.aqmath.xyz")`
+- Rate: 60 requests per 1 minute per IP
+- Mitigation: Challenge, duration 10 min
+
 **R3 — Globalni baseline za API**
 - Matching: `(http.host starts_with "api-")`
 - Rate: 300 requests per 1 minute per IP
@@ -74,16 +80,18 @@ Notifications → **Create notification**:
 
 ## 9. Prebacivanje frontenda na nove URL-ove (NAPRAVITI ZADNJE)
 
-Tek kad su sva 3 TLS certifikata Active i kad `curl https://api-dca.aqmath.xyz/health`
+Tek kad su sva 4 TLS certifikata Active i kad `curl https://api-dca.aqmath.xyz/health`
 radi kroz Cloudflare:
 
 1. U `aqmath-ui/app.js` zamijeni:
    - `BETA_AUTH_URL` → `https://api-auth.aqmath.xyz`
    - `API_URL` → `https://api-engine.aqmath.xyz`
    - `DCA_API_URL` → `https://api-dca.aqmath.xyz`
-2. Pipeline: `python tools/stamp_version.py; python tools/build_pages.py; python tools/audit_pages.py`
-3. Commit + push (proći će L3 gate kao i svaki push)
-4. Stari `*.up.railway.app` URL-ovi ostaju aktivni — po želji ih kasnije
+2. U `aqmath-ui/app-boot.js` zamijeni fetch URL za forward-log:
+   `https://backtesting-production-be57.up.railway.app` → `https://api-backtest.aqmath.xyz`
+3. Pipeline: `python tools/stamp_version.py; python tools/build_pages.py; python tools/audit_pages.py`
+4. Commit + push (proći će L3 gate kao i svaki push)
+5. Stari `*.up.railway.app` URL-ovi ostaju aktivni — po želji ih kasnije
    ugasi u Railway (Settings → Networking → remove public domain) da se
    WAF ne može zaobići.
 

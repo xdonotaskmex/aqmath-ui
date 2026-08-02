@@ -22,6 +22,8 @@ Jedno pravilo: **nijedan secret ne živi u kodu ni u gitu.** Sve je
 | **coinbase / coingecko / kraken-collector** | DATA_PIPELINE_URL | produkcijski pipeline URL | `http://localhost:8004` |
 | | COLLECTOR_SECRET | isti kao data-pipeline | `dev-secret` |
 | **dca-engine** | CORS_ORIGINS | `https://aqmath.xyz` | default uključuje localhost:8090 |
+| **backtesting-** (paper trading) | DATABASE_URL, JWT_SECRET | Railway Postgres + dijeljeni secret | dummy za smoke import |
+| | CORS_ORIGINS | `https://aqmath.xyz` | default uključuje localhost:8090 |
 | **aqmath-ui** | — | GitHub Pages (nema servera) | `python -m http.server 8090` iz roota repoa |
 
 ## Lokalno pokretanje (primjer)
