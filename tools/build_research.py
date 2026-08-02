@@ -402,7 +402,7 @@ def render_doc(doc):
     # below is the real one, so drop the duplicate.
     body_md = re.sub(r"<blockquote>.*?</blockquote>\s*", "", body_md, count=1, flags=re.S)
 
-    nav = [f'<p class="rs-nav"><a href="/research">{ui["backToHub"]}</a>']
+    nav = [f'<p class="rs-nav"><a href="/research/">{ui["backToHub"]}</a>']
     if other:
         nav.append(f'<span class="sep">|</span>{ui["alsoIn"]} '
                    f'<a href="{other["path"]}" hreflang="{other["lang"]}">{doc["altLabel"]}</a>')
