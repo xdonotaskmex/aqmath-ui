@@ -110,7 +110,9 @@ def route_of(name):
     if name == "index.html":
         return "/"
     if name.endswith("/index.html"):
-        return "/" + name[: -len("/index.html")]
+        # Pages serves a subdirectory index only at the trailing-slash URL;
+        # "/research" answers 301, so the canonical route keeps the slash.
+        return "/" + name[: -len("index.html")]
     return "/" + name[: -len(".html")]
 
 

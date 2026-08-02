@@ -104,9 +104,8 @@ DOCS = [
         "title": "OOS Validation: Deleverage v14.0 on Unseen Tokens - AQMath",
         "shortTitle": "OOS Validation &mdash; v14.0 on Unseen Tokens",
         "description": ("Out-of-sample test of the shipped AQMath Deleverage Modulator v14.0 on 16 "
-                        "baskets of tokens never used for tuning: median 54.3 pp drawdown "
-                        "reduction, Calmar improved in 16/16, plus dead-token and short-history "
-                        "stress cases."),
+                        "baskets of never-tuned tokens: median 54.3 pp drawdown cut, Calmar up "
+                        "in 16/16."),
         "altLabel": "\u4e2d\u6587",
     },
     {
@@ -119,9 +118,10 @@ DOCS = [
         "title": "\u6837\u672c\u5916\u9a8c\u8bc1\uff1a\u53bb\u6760\u6746\u8c03\u8282\u5668 v14.0 \u5728\u672a\u89c1\u8fc7\u7684\u4ee3\u5e01\u7ec4\u5408\u4e0a\u7684\u8868\u73b0",
         "shortTitle": "\u6837\u672c\u5916\u9a8c\u8bc1 &mdash; v14.0 \u672a\u89c1\u4ee3\u5e01",
         "description": ("AQMath \u53bb\u6760\u6746\u8c03\u8282\u5668 v14.0 \u7684\u6837\u672c\u5916\u6d4b\u8bd5\uff1a"
-                        "16 \u4e2a\u4ece\u672a\u7528\u4e8e\u8c03\u53c2\u7684\u4ee3\u5e01\u7ec4\u5408\uff0c"
-                        "\u6700\u5927\u56de\u6492\u4e2d\u4f4d\u6570\u524a\u51cf 54.3 \u4e2a\u767e\u5206\u70b9\uff0c"
-                        "Calmar \u5728 16/16 \u4e2a\u7ec4\u5408\u4e2d\u63d0\u5347\u3002"),
+                        "\u5728 16 \u4e2a\u4ece\u672a\u7528\u4e8e\u8c03\u53c2\u7684\u4ee3\u5e01\u7ec4\u5408\u4e0a\u9a8c\u8bc1\uff0c"
+                        "\u6700\u5927\u56de\u64a4\u4e2d\u4f4d\u6570\u524a\u51cf 54.3 \u4e2a\u767e\u5206\u70b9\uff0c"
+                        "Calmar \u5728 16/16 \u4e2a\u7ec4\u5408\u4e2d\u5168\u90e8\u63d0\u5347\uff0c"
+                        "\u5e76\u5305\u542b\u6b7b\u4ea1\u4ee3\u5e01\u4e0e\u77ed\u5386\u53f2\u538b\u529b\u6848\u4f8b\u3002"),
         "altLabel": "English",
     },
 ]
@@ -452,11 +452,13 @@ def render_hub():
         '<a href="/backtest">/backtest</a>, or see the live paper-trading log at '
         '<a href="/results">/results</a>.</p>',
     ])
+    # "/research" 301-redirects to "/research/" on Pages, so canonical/og:url and
+    # the sitemap must use the trailing-slash form or crawlers log a redirect hop.
     return shell(
         "en", "en", "Research &amp; Validation &mdash; AQMath",
         "Published out-of-sample validation reports for the AQMath Deleverage Modulator: "
         "test methodology, per-basket results, stress cases and caveats.",
-        "/research", body)
+        "/research/", body)
 
 
 def build():
