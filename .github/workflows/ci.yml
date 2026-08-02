@@ -1,0 +1,22 @@
+# CI gate for the GitHub Pages site: every push must satisfy the
+# single-stamp invariant and the full page audit (unique bodies, one
+# h1, canonicals, sitemap sync, no broken internal links).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Version stamps must be current
+        run: python tools/stamp_version.py --check
+      - name: Audit all published pages
+        run: python tools/audit_pages.py
