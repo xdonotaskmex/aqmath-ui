@@ -26,11 +26,23 @@ GitHub repo → Settings → **Secrets and variables → Actions**:
 
 ## 3. Ugasi Railway auto-deploy (KLJUČNO)
 
-Da ništa ne stiže u produkciju mimo CI-a:
-Railway → Service → Settings → Deployments →
-isključi **Automatic deployments from GitHub** (za svaki servis).
+Da ništa ne stiže u produkciju mimo CI-a, za **svaki od 8 servisa**:
+
+1. railway.com → Dashboard → otvori projekt servisa
+2. Klikni na servis → tab **Settings**
+3. Sekcija **Deploy** (prikazuje povezani GitHub repo i branch)
+4. Klikni **Disable** pored autodeploy statusa
+
+Servisi: api-auth (-aqmath-beta-auth), api-engine (aqmath-engine),
+api-dca (dca-engine), data-pipeline, api-backtest (backtesting-),
+coinbase-collector, coingecko-collector, kraken-collector.
 
 Od tog trena deploy ide ISKLJUČIVO iz GitHub Actions (nakon zelenih testova).
+Dok je auto-deploy još uključen, svaki push radi dupli deploy
+(Railway auto + GitHub Actions) — bezopasno, ali nepotrebno.
+
+Ručni deploy bez CI-a (hitni slučaj): Command Palette (Ctrl+K) →
+**Deploy Latest Commit**.
 
 ## 4. Kako radi rollback (jedan klik)
 
