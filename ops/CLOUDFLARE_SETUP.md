@@ -45,27 +45,26 @@ Security → WAF → **Managed rules**:
 
 ## 6. Rate limiting (IP-based anomaly zaštita)
 
-Security → WAF → **Rate limiting rules** — napravi ove 3 pravila:
+Security → WAF → **Rate limiting rules**. Free plan dopušta **samo 1 pravilo**,
+samo **Path** polje (Host je tek od Pro plana), fiksni counting period 10 s i
+fiksnu mitigaciju 10 s — zato jedno pravilo pokriva najosjetljivije endpointe.
+Postojeće tvorničko pravilo "Leaked credential check" ostaje aktivno.
 
-**R1 — Auth zaštita (najstrože)**
-- Matching: `(http.request.uri.path contains "/login") or (http.request.uri.path contains "/admin")`
-- Rate: 10 requests per 1 minute per IP
-- Mitigation: Challenge, duration 10 min
+**R1 — Auth zaštita (jedino pravilo na Free planu)**
+- Matching: `(http.request.uri.path contains "/auth/") or (http.request.uri.path contains "/admin")`
+- Pokriva stvarne endpointe beta-auth servisa: `/auth/beta`, `/auth/refresh`,
+  `/admin/reset-binding`, `/admin/revoke`; ti putevi ne postoje na drugim servisima
+- Rate: 5 requests per 10 seconds per IP (jedini dostupni period na Free)
+- Mitigation: Managed Challenge, duration 10 s (jedina dostupna na Free)
 
-**R2 — Teški endpointi**
-- Matching: `(http.request.uri.path contains "/optimize") or (http.request.uri.path contains "/dca")`
-- Rate: 30 requests per 1 minute per IP
-- Mitigation: Challenge, duration 10 min
+**R2/R2b/R3 (izvorno planirani) — NE MOGU na Free planu**: koriste `http.host`
+koji je dostupan tek od Pro plana, a limit od 1 pravila ih dodatno isključuje.
+Njihovu ulogu preuzimaju Bot Fight Mode + Cloudflare Managed Ruleset +
+automatska DDoS zaštita. Ako jednog dana prijeđeš na Pro, dodaj:
 
-**R2b — Paper-trading log**
-- Matching: `(http.host eq "api-backtest.aqmath.xyz")`
-- Rate: 60 requests per 1 minute per IP
-- Mitigation: Challenge, duration 10 min
-
-**R3 — Globalni baseline za API**
-- Matching: `(http.host starts_with "api-")`
-- Rate: 300 requests per 1 minute per IP
-- Mitigation: Block, duration 1 h
+- **R2 — Teški endpointi**: path contains "/optimize" or "/dca", 30/min/IP, Challenge 10 min
+- **R2b — Paper-trading log**: host eq "api-backtest.aqmath.xyz", 60/min/IP, Challenge 10 min
+- **R3 — Globalni baseline za API**: host starts_with "api-", 300/min/IP, Block 1 h
 
 ## 7. DDoS
 
@@ -97,6 +96,6 @@ Sva 4 API endpointa verificirana kroz Cloudflare prije prebacivanja
 
 ## Napomena o limitima Free plana
 
-Prava "adaptive" heuristika rate-limitinga je Pro feature. Free tier daje
-statična pravila (gore) + automatsku DDoS heuristiku + managed rules —
+Free tier rate limiting: 1 pravilo, samo Path polje, 10 s prozori (vidi korak 6).
+Uz to: Bot Fight Mode + Cloudflare Managed Ruleset + automatska DDoS zaštita —
 za ovaj budget to je puna zaštita koju 99% small SaaS-ova koristi.
