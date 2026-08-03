@@ -8,21 +8,29 @@ bez deploya + aqmath-ui na Pages) ima dva workflowa:
 
 ## 1. Railway token (jednom)
 
-1. Railway dashboard → klik na avatar → **Account Settings → Tokens**
-2. **Create Token** → naziv `github-ci` → scope: deploy prava na projekte
-3. Kopiraj token (prikazuje se samo jednom)
+**Koristi se workspace token** (scope "DoNotAskMe's Projects"):
+Railway → projekt → **Settings → Tokens → New Token** → kopiraj token
+(prikazuje se samo jednom, UUID oblika, vrijedi za SVE servise u projektu).
+
+Zašto ne account token i ne CLI: workspace/account tokeni ne podržavaju
+`railway whoami`, a Railway CLI na Linux runnerima pouzdano ne čita
+takve tokene (provjereno 2026-07-29). Zato CI deploy uopće ne koristi
+CLI, nego Railway **GraphQL API** (`environmentTriggersDeploy` mutation,
+`curl` + `jq` u `.github/workflows/ci.yml`) — Railway sam builda i
+deploya zadnji commit s maina.
 
 ## 2. GitHub secrets + variables (po svakom repu)
 
 GitHub repo → Settings → **Secrets and variables → Actions**:
 
 **Secrets → New repository secret:**
-- `RAILWAY_TOKEN` = token iz koraka 1
+- `RAILWAY_TOKEN` = workspace token iz koraka 1 (isti token za svih 8 repova)
 
-**Variables → New repository variable** (3 varijable, nađeš ih u Railway dashboardu):
-- `RAILWAY_PROJECT_ID` — Project Settings → General → Project ID
-- `RAILWAY_SERVICE_ID` — Service → Settings → General → Service ID
-- `RAILWAY_ENVIRONMENT_ID` — Environment → klik na environment → ID u URL-u
+**Variables → New repository variable** (4 varijabile):
+- `RAILWAY_CI_ENABLED` = `true` (uključuje deploy job; bez toga se preskače)
+- `RAILWAY_PROJECT_ID` — Project Settings → General → Project ID (smije biti i secret)
+- `RAILWAY_SERVICE_ID` — Service → Settings → General → Service ID (smije biti i secret)
+- `RAILWAY_ENVIRONMENT_ID` — Environment → klik na environment → ID u URL-u (smije biti i secret)
 
 ## 3. Ugasi Railway auto-deploy (KLJUČNO)
 
