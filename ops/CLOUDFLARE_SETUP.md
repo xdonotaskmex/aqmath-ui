@@ -43,25 +43,32 @@ Security → WAF → **Managed rules**:
 - Uključi **Cloudflare Managed Ruleset** (Log/Block po defaultu: SQLi, XSS, LFI, RCE obrasci)
 - Security → Bots: uključi **Bot Fight Mode**
 
-## 6. Rate limiting (IP-based anomaly zaštita)
+## 6. Rate limiting i auth zaštita (IP-based anomaly zaštita)
 
-Security → WAF → **Rate limiting rules**. Free plan dopušta **samo 1 pravilo**,
-samo **Path** polje (Host je tek od Pro plana), fiksni counting period 10 s i
-fiksnu mitigaciju 10 s — zato jedno pravilo pokriva najosjetljivije endpointe.
-Postojeće tvorničko pravilo "Leaked credential check" ostaje aktivno.
+**Stanje na Free planu (provjereno 2026-07-29):**
+- Rate limiting dopušta **samo 1 pravilo**, samo **Path** polje (Host tek od Pro
+  plana), fiksni counting period 10 s i fiksnu mitigaciju 10 s.
+- To jedno mjesto zauzima Cloudflareovo **zaključano tvorničko pravilo
+  "Leaked credential check"** koje se ne može isključiti — vlastito rate-limit
+  pravilo zato uopće nije moguće stvoriti (Create rule je zaključan na 1/1).
+- Rješenje: auth zaštita se implementira kao **Custom rule** (Free dopušta 5).
 
-**R1 — Auth zaštita (jedino pravilo na Free planu)**
-- Matching: `(http.request.uri.path contains "/auth/") or (http.request.uri.path contains "/admin")`
+**R1 — Auth zaštita (Custom rule, aktivna)**
+- Security rules → Custom rules → Create rule
+- Expression: `(http.request.uri.path contains "/auth/") or (http.request.uri.path contains "/admin")`
 - Pokriva stvarne endpointe beta-auth servisa: `/auth/beta`, `/auth/refresh`,
   `/admin/reset-binding`, `/admin/revoke`; ti putevi ne postoje na drugim servisima
-- Rate: 5 requests per 10 seconds per IP (jedini dostupni period na Free)
-- Mitigation: Managed Challenge, duration 10 s (jedina dostupna na Free)
+- Action: **Managed Challenge** (pravi browseri prolaze nevidljivo, botovi staju)
+- Razlika vs rate limiting: challenge na svaki zahtjev, ne tek nakon N zahtjeva;
+  za rijetke auth pozive (aktivacija/refresh ključa) to je prihvatljivo
 
-**R2/R2b/R3 (izvorno planirani) — NE MOGU na Free planu**: koriste `http.host`
-koji je dostupan tek od Pro plana, a limit od 1 pravila ih dodatno isključuje.
-Njihovu ulogu preuzimaju Bot Fight Mode + Cloudflare Managed Ruleset +
-automatska DDoS zaštita. Ako jednog dana prijeđeš na Pro, dodaj:
+**Pravi rate limiting (R2/R2b/R3) — NE MOGU na Free planu**: `http.host` je
+ dostupan tek od Pro plana, a i limit od 1 (zauzetog) pravila ih isključuje.
+ Njihovu ulogu preuzimaju Bot Fight Mode + Cloudflare Managed Ruleset +
+ automatska DDoS zaštita. Ako jednog dana prijeđeš na Pro:
 
+- Oslobodi slot: na Pro planu tvorničko pravilo se može isključiti
+- **R1 — Auth**: path contains "/auth/" or "/admin", 5/10s/IP, Managed Challenge
 - **R2 — Teški endpointi**: path contains "/optimize" or "/dca", 30/min/IP, Challenge 10 min
 - **R2b — Paper-trading log**: host eq "api-backtest.aqmath.xyz", 60/min/IP, Challenge 10 min
 - **R3 — Globalni baseline za API**: host starts_with "api-", 300/min/IP, Block 1 h
@@ -96,6 +103,7 @@ Sva 4 API endpointa verificirana kroz Cloudflare prije prebacivanja
 
 ## Napomena o limitima Free plana
 
-Free tier rate limiting: 1 pravilo, samo Path polje, 10 s prozori (vidi korak 6).
+Rate limiting: 1 pravilo, samo Path polje, 10 s prozori — i to je mjesto zauzeto
+zaključanim tvorničkim pravilom, pa auth zaštita ide kroz Custom rule (korak 6).
 Uz to: Bot Fight Mode + Cloudflare Managed Ruleset + automatska DDoS zaštita —
 za ovaj budget to je puna zaštita koju 99% small SaaS-ova koristi.
