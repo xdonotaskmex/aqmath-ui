@@ -34,13 +34,13 @@
     <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
     <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer with Deleverage Shield">
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"AQMath","url":"https://aqmath.xyz/","description":"Quantitative crypto portfolio rebalancer with Deleverage Modulator drawdown protection. Risk Parity mathematics, DCA optimization, and automatic de-risking during market crashes.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":[{"@type":"Offer","name":"Beta Access","price":"0","priceCurrency":"USD","description":"Limited slots, access review required"},{"@type":"Offer","name":"Black Annual Access","price":"999","priceCurrency":"EUR","description":"Annual subscription — €999/year, paid in USDC or EURC"}],"featureList":["Risk Parity Optimization","Deleverage Modulator Drawdown Protection","DCA Distribution","Non-Custodial Privacy","Continuous Auto De-Risk"]}</script>
-    <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=21ca2ecbd2">
+    <link rel="stylesheet" href="/styles.min.css?v=df39b2702d">
 </head>
 <body>
 
@@ -458,17 +458,20 @@
     <a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=21ca2ecbd2"></script>
-<script defer src="/app-backtest.js?v=21ca2ecbd2"></script>
-<script defer src="/app.js?v=21ca2ecbd2"></script>
+<script defer src="/app-widgets.js?v=df39b2702d"></script>
+<script defer src="/app-backtest.js?v=df39b2702d"></script>
+<script defer src="/app.js?v=df39b2702d"></script>
 
 <!-- 100% privacy-first analytics -->
+<!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
+     vendor release), so a pinned integrity hash would break analytics on each release.
+     chart.js and i18next below ARE integrity-pinned because their URLs are versioned. -->
 <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="Simple Analytics no-script tracking pixel" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 
 <!-- i18n — Localization -->
-<script src="https://unpkg.com/i18next@23.16.8/dist/umd/i18next.min.js"></script>
-<script defer src="/app-boot.js?v=21ca2ecbd2"></script>
+<script src="https://unpkg.com/i18next@23.16.8/dist/umd/i18next.min.js" integrity="sha384-ZB4j+Y4rqTlON+loxr/YKq9WV8qBuZOqKukqmQVgcZ0GFy93B7TMCSezcrRkfJF5" crossorigin="anonymous"></script>
+<script defer src="/app-boot.js?v=df39b2702d"></script>
 
 </body>
 </html>

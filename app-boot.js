@@ -125,15 +125,55 @@
 
 // ---------------------------------------------------------------------------
 // 2) Live paper-trading fragment (was inline block at index.html L1710)
-//    Server-side fragment regenerated daily at 01:30 UTC. innerHTML here is
-//    first-party engine output; on any failure the bundled snapshot stays.
+//    Server-side fragment regenerated daily at 01:30 UTC. The fragment is
+//    engine output, but it arrives over the network, so it is parsed in an
+//    inert document and stripped down to its presentational subset before it
+//    touches the live DOM (see sanitizeFirstPartyHtml). On any failure the
+//    bundled snapshot stays.
 // ---------------------------------------------------------------------------
+function sanitizeFirstPartyHtml(html) {
+    // The forward-log fragment only ever needs text, layout tags and SVG.
+    // Anything that can run code, load a resource or submit a form is dropped:
+    // bad tags removed, on* handler attributes stripped, URLs allowed only when
+    // same-site. DOMParser never executes scripts, so this pass is CSP-safe.
+    var BAD_TAGS = { SCRIPT: 1, STYLE: 1, IFRAME: 1, FRAME: 1, OBJECT: 1,
+                     EMBED: 1, LINK: 1, META: 1, BASE: 1, FORM: 1,
+                     TEMPLATE: 1, NOSCRIPT: 1 };
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    var els = doc.body.getElementsByTagName('*');
+    // Live NodeList: walk backwards so removals don't shift the iteration.
+    for (var i = els.length - 1; i >= 0; i--) {
+        var el = els[i];
+        if (BAD_TAGS[el.tagName]) {
+            el.parentNode.removeChild(el);
+            continue;
+        }
+        var attrs = el.attributes;
+        for (var j = attrs.length - 1; j >= 0; j--) {
+            var name = attrs[j].name.toLowerCase();
+            if (name.slice(0, 2) === 'on' || name === 'srcdoc' || name === 'formaction') {
+                el.removeAttribute(attrs[j].name);
+                continue;
+            }
+            if (name === 'href' || name === 'src' || name === 'xlink:href') {
+                // Strip control chars/whitespace so "java\tscript:" style bypasses fail.
+                var val = (attrs[j].value || '').replace(/[\u0000-\u0020]/g, '').toLowerCase();
+                var ok = val.charAt(0) === '#' || val.charAt(0) === '/' ||
+                         val.slice(0, 20) === 'https://aqmath.xyz/' ||
+                         val.slice(0, 31) === 'https://api-backtest.aqmath.xyz';
+                if (!ok) el.removeAttribute(attrs[j].name);
+            }
+        }
+    }
+    return doc.body.innerHTML;
+}
+
 (function () {
     var box = document.getElementById('forwardLogLive');
     if (!box || !window.fetch) return;
     fetch('https://api-backtest.aqmath.xyz/forward-log')
         .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
-        .then(function (html) { box.innerHTML = html; })
+        .then(function (html) { box.innerHTML = sanitizeFirstPartyHtml(html); })
         .catch(function () { /* keep the bundled snapshot */ });
 })();
 
@@ -144,7 +184,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=21ca2ecbd2')
+    return fetch('/locales/' + lang + '.json?v=df39b2702d')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }

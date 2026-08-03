@@ -187,6 +187,13 @@ if (window.Chart) {
 }
 
 // Beta mode: check for valid JWT token in localStorage (with sessionStorage migration)
+//
+// SECURITY (accepted risk, audited 2026-07): the token lives in localStorage,
+// which any XSS on this origin could read. The compensating controls are the
+// ones that make XSS itself unreachable: CSP script-src has no unsafe-inline,
+// every event handler goes through the app-boot.js allowlist, third-party CDN
+// scripts are SRI-pinned, and the token is a short sliding-idle session JWT
+// (30 min of inactivity kills it server-side), not the beta key itself.
 function getBetaToken() {
     let token = localStorage.getItem('pro_token');
     if (!token) {
