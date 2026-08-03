@@ -53,14 +53,19 @@ Security → WAF → **Managed rules**:
   pravilo zato uopće nije moguće stvoriti (Create rule je zaključan na 1/1).
 - Rješenje: auth zaštita se implementira kao **Custom rule** (Free dopušta 5).
 
-**R1 — Auth zaštita (Custom rule, aktivna)**
+**R1 — Admin zaštita (Custom rule "Auth protection", aktivna)**
 - Security rules → Custom rules → Create rule
-- Expression: `(http.request.uri.path contains "/auth/") or (http.request.uri.path contains "/admin")`
-- Pokriva stvarne endpointe beta-auth servisa: `/auth/beta`, `/auth/refresh`,
-  `/admin/reset-binding`, `/admin/revoke`; ti putevi ne postoje na drugim servisima
+- Expression: `http.request.uri.path contains "/admin"` (URI Path + contains)
+- Pokriva `/admin/reset-binding` i `/admin/revoke`; frontend ih nikad ne zove,
+  a štite ih i tajni ključevi (ADMIN_KEY) u kodu servisa
 - Action: **Managed Challenge** (pravi browseri prolaze nevidljivo, botovi staju)
-- Razlika vs rate limiting: challenge na svaki zahtjev, ne tek nakon N zahtjeva;
-  za rijetke auth pozive (aktivacija/refresh ključa) to je prihvatljivo
+
+**ZAŠTO NE i `/auth/` u pravilu (lekcija od 2026-07-29):** frontend zove
+`/auth/beta` i `/auth/refresh` preko `fetch()` — challenge se ne može riješiti
+unutar fetch poziva i aktivacija ključa pada s "Couldn't reach the activation
+service". `/auth/*` zato mora ostati otvoren na Cloudflareu; brute-force na
+`/auth/beta` već brani sam servis (per-hashed-IP rate limit s eksponencijalnim
+backoffom, RATE_LIMIT_MAX/RATE_LIMIT_WINDOW u `-aqmath-beta-auth/main.py`).
 
 **Pravi rate limiting (R2/R2b/R3) — NE MOGU na Free planu**: `http.host` je
  dostupan tek od Pro plana, a i limit od 1 (zauzetog) pravila ih isključuje.
@@ -68,7 +73,8 @@ Security → WAF → **Managed rules**:
  automatska DDoS zaštita. Ako jednog dana prijeđeš na Pro:
 
 - Oslobodi slot: na Pro planu tvorničko pravilo se može isključiti
-- **R1 — Auth**: path contains "/auth/" or "/admin", 5/10s/IP, Managed Challenge
+- **R1 — Auth**: path contains "/admin", challenge; `/auth/` ostaje otvoren
+  (frontend fetch + app-level rate limit u servisu)
 - **R2 — Teški endpointi**: path contains "/optimize" or "/dca", 30/min/IP, Challenge 10 min
 - **R2b — Paper-trading log**: host eq "api-backtest.aqmath.xyz", 60/min/IP, Challenge 10 min
 - **R3 — Globalni baseline za API**: host starts_with "api-", 300/min/IP, Block 1 h
