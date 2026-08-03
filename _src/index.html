@@ -39,7 +39,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=d9e400c1ad">
+    <link rel="stylesheet" href="/styles.min.css?v=5b5484cbf1">
 </head>
 <body>
 
@@ -53,6 +53,7 @@
                 <div class="logo-tag">quantitative portfolio rebalancing</div>
             </div>
         </div>
+        <button class="hdr-burger" type="button" aria-label="Menu" data-action="toggleHamburger">&#9776;</button>
         <div class="hdr-nav">
             <a class="hdr-nav-btn active" href="/">landing</a>
             <a class="hdr-nav-btn" href="/app">app</a>
@@ -574,6 +575,18 @@
 <div id="appView">
 <div class="scanlines"></div>
 
+<!-- MOBILE GATE: the app is a desktop-only web experience. On phones this
+     overlay replaces the whole app UI (see @media (max-width: 768px) in
+     styles.css which hides every other #appView child). -->
+<div class="mobile-gate">
+    <div class="mobile-gate-box">
+        <div class="mobile-gate-icon">&#128187;</div>
+        <div class="mobile-gate-title" data-i18n="app.mobileGate.title">--desktop-only</div>
+        <p class="mobile-gate-msg" data-i18n-html="app.mobileGate.msg">The AQMath App is a <strong>web-only</strong> experience built for desktop browsers. Charts, tables and the rebalancing engine need a bigger screen.<br><br>Please open <span class="mono">/app</span> on a computer.</p>
+        <a class="mobile-gate-home" href="/" data-i18n="app.mobileGate.home">[ back to landing ]</a>
+    </div>
+</div>
+
 <div class="loading-overlay hidden" id="loadingOverlay">
     <div class="loading-spinner"></div>
     <div class="loading-text" id="loadingTitle">PROCESSING</div>
@@ -588,6 +601,7 @@
             <div class="logo-tag" data-i18n="app.logoTag">non-custodial • quantum engine</div>
         </div>
     </div>
+    <button class="hdr-burger" type="button" aria-label="Menu" data-action="toggleHamburger">&#9776;</button>
     <div class="hdr-nav">
         <a class="hdr-nav-btn" href="/" data-i18n="app.navLanding">landing</a>
         <a class="hdr-nav-btn active" href="/app" data-i18n="app.navApp">app</a>
@@ -906,6 +920,7 @@
             <div class="logo-tag">backtesting engine</div>
         </div>
     </div>
+    <button class="hdr-burger" type="button" aria-label="Menu" data-action="toggleHamburger">&#9776;</button>
     <div class="hdr-nav">
         <a class="hdr-nav-btn" href="/">landing</a>
         <a class="hdr-nav-btn" href="/app">app</a>
@@ -1156,6 +1171,7 @@
             <div class="logo-tag">out-of-sample results</div>
         </div>
     </div>
+    <button class="hdr-burger" type="button" aria-label="Menu" data-action="toggleHamburger">&#9776;</button>
     <div class="hdr-nav">
         <a class="hdr-nav-btn" href="/">landing</a>
         <a class="hdr-nav-btn" href="/app">app</a>
@@ -1508,6 +1524,7 @@
                 <div class="logo-tag" data-i18n="doc.logoTag">system documentation</div>
             </div>
         </div>
+        <button class="hdr-burger" type="button" aria-label="Menu" data-action="toggleHamburger">&#9776;</button>
         <div class="hdr-nav">
             <a class="hdr-nav-btn" href="/">landing</a>
             <a class="hdr-nav-btn" href="/app">app</a>
@@ -2338,9 +2355,9 @@
     <a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=d9e400c1ad"></script>
-<script defer src="/app-backtest.js?v=d9e400c1ad"></script>
-<script defer src="/app.js?v=d9e400c1ad"></script>
+<script defer src="/app-widgets.js?v=5b5484cbf1"></script>
+<script defer src="/app-backtest.js?v=5b5484cbf1"></script>
+<script defer src="/app.js?v=5b5484cbf1"></script>
 
 <!-- 100% privacy-first analytics -->
 <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
@@ -2348,7 +2365,7 @@
 
 <!-- i18n — Localization -->
 <script src="https://unpkg.com/i18next@23.16.8/dist/umd/i18next.min.js"></script>
-<script defer src="/app-boot.js?v=d9e400c1ad"></script>
+<script defer src="/app-boot.js?v=5b5484cbf1"></script>
 
 </body>
 </html>

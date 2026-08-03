@@ -144,7 +144,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=d9e400c1ad')
+    return fetch('/locales/' + lang + '.json?v=5b5484cbf1')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -225,6 +225,10 @@ function applyTranslations() {
         // DOM-only behaviour (no app function)
         toggleParentOpen: function (el) { el.parentElement.classList.toggle('open'); },
         toggleOpen: function (el) { el.classList.toggle('open'); },
+        toggleHamburger: function (el) {
+            var hdr = el.closest('.hdr');
+            if (hdr) hdr.classList.toggle('menu-open');
+        },
         hideToast: function (el, arg, e) { hideToast(e); },
         stop: function (el, arg, e) { e.stopPropagation(); }
     };
