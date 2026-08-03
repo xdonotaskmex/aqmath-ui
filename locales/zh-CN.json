@@ -131,6 +131,10 @@
       "msg": "AQMath 应用是<strong>仅限网页（桌面浏览器）</strong>的体验。图表、表格和再平衡引擎需要更大的屏幕。<br><br>请在电脑上打开 <span class=\"mono\">/app</span>。",
       "home": "[ 返回主页 ]"
     },
+    "update": {
+      "msg": "AQMath 有新版本可用 - 重新加载以获取最新构建。",
+      "reload": "[ 重新加载 ]"
+    },
     "sync": "同步",
     "csvImport": "CSV 导入",
     "export": "导出",

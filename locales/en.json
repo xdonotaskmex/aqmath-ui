@@ -131,6 +131,10 @@
       "msg": "The AQMath App is a <strong>web-only</strong> experience built for desktop browsers. Charts, tables and the rebalancing engine need a bigger screen.<br><br>Please open <span class=\"mono\">/app</span> on a computer.",
       "home": "[ back to landing ]"
     },
+    "update": {
+      "msg": "A new version of AQMath is available - reload to get the latest build.",
+      "reload": "[ reload ]"
+    },
     "sync": "SYNC",
     "csvImport": "CSV IMPORT",
     "export": "EXPORT",

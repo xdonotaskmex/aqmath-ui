@@ -144,7 +144,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=c6ad37b288')
+    return fetch('/locales/' + lang + '.json?v=21ca2ecbd2')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -215,6 +215,7 @@ function applyTranslations() {
         btRunWFGrid: function () { btRunWFGrid(); },
         btResetAll: function () { btResetAll(); },
         hideProModal: function () { hideProModal(); },
+        reloadApp: function () { window.location.reload(); },
         // argument actions (arg comes from data-arg)
         lang: function (el, arg) { switchLang(arg); },
         clickEl: function (el, arg) { var t = document.getElementById(arg); if (t) t.click(); },
@@ -253,4 +254,31 @@ function applyTranslations() {
         var fn = CHANGE[el.getAttribute('data-change')];
         if (fn) fn(el, el.getAttribute('data-arg'), e);
     });
+})();
+
+// ---------------------------------------------------------------------------
+// 5) Freshness check - every visitor runs the latest build.
+//    The whole asset set is pinned to one build id (?v=..., written by
+//    tools/stamp_version.py), and that id is mirrored to /version.txt at
+//    build time. If this tab loaded an older cached build, its own ?v= stamp
+//    differs from the published one, so show the update banner - one reload
+//    then brings the user to the complete new build, never a mixed one.
+// ---------------------------------------------------------------------------
+(function () {
+    var own = document.querySelector('script[src*="app-boot.js"]');
+    var m = own && own.src.match(/\?v=([\w]+)/);
+    if (!m || !window.fetch) return;
+    var mine = m[1];
+    // Cache-busted + no-store: this file must reflect the LIVE build, not a
+    // CDN/browser copy. On any failure (404, offline) stay silent.
+    fetch('/version.txt?t=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.text() : null; })
+        .then(function (latest) {
+            if (!latest) return;
+            latest = latest.trim();
+            if (!latest || latest === mine) return;
+            var banner = document.getElementById('updateBanner');
+            if (banner) banner.classList.remove('hidden');
+        })
+        .catch(function () { /* offline / missing file: keep the current build */ });
 })();

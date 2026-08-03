@@ -29,6 +29,10 @@ Usage
 Run this *before* tools/build_pages.py, so the generated per-route pages
 inherit the fresh stamp. The stamp is written into _src/index.html (the SPA
 source), never into the generated root pages - those are overwritten anyway.
+
+The build id is also mirrored to version.txt in the site root: app-boot.js
+fetches it at runtime and compares it against its own ?v= stamp, so a visitor
+on a stale cached build gets the update banner (see app-boot.js section 5).
 """
 import hashlib
 import re
@@ -102,6 +106,12 @@ def run(check_only=False):
                 stale.append(f"{rel}: {old} -> {want}")
         edits[rel] = re.sub(pattern, want, body)
 
+    # Published build id for the runtime freshness check in app-boot.js.
+    vtxt = ROOT / "version.txt"
+    have = vtxt.read_text(encoding="utf-8").strip() if vtxt.exists() else ""
+    if have != want:
+        stale.append(f"version.txt: {have or '(missing)'} -> {want}")
+
     if check_only:
         if stale:
             print(f"version stamps STALE (expected {want}):")
@@ -117,6 +127,7 @@ def run(check_only=False):
 
     for rel, body in edits.items():
         (ROOT / rel).write_text(body, encoding="utf-8")
+    vtxt.write_text(want + "\n", encoding="utf-8")
     print(f"stamped v={want}")
     for s in stale:
         print("  " + s)
