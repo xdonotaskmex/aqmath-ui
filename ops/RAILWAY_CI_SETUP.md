@@ -13,11 +13,14 @@ Railway → projekt → **Settings → Tokens → New Token** → kopiraj token
 (prikazuje se samo jednom, UUID oblika, vrijedi za SVE servise u projektu).
 
 Zašto ne account token i ne CLI: workspace/account tokeni ne podržavaju
-`railway whoami`, a Railway CLI na Linux runnerima pouzdano ne čita
-takve tokene (provjereno 2026-07-29). Zato CI deploy uopće ne koristi
-CLI, nego Railway **GraphQL API** (`environmentTriggersDeploy` mutation,
-`curl` + `jq` u `.github/workflows/ci.yml`) — Railway sam builda i
-deploya zadnji commit s maina.
+`railway whoami`, a Railway CLI s njima pouzdano ne radi ni `link`/`up`
+("Unauthorized" ili tihi exit 0 — provjereno 2026-07-29). Zato CI deploy
+uopće ne koristi CLI, nego Railway **GraphQL API** — mutation
+`serviceInstanceDeployV2(serviceId, environmentId, commitSha)` pozvana
+`curl`-om + `jq`-om u `.github/workflows/ci.yml` (commitSha = `github.sha`).
+To je isti poziv koji CLI interno koristi; Railway builda i diže točno
+taj commit. **Ne koristiti** `environmentTriggersDeploy` — vraća `true`,
+ali za servise s GitHub source-om NE kreira deploy (samo mijenja flag).
 
 ## 2. GitHub secrets + variables (po svakom repu)
 
@@ -26,9 +29,9 @@ GitHub repo → Settings → **Secrets and variables → Actions**:
 **Secrets → New repository secret:**
 - `RAILWAY_TOKEN` = workspace token iz koraka 1 (isti token za svih 8 repova)
 
-**Variables → New repository variable** (4 varijabile):
+**Variables → New repository variable** (3 varijable; `RAILWAY_CI_ENABLED`
+može biti i org shared varijabla da vrijedi za sve repove odjednom):
 - `RAILWAY_CI_ENABLED` = `true` (uključuje deploy job; bez toga se preskače)
-- `RAILWAY_PROJECT_ID` — Project Settings → General → Project ID (smije biti i secret)
 - `RAILWAY_SERVICE_ID` — Service → Settings → General → Service ID (smije biti i secret)
 - `RAILWAY_ENVIRONMENT_ID` — Environment → klik na environment → ID u URL-u (smije biti i secret)
 
