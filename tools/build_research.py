@@ -95,6 +95,19 @@ UI = {
 
 DOCS = [
     {
+        "src": "e2e-tiaq.md",
+        "out": "e2e-tiaq.html",
+        "path": "/research/e2e-tiaq",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-08-03",
+        "title": "E2E Walk-Forward Study: TIA / QNT / XRP + PAXG Anchor - AQMath",
+        "shortTitle": "E2E Study &mdash; TIA / QNT / XRP + PAXG Anchor",
+        "description": ("Walk-forward E2E test of a candidate basket (TIA, QNT, XRP, PAXG) on the "
+                        "live dual-speed stack: max drawdown 16.9% vs 24.6% Buy & Hold, beta 0.62; "
+                        "the KKT optimizer zero-weighted TIA on every re-optimisation."),
+    },
+    {
         "src": "oos-v14-new-tokens.md",
         "out": "oos-v14-new-tokens.html",
         "path": "/research/oos-v14-new-tokens",
