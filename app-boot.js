@@ -131,7 +131,7 @@
 (function () {
     var box = document.getElementById('forwardLogLive');
     if (!box || !window.fetch) return;
-    fetch('https://backtesting-production-be57.up.railway.app/forward-log')
+    fetch('https://api-backtest.aqmath.xyz/forward-log')
         .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
         .then(function (html) { box.innerHTML = html; })
         .catch(function () { /* keep the bundled snapshot */ });
@@ -144,7 +144,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=5b5484cbf1')
+    return fetch('/locales/' + lang + '.json?v=c6ad37b288')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }

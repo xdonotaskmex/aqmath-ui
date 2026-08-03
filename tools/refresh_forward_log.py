@@ -43,7 +43,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "_src" / "index.html"
 
-ENDPOINT = "https://backtesting-production-be57.up.railway.app/forward-log"
+ENDPOINT = "https://api-backtest.aqmath.xyz/forward-log"
 TIMEOUT = 60
 
 START = "<!-- FORWARD_LOG_START -->"

@@ -78,21 +78,21 @@ Notifications → **Create notification**:
 - Alert: **HTTP DDoS Attack Event** → email
 - Alert: **Advanced Security Events** (WAF/rate-limit akcije) → email
 
-## 9. Prebacivanje frontenda na nove URL-ove (NAPRAVITI ZADNJE)
+## 9. Prebacivanje frontenda na nove URL-ove — GOTOVO 2026-07-29
 
-Tek kad su sva 4 TLS certifikata Active i kad `curl https://api-dca.aqmath.xyz/health`
-radi kroz Cloudflare:
+Sva 4 API endpointa verificirana kroz Cloudflare prije prebacivanja
+(`api-auth/api-dca/api-engine` root + `/symbols`, `api-backtest/forward-log`):
 
-1. U `aqmath-ui/app.js` zamijeni:
+1. U `aqmath-ui/app.js` zamijenjeno:
    - `BETA_AUTH_URL` → `https://api-auth.aqmath.xyz`
    - `API_URL` → `https://api-engine.aqmath.xyz`
    - `DCA_API_URL` → `https://api-dca.aqmath.xyz`
-2. U `aqmath-ui/app-boot.js` zamijeni fetch URL za forward-log:
+2. U `aqmath-ui/app-boot.js` zamijenjen fetch URL za forward-log:
    `https://backtesting-production-be57.up.railway.app` → `https://api-backtest.aqmath.xyz`
-3. Pipeline: `python tools/stamp_version.py; python tools/build_pages.py; python tools/audit_pages.py`
-4. Commit + push (proći će L3 gate kao i svaki push)
-5. Stari `*.up.railway.app` URL-ovi ostaju aktivni — po želji ih kasnije
-   ugasi u Railway (Settings → Networking → remove public domain) da se
+3. Isto i u `tools/refresh_forward_log.py` (ENDPOINT).
+4. Pipeline + audit prošli; commit + push nakon L3 gate-a.
+5. OTVORENO: stari `*.up.railway.app` URL-ovi su i dalje aktivni — po želji ih
+   kasnije ugasi u Railway (Settings → Networking → remove public domain) da se
    WAF ne može zaobići.
 
 ## Napomena o limitima Free plana

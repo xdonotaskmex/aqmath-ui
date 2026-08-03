@@ -2,7 +2,7 @@
 'use strict';
 
 // ============ BACKEND API URLs ============
-const BETA_AUTH_URL = 'https://aqmath-beta-auth-production.up.railway.app';
+const BETA_AUTH_URL = 'https://api-auth.aqmath.xyz';
 
 // ============ ROUTING ============
 // Clean URLs (aqmath.xyz/docs) via History API.
@@ -415,8 +415,8 @@ function checkBetaUI() {
 
 // ========== BACKEND API URLs ==========
 // Set these to your deployed Railway URLs
-const API_URL = 'https://aqmath-engine-production.up.railway.app';   // aqmath-engine (Risk Parity + KKT) — Pro only
-const DCA_API_URL = 'https://dca-engine-production.up.railway.app'; // dca-engine on Railway — DCA distribution only
+const API_URL = 'https://api-engine.aqmath.xyz';   // aqmath-engine (Risk Parity + KKT) — Pro only
+const DCA_API_URL = 'https://api-dca.aqmath.xyz'; // dca-engine on Railway — DCA distribution only
 
 let portfolioHistory = [];
 
