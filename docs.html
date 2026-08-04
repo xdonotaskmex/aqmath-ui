@@ -166,10 +166,9 @@
         <a href="#doc-circuit" class="doc-nav-sub" data-i18n="doc.nav.circuit">L1 — Circuit Breaker</a>
         <a href="#doc-safety" class="doc-nav-sub" data-i18n="doc.nav.safety">L2 — Safety Factor</a>
         <a href="#doc-trend" class="doc-nav-sub" data-i18n="doc.nav.trend">L3 — Trend Filter</a>
-        <a href="#doc-apy" class="doc-nav-sub" data-i18n="doc.nav.apy">L4 — APY Filter</a>
-        <a href="#doc-hardcaps" class="doc-nav-sub" data-i18n="doc.nav.hardcaps">L5 — Hard Caps</a>
-        <a href="#doc-riskbudget" class="doc-nav-sub" data-i18n="doc.nav.riskbudget">L6 — Risk Budget</a>
-        <a href="#doc-safehaven" class="doc-nav-sub" data-i18n="doc.nav.safehaven">L7 — Safe-Haven</a>
+        <a href="#doc-hardcaps" class="doc-nav-sub" data-i18n="doc.nav.hardcaps">L4 — Hard Caps</a>
+        <a href="#doc-riskbudget" class="doc-nav-sub" data-i18n="doc.nav.riskbudget">L5 — Risk Budget</a>
+        <a href="#doc-safehaven" class="doc-nav-sub" data-i18n="doc.nav.safehaven">L6 — Safe-Haven</a>
         <a href="#doc-volatility" class="doc-nav-head" data-i18n="doc.nav.volatility">Volatility</a>
         <a href="#doc-aqmath" class="doc-nav-head" data-i18n="doc.nav.aqmath">AQMath Engine (Black)</a>
         <a href="#doc-erc-solver" class="doc-nav-sub" data-i18n="doc.nav.erc">Equal Risk Contribution</a>
@@ -413,10 +412,14 @@
         <div class="doc-block" id="doc-defense">
             <h2 data-i18n="doc.s5.title">5. DCA Safety Pipeline</h2>
             <p data-i18n-html="doc.s5.p1">AQMath implements a multi-layer safety pipeline for DCA allocation designed for crypto markets. Traditional systems would halt trading on a 10% dip &mdash; but in crypto, pullbacks of that size happen regularly and are often excellent buying opportunities. Each layer operates independently and in strict sequence. <strong>Note:</strong> This pipeline governs only how new DCA capital is allocated &mdash; it does not trim or sell existing positions.</p>
+            <div class="doc-callout blue">
+                <div class="doc-ct" data-i18n="doc.s5.apyNoteT">&#128200; APY IS INFORMATIONAL ONLY</div>
+                <p data-i18n-html="doc.s5.apyNoteP">Staking APY is tracked per token and displayed in the portfolio table together with its yield gap versus the 10% self-sustaining threshold. It does <strong>not</strong> gate DCA eligibility: an underweight token with a high yield still receives allocation like any other underweight token.</p>
+            </div>
 
             <div class="doc-diagram">
                 <div class="doc-fl">DCA Safety Pipeline</div>
-                <svg viewBox="0 0 480 310" xmlns="http://www.w3.org/2000/svg" style="max-width:440px;">
+                <svg viewBox="0 0 480 270" xmlns="http://www.w3.org/2000/svg" style="max-width:440px;">
                     <rect x="20" y="10" width="440" height="32" rx="4" fill="rgba(248,113,113,0.06)" stroke="var(--red)" stroke-width="0.8" opacity="0.6"/>
                     <circle cx="48" cy="26" r="12" fill="rgba(248,113,113,0.15)" stroke="var(--red)" stroke-width="0.5"/>
                     <text x="48" y="30" text-anchor="middle" fill="var(--red)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L1</text>
@@ -432,27 +435,22 @@
                     <text x="48" y="110" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L3</text>
                     <text x="72" y="110" fill="var(--text)" font-family="'JetBrains Mono',monospace" font-size="10">Trend Filter</text>
                     <text x="440" y="110" text-anchor="end" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">enforces buy-the-dip discipline</text>
-                    <rect x="20" y="130" width="440" height="32" rx="4" fill="rgba(168,85,247,0.06)" stroke="var(--purple)" stroke-width="0.8" opacity="0.6"/>
-                    <circle cx="48" cy="146" r="12" fill="rgba(168,85,247,0.15)" stroke="var(--purple)" stroke-width="0.5"/>
-                    <text x="48" y="150" text-anchor="middle" fill="var(--purple)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L4</text>
-                    <text x="72" y="150" fill="var(--text)" font-family="'JetBrains Mono',monospace" font-size="10">APY Filter</text>
-                    <text x="440" y="150" text-anchor="end" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">skips self-sustaining tokens</text>
-                    <rect x="20" y="170" width="440" height="32" rx="4" fill="rgba(52,211,153,0.06)" stroke="var(--green)" stroke-width="0.8" opacity="0.6"/>
-                    <circle cx="48" cy="186" r="12" fill="rgba(52,211,153,0.15)" stroke="var(--green)" stroke-width="0.5"/>
-                    <text x="48" y="190" text-anchor="middle" fill="var(--green)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L5</text>
-                    <text x="72" y="190" fill="var(--text)" font-family="'JetBrains Mono',monospace" font-size="10">Hard Caps</text>
-                    <text x="440" y="190" text-anchor="end" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">max concentration per token</text>
-                    <rect x="20" y="210" width="440" height="32" rx="4" fill="rgba(6,182,212,0.06)" stroke="var(--blue)" stroke-width="0.8" opacity="0.6"/>
-                    <circle cx="48" cy="226" r="12" fill="rgba(6,182,212,0.15)" stroke="var(--blue)" stroke-width="0.5"/>
-                    <text x="48" y="230" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L6</text>
-                    <text x="72" y="230" fill="var(--text)" font-family="'JetBrains Mono',monospace" font-size="10">Risk Budget</text>
-                    <text x="440" y="230" text-anchor="end" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">caps total risky exposure</text>
-                    <rect x="20" y="250" width="440" height="32" rx="4" fill="rgba(52,211,153,0.1)" stroke="var(--green)" stroke-width="1.2" opacity="0.7"/>
-                    <circle cx="48" cy="266" r="12" fill="rgba(52,211,153,0.2)" stroke="var(--green)" stroke-width="0.5"/>
-                    <text x="48" y="270" text-anchor="middle" fill="var(--green)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L7</text>
-                    <text x="72" y="270" fill="var(--text)" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">Safe-Haven Redirect</text>
-                    <text x="440" y="270" text-anchor="end" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">surplus flows to stablecoin</text>
-                    <line x1="48" y1="40" x2="48" y2="250" stroke="var(--muted)" stroke-width="0.5" opacity="0.15"/>
+                    <rect x="20" y="130" width="440" height="32" rx="4" fill="rgba(52,211,153,0.06)" stroke="var(--green)" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="48" cy="146" r="12" fill="rgba(52,211,153,0.15)" stroke="var(--green)" stroke-width="0.5"/>
+                    <text x="48" y="150" text-anchor="middle" fill="var(--green)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L4</text>
+                    <text x="72" y="150" fill="var(--text)" font-family="'JetBrains Mono',monospace" font-size="10">Hard Caps</text>
+                    <text x="440" y="150" text-anchor="end" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">max concentration per token</text>
+                    <rect x="20" y="170" width="440" height="32" rx="4" fill="rgba(6,182,212,0.06)" stroke="var(--blue)" stroke-width="0.8" opacity="0.6"/>
+                    <circle cx="48" cy="186" r="12" fill="rgba(6,182,212,0.15)" stroke="var(--blue)" stroke-width="0.5"/>
+                    <text x="48" y="190" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L5</text>
+                    <text x="72" y="190" fill="var(--text)" font-family="'JetBrains Mono',monospace" font-size="10">Risk Budget</text>
+                    <text x="440" y="190" text-anchor="end" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">caps total risky exposure</text>
+                    <rect x="20" y="210" width="440" height="32" rx="4" fill="rgba(52,211,153,0.1)" stroke="var(--green)" stroke-width="1.2" opacity="0.7"/>
+                    <circle cx="48" cy="226" r="12" fill="rgba(52,211,153,0.2)" stroke="var(--green)" stroke-width="0.5"/>
+                    <text x="48" y="230" text-anchor="middle" fill="var(--green)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">L6</text>
+                    <text x="72" y="230" fill="var(--text)" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">Safe-Haven Redirect</text>
+                    <text x="440" y="230" text-anchor="end" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">surplus flows to stablecoin</text>
+                    <line x1="48" y1="40" x2="48" y2="210" stroke="var(--muted)" stroke-width="0.5" opacity="0.15"/>
                 </svg>
             </div>
 
@@ -465,20 +463,17 @@
             <h3 id="doc-trend" data-i18n="doc.s5.l3Title">L3 &mdash; Trend Filter</h3>
             <p data-i18n="doc.s5.l3P">Skips tokens currently trading above their moving average &mdash; effectively enforcing a &ldquo;buy the dip&rdquo; discipline. Capital flows to tokens during pullbacks, not during rallies.</p>
 
-            <h3 id="doc-apy" data-i18n="doc.s5.l4Title">L4 &mdash; APY Filter</h3>
-            <p data-i18n="doc.s5.l4P">Tokens earning high staking yields compound on their own and are excluded from DCA distribution. The engine redirects that capital to lower-yield tokens that need active injection.</p>
-
-            <h3 id="doc-hardcaps" data-i18n="doc.s5.l5Title">L5 &mdash; Hard Caps</h3>
+            <h3 id="doc-hardcaps" data-i18n="doc.s5.l5Title">L4 &mdash; Hard Caps</h3>
             <p data-i18n="doc.s5.l5P">No single risky token can exceed a structural concentration limit. If allocation would push a token beyond this cap, the excess is trimmed and redirected to the surplus pool.</p>
             <div class="doc-callout blue">
                 <div class="doc-ct" data-i18n-html="doc.s5.l5Pro">&#128295; DYNAMIC CAPS (Black Feature)</div>
                 <p data-i18n-html="doc.s5.l5ProP">The Black engine replaces the flat cap with <strong>volatility-adaptive limits</strong>: high-volatility tokens receive tighter caps, while low-volatility tokens can hold larger positions (up to 40%). Each token&rsquo;s maximum weight is dynamically scaled based on how volatile it is relative to the most volatile token in the portfolio. The more volatile a token, the tighter its cap.</p>
             </div>
 
-            <h3 id="doc-riskbudget" data-i18n="doc.s5.l6Title">L6 &mdash; Risk Budget</h3>
+            <h3 id="doc-riskbudget" data-i18n="doc.s5.l6Title">L5 &mdash; Risk Budget</h3>
             <p data-i18n="doc.s5.l6P">Total risky exposure is capped at a percentage of your portfolio, ensuring a safety buffer always exists. If risky tokens exceed the budget, all allocations are scaled down proportionally.</p>
 
-            <h3 id="doc-safehaven" data-i18n="doc.s5.l7Title">L7 &mdash; Safe-Haven Redirect</h3>
+            <h3 id="doc-safehaven" data-i18n="doc.s5.l7Title">L6 &mdash; Safe-Haven Redirect</h3>
             <p data-i18n="doc.s5.l7P">All surplus capital from hard caps and risk budget scaling flows into your designated stablecoin. This capital sits in a safe buffer until you decide to redeploy it through DCA.</p>
         </div>
 
