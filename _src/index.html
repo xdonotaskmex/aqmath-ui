@@ -39,7 +39,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=47d369051d">
+    <link rel="stylesheet" href="/styles.min.css?v=122c65d67b">
 </head>
 <body>
 
@@ -1223,6 +1223,16 @@
 <!-- The full write-up of the earlier token-universe test lives at /research as a
      standalone document, methodology and caveats included. -->
 <p class="rv-intro" data-i18n-html="rv.researchLink">The full test report for the previous unseen-token run &mdash; methodology, all 16 baskets, dead-token stress cases and caveats &mdash; is published at <a href="/research/oos-v14-new-tokens">Research &amp; Validation</a>.</p>
+<!-- v15 experiment notice + mirrored engine changelog (single source of truth:
+     the same bt.changelog key the backtest tab renders) -->
+<div class="rv-v15-notice" data-i18n-html="rv.v15Notice"><span class="rv-v15-tag">NEW ENGINE UNDER TEST</span> v15 Beta is now paper trading <strong>live, in parallel with v14</strong> &mdash; an experiment comparing the new correlation-regime protection against the frozen v14 Shield on identical terms. <strong>v14 is completely unchanged.</strong> Full comparison at the bottom of this page.</div>
+<details class="tc rv-cl">
+<summary class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--changelog</span><span class="rv-cl-hint" data-i18n="rv.changelogMirror">engine change log &middot; click to expand</span></summary>
+<div class="tc-body">
+<div class="bt-explain bt-explain-sm" data-i18n-html="bt.changelogIntro"><strong>Change log.</strong> A dated record of engine updates, so any result you see can be traced back to the exact version that produced it.</div>
+<ul class="bt-changelog" data-i18n-html="bt.changelog"><li><span class="bt-cl-date">2026-08-05</span><span class="bt-cl-text"><strong>v15 Beta experiment started (parallel paper trading).</strong> A second paper account running the new correlation-regime protection (v15) is now logging next to the v14 log so the two can be compared on identical terms. <strong>Nothing in v14 was touched</strong> &mdash; its engine and its log continue exactly as before.</span></li><li><span class="bt-cl-date">2026-07-21</span><span class="bt-cl-text"><strong>Engine settings frozen (v14.0).</strong> The modulator's settings were locked on this date. Every result from this day onward comes from this exact, unchanged engine.</span></li><li><span class="bt-cl-date">2026-07-21</span><span class="bt-cl-text"><strong>Recurring contribution can be zero.</strong> You can now set the <strong>DCA Amount</strong> to <strong>0</strong> to test a one-time, lump-sum start. Earlier results are unaffected.</span></li></ul>
+</div>
+</details>
 </div>
 <div class="rv-cards">
 <div class="rv-card"><div class="rv-big">182</div><div class="rv-lbl">baskets tested</div><div class="rv-sub">3-5 coin equal-weight combos</div></div>
@@ -2375,9 +2385,9 @@
     <a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=47d369051d"></script>
-<script defer src="/app-backtest.js?v=47d369051d"></script>
-<script defer src="/app.js?v=47d369051d"></script>
+<script defer src="/app-widgets.js?v=122c65d67b"></script>
+<script defer src="/app-backtest.js?v=122c65d67b"></script>
+<script defer src="/app.js?v=122c65d67b"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -2388,7 +2398,7 @@
 
 <!-- i18n — Localization -->
 <script src="https://unpkg.com/i18next@23.16.8/dist/umd/i18next.min.js" integrity="sha384-ZB4j+Y4rqTlON+loxr/YKq9WV8qBuZOqKukqmQVgcZ0GFy93B7TMCSezcrRkfJF5" crossorigin="anonymous"></script>
-<script defer src="/app-boot.js?v=47d369051d"></script>
+<script defer src="/app-boot.js?v=122c65d67b"></script>
 
 </body>
 </html>
