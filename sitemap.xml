@@ -22,7 +22,11 @@
        The EN and ZH reports are the same document; hreflang pairs them in <head>. -->
   <url>
     <loc>https://aqmath.xyz/research/</loc>
-    <lastmod>2026-08-03</lastmod>
+    <lastmod>2026-08-05</lastmod>
+  </url>
+  <url>
+    <loc>https://aqmath.xyz/research/baskets-v14-hist3</loc>
+    <lastmod>2026-08-05</lastmod>
   </url>
   <url>
     <loc>https://aqmath.xyz/research/e2e-tiaq</loc>

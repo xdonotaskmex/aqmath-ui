@@ -95,6 +95,20 @@ UI = {
 
 DOCS = [
     {
+        "src": "baskets-v14-hist3.md",
+        "out": "baskets-v14-hist3.html",
+        "path": "/research/baskets-v14-hist3",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-08-05",
+        "title": "Three-Basket Historical Comparison: v14 Dual-Speed Engine - AQMath",
+        "shortTitle": "Three-Basket Comparison &mdash; v14 KKT MACRO + Shield",
+        "description": ("Walk-forward E2E comparison of three structurally different baskets "
+                        "(majors+gold, veterans+gold, new-gen alts) on the shipped v14 stack: "
+                        "shared-window max drawdown 9.8% vs 25.4% Buy & Hold; the Shield cut "
+                        "drawdown 30-36 pp in every window."),
+    },
+    {
         "src": "e2e-tiaq.md",
         "out": "e2e-tiaq.html",
         "path": "/research/e2e-tiaq",

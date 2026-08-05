@@ -63,6 +63,7 @@ NO_ROUTE = {"404.html"}
 NEEDS_SIM_NOTICE = {
     "results.html",
     "backtest.html",
+    "research/baskets-v14-hist3.html",
     "research/e2e-tiaq.html",
     "research/oos-v14-new-tokens.html",
     "research/oos-v14-new-tokens-zh.html",
