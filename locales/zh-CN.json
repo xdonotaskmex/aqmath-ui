@@ -490,7 +490,7 @@
   },
   "rv": {
     "v15Notice": "<span class=\"rv-v15-tag\">新引擎测试中</span> v15 Beta 现已<strong>与 v14 并行实时模拟交易</strong> &mdash; 在完全相同的条件下，对比全新相关性区间保护与已冻结的 v14 Shield 的实验。<strong>v14 完全未改动。</strong>完整对比见本页底部。",
-    "changelogMirror": "引擎更新日志 &middot; 点击展开",
+    "changelogMirror": "引擎更新日志 · 点击展开",
     "simNotice": "<strong>模拟结果 &mdash; 未使用真实资金。</strong>本页面的每一项数据均来自回测以及模拟交易记录：一种以<strong>虚拟资金</strong>对接实时行情运行的模拟。从未投入客户资金，从未下过任何订单，数据不包含滑点、买卖价差和税费，但确实计入了对每次再平衡、DCA 买入和资金重新部署收取的 0.1% 模拟交易所手续费 &mdash; 买入并持有基准按同一标准收费。模拟表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是软件，不是投资建议，也不代您管理资金。",
     "researchLink": "上一轮未见代币测试的完整报告 &mdash; 包含方法论、全部 16 个组合、已归零代币压力测试与注意事项 &mdash; 已发布于<a href=\"/research/oos-v14-new-tokens-zh\">研究与验证</a>。"
   },

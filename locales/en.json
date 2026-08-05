@@ -490,7 +490,7 @@
   },
   "rv": {
     "v15Notice": "<span class=\"rv-v15-tag\">NEW ENGINE UNDER TEST</span> v15 Beta is now paper trading <strong>live, in parallel with v14</strong> &mdash; an experiment comparing the new correlation-regime protection against the frozen v14 Shield on identical terms. <strong>v14 is completely unchanged.</strong> Full comparison at the bottom of this page.",
-    "changelogMirror": "engine change log &middot; click to expand",
+    "changelogMirror": "engine change log · click to expand",
     "simNotice": "<strong>Simulated results &mdash; no real money.</strong> Every figure on this page comes from backtests and from a paper-trading log: a simulation that runs against live market data with <strong>virtual capital</strong>. No client funds were ever invested, no orders were ever placed, and the numbers exclude slippage, spreads and taxes, but do include a simulated 0.1% exchange fee on every rebalance, DCA buy and redeployment &mdash; charged to the Buy &amp; Hold benchmark on the same basis. Simulated and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software, not investment advice, and does not manage money on your behalf.",
     "researchLink": "The full test report for the previous unseen-token run &mdash; methodology, all 16 baskets, dead-token stress cases and caveats &mdash; is published at <a href=\"/research/oos-v14-new-tokens\">Research &amp; Validation</a>."
   },
