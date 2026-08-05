@@ -1,0 +1,3 @@
+# Vendored third-party assets are kept byte-identical to upstream so future
+# SRI/integrity pins can always be recomputed from the committed file.
+vendor/** -text

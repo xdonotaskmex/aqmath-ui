@@ -117,8 +117,18 @@ let wsReconnectDelay = 1000;
 let wsReconnecting = false;
 let wsLastMessageTime = 0;
 let wsHeartbeatInterval = null;
+// Binance is geo-blocked in some regions (DNS fails / CORS-blocked). Without a
+// cap the reconnect loop spams the console forever; give up quietly instead
+// and let the landing page degrade without the live ticker.
+let wsFailCount = 0;
+const WS_MAX_FAILS = 6;
+let wsGaveUp = false;
+let wsEverOpen = false;
+let restFailCount = 0;
+let restBackoffUntil = 0;
 
 function connectBinanceWS() {
+    if (wsGaveUp) return;
     if (wsConnection && wsConnection.readyState <= 1) return;
     if (wsReconnecting) return;
     wsReconnecting = true;
@@ -127,6 +137,12 @@ function connectBinanceWS() {
         wsConnection = new WebSocket(`wss://stream.binance.com:9443/stream?streams=${streams}`);
     } catch(e) {
         wsReconnecting = false;
+        wsFailCount++;
+        if (wsFailCount >= WS_MAX_FAILS) {
+            wsGaveUp = true;
+            console.warn('[WS] Binance unreachable after', wsFailCount, 'attempts - ticker disabled');
+            return;
+        }
         setTimeout(connectBinanceWS, wsReconnectDelay);
         wsReconnectDelay = Math.min(wsReconnectDelay * 2, 30000);
         return;
@@ -134,6 +150,8 @@ function connectBinanceWS() {
     wsConnection.onopen = () => {
         console.log('[WS] Binance connected:', WS_TRACKED.length, 'streams');
         wsReconnectDelay = 1000;
+        wsFailCount = 0;
+        wsEverOpen = true;
         wsReconnecting = false;
         wsLastMessageTime = Date.now();
         // Start heartbeat: detect stale connection every 30s
@@ -166,6 +184,20 @@ function connectBinanceWS() {
     wsConnection.onclose = () => {
         wsReconnecting = false;
         if (wsHeartbeatInterval) { clearInterval(wsHeartbeatInterval); wsHeartbeatInterval = null; }
+        if (wsEverOpen) {
+            // Was reachable once, so this is a normal drop - keep retrying
+            // with backoff (the heartbeat handles the stale-socket case).
+            console.log('[WS] Disconnected, reconnecting in', wsReconnectDelay, 'ms');
+            setTimeout(connectBinanceWS, wsReconnectDelay);
+            wsReconnectDelay = Math.min(wsReconnectDelay * 2, 30000);
+            return;
+        }
+        wsFailCount++;
+        if (wsFailCount >= WS_MAX_FAILS) {
+            wsGaveUp = true;
+            console.warn('[WS] Binance unreachable after', wsFailCount, 'attempts - ticker disabled');
+            return;
+        }
         console.log('[WS] Disconnected, reconnecting in', wsReconnectDelay, 'ms');
         setTimeout(connectBinanceWS, wsReconnectDelay);
         wsReconnectDelay = Math.min(wsReconnectDelay * 2, 30000);
@@ -177,7 +209,7 @@ async function fetchBinanceMarkets() {
     const STALE_MS = 120000; // 2 min
     const freshCache = Object.values(wsCache).filter(t => Date.now() - t.ts < STALE_MS);
     // REST fallback when WS cache is empty or stale
-    if (freshCache.length === 0) {
+    if (freshCache.length === 0 && Date.now() >= restBackoffUntil) {
         try {
             const res = await fetch('https://api.binance.com/api/v3/ticker/24hr');
             if (res.ok) {
@@ -197,10 +229,21 @@ async function fetchBinanceMarkets() {
                     }
                 });
                 wsReconnectDelay = 1000; // Reset delay on REST success
+                restFailCount = 0;
                 console.log('[WS] REST fallback populated', Object.keys(wsCache).length, 'symbols');
+            } else {
+                throw new Error('HTTP ' + res.status);
             }
         } catch(e) {
-            console.log('[WS] REST fallback failed:', e.message);
+            restFailCount++;
+            if (restFailCount >= 3) {
+                // Binance unreachable (geo-block / offline): back off 10 min
+                // instead of hammering the endpoint on every refresh tick.
+                restBackoffUntil = Date.now() + 600000;
+                console.warn('[WS] REST fallback disabled for 10 min:', e.message);
+            } else {
+                console.log('[WS] REST fallback failed:', e.message);
+            }
         }
     }
     // If WS is still connecting and cache is empty, wait briefly

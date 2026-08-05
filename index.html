@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://scripts.simpleanalyticscdn.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https: wss:; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://scripts.simpleanalyticscdn.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https: wss:; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -37,10 +37,13 @@
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
+        <!-- API origin used by app-boot auth checks; connect early to save the TLS
+             handshake off the first authenticated request. -->
+        <link rel="preconnect" href="https://api-auth.aqmath.xyz" crossorigin>
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=09e97abdae">
+    <link rel="stylesheet" href="/styles.min.css?v=fc60328bda">
 </head>
 <body>
 
@@ -605,9 +608,9 @@
     <a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=09e97abdae"></script>
-<script defer src="/app-backtest.js?v=09e97abdae"></script>
-<script defer src="/app.js?v=09e97abdae"></script>
+<script defer src="/app-widgets.js?v=fc60328bda"></script>
+<script defer src="/app-backtest.js?v=fc60328bda"></script>
+<script defer src="/app.js?v=fc60328bda"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -616,9 +619,10 @@
 <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="Simple Analytics no-script tracking pixel" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 
-<!-- i18n — Localization -->
-<script src="https://unpkg.com/i18next@23.16.8/dist/umd/i18next.min.js" integrity="sha384-ZB4j+Y4rqTlON+loxr/YKq9WV8qBuZOqKukqmQVgcZ0GFy93B7TMCSezcrRkfJF5" crossorigin="anonymous"></script>
-<script defer src="/app-boot.js?v=09e97abdae"></script>
+<!-- i18n — Localization. Self-hosted (was unpkg.com CDN): the third-party hop
+     sat on the critical path and cost ~900 ms LCP on slow networks. -->
+<script defer src="/vendor/i18next.min.js"></script>
+<script defer src="/app-boot.js?v=fc60328bda"></script>
 
 </body>
 </html>
