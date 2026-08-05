@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aqmath.xyz/</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-05</lastmod>
   </url>
   <url>
     <loc>https://aqmath.xyz/docs</loc>
@@ -10,11 +10,11 @@
   </url>
   <url>
     <loc>https://aqmath.xyz/backtest</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-05</lastmod>
   </url>
   <url>
     <loc>https://aqmath.xyz/results</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-05</lastmod>
   </url>
   <!-- /app is intentionally absent: it is a paid, closed tool and is served
        with <meta name="robots" content="noindex, follow">. -->
@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>https://aqmath.xyz/research/oos-v14-new-tokens-zh</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-05</lastmod>
   </url>
   <url>
     <loc>https://aqmath.xyz/about</loc>
@@ -50,7 +50,7 @@
   </url>
   <url>
     <loc>https://aqmath.xyz/privacy</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-08-05</lastmod>
   </url>
   <url>
     <loc>https://aqmath.xyz/terms</loc>
