@@ -101,7 +101,7 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-05",
-        "title": "Three-Basket Historical Comparison: v14 Dual-Speed Engine - AQMath",
+        "title": "Three-Basket Comparison: v14 Dual-Speed Engine - AQMath",
         "shortTitle": "Three-Basket Comparison &mdash; v14 KKT MACRO + Shield",
         "description": ("Walk-forward E2E comparison of three structurally different baskets "
                         "(majors+gold, veterans+gold, new-gen alts) on the shipped v14 stack: "
@@ -115,7 +115,7 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-03",
-        "title": "E2E Walk-Forward Study: TIA / QNT / XRP + PAXG Anchor - AQMath",
+        "title": "E2E Study: TIA / QNT / XRP + PAXG Anchor - AQMath",
         "shortTitle": "E2E Study &mdash; TIA / QNT / XRP + PAXG Anchor",
         "description": ("Walk-forward E2E test of a candidate basket (TIA, QNT, XRP, PAXG) on the "
                         "live dual-speed stack: max drawdown 16.9% vs 24.6% Buy & Hold, beta 0.62; "
@@ -142,7 +142,7 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-07-17",
-        "title": "\u6837\u672c\u5916\u9a8c\u8bc1\uff1a\u53bb\u6760\u6746\u8c03\u8282\u5668 v14.0 \u5728\u672a\u89c1\u8fc7\u7684\u4ee3\u5e01\u7ec4\u5408\u4e0a\u7684\u8868\u73b0",
+        "title": "\u6837\u672c\u5916\u9a8c\u8bc1\uff1av14.0 \u672a\u89c1\u4ee3\u5e01\u6d4b\u8bd5 - AQMath",
         "shortTitle": "\u6837\u672c\u5916\u9a8c\u8bc1 &mdash; v14.0 \u672a\u89c1\u4ee3\u5e01",
         "description": ("AQMath \u53bb\u6760\u6746\u8c03\u8282\u5668 v14.0 \u7684\u6837\u672c\u5916\u6d4b\u8bd5\uff1a"
                         "\u5728 16 \u4e2a\u4ece\u672a\u7528\u4e8e\u8c03\u53c2\u7684\u4ee3\u5e01\u7ec4\u5408\u4e0a\u9a8c\u8bc1\uff0c"
