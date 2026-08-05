@@ -177,6 +177,17 @@ function sanitizeFirstPartyHtml(html) {
         .catch(function () { /* keep the bundled snapshot */ });
 })();
 
+// Parallel v15 experiment fragment: same sanitizer, revealed only when the
+// fetch succeeds — on any failure the section stays hidden.
+(function () {
+    var box = document.getElementById('forwardLogV15');
+    if (!box || !window.fetch) return;
+    fetch('https://api-backtest.aqmath.xyz/forward-log-v15')
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+        .then(function (html) { box.innerHTML = sanitizeFirstPartyHtml(html); box.hidden = false; })
+        .catch(function () { /* experimental section stays hidden */ });
+})();
+
 // ---------------------------------------------------------------------------
 // 3) i18n / language switching (was inline block at index.html L2573)
 // ---------------------------------------------------------------------------
@@ -184,7 +195,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=050451ff41')
+    return fetch('/locales/' + lang + '.json?v=47d369051d')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
