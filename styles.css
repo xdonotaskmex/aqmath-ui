@@ -680,6 +680,15 @@
         .hdr-right { min-width: auto; }
         .logo { width: auto; }
 
+        /* Landing/docs header on phones: the single desktop row (brand |
+           burger | socials+lang) is wider than a 390px viewport and the
+           socials/lang group overflows off the right edge. Let the header
+           wrap: row 1 = brand + burger, row 2 = socials + language, centred. */
+        .hdr { flex-wrap: wrap; height: auto; min-height: 56px; padding: 8px 16px; row-gap: 6px; }
+        .hdr-right { width: 100%; margin-left: 0; justify-content: center; gap: 10px; }
+        .hdr-socials { flex-wrap: wrap; justify-content: center; gap: 6px; }
+        .hdr-socials a { padding: 3px 8px; font-size: 0.55rem; }
+
         /* App header: the desktop single row (logo | nav | controls) is wider than
            a phone and never wraps, so space-between shoves .hdr-right off the right
            edge where it stacks into a tall narrow column; align-items:center then
@@ -2355,9 +2364,12 @@
         font-family: var(--mono); font-size: 0.62rem; letter-spacing: 1px;
         color: var(--muted); line-height: 2.1;
     }
-    .site-footer a { color: var(--muted); text-decoration: none; }
+    .site-footer a { color: var(--muted); text-decoration: none; display: inline-block; }
     .site-footer a:hover { color: var(--blue); }
-    .site-footer .sep { opacity: 0.35; margin: 0 6px; }
+    /* inline-block gives the browser line-break opportunities between the
+       link/sep atoms; the markup has no whitespace between them, so without
+       this the legal-links row is one unbreakable 340px line on 320px phones */
+    .site-footer .sep { opacity: 0.35; margin: 0 6px; display: inline-block; }
     .lp-pro-close {
         background: transparent; border: 1px solid var(--muted);
         color: var(--muted); font-family: var(--mono); font-size: 0.6rem;

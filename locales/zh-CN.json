@@ -5,7 +5,7 @@
     "description": "AQMath 在安全后端引擎上运行机构级投资组合数学 — 风险平价、KKT 优化和波动率加权 DCA。无账户，无猜测。",
     "cta": "--申请内测访问",
     "proBeta": "申请 Black 访问权限",
-    "follow": "关注获取更新与新闻：<a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">twitter</a> <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" rel=\"noopener\">telegram</a> <a href=\"https://www.reddit.com/user/weaforex/\" target=\"_blank\" rel=\"noopener\">reddit</a>",
+    "follow": "关注获取更新与新闻：<a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">twitter</a> <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" rel=\"noopener\">telegram</a> <a href=\"https://www.reddit.com/user/weaforex/\" target=\"_blank\" rel=\"noopener\">reddit</a> <a href=\"https://substack.com/@aqmathxyz\" target=\"_blank\" rel=\"noopener\">substack</a>",
     "followLabel": "关注获取更新与新闻",
     "termLabel": "--你正在看的是什么",
     "termTitle": "引擎循环，实时演示",
@@ -105,7 +105,7 @@
     "q5": "安全港（USDC）功能是什么？",
     "a5": "启用后，USDC 作为组合内的稳定币缓冲。硬上限产生的盈余或未分配的 DCA 预算流入 USDC，而非丢失。关闭此功能可将 USDC 视为普通代币。",
     "q6": "如何申请 Black 访问权限？",
-    "a6": "通过 <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" style=\"color:#a78bfa;\">Telegram</a> 或 <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:#a78bfa;\">X</a> 私信我们。我们会亲自审核每位申请者 — €999 / 年。我们希望确保 AQMath 适合您后再付款。仅接受 USDC 和 EURC 付款。",
+    "a6": "通过 <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" style=\"color:#a78bfa;\">Telegram</a> 或 <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:#a78bfa;\">Twitter</a> 私信我们。我们会亲自审核每位申请者 — €999 / 年。我们希望确保 AQMath 适合您后再付款。仅接受 USDC 和 EURC 付款。",
     "q7": "是否提供月度计划？",
     "a7": "不提供。AQMath 仅采用年度订阅模式，不提供月度、季度或半年度计划。欧盟消费者享有 14 天法定撤回权 — 详见<a href=\"/widerruf\" style=\"color:#a78bfa;\">撤回权说明</a>；该期限过后，年度期限即为固定，提前取消不按比例退款。",
     "q8": "AQMath 是交易机器人吗？",
@@ -118,7 +118,7 @@
   "community": {
     "title": "--社区信号"
   },
-  "disclaimer": "AQMath 不提供投资建议。所有计算基于历史数据和数学模型。<br>数学处理在安全后端运行；您的投资组合数据在内存中处理，从不持久化。<br>© 2026 AQMath — 安全后端引擎。隐私。非托管。<br><a href=\"/docs\">文档</a> · 关注：<a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">X (Twitter)</a>",
+  "disclaimer": "AQMath 不提供投资建议。所有计算基于历史数据和数学模型。<br>数学处理在安全后端运行；您的投资组合数据在内存中处理，从不持久化。<br>© 2026 AQMath — 安全后端引擎。隐私。非托管。<br><a href=\"/docs\">文档</a> · 关注：<a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">Twitter</a> · <a href=\"https://substack.com/@aqmathxyz\" target=\"_blank\" rel=\"noopener\">Substack</a>",
   "app": {
     "heading": "AQMath 投资组合再平衡器",
     "logoTag": "非托管 • AQMath 引擎",

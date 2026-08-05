@@ -5,7 +5,7 @@
     "description": "AQMath runs institutional-grade portfolio math on a secure backend engine — Risk Parity, KKT optimization, and volatility-weighted DCA. No accounts, no guesswork.",
     "cta": "--request-beta-access",
     "proBeta": "Apply for Black Access",
-    "follow": "follow for updates & news: <a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">twitter</a> <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" rel=\"noopener\">telegram</a> <a href=\"https://www.reddit.com/user/weaforex/\" target=\"_blank\" rel=\"noopener\">reddit</a>",
+    "follow": "follow for updates & news: <a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">twitter</a> <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" rel=\"noopener\">telegram</a> <a href=\"https://www.reddit.com/user/weaforex/\" target=\"_blank\" rel=\"noopener\">reddit</a> <a href=\"https://substack.com/@aqmathxyz\" target=\"_blank\" rel=\"noopener\">substack</a>",
     "followLabel": "follow for updates & news",
     "termLabel": "--what-you-are-watching",
     "termTitle": "The engine loop, live",
@@ -105,7 +105,7 @@
     "q5": "What is the Safe-Haven (USDC) feature?",
     "a5": "When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token.",
     "q6": "How do I apply for Black access?",
-    "a6": "DM us on <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" style=\"color:#a78bfa;\">Telegram</a> or <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:#a78bfa;\">X</a>. We review every applicant personally — €999 / year. We want to make sure AQMath is right for you before you pay. Payments accepted exclusively in USDC and EURC.",
+    "a6": "DM us on <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" style=\"color:#a78bfa;\">Telegram</a> or <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:#a78bfa;\">Twitter</a>. We review every applicant personally — €999 / year. We want to make sure AQMath is right for you before you pay. Payments accepted exclusively in USDC and EURC.",
     "q7": "Do you offer monthly plans?",
     "a7": "No. AQMath operates exclusively on an annual subscription model. We do not offer monthly, quarterly, or semi-annual plans. EU consumers keep the statutory 14-day right of withdrawal &mdash; see the <a href=\"/widerruf\" style=\"color:#a78bfa;\">withdrawal notice</a>; after that the annual term is firm and is not refunded pro rata on early cancellation.",
     "q8": "Is AQMath a trading bot?",
@@ -118,7 +118,7 @@
   "community": {
     "title": "--community-signals"
   },
-  "disclaimer": "AQMath does not provide financial advice. All calculations are based on historical data and mathematical models.<br>Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted.<br>© 2026 AQMath — Secure Backend Engine. Private. Non-Custodial.<br><a href=\"/docs\">Documentation</a> · Follow: <a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">X (Twitter)</a>",
+  "disclaimer": "AQMath does not provide financial advice. All calculations are based on historical data and mathematical models.<br>Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted.<br>© 2026 AQMath — Secure Backend Engine. Private. Non-Custodial.<br><a href=\"/docs\">Documentation</a> · Follow: <a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">Twitter</a> · <a href=\"https://substack.com/@aqmathxyz\" target=\"_blank\" rel=\"noopener\">Substack</a>",
   "app": {
     "heading": "AQMath Portfolio Rebalancer",
     "logoTag": "non-custodial • AQMath engine",
