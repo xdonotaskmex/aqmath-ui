@@ -39,7 +39,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=617abde5d1">
+    <link rel="stylesheet" href="/styles.min.css?v=050451ff41">
 </head>
 <body>
 
@@ -2318,6 +2318,7 @@
                 <div class="doc-ct" data-i18n-html="doc.s9.bnCt">&#128274; ARCHITECTURAL PRIVACY GUARANTEES</div>
                 <p data-i18n-html="doc.s9.bnCtP">No database table maps users to portfolios. No log file records your holdings. Even with full server access, an attacker would find <strong>zero information</strong> about any user&rsquo;s financial state.</p>
             </div>
+            <div class="doc-tablewrap">
             <table class="doc-table">
                 <thead><tr><th data-i18n="doc.s9.thData">Data</th><th data-i18n="doc.s9.thWhy">Why Backend Can&rsquo;t See It</th></tr></thead>
                 <tbody>
@@ -2331,6 +2332,7 @@
                     <tr><td data-i18n="doc.s9.t8a">Beta key identity</td><td data-i18n="doc.s9.t8b">JWT validated but not linked to portfolio data</td></tr>
                 </tbody>
             </table>
+            </div>
             <p data-i18n-html="doc.s9.bnP2">The backend processes your DCA request in a single HTTP round-trip: receive positions &rarr; compute allocation &rarr; return results &rarr; discard. There is no database table that maps users to portfolios. There is no log file that records your holdings. Even if someone gained full access to the server, they would find <strong>zero information</strong> about any user&rsquo;s financial state.</p>
 
             <h3 id="doc-zk-model" data-i18n="doc.s9.zkTitle">9.2 Non-Custodial Privacy Model</h3>
@@ -2345,6 +2347,7 @@
                 <div class="doc-ct" data-i18n="doc.s9.compCt">&#128272; COMPARISON WITH TRADITIONAL TOOLS</div>
                 <p data-i18n="doc.s9.compP">Traditional trackers store everything on centralized servers &mdash; one breach exposes all users. AQMath stores nothing server-side. No accounts, no wallet connections, no analytics tracking. Your portfolio lives in your browser, and nowhere else.</p>
             </div>
+            <div class="doc-tablewrap">
             <table class="doc-table">
                 <thead><tr><th data-i18n="doc.s9.compTh1">Feature</th><th data-i18n="doc.s9.compTh2">Traditional Trackers</th><th data-i18n="doc.s9.compTh3">AQMath</th></tr></thead>
                 <tbody>
@@ -2356,6 +2359,7 @@
                     <tr><td data-i18n="doc.s9.c6a">Analytics tracking</td><td data-i18n="doc.s9.c6b">Google Analytics, Mixpanel</td><td data-i18n="doc.s9.c6c">Simple Analytics (privacy-first)</td></tr>
                 </tbody>
             </table>
+            </div>
             <p style="margin-top:24px;font-size:0.82rem;color:var(--muted);text-align:center;font-family:var(--mono);letter-spacing:1px;" data-i18n="doc.s9.closing">AQMath gives you the computational power of a quantitative hedge fund&rsquo;s allocation engine while maintaining the data sovereignty of a paper notebook.</p>
         </div>
 
@@ -2370,9 +2374,9 @@
     <a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=617abde5d1"></script>
-<script defer src="/app-backtest.js?v=617abde5d1"></script>
-<script defer src="/app.js?v=617abde5d1"></script>
+<script defer src="/app-widgets.js?v=050451ff41"></script>
+<script defer src="/app-backtest.js?v=050451ff41"></script>
+<script defer src="/app.js?v=050451ff41"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -2383,7 +2387,7 @@
 
 <!-- i18n — Localization -->
 <script src="https://unpkg.com/i18next@23.16.8/dist/umd/i18next.min.js" integrity="sha384-ZB4j+Y4rqTlON+loxr/YKq9WV8qBuZOqKukqmQVgcZ0GFy93B7TMCSezcrRkfJF5" crossorigin="anonymous"></script>
-<script defer src="/app-boot.js?v=617abde5d1"></script>
+<script defer src="/app-boot.js?v=050451ff41"></script>
 
 </body>
 </html>

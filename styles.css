@@ -854,6 +854,9 @@
         letter-spacing: 1.5px; margin-bottom: 12px; text-transform: uppercase; }
     .doc-diagram svg { max-width: 100%; height: auto; }
     .doc-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.78rem; }
+    /* wide doc tables scroll inside this wrapper on phones instead of
+       stretching the whole page sideways */
+    .doc-tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .doc-table th { font-family: var(--mono); font-size: 0.55rem; letter-spacing: 1px;
         color: var(--blue); text-align: left; padding: 8px 10px;
         border-bottom: 1px solid var(--border); background: var(--s2); }
