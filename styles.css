@@ -483,6 +483,7 @@
 
     .tbl-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+        .rv-table { min-width: 0; }
     thead tr { border-bottom: 1px solid var(--border); }
     th { padding: 9px 6px; text-align: left; font-size: 0.52rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; font-weight: 500; font-family: var(--mono); }
     tbody tr { border-bottom: 1px solid rgba(255,255,255,0.03); transition: background 0.15s; }
@@ -786,6 +787,7 @@
     .rv-table th:first-child, .rv-table td:first-child { text-align: left; }
     .rv-table td { padding: 9px 12px; text-align: right; color: var(--text); border-top: 1px solid var(--border); white-space: nowrap; }
     .rv-table td.pos { color: var(--green); font-weight: 600; }
+    .rv-stress td:first-child { white-space: normal; min-width: 160px; max-width: 230px; line-height: 1.45; }
     .rv-list { font-size: 0.85rem; line-height: 1.7; color: var(--muted); padding-left: 20px; }
     .rv-list strong { color: var(--text); }
     .rv-disc { font-size: 0.68rem; color: var(--dim); line-height: 1.6; margin-top: 20px;
