@@ -95,18 +95,19 @@ UI = {
 
 DOCS = [
     {
-        "src": "regime-autopsy.md",
-        "out": "regime-autopsy.html",
-        "path": "/research/regime-autopsy",
+        "src": "liveness-screen.md",
+        "out": "liveness-screen.html",
+        "path": "/research/liveness-screen",
         "lang": "en",
         "htmlLang": "en",
-        "published": "2026-08-06",
-        "title": "Regime Autopsy: Worst-Regime OOS Stress Test - AQMath",
-        "shortTitle": "Regime Autopsy &mdash; Worst-Regime OOS Stress Test",
-        "description": ("Post-hoc cuts of the frozen-weight walk-forward series along five named "
-                        "crash regimes (May-2021, LUNA, FTX, Aug-2024, 2025-26): 15/15 "
-                        "regime-basket combinations show a positive out-of-sample drawdown cut, "
-                        "headlines 16.8% vs 44.1% (LUNA) and 3.3% vs 13.3% (FTX)."),
+        "published": "2026-08-07",
+        "title": "Liveness Screen: Fixing the Dead-Token Weight Flaw - AQMath",
+        "shortTitle": "Liveness Screen &mdash; Fixing the Dead-Token Weight Flaw",
+        "description": ("The KKT risk-parity loop can hand a dead token a real allocation, because a "
+                        "collapsed chart looks low-vol: a Celsius-style zombie won a 24.7% frozen "
+                        "weight in our stress basket. We reproduce the flaw, reject three naive "
+                        "filters, and ship the ADV-K2 cap-zero screen — +8.5% final value, Sharpe "
+                        "0.24 to 0.32, zero cost on live-token baskets."),
     },
     {
         "src": "baskets-v14-hist3.md",
