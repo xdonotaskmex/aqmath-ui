@@ -95,6 +95,20 @@ UI = {
 
 DOCS = [
     {
+        "src": "regime-autopsy.md",
+        "out": "regime-autopsy.html",
+        "path": "/research/regime-autopsy",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-08-07",
+        "title": "Regime Autopsy: Does the Shield Survive Its Worst Regimes? - AQMath",
+        "shortTitle": "Regime Autopsy &mdash; Does the Shield Survive Its Worst Regimes?",
+        "description": ("Six named crash regimes - May 2021, LUNA, FTX, Aug 2024, 2025-26 - sliced "
+                        "post-hoc on frozen-weight walk-forward series, with the ADV-K2 liveness "
+                        "screen active: 15 of 15 covered regime-basket combinations show a positive "
+                        "out-of-sample drawdown cut, LUNA contagion held to 16.8% vs 44.1% Buy & Hold."),
+    },
+    {
         "src": "liveness-screen.md",
         "out": "liveness-screen.html",
         "path": "/research/liveness-screen",

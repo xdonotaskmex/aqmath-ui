@@ -63,37 +63,32 @@
 <thead><tr>
 <th style="text-align:left">Token</th>
 <th style="text-align:right">30-day vol</th>
-<th style="text-align:right">Dynamic cap</th>
 <th style="text-align:right">Frozen weight</th>
 </tr></thead>
 <tbody>
 <tr>
 <td style="text-align:left">BTC</td>
 <td style="text-align:right">1.72%</td>
-<td style="text-align:right">24.5%</td>
 <td style="text-align:right">31.3%</td>
 </tr>
 <tr>
 <td style="text-align:left">ETH</td>
-<td style="text-align:right">4.43% (max → cap 0)</td>
-<td style="text-align:right">0.0%</td>
+<td style="text-align:right">4.43% (highest in basket)</td>
 <td style="text-align:right">0.0%</td>
 </tr>
 <tr>
 <td style="text-align:left"><strong>CEL</strong></td>
 <td style="text-align:right"><strong>2.30%</strong></td>
-<td style="text-align:right"><strong>19.3%</strong></td>
 <td style="text-align:right"><strong>24.7%</strong></td>
 </tr>
 <tr>
 <td style="text-align:left">PAXG</td>
 <td style="text-align:right">0.62%</td>
-<td style="text-align:right">34.4%</td>
 <td style="text-align:right">44.0%</td>
 </tr>
 </tbody></table></div>
-<p>The mechanism: the dynamic cap is <code>cap = 40% − (vol₃₀ / max vol₃₀) × 30%</code>, clamped to [10%, 40%]; raw KKT weights are then renormalised to 100%. ETH was the most volatile token that day, so it took cap 0 — and the dead CEL token, whose price barely moved, inherited a <strong>24.7% frozen weight</strong> purely because a collapsed chart has low measured volatility. Nothing in the volatility math can see that the market behind those closes is gone.</p>
-<figure class="rs-fig"><img src="/research/assets/liveness_weights.svg" alt="CEL frozen weight at every macro re-optimisation — the 2025-08-24 anomaly in red" width="920" height="330" loading="lazy" decoding="async"></figure>
+<p>The mechanism: the macro optimiser pairs every token with a dynamic weight ceiling that tightens as its recent volatility rises — the most volatile member of the basket is always squeezed out entirely — and the resulting weights are renormalised to 100%. ETH was the most volatile token that day, so it took zero — and the dead CEL token, whose price barely moved, inherited a <strong>24.7% frozen weight</strong> purely because a collapsed chart has low measured volatility. Nothing in the volatility math can see that the market behind those closes is gone.</p>
+<figure class="rs-fig"><img src="/research/assets/liveness_weights.svg" alt="CEL frozen weight at every macro re-optimisation — the 2025-08-24 anomaly in red" width="920" height="392" loading="lazy" decoding="async"></figure>
 <h2>3. Candidate screens — what we tested and rejected</h2>
 <p>All screens use <strong>trailing data only</strong> (≤ the re-optimisation date) and were walked through every one of the 13 re-optimisations of basket C.</p>
 <div class="rs-tablewrap">
@@ -181,7 +176,7 @@
 <p>A daily-close backtest prices volatility, not <strong>exit risk</strong>. The 24.7% CEL position is marked at closes that assume you can sell at that price; in a dead market the real cost is slippage, thin books, or no exit at all. That loss never appears in backtest metrics — which is exactly why the naive &quot;just optimize harder&quot; intuition fails here. The screen is justified operationally; the backtest shows only that it does no net harm.</p>
 <h2>6. Production implementation (shipped)</h2>
 <p>The screen is implemented in the live paper trading service (<code>liveness.py</code>, wired into both forward logs at their macro re-optimisation points):</p>
-<ul><li><strong>Volume feed:</strong> the CoinGecko <code>total_volumes</code> series (USD-denominated) from the raw collector table. The cleaned price table&#x27;s volume column is <em>not</em> used — it mixes USD and base-unit volumes from different exchanges.</li><li><strong>Rule:</strong> trailing-180d average dollar volume &lt; $1M ⇒ fail; a token is zeroed only after failing at <strong>two consecutive re-optimisations</strong> (K=2), with the fail state persisted in the database across redeploys.</li><li><strong>Fail-open everywhere:</strong> a symbol with fewer than 90 volume-days of coverage in the window is never screened; a database error leaves the frozen weights untouched. The screen can only ever reduce exposure to dead tokens — it can never break the loop.</li><li><strong>Cap-zero mechanics:</strong> KKT caps and covariance are computed on the full universe exactly as before; only the frozen weights are adjusted afterwards (zero + renormalize), and every zeroing is logged and attached to the frozen-weights warnings.</li></ul>
+<ul><li><strong>Volume feed:</strong> the CoinGecko <code>total_volumes</code> series (USD-denominated) from the raw collector table. The cleaned price table&#x27;s volume column is <em>not</em> used — it mixes USD and base-unit volumes from different exchanges.</li><li><strong>Rule:</strong> trailing-180d average dollar volume &lt; $1M ⇒ fail; a token is zeroed only after failing at <strong>two consecutive re-optimisations</strong> (K=2), with the fail state persisted in the database across redeploys.</li><li><strong>Fail-open everywhere:</strong> a symbol with fewer than 90 volume-days of coverage in the window is never screened; a database error leaves the frozen weights untouched. The screen can only ever reduce exposure to dead tokens — it can never break the loop.</li><li><strong>Cap-zero mechanics:</strong> the optimiser runs on the full universe exactly as before; only the frozen weights are adjusted afterwards (zero + renormalize), and every zeroing is logged and attached to the frozen-weights warnings.</li></ul>
 <p>Verified against the production modules: 19/19 checks pass, including an exact reproduction of the 24.7% anomaly by the shipped <code>macro_reoptimize</code> and its correction to BTC 41.6% / PAXG 58.4% by the screen.</p>
 <h2>7. Caveats</h2>
 <ul><li>The study window uses research-grade (Yahoo) volume for the screen walk; the production service reads exchange-aggregated CoinGecko volumes. The threshold is deliberately coarse ($1M/day) so the two feeds agree on which side of it a dead token sits.</li><li>$1M/day is a judgment call: high enough to mark a market as un-exitable for our sizes, low enough never to touch any token that currently trades in the live baskets.</li><li>The screen fires at re-optimisation boundaries (every ~180 days) — it is a composition guard, not an intraday circuit breaker. The Deleverage Shield remains the fast layer.</li><li>Historical study with simulated fees and closes; nothing here is financial advice.</li></ul>

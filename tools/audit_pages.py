@@ -68,6 +68,7 @@ NEEDS_SIM_NOTICE = {
     "research/oos-v14-new-tokens.html",
     "research/oos-v14-new-tokens-zh.html",
     "research/liveness-screen.html",
+    "research/regime-autopsy.html",
 }
 
 FORBIDDEN_ORIGINS = [

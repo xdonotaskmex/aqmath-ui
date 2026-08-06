@@ -29,19 +29,21 @@ parameter changes. Window 2020-03 → 2026-08, $1,000 start, DCA $100/30d,
 At the **2025-08-24 re-optimisation** the optimizer produced this frozen
 sleeve:
 
-| Token | 30-day vol | Dynamic cap | Frozen weight |
-|-------|-----------:|------------:|--------------:|
-| BTC | 1.72% | 24.5% | 31.3% |
-| ETH | 4.43% (max → cap 0) | 0.0% | 0.0% |
-| **CEL** | **2.30%** | **19.3%** | **24.7%** |
-| PAXG | 0.62% | 34.4% | 44.0% |
+| Token | 30-day vol | Frozen weight |
+|-------|-----------:|--------------:|
+| BTC | 1.72% | 31.3% |
+| ETH | 4.43% (highest in basket) | 0.0% |
+| **CEL** | **2.30%** | **24.7%** |
+| PAXG | 0.62% | 44.0% |
 
-The mechanism: the dynamic cap is `cap = 40% − (vol₃₀ / max vol₃₀) × 30%`,
-clamped to [10%, 40%]; raw KKT weights are then renormalised to 100%. ETH
-was the most volatile token that day, so it took cap 0 — and the dead CEL
-token, whose price barely moved, inherited a **24.7% frozen weight** purely
-because a collapsed chart has low measured volatility. Nothing in the
-volatility math can see that the market behind those closes is gone.
+The mechanism: the macro optimiser pairs every token with a dynamic weight
+ceiling that tightens as its recent volatility rises — the most volatile
+member of the basket is always squeezed out entirely — and the resulting
+weights are renormalised to 100%. ETH was the most volatile token that day,
+so it took zero — and the dead CEL token, whose price barely moved,
+inherited a **24.7% frozen weight** purely because a collapsed chart has
+low measured volatility. Nothing in the volatility math can see that the
+market behind those closes is gone.
 
 ![CEL frozen weight at every macro re-optimisation — the 2025-08-24 anomaly in red](oos_assets/liveness_weights.svg)
 
@@ -116,10 +118,10 @@ points):
   coverage in the window is never screened; a database error leaves the
   frozen weights untouched. The screen can only ever reduce exposure to dead
   tokens — it can never break the loop.
-- **Cap-zero mechanics:** KKT caps and covariance are computed on the full
-  universe exactly as before; only the frozen weights are adjusted
-  afterwards (zero + renormalize), and every zeroing is logged and attached
-  to the frozen-weights warnings.
+- **Cap-zero mechanics:** the optimiser runs on the full universe exactly
+  as before; only the frozen weights are adjusted afterwards (zero +
+  renormalize), and every zeroing is logged and attached to the
+  frozen-weights warnings.
 
 Verified against the production modules: 19/19 checks pass, including an
 exact reproduction of the 24.7% anomaly by the shipped `macro_reoptimize`
