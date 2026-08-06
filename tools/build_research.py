@@ -95,6 +95,20 @@ UI = {
 
 DOCS = [
     {
+        "src": "regime-autopsy.md",
+        "out": "regime-autopsy.html",
+        "path": "/research/regime-autopsy",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-08-06",
+        "title": "Regime Autopsy: Worst-Regime OOS Stress Test - AQMath",
+        "shortTitle": "Regime Autopsy &mdash; Worst-Regime OOS Stress Test",
+        "description": ("Post-hoc cuts of the frozen-weight walk-forward series along five named "
+                        "crash regimes (May-2021, LUNA, FTX, Aug-2024, 2025-26): 15/15 "
+                        "regime-basket combinations show a positive out-of-sample drawdown cut, "
+                        "headlines 16.8% vs 44.1% (LUNA) and 3.3% vs 13.3% (FTX)."),
+    },
+    {
         "src": "baskets-v14-hist3.md",
         "out": "baskets-v14-hist3.html",
         "path": "/research/baskets-v14-hist3",
