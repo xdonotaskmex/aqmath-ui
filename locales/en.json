@@ -66,7 +66,7 @@
     "betaF3": "Unlimited tokens and portfolio optimization",
     "betaF4": "Automatic 180-day historical data pipeline",
     "betaF5": "DCA distribution with full safety pipeline",
-    "betaF6": "Non-custodial privacy — no server stores your portfolio",
+    "betaF6": "Non-custodial privacy — portfolio stays in your browser (server-side storage only if you opt in to daily signals)",
     "betaF7": "365-day access from activation",
     "betaF8": "Send a message — we review and activate within 48h",
     "blackF1": "Risk Parity optimization with full Covariance &amp; Variance Matrix",
@@ -74,7 +74,7 @@
     "blackF3": "Dynamic volatility-based allocation caps",
     "blackF4": "Automatic 180-day historical data pipeline",
     "blackF5": "Unlimited token support and portfolio optimization",
-    "blackF6": "Non-custodial privacy &mdash; no server stores your portfolio",
+    "blackF6": "Non-custodial privacy &mdash; portfolio stays in your browser (server-side storage only if you opt in to daily signals)",
     "blackF7": "Annual access only &mdash; no monthly or quarterly plans",
     "blackF8": "14-day EU right of withdrawal &mdash; firm annual term afterwards <a href=\"/widerruf\" style=\"color:var(--purple);font-size:0.85em\">[details]</a>"
   },
@@ -97,7 +97,7 @@
     "q1": "How does the engine calculate risk?",
     "a1": "The Black engine uses a <strong>Variance Matrix</strong>, asset <strong>Covariance</strong>, volatility estimates, and KKT-style projection to calculate Risk Parity allocations where each asset contributes a controlled share of portfolio risk. <a href=\"/docs\" style=\"color:#a78bfa;\">You can audit the full mathematical model in our [Documentation].</a>",
     "q2": "How is AQMath actually private?",
-    "a2": "We don't track your wallet, and we never store your identity or portfolio in any database. Your token balances are stored only in your browser's localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately — nothing is persisted. The only thing we keep server-side is a one-way hashed beta-activation record (see the beta-key question below) — never your financial data. Your financial privacy is architecturally enforced. <a href=\"/docs\" style=\"color:#a78bfa;\">Read the full privacy architecture in our [Documentation].</a>",
+    "a2": "We don't track your wallet, and we never store your identity or portfolio in any database — with one optional exception: if you enable the personalised daily-signal service, your holdings are stored server-side under the hash of your activation key, solely to compute your daily signals, and deleted at any time (Privacy Policy §9). By default, your token balances live only in your browser's localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately — nothing is persisted. The only other server-side record is a one-way hashed beta-activation record (see the beta-key question below) — never your financial data. Your financial privacy is architecturally enforced. <a href=\"/docs\" style=\"color:#a78bfa;\">Read the full privacy architecture in our [Documentation].</a>",
     "q3": "What's included in Beta vs Black?",
     "a3": "Beta access includes the full engine — Risk Parity optimization, Deleverage Shield, DCA distribution, unlimited tokens, and the automated data pipeline. It's the same math as Black, limited to 10 slots with a 365-day activation period. Black adds annual renewals and direct support.",
     "q4": "Why are market widgets separated from features?",
@@ -105,7 +105,7 @@
     "q5": "What is the Safe-Haven (USDC) feature?",
     "a5": "When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token.",
     "q6": "How do I apply for Black access?",
-    "a6": "DM us on <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" style=\"color:#a78bfa;\">Telegram</a> or <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:#a78bfa;\">Twitter</a>. We review every applicant personally — €999 / year. We want to make sure AQMath is right for you before you pay. Payments accepted exclusively in USDC and EURC.",
+    "a6": "DM us on <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" style=\"color:#a78bfa;\">Telegram</a> or <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:#a78bfa;\">Twitter</a>. We review every applicant personally — €999 / year. No call required — send a message, we review and send your activation key within 48h. Payments accepted exclusively in USDC and EURC.",
     "q7": "Do you offer monthly plans?",
     "a7": "No. AQMath operates exclusively on an annual subscription model. We do not offer monthly, quarterly, or semi-annual plans. EU consumers keep the statutory 14-day right of withdrawal &mdash; see the <a href=\"/widerruf\" style=\"color:#a78bfa;\">withdrawal notice</a>; after that the annual term is firm and is not refunded pro rata on early cancellation.",
     "q8": "Is AQMath a trading bot?",
@@ -113,7 +113,9 @@
     "q9": "Is there a mobile app?",
     "a9": "No. AQMath is a web application only. Any app using our name on iOS or Android is not ours and is not authorized.",
     "q10": "Do beta keys track my IP address?",
-    "a10": "No &mdash; not in any readable form. A beta key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href=\"/privacy\" style=\"color:#a78bfa;\">Privacy Policy</a>."
+    "a10": "No &mdash; not in any readable form. A beta key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href=\"/privacy\" style=\"color:#a78bfa;\">Privacy Policy</a>.",
+    "q11": "Is there an automatic daily signal or notification service?",
+    "a11": "Yes — as an <strong>optional, opt-in service</strong>. If you enable it, the engine computes your deleverage shield signal and DCA schedule once per day on the server and can push a notification to your device. To do that, your holdings are stored under the hash of your activation key — never under your name or wallet — and deleted completely the moment you withdraw consent. Full details are in Section 9 of our <a href=\"/privacy\" style=\"color:#a78bfa;\">Privacy Policy</a>."
   },
   "community": {
     "title": "--community-signals"
@@ -195,7 +197,7 @@
       "q7": "What is Safe-Haven (USDC)?",
       "a7": "When enabled, USDC acts as a stablecoin buffer. Excess funds from hard caps and unallocated DCA budget flow into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token.",
       "q8": "Is my data safe?",
-      "a8": "Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in-memory, and discarded immediately. The only server-side record is a one-way hashed beta-key activation (with a hashed IP fingerprint) used purely to protect beta access — never your portfolio. Non-custodial by design."
+      "a8": "Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in-memory, and discarded immediately. The only server-side records are the one-way hashed beta-key activation (with a hashed IP fingerprint) and — only if you opt in to the daily-signal service — your holdings under your hashed key, deleted on withdrawal. Non-custodial by design."
     },
     "allocationTitle": "--allocation",
     "tokens": "Tokens",
@@ -251,7 +253,7 @@
       "privacy": "Privacy Deep-Dive",
       "separation": "Data Separation",
       "backendNever": "What Backend Never Sees",
-      "zkModel": "ZK Privacy Model"
+      "zkModel": "Non-Custodial Privacy"
     },
     "s1": {
       "title": "1. What is AQMath?",
@@ -287,8 +289,8 @@
       "clean4": "<strong>Multi-Source Merge</strong> — when the same token is collected from multiple exchanges, the median price is used to eliminate exchange-specific bias.",
       "cleanP2": "This pipeline runs daily at 01:00 UTC via a scheduled cron job. The result is a clean, continuous price series suitable for covariance and volatility calculations.",
       "zkTitle": "2.3 Non-Custodial Privacy Model",
-      "zkP": "AQMath’s privacy architecture is non-custodial by design. The backend processes your DCA request statelessly — it receives position data, computes optimal allocation, returns results, and discards everything from memory. No persistent record of your holdings is ever created server-side:",
-      "zk1": "No portfolio or financial database exists — there is nothing to hack, leak, or subpoena",
+      "zkP": "AQMath’s privacy architecture is non-custodial by design. The backend processes your DCA request statelessly — it receives position data, computes optimal allocation, returns results, and discards everything from memory. By default, no persistent record of your holdings is ever created server-side (the only exception is the optional daily-signal service, see Section 9):",
+      "zk1": "By default, no portfolio or financial database exists — there is nothing to hack, leak, or subpoena (exception: the opt-in daily-signal service stores holdings under your hashed activation key, deletable at any time)",
       "zk2": "No portfolio amounts are logged or stored server-side after a DCA response",
       "zk3": "No wallet addresses, API keys, or identity information is ever collected",
       "zk4": "The backend cannot reconstruct your portfolio even if it wanted to — it simply doesn’t retain the data",
@@ -428,7 +430,7 @@
       "bnTitle": "9.1 What the Backend NEVER Sees",
       "bnP": "This is the most critical section. The following data is architecturally impossible for the backend to access:",
       "bnCt": "🔒 ARCHITECTURAL PRIVACY GUARANTEES",
-      "bnCtP": "No database table maps users to portfolios. No log file records your holdings. Even with full server access, an attacker would find <strong>zero information</strong> about any user’s financial state.",
+      "bnCtP": "By default, no database table maps users to portfolios. No log file records your holdings. The only exception is the opt-in daily-signal service (Section 9): holdings stored under the hash of your activation key. Even with full server access, an attacker would find <strong>no other information</strong> about any user’s financial state.",
       "thData": "Data",
       "thWhy": "Why Backend Can’t See It",
       "t1a": "Wallet addresses",
@@ -447,7 +449,7 @@
       "t7b": "Sent during DCA for avg calc but not stored",
       "t8a": "Beta key identity",
       "t8b": "JWT validated but not linked to portfolio data",
-      "bnP2": "The backend processes your DCA request in a single HTTP round-trip: receive positions → compute allocation → return results → discard. There is no database table that maps users to portfolios. There is no log file that records your holdings. Even if someone gained full access to the server, they would find <strong>zero information</strong> about any user’s financial state.",
+      "bnP2": "The backend processes your DCA request in a single HTTP round-trip: receive positions → compute allocation → return results → discard. By default, there is no database table that maps users to portfolios (the only exception is the opt-in daily-signal service: holdings stored under the hash of your activation key). There is no log file that records your holdings. Even if someone gained full access to the server, they would find <strong>no other information</strong> about any user’s financial state.",
       "zkTitle": "9.2 Non-Custodial Privacy Model",
       "zkP": "AQMath implements a practical non-custodial privacy model:",
       "zk1": "<strong>The backend proves</strong> that the DCA allocation is mathematically optimal through detailed buy summaries (e.g., “BTC: +$142.30 (0.002371 tokens)”).",

@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=947d5102b5">
+    <link rel="stylesheet" href="/styles.min.css?v=34773390c4">
 </head>
 <body>
 
@@ -491,7 +491,7 @@
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q2">How is AQMath actually private?</div>
-                <div class="lp-faq-a" data-i18n-html="faq.a2">We don&rsquo;t track your wallet, and we never store your identity or portfolio in any database. Your token balances are stored only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. The only thing we keep server-side is a one-way hashed beta-activation record (see the beta-key question below) &mdash; never your financial data. Your financial privacy is architecturally enforced. <a href="/docs" style="color:var(--purple);">Read the full privacy architecture in our [Documentation].</a></div>
+                <div class="lp-faq-a" data-i18n-html="faq.a2">We don&rsquo;t track your wallet, and we never store your identity or portfolio in any database &mdash; with one optional exception: if you enable the personalised daily-signal service, your holdings are stored server-side under the hash of your activation key, solely to compute your daily signals, and deleted at any time (Privacy Policy &sect;9). By default, your token balances live only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. The only other server-side record is a one-way hashed beta-activation record (see the beta-key question below) &mdash; never your financial data. Your financial privacy is architecturally enforced. <a href="/docs" style="color:var(--purple);">Read the full privacy architecture in our [Documentation].</a></div>
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q10">Do beta keys track my IP address?</div>
@@ -524,6 +524,10 @@
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q9">Is there a mobile app?</div>
                 <div class="lp-faq-a" data-i18n-html="faq.a9">No. AQMath is a web application only. Any app using our name on any app store is unauthorized and not affiliated with us.</div>
+            </div>
+            <div class="lp-faq-item">
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q11">Is there an automatic daily signal or notification service?</div>
+                <div class="lp-faq-a" data-i18n-html="faq.a11">Yes &mdash; as an <strong>optional, opt-in service</strong>. If you enable it, the engine computes your deleverage shield signal and DCA schedule once per day on the server and can push a notification to your device. To do that, your holdings are stored under the hash of your activation key &mdash; never under your name or wallet &mdash; and deleted completely the moment you withdraw consent. Full details are in Section 9 of our <a href="/privacy" style="color:var(--purple);">Privacy Policy</a>.</div>
             </div>
         </section>
     </div>
@@ -628,10 +632,10 @@
     <a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=947d5102b5"></script>
-<script defer src="/app-backtest.js?v=947d5102b5"></script>
-<script defer src="/app.js?v=947d5102b5"></script>
-<script defer src="/app-notify.js?v=947d5102b5"></script>
+<script defer src="/app-widgets.js?v=34773390c4"></script>
+<script defer src="/app-backtest.js?v=34773390c4"></script>
+<script defer src="/app.js?v=34773390c4"></script>
+<script defer src="/app-notify.js?v=34773390c4"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -643,7 +647,7 @@
 <!-- i18n — Localization. Self-hosted (was unpkg.com CDN): the third-party hop
      sat on the critical path and cost ~900 ms LCP on slow networks. -->
 <script defer src="/vendor/i18next.min.js"></script>
-<script defer src="/app-boot.js?v=947d5102b5"></script>
+<script defer src="/app-boot.js?v=34773390c4"></script>
 
 </body>
 </html>

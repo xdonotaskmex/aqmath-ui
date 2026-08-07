@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=947d5102b5">
+    <link rel="stylesheet" href="/styles.min.css?v=34773390c4">
 </head>
 <body>
 
@@ -207,7 +207,7 @@
         <a href="#doc-privacy" class="doc-nav-head" data-i18n="doc.nav.privacy">Privacy Deep-Dive</a>
         <a href="#doc-separation" class="doc-nav-sub" data-i18n="doc.nav.separation">Data Separation</a>
         <a href="#doc-backend-never" class="doc-nav-sub" data-i18n="doc.nav.backendNever">What Backend Never Sees</a>
-        <a href="#doc-zk-model" class="doc-nav-sub" data-i18n="doc.nav.zkModel">ZK Privacy Model</a>
+        <a href="#doc-zk-model" class="doc-nav-sub" data-i18n="doc.nav.zkModel">Non-Custodial Privacy</a>
     </nav>
 
     <div class="doc-wrap doc-has-sidebar">
@@ -288,7 +288,7 @@
                     <text x="700" y="222" text-anchor="middle" fill="var(--amber)" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="500">PRIVACY BOUNDARY</text>
                     <text x="700" y="240" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Positions sent during DCA, never stored.</text>
                     <text x="700" y="254" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Amounts sent only during DCA, never stored.</text>
-                    <text x="700" y="268" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">No server-side persistence.</text>
+                    <text x="700" y="268" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">No persistence (opt-in daily signals excepted).</text>
                 </svg>
             </div>
 
@@ -313,9 +313,9 @@
             <p data-i18n="doc.s2.cleanP2">This pipeline runs daily at 01:00 UTC via a scheduled cron job. The result is a clean, continuous price series suitable for covariance and volatility calculations.</p>
 
             <h3 id="doc-zk" data-i18n="doc.s2.zkTitle">2.3 Non-Custodial Privacy Model</h3>
-            <p data-i18n-html="doc.s2.zkP">AQMath&rsquo;s privacy architecture is non-custodial by design. The backend processes your DCA request statelessly &mdash; it receives position data, computes optimal allocation, returns results, and discards everything from memory. No persistent record of your holdings is ever created server-side:</p>
+            <p data-i18n-html="doc.s2.zkP">AQMath&rsquo;s privacy architecture is non-custodial by design. The backend processes your DCA request statelessly &mdash; it receives position data, computes optimal allocation, returns results, and discards everything from memory. By default, no persistent record of your holdings is ever created server-side (the only exception is the optional daily-signal service, see Section 9):</p>
             <ul>
-                <li data-i18n-html="doc.s2.zk1">No portfolio or financial database exists &mdash; there is nothing to hack, leak, or subpoena</li>
+                <li data-i18n-html="doc.s2.zk1">By default, no portfolio or financial database exists &mdash; there is nothing to hack, leak, or subpoena (exception: the opt-in daily-signal service stores holdings under your hashed activation key, deletable at any time)</li>
                 <li data-i18n="doc.s2.zk2">No portfolio amounts are logged or stored server-side after a DCA response</li>
                 <li data-i18n="doc.s2.zk3">No wallet addresses, API keys, or identity information is ever collected</li>
                 <li data-i18n-html="doc.s2.zk4">The backend cannot reconstruct your portfolio even if it wanted to &mdash; it simply doesn&rsquo;t retain the data</li>
@@ -922,7 +922,7 @@
             <p data-i18n="doc.s9.bnP">This is the most critical section. The following data is architecturally impossible for the backend to access:</p>
             <div class="doc-callout red">
                 <div class="doc-ct" data-i18n-html="doc.s9.bnCt">&#128274; ARCHITECTURAL PRIVACY GUARANTEES</div>
-                <p data-i18n-html="doc.s9.bnCtP">No database table maps users to portfolios. No log file records your holdings. Even with full server access, an attacker would find <strong>zero information</strong> about any user&rsquo;s financial state.</p>
+                <p data-i18n-html="doc.s9.bnCtP">By default, no database table maps users to portfolios. No log file records your holdings. The only exception is the opt-in daily-signal service (Section 9): holdings stored under the hash of your activation key. Even with full server access, an attacker would find <strong>no other information</strong> about any user&rsquo;s financial state.</p>
             </div>
             <div class="doc-tablewrap">
             <table class="doc-table">
@@ -939,7 +939,7 @@
                 </tbody>
             </table>
             </div>
-            <p data-i18n-html="doc.s9.bnP2">The backend processes your DCA request in a single HTTP round-trip: receive positions &rarr; compute allocation &rarr; return results &rarr; discard. There is no database table that maps users to portfolios. There is no log file that records your holdings. Even if someone gained full access to the server, they would find <strong>zero information</strong> about any user&rsquo;s financial state.</p>
+            <p data-i18n-html="doc.s9.bnP2">The backend processes your DCA request in a single HTTP round-trip: receive positions &rarr; compute allocation &rarr; return results &rarr; discard. By default, there is no database table that maps users to portfolios (the only exception is the opt-in daily-signal service: holdings stored under the hash of your activation key). There is no log file that records your holdings. Even if someone gained full access to the server, they would find <strong>no other information</strong> about any user&rsquo;s financial state.</p>
 
             <h3 id="doc-zk-model" data-i18n="doc.s9.zkTitle">9.2 Non-Custodial Privacy Model</h3>
             <p data-i18n="doc.s9.zkP">AQMath implements a practical non-custodial privacy model:</p>
@@ -980,10 +980,10 @@
     <a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=947d5102b5"></script>
-<script defer src="/app-backtest.js?v=947d5102b5"></script>
-<script defer src="/app.js?v=947d5102b5"></script>
-<script defer src="/app-notify.js?v=947d5102b5"></script>
+<script defer src="/app-widgets.js?v=34773390c4"></script>
+<script defer src="/app-backtest.js?v=34773390c4"></script>
+<script defer src="/app.js?v=34773390c4"></script>
+<script defer src="/app-notify.js?v=34773390c4"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -995,7 +995,7 @@
 <!-- i18n — Localization. Self-hosted (was unpkg.com CDN): the third-party hop
      sat on the critical path and cost ~900 ms LCP on slow networks. -->
 <script defer src="/vendor/i18next.min.js"></script>
-<script defer src="/app-boot.js?v=947d5102b5"></script>
+<script defer src="/app-boot.js?v=34773390c4"></script>
 
 </body>
 </html>

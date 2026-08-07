@@ -398,7 +398,7 @@ function updateProButtons() {
             engineBtn.textContent = 'AQMath Engine — OPTIMIZE';
         } else {
             engineBtn.className = 'btn amber';
-            engineBtn.textContent = 'AQMath Engine — PRO';
+            engineBtn.textContent = 'AQMath Engine — BLACK';
         }
     }
     if (refreshBtn) {
@@ -409,7 +409,7 @@ function updateProButtons() {
         } else {
             refreshBtn.className = 'btn ghost';
             refreshBtn.disabled = true;
-            refreshBtn.textContent = 'Refresh History — PRO';
+            refreshBtn.textContent = 'Refresh History — BLACK';
         }
     }
 }
@@ -586,7 +586,7 @@ function deployUSDC() {
     showToast(`$${val.toFixed(2)} USDC moved to your DCA amount — click DISTRIBUTE to deploy.`, 'success');
 }
 
-// ============ DELEVERAGE TOGGLE (PRO) ============
+// ============ DELEVERAGE TOGGLE (BLACK) ============
 const DL_KEY = 'aqmath_deleverage_on';
 const DL_STATE_KEY = 'aqmath_deleverage_shield_state';
 function getDeleverageToggle() {
@@ -624,7 +624,7 @@ function updateDeleverageUI() {
     if (!sw) return;
     sw.className = on ? 'dl-sw' : 'dl-sw off';
     lb.className = on ? 'dl-lbl' : 'dl-lbl off';
-    lb.innerHTML = 'DELEVERAGE <span class="dl-pro-badge">PRO</span>';
+    lb.innerHTML = 'DELEVERAGE <span class="dl-pro-badge">BLACK</span>';
     ds.textContent = on
         ? 'ON \u2014 shields KKT weights during downside signature'
         : 'OFF \u2014 KKT weights pass through unmodified';
@@ -1581,7 +1581,7 @@ async function applyDcaResult(result, dcaAmount) {
     ]);
 }
 
-// ============ AQMath ENGINE OPTIMIZATION (data-pipeline /optimize) — PRO ONLY ============
+// ============ AQMath ENGINE OPTIMIZATION (data-pipeline /optimize) — BLACK ONLY ============
 async function optimizePortfolio() {
     if (!isPro) { showProModal(); return; }
 
@@ -1873,7 +1873,7 @@ function importJSON(event) {
     event.target.value = '';
 }
 
-// ============ REFRESH HISTORY (PRO) ============
+// ============ REFRESH HISTORY (BLACK) ============
 async function refreshHistory() {
     if (!isPro) { updateProButtons(); return; }
     const tokens = portfolio.filter(t => t.amount > 0 && !t.safeHaven);
