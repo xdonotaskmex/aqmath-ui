@@ -95,6 +95,20 @@ UI = {
 
 DOCS = [
     {
+        "src": "graveyard.md",
+        "out": "graveyard.html",
+        "path": "/research/graveyard",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-08-07",
+        "title": "Graveyard Gauntlet: Who Saves the Basket When Tokens Die? - AQMath",
+        "shortTitle": "Graveyard Gauntlet &mdash; Who Saves the Basket When Tokens Die?",
+        "description": ("A worst-case basket holding CEL, LUNC and FTT through their 2022 deaths: "
+                        "the system draws down 18% vs 62% for buy & hold, and the honest attribution "
+                        "shows the optimizer dodging slow deaths, the Shield absorbing fast ones, and "
+                        "the liveness screen cleaning up afterwards - not before."),
+    },
+    {
         "src": "robustness.md",
         "out": "robustness.html",
         "path": "/research/robustness",

@@ -70,6 +70,7 @@ NEEDS_SIM_NOTICE = {
     "research/liveness-screen.html",
     "research/regime-autopsy.html",
     "research/robustness.html",
+    "research/graveyard.html",
 }
 
 FORBIDDEN_ORIGINS = [
