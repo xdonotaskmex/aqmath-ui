@@ -130,11 +130,66 @@ function _renderShieldStatus(data) {
     const weights = (data.weights || [])
         .map(w => `${w.sym} ${(Number(w.weight) || 0).toFixed(1)}%`)
         .join(' · ');
+    const last = data.last_signal || {};
+    const parked = last.dca && last.dca.route === 'USDC' ? last.dca.parked_total : null;
     el.innerHTML =
         `shield: ${active}<br>`
         + `frozen weights: ${weights || '—'}<br>`
         + `macro re-opt: ${(data.next_reopt_at || '').slice(0, 10)}<br>`
-        + `last run: ${data.last_run_at ? data.last_run_at.slice(0, 10) : '—'}`;
+        + `last run: ${data.last_run_at ? data.last_run_at.slice(0, 10) : '—'}`
+        + (data.next_dca_on ? `<br>next DCA: ${data.next_dca_on}` : '')
+        + (parked ? `<br>DCA parked in USDC: ~$${Number(parked).toLocaleString()}` : '');
+    _applyShieldSettings(data.settings);
+}
+
+function _applyShieldSettings(settings) {
+    // Fill the mode & DCA inputs from the server-side settings (they are the
+    // source of truth — never localStorage).
+    if (!settings) return;
+    const chk = document.getElementById('chkDeleverage');
+    const amt = document.getElementById('numDcaAmount');
+    const itv = document.getElementById('numDcaInterval');
+    if (chk) chk.checked = settings.deleverage !== false;
+    if (amt && Number(settings.dca_amount) > 0) amt.value = settings.dca_amount;
+    if (itv && settings.dca_interval) itv.value = settings.dca_interval;
+}
+
+async function saveShieldSettings() {
+    if (!isBetaActive()) return showToast('Activate beta first.', 'warning');
+    const chk = document.getElementById('chkDeleverage');
+    const amt = document.getElementById('numDcaAmount');
+    const itv = document.getElementById('numDcaInterval');
+    const body = { deleverage: chk ? chk.checked : true };
+    if (amt && amt.value !== '') body.dca_amount = Number(amt.value);
+    if (itv && itv.value !== '') body.dca_interval = Number(itv.value);
+    const btn = document.getElementById('btnShieldSettings');
+    if (btn) { btn.disabled = true; btn.textContent = '[ saving... ]'; }
+    try {
+        const res = await _shieldFetch('/portfolio/settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+            return showToast(data.detail || 'Could not save settings.', 'error');
+        }
+        _applyShieldSettings(data.settings);
+        const hint = document.getElementById('dcaHint');
+        if (hint && data.next_dca_on) {
+            hint.textContent = 'next DCA signal: ' + data.next_dca_on
+                + ' — you will be told whether it goes to USDC or into tokens.';
+        }
+        showToast(body.deleverage
+            ? 'Saved — full mode: shield + USDC routing + DCA on schedule.'
+            : 'Saved — shield OFF: plain drift-rebalance signals only.', 'success');
+        refreshShieldStatus();
+    } catch (e) {
+        console.error('[AQMath] settings save failed:', e.message);
+        showToast('Save failed: ' + e.message, 'error');
+    } finally {
+        if (btn) { btn.disabled = false; btn.textContent = '[ save mode & DCA ]'; }
+    }
 }
 
 async function refreshShieldStatus() {

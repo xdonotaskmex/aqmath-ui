@@ -195,7 +195,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=29c552fd5a')
+    return fetch('/locales/' + lang + '.json?v=947d5102b5')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -272,6 +272,7 @@ function applyTranslations() {
         hideHowAqmath: function () { hideHowAqmath(); },
         ackHowAqmath: function () { ackHowAqmath(); },
         syncShieldPortfolio: function () { syncShieldPortfolio(); },
+        saveShieldSettings: function () { saveShieldSettings(); },
         enableNotifications: function () { enableNotifications(); },
         disableNotifications: function () { disableNotifications(); },
         copyField: function (el) { _copyText(el); },
