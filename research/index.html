@@ -31,7 +31,7 @@
 
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=fc60328bda">
+<link rel="stylesheet" href="/styles.min.css?v=29c552fd5a">
 </head>
 <body>
 
@@ -48,6 +48,7 @@
 <h1>Research &amp; Validation</h1>
 <p>Published test reports for the AQMath Deleverage Modulator. Each report is generated verbatim from the source write-up in the engine repository, so the figures here are the figures the test produced. The point of publishing them is that a drawdown claim is only worth as much as the test behind it.</p>
 <ul class="rs-list">
+<li class="rs-card"><a href="/research/how-aqmath-works">How AQMath Works &mdash; Signals &amp; What You Execute</a><span class="rs-card-date">2026-08-07</span><p>The must-read user guide: AQMath produces signal-only trading guidance from frozen KKT risk-parity weights (re-optimised every 180 days) and the daily v14 Deleverage Shield - the user executes every trade manually, on their own exchange account.</p></li>
 <li class="rs-card"><a href="/research/mc-risk">Institutional Risk Report &mdash; 3,000 Synthetic Histories</a><span class="rs-card-date">2026-08-07</span><p>Stationary block bootstrap, Deflated Sharpe, White's Reality Check and CVaR on the production v14 wiring: the drawdown cut wins in 98.6-99.7% of 3,000 paired synthetic histories per basket and the one-month tail is ~40% thinner everywhere - but excess return over buy & hold is statistically zero.</p></li>
 <li class="rs-card"><a href="/research/graveyard">Graveyard Gauntlet &mdash; Who Saves the Basket When Tokens Die?</a><span class="rs-card-date">2026-08-07</span><p>A worst-case basket holding CEL, LUNC and FTT through their 2022 deaths: the system draws down 18% vs 62% for buy & hold, and the honest attribution shows the optimizer dodging slow deaths, the Shield absorbing fast ones, and the liveness screen cleaning up afterwards - not before.</p></li>
 <li class="rs-card"><a href="/research/robustness">Robustness &mdash; How Far Can Reality Deviate Before the Shield Breaks?</a><span class="rs-card-date">2026-08-07</span><p>129 walk-forward re-runs perturb every user-facing knob one at a time and stress fees to 20x and execution to 2 days late: no cliff found - two knobs are true plateaus, one is a clean protection dial, and the drawdown cut survives late execution almost intact.</p></li>

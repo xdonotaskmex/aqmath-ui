@@ -366,6 +366,10 @@ async function activateBeta() {
         showToast("You're in — beta access unlocked.", 'success');
         updateProButtons();
         render();
+        // Must-read gate: server says whether the current explainer version was
+        // acknowledged; if not, the modal opens and only "I have read" closes it.
+        if (typeof ensureHowAqmathAck === 'function') ensureHowAqmathAck();
+        if (typeof refreshNotifyUI === 'function') refreshNotifyUI();
     } catch(e) {
         console.error('[AQMath] beta activation failed:', e.message);
         showToast("Couldn't reach the activation service — please check your connection and try again.", 'error');
@@ -418,6 +422,8 @@ function checkBetaUI() {
     if (section) section.classList.toggle('hidden', active);
     if (activeEl) activeEl.classList.toggle('hidden', !active);
     updateProButtons();
+    // Shield status + notification state follow the auth state (app-notify.js).
+    if (typeof refreshNotifyUI === 'function') refreshNotifyUI();
 }
 
 // ========== BACKEND API URLs ==========

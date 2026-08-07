@@ -195,7 +195,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=fc60328bda')
+    return fetch('/locales/' + lang + '.json?v=29c552fd5a')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -267,6 +267,14 @@ function applyTranslations() {
         btResetAll: function () { btResetAll(); },
         hideProModal: function () { hideProModal(); },
         reloadApp: function () { window.location.reload(); },
+        // signal-only automation (app-notify.js)
+        showHowAqmath: function () { showHowAqmath(false); },
+        hideHowAqmath: function () { hideHowAqmath(); },
+        ackHowAqmath: function () { ackHowAqmath(); },
+        syncShieldPortfolio: function () { syncShieldPortfolio(); },
+        enableNotifications: function () { enableNotifications(); },
+        disableNotifications: function () { disableNotifications(); },
+        copyField: function (el) { _copyText(el); },
         // argument actions (arg comes from data-arg)
         lang: function (el, arg) { switchLang(arg); },
         clickEl: function (el, arg) { var t = document.getElementById(arg); if (t) t.click(); },

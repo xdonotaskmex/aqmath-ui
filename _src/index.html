@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=fc60328bda">
+    <link rel="stylesheet" href="/styles.min.css?v=29c552fd5a">
 </head>
 <body>
 
@@ -561,6 +561,26 @@
     </div>
 </div>
 
+<!-- ============ HOW AQMATH WORKS — MUST-READ EXPLAINER ============ -->
+<!-- Content is fetched from /research/how-aqmath-works (generated from
+     _research/how-aqmath-works.md) so the explainer has ONE source. When
+     opened in must-read mode the ONLY exit is the "I have read" button,
+     which records the ack server-side (beta-auth /ack). -->
+<div class="howaq-modal hidden" id="howAqmathModal">
+    <div class="howaq-box">
+        <div class="howaq-head">
+            <h3>&#128214; How AQMath Works</h3>
+            <button class="howaq-close" data-action="hideHowAqmath" title="close">[ &times; ]</button>
+        </div>
+        <div class="howaq-body legal-page" id="howAqmathBody">
+            <p>Loading&hellip;</p>
+        </div>
+        <div class="howaq-foot">
+            <button class="btn purple" id="btnHowAck" data-action="ackHowAqmath">[ I have read ]</button>
+        </div>
+    </div>
+</div>
+
 <!-- ============ TOAST NOTIFICATION ============ -->
 <div class="toast-overlay hidden" id="toastOverlay" data-action="hideToast">
     <div class="toast-box" id="toastBox" data-action="stop">
@@ -666,6 +686,9 @@
                     <span class="pro-badge"><span data-i18n="app.proActive">BLACK ACTIVE</span>
                     <button class="btn-deact" data-action="deactivateBeta">DEACTIVATE</button>
                 </div>
+                <div class="beta-active-row" style="margin-top:8px;">
+                    <button class="btn ghost btn-how" data-action="showHowAqmath" title="How AQMath works">? how it works</button>
+                </div>
             </div>
         </div>
 
@@ -689,6 +712,44 @@
                     <a class="beta-link" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">telegram</a>
                     <a class="beta-link" href="https://x.com/aqmathapp" target="_blank" rel="noopener">twitter</a>
                     <a class="beta-link" href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">substack</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- SHIELD &amp; SIGNALS — personal daily signal loop (signal-only) -->
+        <div class="tc shield-card">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title">--shield-signals</span>
+            </div>
+            <div class="tc-body">
+                <div class="shield-status" id="shieldStatus">not initialized &mdash; sync your portfolio below</div>
+                <button class="btn amber" id="btnShieldSync" data-action="syncShieldPortfolio">[ sync to shield ]</button>
+                <div class="beta-hint">saves your holdings &amp; freezes your KKT weights on first sync. daily-close signals run automatically &mdash; you execute every trade yourself.</div>
+
+                <div class="ntfy-sec">
+                    <div class="ntfy-title">notifications</div>
+                    <div class="ntfy-status" id="ntfyStatus">not connected</div>
+
+                    <div id="ntfyOff">
+                        <label class="ntfy-consent">
+                            <input type="checkbox" id="chkNtfyConsent">
+                            <span>I consent to my holdings being processed to generate personal signals and to receiving push notifications on our first-party server (no third parties). See the Privacy Policy. I can withdraw at any time.</span>
+                        </label>
+                        <button class="btn green" id="btnNtfyEnable" data-action="enableNotifications">[ enable notifications ]</button>
+                    </div>
+
+                    <div class="hidden" id="ntfyOn">
+                        <button class="btn ghost" id="btnNtfyDisable" data-action="disableNotifications">[ disable notifications ]</button>
+                    </div>
+
+                    <div class="hidden ntfy-once" id="ntfyOnce">
+                        <div class="ntfy-once-warn">&#9888; Save these now &mdash; the token is shown only ONCE and cannot be recovered.</div>
+                        <div class="ntfy-row"><span class="ntfy-l">server</span><span class="mono ntfy-v" id="ntfyServer"></span><button class="btn-copy" data-action="copyField" data-arg="ntfyServer">copy</button></div>
+                        <div class="ntfy-row"><span class="ntfy-l">topic</span><span class="mono ntfy-v" id="ntfyTopic"></span><button class="btn-copy" data-action="copyField" data-arg="ntfyTopic">copy</button></div>
+                        <div class="ntfy-row"><span class="ntfy-l">token</span><span class="mono ntfy-v" id="ntfyToken"></span><button class="btn-copy" data-action="copyField" data-arg="ntfyToken">copy</button></div>
+                        <div class="ntfy-steps">in the free <strong>ntfy</strong> app: add our server &rarr; subscribe to your topic &rarr; paste the token in the subscription settings.</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2377,9 +2438,10 @@
     <a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=fc60328bda"></script>
-<script defer src="/app-backtest.js?v=fc60328bda"></script>
-<script defer src="/app.js?v=fc60328bda"></script>
+<script defer src="/app-widgets.js?v=29c552fd5a"></script>
+<script defer src="/app-backtest.js?v=29c552fd5a"></script>
+<script defer src="/app.js?v=29c552fd5a"></script>
+<script defer src="/app-notify.js?v=29c552fd5a"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -2391,7 +2453,7 @@
 <!-- i18n — Localization. Self-hosted (was unpkg.com CDN): the third-party hop
      sat on the critical path and cost ~900 ms LCP on slow networks. -->
 <script defer src="/vendor/i18next.min.js"></script>
-<script defer src="/app-boot.js?v=fc60328bda"></script>
+<script defer src="/app-boot.js?v=29c552fd5a"></script>
 
 </body>
 </html>

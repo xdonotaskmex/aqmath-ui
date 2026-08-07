@@ -29,7 +29,7 @@
     <meta name="twitter:image:alt" content="AQMath — Risk Parity crypto portfolio rebalancer with Deleverage Shield">
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=fc60328bda">
+    <link rel="stylesheet" href="/styles.min.css?v=29c552fd5a">
 </head>
 <body>
 
@@ -43,7 +43,7 @@
     </a>
 
     <h1>Datenschutzerkl&auml;rung / Privacy &amp; Legacy Policy</h1>
-    <p class="legal-updated">Stand: Juli 2026</p>
+    <p class="legal-updated">Stand: August 2026</p>
 
     <h2>&#127465;&#127466; Deutsche Version</h2>
 
@@ -56,9 +56,10 @@
     <p>Diese Website verfolgt einen strengen &bdquo;Privacy-by-Design&ldquo;-Ansatz. Es gibt keine
     Benutzerkonten, keine Wallets und keine serverseitigen Datenbanken. Wir speichern, protokollieren
     oder persistieren Ihre pers&ouml;nlichen Portfolio- oder Finanzdaten zu keinem Zeitpunkt auf unserer
-    Infrastruktur. Die einzige Ausnahme ist unser privates Beta-Zugangssystem (siehe Abschnitt 8),
-    das ausschlie&szlig;lich unumkehrbar gehashte Daten &ndash; niemals Ihre Portfolio- oder Finanzdaten
-    &ndash; allein zur Zugangskontrolle speichert.</p>
+    Infrastruktur. Ausnahmen sind unser privates Beta-Zugangssystem (siehe Abschnitt 8),
+    das ausschlie&szlig;lich unumkehrbar gehashte Daten zur Zugangskontrolle speichert, und die
+    optionale, einwilligungsbasierte Funktion &bdquo;Personalisierte Signale&ldquo; (siehe Abschnitt 9),
+    bei der Sie selbst entscheiden, ob und welche Bestandsdaten Sie uns anvertrauen.</p>
 
     <h3>2. Kurzzeitige serverseitige Verarbeitung (In-Memory Processing)</h3>
     <p>Wenn Sie Berechnungen auf unserer Website durchf&uuml;hren, werden die von Ihnen eingegebenen
@@ -154,11 +155,42 @@
         Bindung zur&uuml;ck oder l&ouml;schen den Datensatz.</li>
     </ul>
 
-    <h3>9. Ihre Rechte</h3>
-    <p>Abgesehen von dem pseudonymisierten Beta-Aktivierungsdatensatz (Abschnitt 8) speichern wir keine
-    personenbezogenen Daten oder Portfolio-Daten auf unseren Servern &ndash; f&uuml;r die allgemeine
-    Verarbeitung besitzen wir daher nichts, wor&uuml;ber wir Auskunft erteilen oder das wir l&ouml;schen
-    k&ouml;nnten. Ihnen stehen grunds&auml;tzlich die Rechte auf Auskunft, Berichtigung, L&ouml;schung,
+    <h3>9. Personalisierte Signale &amp; Benachrichtigungen (optional, nur Beta-Teilnehmer)</h3>
+    <p>Diese Funktionen sind vollst&auml;ndig optional und werden nur aktiv, wenn Sie sie selbst
+    einschalten. Die Berechnung bleibt signalbasiert: Wir f&uuml;hren niemals Trades aus und besitzen
+    keine B&ouml;rsen-API-Schl&uuml;ssel.</p>
+    <ul>
+        <li><strong>Bestandsangaben (Holdings):</strong> Wenn Sie personalisierte Signale aktivieren,
+        &uuml;bermitteln Sie uns die Token-Symbole und Mengen, die Sie halten. Diese Angaben werden
+        verschl&uuml;sselt &uuml;bertragen und in unserer Datenbank verkn&uuml;pft mit dem Hash Ihres
+        Aktivierungsschl&uuml;ssels gespeichert, ausschlie&szlig;lich um Ihre pers&ouml;nlichen
+        Tages-Signale zu berechnen. Rechtsgrundlage: Ihre Einwilligung &ndash; Art. 6 Abs. 1 lit. a
+        DSGVO &ndash;, die Sie jederzeit mit Wirkung f&uuml;r die Zukunft widerrufen k&ouml;nnen
+        (Bestand l&ouml;schen oder Schl&uuml;ssel deaktivieren).</li>
+        <li><strong>Einwilligungsprotokoll:</strong> Jede erteilte Einwilligung (z.&nbsp;B. f&uuml;r
+        Benachrichtigungen) sowie Ihre Best&auml;tigung der Pflichtlekt&uuml;re werden mit Zeitstempel
+        und Version des Textes protokolliert, damit wir die Einwilligung nachweisen k&ouml;nnen
+        (Art. 7 Abs. 1 DSGVO).</li>
+        <li><strong>Benachrichtigungen &ndash; eigene Infrastruktur, keine Dritten:</strong>
+        Push-Benachrichtigungen laufen ausschlie&szlig;lich &uuml;ber unseren eigenen,
+        selbst gehosteten Benachrichtigungsserver. Es ist kein Drittanbieter eingebunden, und Ihre
+        Signaldaten verlassen unsere Infrastruktur nicht. Sie erhalten einen zuf&auml;lligen,
+        nicht erratbaren Themenkanal und einen Nur-Lese-Zugangstoken, der Ihnen genau einmal angezeigt
+        und danach nur noch als Hash gespeichert wird. Beim Deaktivieren wird der Token sofort
+        widerrufen.</li>
+        <li><strong>Tagesprotokoll:</strong> Die Ergebnisse des t&auml;glichen Signal-Laufs werden je
+        Nutzer und Datum protokolliert (Pr&uuml;fpfad), gebunden an den Hash Ihres Schl&uuml;ssels.</li>
+        <li><strong>L&ouml;schung:</strong> Widerrufen Sie Ihre Einwilligung, deaktivieren Sie die
+        Benachrichtigungen oder Ihren Schl&uuml;ssel, werden Bestandsangaben, Einwilligungen,
+        Best&auml;tigungen und der Benachrichtigungszugang vollst&auml;ndig gel&ouml;scht
+        (Recht auf L&ouml;schung, Art. 17 DSGVO).</li>
+    </ul>
+
+    <h3>10. Ihre Rechte</h3>
+    <p>Abgesehen von dem pseudonymisierten Beta-Aktivierungsdatensatz (Abschnitt 8) und den von Ihnen
+    freiwillig &uuml;bermittelten Daten der personalisierten Signale (Abschnitt 9) speichern wir keine
+    personenbezogenen Daten oder Portfolio-Daten auf unseren Servern. Ihnen stehen grunds&auml;tzlich
+die Rechte auf Auskunft, Berichtigung, L&ouml;schung,
     Einschr&auml;nkung der Verarbeitung, Daten&uuml;bertragbarkeit und Widerspruch (Art. 15 bis 21 DSGVO)
     sowie ein Beschwerderecht bei einer Aufsichtsbeh&ouml;rde zu. Beta-Teilnehmer k&ouml;nnen jederzeit
     das Zur&uuml;cksetzen der Ger&auml;tebindung ihres Schl&uuml;ssels oder die L&ouml;schung ihres
@@ -176,10 +208,11 @@
 
     <h3>1. General Principles &amp; Data Minimization</h3>
     <p>This service is designed with privacy-first principles: no user accounts, no wallets, and no
-    server-side databases. We do not store, log, or persist your financial or portfolio data on our
-    infrastructure. The single exception is our private beta access system (see Section 8), which stores
-    only irreversibly hashed data &mdash; never your portfolio or financial information &mdash; solely
-    to control beta access.</p>
+    server-side databases by default. We do not store, log, or persist your financial or portfolio data
+    on our infrastructure. The exceptions are our private beta access system (see Section 8), which
+    stores only irreversibly hashed data solely to control beta access, and the optional,
+    consent-based &ldquo;Personalised Signals&rdquo; feature (see Section 9), where you yourself decide
+    whether and which holdings data to entrust to us.</p>
 
     <h3>2. Transient Server-Side Processing (Ephemeral Processing)</h3>
     <p>When you use our computation features, the data you enter (such as token amounts or symbols) is
@@ -267,8 +300,33 @@
         binding or delete the record.</li>
     </ul>
 
-    <h3>9. Your Rights</h3>
-    <p>Aside from the pseudonymized beta activation record described in Section 8, we do not store
+    <h3>9. Personalised Signals &amp; Notifications (Optional, Beta Participants Only)</h3>
+    <p>These features are entirely optional and only activate when you turn them on yourself. The
+    service remains signal-only: we never execute trades and we never hold exchange API keys.</p>
+    <ul>
+        <li><strong>Holdings:</strong> when you enable personalised signals, you send us the token
+        symbols and amounts you hold. They are transmitted over TLS and stored in our database linked
+        to the hash of your activation key, solely to compute your personal daily signals. Legal basis:
+        your consent &mdash; Art. 6 (1) (a) GDPR &mdash; which you can withdraw at any time with effect
+        for the future (delete your holdings or deactivate your key).</li>
+        <li><strong>Consent log:</strong> every consent you give (e.g. for notifications) and your
+        acknowledgement of the mandatory explainer are recorded with a timestamp and the text version,
+        so that consent can be demonstrated (Art. 7 (1) GDPR).</li>
+        <li><strong>Notifications &mdash; first-party infrastructure, no third parties:</strong> push
+        notifications run exclusively on our own self-hosted notification server. No third-party
+        provider is involved and your signal data never leaves our infrastructure. You receive a random,
+        unguessable topic channel and a read-only access token, shown to you exactly once and stored
+        only as a hash afterwards. Disabling notifications revokes the token immediately.</li>
+        <li><strong>Daily log:</strong> the results of each daily signal run are logged per user and
+        date (audit trail), tied to the hash of your key.</li>
+        <li><strong>Erasure:</strong> withdrawing consent, disabling notifications or deactivating your
+        key deletes your holdings, consents, acknowledgements and notification access completely
+        (right to erasure, Art. 17 GDPR).</li>
+    </ul>
+
+    <h3>10. Your Rights</h3>
+    <p>Aside from the pseudonymized beta activation record described in Section 8 and the data you
+    voluntarily submit for personalised signals (Section 9), we do not store
     personal or portfolio data on our servers, so for general processing we simply hold nothing to
     disclose or delete. You retain the rights of access, rectification, erasure, restriction of
     processing, data portability and objection (Art. 15&ndash;21 GDPR), as well as the right to lodge a

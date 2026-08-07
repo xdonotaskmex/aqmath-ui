@@ -95,6 +95,22 @@ UI = {
 
 DOCS = [
     {
+        "src": "how-aqmath-works.md",
+        "out": "how-aqmath-works.html",
+        "path": "/research/how-aqmath-works",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-08-07",
+        "title": "How AQMath Works: Signals, Frozen Weights and What You Execute - AQMath",
+        "shortTitle": "How AQMath Works &mdash; Signals &amp; What You Execute",
+        "description": ("The must-read user guide: AQMath produces signal-only trading guidance "
+                        "from frozen KKT risk-parity weights (re-optimised every 180 days) and the "
+                        "daily v14 Deleverage Shield - the user executes every trade manually, on "
+                        "their own exchange account."),
+        # User guide, not a performance study: no simulated-results notice.
+        "sim_notice": False,
+    },
+    {
         "src": "mc-risk.md",
         "out": "mc-risk.html",
         "path": "/research/mc-risk",
@@ -517,9 +533,12 @@ def render_doc(doc):
         "".join(nav),
         heading,
         f'<p class="legal-updated">{ui["published"]}: {doc["published"]}</p>',
-        f'<p class="sim-notice">{SIM_NOTICE[doc["lang"]]}</p>',
-        rest,
     ])
+    # Documents without performance figures (e.g. the user guide) opt out of
+    # the simulated-results notice via "sim_notice": False.
+    if doc.get("sim_notice", True):
+        body += f'\n<p class="sim-notice">{SIM_NOTICE[doc["lang"]]}</p>'
+    body += "\n" + rest
     return shell(doc["lang"], doc["htmlLang"], doc["title"], doc["description"],
                  doc["path"], body)
 
