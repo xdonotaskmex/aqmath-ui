@@ -95,6 +95,20 @@ UI = {
 
 DOCS = [
     {
+        "src": "mc-risk.md",
+        "out": "mc-risk.html",
+        "path": "/research/mc-risk",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-08-07",
+        "title": "Institutional Risk Report: Does v14's Edge Survive 3,000 Synthetic Histories? - AQMath",
+        "shortTitle": "Institutional Risk Report &mdash; 3,000 Synthetic Histories",
+        "description": ("Stationary block bootstrap, Deflated Sharpe, White's Reality Check and "
+                        "CVaR on the production v14 wiring: the drawdown cut wins in 98.6-99.7% of "
+                        "3,000 paired synthetic histories per basket and the one-month tail is ~40% "
+                        "thinner everywhere - but excess return over buy & hold is statistically zero."),
+    },
+    {
         "src": "graveyard.md",
         "out": "graveyard.html",
         "path": "/research/graveyard",

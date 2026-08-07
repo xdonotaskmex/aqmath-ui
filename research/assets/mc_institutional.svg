@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="430" viewBox="0 0 1040 430" font-family="Plus Jakarta Sans,Segoe UI,Arial,sans-serif">
+<rect width="1040" height="430" fill="#050a18"/>
+<text x="24.0" y="26.0" fill="#e2e8f0" font-size="15" font-weight="700" text-anchor="start">Institutional Monte Carlo risk report - v14 production wiring, 3000 paired bootstrap paths per basket</text>
+<text x="24.0" y="42.0" fill="#7a8ba5" font-size="10" text-anchor="start">time-weighted strategy returns vs buy &amp; hold; stationary block bootstrap (mean block 10 d)</text>
+<text x="24.0" y="66.0" fill="#e2e8f0" font-size="12" font-weight="700" text-anchor="start">Tail risk: CVaR 95%, 1-month horizon</text>
+<line x1="24.0" y1="78.0" x2="344.0" y2="78.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="18.0" y="81.0" fill="#7a8ba5" font-size="9" text-anchor="end">-0%</text>
+<line x1="24.0" y1="134.0" x2="344.0" y2="134.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="18.0" y="137.0" fill="#7a8ba5" font-size="9" text-anchor="end">-4%</text>
+<line x1="24.0" y1="190.0" x2="344.0" y2="190.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="18.0" y="193.0" fill="#7a8ba5" font-size="9" text-anchor="end">-8%</text>
+<line x1="24.0" y1="246.0" x2="344.0" y2="246.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="18.0" y="249.0" fill="#7a8ba5" font-size="9" text-anchor="end">-12%</text>
+<line x1="24.0" y1="302.0" x2="344.0" y2="302.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="18.0" y="305.0" fill="#7a8ba5" font-size="9" text-anchor="end">-16%</text>
+<rect x="54.0" y="78.0" width="30.0" height="119.3" fill="#34d399"/>
+<rect x="90.0" y="78.0" width="30.0" height="201.9" fill="#f87171"/>
+<text x="87.0" y="209.3" fill="#34d399" font-size="9" text-anchor="middle">8.5</text>
+<text x="123.0" y="291.9" fill="#f87171" font-size="9" text-anchor="middle">14.4</text>
+<text x="87.0" y="346.0" fill="#e2e8f0" font-size="10" text-anchor="middle">A</text>
+<rect x="154.0" y="78.0" width="30.0" height="137.3" fill="#34d399"/>
+<rect x="190.0" y="78.0" width="30.0" height="234.1" fill="#f87171"/>
+<text x="187.0" y="227.3" fill="#34d399" font-size="9" text-anchor="middle">9.8</text>
+<text x="223.0" y="324.1" fill="#f87171" font-size="9" text-anchor="middle">16.7</text>
+<text x="187.0" y="346.0" fill="#e2e8f0" font-size="10" text-anchor="middle">B</text>
+<rect x="254.0" y="78.0" width="30.0" height="98.7" fill="#34d399"/>
+<rect x="290.0" y="78.0" width="30.0" height="164.4" fill="#f87171"/>
+<text x="287.0" y="188.7" fill="#34d399" font-size="9" text-anchor="middle">7.0</text>
+<text x="323.0" y="254.4" fill="#f87171" font-size="9" text-anchor="middle">11.7</text>
+<text x="287.0" y="346.0" fill="#e2e8f0" font-size="10" text-anchor="middle">C</text>
+<text x="24.0" y="368.0" fill="#7a8ba5" font-size="9" text-anchor="start">average loss in the worst 5% of bootstrapped months</text>
+<text x="380.0" y="66.0" fill="#e2e8f0" font-size="12" font-weight="700" text-anchor="start">P(strategy beats buy &amp; hold), 3000 paths</text>
+<line x1="380.0" y1="330.0" x2="680.0" y2="330.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="374.0" y="333.0" fill="#7a8ba5" font-size="9" text-anchor="end">0%</text>
+<line x1="380.0" y1="267.0" x2="680.0" y2="267.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="374.0" y="270.0" fill="#7a8ba5" font-size="9" text-anchor="end">25%</text>
+<line x1="380.0" y1="204.0" x2="680.0" y2="204.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="374.0" y="207.0" fill="#7a8ba5" font-size="9" text-anchor="end">50%</text>
+<line x1="380.0" y1="141.0" x2="680.0" y2="141.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="374.0" y="144.0" fill="#7a8ba5" font-size="9" text-anchor="end">75%</text>
+<line x1="380.0" y1="78.0" x2="680.0" y2="78.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="374.0" y="81.0" fill="#7a8ba5" font-size="9" text-anchor="end">100%</text>
+<line x1="380.0" y1="204.0" x2="680.0" y2="204.0" stroke="#fbbf24" stroke-width="1.0" stroke-dasharray="4 3"/>
+<text x="680.0" y="199.0" fill="#fbbf24" font-size="8" text-anchor="end">coin flip</text>
+<rect x="404.0" y="79.0" width="16.0" height="251.0" fill="#34d399"/>
+<rect x="424.0" y="81.5" width="16.0" height="248.5" fill="#06b6d4"/>
+<rect x="444.0" y="78.8" width="16.0" height="251.2" fill="#a855f7"/>
+<text x="434.0" y="346.0" fill="#e2e8f0" font-size="10" text-anchor="middle">MDD</text>
+<rect x="500.0" y="225.2" width="16.0" height="104.8" fill="#34d399"/>
+<rect x="520.0" y="307.3" width="16.0" height="22.7" fill="#06b6d4"/>
+<rect x="540.0" y="136.0" width="16.0" height="194.0" fill="#a855f7"/>
+<text x="530.0" y="346.0" fill="#e2e8f0" font-size="10" text-anchor="middle">Sharpe</text>
+<rect x="596.0" y="196.7" width="16.0" height="133.3" fill="#34d399"/>
+<rect x="616.0" y="270.8" width="16.0" height="59.2" fill="#06b6d4"/>
+<rect x="636.0" y="137.7" width="16.0" height="192.3" fill="#a855f7"/>
+<text x="626.0" y="346.0" fill="#e2e8f0" font-size="10" text-anchor="middle">Calmar</text>
+<text x="380.0" y="368.0" fill="#7a8ba5" font-size="9" text-anchor="start">drawdown protection wins in ~99% of synthetic histories</text>
+<text x="716.0" y="66.0" fill="#e2e8f0" font-size="12" font-weight="700" text-anchor="start">Deflated Sharpe ratio vs trials tried</text>
+<line x1="716.0" y1="330.0" x2="1016.0" y2="330.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="710.0" y="333.0" fill="#7a8ba5" font-size="9" text-anchor="end">0.00</text>
+<line x1="716.0" y1="267.0" x2="1016.0" y2="267.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="710.0" y="270.0" fill="#7a8ba5" font-size="9" text-anchor="end">0.25</text>
+<line x1="716.0" y1="204.0" x2="1016.0" y2="204.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="710.0" y="207.0" fill="#7a8ba5" font-size="9" text-anchor="end">0.50</text>
+<line x1="716.0" y1="141.0" x2="1016.0" y2="141.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="710.0" y="144.0" fill="#7a8ba5" font-size="9" text-anchor="end">0.75</text>
+<line x1="716.0" y1="78.0" x2="1016.0" y2="78.0" stroke="#18223a" stroke-width="1.0"/>
+<text x="710.0" y="81.0" fill="#7a8ba5" font-size="9" text-anchor="end">1.00</text>
+<line x1="716.0" y1="90.6" x2="1016.0" y2="90.6" stroke="#fbbf24" stroke-width="1.0" stroke-dasharray="4 3"/>
+<text x="1016.0" y="85.6" fill="#fbbf24" font-size="8" text-anchor="end">0.95</text>
+<polyline points="716.0,79.3 749.5,83.0 827.2,117.4 904.8,173.2 938.3,198.2 971.8,221.6 1016.0,248.8" fill="none" stroke="#34d399" stroke-width="1.8"/>
+<text x="1014.0" y="254.8" fill="#34d399" font-size="10" text-anchor="end">A</text>
+<polyline points="716.0,145.9 749.5,194.0 827.2,286.7 904.8,317.3 938.3,322.7 971.8,325.8 1016.0,328.0" fill="none" stroke="#06b6d4" stroke-width="1.8"/>
+<text x="1014.0" y="320.0" fill="#06b6d4" font-size="10" text-anchor="end">B</text>
+<polyline points="716.0,78.2 749.5,79.0 827.2,91.5 904.8,123.8 938.3,142.7 971.8,163.1 1016.0,190.8" fill="none" stroke="#a855f7" stroke-width="1.8"/>
+<text x="1014.0" y="196.8" fill="#a855f7" font-size="10" text-anchor="end">C</text>
+<text x="716.0" y="346.0" fill="#7a8ba5" font-size="9" text-anchor="middle">1</text>
+<text x="827.2" y="346.0" fill="#7a8ba5" font-size="9" text-anchor="middle">10</text>
+<text x="938.3" y="346.0" fill="#7a8ba5" font-size="9" text-anchor="middle">100</text>
+<text x="1016.0" y="346.0" fill="#7a8ba5" font-size="9" text-anchor="middle">500</text>
+<text x="716.0" y="368.0" fill="#7a8ba5" font-size="9" text-anchor="start">p-value that the Sharpe survives selection-bias correction (Bailey &amp; Lopez de Prado)</text>
+<rect x="24.0" y="406.0" width="14.0" height="4.0" fill="#34d399"/>
+<text x="44.0" y="411.0" fill="#e2e8f0" font-size="10" text-anchor="start">strategy (v14 production)</text>
+<rect x="194.0" y="406.0" width="14.0" height="4.0" fill="#f87171"/>
+<text x="214.0" y="411.0" fill="#e2e8f0" font-size="10" text-anchor="start">buy &amp; hold</text>
+<rect x="364.0" y="406.0" width="14.0" height="4.0" fill="#34d399"/>
+<text x="384.0" y="411.0" fill="#e2e8f0" font-size="10" text-anchor="start">basket A</text>
+<rect x="474.0" y="406.0" width="14.0" height="4.0" fill="#06b6d4"/>
+<text x="494.0" y="411.0" fill="#e2e8f0" font-size="10" text-anchor="start">basket B</text>
+<rect x="584.0" y="406.0" width="14.0" height="4.0" fill="#a855f7"/>
+<text x="604.0" y="411.0" fill="#e2e8f0" font-size="10" text-anchor="start">basket C</text>
+</svg>

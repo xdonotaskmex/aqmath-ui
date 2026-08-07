@@ -71,6 +71,7 @@ NEEDS_SIM_NOTICE = {
     "research/regime-autopsy.html",
     "research/robustness.html",
     "research/graveyard.html",
+    "research/mc-risk.html",
 }
 
 FORBIDDEN_ORIGINS = [
