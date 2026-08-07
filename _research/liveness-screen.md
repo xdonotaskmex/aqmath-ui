@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-07
 **Engine:** Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop + v14 Deleverage Shield)
-**Status:** 📊 RESEARCH — design study, fix implemented in the production service
+**Status:** 📊 RESEARCH — component design study, implemented in the production service
 
 ---
 
@@ -16,7 +16,13 @@ can hand a dead token a real share of the frozen sleeve.
 
 This study (a) reproduces that failure mode exactly, (b) tests candidate
 liveness screens, (c) selects one and verifies it on the production code
-path, and (d) ships it into the live paper trading service.
+path, and (d) runs it in the live paper trading service.
+
+One rule frames the whole design: **a frozen sleeve is never modified
+after it freezes.** The screen operates exclusively at re-optimisation
+boundaries — it inspects trailing data and shapes the sleeve that is
+about to be frozen for the next window. Any sleeve that is already live
+runs to the end of its window exactly as frozen.
 
 ## 2. The failure mode, reproduced
 
@@ -60,9 +66,11 @@ walked through every one of the 13 re-optimisations of basket C.
 | **ADV-K2 cap-zero** | trailing-180d avg dollar volume < $1M at **two consecutive** re-opts → weight zeroed, survivors renormalized | anomaly removed, metrics improve (below) | ✅ selected |
 
 The winning design is a **cap-zero screen**: the KKT optimizer always runs on
-the *full* basket universe (caps and covariance untouched); afterwards,
-screened tokens get their frozen weight set to zero and the survivors are
-renormalized. The persistence requirement (two consecutive re-optimisations,
+the *full* basket universe (caps and covariance untouched); the screen then
+filters the optimizer's output *before* the sleeve freezes for the coming
+window — screened tokens enter the new sleeve at zero weight and the
+survivors are renormalized. Nothing that is already frozen mid-window is
+ever touched. The persistence requirement (two consecutive re-optimisations,
 ~one year) guarantees one bad data day can never zero a live token.
 
 ## 4. Results — basket C LANDMINE
@@ -102,11 +110,13 @@ loss never appears in backtest metrics — which is exactly why the naive
 "just optimize harder" intuition fails here. The screen is justified
 operationally; the backtest shows only that it does no net harm.
 
-## 6. Production implementation (shipped)
+## 6. Production implementation
 
 The screen is implemented in the live paper trading service
 (`liveness.py`, wired into both forward logs at their macro re-optimisation
-points):
+points). Timing: it runs **inside each re-optimisation step, before the
+new sleeve freezes** — the active sleeve of the current window is never
+modified. The implementation:
 
 - **Volume feed:** the CoinGecko `total_volumes` series (USD-denominated)
   from the raw collector table. The cleaned price table's volume column is
@@ -119,13 +129,14 @@ points):
   frozen weights untouched. The screen can only ever reduce exposure to dead
   tokens — it can never break the loop.
 - **Cap-zero mechanics:** the optimiser runs on the full universe exactly
-  as before; only the frozen weights are adjusted afterwards (zero +
-  renormalize), and every zeroing is logged and attached to the
+  as before; only the optimiser's output is adjusted before freezing (zero
+  + renormalize), and every zeroing is logged and attached to the
   frozen-weights warnings.
 
 Verified against the production modules: 19/19 checks pass, including an
-exact reproduction of the 24.7% anomaly by the shipped `macro_reoptimize`
-and its correction to BTC 41.6% / PAXG 58.4% by the screen.
+exact reproduction of the 24.7% anomaly by the `macro_reoptimize` path
+and its correction to BTC 41.6% / PAXG 58.4% in the sleeve the screen
+lets freeze.
 
 ## 7. Caveats
 
