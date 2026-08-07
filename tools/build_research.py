@@ -95,6 +95,20 @@ UI = {
 
 DOCS = [
     {
+        "src": "robustness.md",
+        "out": "robustness.html",
+        "path": "/research/robustness",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-08-07",
+        "title": "Robustness: How Far Can Reality Deviate Before the Shield Breaks? - AQMath",
+        "shortTitle": "Robustness &mdash; How Far Can Reality Deviate Before the Shield Breaks?",
+        "description": ("129 walk-forward re-runs perturb every user-facing knob one at a time and "
+                        "stress fees to 20x and execution to 2 days late: no cliff found - two knobs "
+                        "are true plateaus, one is a clean protection dial, and the drawdown cut "
+                        "survives late execution almost intact."),
+    },
+    {
         "src": "regime-autopsy.md",
         "out": "regime-autopsy.html",
         "path": "/research/regime-autopsy",

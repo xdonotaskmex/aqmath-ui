@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="380" viewBox="0 0 920 380" font-family="Plus Jakarta Sans,Segoe UI,Arial,sans-serif">
+<rect width="920" height="380" fill="#050a18"/>
+<text x="78" y="22" fill="#e2e8f0" font-size="15" font-weight="700">Reality stress — drawdown protection under late execution</text>
+<text x="78" y="36" fill="#7a8ba5" font-size="10">max drawdown, Shield vs Buy &amp; Hold, when shield decisions are applied 0 / 1 / 2 trading days late</text>
+<line x1="78" y1="322.0" x2="904" y2="322.0" stroke="#18223a" stroke-width="1"/>
+<text x="70" y="325.0" fill="#7a8ba5" font-size="10" text-anchor="end">0%</text>
+<line x1="78" y1="257.0" x2="904" y2="257.0" stroke="#18223a" stroke-width="1"/>
+<text x="70" y="260.0" fill="#7a8ba5" font-size="10" text-anchor="end">12%</text>
+<line x1="78" y1="192.0" x2="904" y2="192.0" stroke="#18223a" stroke-width="1"/>
+<text x="70" y="195.0" fill="#7a8ba5" font-size="10" text-anchor="end">25%</text>
+<line x1="78" y1="127.0" x2="904" y2="127.0" stroke="#18223a" stroke-width="1"/>
+<text x="70" y="130.0" fill="#7a8ba5" font-size="10" text-anchor="end">37%</text>
+<line x1="78" y1="62.0" x2="904" y2="62.0" stroke="#18223a" stroke-width="1"/>
+<text x="70" y="65.0" fill="#7a8ba5" font-size="10" text-anchor="end">50%</text>
+<rect x="90.8" y="95.9" width="26.4" height="226.1" fill="#5b6b8a" opacity="0.45"/>
+<rect x="120.2" y="233.5" width="26.4" height="88.5" fill="#34d399"/>
+<text x="120.2" y="340" fill="#e2e8f0" font-size="9" text-anchor="middle">16.9%</text>
+<text x="123.9" y="358" fill="#7a8ba5" font-size="9" text-anchor="middle">A lag 0d</text>
+<rect x="182.6" y="95.9" width="26.4" height="226.1" fill="#5b6b8a" opacity="0.45"/>
+<rect x="212.0" y="221.0" width="26.4" height="101.0" fill="#34d399"/>
+<text x="212.0" y="340" fill="#e2e8f0" font-size="9" text-anchor="middle">19.3%</text>
+<text x="215.7" y="358" fill="#7a8ba5" font-size="9" text-anchor="middle">A lag 1d</text>
+<rect x="274.4" y="95.9" width="26.4" height="226.1" fill="#5b6b8a" opacity="0.45"/>
+<rect x="303.8" y="219.8" width="26.4" height="102.2" fill="#34d399"/>
+<text x="303.8" y="340" fill="#e2e8f0" font-size="9" text-anchor="middle">19.5%</text>
+<text x="307.4" y="358" fill="#7a8ba5" font-size="9" text-anchor="middle">A lag 2d</text>
+<rect x="366.2" y="125.8" width="26.4" height="196.2" fill="#5b6b8a" opacity="0.45"/>
+<rect x="395.6" y="223.2" width="26.4" height="98.8" fill="#06b6d4"/>
+<text x="395.6" y="340" fill="#e2e8f0" font-size="9" text-anchor="middle">18.9%</text>
+<text x="399.2" y="358" fill="#7a8ba5" font-size="9" text-anchor="middle">B lag 0d</text>
+<rect x="458.0" y="125.8" width="26.4" height="196.2" fill="#5b6b8a" opacity="0.45"/>
+<rect x="487.3" y="207.0" width="26.4" height="115.0" fill="#06b6d4"/>
+<text x="487.3" y="340" fill="#e2e8f0" font-size="9" text-anchor="middle">22.0%</text>
+<text x="491.0" y="358" fill="#7a8ba5" font-size="9" text-anchor="middle">B lag 1d</text>
+<rect x="549.7" y="125.8" width="26.4" height="196.2" fill="#5b6b8a" opacity="0.45"/>
+<rect x="579.1" y="209.1" width="26.4" height="112.9" fill="#06b6d4"/>
+<text x="579.1" y="340" fill="#e2e8f0" font-size="9" text-anchor="middle">21.6%</text>
+<text x="582.8" y="358" fill="#7a8ba5" font-size="9" text-anchor="middle">B lag 2d</text>
+<rect x="641.5" y="158.9" width="26.4" height="163.1" fill="#5b6b8a" opacity="0.45"/>
+<rect x="670.9" y="228.8" width="26.4" height="93.2" fill="#a855f7"/>
+<text x="670.9" y="340" fill="#e2e8f0" font-size="9" text-anchor="middle">17.8%</text>
+<text x="674.6" y="358" fill="#7a8ba5" font-size="9" text-anchor="middle">C lag 0d</text>
+<rect x="733.3" y="158.9" width="26.4" height="163.1" fill="#5b6b8a" opacity="0.45"/>
+<rect x="762.7" y="229.8" width="26.4" height="92.2" fill="#a855f7"/>
+<text x="762.7" y="340" fill="#e2e8f0" font-size="9" text-anchor="middle">17.6%</text>
+<text x="766.3" y="358" fill="#7a8ba5" font-size="9" text-anchor="middle">C lag 1d</text>
+<rect x="825.1" y="158.9" width="26.4" height="163.1" fill="#5b6b8a" opacity="0.45"/>
+<rect x="854.4" y="228.7" width="26.4" height="93.3" fill="#a855f7"/>
+<text x="854.4" y="340" fill="#e2e8f0" font-size="9" text-anchor="middle">17.8%</text>
+<text x="858.1" y="358" fill="#7a8ba5" font-size="9" text-anchor="middle">C lag 2d</text>
+<rect x="738.8" y="48" width="14" height="4" fill="#34d399"/>
+<text x="758.8" y="56" fill="#e2e8f0" font-size="11">Shield</text>
+<rect x="822.0" y="48" width="14" height="4" fill="#5b6b8a"/>
+<text x="842.0" y="56" fill="#e2e8f0" font-size="11">Buy &amp; Hold</text>
+</svg>
