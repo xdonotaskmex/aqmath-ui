@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=34773390c4">
+    <link rel="stylesheet" href="/styles.min.css?v=e51f04801f">
 </head>
 <body>
 
@@ -150,11 +150,11 @@
         </div>
         <button class="hdr-burger" type="button" aria-label="Menu" data-action="toggleHamburger">&#9776;</button>
         <div class="hdr-nav">
-            <a class="hdr-nav-btn" href="/">landing</a>
-            <a class="hdr-nav-btn" href="/app">app</a>
-            <a class="hdr-nav-btn" href="/backtest">backtest</a>
-            <a class="hdr-nav-btn" href="/results">results</a>
-            <a class="hdr-nav-btn active" href="/docs">docs</a>
+            <a class="hdr-nav-btn" href="/" data-i18n="app.navLanding">landing</a>
+            <a class="hdr-nav-btn" href="/app" data-i18n="app.navApp">app</a>
+            <a class="hdr-nav-btn" href="/backtest" data-i18n="app.navBacktest">backtest</a>
+            <a class="hdr-nav-btn" href="/results" data-i18n="app.navResults">results</a>
+            <a class="hdr-nav-btn active" href="/docs" data-i18n="app.navDocs">docs</a>
         </div>
         <div class="hdr-right">
             <div class="hdr-socials">
@@ -214,7 +214,7 @@
         <div class="doc-hero-block">
             <h1 data-i18n="doc.title">System Documentation</h1>
             <div class="doc-sub" data-i18n="doc.subtitle">AQMath Quantitative Portfolio Rebalancer — Technical Reference</div>
-            <div class="doc-ver">v1.0 &mdash; June 2026</div>
+            <div class="doc-ver" data-i18n="doc.version">v1.0 &mdash; June 2026</div>
         </div>
 
         <!-- INTRODUCTION -->
@@ -245,7 +245,7 @@
             <h2 id="doc-sysdiag" data-i18n="doc.s2.title">2. System Architecture</h2>
             <p data-i18n="doc.s2.p1">AQMath uses a hybrid architecture that separates data ownership from computational power. Your browser owns the data; the backend owns the math. This is fundamentally different from traditional portfolio tools that store everything on centralized servers, creating a single point of failure and a tempting target for data breaches.</p>
             <div class="doc-diagram">
-                <div class="doc-fl">System Architecture Diagram</div>
+                <div class="doc-fl" data-i18n="doc.cap.arch">System Architecture Diagram</div>
                 <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" style="max-width:760px;">
                     <rect x="20" y="40" width="240" height="260" rx="6" fill="none" stroke="var(--blue)" stroke-width="1.5" opacity="0.6"/>
                     <text x="140" y="68" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="600">BROWSER (localStorage)</text>
@@ -334,7 +334,7 @@
             <p data-i18n-html="doc.s3.p1">Your portfolio is a collection of token positions stored entirely in your browser&rsquo;s localStorage. For each token, AQMath tracks your holdings, target allocation percentage, current price, staking yield, entry price history, and DCA cost basis. Together, these parameters form the complete state of your portfolio and drive every calculation in the system &mdash; from allocation metrics to risk budget enforcement.</p>
 
             <div class="doc-diagram">
-                <div class="doc-fl">Portfolio Position Overview (example)</div>
+                <div class="doc-fl" data-i18n="doc.cap.positions">Portfolio Position Overview (example)</div>
                 <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;">
                     <rect x="10" y="10" width="580" height="180" rx="6" fill="none" stroke="var(--blue)" stroke-width="1" opacity="0.4"/>
                     <text x="30" y="34" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="500">PORTFOLIO</text>
@@ -388,7 +388,7 @@
             <p data-i18n-html="doc.s4.p2">The engine builds an <strong>allocation plan</strong> without ever touching your actual tokens: it hands each token a share of the budget in proportion to how far it sits below its target, adjusted for risk. Tokens that reach their target drop out and their share is redistributed to the rest. Every planned buy must clear a per-token minimum (default $20) &mdash; any buy that would fall below that floor is dropped and its budget re-planned across the remaining tokens, so you never place fee-eating sub-dollar buys.</p>
 
             <div class="doc-diagram">
-                <div class="doc-fl">DCA Budget Flow (example: $500)</div>
+                <div class="doc-fl" data-i18n="doc.cap.dcaFlow">DCA Budget Flow (example: $500)</div>
                 <svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg" style="max-width:660px;">
                     <rect x="10" y="50" width="120" height="70" rx="6" fill="rgba(251,191,36,0.08)" stroke="var(--amber)" stroke-width="1" opacity="0.6"/>
                     <text x="70" y="78" text-anchor="middle" fill="var(--amber)" font-family="'JetBrains Mono',monospace" font-size="13" font-weight="600">$500</text>
@@ -445,7 +445,7 @@
             </div>
 
             <div class="doc-diagram">
-                <div class="doc-fl">DCA Safety Pipeline</div>
+                <div class="doc-fl" data-i18n="doc.cap.dcaSafety">DCA Safety Pipeline</div>
                 <svg viewBox="0 0 480 270" xmlns="http://www.w3.org/2000/svg" style="max-width:440px;">
                     <rect x="20" y="10" width="440" height="32" rx="4" fill="rgba(248,113,113,0.06)" stroke="var(--red)" stroke-width="0.8" opacity="0.6"/>
                     <circle cx="48" cy="26" r="12" fill="rgba(248,113,113,0.15)" stroke="var(--red)" stroke-width="0.5"/>
@@ -526,7 +526,7 @@
             <p data-i18n="doc.s8.p2">The engine runs a three-stage pipeline: it builds a full covariance matrix from 180 days of cleaned price history, solves for Equal Risk Contribution (true Risk Parity), and applies KKT projection with dynamic volatility caps to enforce structural limits.</p>
 
             <div class="doc-diagram">
-                <div class="doc-fl">AQMath Engine Pipeline</div>
+                <div class="doc-fl" data-i18n="doc.cap.engine">AQMath Engine Pipeline</div>
                 <svg viewBox="0 0 720 140" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;">
                     <rect x="10" y="30" width="150" height="80" rx="6" fill="rgba(6,182,212,0.06)" stroke="var(--blue)" stroke-width="1" opacity="0.6"/>
                     <text x="85" y="58" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="600">COVARIANCE</text>
@@ -606,7 +606,7 @@
             </ul>
 
             <div class="doc-diagram">
-                <div class="doc-fl">Deleverage Modulator Lifecycle</div>
+                <div class="doc-fl" data-i18n="doc.cap.dlLifecycle">Deleverage Modulator Lifecycle</div>
                 <svg viewBox="0 0 720 180" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;">
                     <!-- Normal -->
                     <rect x="10" y="30" width="130" height="100" rx="6" fill="rgba(52,211,153,0.06)" stroke="var(--green)" stroke-width="1" opacity="0.6"/>
@@ -664,7 +664,7 @@
 
             <!-- MODULATOR EXPOSURE/USDC TIMELINE -->
             <div class="doc-diagram">
-                <div class="doc-fl">Deleverage Modulator: Exposure &amp; USDC Timeline</div>
+                <div class="doc-fl" data-i18n="doc.cap.dlTimeline">Deleverage Modulator: Exposure &amp; USDC Timeline</div>
                 <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;">
                     <!-- Grid lines -->
                     <line x1="60" y1="30" x2="60" y2="240" stroke="var(--border)" stroke-width="0.5"/>
@@ -764,7 +764,7 @@
             <p data-i18n-html="doc.s8.vsBhP1">The chart below compares the <strong>Deleverage Modulator</strong> against a classic <strong>Buy &amp; Hold</strong> strategy over an <strong>8.7-year, 5-token backtest</strong> spanning multiple bull/bear cycles (including the 2022 crypto winter and 2024 corrections). Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. The curves track <strong>peak-to-trough drawdown</strong> &mdash; how deep each strategy fell from its highs. The modulator is scored on <strong>risk-adjusted return</strong> (Sharpe) and drawdown; the v14 preset now beats Buy &amp; Hold on Sharpe, though not on raw dollars.</p>
 
             <div class="doc-diagram">
-                <div class="doc-fl">Peak-to-Trough Drawdown &middot; Deleverage Modulator vs Buy &amp; Hold (v14.0)</div>
+                <div class="doc-fl" data-i18n="doc.cap.ddChart">Peak-to-Trough Drawdown &middot; Deleverage Modulator vs Buy &amp; Hold (v14.0)</div>
                 <svg viewBox="0 0 720 260" role="img" aria-label="Max drawdown: Buy and Hold minus 83.8 percent versus Deleverage Modulator minus 35.0 percent" preserveAspectRatio="xMidYMid meet" style="max-width:700px;width:100%;height:auto;">
                     <!-- gridlines -->
                     <line x1="60" y1="40" x2="690" y2="40" class="lp-sh-grid dash"/>
@@ -794,28 +794,28 @@
                 <div class="doc-ct" data-i18n-html="doc.s8.vsBhMetrics">&#128202; BACKTEST METRICS (8.7 YEARS, 5 TOKENS)</div>
                 <div class="doc-metrics-grid">
                     <div>
-                        <div class="doc-metric-label">Modulator Max Drawdown</div>
+                        <div class="doc-metric-label" data-i18n="doc.s8.m1">Modulator Max Drawdown</div>
                         <div class="doc-metric-value" style="color:var(--blue);">35.0%</div>
                     </div>
                     <div>
-                        <div class="doc-metric-label">B&amp;H Max Drawdown</div>
+                        <div class="doc-metric-label" data-i18n="doc.s8.m2">B&amp;H Max Drawdown</div>
                         <div class="doc-metric-value" style="color:var(--amber);">83.8%</div>
                     </div>
                     <div>
-                        <div class="doc-metric-label">Drawdown Reduction</div>
+                        <div class="doc-metric-label" data-i18n="doc.s8.m3">Drawdown Reduction</div>
                         <div class="doc-metric-value" style="color:var(--green);">&minus;48.8pp</div>
                     </div>
                     <div>
-                        <div class="doc-metric-label">Sharpe (Modulator vs B&amp;H)</div>
+                        <div class="doc-metric-label" data-i18n="doc.s8.m4">Sharpe (Modulator vs B&amp;H)</div>
                         <div class="doc-metric-value" style="color:var(--green);">0.93 vs 0.75</div>
                     </div>
                     <div>
-                        <div class="doc-metric-label">CAGR (8.7y)</div>
+                        <div class="doc-metric-label" data-i18n="doc.s8.m5">CAGR (8.7y)</div>
                         <div class="doc-metric-value" style="color:var(--blue);">32.9%</div>
                     </div>
                     <div>
-                        <div class="doc-metric-label">Regime Signal</div>
-                        <div class="doc-metric-value" style="color:var(--purple);">drawdown + downside vol</div>
+                        <div class="doc-metric-label" data-i18n="doc.s8.m6">Regime Signal</div>
+                        <div class="doc-metric-value" style="color:var(--purple);" data-i18n="doc.s8.m7">drawdown + downside vol</div>
                     </div>
                 </div>
             </div>
@@ -844,7 +844,7 @@
             </ul>
 
             <div class="doc-diagram">
-                <div class="doc-fl">Backtest Results: Drawdown Reduction</div>
+                <div class="doc-fl" data-i18n="doc.cap.btResults">Backtest Results: Drawdown Reduction</div>
                 <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;">
                     <!-- Background -->
                     <rect width="720" height="200" fill="rgba(0,0,0,0.02)" rx="8"/>
@@ -976,14 +976,14 @@
      Outside every view container, so it renders on all five routes
      (/, /app, /backtest, /results, /docs) and stays crawlable. -->
 <footer class="site-footer">
-    &copy; 2026 AQMath &mdash; Private. Non-Custodial.<br>
-    <a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
+    <span data-i18n="ft.copy">&copy; 2026 AQMath &mdash; Private. Non-Custodial.</span><br>
+    <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=34773390c4"></script>
-<script defer src="/app-backtest.js?v=34773390c4"></script>
-<script defer src="/app.js?v=34773390c4"></script>
-<script defer src="/app-notify.js?v=34773390c4"></script>
+<script defer src="/app-widgets.js?v=e51f04801f"></script>
+<script defer src="/app-backtest.js?v=e51f04801f"></script>
+<script defer src="/app.js?v=e51f04801f"></script>
+<script defer src="/app-notify.js?v=e51f04801f"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -995,7 +995,7 @@
 <!-- i18n — Localization. Self-hosted (was unpkg.com CDN): the third-party hop
      sat on the critical path and cost ~900 ms LCP on slow networks. -->
 <script defer src="/vendor/i18next.min.js"></script>
-<script defer src="/app-boot.js?v=34773390c4"></script>
+<script defer src="/app-boot.js?v=e51f04801f"></script>
 
 </body>
 </html>

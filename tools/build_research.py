@@ -109,6 +109,22 @@ DOCS = [
                         "their own exchange account."),
         # User guide, not a performance study: no simulated-results notice.
         "sim_notice": False,
+        "altLabel": "中文",
+    },
+    {
+        "src": "how-aqmath-works.zh-CN.md",
+        "out": "how-aqmath-works-zh.html",
+        "path": "/research/how-aqmath-works-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-08-07",
+        "title": "AQMath 工作原理：信号、冻结权重与你执行什么 - AQMath",
+        "shortTitle": "AQMath 工作原理 &mdash; 信号与你执行什么",
+        "description": ("必读用户指南：AQMath 仅产生信号型交易指引，基于冻结的 KKT 风险平价"
+                        "权重（每 180 天再优化）与每日 v14 去杠杆防护盾 — 用户在自己的交易所"
+                        "账户上手动执行每一笔交易。"),
+        "sim_notice": False,
+        "altLabel": "English",
     },
     {
         "src": "mc-risk.md",
@@ -123,6 +139,21 @@ DOCS = [
                         "CVaR on the production v14 wiring: the drawdown cut wins in 98.6-99.7% of "
                         "3,000 paired synthetic histories per basket and the one-month tail is ~40% "
                         "thinner everywhere - but excess return over buy & hold is statistically zero."),
+        "altLabel": "中文",
+    },
+    {
+        "src": "mc-risk.zh-CN.md",
+        "out": "mc-risk-zh.html",
+        "path": "/research/mc-risk-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-08-07",
+        "title": "机构级风险报告：v14 的优势能否经受 3,000 段合成历史？ - AQMath",
+        "shortTitle": "机构级风险报告 &mdash; 3,000 段合成历史",
+        "description": ("对生产 v14 接线做平稳分块自助法、通缩夏普、White 现实检验与 CVaR："
+                        "每个组合 3,000 段成对合成历史中 98.6-99.7% 的路径回撤削减为正，"
+                        "一个月尾部处处薄约 40% — 但相对买入持有的超额收益在统计上为零。"),
+        "altLabel": "English",
     },
     {
         "src": "graveyard.md",
@@ -137,6 +168,21 @@ DOCS = [
                         "the system draws down 18% vs 62% for buy & hold, and the honest attribution "
                         "shows the optimizer dodging slow deaths, the Shield absorbing fast ones, and "
                         "the liveness screen cleaning up afterwards - not before."),
+        "altLabel": "中文",
+    },
+    {
+        "src": "graveyard.zh-CN.md",
+        "out": "graveyard-zh.html",
+        "path": "/research/graveyard-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-08-07",
+        "title": "墓地试炼：代币死亡时谁来拯救组合？ - AQMath",
+        "shortTitle": "墓地试炼 &mdash; 代币死亡时谁来拯救组合？",
+        "description": ("最坏情况组合持有 CEL、LUNC 与 FTT 度过其 2022 年死亡：系统回撤 18% "
+                        "vs 买入持有 62%，诚实归因显示优化器避开缓慢死亡、防护盾吸收快速死亡、"
+                        "活性筛查事后清理 — 而不是事前。"),
+        "altLabel": "English",
     },
     {
         "src": "robustness.md",
@@ -151,6 +197,21 @@ DOCS = [
                         "stress fees to 20x and execution to 2 days late: no cliff found - two knobs "
                         "are true plateaus, one is a clean protection dial, and the drawdown cut "
                         "survives late execution almost intact."),
+        "altLabel": "中文",
+    },
+    {
+        "src": "robustness.zh-CN.md",
+        "out": "robustness-zh.html",
+        "path": "/research/robustness-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-08-07",
+        "title": "稳健性：现实偏离多远防护盾才会失效？ - AQMath",
+        "shortTitle": "稳健性 &mdash; 现实偏离多远防护盾才会失效？",
+        "description": ("129 次滚动前推重跑逐一扰动每个面向用户的旋钮，并把手续费压到 20 倍、"
+                        "执行延迟 2 天：未发现断崖 — 两个旋钮是真正的高原，一个是干净的保护旋钮，"
+                        "回撤削减在延迟执行下几乎完整保留。"),
+        "altLabel": "English",
     },
     {
         "src": "regime-autopsy.md",
@@ -165,6 +226,22 @@ DOCS = [
                         "post-hoc on frozen-weight walk-forward series, with the ADV-K2 liveness "
                         "screen active: 15 of 15 covered regime-basket combinations show a positive "
                         "out-of-sample drawdown cut, LUNA contagion held to 16.8% vs 44.1% Buy & Hold."),
+        "altLabel": "中文",
+    },
+    {
+        "src": "regime-autopsy.zh-CN.md",
+        "out": "regime-autopsy-zh.html",
+        "path": "/research/regime-autopsy-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-08-07",
+        "title": "市场状态尸检：防护盾能否在最差的市场状态中存活？ - AQMath",
+        "shortTitle": "市场状态尸检 &mdash; 防护盾能否在最差的市场状态中存活？",
+        "description": ("六个已命名的崩盘市场状态 — 2021 年 5 月、LUNA、FTX、2024 年 8 月、"
+                        "2025-26 — 在冻结权重滚动前推序列上做事后切片，ADV-K2 活性筛查开启："
+                        "15/15 个被覆盖的市场状态-组合搭配显示出正的样本外回撤削减，"
+                        "LUNA 传染被控制在 16.8% vs 买入持有 44.1%。"),
+        "altLabel": "English",
     },
     {
         "src": "liveness-screen.md",
@@ -180,6 +257,22 @@ DOCS = [
                         "weight in our stress basket. We reproduce the flaw, reject three naive "
                         "filters, and ship the ADV-K2 cap-zero screen — +8.5% final value, Sharpe "
                         "0.24 to 0.32, zero cost on live-token baskets."),
+        "altLabel": "中文",
+    },
+    {
+        "src": "liveness-screen.zh-CN.md",
+        "out": "liveness-screen-zh.html",
+        "path": "/research/liveness-screen-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-08-07",
+        "title": "活性筛查：修复死代币权重缺陷 - AQMath",
+        "shortTitle": "活性筛查 &mdash; 修复死代币权重缺陷",
+        "description": ("KKT 风险平价回路可能把一个死代币赋予真实配置，因为崩塌后的图表看起来"
+                        "低波动：一个 Celsius 式僵尸在我们的压力组合中赢得 24.7% 冻结权重。"
+                        "我们复现该缺陷、否决三种朴素过滤器，并上线 ADV-K2 上限归零筛查 — "
+                        "最终价值 +8.5%，Sharpe 从 0.24 升至 0.32，在存续代币组合上零成本。"),
+        "altLabel": "English",
     },
     {
         "src": "baskets-v14-hist3.md",
@@ -194,6 +287,21 @@ DOCS = [
                         "(majors+gold, veterans+gold, new-gen alts) on the shipped v14 stack: "
                         "shared-window max drawdown 9.8% vs 25.4% Buy & Hold; the Shield cut "
                         "drawdown 30-36 pp in every window."),
+        "altLabel": "中文",
+    },
+    {
+        "src": "baskets-v14-hist3.zh-CN.md",
+        "out": "baskets-v14-hist3-zh.html",
+        "path": "/research/baskets-v14-hist3-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-08-05",
+        "title": "三组合对比：v14 双速引擎 - AQMath",
+        "shortTitle": "三组合对比 &mdash; v14 KKT MACRO + 防护盾",
+        "description": ("三个结构不同组合（主流币+黄金、老将+黄金、新生代山寨币）在已上线 "
+                        "v14 栈上的滚动前推 E2E 对比：共同窗口最大回撤 9.8% vs 买入持有 25.4%；"
+                        "防护盾在每个窗口都把回撤削减 30-36 个百分点。"),
+        "altLabel": "English",
     },
     {
         "src": "e2e-tiaq.md",
@@ -207,6 +315,21 @@ DOCS = [
         "description": ("Walk-forward E2E test of a candidate basket (TIA, QNT, XRP, PAXG) on the "
                         "live dual-speed stack: max drawdown 16.9% vs 24.6% Buy & Hold, beta 0.62; "
                         "the KKT optimizer zero-weighted TIA on every re-optimisation."),
+        "altLabel": "中文",
+    },
+    {
+        "src": "e2e-tiaq.zh-CN.md",
+        "out": "e2e-tiaq-zh.html",
+        "path": "/research/e2e-tiaq-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-08-03",
+        "title": "E2E 研究：TIA / QNT / XRP + PAXG 锚 - AQMath",
+        "shortTitle": "E2E 研究 &mdash; TIA / QNT / XRP + PAXG 锚",
+        "description": ("候选组合（TIA、QNT、XRP、PAXG）在实盘双速栈上的滚动前推 E2E 测试："
+                        "最大回撤 16.9% vs 买入持有 24.6%，beta 0.62；KKT 优化器在每次再优化中"
+                        "都把 TIA 赋予零权重。"),
+        "altLabel": "English",
     },
     {
         "src": "oos-v14-new-tokens.md",
@@ -241,7 +364,17 @@ DOCS = [
 ]
 
 # Language pairs that describe the same document, for hreflang.
-TRANSLATION_SETS = [["/research/oos-v14-new-tokens", "/research/oos-v14-new-tokens-zh"]]
+TRANSLATION_SETS = [
+    ["/research/oos-v14-new-tokens", "/research/oos-v14-new-tokens-zh"],
+    ["/research/how-aqmath-works", "/research/how-aqmath-works-zh"],
+    ["/research/mc-risk", "/research/mc-risk-zh"],
+    ["/research/graveyard", "/research/graveyard-zh"],
+    ["/research/robustness", "/research/robustness-zh"],
+    ["/research/regime-autopsy", "/research/regime-autopsy-zh"],
+    ["/research/liveness-screen", "/research/liveness-screen-zh"],
+    ["/research/baskets-v14-hist3", "/research/baskets-v14-hist3-zh"],
+    ["/research/e2e-tiaq", "/research/e2e-tiaq-zh"],
+]
 
 
 # ---------------------------------------------------------------- markdown ---

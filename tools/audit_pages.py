@@ -64,14 +64,21 @@ NEEDS_SIM_NOTICE = {
     "results.html",
     "backtest.html",
     "research/baskets-v14-hist3.html",
+    "research/baskets-v14-hist3-zh.html",
     "research/e2e-tiaq.html",
+    "research/e2e-tiaq-zh.html",
     "research/oos-v14-new-tokens.html",
     "research/oos-v14-new-tokens-zh.html",
     "research/liveness-screen.html",
+    "research/liveness-screen-zh.html",
     "research/regime-autopsy.html",
+    "research/regime-autopsy-zh.html",
     "research/robustness.html",
+    "research/robustness-zh.html",
     "research/graveyard.html",
+    "research/graveyard-zh.html",
     "research/mc-risk.html",
+    "research/mc-risk-zh.html",
 }
 
 FORBIDDEN_ORIGINS = [

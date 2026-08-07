@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=34773390c4">
+    <link rel="stylesheet" href="/styles.min.css?v=e51f04801f">
 </head>
 <body>
 
@@ -148,11 +148,11 @@
     </div>
     <button class="hdr-burger" type="button" aria-label="Menu" data-action="toggleHamburger">&#9776;</button>
     <div class="hdr-nav">
-        <a class="hdr-nav-btn" href="/">landing</a>
-        <a class="hdr-nav-btn" href="/app">app</a>
-        <a class="hdr-nav-btn" href="/backtest">backtest</a>
-        <a class="hdr-nav-btn active" href="/results">results</a>
-        <a class="hdr-nav-btn" href="/docs">docs</a>
+        <a class="hdr-nav-btn" href="/" data-i18n="app.navLanding">landing</a>
+        <a class="hdr-nav-btn" href="/app" data-i18n="app.navApp">app</a>
+        <a class="hdr-nav-btn" href="/backtest" data-i18n="app.navBacktest">backtest</a>
+        <a class="hdr-nav-btn active" href="/results" data-i18n="app.navResults">results</a>
+        <a class="hdr-nav-btn" href="/docs" data-i18n="app.navDocs">docs</a>
     </div>
     <div class="hdr-right">
         <div class="hdr-socials">
@@ -173,11 +173,11 @@
 <div class="rv-wrap">
 <!-- RESULTS_VIEW_START -->
 <div class="rv-head">
-<div class="rv-kicker">OUT-OF-SAMPLE VALIDATION</div>
-<h1 class="rv-title">New-Token Stress Test</h1>
-<div class="rv-date">Generated 2026-07-21 &middot; production v14 &middot; no re-tuning</div>
-<p class="rv-intro">We re-ran the shipped AQMath Shield on a fresh batch of coins &mdash; including <strong>ATH, SUI and XMR, which were never used to build or tune the model</strong>. The question: on coins it has never seen, does the Shield still do its job &mdash; cut the deep crashes while keeping healthy long-run growth? Across <strong>182</strong> equal-weight baskets (3-, 4- and 5-coin combinations) plus dead-coin and short-history stress cases, the answer is yes.</p>
-<p class="rv-intro">Each basket is an equal-weight mix rebalanced on the same schedule, with an identical $1,000 start and $100 monthly top-up for both the Shield and plain Buy &amp; Hold. Nothing about the model was changed, re-fit or re-tuned for these coins &mdash; it is the exact configuration running in production today. That makes this a clean out-of-sample read, not a backtest polished after the fact.</p>
+<div class="rv-kicker" data-i18n="rv.kicker">OUT-OF-SAMPLE VALIDATION</div>
+<h1 class="rv-title" data-i18n="rv.title">New-Token Stress Test</h1>
+<div class="rv-date"><span data-i18n="rv.genBefore">Generated</span> 2026-07-21 &middot; <span data-i18n="rv.genAfter">production v14 &middot; no re-tuning</span></div>
+<p class="rv-intro"><span data-i18n="rv.intro1a">We re-ran the shipped AQMath Shield on a fresh batch of coins &mdash; including</span> <strong data-i18n="rv.intro1b">ATH, SUI and XMR, which were never used to build or tune the model</strong><span data-i18n="rv.intro1c">. The question: on coins it has never seen, does the Shield still do its job &mdash; cut the deep crashes while keeping healthy long-run growth? Across</span> <strong>182</strong> <span data-i18n="rv.intro1d">equal-weight baskets (3-, 4- and 5-coin combinations) plus dead-coin and short-history stress cases, the answer is yes.</span></p>
+<p class="rv-intro" data-i18n-html="rv.intro2">Each basket is an equal-weight mix rebalanced on the same schedule, with an identical $1,000 start and $100 monthly top-up for both the Shield and plain Buy &amp; Hold. Nothing about the model was changed, re-fit or re-tuned for these coins &mdash; it is the exact configuration running in production today. That makes this a clean out-of-sample read, not a backtest polished after the fact.</p>
 <p class="sim-notice" data-i18n-html="rv.simNotice"><strong>Simulated results — no real money.</strong> Every figure on this page comes from backtests and from a paper-trading log: a simulation that runs against live market data with <strong>virtual capital</strong>. No client funds were ever invested, no orders were ever placed, and the numbers exclude slippage, spreads and taxes, but do include a simulated 0.1% exchange fee on every rebalance, DCA buy and redeployment &mdash; charged to the Buy &amp; Hold benchmark on the same basis. Simulated and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software, not investment advice, and does not manage money on your behalf.</p>
 <!-- The full write-up of the earlier token-universe test lives at /research as a
      standalone document, methodology and caveats included. -->
@@ -194,10 +194,10 @@
 </details>
 </div>
 <div class="rv-cards">
-<div class="rv-card"><div class="rv-big">182</div><div class="rv-lbl">baskets tested</div><div class="rv-sub">3-5 coin equal-weight combos</div></div>
-<div class="rv-card"><div class="rv-big">100%</div><div class="rv-lbl">cut the crash</div><div class="rv-sub">smaller max drawdown vs holding (182/182)</div></div>
-<div class="rv-card"><div class="rv-big">-45 pp</div><div class="rv-lbl">median crash cut</div><div class="rv-sub">typical drawdown reduction</div></div>
-<div class="rv-card"><div class="rv-big">1.40x</div><div class="rv-lbl">median end value</div><div class="rv-sub">vs buy &amp; hold, same DCA</div></div>
+<div class="rv-card"><div class="rv-big">182</div><div class="rv-lbl" data-i18n="rv.c1Lbl">baskets tested</div><div class="rv-sub" data-i18n="rv.c1Sub">3-5 coin equal-weight combos</div></div>
+<div class="rv-card"><div class="rv-big">100%</div><div class="rv-lbl" data-i18n="rv.c2Lbl">cut the crash</div><div class="rv-sub"><span data-i18n="rv.c2SubA">smaller max drawdown vs holding</span> (182/182)</div></div>
+<div class="rv-card"><div class="rv-big">-45 pp</div><div class="rv-lbl" data-i18n="rv.c3Lbl">median crash cut</div><div class="rv-sub" data-i18n="rv.c3Sub">typical drawdown reduction</div></div>
+<div class="rv-card"><div class="rv-big">1.40x</div><div class="rv-lbl" data-i18n="rv.c4Lbl">median end value</div><div class="rv-sub" data-i18n="rv.c4Sub">vs buy &amp; hold, same DCA</div></div>
 </div>
 <div class="rv-chart"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 860 468" font-family="Segoe UI,Arial,sans-serif" style="max-width:860px">
 <rect width="860" height="468" fill="#070d1a"/>
@@ -372,16 +372,16 @@
 <rect x="670" y="88" width="12" height="12" fill="#f87171"/>
 <text x="688" y="99" font-size="12" fill="#e2e8f0">Buy &amp; Hold</text>
 </svg></div>
-<h2 class="rv-h2">Stress cases</h2>
-<p class="rv-note">Harder tests: a dead coin (CEL / Celsius, collapsed 2022), a very short history (PYTH), and the full 13-coin basket. Lower drawdown is better.</p>
+<h2 class="rv-h2" data-i18n="rv.stressTitle">Stress cases</h2>
+<p class="rv-note" data-i18n="rv.stressNote">Harder tests: a dead coin (CEL / Celsius, collapsed 2022), a very short history (PYTH), and the full 13-coin basket. Lower drawdown is better.</p>
 <div class="rv-tablewrap"><table class="rv-table rv-stress">
-<thead><tr><th>Basket</th><th>Shield DD</th><th>Hold DD</th><th>Crash cut</th><th>Shield Calmar</th><th>Hold Calmar</th><th>Days</th></tr></thead>
-<tbody><tr><td>SOL/SUI/DOGE/CEL(dead)</td><td>20.4%</td><td>72.4%</td><td class="pos">+52.1 pp</td><td>1.07</td><td>0.13</td><td>1173</td></tr><tr><td>ATH/SOL/PYTH(short)</td><td>11.9%</td><td>67.5%</td><td class="pos">+55.6 pp</td><td>0.00</td><td>-0.46</td><td>767</td></tr><tr><td>BTC/ETH/XMR/CEL(dead)</td><td>24.0%</td><td>67.3%</td><td class="pos">+43.3 pp</td><td>1.05</td><td>0.61</td><td>2837</td></tr><tr><td>ALL 13 tokens</td><td>15.1%</td><td>47.5%</td><td class="pos">+32.4 pp</td><td>0.33</td><td>-0.20</td><td>767</td></tr></tbody></table></div>
-<h2 class="rv-h2">How to read this</h2>
-<ul class="rv-list"><li><strong>Drawdown</strong> is the worst peak-to-trough drop &mdash; how much your balance fell at the scariest moment.</li><li><strong>Calmar</strong> is annual return divided by that worst drawdown &mdash; higher means more reward for each unit of pain. It improved on every basket.</li><li><strong>Shield (v14)</strong> is the live production model; <strong>Buy &amp; Hold</strong> just holds the same coins with the same monthly buys.</li><li>These coins were <strong>not</strong> used to design the model, so this is a genuine out-of-sample check, not a curve-fit.</li></ul>
-<h2 class="rv-h2">Bottom line</h2>
-<p class="rv-intro">On coins the model had never seen before, the Shield cut the worst drop in <strong>every single basket</strong> &mdash; a typical crash cut of roughly <strong>45 percentage points</strong> &mdash; while still compounding to a median <strong>1.40x</strong> the end value of simply holding. It trades a sliver of the wildest upside for far shallower, shorter drawdowns, which is exactly the job of a risk shield: keep you in the game through the crashes so the recoveries actually count.</p>
-<p class="rv-disc">Past performance does not guarantee future results. Educational backtest on historical data; not financial advice. Aggregate: median crash cut -45 pp (range -23 to -59 pp), Calmar improved in 182/182 baskets, Sharpe improved in 172/182.</p>
+<thead><tr><th data-i18n="rv.thBasket">Basket</th><th data-i18n="rv.thShieldDd">Shield DD</th><th data-i18n="rv.thHoldDd">Hold DD</th><th data-i18n="rv.thCrashCut">Crash cut</th><th data-i18n="rv.thShieldCalmar">Shield Calmar</th><th data-i18n="rv.thHoldCalmar">Hold Calmar</th><th data-i18n="rv.thDays">Days</th></tr></thead>
+<tbody><tr><td>SOL/SUI/DOGE/CEL<span data-i18n="rv.tagDead">(dead)</span></td><td>20.4%</td><td>72.4%</td><td class="pos">+52.1 pp</td><td>1.07</td><td>0.13</td><td>1173</td></tr><tr><td>ATH/SOL/PYTH<span data-i18n="rv.tagShort">(short)</span></td><td>11.9%</td><td>67.5%</td><td class="pos">+55.6 pp</td><td>0.00</td><td>-0.46</td><td>767</td></tr><tr><td>BTC/ETH/XMR/CEL<span data-i18n="rv.tagDead">(dead)</span></td><td>24.0%</td><td>67.3%</td><td class="pos">+43.3 pp</td><td>1.05</td><td>0.61</td><td>2837</td></tr><tr><td><span data-i18n="rv.rowAll">ALL 13 tokens</span></td><td>15.1%</td><td>47.5%</td><td class="pos">+32.4 pp</td><td>0.33</td><td>-0.20</td><td>767</td></tr></tbody></table></div>
+<h2 class="rv-h2" data-i18n="rv.htrTitle">How to read this</h2>
+<ul class="rv-list"><li data-i18n-html="rv.htr1"><strong>Drawdown</strong> is the worst peak-to-trough drop &mdash; how much your balance fell at the scariest moment.</li><li data-i18n-html="rv.htr2"><strong>Calmar</strong> is annual return divided by that worst drawdown &mdash; higher means more reward for each unit of pain. It improved on every basket.</li><li data-i18n-html="rv.htr3"><strong>Shield (v14)</strong> is the live production model; <strong>Buy &amp; Hold</strong> just holds the same coins with the same monthly buys.</li><li data-i18n-html="rv.htr4">These coins were <strong>not</strong> used to design the model, so this is a genuine out-of-sample check, not a curve-fit.</li></ul>
+<h2 class="rv-h2" data-i18n="rv.blTitle">Bottom line</h2>
+<p class="rv-intro"><span data-i18n="rv.blA">On coins the model had never seen before, the Shield cut the worst drop in</span> <strong data-i18n="rv.blB">every single basket</strong> <span data-i18n="rv.blC">&mdash; a typical crash cut of roughly</span> <strong>45 <span data-i18n="rv.blD">percentage points</span></strong> <span data-i18n="rv.blE">&mdash; while still compounding to a median</span> <strong>1.40x</strong> <span data-i18n="rv.blF">the end value of simply holding. It trades a sliver of the wildest upside for far shallower, shorter drawdowns, which is exactly the job of a risk shield: keep you in the game through the crashes so the recoveries actually count.</span></p>
+<p class="rv-disc"><span data-i18n="rv.discA">Past performance does not guarantee future results. Educational backtest on historical data; not financial advice. Aggregate: median crash cut</span> -45 pp <span data-i18n="rv.discB">(range</span> -23 <span data-i18n="rv.discTo">to</span> -59 <span data-i18n="rv.discC">pp), Calmar improved in</span> 182/182 <span data-i18n="rv.discD">baskets, Sharpe improved in</span> 172/182.</p>
 <!-- RESULTS_VIEW_END -->
 <!-- FORWARD_LOG_START -->
 <div id="forwardLogLive">
@@ -487,7 +487,7 @@
 <footer class="footer">
     <span>AQMath</span>
     <span style="margin-left:12px;color:var(--dim);">|</span>
-    <span>Out-of-Sample Validation v14.0</span>
+    <span data-i18n="rv.footTag">Out-of-Sample Validation v14.0</span>
 </footer>
 </div><!-- /resultsView -->
 
@@ -498,14 +498,14 @@
      Outside every view container, so it renders on all five routes
      (/, /app, /backtest, /results, /docs) and stays crawlable. -->
 <footer class="site-footer">
-    &copy; 2026 AQMath &mdash; Private. Non-Custodial.<br>
-    <a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
+    <span data-i18n="ft.copy">&copy; 2026 AQMath &mdash; Private. Non-Custodial.</span><br>
+    <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=34773390c4"></script>
-<script defer src="/app-backtest.js?v=34773390c4"></script>
-<script defer src="/app.js?v=34773390c4"></script>
-<script defer src="/app-notify.js?v=34773390c4"></script>
+<script defer src="/app-widgets.js?v=e51f04801f"></script>
+<script defer src="/app-backtest.js?v=e51f04801f"></script>
+<script defer src="/app.js?v=e51f04801f"></script>
+<script defer src="/app-notify.js?v=e51f04801f"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -517,7 +517,7 @@
 <!-- i18n — Localization. Self-hosted (was unpkg.com CDN): the third-party hop
      sat on the critical path and cost ~900 ms LCP on slow networks. -->
 <script defer src="/vendor/i18next.min.js"></script>
-<script defer src="/app-boot.js?v=34773390c4"></script>
+<script defer src="/app-boot.js?v=e51f04801f"></script>
 
 </body>
 </html>

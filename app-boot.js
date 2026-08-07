@@ -168,12 +168,131 @@ function sanitizeFirstPartyHtml(html) {
     return doc.body.innerHTML;
 }
 
+// The forward-log fragment is regenerated daily on the server and swapped in
+// via fetch, so it can never carry data-i18n attributes. Instead the canonical
+// EN markup is kept per box and re-rendered on every language switch: EN is a
+// verbatim pass-through, zh-CN is rebuilt from locale keys (rv.fl*), with the
+// live figures (dates, amounts, ratios) re-extracted from the EN source so a
+// daily regeneration can never invalidate the translation.
+var _flOriginals = {};
+
+function renderForwardLog(box) {
+    if (!box) return;
+    var src = _flOriginals[box.id] || box.innerHTML;
+    _flOriginals[box.id] = src;
+    box.innerHTML = src;
+    try {
+        if ((localStorage.getItem('aqmath-lang') || 'en') === 'zh-CN') {
+            localizeForwardLog(box);
+        }
+    } catch (e) { /* storage disabled — EN snapshot already applied */ }
+}
+
+function localizeForwardLog(box) {
+    if (!window.i18next || typeof i18next.t !== 'function') return;
+    function t(key, opts) {
+        var s = i18next.t(key, opts || {});
+        return (s && s !== key) ? s : null;
+    }
+    var s, m;
+
+    var h2 = box.querySelector('.rv-h2');
+    if (h2 && /Live Paper Trading/.test(h2.textContent)) {
+        s = t('rv.flTitle');
+        if (s) h2.textContent = s;
+    }
+
+    var note = box.querySelector('.rv-note');
+    if (note) {
+        var nh = note.innerHTML;
+        var mf = nh.match(/frozen on (\d{4}-\d{2}-\d{2})/);
+        var mr = nh.match(/re-optimisation:\s*<strong>(\d{4}-\d{2}-\d{2})<\/strong>/);
+        if (mf && mr) {
+            s = t('rv.flNote', { frozen: mf[1], reopt: mr[1] });
+            if (s) note.innerHTML = s;
+        }
+    }
+
+    box.querySelectorAll('.rv-card').forEach(function (card) {
+        var lbl = card.querySelector('.rv-lbl');
+        var sub = card.querySelector('.rv-sub');
+        if (!lbl) return;
+        var txt = sub ? sub.textContent : '';
+        switch (lbl.textContent) {
+        case 'virtual equity':
+            s = t('rv.flEq'); if (s) lbl.textContent = s;
+            if (sub) {
+                m = txt.match(/as of (\d{4}-\d{2}-\d{2}) \u00b7 (\$[\d,]+) invested since (\d{4}-\d{2}-\d{2})/);
+                if (m) { s = t('rv.flEqSub', { date: m[1], amt: m[2], start: m[3] }); if (s) sub.textContent = s; }
+            }
+            break;
+        case 'buy & hold benchmark':
+            s = t('rv.flBh'); if (s) lbl.textContent = s;
+            if (sub) {
+                m = txt.match(/same (\$[\d,]+) invested \u00b7 max drawdown ([\d.]+%)/);
+                if (m) { s = t('rv.flBhSub', { amt: m[1], dd: m[2] }); if (s) sub.textContent = s; }
+            }
+            break;
+        case 'risky exposure':
+            s = t('rv.flExp'); if (s) lbl.textContent = s;
+            if (sub) {
+                var neg = sub.querySelector('.neg');
+                if (neg) { var d = t('rv.flExpDef'); if (d) neg.textContent = d; }
+                m = txt.match(/shield dial ([\d.]+%)/);
+                if (m) {
+                    s = t('rv.flExpDial', { pct: m[1] });
+                    if (s) sub.innerHTML = neg ? neg.outerHTML + ' \u00b7 ' + s : s;
+                }
+            }
+            break;
+        case 'Calmar ratio':
+            s = t('rv.flCalmar'); if (s) lbl.textContent = s;
+            if (sub) {
+                m = txt.match(/\(([\d.]+%)\) \u00b7 since (\d{4}-\d{2}-\d{2}) \u00b7 B&H: (-?[\d.]+)/);
+                if (m) { s = t('rv.flCalmarSub', { dd: m[1], start: m[2], bh: m[3] }); if (s) sub.textContent = s; }
+            }
+            break;
+        case 'Sharpe ratio':
+            s = t('rv.flSharpe'); if (s) lbl.textContent = s;
+            if (sub) {
+                m = txt.match(/since (\d{4}-\d{2}-\d{2}) \u00b7 B&H: (-?[\d.]+)/);
+                if (m) { s = t('rv.flSharpeSub', { start: m[1], bh: m[2] }); if (s) sub.textContent = s; }
+            }
+            break;
+        case 'forward days':
+            s = t('rv.flDays'); if (s) lbl.textContent = s;
+            if (sub) { s = t('rv.flDaysSub'); if (s) sub.textContent = s; }
+            break;
+        case 'next re-optimisation':
+            s = t('rv.flReopt'); if (s) lbl.textContent = s;
+            if (sub) { s = t('rv.flReoptSub'); if (s) sub.textContent = s; }
+            break;
+        }
+    });
+
+    var disc = box.querySelector('.rv-disc');
+    if (disc) {
+        var dt = disc.textContent;
+        var md = dt.match(/Telemetry generated (\d{4}-\d{2}-\d{2})/);
+        var mz = dt.match(/frozen (\d{4}-\d{2}-\d{2})/);
+        if (md && mz) {
+            s = t('rv.flTelemetry', { date: md[1], frozen: mz[1] });
+            if (s) disc.innerHTML = s;
+        }
+    }
+}
+
 (function () {
     var box = document.getElementById('forwardLogLive');
-    if (!box || !window.fetch) return;
+    if (!box) return;
+    _flOriginals[box.id] = box.innerHTML;   // baked EN snapshot
+    if (!window.fetch) return;
     fetch('https://api-backtest.aqmath.xyz/forward-log')
         .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
-        .then(function (html) { box.innerHTML = sanitizeFirstPartyHtml(html); })
+        .then(function (html) {
+            _flOriginals[box.id] = sanitizeFirstPartyHtml(html);
+            renderForwardLog(box);
+        })
         .catch(function () { /* keep the bundled snapshot */ });
 })();
 
@@ -184,7 +303,11 @@ function sanitizeFirstPartyHtml(html) {
     if (!box || !window.fetch) return;
     fetch('https://api-backtest.aqmath.xyz/forward-log-v15')
         .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
-        .then(function (html) { box.innerHTML = sanitizeFirstPartyHtml(html); box.hidden = false; })
+        .then(function (html) {
+            _flOriginals[box.id] = sanitizeFirstPartyHtml(html);
+            box.hidden = false;
+            renderForwardLog(box);
+        })
         .catch(function () { /* experimental section stays hidden */ });
 })();
 
@@ -195,7 +318,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=34773390c4')
+    return fetch('/locales/' + lang + '.json?v=e51f04801f')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -229,6 +352,11 @@ function applyTranslations() {
         var key = el.getAttribute('data-i18n-html');
         var t = i18next.t(key);
         if (t && t !== key) el.innerHTML = t;
+    });
+    // Server-rendered forward-log fragments carry no data-i18n — re-render
+    // each box from its stored EN original for the active language.
+    ['forwardLogLive', 'forwardLogV15'].forEach(function (id) {
+        renderForwardLog(document.getElementById(id));
     });
 }
 
