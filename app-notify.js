@@ -257,19 +257,56 @@ function _copyText(el) {
     const src = document.getElementById(el.getAttribute('data-arg'));
     if (!src) return;
     const text = src.textContent.trim();
+    const label = el.getAttribute('data-arg') || 'value';
     try {
         navigator.clipboard.writeText(text).then(
-            () => showToast('Copied.', 'success'),
+            () => showToast(label + ' copied.', 'success'),
             () => showToast('Copy failed — select the text manually.', 'warning'));
     } catch (e) {
         showToast('Copy failed — select the text manually.', 'warning');
     }
 }
 
-async function refreshNtfyStatus() {
+function _setNtfyStatus(connected, topic) {
     const statusEl = document.getElementById('ntfyStatus');
+    if (!statusEl) return;
+    statusEl.innerHTML = connected
+        ? '<span class="ntfy-dot on"></span>connected &middot; topic <span class="mono">' + topic + '</span>'
+        : '<span class="ntfy-dot off"></span>not connected';
+}
+
+// The credentials panel stays visible for returning users too — server, topic
+// and the subscribe steps remain needed; only the token itself is gone after
+// the one-time display.
+function _showNtfyPanel(opts) {
     const onBox = document.getElementById('ntfyOn');
     const offBox = document.getElementById('ntfyOff');
+    const tokenEl = document.getElementById('ntfyToken');
+    const tokenCopy = document.getElementById('btnNtfyTokenCopy');
+    if (opts.server) document.getElementById('ntfyServer').textContent = opts.server;
+    if (opts.topic) document.getElementById('ntfyTopic').textContent = opts.topic;
+    if (opts.token) {
+        tokenEl.textContent = opts.token;
+        tokenEl.classList.remove('ntfy-mask');
+        if (tokenCopy) tokenCopy.classList.remove('hidden');
+    } else {
+        tokenEl.textContent = 'shown once — not recoverable';
+        tokenEl.classList.add('ntfy-mask');
+        if (tokenCopy) tokenCopy.classList.add('hidden');
+    }
+    if (onBox) onBox.classList.remove('hidden');
+    if (offBox) offBox.classList.add('hidden');
+}
+
+function _hideNtfyPanel() {
+    const onBox = document.getElementById('ntfyOn');
+    const offBox = document.getElementById('ntfyOff');
+    if (onBox) onBox.classList.add('hidden');
+    if (offBox) offBox.classList.remove('hidden');
+}
+
+async function refreshNtfyStatus() {
+    const statusEl = document.getElementById('ntfyStatus');
     if (!statusEl || !isBetaActive()) return;
     try {
         const res = await fetch(BETA_AUTH_URL + '/notifications', {
@@ -278,13 +315,18 @@ async function refreshNtfyStatus() {
         if (!res.ok) return;
         const data = await res.json();
         if (data.enabled && data.active) {
-            statusEl.innerHTML = `connected · topic <span class="mono">${data.topic}</span>`;
-            if (onBox) onBox.classList.remove('hidden');
-            if (offBox) offBox.classList.add('hidden');
+            _setNtfyStatus(true, data.topic);
+            // Only overwrite the cached server if we never received one (the
+            // status endpoint does not return it).
+            const serverEl = document.getElementById('ntfyServer');
+            _showNtfyPanel({
+                server: (serverEl && serverEl.textContent) ? null : data.server,
+                topic: data.topic,
+                token: null
+            });
         } else {
-            statusEl.textContent = 'not connected';
-            if (onBox) onBox.classList.add('hidden');
-            if (offBox) offBox.classList.remove('hidden');
+            _setNtfyStatus(false);
+            _hideNtfyPanel();
         }
     } catch (e) { /* silent */ }
 }
@@ -312,18 +354,13 @@ async function enableNotifications() {
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data.detail || 'HTTP ' + res.status);
         if (data.token) {
-            document.getElementById('ntfyServer').textContent = data.server;
-            document.getElementById('ntfyTopic').textContent = data.topic;
-            document.getElementById('ntfyToken').textContent = data.token;
-            document.getElementById('ntfyOnce').classList.remove('hidden');
-            document.getElementById('ntfyOn').classList.remove('hidden');
-            document.getElementById('ntfyOff').classList.add('hidden');
-            document.getElementById('ntfyStatus').innerHTML =
-                `connected · topic <span class="mono">${data.topic}</span>`;
+            _setNtfyStatus(true, data.topic);
+            _showNtfyPanel({ server: data.server, topic: data.topic, token: data.token });
+            showToast('Notifications enabled — save the token now, it is shown only once.', 'success');
         } else if (data.already_active) {
             await refreshNtfyStatus();
+            showToast('Notifications are already enabled.', 'notice');
         }
-        showToast('Notifications enabled.', 'success');
     } catch (e) {
         console.error('[AQMath] notifications enable failed:', e.message);
         showToast('Could not enable notifications: ' + e.message, 'error');
@@ -333,6 +370,8 @@ async function enableNotifications() {
 }
 
 async function disableNotifications() {
+    // Disabling revokes the read token irreversibly — confirm first.
+    if (!confirm('Disable notifications? Your topic and token are deleted — if you enable again you get a NEW topic and token.')) return;
     const btn = document.getElementById('btnNtfyDisable');
     if (btn) { btn.disabled = true; }
     try {
@@ -341,7 +380,11 @@ async function disableNotifications() {
             headers: { 'Authorization': 'Bearer ' + getBetaToken() }
         });
         if (!res.ok) throw new Error('HTTP ' + res.status);
-        document.getElementById('ntfyOnce').classList.add('hidden');
+        const serverEl = document.getElementById('ntfyServer');
+        if (serverEl) serverEl.textContent = '';
+        const tokenEl = document.getElementById('ntfyToken');
+        if (tokenEl) tokenEl.textContent = '';
+        _hideNtfyPanel();
         showToast('Notifications disabled — your token was revoked.', 'notice');
         await refreshNtfyStatus();
     } catch (e) {
