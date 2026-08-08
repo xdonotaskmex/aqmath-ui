@@ -33,7 +33,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/how-aqmath-works">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=45be76fea1">
+<link rel="stylesheet" href="/styles.min.css?v=0077616966">
 </head>
 <body>
 
@@ -49,7 +49,7 @@
 <p class="rs-nav"><a href="/research/">&larr; All research</a><span class="sep">|</span>Also available in <a href="/research/how-aqmath-works-zh" hreflang="zh-Hans">中文</a></p>
 <h1>How AQMath Works — What the Signals Mean and What You Execute</h1>
 <p class="legal-updated">Published: 2026-08-07</p>
-<p><strong>Version:</strong> v2<br>
+<p><strong>Version:</strong> v3<br>
 <strong>Audience:</strong> every BLACK user, shown as a must-read before first use<br>
 <strong>Status:</strong> 📖 USER GUIDE — the single source of truth for the in-app explainer</p>
 <hr>
@@ -72,7 +72,7 @@
 <h2>4. Your data</h2>
 <p>To personalise the calculation you declare which tokens you hold and in what amounts. These holdings are stored on our servers tied to the hash of your activation key, and are used <strong>only</strong> to compute your personal signals. You can update them any time, and deleting your key deletes your holdings, your consent records and your notification subscription. Full details are in the Privacy Policy.</p>
 <h2>5. Notifications</h2>
-<p>Notifications are delivered through our <strong>own first-party push server</strong> — no third-party provider sees your signals. You install the free ntfy app, add our server address and subscribe to your personal topic with the one-time access token shown in this app. Turning notifications off revokes that token immediately; signals are still computed and logged in the app.</p>
+<p>Notifications are delivered through our <strong>own first-party push server</strong> — no third-party provider sees your signals. You install the free ntfy app, add our server address and subscribe to your personal topic — no login or password is required, because the random 32-character topic name itself is your private address and is read-only. Turning notifications off closes the topic immediately; signals are still computed and logged in the app.</p>
 <h2>6. The honest summary</h2>
 <ul><li>AQMath tells you <strong>what a disciplined risk model would trade today</strong>.</li><li><strong>You</strong> trade it — manually, on your own exchange, if you choose to.</li><li>Weights are frozen at entry and re-optimised every 180 days; the shield modulates exposure daily; both run without your intervention.</li><li>There is <strong>no guarantee</strong>. The shield cuts drawdowns in backtests; markets can still lose value, including rapidly.</li></ul>
 </main>

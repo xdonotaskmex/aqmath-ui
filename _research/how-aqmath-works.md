@@ -1,6 +1,6 @@
 # How AQMath Works — What the Signals Mean and What You Execute
 
-**Version:** v2
+**Version:** v3
 **Audience:** every BLACK user, shown as a must-read before first use
 **Status:** 📖 USER GUIDE — the single source of truth for the in-app explainer
 
@@ -80,8 +80,9 @@ Privacy Policy.
 
 Notifications are delivered through our **own first-party push server** — no
 third-party provider sees your signals. You install the free ntfy app, add our
-server address and subscribe to your personal topic with the one-time access
-token shown in this app. Turning notifications off revokes that token
+server address and subscribe to your personal topic — no login or password is
+required, because the random 32-character topic name itself is your private
+address and is read-only. Turning notifications off closes the topic
 immediately; signals are still computed and logged in the app.
 
 ## 6. The honest summary
