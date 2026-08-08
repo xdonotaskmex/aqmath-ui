@@ -107,9 +107,11 @@ async function ensureHowAqmathAck() {
 
 function _localHoldings() {
     // The local portfolio rows are the source of the personal holdings.
+    // Rows carry `amount` (not `amt`); the safe-haven USDC row is a reserve,
+    // not part of the risky sleeve the engine freezes weights for.
     return (portfolio || [])
-        .filter(t => t && t.sym && Number(t.amt) > 0)
-        .map(t => ({ token: String(t.sym).toUpperCase(), amount: String(t.amt) }));
+        .filter(t => t && t.sym && !t.safeHaven && Number(t.amount) > 0)
+        .map(t => ({ token: String(t.sym).toUpperCase(), amount: String(t.amount) }));
 }
 
 async function _shieldFetch(path, options = {}) {
