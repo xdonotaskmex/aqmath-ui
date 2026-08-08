@@ -1,7 +1,7 @@
 # AQMath 工作原理 — 信号的含义与你执行什么
 
-**版本：** v1
-**读者：** 全体 beta 用户，首次使用前必读
+**版本：** v2
+**读者：** 全体 BLACK 用户，首次使用前必读
 **状态：** 📖 用户指南 — 应用内说明的唯一权威来源
 
 > English version: [How AQMath Works](/research/how-aqmath-works)

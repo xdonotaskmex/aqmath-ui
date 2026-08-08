@@ -1,7 +1,7 @@
 # How AQMath Works — What the Signals Mean and What You Execute
 
-**Version:** v1
-**Audience:** every beta user, shown as a must-read before first use
+**Version:** v2
+**Audience:** every BLACK user, shown as a must-read before first use
 **Status:** 📖 USER GUIDE — the single source of truth for the in-app explainer
 
 ---
