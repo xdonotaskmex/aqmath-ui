@@ -199,7 +199,13 @@ async function refreshShieldStatus() {
     try {
         const res = await _shieldFetch('/portfolio/status');
         if (res.ok) _renderShieldStatus(await res.json());
-    } catch (e) { /* token/session problem already toasted by pipelineFetch */ }
+    } catch (e) {
+        // The engine may be mid-redeploy; show WHY the card is blank instead
+        // of leaving the misleading "not initialized" default (401s are
+        // already toasted by pipelineFetch).
+        const el = document.getElementById('shieldStatus');
+        if (el) el.innerHTML = 'engine unreachable — refresh in a minute';
+    }
 }
 
 async function syncShieldPortfolio() {
