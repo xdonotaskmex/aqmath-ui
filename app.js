@@ -2137,11 +2137,14 @@ Object.assign(window, {
     navigate,
     showProModal, hideProModal, showToast, hideToast,
     activateBeta, deactivateBeta,
-    isBetaActive, getBetaToken, pipelineFetch, API_URL,
+    isBetaActive, getBetaToken, pipelineFetch, API_URL, BETA_AUTH_URL,
     saveSnapshot, toggleGlobalSafeHaven, deployUSDC, toggleDeleverage,
     osvjeziSveCijene, importCSV, dodajToken,
     obrisiSve, distribuirajDca, confirmDca, cancelDca, optimizePortfolio,
     exportJSON, importJSON, refreshHistory,
     toggleFreeze, popuniFormu, obrisiToken
 });
+// app-notify.js reads the live holdings array; a plain Object.assign copy
+// would go stale the moment loadState() reassigns `portfolio`.
+Object.defineProperty(window, 'portfolio', { get: () => portfolio });
 })();
