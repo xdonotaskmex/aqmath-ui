@@ -127,6 +127,17 @@ function _setShieldFrozen(frozen) {
     if (typeof syncTargetFieldLock === 'function') syncTargetFieldLock();
 }
 
+// Friendly names users type -> the collector ticker the engine stores weights
+// under. MUST mirror aqmath-engine main.SYMBOL_ALIASES: frozen weights come
+// back keyed by the canonical ticker (TIA), while the local row may still carry
+// the name it was added with (CELESTIA) — without this map that row matches
+// nothing and its Target% is zeroed even though the plan covers it.
+const SYMBOL_ALIASES = {
+    'PYTH NETWORK': 'PYTH', 'CELESTIA': 'TIA', 'CONSTELLATION': 'DAG',
+    'ENERGY WEB': 'EWT', 'ENERGY-WEB': 'EWT', 'QUBETICS': 'TICS',
+    'AETHIR': 'ATH',
+};
+
 function _applyFrozenTargets(weights) {
     // The frozen weights ARE the plan the daily signals are computed from, so
     // the holdings table shows exactly them. USDC absorbs the remainder (KKT
@@ -141,15 +152,29 @@ function _applyFrozenTargets(weights) {
     let changed = false;
     (portfolio || []).forEach(t => {
         if (!t || !t.sym || t.safeHaven) return;
-        const next = frozen[t.sym.toUpperCase()] != null ? frozen[t.sym.toUpperCase()] : 0;
+        // Alias-aware lookup: literal symbol first, then the canonical ticker
+        // (CELESTIA row vs TIA weights).
+        const up = t.sym.toUpperCase();
+        const key = frozen[up] != null ? up : (SYMBOL_ALIASES[up] || up);
+        const next = frozen[key] != null ? frozen[key] : 0;
         if (t.target !== next) { t.target = next; changed = true; }
         risky += next;
     });
-    const usdc = (portfolio || []).find(t => t && t.safeHaven);
-    if (usdc) {
-        const rest = Math.max(0, Number((100 - risky).toFixed(2)));
-        if (usdc.target !== rest) { usdc.target = rest; changed = true; }
+    let usdc = (portfolio || []).find(t => t && t.safeHaven);
+    // The safe-haven row is excluded from the engine sync (it is not part of
+    // the risky sleeve), so a table restored from the server has no USDC row
+    // and the remainder target had nowhere to land — the allocation view just
+    // lost USDC. Recreate an empty row: the user re-enters the quantity, but
+    // the plan stays whole and visible.
+    if (!usdc) {
+        usdc = { sym: 'USDC', coinId: 'usd-coin', amount: 0, price: 1, entry: 0,
+                 apy: 0, target: 0, costBasis: 0, totalTokens: 0,
+                 frozen: false, insufficientHistory: false, safeHaven: true };
+        portfolio.push(usdc);
+        changed = true;
     }
+    const rest = Math.max(0, Number((100 - risky).toFixed(2)));
+    if (usdc.target !== rest) { usdc.target = rest; changed = true; }
     if (changed) { saveState(); render(); }
 }
 
@@ -186,10 +211,16 @@ async function restoreHoldingsFromServer() {
         const amount = Number(h.amount);
         if (!sym || !(amount > 0)) continue;
         if ((portfolio || []).some(t => t && t.sym === sym)) continue;
+        // entry/apy come back only if the user's sync included them (older
+        // saves stored neither); a stablecoin row is rebuilt as safe-haven at
+        // its $1 peg so the allocation view matches the pre-restore table.
+        const safeHaven = typeof isStablecoin === 'function' && isStablecoin(sym);
         portfolio.push({
-            sym, coinId: sym.toLowerCase(), amount, price: 0,
-            entry: 0, apy: 0, target: 0, costBasis: 0, totalTokens: 0,
-            frozen: false, insufficientHistory: false, safeHaven: false
+            sym, coinId: sym.toLowerCase(), amount,
+            price: safeHaven ? 1 : 0,
+            entry: Number(h.entry) || 0, apy: Number(h.apy) || 0,
+            target: 0, costBasis: 0, totalTokens: 0,
+            frozen: false, insufficientHistory: false, safeHaven
         });
         added++;
     }
@@ -197,7 +228,8 @@ async function restoreHoldingsFromServer() {
         saveState();
         render();
         showToast(`Restored ${added} synced ${added === 1 ? 'holding' : 'holdings'} `
-            + 'from your account — press [ SYNC ALL ] to refresh prices.', 'notice');
+            + 'from your account — press [ SYNC ALL ] to refresh prices. '
+            + 'Entry prices and APY only come back if your last sync stored them.', 'notice');
     }
     return added;
 }
@@ -209,6 +241,25 @@ function _localHoldings() {
     return (portfolio || [])
         .filter(t => t && t.sym && !t.safeHaven && Number(t.amount) > 0)
         .map(t => ({ token: String(t.sym).toUpperCase(), amount: String(t.amount) }));
+}
+
+// The DURABLE copy sent to beta-auth. Wider than _localHoldings on purpose:
+//  * safe-haven rows included — /portfolio/init never sees them (it gets
+//    _localHoldings), but a table restore must bring USDC back or the
+//    allocation view silently loses it;
+//  * entry price and APY included — beta-auth stores them as UI bookkeeping,
+//    because they exist NOWHERE else. Without them a restore rebuilds the
+//    table with entry=0 and the whole P&L column reads N/A even though the
+//    user entered every price.
+function _durableHoldings() {
+    return (portfolio || [])
+        .filter(t => t && t.sym && Number(t.amount) > 0)
+        .map(t => ({
+            token: String(t.sym).toUpperCase(),
+            amount: String(t.amount),
+            entry: Number(t.entry) > 0 ? String(t.entry) : null,
+            apy: Number(t.apy) > 0 ? String(t.apy) : null,
+        }));
 }
 
 async function _shieldFetch(path, options = {}) {
@@ -403,13 +454,16 @@ async function syncShieldPortfolio() {
     if (btn) { btn.disabled = true; btn.textContent = '[ syncing... ]'; }
     try {
         // 1. Persist the holdings on beta-auth (personal data, GDPR-logged).
+        // The durable copy carries safe-haven rows plus entry/APY; the engine
+        // payload below stays risky-only so /portfolio/init keeps seeing the
+        // exact frozen token set (a wider set would 409 against it).
         const res = await fetch(BETA_AUTH_URL + '/portfolio', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + getBetaToken()
             },
-            body: JSON.stringify({ holdings })
+            body: JSON.stringify({ holdings: _durableHoldings() })
         });
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
