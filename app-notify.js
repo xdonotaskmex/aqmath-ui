@@ -106,6 +106,39 @@ async function ensureHowAqmathAck() {
 // ---------- shield card: portfolio sync + status ----------
 
 let _holdingsRestored = false;
+let _shieldFrozen = false;
+
+// True once the engine confirms a frozen portfolio: from then on the frozen
+// weights are the authoritative plan and [optimize] must not overwrite them.
+function shieldTargetsFrozen() {
+    return _shieldFrozen;
+}
+
+function _applyFrozenTargets(weights) {
+    // The frozen weights ARE the plan the daily signals are computed from, so
+    // the holdings table shows exactly them. USDC absorbs the remainder (KKT
+    // caps the risky sleeve well below 100%), and a row outside the frozen set
+    // targets 0 — otherwise the total would read over 100%.
+    if (!Array.isArray(weights) || weights.length === 0) return;
+    const frozen = {};
+    weights.forEach(w => {
+        if (w && w.sym) frozen[String(w.sym).toUpperCase()] = Number(w.weight) || 0;
+    });
+    let risky = 0;
+    let changed = false;
+    (portfolio || []).forEach(t => {
+        if (!t || !t.sym || t.safeHaven) return;
+        const next = frozen[t.sym.toUpperCase()] != null ? frozen[t.sym.toUpperCase()] : 0;
+        if (t.target !== next) { t.target = next; changed = true; }
+        risky += next;
+    });
+    const usdc = (portfolio || []).find(t => t && t.safeHaven);
+    if (usdc) {
+        const rest = Math.max(0, Number((100 - risky).toFixed(2)));
+        if (usdc.target !== rest) { usdc.target = rest; changed = true; }
+    }
+    if (changed) { saveState(); render(); }
+}
 
 // beta-auth is the DURABLE home of the synced holdings; the table itself lives
 // in localStorage. Clearing browser data, a fresh browser profile or another
@@ -168,6 +201,7 @@ function _renderShieldStatus(data) {
     const el = document.getElementById('shieldStatus');
     if (!el) return;
     if (!data || !data.initialized) {
+        _shieldFrozen = false;
         el.innerHTML = 'not initialized — sync your portfolio below';
         return;
     }
@@ -191,6 +225,10 @@ function _renderShieldStatus(data) {
         + (data.next_dca_on ? `<br>next DCA: ${data.next_dca_on}` : '')
         + (parked ? `<br>DCA parked in USDC: ~$${Number(parked).toLocaleString()}` : '');
     _applyShieldSettings(data.settings);
+    // Push the frozen plan into the holdings table so Target% and this card can
+    // never disagree. Done last: it may re-render the table.
+    _shieldFrozen = true;
+    _applyFrozenTargets(data.weights || []);
 }
 
 function _applyShieldSettings(settings) {
@@ -452,12 +490,13 @@ async function disableNotifications() {
 }
 
 // Called from checkBetaUI() (app.js) whenever the auth state changes.
-function refreshNotifyUI() {
-    if (isBetaActive()) {
-        restoreHoldingsFromServer();
-        refreshShieldStatus();
-        refreshNtfyStatus();
-    }
+async function refreshNotifyUI() {
+    if (!isBetaActive()) return;
+    // Sequential on purpose: restored rows must exist BEFORE the status handler
+    // writes the frozen targets into them, otherwise they keep Target% 0.
+    await restoreHoldingsFromServer();
+    await refreshShieldStatus();
+    refreshNtfyStatus();
 }
 
 // Page-load gate: returning users with a stored token must also pass the

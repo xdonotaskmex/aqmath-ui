@@ -1639,13 +1639,17 @@ async function optimizePortfolio() {
         // the USDC gap-fill below pushes totalTarget over 100% (meter OVER).
         // insufficient_data tokens keep their old target (no verdict on them)
         // but are reserved in the USDC calc like frozen tokens.
+        // EXCEPTION: once the shield has frozen a plan, that plan owns Target% —
+        // a fresh optimization is then only a preview and writes nothing, so the
+        // table can never drift away from the weights the signals use.
+        const frozenPlan = typeof shieldTargetsFrozen === 'function' && shieldTargetsFrozen();
         let insufficientTotal = 0;
         weights.forEach(w => {
             const token = portfolio.find(t => t.sym === w.sym);
             if (!token) return;
             if (w.error === 'insufficient_data') {
                 insufficientTotal += token.target || 0;
-            } else {
+            } else if (!frozenPlan) {
                 token.target = w.weight > 0 ? w.weight : 0;
             }
         });
@@ -1654,9 +1658,8 @@ async function optimizePortfolio() {
         const riskyTotal = weights.reduce((sum, w) => sum + (w.weight > 0 ? w.weight : 0), 0);
         const frozenTotal = Object.values(frozenTargets).reduce((s, v) => s + v, 0);
         const usdc = portfolio.find(t => t.safeHaven);
-        let usdcTarget = 0;
-        if (usdc) {
-            usdcTarget = Math.max(0, +(100 - riskyTotal - frozenTotal - insufficientTotal).toFixed(2));
+        let usdcTarget = Math.max(0, +(100 - riskyTotal - frozenTotal - insufficientTotal).toFixed(2));
+        if (usdc && !frozenPlan) {
             usdc.target = usdcTarget;
         }
 
@@ -1692,7 +1695,11 @@ async function optimizePortfolio() {
         msg += `Method: ${result.method || 'ERC+covariance+KKT'} (${result.erc_iterations || '?'} iter)\n`;
         if (result.portfolio_volatility) msg += `Portfolio vol: ${(result.portfolio_volatility * 100).toFixed(1)}%\n`;
         msg += '\n';
-        msg += 'Weights (KKT-projected):\n\n';
+        msg += frozenPlan
+            ? 'Weights (KKT-projected) — PREVIEW ONLY:\n'
+              + 'Your targets stay on the frozen shield plan; this is what a fresh\n'
+              + 'optimization would say today.\n\n'
+            : 'Weights (KKT-projected):\n\n';
         weights.forEach(w => {
             const vol = w.volatility != null ? `vol:${(w.volatility * 100).toFixed(1)}%` : 'no data';
             const rc = w.risk_contribution ? `rc:${(w.risk_contribution * 100).toFixed(1)}%` : '';
