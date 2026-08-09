@@ -279,9 +279,19 @@ function _renderShieldStatus(data) {
     const active = data.shield_active
         ? '<span class="shield-on">ACTIVE (defensive)</span>'
         : '<span class="shield-off">OFF (normal)</span>';
-    const weights = (data.weights || [])
+    // The stored weights cover only the risky sleeve (KKT caps it well below
+    // 100%); USDC absorbs the remainder. Printing only the risky rows made the
+    // card look like the plan stops at 60% — show the safe-haven target too,
+    // with exactly the same remainder math _applyFrozenTargets uses for the
+    // table so the two views can never disagree.
+    const wList = data.weights || [];
+    const riskySum = wList.reduce((s, w) => s + (Number(w.weight) || 0), 0);
+    const usdcRest = Math.max(0, Number((100 - riskySum).toFixed(2)));
+    const riskyPart = wList
         .map(w => `${w.sym} ${(Number(w.weight) || 0).toFixed(1)}%`)
         .join(' · ');
+    const weights = riskyPart
+        + (usdcRest > 0 ? (riskyPart ? ' · ' : '') + `USDC ${usdcRest.toFixed(1)}%` : '');
     const last = data.last_signal || {};
     const parked = last.dca && last.dca.route === 'USDC' ? last.dca.parked_total : null;
     // Say WHEN the weights were locked: they deliberately do NOT follow the
