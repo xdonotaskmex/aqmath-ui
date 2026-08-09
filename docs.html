@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=619a987a85">
+    <link rel="stylesheet" href="/styles.min.css?v=ec8171fa8b">
 </head>
 <body>
 
@@ -980,22 +980,25 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=619a987a85"></script>
-<script defer src="/app-backtest.js?v=619a987a85"></script>
-<script defer src="/app.js?v=619a987a85"></script>
-<script defer src="/app-notify.js?v=619a987a85"></script>
+<script defer src="/app-widgets.js?v=ec8171fa8b"></script>
+<script defer src="/app-backtest.js?v=ec8171fa8b"></script>
+<script defer src="/app.js?v=ec8171fa8b"></script>
+<script defer src="/app-notify.js?v=ec8171fa8b"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
      vendor release), so a pinned integrity hash would break analytics on each release.
-     chart.js and i18next below ARE integrity-pinned because their URLs are versioned. -->
+     chart.js IS integrity-pinned because its URL is versioned. i18next needs no SRI:
+     it is served from this origin, so it is covered by CSP script-src 'self'. -->
 <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="Simple Analytics no-script tracking pixel" referrerpolicy="no-referrer-when-downgrade" /></noscript>
 
 <!-- i18n — Localization. Self-hosted (was unpkg.com CDN): the third-party hop
-     sat on the critical path and cost ~900 ms LCP on slow networks. -->
-<script defer src="/vendor/i18next.min.js"></script>
-<script defer src="/app-boot.js?v=619a987a85"></script>
+     sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
+     every other first-party asset, so replacing the vendored copy is part of the
+     atomic build id instead of living forever in someone's cache. -->
+<script defer src="/vendor/i18next.min.js?v=ec8171fa8b"></script>
+<script defer src="/app-boot.js?v=ec8171fa8b"></script>
 
 </body>
 </html>

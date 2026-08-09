@@ -157,7 +157,13 @@ async function restoreHoldingsFromServer() {
         const res = await fetch(BETA_AUTH_URL + '/portfolio', {
             headers: { 'Authorization': 'Bearer ' + getBetaToken() }
         });
-        if (!res.ok) return 0;
+        if (!res.ok) {
+            // A rejected read is not a "restore done" — leaving the latch set
+            // would keep the table empty for the rest of the page session even
+            // after the session refreshes.
+            _holdingsRestored = false;
+            return 0;
+        }
         holdings = (await res.json()).holdings || [];
     } catch (e) {
         console.warn('[AQMath] holdings restore failed:', e.message);
@@ -225,11 +231,11 @@ function _renderShieldStatus(data) {
         // Standing confirmation that the setup is DONE. Without it the card reads
         // like a settings form, so a returning user cannot tell whether the
         // engine ever accepted the sync.
-        `<span class="shield-on">✓ synced — daily-close signals run for you</span><br>`
+        `<span class="shield-ok">✓ synced — daily-close signals run for you</span><br>`
         + `shield: ${active}<br>`
         + `frozen weights${froze ? ' (locked ' + froze + ')' : ''}: ${weights || '—'}<br>`
         + `macro re-opt: ${(data.next_reopt_at || '').slice(0, 10)}<br>`
-        + `last run: ${data.last_run_at ? data.last_run_at.slice(0, 10) : '— (first one at the next daily close)'}`
+        + `last run: ${_lastRunText(data)}`
         + (data.next_dca_on ? `<br>next DCA: ${data.next_dca_on}` : '')
         + (parked ? `<br>DCA parked in USDC: ~$${Number(parked).toLocaleString()}` : '');
     _setShieldSynced(true);
@@ -238,6 +244,31 @@ function _renderShieldStatus(data) {
     // never disagree. Done last: it may re-render the table.
     _shieldFrozen = true;
     _applyFrozenTargets(data.weights || []);
+}
+
+function _escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[c]);
+}
+
+function _lastRunText(data) {
+    // last_run_at is only written when a run SUCCEEDS, so on its own a failed
+    // day is indistinguishable from a day the cron never reached. last_run is
+    // the log row itself and carries the reason.
+    const at = data.last_run_at ? data.last_run_at.slice(0, 10) : null;
+    const run = data.last_run;
+    const at_utc = (data.cron && data.cron.at_utc) ? data.cron.at_utc + ' UTC' : 'the daily close';
+    if (run && run.status === 'error') {
+        // Server-generated text: escaped, never trusted as markup.
+        return `<span class="shield-on">${run.run_date} FAILED</span> — `
+            + _escapeHtml(run.detail || 'reason not recorded')
+            + `. it retries automatically`
+            + (at ? `<br>last successful run: ${at}` : '');
+    }
+    if (at) return at;
+    if (run && run.status === 'running') return `${run.run_date} in progress…`;
+    return `— (first one at ${at_utc})`;
 }
 
 function _setShieldSynced(synced) {
@@ -263,8 +294,13 @@ function _applyShieldSettings(settings) {
     const amt = document.getElementById('numDcaAmount');
     const itv = document.getElementById('numDcaInterval');
     if (chk) chk.checked = settings.deleverage !== false;
-    if (amt && Number(settings.dca_amount) > 0) amt.value = settings.dca_amount;
-    if (itv && settings.dca_interval) itv.value = settings.dca_interval;
+    // Mirror the value even when it is 0 ("DCA off"). The old `> 0` test meant a
+    // user who turned DCA off still saw the previous amount in the field, so the
+    // form contradicted the server — and the next "save mode & DCA" silently
+    // switched DCA back on with that stale number. null/undefined is a different
+    // case: the server said nothing, so the placeholder must stay.
+    if (amt && settings.dca_amount != null) amt.value = Number(settings.dca_amount);
+    if (itv && settings.dca_interval != null) itv.value = Number(settings.dca_interval);
 }
 
 async function saveShieldSettings() {

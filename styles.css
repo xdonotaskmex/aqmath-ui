@@ -2276,6 +2276,10 @@
     }
     .shield-on { color: var(--red); font-weight: 700; }
     .shield-off { color: var(--green); }
+    /* Setup confirmation — deliberately NOT .shield-on: that one is the red
+       "shield is defensive" marker, so reusing it would paint a success line
+       as an alarm. */
+    .shield-ok { color: var(--green); font-weight: 700; }
     .btn-how { font-size: 0.6rem; padding: 4px 8px; }
 
     .ntfy-sec {

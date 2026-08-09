@@ -26,6 +26,31 @@
 		-Server
 	}
 
+	# Cache policy. Without an explicit one, browsers fall back to HEURISTIC
+	# caching (a fraction of the age since Last-Modified), which for a page that
+	# has not changed in days can pin a visitor to old HTML for hours — and old
+	# HTML means old ?v= stamps, i.e. an old build. So:
+	#   * HTML: always revalidate. Cheap (304) and it is the document that
+	#     carries the build id.
+	#   * version.txt: never stored — the freshness check in app-boot.js compares
+	#     against it, so a cached copy would defeat the check itself.
+	#   * stamped assets: immutable for a year. Safe precisely because a new
+	#     build changes the ?v= query, which is a different cache entry.
+	#   * fonts: NOT in that set. They are referenced without a ?v= stamp, so
+	#     "immutable" would pin a visitor to an old face for a year if
+	#     tools/fetch_fonts.py ever regenerates them. A week is long enough that
+	#     refetches are irrelevant and short enough to stay fixable.
+	@html path *.html /
+	header @html Cache-Control "no-cache"
+
+	header /version.txt Cache-Control "no-store"
+
+	@stamped path *.js *.css *.json
+	header @stamped Cache-Control "public, max-age=31536000, immutable"
+
+	@fonts path *.woff2
+	header @fonts Cache-Control "public, max-age=604800"
+
 	try_files {path} {path}.html {path}/ /index.html
 	file_server
 }

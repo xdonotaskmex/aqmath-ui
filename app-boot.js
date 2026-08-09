@@ -318,7 +318,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=619a987a85')
+    return fetch('/locales/' + lang + '.json?v=ec8171fa8b')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -451,22 +451,38 @@ function applyTranslations() {
 //    build time. If this tab loaded an older cached build, its own ?v= stamp
 //    differs from the published one, so show the update banner - one reload
 //    then brings the user to the complete new build, never a mixed one.
+//    Re-checked when the tab is brought back to the foreground: this app is
+//    left open for days, and a load-time-only check would never notice a build
+//    that shipped after the tab was opened.
 // ---------------------------------------------------------------------------
 (function () {
     var own = document.querySelector('script[src*="app-boot.js"]');
     var m = own && own.src.match(/\?v=([\w]+)/);
     if (!m || !window.fetch) return;
     var mine = m[1];
-    // Cache-busted + no-store: this file must reflect the LIVE build, not a
-    // CDN/browser copy. On any failure (404, offline) stay silent.
-    fetch('/version.txt?t=' + Date.now(), { cache: 'no-store' })
-        .then(function (r) { return r.ok ? r.text() : null; })
-        .then(function (latest) {
-            if (!latest) return;
-            latest = latest.trim();
-            if (!latest || latest === mine) return;
-            var banner = document.getElementById('updateBanner');
-            if (banner) banner.classList.remove('hidden');
-        })
-        .catch(function () { /* offline / missing file: keep the current build */ });
+    var last = 0;
+    var MIN_GAP = 5 * 60 * 1000;
+
+    function check() {
+        var now = Date.now();
+        if (now - last < MIN_GAP) return;
+        last = now;
+        // Cache-busted + no-store: this file must reflect the LIVE build, not a
+        // CDN/browser copy. On any failure (404, offline) stay silent.
+        fetch('/version.txt?t=' + now, { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.text() : null; })
+            .then(function (latest) {
+                if (!latest) return;
+                latest = latest.trim();
+                if (!latest || latest === mine) return;
+                var banner = document.getElementById('updateBanner');
+                if (banner) banner.classList.remove('hidden');
+            })
+            .catch(function () { /* offline / missing file: keep the current build */ });
+    }
+
+    check();
+    document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) check();
+    });
 })();
