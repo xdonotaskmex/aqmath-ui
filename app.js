@@ -1624,7 +1624,9 @@ async function optimizePortfolio() {
                 return showToast(`\u23f3 Next optimization available in ${timeStr}`, 'notice');
             }
             console.error('[Optimize] engine detail:', result.detail);
-            return showToast("Couldn't optimize right now — please try again shortly.", 'error');
+            // Show the server's own reason. The generic text used to hide real
+            // failures (a 410 gate looked identical to a transient hiccup).
+            return showToast('Optimization refused: ' + String(result.detail).slice(0, 180), 'error');
         }
 
         const weights = result.weights || [];
@@ -1640,9 +1642,10 @@ async function optimizePortfolio() {
         // insufficient_data tokens keep their old target (no verdict on them)
         // but are reserved in the USDC calc like frozen tokens.
         // EXCEPTION: once the shield has frozen a plan, that plan owns Target% —
-        // a fresh optimization is then only a preview and writes nothing, so the
-        // table can never drift away from the weights the signals use.
-        const frozenPlan = typeof shieldTargetsFrozen === 'function' && shieldTargetsFrozen();
+        // the engine then returns the frozen weights themselves (result.frozen),
+        // so there is nothing to overwrite and nothing can drift.
+        const frozenPlan = (result.frozen === true)
+            || (typeof shieldTargetsFrozen === 'function' && shieldTargetsFrozen());
         let insufficientTotal = 0;
         weights.forEach(w => {
             const token = portfolio.find(t => t.sym === w.sym);
@@ -1690,15 +1693,22 @@ async function optimizePortfolio() {
         await sleep(2000);
         hideLoading();
 
-        let msg = '\u2699\ufe0f AQMath Engine Optimization Complete\n';
+        let msg = frozenPlan
+            ? '\ud83d\udd12 AQMath Engine — Frozen Plan\n'
+            : '\u2699\ufe0f AQMath Engine Optimization Complete\n';
         msg += '\u2501'.repeat(30) + '\n';
-        msg += `Method: ${result.method || 'ERC+covariance+KKT'} (${result.erc_iterations || '?'} iter)\n`;
+        // The frozen plan is a stored row, not a solve: it has no iteration count
+        // or covariance stats to report.
+        msg += frozenPlan
+            ? `Method: ${result.method || 'frozen KKT plan'}\n`
+              + (result.next_reopt_at ? `Macro re-optimization: ${result.next_reopt_at}\n` : '')
+            : `Method: ${result.method || 'ERC+covariance+KKT'} (${result.erc_iterations || '?'} iter)\n`;
         if (result.portfolio_volatility) msg += `Portfolio vol: ${(result.portfolio_volatility * 100).toFixed(1)}%\n`;
         msg += '\n';
         msg += frozenPlan
-            ? 'Weights (KKT-projected) — PREVIEW ONLY:\n'
-              + 'Your targets stay on the frozen shield plan; this is what a fresh\n'
-              + 'optimization would say today.\n\n'
+            ? 'Weights — YOUR FROZEN PLAN:\n'
+              + 'These are the exact weights the daily signals use. They are locked\n'
+              + 'until the macro re-optimization date, so they never drift.\n\n'
             : 'Weights (KKT-projected):\n\n';
         weights.forEach(w => {
             const vol = w.volatility != null ? `vol:${(w.volatility * 100).toFixed(1)}%` : 'no data';
@@ -2149,7 +2159,13 @@ Object.assign(window, {
     osvjeziSveCijene, importCSV, dodajToken,
     obrisiSve, distribuirajDca, confirmDca, cancelDca, optimizePortfolio,
     exportJSON, importJSON, refreshHistory,
-    toggleFreeze, popuniFormu, obrisiToken
+    toggleFreeze, popuniFormu, obrisiToken,
+    // app-notify.js writes into the holdings table (frozen shield targets,
+    // holdings restored from the account) and must be able to persist and
+    // repaint it. app.js is an IIFE, so anything it does not export here is a
+    // ReferenceError at the call site — which previously aborted the shield
+    // card mid-render and left Target% untouched.
+    saveState, render
 });
 // app-notify.js reads the live holdings array; a plain Object.assign copy
 // would go stale the moment loadState() reassigns `portfolio`.

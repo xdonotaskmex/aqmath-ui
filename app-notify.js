@@ -283,16 +283,31 @@ async function saveShieldSettings() {
 
 async function refreshShieldStatus() {
     if (!isBetaActive()) return;
+    let data;
     try {
         const res = await _shieldFetch('/portfolio/status');
-        if (res.ok) _renderShieldStatus(await res.json());
+        if (!res.ok) {
+            _setShieldMessage('status unavailable (HTTP ' + res.status + ') — refresh in a minute');
+            return;
+        }
+        data = await res.json();
     } catch (e) {
         // The engine may be mid-redeploy; show WHY the card is blank instead
         // of leaving the misleading "not initialized" default (401s are
         // already toasted by pipelineFetch).
-        const el = document.getElementById('shieldStatus');
-        if (el) el.innerHTML = 'engine unreachable — refresh in a minute';
+        _setShieldMessage('engine unreachable — refresh in a minute');
+        return;
     }
+    // Rendering is OUTSIDE the fetch try: a bug in the render path used to be
+    // reported as "engine unreachable", which wiped a card that had just been
+    // filled with good server data and hid the real error.
+    _renderShieldStatus(data);
+}
+
+function _setShieldMessage(text) {
+    _shieldFrozen = false;
+    const el = document.getElementById('shieldStatus');
+    if (el) el.textContent = text;
 }
 
 async function syncShieldPortfolio() {
@@ -494,8 +509,18 @@ async function refreshNotifyUI() {
     if (!isBetaActive()) return;
     // Sequential on purpose: restored rows must exist BEFORE the status handler
     // writes the frozen targets into them, otherwise they keep Target% 0.
-    await restoreHoldingsFromServer();
-    await refreshShieldStatus();
+    // Each step is isolated so one failure cannot silently cancel the others —
+    // a throw in the restore step used to stop the shield card from loading at all.
+    try {
+        await restoreHoldingsFromServer();
+    } catch (e) {
+        console.error('[AQMath] holdings restore aborted:', e.message);
+    }
+    try {
+        await refreshShieldStatus();
+    } catch (e) {
+        console.error('[AQMath] shield status aborted:', e.message);
+    }
     refreshNtfyStatus();
 }
 
