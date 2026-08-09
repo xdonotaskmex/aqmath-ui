@@ -127,6 +127,37 @@ DOCS = [
         "altLabel": "English",
     },
     {
+        "src": "feed-sensitivity.md",
+        "out": "feed-sensitivity.html",
+        "path": "/research/feed-sensitivity",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-08-09",
+        "title": "Three Price Feeds, One Strategy: Does the Signal Depend on Who Tells You the Price? - AQMath",
+        "shortTitle": "Three Price Feeds, One Strategy &mdash; Feed Sensitivity",
+        "description": ("The shield trusts one free-tier aggregator for every signal. Pulling the "
+                        "same eight tokens from three independent feeds shows exchanges agreeing to "
+                        "~0.1% while the aggregator prints 49 unfiltered one-day moves above 30% in a "
+                        "year - 41 corroborated by no exchange. The v14 replay outcome barely moves, "
+                        "but trade timing and the macro loop's volatility input do."),
+        "altLabel": "中文",
+    },
+    {
+        "src": "feed-sensitivity.zh-CN.md",
+        "out": "feed-sensitivity-zh.html",
+        "path": "/research/feed-sensitivity-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-08-09",
+        "title": "三个价格源，一个策略：信号取决于谁告诉你价格吗？ - AQMath",
+        "shortTitle": "三个价格源，一个策略 &mdash; 数据源敏感性",
+        "description": ("防护盾的每个信号都依赖一个免费档聚合器。把同样 8 个代币从三个独立"
+                        "价格源拉取：交易所之间分歧仅 ~0.1%，而聚合器一年打出 49 次未经过滤的"
+                        "超 30% 单日波动 — 其中 41 次没有任何交易所佐证。v14 回放结果几乎不动，"
+                        "但交易时机与宏观回路的波动率输入会动。"),
+        "altLabel": "English",
+    },
+    {
         "src": "mc-risk.md",
         "out": "mc-risk.html",
         "path": "/research/mc-risk",
@@ -367,6 +398,7 @@ DOCS = [
 TRANSLATION_SETS = [
     ["/research/oos-v14-new-tokens", "/research/oos-v14-new-tokens-zh"],
     ["/research/how-aqmath-works", "/research/how-aqmath-works-zh"],
+    ["/research/feed-sensitivity", "/research/feed-sensitivity-zh"],
     ["/research/mc-risk", "/research/mc-risk-zh"],
     ["/research/graveyard", "/research/graveyard-zh"],
     ["/research/robustness", "/research/robustness-zh"],

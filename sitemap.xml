@@ -22,11 +22,15 @@
        The EN and ZH reports are the same document; hreflang pairs them in <head>. -->
   <url>
     <loc>https://aqmath.xyz/research/</loc>
-    <lastmod>2026-08-07</lastmod>
+    <lastmod>2026-08-09</lastmod>
   </url>
   <url>
     <loc>https://aqmath.xyz/research/how-aqmath-works</loc>
     <lastmod>2026-08-07</lastmod>
+  </url>
+  <url>
+    <loc>https://aqmath.xyz/research/feed-sensitivity</loc>
+    <lastmod>2026-08-09</lastmod>
   </url>
   <url>
     <loc>https://aqmath.xyz/research/mc-risk</loc>
@@ -67,6 +71,10 @@
   <url>
     <loc>https://aqmath.xyz/research/how-aqmath-works-zh</loc>
     <lastmod>2026-08-07</lastmod>
+  </url>
+  <url>
+    <loc>https://aqmath.xyz/research/feed-sensitivity-zh</loc>
+    <lastmod>2026-08-09</lastmod>
   </url>
   <url>
     <loc>https://aqmath.xyz/research/mc-risk-zh</loc>

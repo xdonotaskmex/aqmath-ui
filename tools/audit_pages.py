@@ -79,6 +79,8 @@ NEEDS_SIM_NOTICE = {
     "research/graveyard-zh.html",
     "research/mc-risk.html",
     "research/mc-risk-zh.html",
+    "research/feed-sensitivity.html",
+    "research/feed-sensitivity-zh.html",
 }
 
 FORBIDDEN_ORIGINS = [
