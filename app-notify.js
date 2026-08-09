@@ -105,6 +105,51 @@ async function ensureHowAqmathAck() {
 
 // ---------- shield card: portfolio sync + status ----------
 
+let _holdingsRestored = false;
+
+// beta-auth is the DURABLE home of the synced holdings; the table itself lives
+// in localStorage. Clearing browser data, a fresh browser profile or another
+// machine therefore left the table empty while the shield card kept showing the
+// frozen weights from the server — which reads as "the two sections disagree".
+// Only MISSING rows are restored: an existing local row is never overwritten,
+// so quantities edited but not yet synced survive.
+async function restoreHoldingsFromServer() {
+    if (!isBetaActive() || _holdingsRestored) return 0;
+    _holdingsRestored = true;
+    let holdings = [];
+    try {
+        const res = await fetch(BETA_AUTH_URL + '/portfolio', {
+            headers: { 'Authorization': 'Bearer ' + getBetaToken() }
+        });
+        if (!res.ok) return 0;
+        holdings = (await res.json()).holdings || [];
+    } catch (e) {
+        console.warn('[AQMath] holdings restore failed:', e.message);
+        _holdingsRestored = false;   // allow a retry on the next auth refresh
+        return 0;
+    }
+    let added = 0;
+    for (const h of holdings) {
+        const sym = String(h.token || '').toUpperCase();
+        const amount = Number(h.amount);
+        if (!sym || !(amount > 0)) continue;
+        if ((portfolio || []).some(t => t && t.sym === sym)) continue;
+        portfolio.push({
+            sym, coinId: sym.toLowerCase(), amount, price: 0,
+            entry: 0, apy: 0, target: 0, costBasis: 0, totalTokens: 0,
+            frozen: false, insufficientHistory: false, safeHaven: false
+        });
+        added++;
+    }
+    if (added > 0) {
+        saveState();
+        render();
+        showToast(`Restored ${added} synced ${added === 1 ? 'holding' : 'holdings'} `
+            + 'from your account — press [ SYNC ALL ] to refresh prices.', 'notice');
+    }
+    return added;
+}
+
 function _localHoldings() {
     // The local portfolio rows are the source of the personal holdings.
     // Rows carry `amount` (not `amt`); the safe-haven USDC row is a reserve,
@@ -409,6 +454,7 @@ async function disableNotifications() {
 // Called from checkBetaUI() (app.js) whenever the auth state changes.
 function refreshNotifyUI() {
     if (isBetaActive()) {
+        restoreHoldingsFromServer();
         refreshShieldStatus();
         refreshNtfyStatus();
     }
