@@ -11,10 +11,17 @@
 Every study published so far ([OOS](/research/oos-v14-new-tokens),
 [Monte Carlo](/research/mc-risk), [Regime Autopsy](/research/regime-autopsy),
 [Robustness](/research/robustness)) treated the price series as ground truth.
-It is not. The live pipeline trusts **one** daily-close feed — a free-tier
-aggregator — for every shield signal, every DCA routing and every KKT
-re-optimisation. The question this study asks: *if we had trusted a different
-feed, would the user have gotten different signals?*
+It is not — and the live pipeline is built as if it knows. Three independent
+collectors (aggregator, Coinbase, Kraken) push raw daily prices into the data
+pipeline, which for every token and date de-duplicates, removes per-source
+outliers (4.5 standard deviations on a 7-day rolling window), takes the
+**cross-source median** of that date's prices, and fills gaps of ≤2 days by
+interpolation before the strategy ever sees the number. The shield does not
+read one feed blindly — but only for the tokens that more than one collector
+actually collects. Section 2 shows where that condition fails.
+
+The question this study asks: *if the shield had trusted a different feed,
+would the user have gotten different signals?*
 
 Three feeds were pulled independently for the eight tokens in the frozen v14
 plan: the aggregator the production collector uses (CoinGecko), and two
@@ -22,22 +29,28 @@ exchange-native feeds (Coinbase Exchange candles, Kraken OHLC).
 
 ## 2. Coverage — already a finding
 
-Listing status on 2026-08-09:
+Listing status on 2026-08-09 — and what the production collectors actually
+pull (per their configs):
 
-| Token | Aggregator (production) | Coinbase | Kraken |
-|-------|:---:|:---:|:---:|
-| ATH   | ✓ | ✓ | ✓ |
-| DAG   | ✓ | ✗ | ✓ |
-| EWT   | ✓ | ✗ | ✓ |
-| PAXG  | ✓ | ✓ | ✓ |
-| PEAQ  | ✓ | ✗ | ✓ |
-| PYTH  | ✓ | ✓ | ✓ |
-| TIA   | ✓ | ✓ | ✓ |
-| TICS  | ✓ | ✗ | ✗ |
+| Token | Listed: Aggregator | Coinbase | Kraken | Production |
+|-------|:---:|:---:|:---:|:---:|
+| ATH   | ✓ | ✓ | ✓ | 1 source |
+| DAG   | ✓ | ✗ | ✓ | 1 source |
+| EWT   | ✓ | ✗ | ✓ | 1 source |
+| PAXG  | ✓ | ✓ | ✓ | 3 sources |
+| PEAQ  | ✓ | ✗ | ✓ | 1 source |
+| PYTH  | ✓ | ✓ | ✓ | 3 sources |
+| TIA   | ✓ | ✓ | ✓ | 3 sources |
+| TICS  | ✓ | ✗ | ✗ | 1 source |
 
-Only **4 of 8** plan tokens are listed on all three feeds. **TICS is
-single-source**: its daily close exists nowhere in this comparison but the
-production aggregator. Any bad print there is undetectable by construction.
+Two findings. First, **TICS is single-source everywhere**: no exchange lists
+it, so any bad print there is undetectable by construction. Second, and more
+surprising: **in production, 5 of the 8 plan tokens are single-source**. The
+exchange collectors only pull TIA, PYTH and PAXG. Kraken *lists* ATH, DAG,
+EWT and PEAQ as well (this study uses its feed for them), but the production
+Kraken collector is not configured to collect them — so for those four tokens
+the cross-source median described above operates on exactly one input,
+equivalent to trusting the aggregator alone.
 
 One more coverage fact with operational weight: the aggregator's free tier
 (what the production collector uses — browser User-Agent, no key) is now
@@ -67,6 +80,11 @@ comparison.)
 | Aggregator vs Kraken | EWT | 364 | 1.87% | 33.0% | 56.3% |
 | Aggregator vs Kraken | DAG | 270 | 3.53% | 40.2% | 50.4% |
 
+![median and p95 same-day feed divergence per token pair, log axis](/research/assets/feed_divergence.svg)
+
+*Median (blue) and p95 (red) same-day feed divergence, per token and feed
+pair; log axis. Dashed guide: 0.5%, the v14 rebalance threshold.*
+
 **The exchanges agree with each other.** Venue-to-venue divergence on the
 same day is noise: median 0.04–0.21%, p95 under 0.9%. Price discovery is not
 the issue.
@@ -95,6 +113,11 @@ bad print, not a market event.
 | Kraken | (6 tokens) | 11 | — |
 | Coinbase | (3 tokens) | 5 | — |
 
+![aggregator jumps over 30% per token, uncorroborated share in red](/research/assets/feed_contamination.svg)
+
+*Single-day moves above 30% on the aggregator feed, per token (grey); the red
+part is corroborated by no exchange — bad prints, not market events.*
+
 The production feed printed **49 one-day moves above 30% in a single year, 41
 of them corroborated by no exchange** — prints like +107% and −52% on TIA in
 consecutive weeks while both exchanges traded flat. The exchanges' jumps, by
@@ -102,17 +125,24 @@ contrast, are nearly all shared events (the October 2025 liquidation cascade
 appears on every feed that lists the token). The contamination concentrates
 in exactly the thin-liquidity tokens a small-cap plan must hold.
 
-For context on why this reaches the strategy unfiltered: the pipeline
-validator *flags* moves above 50% but does not reject them, and moves of
-30–50% are not checked at all.
+For context on why this reaches the strategy: the pipeline's outlier filter
+drops prices deviating more than 4.5 standard deviations from a 7-day rolling
+mean, per source — a useful sieve for blue chips, but a thin token's own
+volatility inflates the local std, so extreme prints can survive it. Where the
+merge has three sources (TIA, PYTH, PAXG) the cross-source median then
+absorbs any survivor; where a token is single-source (§2), nothing stands
+between the print and the shield. The validator additionally *flags* moves
+above 50% but does not reject them, and moves of 30–50% are not checked at
+all.
 
 ## 5. Replay — same shield, three feeds
 
 The real v14 shield (`evaluate_shield`, production constants, 10 bps fees,
-threshold rebalancing) was replayed once per feed plus a **consensus** arm
-(per-token median across the three feeds), on the 4-token sub-basket listed
-everywhere (weights: the frozen plan renormalised — ATH 20.1%, PAXG 52.6%,
-PYTH 14.4%, TIA 12.9%). Window: 364 days, 2025-08-09 → 2026-08-07.
+threshold rebalancing) was replayed once per feed plus a **consensus** arm —
+the per-token median across the three feeds, i.e. the same merge rule the
+production pipeline applies to TIA/PYTH/PAXG — on the 4-token sub-basket
+listed everywhere (weights: the frozen plan renormalised — ATH 20.1%, PAXG
+52.6%, PYTH 14.4%, TIA 12.9%). Window: 364 days, 2025-08-09 → 2026-08-07.
 $10,000 start + $300/30d DCA.
 
 | Feed | Final | MaxDD | Sharpe | Calmar | Fees | Rebalances |
@@ -121,6 +151,12 @@ $10,000 start + $300/30d DCA.
 | Coinbase | $16,580 | 14.1% | 1.35 | 1.57 | $33 | 22 |
 | Kraken | $16,601 | 14.4% | 1.34 | 1.55 | $35 | 23 |
 | Consensus (median of 3) | $16,600 | 14.3% | 1.34 | 1.55 | $35 | 23 |
+
+![equity paths per feed arm plus consensus and buy-and-hold](/research/assets/feed_replay.svg)
+
+*Equity per feed arm, same shield code. The Consensus arm mirrors the merge
+production serves for the triple-sourced tokens; the Aggregator-only arm is
+the reality of the five single-source tokens. Dashed grey: Buy & Hold.*
 
 Buy & Hold on the same window: +28.3–28.4%.
 
@@ -160,7 +196,9 @@ the sub-basket tokens:
 The production feed estimates TIA's risk at **2.8× the exchange estimate** —
 purely from bad prints. The frozen weights locked 2026-08-08 are untouched by
 this (they are frozen), but the next macro re-optimisation reads those
-contaminated vols: thin tokens get systematically over-penalised, and the
+contaminated vols — and for the five single-source tokens (§2) the
+contaminated vol is exactly what sits in the production DB, with no second
+feed to outvote it. Thin tokens get systematically over-penalised, and the
 "clean" answer depends on which feed you ask. This is the channel where feed
 choice stops being noise and becomes a hidden parameter.
 
@@ -170,8 +208,13 @@ choice stops being noise and becomes a hidden parameter.
   free-tier 365-day history limit. No bear-market leg is covered.
 - **Sub-basket:** only the 4 of 8 plan tokens listed on all three feeds. The
   replay is gold-heavy by construction; the contaminated single-source tokens
-  (TICS, DAG, EWT, PEAQ) could not be replayed across feeds at all. Their
-  contamination counts in §4 are the evidence for them instead.
+  (DAG, EWT, PEAQ; ATH is in the replay, TICS is not) could not be replayed
+  across feeds. Their contamination counts in §4 are the evidence for them
+  instead.
+- **Study series vs production DB:** this study pulls the public APIs
+  directly; production reads the merged DB. For TIA/PYTH/PAXG the Consensus
+  arm replicates the pipeline's merge rule (per-date median) on the same three
+  feeds.
 - **Jump threshold:** 30% is a heuristic; genuine thin-token moves can exceed
   it. The uncorroborated count (requiring silence on BOTH exchanges ±1 day)
   is the conservative figure used for attribution.
@@ -181,18 +224,30 @@ choice stops being noise and becomes a hidden parameter.
 ## 8. Implications
 
 1. **Venue disagreement is not the risk.** Two independent exchanges agree to
-   within ~0.1% on a typical day. The production feed agrees with them in the
+   within ~0.1% on a typical day. The aggregator agrees with them in the
    median — the risk lives entirely in its tail.
-2. **The shield's bottom line survived one year of that tail** at the current
-   (gold-heavy) weights — with 0/363 days of >2 pp basket-level deviation.
-3. **The two exposed channels are timing and the macro vol input**, both
+2. **Production's median merge does its job where it has inputs.** The
+   consensus arm — the same rule the pipeline applies to TIA/PYTH/PAXG — sits
+   within $22 of the exchange arms' finals, and all four outcomes land inside
+   a 0.7% band with 0/363 days of >2 pp basket-level deviation.
+3. **The gap is coverage, not math.** Five of the eight plan tokens — ATH,
+   DAG, EWT, PEAQ, TICS — reach the production DB through the aggregator
+   alone even though Kraken lists four of them; the 4.5σ outlier filter is
+   the only screen left there, and it is weakest exactly where the token's
+   own volatility is highest.
+4. **The two exposed channels are timing and the macro vol input**, both
    driven by single-feed bad prints on thin tokens.
-4. Candidate hardening (not implemented — shield parameters are frozen and
-   this study changes nothing in production): a plausibility clamp on
-   single-day moves, or a cross-feed median where a second source exists —
-   Kraken alone covers 7 of the 8 plan tokens.
+5. Candidate hardening (not implemented — shield parameters are frozen and
+   this study changes nothing in production): collect ATH, DAG, EWT and PEAQ
+   with the Kraken collector so the existing median merge gains a second
+   input. Caveat: with two sources the merge takes the *higher* of the two
+   prices (middle index of the sorted list), so the full benefit needs a
+   third source or an explicit reject rule. TICS stays single-source in any
+   case — it is listed nowhere else — and deserves its own plausibility
+   clamp.
 
 The honest summary: *the signal does not depend on who tells you the price in
-the median case — but one of the three feeds occasionally lies, the lie is
-concentrated in exactly the tokens the plan must hold, and the next macro
-re-optimisation will read those lies as volatility.*
+the median case — the pipeline already takes the median. But one of the three
+feeds occasionally lies, the lie is concentrated in exactly the tokens the
+plan must hold, five of the eight tokens get no second opinion in production,
+and the next macro re-optimisation will read those lies as volatility.*

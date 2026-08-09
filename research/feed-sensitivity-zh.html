@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>三个价格源，一个策略：信号取决于谁告诉你价格吗？ - AQMath</title>
-<meta name="description" content="防护盾的每个信号都依赖一个免费档聚合器。把同样 8 个代币从三个独立价格源拉取：交易所之间分歧仅 ~0.1%，而聚合器一年打出 49 次未经过滤的超 30% 单日波动 — 其中 41 次没有任何交易所佐证。v14 回放结果几乎不动，但交易时机与宏观回路的波动率输入会动。">
+<meta name="description" content="管线用按日中位数合并三个价格源 — 但冻结计划的 8 个代币中有 5 个只由免费档聚合器采集。把同样 8 个代币从三个独立价格源拉取：交易所之间分歧仅 ~0.1%，而聚合器一年打出 49 次超 30% 单日波动 — 其中 41 次没有任何交易所佐证。v14 回放结果几乎不动，但交易时机与宏观回路的波动率输入会动。">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://aqmath.xyz/research/feed-sensitivity-zh">
 <link rel="icon" href="/favicon.ico">
@@ -15,7 +15,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://aqmath.xyz/research/feed-sensitivity-zh">
 <meta property="og:title" content="三个价格源，一个策略：信号取决于谁告诉你价格吗？ - AQMath">
-<meta property="og:description" content="防护盾的每个信号都依赖一个免费档聚合器。把同样 8 个代币从三个独立价格源拉取：交易所之间分歧仅 ~0.1%，而聚合器一年打出 49 次未经过滤的超 30% 单日波动 — 其中 41 次没有任何交易所佐证。v14 回放结果几乎不动，但交易时机与宏观回路的波动率输入会动。">
+<meta property="og:description" content="管线用按日中位数合并三个价格源 — 但冻结计划的 8 个代币中有 5 个只由免费档聚合器采集。把同样 8 个代币从三个独立价格源拉取：交易所之间分歧仅 ~0.1%，而聚合器一年打出 49 次超 30% 单日波动 — 其中 41 次没有任何交易所佐证。v14 回放结果几乎不动，但交易时机与宏观回路的波动率输入会动。">
 <meta property="og:site_name" content="AQMath">
 <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20260721b">
@@ -25,7 +25,7 @@
 <meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="三个价格源，一个策略：信号取决于谁告诉你价格吗？ - AQMath">
-<meta name="twitter:description" content="防护盾的每个信号都依赖一个免费档聚合器。把同样 8 个代币从三个独立价格源拉取：交易所之间分歧仅 ~0.1%，而聚合器一年打出 49 次未经过滤的超 30% 单日波动 — 其中 41 次没有任何交易所佐证。v14 回放结果几乎不动，但交易时机与宏观回路的波动率输入会动。">
+<meta name="twitter:description" content="管线用按日中位数合并三个价格源 — 但冻结计划的 8 个代币中有 5 个只由免费档聚合器采集。把同样 8 个代币从三个独立价格源拉取：交易所之间分歧仅 ~0.1%，而聚合器一年打出 49 次超 30% 单日波动 — 其中 41 次没有任何交易所佐证。v14 回放结果几乎不动，但交易时机与宏观回路的波动率输入会动。">
 <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <link rel="alternate" hreflang="en" href="https://aqmath.xyz/research/feed-sensitivity">
@@ -55,17 +55,19 @@
 <strong>状态：</strong> 📊 研究 — 数据源敏感性研究，未改动任何参数，未提升任何组合</p>
 <hr>
 <h2>1. 目标</h2>
-<p>迄今发布的每一项研究（<a href="/research/oos-v14-new-tokens-zh">样本外验证</a>、 <a href="/research/mc-risk-zh">蒙特卡洛</a>、<a href="/research/regime-autopsy-zh">市场状态尸检</a>、 <a href="/research/robustness-zh">稳健性</a>）都把价格序列当作地面真值。它不是。 生产管线把<strong>一个</strong>日线收盘源 — 免费档聚合器 — 当作每一个防护盾信号、 每一次 DCA 路由和每一次 KKT 再优化的依据。本研究要问的是：<em>如果当初信任 另一个源，用户得到的信号会不同吗？</em></p>
+<p>迄今发布的每一项研究（<a href="/research/oos-v14-new-tokens-zh">样本外验证</a>、 <a href="/research/mc-risk-zh">蒙特卡洛</a>、<a href="/research/regime-autopsy-zh">市场状态尸检</a>、 <a href="/research/robustness-zh">稳健性</a>）都把价格序列当作地面真值。它不是 — 而且生产管线就是按&quot;知道这一点&quot;来构建的。三个独立 collector（聚合器、 Coinbase、Kraken）把原始日线价格推入数据管线；管线对每个代币、每个日期 先去重，再按源剔除离群值（7 天滚动窗口的 4.5 个标准差），然后取该日 各源的<strong>中位数</strong>价格，并对 ≤2 天的缺口做插值 — 策略看到的数字已经过这 一切处理。防护盾并不是盲目只读一个源 — 但前提是该代币确实被不止一个 collector 采集。第 2 节展示这个前提在哪里失效。</p>
+<p>本研究要问的是：<em>如果防护盾当初信任另一个源，用户得到的信号会不同吗？</em></p>
 <p>我们为冻结 v14 计划中的 8 个代币独立拉取了三个源：生产 collector 使用的 聚合器（CoinGecko），以及两个交易所原生源（Coinbase Exchange K 线、 Kraken OHLC）。</p>
 <h2>2. 覆盖范围 — 本身就是一个发现</h2>
-<p>2026-08-09 的上币情况：</p>
+<p>2026-08-09 的上币情况 — 以及生产 collector 实际采集的范围（按配置）：</p>
 <div class="rs-tablewrap">
 <table>
 <thead><tr>
 <th style="text-align:left">代币</th>
-<th style="text-align:center">聚合器（生产）</th>
+<th style="text-align:center">上币：聚合器</th>
 <th style="text-align:center">Coinbase</th>
 <th style="text-align:center">Kraken</th>
+<th style="text-align:center">生产</th>
 </tr></thead>
 <tbody>
 <tr>
@@ -73,51 +75,59 @@
 <td style="text-align:center">✓</td>
 <td style="text-align:center">✓</td>
 <td style="text-align:center">✓</td>
+<td style="text-align:center">单源</td>
 </tr>
 <tr>
 <td style="text-align:left">DAG</td>
 <td style="text-align:center">✓</td>
 <td style="text-align:center">✗</td>
 <td style="text-align:center">✓</td>
+<td style="text-align:center">单源</td>
 </tr>
 <tr>
 <td style="text-align:left">EWT</td>
 <td style="text-align:center">✓</td>
 <td style="text-align:center">✗</td>
 <td style="text-align:center">✓</td>
+<td style="text-align:center">单源</td>
 </tr>
 <tr>
 <td style="text-align:left">PAXG</td>
 <td style="text-align:center">✓</td>
 <td style="text-align:center">✓</td>
 <td style="text-align:center">✓</td>
+<td style="text-align:center">三源</td>
 </tr>
 <tr>
 <td style="text-align:left">PEAQ</td>
 <td style="text-align:center">✓</td>
 <td style="text-align:center">✗</td>
 <td style="text-align:center">✓</td>
+<td style="text-align:center">单源</td>
 </tr>
 <tr>
 <td style="text-align:left">PYTH</td>
 <td style="text-align:center">✓</td>
 <td style="text-align:center">✓</td>
 <td style="text-align:center">✓</td>
+<td style="text-align:center">三源</td>
 </tr>
 <tr>
 <td style="text-align:left">TIA</td>
 <td style="text-align:center">✓</td>
 <td style="text-align:center">✓</td>
 <td style="text-align:center">✓</td>
+<td style="text-align:center">三源</td>
 </tr>
 <tr>
 <td style="text-align:left">TICS</td>
 <td style="text-align:center">✓</td>
 <td style="text-align:center">✗</td>
 <td style="text-align:center">✗</td>
+<td style="text-align:center">单源</td>
 </tr>
 </tbody></table></div>
-<p>计划中 8 个代币只有 <strong>4 个</strong>在三个源同时上币。<strong>TICS 是单一来源</strong>：它的 日线收盘在本比较中只存在于生产聚合器上。那里的任何坏报价在构造上就 不可检测。</p>
+<p>两个发现。第一，<strong>TICS 在任何地方都是单一来源</strong>：两家交易所都未上币， 那里的任何坏报价在构造上就不可检测。第二，更出乎意料：<strong>在生产中， 计划中 8 个代币有 5 个是单一来源</strong>。交易所 collector 只采集 TIA、PYTH、 PAXG。Kraken <em>也上币了</em> ATH、DAG、EWT、PEAQ（本研究正是用它的源比较这 四个代币），但生产 Kraken collector 并未配置采集它们 — 因此对这四个 代币，上面描述的跨源中位数只对一个输入运作，等同于只信任聚合器。</p>
 <p>还有一条有运维分量的覆盖事实：聚合器的免费档（生产 collector 所用 — 浏览器 User-Agent、无密钥）现在被限制在 <strong>365 天</strong>历史；更深的请求返回 HTTP 401。这既限制了本研究的窗口，也会限制任何全新部署的回填深度。</p>
 <h2>3. 各源分歧有多大？</h2>
 <p>重叠日期上同日价格的成对绝对相对差。（先做一个口径修正：聚合器的 &quot;daily&quot;点是 UTC 00:00 快照，即<em>前一天</em>的收盘 — 已验证：2025-10-10 崩盘 在两个交易所记在 10-10，在该源记在 10-11。比较前所有序列已重标记为 交易所口径。）</p>
@@ -221,6 +231,8 @@
 <td style="text-align:right">50.4%</td>
 </tr>
 </tbody></table></div>
+<figure class="rs-fig"><img src="/research/assets/feed_divergence.svg" alt="每个代币-源对同日分歧的中位数与 p95，对数轴" width="920" height="400" loading="lazy" decoding="async"></figure>
+<p><em>同日源分歧的中位数（蓝）与 p95（红），按代币与源对；对数轴。虚线： 0.5%，v14 再平衡阈值。</em></p>
 <p><strong>交易所之间彼此一致。</strong>同日跨所分歧就是噪声：中位数 0.04–0.21%， p95 低于 0.9%。价格发现不是问题所在。</p>
 <p><strong>聚合器大体一致 — 直到它不一致。</strong>中位数分歧同样很小，但尾部巨大： p95 介于 13% 到 59%，单日最大差距达 76%。分歧不是一个宽的分布，而是 少数极端报价。第 4 节展示它们的来源。</p>
 <h2>4. 坏报价的解剖</h2>
@@ -289,10 +301,12 @@
 <td style="text-align:right">—</td>
 </tr>
 </tbody></table></div>
+<figure class="rs-fig"><img src="/research/assets/feed_contamination.svg" alt="聚合器每个代币超 30% 单日波动，红色为无佐证部分" width="920" height="400" loading="lazy" decoding="async"></figure>
+<p><em>聚合器源上单日波动超 30% 的次数，按代币（灰）；红色部分没有任何交易所 佐证 — 是坏报价，不是市场事件。</em></p>
 <p>生产源在一年内打出了 <strong>49 次超 30% 的单日波动，其中 41 次没有任何 交易所佐证</strong> — 例如 TIA 在数周内先后出现 +107% 与 −52%，而两个交易所 全程横盘。相比之下交易所的跳变几乎全是共享事件（2025 年 10 月的清算 级联出现在每个上币该代币的源上）。污染恰好集中在小型股计划必须持有的 薄流动性代币上。</p>
-<p>关于它为何未经过滤进入策略：管线 validator 会<em>标记</em>超 50% 的波动但不 拒绝，30–50% 的波动则完全不被检查。</p>
+<p>关于它为何能进入策略：管线的离群值过滤器会按源剔除偏离 7 天滚动均值 超过 4.5 个标准差的价格 — 对蓝筹币是好筛子，但薄代币自身的波动率会抬高 局部标准差，极端报价可以存活下来。在合并有三个源的地方（TIA、PYTH、 PAXG），跨源中位数随后能吸收幸存者；在代币为单一来源的地方（第 2 节）， 坏报价与防护盾之间没有任何屏障。validator 另外会<em>标记</em>超 50% 的波动但 不拒绝，30–50% 的波动则完全不被检查。</p>
 <h2>5. 回放 — 同一防护盾，三个源</h2>
-<p>真实 v14 防护盾（<code>evaluate_shield</code>、生产常数、10 bps 手续费、阈值再平衡） 按每个源各回放一次，外加一个<strong>共识</strong>组（每代币取三源中位数），标的为 处处上币的 4 代币子组合（权重：冻结计划重归一 — ATH 20.1%、PAXG 52.6%、 PYTH 14.4%、TIA 12.9%）。窗口：364 天，2025-08-09 → 2026-08-07。 $10,000 起步 + 每 30 天 $300 DCA。</p>
+<p>真实 v14 防护盾（<code>evaluate_shield</code>、生产常数、10 bps 手续费、阈值再平衡） 按每个源各回放一次，外加一个<strong>共识</strong>组 — 每代币取三源中位数，也就是生产 管线对 TIA/PYTH/PAXG 实际使用的同一条合并规则 — 标的为处处上币的 4 代币 子组合（权重：冻结计划重归一 — ATH 20.1%、PAXG 52.6%、PYTH 14.4%、 TIA 12.9%）。窗口：364 天，2025-08-09 → 2026-08-07。$10,000 起步 + 每 30 天 $300 DCA。</p>
 <div class="rs-tablewrap">
 <table>
 <thead><tr>
@@ -342,6 +356,8 @@
 <td style="text-align:right">23</td>
 </tr>
 </tbody></table></div>
+<figure class="rs-fig"><img src="/research/assets/feed_replay.svg" alt="每个源组的净值曲线，加共识组与买入持有" width="920" height="400" loading="lazy" decoding="async"></figure>
+<p><em>每个源组的净值，同一套防护盾代码。共识组对应生产为三源代币提供的合并 结果；仅聚合器组是五个单源代币面对的现实。灰色虚线：买入持有。</em></p>
 <p>同窗口买入持有：+28.3–28.4%。</p>
 <p><strong>最终结果在本窗口内对源是稳健的。</strong>终值落在 0.7% 带宽内，最大回撤 落在 0.3 个百分点内。两个结构性原因：子组合由 PAXG 主导（52.6% — 本研究 中最干净的序列，每个源上都是 0 次跳变），且污染报价均值回归（+107% 报价之后跟着 −52%），对水平的净影响大体抵消。</p>
 <p>生产源的篮子层面收益与共识偏差超 2 个百分点的天数为 <strong>0/363</strong> — 污染真实存在，但在这些权重下停留在篮子表面之下。</p>
@@ -388,12 +404,12 @@
 <td style="text-align:right"><strong>187.5 pp</strong></td>
 </tr>
 </tbody></table></div>
-<p>生产源把 TIA 的风险估计为<strong>交易所估计的 2.8 倍</strong> — 纯粹来自坏报价。 2026-08-08 锁定的冻结权重不受影响（它们是冻结的），但下一次宏观再优化 会读到这些被污染的波动率：薄代币被系统性过度惩罚，而&quot;干净&quot;的答案 取决于你问哪个源。这就是源选择从噪声变成隐藏参数的通道。</p>
+<p>生产源把 TIA 的风险估计为<strong>交易所估计的 2.8 倍</strong> — 纯粹来自坏报价。 2026-08-08 锁定的冻结权重不受影响（它们是冻结的），但下一次宏观再优化 会读到这些被污染的波动率 — 而对五个单一来源代币（第 2 节），被污染的 波动率正是生产数据库里存放的那个值，没有第二个源能否决它。薄代币被 系统性过度惩罚，而&quot;干净&quot;的答案取决于你问哪个源。这就是源选择从噪声 变成隐藏参数的通道。</p>
 <h2>7. 注意事项</h2>
-<ul><li><strong>窗口：</strong>364 天（2025-08-09 → 2026-08-07），受聚合器免费档 365 天 历史上限限制。未覆盖熊市段。</li><li><strong>子组合：</strong>只有 8 个计划代币中三源皆上币的 4 个。回放构造上偏黄金； 被污染的单一来源代币（TICS、DAG、EWT、PEAQ）根本无法跨源回放。它们的 证据改为第 4 节的污染计数。</li><li><strong>跳变阈值：</strong>30% 是启发式；真实的薄代币波动可以超过它。无佐证计数 （要求两个交易所在 ±1 天内同时沉默）是归因所用的保守口径。</li><li><strong>全程无前视：</strong>每个源组运行完全相同的生产代码路径、同样的 DCA、 手续费与常数。</li></ul>
+<ul><li><strong>窗口：</strong>364 天（2025-08-09 → 2026-08-07），受聚合器免费档 365 天 历史上限限制。未覆盖熊市段。</li><li><strong>子组合：</strong>只有 8 个计划代币中三源皆上币的 4 个。回放构造上偏黄金； 被污染的单一来源代币（DAG、EWT、PEAQ；ATH 在回放内，TICS 不在）无法 跨源回放。它们的证据改为第 4 节的污染计数。</li><li><strong>研究序列 vs 生产数据库：</strong>本研究直接拉取公开 API；生产读取合并后的 数据库。对 TIA/PYTH/PAXG，共识组在同样三个源上复现了管线的合并规则 （按日取中位数）。</li><li><strong>跳变阈值：</strong>30% 是启发式；真实的薄代币波动可以超过它。无佐证计数 （要求两个交易所在 ±1 天内同时沉默）是归因所用的保守口径。</li><li><strong>全程无前视：</strong>每个源组运行完全相同的生产代码路径、同样的 DCA、 手续费与常数。</li></ul>
 <h2>8. 结论</h2>
-<p>1. <strong>交易所分歧不是风险。</strong>两个独立交易所在典型日的分歧在 ~0.1% 以内。 生产源在中位数上与它们一致 — 风险完全活在它的尾部。 2. <strong>防护盾的最终结果在当前（偏黄金）权重下扛过了这条尾部的一年</strong> — 0/363 天的篮子层面偏差超过 2 个百分点。 3. <strong>两个暴露通道是时机与宏观波动率输入</strong>，都由薄代币上的单源坏报价 驱动。 4. 候选加固措施（未实施 — 防护盾参数已冻结，本研究不改动生产任何部分）： 对单日波动加合理性钳制，或在存在第二来源处取跨源中位数 — 仅 Kraken 就覆盖 8 个计划代币中的 7 个。</p>
-<p>诚实的总结：<em>在中位数情形下，信号不取决于谁告诉你价格 — 但三个源中 有一个偶尔会说谎，谎言恰好集中在计划必须持有的代币上，而下一次宏观 再优化会把这些谎言当作波动率读进去。</em></p>
+<p>1. <strong>交易所分歧不是风险。</strong>两个独立交易所在典型日的分歧在 ~0.1% 以内。 聚合器在中位数上与它们一致 — 风险完全活在它的尾部。 2. <strong>生产的中位数合并在有输入的地方尽了职。</strong>共识组 — 管线对 TIA/PYTH/PAXG 使用的同一条规则 — 与交易所组的终值相差不到 $22， 四组结果全部落在 0.7% 带宽内，0/363 天的篮子层面偏差超过 2 个百分点。 3. <strong>缺口是覆盖，不是数学。</strong>计划中 8 个代币有 5 个 — ATH、DAG、EWT、 PEAQ、TICS — 只通过聚合器进入生产数据库，尽管 Kraken 上币了其中 4 个；那里只剩下 4.5σ 离群值过滤器，而它恰恰在代币自身波动率最高的 地方最弱。 4. <strong>两个暴露通道是时机与宏观波动率输入</strong>，都由薄代币上的单源坏报价 驱动。 5. 候选加固措施（未实施 — 防护盾参数已冻结，本研究不改动生产任何部分）： 让 Kraken collector 采集 ATH、DAG、EWT、PEAQ，使现有的中位数合并获得 第二个输入。注意：只有两个源时，合并取两者中<em>较高</em>的价格（排序列表 的中间下标），因此完整收益需要第三个源或显式的拒绝规则。TICS 在任何 方案下都保持单一来源 — 它没有在任何别处上币 — 值得单独的合理性钳制。</p>
+<p>诚实的总结：<em>在中位数情形下，信号不取决于谁告诉你价格 — 管线本来就取 中位数。但三个源中有一个偶尔会说谎，谎言恰好集中在计划必须持有的代币 上，八个代币里有五个在生产中得不到第二意见，而下一次宏观再优化会把 这些谎言当作波动率读进去。</em></p>
 </main>
 
 <footer class="site-footer">
