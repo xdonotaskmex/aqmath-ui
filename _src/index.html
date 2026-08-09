@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=cf91a21ed7">
+    <link rel="stylesheet" href="/styles.min.css?v=dac8c9646f">
 </head>
 <body>
 
@@ -818,7 +818,13 @@
                 </div>
                 <div class="fg">
                     <label data-i18n="app.targetLabel">Target Allocation (%)</label>
-                    <input type="number" id="iTarget" step="0.1" min="0.1" max="100" placeholder="0.0">
+                    <!-- min=0, not 0.1: a frozen v14 plan legitimately assigns 0% to a
+                         token under its KKT min-weight floor, and the edit form mirrors
+                         that value back - min=0.1 marked such a row :invalid. -->
+                    <input type="number" id="iTarget" step="0.1" min="0" max="100" placeholder="0.0">
+                    <!-- Filled by syncTargetFieldLock() in app.js while the shield owns
+                         the allocation; stays empty and hidden otherwise. -->
+                    <div class="fg-hint" id="iTargetHint" hidden></div>
                 </div>
                 <div class="fg">
                     <label data-i18n="app.historyCsvLabel">Historical Prices (CSV)</label>
@@ -2469,10 +2475,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=cf91a21ed7"></script>
-<script defer src="/app-backtest.js?v=cf91a21ed7"></script>
-<script defer src="/app.js?v=cf91a21ed7"></script>
-<script defer src="/app-notify.js?v=cf91a21ed7"></script>
+<script defer src="/app-widgets.js?v=dac8c9646f"></script>
+<script defer src="/app-backtest.js?v=dac8c9646f"></script>
+<script defer src="/app.js?v=dac8c9646f"></script>
+<script defer src="/app-notify.js?v=dac8c9646f"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -2486,8 +2492,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=cf91a21ed7"></script>
-<script defer src="/app-boot.js?v=cf91a21ed7"></script>
+<script defer src="/vendor/i18next.min.js?v=dac8c9646f"></script>
+<script defer src="/app-boot.js?v=dac8c9646f"></script>
 
 </body>
 </html>

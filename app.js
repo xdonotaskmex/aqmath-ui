@@ -1182,6 +1182,25 @@ function popuniFormu(sym) {
     document.getElementById('iTarget').value = token.target;
     document.getElementById('btnAdd').textContent = '[ Update ]';
     editMode = token.sym;
+    syncTargetFieldLock();
+}
+
+// Target% belongs to the server once the shield has frozen the KKT plan: v14
+// recomputes it and the next status refresh overwrites anything typed here.
+// Locking the field says so, instead of letting the user fill in a number that
+// gets silently discarded.
+function syncTargetFieldLock() {
+    const el = document.getElementById('iTarget');
+    if (!el) return;
+    const frozen = typeof shieldTargetsFrozen === 'function' && shieldTargetsFrozen();
+    el.readOnly = frozen;
+    const hint = document.getElementById('iTargetHint');
+    if (hint) {
+        hint.textContent = frozen
+            ? 'managed by the v14 shield — quantity and APY stay editable'
+            : '';
+        hint.hidden = !frozen;
+    }
 }
 
 function resetForme() {
@@ -1189,6 +1208,7 @@ function resetForme() {
     document.getElementById('iHistoryCSV').value = '';
     document.getElementById('btnAdd').textContent = '[ Load ]';
     editMode = null;
+    syncTargetFieldLock();
 }
 
 async function dodajToken() {
@@ -1203,10 +1223,25 @@ async function dodajToken() {
     let price = parseFloat(document.getElementById('iPrice').value);
     const entryInput = parseFloat(document.getElementById('iEntry').value);
     const apy = parseFloat(document.getElementById('iApy').value) || 0;
-    const target = parseFloat(document.getElementById('iTarget').value);
+    const targetInput = parseFloat(document.getElementById('iTarget').value);
     const safeHaven = isStablecoin(sym);
     if (isNaN(amount) || amount <= 0) return showToast('quantity must be > 0.', 'warning');
-    if (isNaN(target) || target <= 0) return showToast('allocation must be > 0%.', 'warning');
+
+    // Once the shield has frozen the KKT plan, Target% is SERVER-owned (v14
+    // computes it) and the field is only a mirror. Demanding "> 0" then made a
+    // row unmaintainable: KKT legitimately assigns 0% to a token under its
+    // min-weight floor, so updating that token's APY or quantity was impossible
+    // without inventing an allocation the engine would immediately overwrite.
+    const planFrozen = typeof shieldTargetsFrozen === 'function' && shieldTargetsFrozen();
+    let target = targetInput;
+    if (planFrozen) {
+        // Keep whatever the frozen plan already assigned; the next status refresh
+        // re-applies it anyway.
+        const known = portfolio.find(t => t && t.sym === (editMode || sym));
+        if (isNaN(target)) target = known ? (Number(known.target) || 0) : 0;
+    } else if (isNaN(target) || target <= 0) {
+        return showToast('allocation must be > 0%.', 'warning');
+    }
 
     const coinId = sym.toLowerCase();  // use sym as coinId
     const btn = document.getElementById('btnAdd');
@@ -2009,6 +2044,7 @@ function renderHistoryChart() {
 // ============ RENDER ============
 function render() {
     saveState();
+    syncTargetFieldLock();
     const portVal = totalValue();
     const allTokens = portfolio;
     const tgt = totalTarget();

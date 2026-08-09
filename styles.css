@@ -290,6 +290,12 @@
         color: var(--blue); font-family: var(--mono); font-size: 0.82rem; font-weight: 500;
         outline: none; border-radius: 3px; transition: border 0.2s; appearance: textfield; }
     .fg input:focus { border-color: var(--borderB); box-shadow: 0 0 0 1px rgba(56,189,248,0.1); }
+    /* Server-owned field (Target% under a frozen v14 plan): must not look like a
+       normal editable input, otherwise the user types a value that the next
+       status refresh silently overwrites. */
+    .fg input[readonly] { color: var(--muted); background: rgba(0,0,0,0.28);
+        border-style: dashed; cursor: not-allowed; }
+    .fg input[readonly]:focus { border-color: var(--border); box-shadow: none; }
     .fg input::placeholder { color: var(--muted); font-size: 0.72rem; }
     .fg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .fg-file { display: flex; align-items: center; gap: 8px; padding: 9px 12px; background: rgba(0,0,0,0.3);

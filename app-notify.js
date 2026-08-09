@@ -117,6 +117,16 @@ function shieldTargetsFrozen() {
     return _shieldFrozen;
 }
 
+// Every write to _shieldFrozen goes through here so the Target% input's
+// read-only state can never lag behind the plan. _applyFrozenTargets' render()
+// is not enough: it only fires when a weight actually CHANGED, so a refresh that
+// confirms the same plan would leave the field editable and let the user type a
+// number the next refresh throws away.
+function _setShieldFrozen(frozen) {
+    _shieldFrozen = frozen;
+    if (typeof syncTargetFieldLock === 'function') syncTargetFieldLock();
+}
+
 function _applyFrozenTargets(weights) {
     // The frozen weights ARE the plan the daily signals are computed from, so
     // the holdings table shows exactly them. USDC absorbs the remainder (KKT
@@ -210,7 +220,7 @@ function _renderShieldStatus(data) {
     const el = document.getElementById('shieldStatus');
     if (!el) return;
     if (!data || !data.initialized) {
-        _shieldFrozen = false;
+        _setShieldFrozen(false);
         el.innerHTML = 'not initialized — sync your portfolio below';
         _setShieldSynced(false);
         return;
@@ -255,7 +265,7 @@ function _renderShieldStatus(data) {
     _applyShieldSettings(data.settings);
     // Push the frozen plan into the holdings table so Target% and this card can
     // never disagree. Done last: it may re-render the table.
-    _shieldFrozen = true;
+    _setShieldFrozen(true);
     _applyFrozenTargets(data.weights || []);
 }
 
@@ -378,7 +388,7 @@ async function refreshShieldStatus() {
 }
 
 function _setShieldMessage(text) {
-    _shieldFrozen = false;
+    _setShieldFrozen(false);
     const el = document.getElementById('shieldStatus');
     if (el) el.textContent = text;
 }
