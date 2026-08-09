@@ -134,9 +134,13 @@ function _renderShieldStatus(data) {
         .join(' · ');
     const last = data.last_signal || {};
     const parked = last.dca && last.dca.route === 'USDC' ? last.dca.parked_total : null;
+    // Say WHEN the weights were locked: they deliberately do NOT follow the
+    // live [optimize] targets in the holdings table, which are recomputed from
+    // today's covariance on every click.
+    const froze = (data.frozen_at || '').slice(0, 10);
     el.innerHTML =
         `shield: ${active}<br>`
-        + `frozen weights: ${weights || '—'}<br>`
+        + `frozen weights${froze ? ' (locked ' + froze + ')' : ''}: ${weights || '—'}<br>`
         + `macro re-opt: ${(data.next_reopt_at || '').slice(0, 10)}<br>`
         + `last run: ${data.last_run_at ? data.last_run_at.slice(0, 10) : '—'}`
         + (data.next_dca_on ? `<br>next DCA: ${data.next_dca_on}` : '')
