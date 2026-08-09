@@ -423,6 +423,10 @@ function checkBetaUI() {
     if (activeEl) activeEl.classList.toggle('hidden', !active);
     updateProButtons();
     // Shield status + notification state follow the auth state (app-notify.js).
+    // The guard is NOT a no-op: at page load app.js runs before app-notify.js
+    // (both `defer`, document order), so this call is skipped and the initial
+    // load is booted from the bottom of app-notify.js instead. Here it only
+    // serves later auth changes (activate / deactivate).
     if (typeof refreshNotifyUI === 'function') refreshNotifyUI();
 }
 

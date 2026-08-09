@@ -107,6 +107,9 @@ async function ensureHowAqmathAck() {
 
 let _holdingsRestored = false;
 let _shieldFrozen = false;
+// Last CONFIRMED setup state from the server. Kept separate from _shieldFrozen
+// so a transient network error cannot relabel the button back to "first sync".
+let _shieldSynced = false;
 
 // True once the engine confirms a frozen portfolio: from then on the frozen
 // weights are the authoritative plan and [optimize] must not overwrite them.
@@ -203,6 +206,7 @@ function _renderShieldStatus(data) {
     if (!data || !data.initialized) {
         _shieldFrozen = false;
         el.innerHTML = 'not initialized — sync your portfolio below';
+        _setShieldSynced(false);
         return;
     }
     const active = data.shield_active
@@ -218,17 +222,37 @@ function _renderShieldStatus(data) {
     // today's covariance on every click.
     const froze = (data.frozen_at || '').slice(0, 10);
     el.innerHTML =
-        `shield: ${active}<br>`
+        // Standing confirmation that the setup is DONE. Without it the card reads
+        // like a settings form, so a returning user cannot tell whether the
+        // engine ever accepted the sync.
+        `<span class="shield-on">✓ synced — daily-close signals run for you</span><br>`
+        + `shield: ${active}<br>`
         + `frozen weights${froze ? ' (locked ' + froze + ')' : ''}: ${weights || '—'}<br>`
         + `macro re-opt: ${(data.next_reopt_at || '').slice(0, 10)}<br>`
-        + `last run: ${data.last_run_at ? data.last_run_at.slice(0, 10) : '—'}`
+        + `last run: ${data.last_run_at ? data.last_run_at.slice(0, 10) : '— (first one at the next daily close)'}`
         + (data.next_dca_on ? `<br>next DCA: ${data.next_dca_on}` : '')
         + (parked ? `<br>DCA parked in USDC: ~$${Number(parked).toLocaleString()}` : '');
+    _setShieldSynced(true);
     _applyShieldSettings(data.settings);
     // Push the frozen plan into the holdings table so Target% and this card can
     // never disagree. Done last: it may re-render the table.
     _shieldFrozen = true;
     _applyFrozenTargets(data.weights || []);
+}
+
+function _setShieldSynced(synced) {
+    _shieldSynced = synced;
+    // The button keeps working after the first sync (amounts change), but its
+    // label must stop inviting a "first" sync — the freeze already happened and
+    // re-clicking can never re-run it.
+    const btn = document.getElementById('btnShieldSync');
+    if (btn) btn.textContent = synced ? '[ update holdings ]' : '[ sync to shield ]';
+    const hint = document.getElementById('shieldSyncHint');
+    if (hint) {
+        hint.textContent = synced
+            ? 'your holdings are stored and your KKT weights are frozen. re-sync only after you change amounts — daily-close signals keep running either way, and you execute every trade yourself.'
+            : 'saves your holdings & freezes your KKT weights on first sync. daily-close signals run automatically — you execute every trade yourself.';
+    }
 }
 
 function _applyShieldSettings(settings) {
@@ -332,32 +356,37 @@ async function syncShieldPortfolio() {
             const err = await res.json().catch(() => ({}));
             throw new Error(err.detail || 'HTTP ' + res.status);
         }
-        const saved = await res.json();
+        await res.json();
 
-        // 2. FIRST save only: freeze the KKT weights on the engine.
-        if (saved.first_time) {
-            const init = await _shieldFetch('/portfolio/init', {
-                method: 'POST',
-                body: JSON.stringify({ holdings })
-            });
-            if (!init.ok) {
-                const err = await init.json().catch(() => ({}));
-                throw new Error(err.detail || 'init failed');
-            }
-            const data = await init.json();
-            showToast('KKT weights frozen — the daily signal loop is now active for you.', 'success');
-            _renderShieldStatus({ initialized: true, weights: data.weights,
-                                  shield_active: false,
-                                  next_reopt_at: data.next_reopt_at });
-        } else {
-            showToast('Holdings updated.', 'success');
-            await refreshShieldStatus();
+        // Always call /portfolio/init. beta-auth's `first_time` says whether IT
+        // had holdings, which is not the same question as "does the engine have
+        // frozen weights": if a first sync stored the holdings and then the init
+        // call failed, first_time was false forever and the shield could never be
+        // initialised again. /portfolio/init is idempotent — an unchanged token
+        // set returns the existing plan as 'already_frozen'.
+        const init = await _shieldFetch('/portfolio/init', {
+            method: 'POST',
+            body: JSON.stringify({ holdings })
+        });
+        if (!init.ok) {
+            const err = await init.json().catch(() => ({}));
+            throw new Error(err.detail || 'init failed');
         }
+        const data = await init.json();
+        showToast(data.status === 'frozen'
+            ? 'KKT weights frozen — the daily signal loop is now active for you.'
+            : 'Holdings updated — your frozen weights are unchanged.', 'success');
+        // Re-read from the server rather than rendering the init response: the
+        // card must show the same row the daily loop reads, settings included.
+        await refreshShieldStatus();
     } catch (e) {
         console.error('[AQMath] shield sync failed:', e.message);
         showToast('Sync failed: ' + e.message, 'error');
     } finally {
-        if (btn) { btn.disabled = false; btn.textContent = '[ sync to shield ]'; }
+        // _setShieldSynced owns the label: a successful sync has already switched
+        // it to "[ update holdings ]", and hardcoding the old text here would undo
+        // that. On failure it restores whatever the server last confirmed.
+        if (btn) { btn.disabled = false; _setShieldSynced(_shieldSynced); }
     }
 }
 
@@ -381,7 +410,7 @@ function _setNtfyStatus(connected, topic) {
     const statusEl = document.getElementById('ntfyStatus');
     if (!statusEl) return;
     statusEl.innerHTML = connected
-        ? '<span class="ntfy-dot on"></span>connected &middot; topic <span class="mono">' + topic + '</span>'
+        ? '<span class="ntfy-dot on"></span>✓ connected — you are receiving signals &middot; topic <span class="mono">' + topic + '</span>'
         : '<span class="ntfy-dot off"></span>not connected';
 }
 
@@ -422,7 +451,13 @@ async function refreshNtfyStatus() {
         const res = await fetch(BETA_AUTH_URL + '/notifications', {
             headers: { 'Authorization': 'Bearer ' + getBetaToken() }
         });
-        if (!res.ok) return;
+        if (!res.ok) {
+            // Do not leave the static "not connected" default standing on a server
+            // error: a user who already subscribed would think their setup was lost.
+            statusEl.innerHTML = '<span class="ntfy-dot off"></span>status unavailable (HTTP '
+                + res.status + ') — your subscription is unaffected';
+            return;
+        }
         const data = await res.json();
         if (data.enabled && data.active) {
             _setNtfyStatus(true, data.topic);
@@ -527,3 +562,11 @@ async function refreshNotifyUI() {
 // Page-load gate: returning users with a stored token must also pass the
 // must-read check (this file loads after app.js, so the boot call lives here).
 if (isBetaActive()) ensureHowAqmathAck();
+
+// Boot the shield card + notification state HERE, not from app.js.
+// Both files are `defer`, so they run in document order: app.js's init already
+// called checkBetaUI() while `refreshNotifyUI` was still undefined, and the
+// `typeof === 'function'` guard silently skipped it. The result was that on
+// every page load the card kept its static "not initialized" placeholder and
+// the notification panel kept "not connected", no matter what the server said.
+if (isBetaActive()) refreshNotifyUI();
