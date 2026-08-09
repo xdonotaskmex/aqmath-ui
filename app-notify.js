@@ -226,14 +226,27 @@ function _renderShieldStatus(data) {
     // Say WHEN the weights were locked: they deliberately do NOT follow the
     // live [optimize] targets in the holdings table, which are recomputed from
     // today's covariance on every click.
-    const froze = (data.frozen_at || '').slice(0, 10);
+    //
+    // "locked" is the day the user FIRST started the shield (first_synced_at),
+    // not frozen_at: the macro loop overwrites frozen_at with the re-opt date, so
+    // using it here told a long-time user they had joined last week. Fall back to
+    // frozen_at only for a server that predates the field, where the two are
+    // still identical anyway (no re-opt can have happened yet).
+    const froze = (data.first_synced_at || data.frozen_at || '').slice(0, 10);
+    // Shown only once the macro loop has actually moved the weights, so the card
+    // stays quiet for everyone in their first cycle instead of printing two
+    // identical dates.
+    const reopt = (data.frozen_at || '').slice(0, 10);
+    const recomputed = (reopt && froze && reopt !== froze)
+        ? `<br>weights last recomputed: ${reopt}` : '';
     el.innerHTML =
         // Standing confirmation that the setup is DONE. Without it the card reads
         // like a settings form, so a returning user cannot tell whether the
         // engine ever accepted the sync.
         `<span class="shield-ok">✓ synced — daily-close signals run for you</span><br>`
         + `shield: ${active}<br>`
-        + `frozen weights${froze ? ' (locked ' + froze + ')' : ''}: ${weights || '—'}<br>`
+        + `frozen weights${froze ? ' (locked ' + froze + ')' : ''}: ${weights || '—'}`
+        + recomputed + `<br>`
         + `macro re-opt: ${(data.next_reopt_at || '').slice(0, 10)}<br>`
         + `last run: ${_lastRunText(data)}`
         + (data.next_dca_on ? `<br>next DCA: ${data.next_dca_on}` : '')
