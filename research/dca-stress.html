@@ -155,7 +155,7 @@
 </tr>
 </tbody></table></div>
 <p><strong>The worst degradation is 0.5 percentage points on MaxDD.</strong> The shield&#x27;s drawdown protection is essentially unaffected by the DCA schedule — even when you delay, vary amounts, and skip months simultaneously.</p>
-<figure class="rs-fig"><img src="research/assets/dca_stress_dd.svg" alt="Max drawdown comparison across all five DCA scenarios" width="820" height="304" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><img src="/research/assets/dca_stress_dd.svg" alt="Max drawdown comparison across all five DCA scenarios" width="820" height="304" loading="lazy" decoding="async"></figure>
 <h3>3b. Risk-adjusted return — Sharpe and Calmar</h3>
 <div class="rs-tablewrap">
 <table>
@@ -206,9 +206,9 @@
 <p><strong>Sharpe is within 0.003 of baseline for delay and amount noise</strong> — effectively zero. Skipping months (D and E) raises Sharpe because the total capital deployed is lower, and in a rising market, less capital earlier means a higher percentage return on what was invested. This is a quirk of the metric, not a flaw — the key is that the shield does not <em>lose</em> risk-adjusted return under any jitter.</p>
 <h3>3c. Equity curves — baseline vs worst case</h3>
 <p>The equity curves for the perfect schedule (A) and the combined worst-case schedule (E) are nearly indistinguishable:</p>
-<figure class="rs-fig"><img src="research/assets/dca_stress_equity.svg" alt="Equity curve: baseline vs worst-case DCA, log scale" width="820" height="420" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><img src="/research/assets/dca_stress_equity.svg" alt="Equity curve: baseline vs worst-case DCA, log scale" width="820" height="420" loading="lazy" decoding="async"></figure>
 <p>The underwater (drawdown) chart tells the same story — the depth and timing of drawdowns is identical between perfect and worst-case DCA:</p>
-<figure class="rs-fig"><img src="research/assets/dca_stress_underwater.svg" alt="Underwater curve: baseline vs worst-case DCA" width="820" height="420" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><img src="/research/assets/dca_stress_underwater.svg" alt="Underwater curve: baseline vs worst-case DCA" width="820" height="420" loading="lazy" decoding="async"></figure>
 <h2>4. What this proves</h2>
 <p>1. <strong>The shield is not fragile.</strong> DCA timing errors, amount variations, and skipped months degrade MaxDD by at most 0.5 pp — far below the 3 pp threshold that would indicate a real problem.</p>
 <p>2. <strong>The shield&#x27;s protection is structural, not lucky.</strong> The continuous modulator is driven by drawdown depth and downside volatility, not by the exact timing of cash inflows. As long as capital eventually enters the basket, the shield protects it the same way.</p>

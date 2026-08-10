@@ -56,7 +56,7 @@ imperfect DCA, not whether imperfect DCA itself is worse.
 drawdown protection is essentially unaffected by the DCA schedule — even when
 you delay, vary amounts, and skip months simultaneously.
 
-![Max drawdown comparison across all five DCA scenarios](research/assets/dca_stress_dd.svg)
+![Max drawdown comparison across all five DCA scenarios](/research/assets/dca_stress_dd.svg)
 
 ### 3b. Risk-adjusted return — Sharpe and Calmar
 
@@ -79,12 +79,12 @@ is that the shield does not *lose* risk-adjusted return under any jitter.
 The equity curves for the perfect schedule (A) and the combined worst-case
 schedule (E) are nearly indistinguishable:
 
-![Equity curve: baseline vs worst-case DCA, log scale](research/assets/dca_stress_equity.svg)
+![Equity curve: baseline vs worst-case DCA, log scale](/research/assets/dca_stress_equity.svg)
 
 The underwater (drawdown) chart tells the same story — the depth and timing of
 drawdowns is identical between perfect and worst-case DCA:
 
-![Underwater curve: baseline vs worst-case DCA](research/assets/dca_stress_underwater.svg)
+![Underwater curve: baseline vs worst-case DCA](/research/assets/dca_stress_underwater.svg)
 
 ## 4. What this proves
 
