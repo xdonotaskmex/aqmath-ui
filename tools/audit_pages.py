@@ -81,6 +81,7 @@ NEEDS_SIM_NOTICE = {
     "research/mc-risk-zh.html",
     "research/feed-sensitivity.html",
     "research/feed-sensitivity-zh.html",
+    "research/dca-stress.html",
 }
 
 FORBIDDEN_ORIGINS = [

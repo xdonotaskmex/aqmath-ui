@@ -127,6 +127,20 @@ DOCS = [
         "altLabel": "English",
     },
     {
+        "src": "dca-stress.md",
+        "out": "dca-stress.html",
+        "path": "/research/dca-stress",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-08-10",
+        "title": "Human Factor Stress Test: Does the Shield Break When You Do? - AQMath",
+        "shortTitle": "DCA Stress Test &mdash; Does the Shield Break When You Do?",
+        "description": ("5 DCA scenarios, 30 seeds each, 6.2-year window: the v14 shield's MaxDD "
+                        "degradation is at most 0.5 pp when you delay, vary amounts, and skip "
+                        "months. The shield is robust to human error."),
+        "altLabel": "",
+    },
+    {
         "src": "feed-sensitivity.md",
         "out": "feed-sensitivity.html",
         "path": "/research/feed-sensitivity",

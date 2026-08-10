@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="304" viewBox="0 0 820 304" font-family="Plus Jakarta Sans,Segoe UI,Arial,sans-serif">
+<rect width="820" height="304" fill="#050a18"/>
+<text x="40" y="30" font-size="18" font-weight="700" fill="#e2e8f0">Max Drawdown: DCA Stress Scenarios</text>
+<text x="40" y="50" font-size="12" fill="#7a8ba5">Lower is better. 30 seeds per scenario, median shown. Basket: ADA, BNB, ETH, XRP, SOL.</text>
+<line x1="190.0" y1="58" x2="190.0" y2="264" stroke="#18223a" stroke-width="1"/>
+<text x="190.0" y="282" font-size="11" fill="#7a8ba5" text-anchor="middle">0%</text>
+<line x1="321.8" y1="58" x2="321.8" y2="264" stroke="#18223a" stroke-width="1"/>
+<text x="321.8" y="282" font-size="11" fill="#7a8ba5" text-anchor="middle">20%</text>
+<line x1="453.5" y1="58" x2="453.5" y2="264" stroke="#18223a" stroke-width="1"/>
+<text x="453.5" y="282" font-size="11" fill="#7a8ba5" text-anchor="middle">40%</text>
+<line x1="585.3" y1="58" x2="585.3" y2="264" stroke="#18223a" stroke-width="1"/>
+<text x="585.3" y="282" font-size="11" fill="#7a8ba5" text-anchor="middle">60%</text>
+<line x1="717.1" y1="58" x2="717.1" y2="264" stroke="#18223a" stroke-width="1"/>
+<text x="717.1" y="282" font-size="11" fill="#7a8ba5" text-anchor="middle">80%</text>
+<text x="180" y="84.0" font-size="11" fill="#e2e8f0" text-anchor="end">A: Perfect</text>
+<rect x="190" y="68.0" width="497.1" height="11" fill="#f87171"/>
+<text x="691.1" y="77.0" font-size="10" fill="#f87171">75%</text>
+<rect x="190" y="81.0" width="211.1" height="11" fill="#34d399"/>
+<text x="405.1" y="90.0" font-size="10" fill="#34d399">32%</text>
+<text x="180" y="124.0" font-size="11" fill="#e2e8f0" text-anchor="end">B: Delay 2–5d</text>
+<rect x="190" y="108.0" width="497.0" height="11" fill="#f87171"/>
+<text x="691.0" y="117.0" font-size="10" fill="#f87171">75%</text>
+<rect x="190" y="121.0" width="211.0" height="11" fill="#34d399"/>
+<text x="405.0" y="130.0" font-size="10" fill="#34d399">32%</text>
+<text x="180" y="164.0" font-size="11" fill="#e2e8f0" text-anchor="end">C: Amt ±20%</text>
+<rect x="190" y="148.0" width="497.0" height="11" fill="#f87171"/>
+<text x="691.0" y="157.0" font-size="10" fill="#f87171">75%</text>
+<rect x="190" y="161.0" width="211.2" height="11" fill="#34d399"/>
+<text x="405.2" y="170.0" font-size="10" fill="#34d399">32%</text>
+<text x="180" y="204.0" font-size="11" fill="#e2e8f0" text-anchor="end">D: Skip 4th</text>
+<rect x="190" y="188.0" width="497.8" height="11" fill="#f87171"/>
+<text x="691.8" y="197.0" font-size="10" fill="#f87171">76%</text>
+<rect x="190" y="201.0" width="213.5" height="11" fill="#34d399"/>
+<text x="407.5" y="210.0" font-size="10" fill="#34d399">32%</text>
+<text x="180" y="244.0" font-size="11" fill="#e2e8f0" text-anchor="end">E: Combined</text>
+<rect x="190" y="228.0" width="498.0" height="11" fill="#f87171"/>
+<text x="692.0" y="237.0" font-size="10" fill="#f87171">76%</text>
+<rect x="190" y="241.0" width="213.9" height="11" fill="#34d399"/>
+<text x="407.9" y="250.0" font-size="10" fill="#34d399">32%</text>
+<rect x="600" y="36" width="12" height="12" rx="2" fill="#34d399"/>
+<text x="616" y="46" font-size="12" fill="#e2e8f0">Modulator</text>
+<rect x="690" y="36" width="12" height="12" rx="2" fill="#f87171"/>
+<text x="706" y="46" font-size="12" fill="#e2e8f0">Buy &amp; Hold</text>
+</svg>
