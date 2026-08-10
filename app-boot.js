@@ -318,7 +318,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=fa87fb582a')
+    return fetch('/locales/' + lang + '.json?v=1d7fed14eb')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -381,6 +381,8 @@ function applyTranslations() {
         deactivateBeta: function () { deactivateBeta(); },
         activateBeta: function () { activateBeta(); },
         dodajToken: function () { dodajToken(); },
+        recordBuy: function () { recordBuy(); },
+        recordSell: function () { recordSell(); },
         distribuirajDca: function () { distribuirajDca(); },
         confirmDca: function () { confirmDca(); },
         cancelDca: function () { cancelDca(); },

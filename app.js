@@ -1318,6 +1318,136 @@ async function dodajToken() {
     }
 }
 
+// ============ RECORD BUY / SELL ============
+// Applies a new purchase or sale to an existing position instead of replacing
+// it. Uses the symbol from the main iSym field, so it works naturally alongside
+// the Add/Update form: type a symbol, fill in amount + price, click Buy or Sell.
+// Price left empty = auto-fetched (stablecoins stay pegged to $1).
+function _tradeSymFromForm() {
+    const symInput = document.getElementById('iSym').value.trim();
+    if (!symInput) { showToast('Enter a symbol first (in the field above).', 'warning'); return null; }
+    const sym = symInput.toUpperCase();
+    if (!isValidSymbol(sym)) {
+        showToast('symbol may only contain letters, digits, dot, dash or underscore (max 20).', 'warning');
+        return null;
+    }
+    return sym;
+}
+
+async function _tradeResolvePrice(sym, priceInputId) {
+    let price = parseFloat(document.getElementById(priceInputId).value);
+    if (!isNaN(price) && price > 0) return price;
+    if (isStablecoin(sym)) {
+        price = 1.0; // stablecoin pegged to $1
+    } else {
+        price = await dohvatiCijenu(sym);
+    }
+    if (price) document.getElementById(priceInputId).value = price;
+    return price;
+}
+
+async function recordBuy() {
+    const sym = _tradeSymFromForm();
+    if (!sym) return;
+
+    const token = portfolio.find(t => t.sym === sym);
+    if (!token) return showToast(`"${sym}" not in portfolio. Add it with [ Load ] first, then record buys.`, 'warning');
+
+    const boughtAmt = parseFloat(document.getElementById('iBuyAmt').value);
+    if (isNaN(boughtAmt) || boughtAmt <= 0) return showToast('Amount must be > 0.', 'warning');
+
+    const btn = document.getElementById('btnRecordBuy');
+    const btnLabel = btn.textContent; // keep the localized label for restore
+    btn.textContent = '[ ... ]';
+    btn.disabled = true;
+
+    try {
+        const price = await _tradeResolvePrice(sym, 'iBuyPrice');
+        if (!price) {
+            return showToast(`Price for ${sym} not found. Enter it manually.`, 'error');
+        }
+
+        // Accumulate purchase into existing position
+        token.amount += boughtAmt;
+        token.totalTokens += boughtAmt;
+        token.costBasis += boughtAmt * price;
+        if (token.totalTokens > 0) {
+            token.entry = token.costBasis / token.totalTokens;
+        }
+        token.price = price;
+
+        // Clear trade fields, keep symbol for convenience
+        document.getElementById('iBuyAmt').value = '';
+        document.getElementById('iBuyPrice').value = '';
+
+        saveState();
+        render();
+
+        showToast(`BUY +${fmtTokens(boughtAmt)} ${sym} @ $${fmtPrice(price)} — avg entry $${fmtPrice(token.entry)}`, 'success');
+    } catch(e) {
+        console.error('[AQMath] record buy failed:', e.message);
+        showToast('Record buy failed: ' + e.message, 'error');
+    } finally {
+        btn.textContent = btnLabel;
+        btn.disabled = false;
+    }
+}
+
+async function recordSell() {
+    const sym = _tradeSymFromForm();
+    if (!sym) return;
+
+    const token = portfolio.find(t => t.sym === sym);
+    if (!token) return showToast(`"${sym}" not in portfolio. Add it with [ Load ] first.`, 'warning');
+
+    const soldAmt = parseFloat(document.getElementById('iBuyAmt').value);
+    if (isNaN(soldAmt) || soldAmt <= 0) return showToast('Amount must be > 0.', 'warning');
+    if (soldAmt > token.amount + 1e-9) {
+        return showToast(`You only hold ${fmtTokens(token.amount)} ${sym}.`, 'warning');
+    }
+
+    const btn = document.getElementById('btnRecordSell');
+    const btnLabel = btn.textContent; // keep the localized label for restore
+    btn.textContent = '[ ... ]';
+    btn.disabled = true;
+
+    try {
+        const price = await _tradeResolvePrice(sym, 'iBuyPrice');
+        if (!price) {
+            return showToast(`Price for ${sym} not found. Enter it manually.`, 'error');
+        }
+
+        // Average-cost accounting: the avg entry stays unchanged on a partial
+        // sale — cost basis shrinks proportionally with the tokens sold.
+        const avgEntry = token.totalTokens > 0 ? token.costBasis / token.totalTokens : token.entry;
+        token.amount -= soldAmt;
+        token.totalTokens -= soldAmt;
+        token.costBasis -= soldAmt * (avgEntry || price);
+        // Dust guard: selling the full position must land exactly on zero.
+        if (token.amount < 1e-9) token.amount = 0;
+        if (token.totalTokens < 1e-9) { token.totalTokens = 0; token.costBasis = 0; }
+        if (token.totalTokens > 0) {
+            token.entry = token.costBasis / token.totalTokens;
+        }
+        token.price = price;
+
+        // Clear trade fields, keep symbol for convenience
+        document.getElementById('iBuyAmt').value = '';
+        document.getElementById('iBuyPrice').value = '';
+
+        saveState();
+        render();
+
+        showToast(`SELL -${fmtTokens(soldAmt)} ${sym} @ $${fmtPrice(price)} — remaining ${fmtTokens(token.amount)} ${sym}`, 'success');
+    } catch(e) {
+        console.error('[AQMath] record sell failed:', e.message);
+        showToast('Record sell failed: ' + e.message, 'error');
+    } finally {
+        btn.textContent = btnLabel;
+        btn.disabled = false;
+    }
+}
+
 function toggleFreeze(sym) {
     const t = portfolio.find(p => p.sym === sym);
     if (t) { t.frozen = !t.frozen; render(); }

@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=fa87fb582a">
+    <link rel="stylesheet" href="/styles.min.css?v=1d7fed14eb">
 </head>
 <body>
 
@@ -354,6 +354,22 @@
                     <div class="fg-hint" data-i18n="app.csvFormat">Format: Date, Price (weekly or daily)</div>
                 </div>
                 <button class="btn blue" id="btnAdd" data-action="dodajToken" data-i18n="app.load">Load</button>
+                <hr class="fg-sep">
+                <div class="fg-hint" style="margin-bottom:6px;" data-i18n="app.tradeHint">&mdash; Record a buy / sell on an existing position</div>
+                <div class="fg-row">
+                    <div class="fg">
+                        <label data-i18n="app.tradeAmt">Amount (tokens)</label>
+                        <input type="number" id="iBuyAmt" step="any" placeholder="0.00000000" min="0">
+                    </div>
+                    <div class="fg">
+                        <label data-i18n="app.tradePrice">Price ($) &mdash; Auto</label>
+                        <input type="number" id="iBuyPrice" step="any" placeholder="Empty = API">
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <button class="btn green" id="btnRecordBuy" data-action="recordBuy" data-i18n="app.recordBuy">[ Record Buy ]</button>
+                    <button class="btn red" id="btnRecordSell" data-action="recordSell" data-i18n="app.recordSell">[ Record Sell ]</button>
+                </div>
             </div>
         </div>
 
@@ -558,10 +574,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=fa87fb582a"></script>
-<script defer src="/app-backtest.js?v=fa87fb582a"></script>
-<script defer src="/app.js?v=fa87fb582a"></script>
-<script defer src="/app-notify.js?v=fa87fb582a"></script>
+<script defer src="/app-widgets.js?v=1d7fed14eb"></script>
+<script defer src="/app-backtest.js?v=1d7fed14eb"></script>
+<script defer src="/app.js?v=1d7fed14eb"></script>
+<script defer src="/app-notify.js?v=1d7fed14eb"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -575,8 +591,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=fa87fb582a"></script>
-<script defer src="/app-boot.js?v=fa87fb582a"></script>
+<script defer src="/vendor/i18next.min.js?v=1d7fed14eb"></script>
+<script defer src="/app-boot.js?v=1d7fed14eb"></script>
 
 </body>
 </html>

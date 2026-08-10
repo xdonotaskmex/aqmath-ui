@@ -305,6 +305,7 @@
     .fg-file-text { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); letter-spacing: 1px; }
     .fg-file input[type=file] { display: none; }
     .fg-hint { font-family: var(--mono); font-size: 0.58rem; color: var(--dim); margin-top: 3px; letter-spacing: 0.5px; }
+    .fg-sep { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 14px 0 10px; }
 
     .engine-hint { font-family: var(--mono); font-size: 0.6rem; color: var(--amber); letter-spacing: 0.5px; padding-top: 4px; }
 
