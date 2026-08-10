@@ -138,7 +138,21 @@ DOCS = [
         "description": ("5 DCA scenarios, 30 seeds each, 6.2-year window: the v14 shield's MaxDD "
                         "degradation is at most 0.5 pp when you delay, vary amounts, and skip "
                         "months. The shield is robust to human error."),
-        "altLabel": "",
+        "altLabel": "中文",
+    },
+    {
+        "src": "dca-stress.zh-CN.md",
+        "out": "dca-stress-zh.html",
+        "path": "/research/dca-stress-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-08-10",
+        "title": "人为因素压力测试：你犯错时，防护盾会崩吗？ - AQMath",
+        "shortTitle": "DCA 压力测试 &mdash; 你犯错时防护盾会崩吗？",
+        "description": ("5 个定投场景、每场景 30 个种子、6.2 年窗口：当你迟交、变动金额并"
+                        "漏掉月份时，v14 防护盾的最大回撤衰减最多 0.5 个百分点。"
+                        "防护盾对人为误差是稳健的。"),
+        "altLabel": "English",
     },
     {
         "src": "feed-sensitivity.md",
@@ -413,6 +427,7 @@ DOCS = [
 TRANSLATION_SETS = [
     ["/research/oos-v14-new-tokens", "/research/oos-v14-new-tokens-zh"],
     ["/research/how-aqmath-works", "/research/how-aqmath-works-zh"],
+    ["/research/dca-stress", "/research/dca-stress-zh"],
     ["/research/feed-sensitivity", "/research/feed-sensitivity-zh"],
     ["/research/mc-risk", "/research/mc-risk-zh"],
     ["/research/graveyard", "/research/graveyard-zh"],
