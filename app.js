@@ -2345,6 +2345,7 @@ Object.assign(window, {
     isBetaActive, getBetaToken, pipelineFetch, API_URL, BETA_AUTH_URL,
     saveSnapshot, toggleGlobalSafeHaven, deployUSDC, toggleDeleverage,
     osvjeziSveCijene, importCSV, dodajToken,
+    recordBuy, recordSell,
     obrisiSve, distribuirajDca, confirmDca, cancelDca, optimizePortfolio,
     exportJSON, importJSON, refreshHistory,
     toggleFreeze, popuniFormu, obrisiToken,
