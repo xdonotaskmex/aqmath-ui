@@ -1320,18 +1320,35 @@ async function dodajToken() {
 
 // ============ RECORD BUY / SELL ============
 // Applies a new purchase or sale to an existing position instead of replacing
-// it. Uses the symbol from the main iSym field, so it works naturally alongside
-// the Add/Update form: type a symbol, fill in amount + price, click Buy or Sell.
+// it. The token is picked from the --record-trade dropdown (iTradeSym), then
+// fill in amount + price and click Buy or Sell.
 // Price left empty = auto-fetched (stablecoins stay pegged to $1).
 function _tradeSymFromForm() {
-    const symInput = document.getElementById('iSym').value.trim();
-    if (!symInput) { showToast('Enter a symbol first (in the field above).', 'warning'); return null; }
-    const sym = symInput.toUpperCase();
-    if (!isValidSymbol(sym)) {
-        showToast('symbol may only contain letters, digits, dot, dash or underscore (max 20).', 'warning');
+    const sel = document.getElementById('iTradeSym');
+    const sym = sel ? sel.value : '';
+    if (!sym) {
+        showToast('Pick a token from the dropdown first.', 'warning');
         return null;
     }
     return sym;
+}
+
+// Keeps the Record Trade dropdown in sync with the portfolio: one option per
+// position, labelled with the held amount so the right token is obvious at a
+// glance. Called from render(), so add/edit/delete/DCA all refresh it.
+function renderTradeSymSelect() {
+    const sel = document.getElementById('iTradeSym');
+    if (!sel) return;
+    const prev = sel.value;
+    if (!portfolio.length) {
+        sel.innerHTML = '<option value="">—</option>';
+        return;
+    }
+    sel.innerHTML = portfolio.map(t =>
+        `<option value="${escapeHtml(t.sym)}">${escapeHtml(t.sym)} — ${fmtTokens(t.amount)} held</option>`
+    ).join('');
+    // Restore the previous pick when that token still exists.
+    if (prev && portfolio.some(t => t.sym === prev)) sel.value = prev;
 }
 
 async function _tradeResolvePrice(sym, priceInputId) {
@@ -2175,6 +2192,7 @@ function renderHistoryChart() {
 function render() {
     saveState();
     syncTargetFieldLock();
+    renderTradeSymSelect();
     const portVal = totalValue();
     const allTokens = portfolio;
     const tgt = totalTarget();
