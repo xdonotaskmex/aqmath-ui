@@ -261,6 +261,9 @@
     .btn.red:hover { background: var(--red); color: #000; box-shadow: 0 0 16px rgba(248,113,113,0.2); }
     .btn.ghost { border: 1px solid var(--border); color: var(--muted); opacity: 0.5; font-size: 0.6rem; }
     .btn.ghost:disabled { cursor: not-allowed; }
+    /* Compact variant for the side-by-side Record Buy / Sell pair: the long
+       labels overflow full-size buttons when two share one row. */
+    .btn.btn-trade { padding: 6px 4px; font-size: 0.58rem; letter-spacing: 1px; }
     .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
     .main { display: grid; grid-template-columns: 350px 1fr; min-height: calc(100vh - 64px - 40px); position: relative; z-index: 1; }
