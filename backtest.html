@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=35371a0603">
+    <link rel="stylesheet" href="/styles.min.css?v=30884b79eb">
 </head>
 <body>
 
@@ -196,7 +196,7 @@
         </div>
         <div class="tc-body">
             <div class="bt-explain bt-explain-intro" data-i18n-html="bt.intro">
-                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage modulator <strong>(v14.0 &mdash; validated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule. <strong>Buy &amp; Hold</strong> buys tokens unconditionally and stays fully exposed. <strong>Deleverage</strong> scales exposure <strong>continuously</strong> off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It <strong>moves exposure smoothly toward its target every bar</strong> in either direction, with no hard floor, redeploying parked DCA cash once exposure recovers above 40%. v14 adds <strong>threshold rebalancing</strong> &mdash; a deadband that skips trades when the target barely moves, cutting rebalances ~64%. It is scored on <strong>risk-adjusted return (Sharpe)</strong>, not on beating Buy &amp; Hold.
+                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage modulator <strong>(v14.0 &mdash; validated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule. <strong>Buy &amp; Hold</strong> buys tokens unconditionally and stays fully exposed. <strong>Deleverage</strong> scales exposure <strong>continuously</strong> off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It <strong>moves exposure smoothly toward its target every bar</strong> in either direction, with no hard floor, redeploying parked DCA cash automatically once exposure recovers. v14 adds <strong>threshold rebalancing</strong> &mdash; a deadband that skips trades when the target barely moves, cutting rebalances ~64%. It is scored on <strong>risk-adjusted return (Sharpe)</strong>, not on beating Buy &amp; Hold.
             </div>
             <!-- v14.0 continuous DD + downside-vol modulator flow -->
             <svg class="bt-flow-svg" viewBox="0 0 900 148" role="img" aria-label="Deleverage v14.0 continuous drawdown and downside-volatility modulator flow" preserveAspectRatio="xMidYMid meet">
@@ -220,7 +220,7 @@
                 <g>
                     <rect x="238" y="60" width="186" height="48" rx="6" class="bt-flow-node red"/>
                     <text x="331" y="82" class="bt-flow-t red">base_risk</text>
-                    <text x="331" y="98" class="bt-flow-s">w₁·dd_sig + w₂·vol_sig</text>
+                    <text x="331" y="98" class="bt-flow-s">drawdown + downside vol</text>
                 </g>
                 <g>
                     <rect x="468" y="60" width="186" height="48" rx="6" class="bt-flow-node purple"/>
@@ -400,10 +400,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=35371a0603"></script>
-<script defer src="/app-backtest.js?v=35371a0603"></script>
-<script defer src="/app.js?v=35371a0603"></script>
-<script defer src="/app-notify.js?v=35371a0603"></script>
+<script defer src="/app-widgets.js?v=30884b79eb"></script>
+<script defer src="/app-backtest.js?v=30884b79eb"></script>
+<script defer src="/app.js?v=30884b79eb"></script>
+<script defer src="/app-notify.js?v=30884b79eb"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -417,8 +417,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=35371a0603"></script>
-<script defer src="/app-boot.js?v=35371a0603"></script>
+<script defer src="/vendor/i18next.min.js?v=30884b79eb"></script>
+<script defer src="/app-boot.js?v=30884b79eb"></script>
 
 </body>
 </html>

@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=35371a0603">
+    <link rel="stylesheet" href="/styles.min.css?v=30884b79eb">
 </head>
 <body>
 
@@ -374,7 +374,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">04</span></div>
                         <div class="metric-label" data-i18n="math.shieldLabel">--deleverage-modulator</div>
-                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Continuous regime modulator: exposure scales down as drawdown and downside volatility rise &mdash; no indicators, no timers, no correlation gate. It moves exposure smoothly toward its target every bar in either direction, with <strong>no hard floor</strong>; parked DCA cash redeploys once exposure recovers above 40%.</div>
+                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Continuous regime modulator: exposure scales down as drawdown and downside volatility rise &mdash; no indicators, no timers, no correlation gate. It moves exposure smoothly toward its target every bar in either direction, with <strong>no hard floor</strong>; parked DCA cash redeploys automatically once exposure recovers.</div>
                         <a href="/backtest" class="doc-formula-link" data-i18n="math.shieldLink">[ see 8.7-year backtest ]</a>
                     </div>
                 </div>
@@ -632,10 +632,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=35371a0603"></script>
-<script defer src="/app-backtest.js?v=35371a0603"></script>
-<script defer src="/app.js?v=35371a0603"></script>
-<script defer src="/app-notify.js?v=35371a0603"></script>
+<script defer src="/app-widgets.js?v=30884b79eb"></script>
+<script defer src="/app-backtest.js?v=30884b79eb"></script>
+<script defer src="/app.js?v=30884b79eb"></script>
+<script defer src="/app-notify.js?v=30884b79eb"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -649,8 +649,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=35371a0603"></script>
-<script defer src="/app-boot.js?v=35371a0603"></script>
+<script defer src="/vendor/i18next.min.js?v=30884b79eb"></script>
+<script defer src="/app-boot.js?v=30884b79eb"></script>
 
 </body>
 </html>
