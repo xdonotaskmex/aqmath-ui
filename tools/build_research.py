@@ -137,8 +137,9 @@ DOCS = [
         "shortTitle": "Human Factor Stress Tests &mdash; DCA Jitter & Signal Lag",
         "description": ("Test 1: DCA jitter costs at most 0.5 pp of MaxDD. Test 2 hits the signals "
                         "themselves: random delays and missed days pass, but a constant 3-day lag "
-                        "fails the Sharpe gate - $5,058 of damage with zero seed variance. Lag is "
-                        "not noise."),
+                        "fails the Sharpe gate - $5,058 of damage with zero seed variance. Test 2b "
+                        "re-runs it on the production KKT 60/40 stack: every error scenario breaks "
+                        "the MaxDD gate. Same-day execution is the only policy that passes."),
         "altLabel": "中文",
     },
     {
@@ -152,7 +153,8 @@ DOCS = [
         "shortTitle": "人为因素压力测试 &mdash; 定投抖动与信号滞后",
         "description": ("测试 1：定投抖动最多损失 0.5 个百分点的 MaxDD。测试 2 直接打在信号上："
                         "随机延迟与漏掉的交易日通过，但持续 3 天的滞后打破夏普门槛 — "
-                        "$5,058 的损害、零种子方差。滞后不是噪声。"),
+                        "$5,058 的损害、零种子方差。测试 2b 在生产 KKT 60/40 堆栈上重跑："
+                        "每一个误差场景都打破最大回撤门槛。当日执行是唯一能通过的做法。"),
         "altLabel": "English",
     },
     {

@@ -1,8 +1,8 @@
 # Human Factor Stress Test: Does the Shield Break When You Do?
 
-**Date:** 2026-08-10 · **Updated:** 2026-08-11 (Test 2 results)
+**Date:** 2026-08-10 · **Updated:** 2026-08-11 (Test 2 + Test 2b results)
 **Engine:** v14 Deleverage Shield — production `evaluate_shield` / `backtest_modulator` imported unmodified
-**Status:** Test 1 ✅ PASS 5/5 (DCA jitter) · Test 2 ⚠️ 3/4 — a constant 3-day signal lag FAILS the Sharpe gate · 30 seeds per scenario
+**Status:** Test 1 ✅ PASS 5/5 (DCA jitter) · Test 2 ⚠️ 3/4 (constant lag fails the Sharpe gate) · Test 2b ❌ 0/4 — on the production KKT 60/40 stack, every execution-error scenario fails the MaxDD gate · 30 seeds per scenario
 
 ---
 
@@ -228,7 +228,84 @@ where the engine needs you most.
    systematic delay. Execute the signal when you see it; a missed day costs
    far less than a habitual delay.
 
-## 7. Test details
+**Test 2b re-ran all of this on the actual production stack** — KKT weights,
+60/40 structure, 180-day re-optimization. The verdict got harsher: §7.
+
+## 7. Test 2b — the production stack: the same errors cost more
+
+Test 2 ran on a 100% risky equal-weight basket. Production is different:
+
+- KKT risk-parity weights — ERC on the trailing 180-day log-return
+  covariance, capped 40%/10% per token, risky sleeve max 60%
+- structural 40% USDC sleeve
+- weights frozen and re-optimised every 180 days, drifting with prices
+  between re-opts (no drift-trading)
+- the shield reads the **full portfolio equity** (risky + parked USDC)
+
+Test 2b replays that exact stack locally — the real `_solve_erc`,
+`_kkt_project`, and `evaluate_shield` functions, unmodified — and re-runs the
+same A/N/L/M/W execution-error scenarios. The only human surface in
+production is executing the daily buy/sell signal (KKT and the shield are
+fully automated server-side), so that is exactly what the scenarios perturb.
+The first re-optimization happens at day 180, matching the production data
+gate (≥2 tokens with ≥30 closes); before it, the portfolio sits in USDC.
+
+### 7a. Headline numbers (median of 30 seeds)
+
+| Scenario | MaxDD | Δ pp | Sharpe | Δ Sharpe | Calmar | Final | Damage |
+|----------|:-----:|:----:|:------:|:--------:|:------:|:-----:|:------:|
+| A — Baseline | 29.1% | — | 0.453 | — | 0.833 | $32,793 | — |
+| N — Random 0–3d | 33.8% | +4.7 | 0.425 | −0.028 | 0.668 | $30,488 | +$2,372 |
+| L — Constant 3d lag | 40.3% | +11.3 | 0.336 | −0.117 | 0.513 | $27,422 | +$5,371 |
+| M — Asleep ~29% | 33.8% | +4.7 | 0.421 | −0.032 | 0.724 | $31,404 | +$1,587 |
+| W — Worst weeks only | 40.3% | +11.3 | 0.396 | −0.057 | 0.585 | $31,760 | +$1,033 |
+
+Same pass criteria as before: MaxDD degradation under 3 pp AND Sharpe loss
+under 0.10.
+
+![Max drawdown under execution error, production stack](/research/assets/lag_prod_dd.svg)
+
+**Verdict: 0/4.** On the production stack, every execution-error scenario
+fails the MaxDD gate, and the constant lag (L) fails both gates. Test 2's
+conclusion — lag leaks *return* but *protection* holds — does not survive
+contact with the production structure.
+
+### 7b. Why protection leaks in production
+
+On the equal-weight basket the shield's ramp absorbed a 3-day execution lag
+with at most +1.4 pp of extra drawdown. On the KKT 60/40 stack the same lag
+adds +4.7 to +11.3 pp. The shield's ramp on the 60/40 portfolio is gentler
+and slower; when execution is late, the portfolio rides further into the
+crash at full exposure before the deleverage lands. The product's core
+promise — drawdown protection — is exactly what breaks.
+
+### 7c. What survived from Test 2
+
+1. **Lag is still not noise.** L has zero seed variance (p5 = p95 =
+   +$5,371); W is deterministic too (+$1,033). Random scenarios still have
+   seeds where lateness *helped* (N damage p5 = −$1,854, M p5 = −$3,202).
+2. **Damage still clusters.** W concentrates 42.0% of its damage on
+   vol-spike days, which are 9.2% of the window on the production series
+   (4.6× base rate).
+3. **Being asleep is still cheaper than being late** — $1,587 vs $5,371 —
+   but in production neither passes.
+4. **W remains the sharpest case:** only $1,033 of total damage, yet
+   +11.3 pp of MaxDD. Errors timed to the worst weeks destroy protection
+   almost without touching final equity.
+
+![Equity under execution error, production stack, log scale](/research/assets/lag_prod_equity.svg)
+
+![Cumulative execution damage vs vol-spike shading, production stack](/research/assets/lag_prod_damage.svg)
+
+### 7d. Operational conclusion
+
+The production stack is **less tolerant of human error than the equal-weight
+test suggested**: even random 0–3-day delays break the MaxDD gate. The only
+execution standard that passes is acting on the signal **the same day it
+arrives**. Any "I'll do it in a couple of days" policy invalidates the
+drawdown protection the shield was built to deliver.
+
+## 8. Test details
 
 - **Basket:** ADA, BNB, ETH, XRP, SOL (equal weight)
 - **Window:** 2020-04-10 to 2026-07-04 (2,275 days, 6.2 years)
@@ -251,12 +328,20 @@ top decile of the window. Execution schedules are applied through the
 `exec_schedule` kwarg of `simulate()`; the shield's signal path itself is
 never altered.
 
-## 8. Files
+Test 2b parameters: production KKT weights recomputed every 180 days via
+`_solve_erc` + `_kkt_project` on trailing 180-day log returns (gate: ≥2
+tokens with ≥30 closes), weights drift with prices between re-opts, shield
+equity/peak = full portfolio equity. The replay mirrors `simulate()`
+accounting on the drifting KKT 60/40 return stream; self-checked that
+`exec_schedule = targets` reproduces the same-day baseline exactly.
+
+## 9. Files
 
 - `backtest.py` — added `generate_dca_schedule()`, `dca_schedule` kwarg, `shield_target_series()` and `exec_schedule` kwarg on `simulate()`
 - `scratch/stress_test_dca.py` — Test 1 batch runner, 30 seeds × 5 scenarios
 - `scratch/stress_test_lag.py` — Test 2 batch runner, 30 seeds × 5 scenarios
-- `scratch/make_stress_charts.py` / `scratch/make_lag_charts.py` — branded SVG chart generators
+- `scratch/stress_test_lag_prod.py` — Test 2b production-stack replay runner
+- `scratch/make_stress_charts.py` / `scratch/make_lag_charts.py` / `scratch/make_lag_prod_charts.py` — branded SVG chart generators
 - `SHIELD_STRESS_TESTS.md` — full test plan and results
 
 ---
@@ -264,5 +349,8 @@ never altered.
 *This is the first of five planned stress tests for the v14 Deleverage Shield.
 Per the critique in §5, Test 2 moved from deposit jitter to signal execution
 lag — the first test in this series that can actually fail — and it delivered
-the first failure: a constant 3-day signal lag breaks the Sharpe gate.
+the first failure: a constant 3-day signal lag breaks the Sharpe gate. Test 2b
+then re-ran the same errors on the production KKT 60/40 stack, where every
+error scenario breaks the MaxDD gate — same-day signal execution is the only
+policy that passes.
 [See the full test plan](https://aqmath.xyz) for the remaining four.*
