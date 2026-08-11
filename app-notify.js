@@ -262,6 +262,35 @@ function _durableHoldings() {
         }));
 }
 
+// Auto-backup of the durable holdings right after a recorded trade. recordBuy /
+// recordSell only touch localStorage; a browser that drops site data between
+// sessions (or another device) therefore lost every trade made since the last
+// manual [ update holdings ]. This pushes the same durable copy (amounts +
+// entry + APY) to beta-auth immediately, so the restore on the next visit
+// rebuilds the table INCLUDING the trade. Best effort: the local table already
+// shows the trade, so a failed backup only earns a warning, never a rollback.
+// Deliberately does NOT call /portfolio/init — frozen weights must not move on
+// a trade; the daily signal loop reads the fresh holdings from beta-auth anyway.
+async function pushDurableHoldings() {
+    if (!isBetaActive()) return false;
+    const holdings = _durableHoldings();
+    if (!holdings.length) return false;
+    try {
+        const res = await fetch(BETA_AUTH_URL + '/portfolio', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getBetaToken()
+            },
+            body: JSON.stringify({ holdings })
+        });
+        return res.ok;
+    } catch (e) {
+        console.warn('[AQMath] holdings auto-backup failed:', e.message);
+        return false;
+    }
+}
+
 async function _shieldFetch(path, options = {}) {
     // Engine calls carry the beta JWT; reuse pipelineFetch's 401 handling.
     return pipelineFetch(API_URL + path, options);

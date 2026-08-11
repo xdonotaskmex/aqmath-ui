@@ -1366,6 +1366,18 @@ async function _tradeResolvePrice(sym, priceInputId) {
     return price;
 }
 
+// Trades used to live only in localStorage until the user pressed
+// [ update holdings ] — browsers that clear site data between sessions lost
+// every recorded buy/sell for good. Push the durable copy (amounts + entry +
+// APY) to beta-auth right after each trade; best effort, the local table
+// already shows the result, so only a failed backup earns a warning.
+function _backupHoldingsAfterTrade() {
+    if (!isPro || typeof pushDurableHoldings !== 'function') return;
+    pushDurableHoldings().then(ok => {
+        if (!ok) showToast('Trade saved locally but the account backup failed — press [ update holdings ] to sync it.', 'warning');
+    });
+}
+
 async function recordBuy() {
     const sym = _tradeSymFromForm();
     if (!sym) return;
@@ -1402,6 +1414,7 @@ async function recordBuy() {
 
         saveState();
         render();
+        _backupHoldingsAfterTrade();
 
         showToast(`BUY +${fmtTokens(boughtAmt)} ${sym} @ $${fmtPrice(price)} — avg entry $${fmtPrice(token.entry)}`, 'success');
     } catch(e) {
@@ -1457,6 +1470,7 @@ async function recordSell() {
 
         saveState();
         render();
+        _backupHoldingsAfterTrade();
 
         showToast(`SELL -${fmtTokens(soldAmt)} ${sym} @ $${fmtPrice(price)} — remaining ${fmtTokens(token.amount)} ${sym}`, 'success');
     } catch(e) {
