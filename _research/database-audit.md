@@ -1,6 +1,6 @@
 # 🗄️ AQMath — Potpuni Database Audit
 
-**Datum:** 2026-08-09
+**Datum:** 2026-08-09 · **Zadnja revizija: 2026-08-11** (nakon security remedijacije — statusi svih akcija ažurirani)
 **Opseg:** Svih 9 repozitorija — sve SQL sheme, query patterni, data flow, caching, pool management
 **DB Engine:** PostgreSQL (single Railway instance, shared `DATABASE_URL`)
 
@@ -54,13 +54,13 @@ AQMath koristi **jednu PostgreSQL instancu** koju dijeli više servisa. Svaki se
 | Servis | Pool Min | Pool Max | Ukupno konekcija (1 worker) |
 |---|---|---|---|
 | **-aqmath-beta-auth** | 2 (env `DB_POOL_MIN`) | 12 (env `DB_POOL_MAX`) | 2–12 |
-| **aqmath-beta-auth** (stripped) | 1 | 5 | 1–5 |
+| **aqmath-beta-auth** (stripped) | 1 | 5 | ~~1–5~~ ⚰️ **decommissioned 2026-08-11** |
 | **aqmath-engine** | 2 (env `DB_POOL_MIN`) | 10 (env `DB_POOL_MAX`) | 2–10 |
 | **data-pipeline** | 2 | 10 | 2–10 |
 | **dca-engine** | — | — | **0** (HTTP-only) |
 | **collectors** (3×) | — | — | **0** (HTTP-only) |
 
-**Ukupni connection cap:** U najgorem slučaju (auth 12 + engine 10 + pipeline 10 = **32 konekcije** po workeru). S Railway-jevim default capom od 100 konekcija, ovo je sigurno s marginom.
+**Ukupni connection cap:** U najgorem slučaju (auth 12 + engine 10 + pipeline 10 = **32 konekcije** po workeru). S Railway-jevim default capom od 100 konekcija, ovo je sigurno s marginom. *(Nakon gašenja stripped autha stvarni cap je još niži.)*
 
 ### 2.3 Schema Initialization
 
@@ -246,9 +246,9 @@ Identična struktura. **Napomena:** `ON CONFLICT` ne uključuje `market_cap` (Co
 
 **Constraints:** `UNIQUE(key_hash, run_date)` — idempotentan daily run, jedan red po korisniku po danu.
 
-### 3.5 Stripped-Down Auth Tables (vlasnik: aqmath-beta-auth)
+### 3.5 Stripped-Down Auth Tables (vlasnik: aqmath-beta-auth) ⚰️ DECOMMISSIONED 2026-08-11
 
-Samo `beta_activations` i `auth_attempts` — identične strukture, bez sessions/holdings/consent/acks/ntfy. **Ovaj repo je outdated fork — kanonska verzija je `-aqmath-beta-auth`.**
+Samo `beta_activations` i `auth_attempts` — identične strukture, bez sessions/holdings/consent/acks/ntfy. **Ovaj repo je outdated fork — kanonska verzija je `-aqmath-beta-auth`.** Railway service i GitHub repo obrisani 2026-08-11 (security remedijacija, Medium 3) — lokalni klon ostaje samo za povijest; više ne drži konekcije ni tablice.
 
 ---
 
@@ -457,12 +457,14 @@ UNIQUE constraint na `(key_hash, run_date)` služi kao de facto index, ali sort 
 
 **Preporuka:** Za production, dodati `CHECK` constraint s `jsonb_typeof` ili koristiti PostgreSQL check constraint za kritična polja.
 
-#### W5 — COUNT(*) bez Cache-a na /api/slots (stripped auth) ℹ️ LOW
+#### W5 — COUNT(*) bez Cache-a na /api/slots (stripped auth) ✅ RIJEŠENO (2026-08-11)
 `aqmath-beta-auth` (stripped) nema in-memory cache za `/api/slots`:
 ```python
 used = await db.count_active(cutoff)  # direktan COUNT(*) svaki put
 ```
 Kanonska verzija (`-aqmath-beta-auth`) ima 15s TTL cache. Svaki landing page posjetitelj pogađa ovaj endpoint.
+
+**Status:** Nalaz zastario — stripped auth je decommissioned (Railway + GitHub obrisani), pa problematični endpoint više ne postoji. Kanonski servis s 15s cacheom je jedini live.
 
 ---
 
@@ -570,6 +572,8 @@ if not any(hmac.compare_digest(provided, s) for s in COLLECTOR_SECRETS):
 
 `hmac.compare_digest` je timing-safe — onemogućava timing attack na dužinu/vrijednost secreta.
 
+**Update 2026-08-11 (security remedijacija):** isti secret sada štiti i **read path** — kolektori šalju `X-Collector-Secret` i na GET `/api/symbols` (kraken, coinbase, coingecko, mexc), a pipeline endpointi (`/api/symbols`, `/symbols`, `/stats`, `/api/volatility`) više ne odgovaraju anonimnim pozivima (dual-auth: beta JWT ili collector secret). Pipeline ujedno nema javnu domenu — dostupan je samo preko `*.railway.internal`.
+
 ### 9.2 Ingestion Data Format
 
 Flat array, source per record:
@@ -661,7 +665,7 @@ Ovo je sigurno jer `table` dolazi iz fiksnog dictionarya, ne iz user inputa.
 | RL_MAX_SEC default | 900 (15 min) | 3600 (1 sat) |
 | SESSION_IDLE_MINUTES | 30 (sliding) | ❌ (no sessions) |
 
-**Zaključak:** `aqmath-beta-auth` je **starija, nepotpuna verzija**. Ne podržava sliding sessions, portfolio storage, ntfy notifikacije, GDPR consent log, ni must-read ack. **Treba ga arhivirati/obrisati.**
+**Zaključak:** `aqmath-beta-auth` je **starija, nepotpuna verzija**. Ne podržava sliding sessions, portfolio storage, ntfy notifikacije, GDPR consent log, ni must-read ack. ~~Treba ga arhivirati/obrisati.~~ ✅ **DONE 2026-08-11** — Railway service obrisan, GitHub repo obrisan; ostaje samo kanonski `-aqmath-beta-auth`.
 
 ---
 
@@ -689,7 +693,9 @@ Ovo je sigurno jer `table` dolazi iz fiksnog dictionarya, ne iz user inputa.
 **Database arhitektura je čvrsta za beta fazu.** Jedna PostgreSQL instanca je više nego dovoljna za predviđeni load (50–200 korisnika). Hash-only storage za osjetljive podatke je best practice. Idempotentni writeovi i retry-safe daily run gate su produkcijski obrasci.
 
 **Prioritetne akcije za production:**
-1. ~~Dodati index na `crypto_prices(symbol, date)`~~ ✅ **DONE** (2026-08-09, u `data-pipeline/cleaner.py`)
-2. **Arhivirati `aqmath-beta-auth`** — konsolidirati na kanonsku verziju
-3. **Dodati `CHECK` constraint na JSONB polja** — schema validacija na DB razini
+1. ~~Dodati index na `crypto_prices(symbol, date)`~~ ✅ **DONE** (2026-08-09, u `data-pipeline/cleaner.py`) — verificirano 2026-08-11: `CREATE INDEX IF NOT EXISTS` je samostalna naredba u `CREATE_CLEAN_TABLE_SQL` i izvršava se pri svakom startupu u `init_db()`, pa je produkcijska tablica dobila index na deployu.
+2. ~~**Arhivirati `aqmath-beta-auth`** — konsolidirati na kanonsku verziju~~ ✅ **DONE 2026-08-11** — Railway service i GitHub repo obrisani (još agresivnije od archivea).
+3. **Dodati `CHECK` constraint na JSONB polja** — schema validacija na DB razini. ⏳ **OPEN — jedina preostala akcija iz ovog audita** (low priority: Python sloj već validira prije writea; za produkciju iznad ~100 korisnika).
 4. ~~Connection pooling monitoring~~ ✅ **DONE** (2026-08-09) — `GET /metrics` endpoint dodan u `data-pipeline`, `aqmath-engine` i `-aqmath-beta-auth` (gated by `METRICS_TOKEN` env var, header `X-Metrics-Token`; unset token → 503). Vraća `db_pool{size, idle, in_use, min, max, utilization}` + uptime.
+
+**Stanje nakon revizije 2026-08-11:** 3 od 4 prioritetne akcije gotove. W2 (FK constraints) ostaje svjestan tradeoff za beta fazu; W3/W4 su low-priority preporuke bez roka.
