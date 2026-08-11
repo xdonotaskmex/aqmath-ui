@@ -1,8 +1,8 @@
 # Human Factor Stress Test: Does the Shield Break When You Do?
 
-**Date:** 2026-08-10
+**Date:** 2026-08-10 · **Updated:** 2026-08-11 (Test 2 results)
 **Engine:** v14 Deleverage Shield — production `evaluate_shield` / `backtest_modulator` imported unmodified
-**Status:** ✅ PASS — 5/5 scenarios, 0% failure rate, 30 seeds per scenario · scope: DCA deposits only — see §5 for the test that can actually fail
+**Status:** Test 1 ✅ PASS 5/5 (DCA jitter) · Test 2 ⚠️ 3/4 — a constant 3-day signal lag FAILS the Sharpe gate · 30 seeds per scenario
 
 ---
 
@@ -127,21 +127,108 @@ late by the same amount, that is a lag, and lag has a direction. Random delays
 average out across seeds; consistent lateness does not. Any follow-up test must
 run the two separately or the seed averaging will hide the damage.
 
-### Test 2 — Signal execution lag (next)
+**Test 2 was run.** Design, numbers, and this series' first real failure:
+§6.
 
-| Scenario | Execution error | Why |
-|----------|-----------------|-----|
-| N — Random delay | every signal executed 0–3 days late | noise — expected to average out |
-| L — Constant lag | every signal exactly 3 days late | directional — does NOT average out |
-| M — Missed rebalance | skip a share of signals entirely ("asleep") | worst realistic case |
-| W — Lag in worst weeks | delays only during vol spikes | where the money actually is |
+## 6. Test 2 — Signal execution lag: results
 
-Pass criteria: the same 3 pp MaxDD degradation threshold as Test 1, plus a
-clustering report — where in the timeline the damage lands. If N passes and L
-fails, that is itself a finding: it would mean the shield tolerates
-sloppiness but not routine.
+The follow-up proposed in §5 was implemented and run: same basket, same
+window, same production config, 30 seeds per scenario — but this time the
+error hits the thing the engine actually reacts to: the shield's signals.
+DCA is perfect in every scenario, so execution error is the only disturbance.
 
-## 6. Test details
+| Scenario | Execution error | Model |
+|----------|-----------------|-------|
+| **A — Baseline** | none | every signal executed same day (production) |
+| **N — Random delay** | every signal 0–3 days late | noise — expected to average out |
+| **L — Constant lag** | every signal exactly 3 days late | directional — does NOT average out |
+| **M — Missed rebalances** | asleep ~29% of days, in ~4-day episodes | signals ignored while asleep |
+| **W — Worst weeks only** | 3-day lag on signals fired during vol spikes | where the money actually is |
+
+Mechanics, for reproducibility: the ideal target path is computed once — it
+depends only on returns, not on what the operator does — and each scenario
+builds its execution schedule from it. A delayed signal overtaken by a newer
+one is dropped: when the operator finally acts, they execute the newest
+instruction. A vol spike is a day whose trailing 7-day realized vol sits in
+the top decile of the window (10.0% of days). Awake means always acting,
+asleep means never acting.
+
+### 6a. Headline numbers (median of 30 seeds)
+
+| Scenario | MaxDD | Δ pp | Sharpe | Δ Sharpe | Calmar | Final | Damage |
+|----------|:-----:|:----:|:------:|:--------:|:------:|:-----:|:------:|
+| A — Baseline | 34.2% | — | 0.493 | — | 0.659 | $30,121 | — |
+| N — Random 0–3d | 32.0% | −2.1 | 0.470 | −0.022 | 0.673 | $29,322 | +$965 |
+| L — Constant 3d lag | 35.3% | +1.2 | 0.388 | −0.105 | 0.537 | $25,063 | +$5,058 |
+| M — Asleep | 33.2% | −0.9 | 0.480 | −0.013 | 0.667 | $29,449 | +$675 |
+| W — Worst weeks only | 35.6% | +1.4 | 0.468 | −0.025 | 0.626 | $29,734 | +$387 |
+
+Pass criteria are the same as Test 1: MaxDD degradation under 3 pp AND
+Sharpe loss under 0.10. Buy & Hold is omitted because it executes no
+signals — it is literally identical in all five runs (MaxDD 81.5%).
+
+![Max drawdown under execution error, median with p5–p95 whiskers](/research/assets/lag_stress_dd.svg)
+
+**Verdict: 3/4 pass, one fail — and it is exactly the one the review
+predicted.** Being constantly 3 days late (L) costs $5,058 on a $30k final
+equity (16.8%), drags CAGR from 22.5% to 19.0%, and breaks the Sharpe gate
+(−0.105 vs the −0.10 limit). The drawdown protection itself held in every
+scenario — worst MaxDD degradation is +1.4 pp — so what leaks under lag is
+*return*, not *protection*.
+
+### 6b. Lag is not noise
+
+The §5 review made this distinction; the numbers confirm it brutally. Final
+equity damage vs the baseline, across the 30 seeds:
+
+| Scenario | Damage p5 | Damage median | Damage p95 |
+|----------|:---------:|:-------------:|:----------:|
+| N — Random | −$1,172 | +$965 | +$4,194 |
+| L — Constant | +$5,058 | +$5,058 | +$5,058 |
+| M — Asleep | −$2,888 | +$675 | +$4,265 |
+
+Random delay has a wide spread, and on some seeds being late actually
+*helped* (p5 is negative) — noise averages out. Constant lag has **zero
+variance**: every seed eats exactly the same $5,058. Lag has a direction,
+and no amount of seed averaging will hide it. Had we only tested random
+delays, we would have published another test that could not fail.
+
+### 6c. Where the damage lands
+
+Vol-spike days are 10.0% of the window. Share of total execution damage
+accrued on those days:
+
+| Scenario | Damage on spike days | Base rate | Concentration |
+|----------|:--------------------:|:---------:|:-------------:|
+| N — Random | 17.9% | 10.0% | 1.8× |
+| L — Constant | 15.7% | 10.0% | 1.6× |
+| M — Asleep | 17.1% | 10.0% | 1.7× |
+| W — Worst weeks | 40.1% | 10.0% | 4.0× |
+
+Even uniform errors concentrate in the worst weeks — and when the error is
+restricted to spikes (W), concentration quadruples. The damage lands exactly
+where the engine needs you most.
+
+![Cumulative execution damage vs vol-spike shading](/research/assets/lag_stress_damage.svg)
+
+### 6d. Equity curves
+
+![Equity under execution error, weekly medians, log scale](/research/assets/lag_stress_equity.svg)
+
+### 6e. What this means operationally
+
+1. **The shield tolerates sloppiness but not routine.** Random delays,
+   missed days, even sleeping through ~29% of the window — all pass. Being
+   systematically 3 days late on every signal is the version that fails.
+2. **Being asleep is cheaper than being late.** Missing ~29% of days costs
+   ~$675, because the signal is continuous: when the operator wakes up they
+   execute the latest instruction and the gap heals. A constant lag has no
+   healing mechanism — every single day starts 3 days stale.
+3. **The practical rule:** do not optimize for punctuality, optimize against
+   systematic delay. Execute the signal when you see it; a missed day costs
+   far less than a habitual delay.
+
+## 7. Test details
 
 - **Basket:** ADA, BNB, ETH, XRP, SOL (equal weight)
 - **Window:** 2020-04-10 to 2026-07-04 (2,275 days, 6.2 years)
@@ -157,16 +244,25 @@ scheduled DCA day, a random delay (0–5 days), amount noise (±20%), and option
 skip (every 4th) are applied. The same schedule feeds both the modulator and
 the Buy & Hold reference, so the comparison is fair.
 
-## 7. Files
+Test 2 parameters: lag 3 days (L, W) and uniform 0–3 days (N); sleep model
+P(fall asleep) = 0.10 per awake day, P(wake) = 0.25 per asleep day (≈29% of
+days asleep in ~4-day episodes); vol spike = trailing 7-day realized vol,
+top decile of the window. Execution schedules are applied through the
+`exec_schedule` kwarg of `simulate()`; the shield's signal path itself is
+never altered.
 
-- `backtest.py` — added `generate_dca_schedule()` and `dca_schedule` kwarg on `simulate()`
-- `scratch/stress_test_dca.py` — batch runner, 30 seeds × 5 scenarios
-- `scratch/make_stress_charts.py` — branded SVG chart generator
+## 8. Files
+
+- `backtest.py` — added `generate_dca_schedule()`, `dca_schedule` kwarg, `shield_target_series()` and `exec_schedule` kwarg on `simulate()`
+- `scratch/stress_test_dca.py` — Test 1 batch runner, 30 seeds × 5 scenarios
+- `scratch/stress_test_lag.py` — Test 2 batch runner, 30 seeds × 5 scenarios
+- `scratch/make_stress_charts.py` / `scratch/make_lag_charts.py` — branded SVG chart generators
 - `SHIELD_STRESS_TESTS.md` — full test plan and results
 
 ---
 
 *This is the first of five planned stress tests for the v14 Deleverage Shield.
-Per the critique in §5, Test 2 moves from deposit jitter to signal execution
-lag — the first test in this series that can actually fail.
+Per the critique in §5, Test 2 moved from deposit jitter to signal execution
+lag — the first test in this series that can actually fail — and it delivered
+the first failure: a constant 3-day signal lag breaks the Sharpe gate.
 [See the full test plan](https://aqmath.xyz) for the remaining four.*

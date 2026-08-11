@@ -134,10 +134,11 @@ DOCS = [
         "htmlLang": "en",
         "published": "2026-08-10",
         "title": "Human Factor Stress Test: Does the Shield Break When You Do? - AQMath",
-        "shortTitle": "DCA Stress Test &mdash; Does the Shield Break When You Do?",
-        "description": ("5 DCA scenarios, 30 seeds each, 6.2-year window: the v14 shield's MaxDD "
-                        "degradation is at most 0.5 pp when you delay, vary amounts, and skip "
-                        "months. The shield is robust to human error."),
+        "shortTitle": "Human Factor Stress Tests &mdash; DCA Jitter & Signal Lag",
+        "description": ("Test 1: DCA jitter costs at most 0.5 pp of MaxDD. Test 2 hits the signals "
+                        "themselves: random delays and missed days pass, but a constant 3-day lag "
+                        "fails the Sharpe gate - $5,058 of damage with zero seed variance. Lag is "
+                        "not noise."),
         "altLabel": "中文",
     },
     {
@@ -148,10 +149,10 @@ DOCS = [
         "htmlLang": "zh-CN",
         "published": "2026-08-10",
         "title": "人为因素压力测试：你犯错时，防护盾会崩吗？ - AQMath",
-        "shortTitle": "DCA 压力测试 &mdash; 你犯错时防护盾会崩吗？",
-        "description": ("5 个定投场景、每场景 30 个种子、6.2 年窗口：当你迟交、变动金额并"
-                        "漏掉月份时，v14 防护盾的最大回撤衰减最多 0.5 个百分点。"
-                        "防护盾对人为误差是稳健的。"),
+        "shortTitle": "人为因素压力测试 &mdash; 定投抖动与信号滞后",
+        "description": ("测试 1：定投抖动最多损失 0.5 个百分点的 MaxDD。测试 2 直接打在信号上："
+                        "随机延迟与漏掉的交易日通过，但持续 3 天的滞后打破夏普门槛 — "
+                        "$5,058 的损害、零种子方差。滞后不是噪声。"),
         "altLabel": "English",
     },
     {

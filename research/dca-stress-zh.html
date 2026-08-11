@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>人为因素压力测试：你犯错时，防护盾会崩吗？ - AQMath</title>
-<meta name="description" content="5 个定投场景、每场景 30 个种子、6.2 年窗口：当你迟交、变动金额并漏掉月份时，v14 防护盾的最大回撤衰减最多 0.5 个百分点。防护盾对人为误差是稳健的。">
+<meta name="description" content="测试 1：定投抖动最多损失 0.5 个百分点的 MaxDD。测试 2 直接打在信号上：随机延迟与漏掉的交易日通过，但持续 3 天的滞后打破夏普门槛 — $5,058 的损害、零种子方差。滞后不是噪声。">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://aqmath.xyz/research/dca-stress-zh">
 <link rel="icon" href="/favicon.ico">
@@ -15,7 +15,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://aqmath.xyz/research/dca-stress-zh">
 <meta property="og:title" content="人为因素压力测试：你犯错时，防护盾会崩吗？ - AQMath">
-<meta property="og:description" content="5 个定投场景、每场景 30 个种子、6.2 年窗口：当你迟交、变动金额并漏掉月份时，v14 防护盾的最大回撤衰减最多 0.5 个百分点。防护盾对人为误差是稳健的。">
+<meta property="og:description" content="测试 1：定投抖动最多损失 0.5 个百分点的 MaxDD。测试 2 直接打在信号上：随机延迟与漏掉的交易日通过，但持续 3 天的滞后打破夏普门槛 — $5,058 的损害、零种子方差。滞后不是噪声。">
 <meta property="og:site_name" content="AQMath">
 <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20260721b">
@@ -25,7 +25,7 @@
 <meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="人为因素压力测试：你犯错时，防护盾会崩吗？ - AQMath">
-<meta name="twitter:description" content="5 个定投场景、每场景 30 个种子、6.2 年窗口：当你迟交、变动金额并漏掉月份时，v14 防护盾的最大回撤衰减最多 0.5 个百分点。防护盾对人为误差是稳健的。">
+<meta name="twitter:description" content="测试 1：定投抖动最多损失 0.5 个百分点的 MaxDD。测试 2 直接打在信号上：随机延迟与漏掉的交易日通过，但持续 3 天的滞后打破夏普门槛 — $5,058 的损害、零种子方差。滞后不是噪声。">
 <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <link rel="alternate" hreflang="en" href="https://aqmath.xyz/research/dca-stress">
@@ -50,9 +50,9 @@
 <h1>人为因素压力测试：你犯错时，防护盾会崩吗？</h1>
 <p class="legal-updated">发布日期: 2026-08-10</p>
 <p class="sim-notice"><strong>模拟结果 &mdash; 未使用真实资金。</strong>以下每一项数据均由回测根据历史价格数据计算得出。未投入任何资金，也未下过任何订单。回测是在完全知晓该时段结果的前提下把策略套用于过去，且数据不包含滑点与流动性影响，但会对每次再平衡、DCA 买入和资金重新部署收取 0.1% 的模拟交易所手续费。模拟表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是软件，不是投资建议。</p>
-<p><strong>日期：</strong> 2026-08-10<br>
+<p><strong>日期：</strong> 2026-08-10 · <strong>更新：</strong> 2026-08-11（测试 2 结果）<br>
 <strong>引擎：</strong> v14 去杠杆防护盾 — 原样导入生产 <code>evaluate_shield</code> / <code>backtest_modulator</code>，未做任何改动<br>
-<strong>状态：</strong> ✅ 通过 — 5/5 场景，0% 失败率，每场景 30 个随机种子</p>
+<strong>状态：</strong> 测试 1 ✅ 通过 5/5（定投抖动）· 测试 2 ⚠️ 3/4 — 持续 3 天的信号滞后未通过夏普门槛 · 每场景 30 个随机种子</p>
 <hr>
 <h2>1. 目标</h2>
 <p>迄今发布的每一个回测都假设了一份完美的定投计划：每 30 天投入 $100， 准时准点，一次不差。没有人是这样交易的。人会忘记，会迟交，金额也会 变动。如果防护盾的保护在定投计划一变得马虎时就垮掉，整个设计就是 实验室玩具。</p>
@@ -215,13 +215,200 @@
 <p>1. <strong>防护盾并不脆弱。</strong>定投时机错误、金额变动与漏月最多让最大回撤 衰减 0.5 个百分点 — 远低于表明存在真实问题的 3 个百分点阈值。</p>
 <p>2. <strong>防护盾的保护是结构性的，不是运气。</strong>连续调制器由回撤深度与下行 波动率驱动，而不是由现金流入的精确时机驱动。只要资金最终进入篮子， 防护盾就以同样的方式保护它。</p>
 <p>3. <strong>你可以像个普通人。</strong>防护盾不要求机器人式的精确。无论你定投得完美 还是马虎，它都保护这个组合。</p>
-<h2>5. 测试细节</h2>
+<h2>5. 诚实的局限：这个测试本不可能失败</h2>
+<p>一篇对本研究的外部评审（读者评论，2026-08-11）提出了一个值得完整发表 的观点，因为它是对的：</p>
+<blockquote>时间表 — 所以打乱现金到账的时间根本碰不到它。你们证明了两者解耦，</blockquote>
+<blockquote>这值得知道，但这也意味着测试其实不可能失败。</blockquote>
+<p>这重新框定了 §4 实际证明的东西：定投抖动测试的是一项<strong>设计属性</strong> （入金时机与风险引擎解耦），而不是一个脆弱的边界。一个不可能失败的 测试只能验证稳健性 — 它发现不了弱点。我们测试了引擎周围的一切，唯独 没测引擎真正响应的东西。</p>
+<p><strong>能失败的版本：延迟去杠杆，而不是延迟定投。</strong>如果防护盾信号触发后 你晚 3 天才行动 — 或者因为睡着了干脆跳过再平衡 — 这种马虎才会亏钱。 而且它在波动率飙升时亏得最多，所以损害集中在最糟糕的几周，而不是 均匀摊开。</p>
+<p>评审还点破了一个区分：<strong>滞后不是噪声。</strong>如果你总是晚同样的时间，那是 滞后，滞后有方向。随机延迟会在种子之间相互抵消；持续迟到不会。任何 后续测试都必须把两者分开跑，否则种子平均会把损害藏起来。</p>
+<p><strong>测试 2 已经完成。</strong>设计、数字，以及本系列第一次真正的失败：§6。</p>
+<h2>6. 测试 2 — 信号执行滞后：结果</h2>
+<p>按 §5 提出的后续方案实施并运行：同样的篮子、同样的窗口、同样的生产 配置、每场景 30 个种子 — 但这一次，误差打在引擎真正响应的东西上： 防护盾信号。所有场景的定投都是完美的，执行误差是唯一的扰动。</p>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">场景</th>
+<th style="text-align:left">执行误差</th>
+<th style="text-align:left">模型</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>A — 基准</strong></td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">每个信号当日执行（生产行为）</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>N — 随机延迟</strong></td>
+<td style="text-align:left">每个信号晚 0–3 天</td>
+<td style="text-align:left">噪声 — 预期会被平均掉</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>L — 恒定滞后</strong></td>
+<td style="text-align:left">每个信号恰好晚 3 天</td>
+<td style="text-align:left">有方向 — 不会被平均掉</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>M — 漏掉再平衡</strong></td>
+<td style="text-align:left">约 29% 的时间在睡觉，每次约 4 天</td>
+<td style="text-align:left">睡着时信号被无视</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>W — 只在最坏周</strong></td>
+<td style="text-align:left">波动尖峰时触发的信号晚 3 天</td>
+<td style="text-align:left">钱真正所在的地方</td>
+</tr>
+</tbody></table></div>
+<p>机制（可复现性说明）：理想目标路径只计算一次 — 它只依赖收益率，不 依赖操作者做什么 — 每个场景从中构造自己的执行时间表。被更新信号超越 的延迟信号会被丢弃：操作者真正行动时，执行的是最新的指令。波动尖峰 定义为滚动 7 日实现波动率处于窗口顶部十分位的日子（占 10.0% 的天数）。 醒着就意味着总是行动，睡着就意味着从不行动。</p>
+<h3>6a. 核心数字（30 个种子的中位数）</h3>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">场景</th>
+<th style="text-align:center">MaxDD</th>
+<th style="text-align:center">Δ pp</th>
+<th style="text-align:center">Sharpe</th>
+<th style="text-align:center">Δ Sharpe</th>
+<th style="text-align:center">Calmar</th>
+<th style="text-align:center">最终</th>
+<th style="text-align:center">损害</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">A — 基准</td>
+<td style="text-align:center">34.2%</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">0.493</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">0.659</td>
+<td style="text-align:center">$30,121</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td style="text-align:left">N — 随机 0–3 天</td>
+<td style="text-align:center">32.0%</td>
+<td style="text-align:center">−2.1</td>
+<td style="text-align:center">0.470</td>
+<td style="text-align:center">−0.022</td>
+<td style="text-align:center">0.673</td>
+<td style="text-align:center">$29,322</td>
+<td style="text-align:center">+$965</td>
+</tr>
+<tr>
+<td style="text-align:left">L — 恒定滞后 3 天</td>
+<td style="text-align:center">35.3%</td>
+<td style="text-align:center">+1.2</td>
+<td style="text-align:center">0.388</td>
+<td style="text-align:center">−0.105</td>
+<td style="text-align:center">0.537</td>
+<td style="text-align:center">$25,063</td>
+<td style="text-align:center">+$5,058</td>
+</tr>
+<tr>
+<td style="text-align:left">M — 睡着</td>
+<td style="text-align:center">33.2%</td>
+<td style="text-align:center">−0.9</td>
+<td style="text-align:center">0.480</td>
+<td style="text-align:center">−0.013</td>
+<td style="text-align:center">0.667</td>
+<td style="text-align:center">$29,449</td>
+<td style="text-align:center">+$675</td>
+</tr>
+<tr>
+<td style="text-align:left">W — 只在最坏周</td>
+<td style="text-align:center">35.6%</td>
+<td style="text-align:center">+1.4</td>
+<td style="text-align:center">0.468</td>
+<td style="text-align:center">−0.025</td>
+<td style="text-align:center">0.626</td>
+<td style="text-align:center">$29,734</td>
+<td style="text-align:center">+$387</td>
+</tr>
+</tbody></table></div>
+<p>通过标准与测试 1 相同：最大回撤恶化低于 3 个百分点，且夏普损失低于 0.10。买入持有被略去，因为它不执行任何信号 — 五次运行中它完全相同 （MaxDD 81.5%）。</p>
+<figure class="rs-fig"><img src="/research/assets/lag_stress_dd.svg" alt="执行误差下的最大回撤，中位数与 p5–p95 须线" width="820" height="364" loading="lazy" decoding="async"></figure>
+<p><strong>结论：4 项中 3 项通过，1 项失败 — 而且失败的正是评审预测的那一项。</strong> 持续晚 3 天（L）在 $30k 的最终权益上损失 $5,058（16.8%），把年化收益 从 22.5% 拖到 19.0%，并打破夏普门槛（−0.105 对 −0.10 的限制）。回撤 保护本身在所有场景中都守住了 — 最坏的 MaxDD 恶化只有 +1.4 个百分点 — 所以滞后漏掉的是<em>收益</em>，不是<em>保护</em>。</p>
+<h3>6b. 滞后不是噪声</h3>
+<p>§5 的评审提出了这个区分；数字残酷地证实了它。相对基准的最终权益损害， 跨 30 个种子：</p>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">场景</th>
+<th style="text-align:center">损害 p5</th>
+<th style="text-align:center">损害中位数</th>
+<th style="text-align:center">损害 p95</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">N — 随机</td>
+<td style="text-align:center">−$1,172</td>
+<td style="text-align:center">+$965</td>
+<td style="text-align:center">+$4,194</td>
+</tr>
+<tr>
+<td style="text-align:left">L — 恒定</td>
+<td style="text-align:center">+$5,058</td>
+<td style="text-align:center">+$5,058</td>
+<td style="text-align:center">+$5,058</td>
+</tr>
+<tr>
+<td style="text-align:left">M — 睡着</td>
+<td style="text-align:center">−$2,888</td>
+<td style="text-align:center">+$675</td>
+<td style="text-align:center">+$4,265</td>
+</tr>
+</tbody></table></div>
+<p>随机延迟的分布很宽，某些种子上迟到反而<em>帮了忙</em>（p5 为负）— 噪声会被 平均掉。恒定滞后的方差为<strong>零</strong>：每个种子都吃下完全相同的 $5,058。 滞后有方向，再多的种子平均也藏不住它。如果我们只测随机延迟，就会再 发表一个不可能失败的测试。</p>
+<h3>6c. 损害落在哪里</h3>
+<p>波动尖峰日占窗口的 10.0%。执行总损害中落在这些日子上的份额：</p>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">场景</th>
+<th style="text-align:center">尖峰日上的损害</th>
+<th style="text-align:center">基准率</th>
+<th style="text-align:center">集中度</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">N — 随机</td>
+<td style="text-align:center">17.9%</td>
+<td style="text-align:center">10.0%</td>
+<td style="text-align:center">1.8×</td>
+</tr>
+<tr>
+<td style="text-align:left">L — 恒定</td>
+<td style="text-align:center">15.7%</td>
+<td style="text-align:center">10.0%</td>
+<td style="text-align:center">1.6×</td>
+</tr>
+<tr>
+<td style="text-align:left">M — 睡着</td>
+<td style="text-align:center">17.1%</td>
+<td style="text-align:center">10.0%</td>
+<td style="text-align:center">1.7×</td>
+</tr>
+<tr>
+<td style="text-align:left">W — 最坏周</td>
+<td style="text-align:center">40.1%</td>
+<td style="text-align:center">10.0%</td>
+<td style="text-align:center">4.0×</td>
+</tr>
+</tbody></table></div>
+<p>即使均匀的误差也会集中在最糟糕的几周 — 而当误差被限制在尖峰时段 （W），集中度翻到四倍。损害恰好落在引擎最需要你的地方。</p>
+<figure class="rs-fig"><img src="/research/assets/lag_stress_damage.svg" alt="累计执行损害与波动尖峰着色" width="820" height="436" loading="lazy" decoding="async"></figure>
+<h3>6d. 净值曲线</h3>
+<figure class="rs-fig"><img src="/research/assets/lag_stress_equity.svg" alt="执行误差下的净值曲线，周中位数，对数轴" width="820" height="436" loading="lazy" decoding="async"></figure>
+<h3>6e. 这在操作上意味着什么</h3>
+<p>1. <strong>防护盾容忍马虎，不容忍惯例。</strong>随机延迟、漏掉几天、甚至睡过约 29% 的时间 — 都通过。系统性地每个信号晚 3 天，才是会失败的那一种。 2. <strong>睡着比迟到便宜。</strong>漏掉约 29% 的天数只花约 $675，因为信号是连续的： 操作者醒来时执行最新指令，缺口就愈合了。恒定滞后没有愈合机制 — 每一天都从 3 天前的过期状态开始。 3. <strong>实用规则：</strong>不要优化准时，要优化掉系统性延迟。看到信号就执行； 漏掉一天，远比习惯性拖延便宜。</p>
+<h2>7. 测试细节</h2>
 <ul><li><strong>篮子：</strong> ADA、BNB、ETH、XRP、SOL（等权重）</li><li><strong>窗口：</strong> 2020-04-10 至 2026-07-04（2,275 天，6.2 年）</li><li><strong>起始资金：</strong> $1,000</li><li><strong>定投：</strong> 每 30 天 $100（共 75 次计划投入）</li><li><strong>每场景种子数：</strong> 30</li><li><strong>引擎：</strong> <code>backtest.simulate()</code>，带 <code>dca_schedule</code> 参数（v14.1 新增）</li><li><strong>手续费：</strong> 每笔交易 0.1%（生产 <code>DL_FEE_RATE</code>）</li><li><strong>全部参数：</strong> 生产 <code>default_config()</code>，未改动</li></ul>
 <p>定投抖动以预计算的逐日计划实现：在每个计划定投日，施加随机延迟 （0–5 天）、金额噪声（±20%）与可选跳过（每第 4 次）。同一份计划 同时喂给调制器与买入持有参照，因此比较是公平的。</p>
-<h2>6. 文件</h2>
-<ul><li><code>backtest.py</code> — 新增 <code>generate_dca_schedule()</code> 与 <code>simulate()</code> 的 <code>dca_schedule</code> 参数</li><li><code>scratch/stress_test_dca.py</code> — 批量运行器，30 种子 × 5 场景</li><li><code>scratch/make_stress_charts.py</code> — 品牌风格 SVG 图表生成器</li><li><code>SHIELD_STRESS_TESTS.md</code> — 完整测试计划与结果</li></ul>
+<p>测试 2 参数：滞后 3 天（L、W）与均匀 0–3 天（N）；睡眠模型 P(入睡) = 每个清醒日 0.10，P(醒来) = 每个睡眠日 0.25（约 29% 的时间 在睡觉，每次约 4 天）；波动尖峰 = 滚动 7 日实现波动率处于窗口顶部 十分位。执行时间表通过 <code>simulate()</code> 的 <code>exec_schedule</code> 参数施加； 防护盾的信号路径本身从未被改动。</p>
+<h2>8. 文件</h2>
+<ul><li><code>backtest.py</code> — 新增 <code>generate_dca_schedule()</code>、<code>dca_schedule</code> 参数、<code>shield_target_series()</code> 与 <code>simulate()</code> 的 <code>exec_schedule</code> 参数</li><li><code>scratch/stress_test_dca.py</code> — 测试 1 批量运行器，30 种子 × 5 场景</li><li><code>scratch/stress_test_lag.py</code> — 测试 2 批量运行器，30 种子 × 5 场景</li><li><code>scratch/make_stress_charts.py</code> / <code>scratch/make_lag_charts.py</code> — 品牌风格 SVG 图表生成器</li><li><code>SHIELD_STRESS_TESTS.md</code> — 完整测试计划与结果</li></ul>
 <hr>
-<p><em>这是 v14 去杠杆防护盾五项计划压力测试中的第一项。 <a href="https://aqmath.xyz">查看完整测试计划</a>了解其余四项。</em></p>
+<p><em>这是 v14 去杠杆防护盾五项计划压力测试中的第一项。 按 §5 的批评，测试 2 从定投抖动转向信号执行滞后 — 本系列中第一个 真正可能失败的测试 — 而它交出了第一次失败：持续 3 天的信号滞后打破 夏普门槛。 <a href="https://aqmath.xyz">查看完整测试计划</a>了解其余四项。</em></p>
 </main>
 
 <footer class="site-footer">
