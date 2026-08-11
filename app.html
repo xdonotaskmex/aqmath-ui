@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=30884b79eb">
+    <link rel="stylesheet" href="/styles.min.css?v=29299c3706">
 </head>
 <body>
 
@@ -477,7 +477,7 @@
             </div>
             <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q8">Is my data safe?</div>
-                <div class="faq-a" data-i18n="app.faq.a8">Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in-memory, and discarded immediately. The only server-side records are the one-way hashed beta-key activation (with a hashed IP fingerprint) and &mdash; only if you opt in to the daily-signal service &mdash; your holdings under your hashed key, deleted on withdrawal. Non-custodial by design.</div>
+                <div class="faq-a" data-i18n="app.faq.a8">Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in-memory, and discarded immediately. The only server-side records are the one-way hashed beta-key activation (with a hashed IP fingerprint) and &mdash; only if you opt in to the signal &amp; notification service &mdash; your holdings under your hashed key, deleted on withdrawal. Non-custodial by design.</div>
             </div>
         </div>
     </aside>
@@ -587,10 +587,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=30884b79eb"></script>
-<script defer src="/app-backtest.js?v=30884b79eb"></script>
-<script defer src="/app.js?v=30884b79eb"></script>
-<script defer src="/app-notify.js?v=30884b79eb"></script>
+<script defer src="/app-widgets.js?v=29299c3706"></script>
+<script defer src="/app-backtest.js?v=29299c3706"></script>
+<script defer src="/app.js?v=29299c3706"></script>
+<script defer src="/app-notify.js?v=29299c3706"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -604,8 +604,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=30884b79eb"></script>
-<script defer src="/app-boot.js?v=30884b79eb"></script>
+<script defer src="/vendor/i18next.min.js?v=29299c3706"></script>
+<script defer src="/app-boot.js?v=29299c3706"></script>
 
 </body>
 </html>

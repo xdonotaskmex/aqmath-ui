@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=30884b79eb">
+    <link rel="stylesheet" href="/styles.min.css?v=29299c3706">
 </head>
 <body>
 
@@ -193,7 +193,7 @@
                         <div class="card-title" style="color:var(--blue);" data-i18n="what.whatTitle">--what</div>
                         <p data-i18n-html="what.whatP">AQMath is a quantitative portfolio rebalancer built for passive crypto investors.<br><br>
                         It combines institutional-grade mathematics &mdash; Risk Parity, Karush-Kuhn-Tucker (KKT) optimization, and volatility-weighted Dollar-Cost Averaging &mdash; to keep your portfolio balanced without emotion, guesswork, or centralized data collection.<br><br>
-                        Non-Custodial Math Processing. Your portfolio data is sent only during DCA/Optimize and never persisted. No accounts. No tracking. Just math.</p>
+                        Non-Custodial Math Processing. Your portfolio data is sent only during DCA/Optimize and never persisted &mdash; unless you opt in to the optional signal service. No accounts. No tracking. Just math.</p>
                     </div>
                     <div class="lp-card">
                         <div class="card-title" style="color:var(--blue);" data-i18n="what.howTitle">--how</div>
@@ -206,10 +206,10 @@
                         <div class="card-title" style="color:var(--blue);" data-i18n="what.whyTitle">--why</div>
                         <p data-i18n-html="what.whyP">Most portfolio tools either collect your data or offer only basic rebalancing. AQMath is different:<br><br>
                         &rarr; Institutional-grade math (same concepts used by multi-billion funds)<br>
-                        &rarr; Non-Custodial &mdash; your portfolio stays in your browser&rsquo;s localStorage, backend processing is ephemeral<br>
+                        &rarr; Non-Custodial &mdash; your portfolio stays in your browser&rsquo;s localStorage, backend processing is ephemeral (opt-in signal service excepted)<br>
                         &rarr; Transparent, auditable logic (no black boxes)<br>
                         &rarr; €999 / year &mdash; transparent pricing, processed via USDC &amp; EURC<br><br>
-                        Your balances are ephemeral &mdash; processed in-memory, never stored. No exchange API keys required. No data to sell.</p>
+                        Your balances are ephemeral &mdash; processed in-memory, never stored (the opt-in signal service excepted). No exchange API keys required. No data to sell.</p>
                     </div>
                 </div>
                 <div class="lp-what-closing">
@@ -362,7 +362,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">03</span></div>
                         <div class="metric-label" data-i18n="math.privLabel">--privacy</div>
-                        <div class="metric-copy" data-i18n-html="math.privCopy">Amounts, targets, and allocation weights stay in your browser&rsquo;s localStorage. Data sent to the backend is processed in-memory and discarded immediately &mdash; nothing is persisted.</div>
+                        <div class="metric-copy" data-i18n-html="math.privCopy">Amounts, targets, and allocation weights stay in your browser&rsquo;s localStorage. Data sent to the backend is processed in-memory and discarded immediately &mdash; nothing is persisted unless you opt in to the signal service.</div>
 <a href="/docs#doc-dataflow" class="doc-formula-link" data-i18n="math.privLink">[ see the privacy data flow ]</a>
                     </div>
                     <div class="lp-math-metric">
@@ -391,7 +391,7 @@
                     <div class="lp-trust-strip">
                         <div class="lp-trust-chip"><span class="lp-trust-dot">●</span> math fully documented — <a href="/docs">audit the model</a></div>
                         <div class="lp-trust-chip"><span class="lp-trust-dot">●</span> no cookies · no tracking · simple analytics</div>
-                        <div class="lp-trust-chip"><span class="lp-trust-dot">●</span> portfolio never stored — in-memory only</div>
+                        <div class="lp-trust-chip"><span class="lp-trust-dot">●</span> portfolio stays in your browser — server data only if you opt in</div>
                         <div class="lp-trust-chip"><span class="lp-trust-dot">●</span> GDPR / DSGVO compliant infrastructure</div>
                     </div>
                 </div>
@@ -427,7 +427,7 @@
                         <li data-i18n="plans.betaF3">Unlimited tokens and portfolio optimization</li>
                         <li data-i18n="plans.betaF4">Automatic 180-day historical data pipeline</li>
                         <li data-i18n="plans.betaF5">DCA distribution with full safety pipeline</li>
-                        <li data-i18n="plans.betaF6">Non-custodial privacy — no server stores your portfolio</li>
+                        <li data-i18n="plans.betaF6">Non-custodial privacy — portfolio stays in your browser (server-side storage only if you opt in)</li>
                         <li data-i18n="plans.betaF7">365-day access from activation</li>
                         <li data-i18n="plans.betaF8">Send a message — we review and activate within 48h</li>
                     </ul>
@@ -443,7 +443,7 @@
                         <li data-i18n-html="plans.blackF3">Dynamic volatility-based allocation caps</li>
                         <li data-i18n-html="plans.blackF4">Automatic 180-day historical data pipeline</li>
                         <li data-i18n-html="plans.blackF5">Unlimited token support and portfolio optimization</li>
-                        <li data-i18n-html="plans.blackF6">Non-custodial privacy &mdash; no server stores your portfolio</li>
+                        <li data-i18n-html="plans.blackF6">Non-custodial privacy &mdash; portfolio stays in your browser (server-side storage only if you opt in)</li>
                         <li data-i18n-html="plans.blackF7">Annual access only &mdash; no monthly or quarterly plans</li>
                         <li data-i18n-html="plans.blackF8">14-day EU right of withdrawal &mdash; firm annual term afterwards <a href="/widerruf" style="color:var(--purple);font-size:0.85em">[details]</a></li>
                     </ul>
@@ -490,7 +490,7 @@
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q2">How is AQMath actually private?</div>
-                <div class="lp-faq-a" data-i18n-html="faq.a2">We don&rsquo;t track your wallet, and we never store your identity or portfolio in any database &mdash; with one optional exception: if you enable the personalised daily-signal service, your holdings are stored server-side under the hash of your activation key, solely to compute your daily signals, and deleted at any time (Privacy Policy &sect;9). By default, your token balances live only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. The only other server-side record is a one-way hashed beta-activation record (see the beta-key question below) &mdash; never your financial data. Your financial privacy is architecturally enforced. <a href="/docs" style="color:var(--purple);">Read the full privacy architecture in our [Documentation].</a></div>
+                <div class="lp-faq-a" data-i18n-html="faq.a2">We don&rsquo;t track your wallet, and we never store your identity or portfolio in any database &mdash; with one optional exception: if you enable the personalised signal &amp; notification service, your holdings are stored server-side under the hash of your activation key, solely to compute your daily signals and send notifications, and deleted at any time (Privacy Policy &sect;9). By default, your token balances live only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. The only other server-side record is a one-way hashed beta-activation record (see the beta-key question below) &mdash; never your financial data. Your financial privacy is architecturally enforced. <a href="/docs" style="color:var(--purple);">Read the full privacy architecture in our [Documentation].</a></div>
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q10">Do beta keys track my IP address?</div>
@@ -533,7 +533,7 @@
     </main>
 
     <div class="lp-disclaimer" data-i18n-html="disclaimer">AQMath does not provide financial advice. All calculations are based on historical data and mathematical models.<br>
-        Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted.<br>
+        Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted (opt-in signal service excepted).<br>
         &copy; 2026 AQMath &mdash; Secure Backend Engine. Private. Non-Custodial.<br>
         <a href="/docs">Documentation</a> &middot;
         Follow: <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">Twitter</a> &middot; <a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">Substack</a>
@@ -959,7 +959,7 @@
             </div>
             <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q8">Is my data safe?</div>
-                <div class="faq-a" data-i18n="app.faq.a8">Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in-memory, and discarded immediately. The only server-side records are the one-way hashed beta-key activation (with a hashed IP fingerprint) and &mdash; only if you opt in to the daily-signal service &mdash; your holdings under your hashed key, deleted on withdrawal. Non-custodial by design.</div>
+                <div class="faq-a" data-i18n="app.faq.a8">Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in-memory, and discarded immediately. The only server-side records are the one-way hashed beta-key activation (with a hashed IP fingerprint) and &mdash; only if you opt in to the signal &amp; notification service &mdash; your holdings under your hashed key, deleted on withdrawal. Non-custodial by design.</div>
             </div>
         </div>
     </aside>
@@ -1745,7 +1745,7 @@
             <div class="doc-ct" data-i18n-html="doc.tldr.title">&#9889; READ THIS PAGE IN 60 SECONDS</div>
             <p data-i18n-html="doc.tldr.p1"><strong>What it does:</strong> AQMath tells you the mathematically best way to spread every new dollar you invest across your tokens &mdash; instead of guessing or splitting equally.</p>
             <p data-i18n-html="doc.tldr.p2"><strong>How it protects you:</strong> the Deleverage Shield automatically moves your portfolio into stablecoins as the market turns dangerous, and back into tokens as it recovers.</p>
-            <p data-i18n-html="doc.tldr.p3"><strong>How it stays private:</strong> your portfolio lives only in your browser. No accounts, no wallet connection, nothing stored on our servers.</p>
+            <p data-i18n-html="doc.tldr.p3"><strong>How it stays private:</strong> no accounts, no wallet connection. Your portfolio lives in your browser &mdash; the only server-side data is pseudonymous, exists only if you opt in to the optional signal &amp; notification service, and is deletable at any time.</p>
             <p data-i18n-html="doc.tldr.glossary"><strong>Plain English:</strong> <em>drawdown</em> = how far a portfolio falls from its highest point. <em>Sharpe</em> = return earned per unit of risk &mdash; higher is better. <em>risk parity</em> = weighting tokens by the risk they add, not by their dollar size. <em>DCA</em> = investing a fixed amount on a regular schedule.</p>
         </div>
 
@@ -1754,10 +1754,10 @@
             <h2 id="doc-what" data-i18n="doc.s1.title">1. What is AQMath?</h2>
             <p data-i18n-html="doc.s1.p1">AQMath is a quantitative portfolio rebalancer purpose-built for the crypto market. It combines institutional-grade mathematical models &mdash; the same class of optimization used by multi-billion-dollar hedge funds &mdash; with a privacy-first architecture that ensures your financial data never leaves your control.</p>
             <p data-i18n-html="doc.s1.p2">At its core, AQMath solves a deceptively complex problem: <strong>when you add new capital to your crypto portfolio, which tokens should you buy, and how much of each?</strong> A naive approach (split equally) ignores that some positions are already overweight while others are dangerously underweight. AQMath&rsquo;s DCA engine uses smart proportional allocation, filtered through a DCA safety pipeline, to ensure every dollar you invest moves your portfolio closer to its optimal structure.</p>
-            <p data-i18n-html="doc.s1.p3">The system operates on a <strong>hybrid architecture</strong>: your portfolio data (token amounts, entry prices, targets) is stored exclusively in your browser&rsquo;s localStorage, while computationally intensive math (covariance matrices, DCA allocation planning, volatility analysis) runs on our secure backend engine. This means you get institutional-quality analysis without your holdings being stored on any server.</p>
+            <p data-i18n-html="doc.s1.p3">The system operates on a <strong>hybrid architecture</strong>: your portfolio data (token amounts, entry prices, targets) is stored exclusively in your browser&rsquo;s localStorage, while computationally intensive math (covariance matrices, DCA allocation planning, volatility analysis) runs on our secure backend engine. This means you get institutional-quality analysis &mdash; and nothing financial is stored on any server unless you opt in to the optional signal &amp; notification service (Section 9).</p>
             <div class="doc-callout purple">
                 <div class="doc-ct" data-i18n-html="doc.s1.privTitle">&#128272; NON-CUSTODIAL PRIVACY</div>
-                <p data-i18n-html="doc.s1.privP">AQMath&rsquo;s privacy model is non-custodial by design: the backend receives position data in-memory during a single DCA request, computes the result, and discards everything. No persistence. No logs of your amounts. No database of your identity or portfolio. Your financial state lives exclusively in your browser&rsquo;s localStorage &mdash; the server never retains it.</p>
+                <p data-i18n-html="doc.s1.privP">AQMath&rsquo;s privacy model is non-custodial by design: the backend receives position data in-memory during a single DCA request, computes the result, and discards everything. No persistence. No logs of your amounts. No database of your identity. Your financial state lives in your browser&rsquo;s localStorage &mdash; the only server-side exception is the optional signal &amp; notification service, which stores your holdings under a one-way key hash and can be deleted at any time.</p>
             </div>
 
             <h3 id="doc-who" data-i18n="doc.s1.whoTitle">1.1 Who Is AQMath For?</h3>
@@ -1819,13 +1819,13 @@
                     <rect x="620" y="200" width="160" height="80" rx="4" fill="rgba(251,191,36,0.06)" stroke="var(--amber)" stroke-width="0.5" opacity="0.4"/>
                     <text x="700" y="222" text-anchor="middle" fill="var(--amber)" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="500">PRIVACY BOUNDARY</text>
                     <text x="700" y="240" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Positions sent during DCA, never stored.</text>
-                    <text x="700" y="254" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Amounts sent only during DCA, never stored.</text>
-                    <text x="700" y="268" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">No persistence (opt-in daily signals excepted).</text>
+                    <text x="700" y="254" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Holdings synced only if you opt in.</text>
+                    <text x="700" y="268" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">No persistence (opt-in signal service excepted).</text>
                 </svg>
             </div>
 
             <h3 id="doc-dataflow" data-i18n="doc.s2.dfTitle">2.1 Data Flow</h3>
-            <p data-i18n-html="doc.s2.dfP">Understanding the data flow is critical to understanding AQMath&rsquo;s privacy guarantees. Every interaction follows the same pattern: your browser sends the minimum information needed for computation, and the backend returns results without retaining any state.</p>
+            <p data-i18n-html="doc.s2.dfP">Understanding the data flow is critical to understanding AQMath&rsquo;s privacy guarantees. Every computation interaction follows the same pattern: your browser sends the minimum information needed, and the backend returns results without retaining any state. The single documented exception is the opt-in signal &amp; notification service (Section 9).</p>
             <ol>
                 <li data-i18n-html="doc.s2.df1"><strong>User enters tokens + targets</strong> &rarr; stored exclusively in browser localStorage. No network request is made.</li>
                 <li data-i18n-html="doc.s2.df2"><strong>SYNC clicked</strong> &rarr; live spot prices are pulled from Binance&rsquo;s public market data (CoinGecko as fallback) &mdash; read-only market data. Your holdings are never transmitted.</li>
@@ -1845,17 +1845,17 @@
             <p data-i18n="doc.s2.cleanP2">This pipeline runs daily at 01:00 UTC via a scheduled cron job. The result is a clean, continuous price series suitable for covariance and volatility calculations.</p>
 
             <h3 id="doc-zk" data-i18n="doc.s2.zkTitle">2.3 Non-Custodial Privacy Model</h3>
-            <p data-i18n-html="doc.s2.zkP">AQMath&rsquo;s privacy architecture is non-custodial by design. The backend processes your DCA request statelessly &mdash; it receives position data, computes optimal allocation, returns results, and discards everything from memory. By default, no persistent record of your holdings is ever created server-side (the only exception is the optional daily-signal service, see Section 9):</p>
+            <p data-i18n-html="doc.s2.zkP">AQMath&rsquo;s privacy architecture is non-custodial by design. The backend processes your DCA request statelessly &mdash; it receives position data, computes optimal allocation, returns results, and discards everything from memory. No persistent record of your holdings is created server-side unless you opt in to the signal &amp; notification service (Section 9):</p>
             <ul>
-                <li data-i18n-html="doc.s2.zk1">By default, no portfolio or financial database exists &mdash; there is nothing to hack, leak, or subpoena (exception: the opt-in daily-signal service stores holdings under your hashed activation key, deletable at any time)</li>
+                <li data-i18n-html="doc.s2.zk1">No portfolio or financial database exists unless you opt in &mdash; and even then only a pseudonymous record under your hashed key, deletable at any time (Section 9)</li>
                 <li data-i18n="doc.s2.zk2">No portfolio amounts are logged or stored server-side after a DCA response</li>
                 <li data-i18n="doc.s2.zk3">No wallet addresses, API keys, or identity information is ever collected</li>
-                <li data-i18n-html="doc.s2.zk4">The backend cannot reconstruct your portfolio even if it wanted to &mdash; it simply doesn&rsquo;t retain the data</li>
-                <li data-i18n-html="doc.s2.zk5">Your browser&rsquo;s localStorage is the single source of truth for your financial state</li>
+                <li data-i18n-html="doc.s2.zk4">Unless you opt in to the signal service, the backend cannot reconstruct your portfolio &mdash; it simply doesn&rsquo;t retain the data</li>
+                <li data-i18n-html="doc.s2.zk5">Your browser&rsquo;s localStorage is the home of your financial state; the optional signal service keeps only a pseudonymous mirror of your holdings</li>
             </ul>
             <div class="doc-callout purple">
                 <div class="doc-ct" data-i18n-html="doc.s2.zkWhy">&#128272; WHY THIS MATTERS</div>
-                <p data-i18n-html="doc.s2.zkWhyP">In 2023&ndash;2025, multiple centralized portfolio trackers suffered data breaches exposing user holdings. With AQMath, a server breach would reveal nothing about your portfolio &mdash; because there is nothing to find. Your financial sovereignty is guaranteed by architecture, not by promises.</p>
+                <p data-i18n-html="doc.s2.zkWhyP">In 2023&ndash;2025, multiple centralized portfolio trackers suffered data breaches exposing user holdings. With AQMath, even a server breach could expose only what you chose to sync &mdash; token symbols and amounts tied to an anonymous key hash, never your name, wallet, or exchange keys. Your financial sovereignty is guaranteed by architecture, not by promises.</p>
             </div>
         </div>
 
@@ -1863,7 +1863,7 @@
         <!-- PORTFOLIO -->
         <div class="doc-block" id="doc-portfolio">
             <h2 id="doc-metrics" data-i18n="doc.s3.title">3. Portfolio Tracking</h2>
-            <p data-i18n-html="doc.s3.p1">Your portfolio is a collection of token positions stored entirely in your browser&rsquo;s localStorage. For each token, AQMath tracks your holdings, target allocation percentage, current price, staking yield, entry price history, and DCA cost basis. Together, these parameters form the complete state of your portfolio and drive every calculation in the system &mdash; from allocation metrics to risk budget enforcement.</p>
+            <p data-i18n-html="doc.s3.p1">Your portfolio is a collection of token positions stored entirely in your browser&rsquo;s localStorage. For each token, AQMath tracks your holdings, target allocation percentage, current price, staking yield, entry price history, and DCA cost basis. Together, these parameters form the complete state of your portfolio and drive every calculation in the system &mdash; from allocation metrics to risk budget enforcement. If you enable the optional signal &amp; notification service, a pseudonymous copy of your holdings is mirrored server-side under your hashed key (Section 9).</p>
 
             <div class="doc-diagram">
                 <div class="doc-fl" data-i18n="doc.cap.positions">Portfolio Position Overview (example)</div>
@@ -2437,7 +2437,7 @@
                     </ul>
                 </div>
                 <div class="doc-privacy-col">
-                    <h4 style="color:var(--green);" data-i18n-html="doc.s9.backendTitle">&#128994; Backend Receives (DCA &amp; Backtest, Ephemeral)</h4>
+                    <h4 style="color:var(--green);" data-i18n-html="doc.s9.backendTitle">&#128994; Backend Receives (ephemeral &mdash; plus opt-in stored data)</h4>
                     <ul>
                         <li data-i18n="doc.s9.backend1">Token symbols (e.g., BTC, ETH)</li>
                         <li data-i18n="doc.s9.backend2">Current amounts and prices</li>
@@ -2446,6 +2446,9 @@
                         <li data-i18n="doc.s9.backend5">Cost basis and total tokens</li>
                         <li data-i18n="doc.s9.backend6">Frozen and safe-haven flags</li>
                         <li data-i18n="doc.s9.backend7">Backtest price series (CSV you upload) &mdash; processed in-memory, then discarded</li>
+                        <li data-i18n-html="doc.s9.backend8"><strong>Opt-in signal &amp; notification service (stored, deletable):</strong> token symbols + amounts and the frozen weight plan, under the hash of your key</li>
+                        <li data-i18n="doc.s9.backend9">Consent receipts and must-read acknowledgements &mdash; GDPR audit records</li>
+                        <li data-i18n="doc.s9.backend10">Notification setup &mdash; a random unguessable topic; the read token is stored only as a hash</li>
                     </ul>
                 </div>
             </div>
@@ -2454,7 +2457,7 @@
             <p data-i18n="doc.s9.bnP">This is the most critical section. The following data is architecturally impossible for the backend to access:</p>
             <div class="doc-callout red">
                 <div class="doc-ct" data-i18n-html="doc.s9.bnCt">&#128274; ARCHITECTURAL PRIVACY GUARANTEES</div>
-                <p data-i18n-html="doc.s9.bnCtP">By default, no database table maps users to portfolios. No log file records your holdings. The only exception is the opt-in daily-signal service (Section 9): holdings stored under the hash of your activation key. Even with full server access, an attacker would find <strong>no other information</strong> about any user&rsquo;s financial state.</p>
+                <p data-i18n-html="doc.s9.bnCtP">By default, no database table maps users to portfolios and no log records your holdings. The exception is the opt-in signal &amp; notification service (Section 9): holdings, the frozen plan and consent receipts are stored under the one-way hash of your activation key &mdash; never your name, wallet, or exchange keys. Even with full server access, an attacker would find <strong>no other information</strong> about any user&rsquo;s financial state.</p>
             </div>
             <div class="doc-tablewrap">
             <table class="doc-table">
@@ -2464,32 +2467,32 @@
                     <tr><td data-i18n="doc.s9.t2a">Exchange API keys</td><td data-i18n="doc.s9.t2b">Never requested &mdash; price sync uses public endpoints</td></tr>
                     <tr><td data-i18n="doc.s9.t3a">Transaction history</td><td data-i18n="doc.s9.t3b">Never transmitted &mdash; only current state during DCA</td></tr>
                     <tr><td data-i18n="doc.s9.t4a">User identity</td><td data-i18n="doc.s9.t4b">No accounts, no email, no registration</td></tr>
-                    <tr><td data-i18n="doc.s9.t5a">Total portfolio value</td><td data-i18n="doc.s9.t5b">Sent during DCA but never persisted</td></tr>
+                    <tr><td data-i18n="doc.s9.t5a">Total portfolio value</td><td data-i18n="doc.s9.t5b">Sent during DCA, never persisted &mdash; stored only if you opt in to the signal service</td></tr>
                     <tr><td data-i18n="doc.s9.t6a">Historical allocations</td><td data-i18n="doc.s9.t6b">Snapshots exist only in localStorage</td></tr>
-                    <tr><td data-i18n="doc.s9.t7a">Entry prices</td><td data-i18n="doc.s9.t7b">Sent during DCA for avg calc but not stored</td></tr>
-                    <tr><td data-i18n="doc.s9.t8a">Beta key identity</td><td data-i18n="doc.s9.t8b">JWT validated but not linked to portfolio data</td></tr>
+                    <tr><td data-i18n="doc.s9.t7a">Entry prices</td><td data-i18n="doc.s9.t7b">Sent during DCA, not stored &mdash; saved only if you opt in to the signal service (UI bookkeeping)</td></tr>
+                    <tr><td data-i18n="doc.s9.t8a">Beta key identity</td><td data-i18n="doc.s9.t8b">Never your raw key &mdash; everything is linked to a one-way hash; no name, email, or wallet</td></tr>
                 </tbody>
             </table>
             </div>
-            <p data-i18n-html="doc.s9.bnP2">The backend processes your DCA request in a single HTTP round-trip: receive positions &rarr; compute allocation &rarr; return results &rarr; discard. By default, there is no database table that maps users to portfolios (the only exception is the opt-in daily-signal service: holdings stored under the hash of your activation key). There is no log file that records your holdings. Even if someone gained full access to the server, they would find <strong>no other information</strong> about any user&rsquo;s financial state.</p>
+            <p data-i18n-html="doc.s9.bnP2">The backend processes your DCA request in a single HTTP round-trip: receive positions &rarr; compute allocation &rarr; return results &rarr; discard. By default, there is no database table that maps users to portfolios (the only exception is the opt-in signal &amp; notification service: holdings stored under the hash of your activation key). There is no log file that records your holdings. Even if someone gained full access to the server, they would find <strong>no other information</strong> about any user&rsquo;s financial state.</p>
 
             <h3 id="doc-zk-model" data-i18n="doc.s9.zkTitle">9.2 Non-Custodial Privacy Model</h3>
             <p data-i18n="doc.s9.zkP">AQMath implements a practical non-custodial privacy model:</p>
             <ul>
                 <li data-i18n-html="doc.s9.zk1"><strong>The backend proves</strong> that the DCA allocation is mathematically optimal through detailed buy summaries (e.g., &ldquo;BTC: +$142.30 (0.002371 tokens)&rdquo;).</li>
-                <li data-i18n-html="doc.s9.zk2"><strong>The backend does not retain</strong> the inputs. After the HTTP response is sent, the request data is garbage-collected from memory. No disk write. No database insert.</li>
+                <li data-i18n-html="doc.s9.zk2"><strong>The backend does not retain</strong> the inputs. After the HTTP response is sent, the request data is garbage-collected from memory. No disk write. No database insert. (The opt-in signal &amp; notification service is the documented exception &mdash; Section 9.)</li>
                 <li data-i18n-html="doc.s9.zk3"><strong>The browser verifies</strong> the results by applying updated amounts and re-rendering the portfolio.</li>
             </ul>
-            <p data-i18n="doc.s9.zkP2">The backend does not retain your data after the HTTP response is sent &mdash; request data is garbage-collected from memory with no disk write, no database insert, and no logs of your holdings. Your portfolio lives in your browser&rsquo;s localStorage, and nowhere else.</p>
+            <p data-i18n="doc.s9.zkP2">The backend does not retain your data after the HTTP response is sent &mdash; request data is garbage-collected from memory with no disk write, no database insert, and no logs of your holdings. Your portfolio lives in your browser&rsquo;s localStorage &mdash; the only server-side mirror is the pseudonymous one you opt into (Section 9).</p>
             <div class="doc-callout purple">
                 <div class="doc-ct" data-i18n="doc.s9.compCt">&#128272; COMPARISON WITH TRADITIONAL TOOLS</div>
-                <p data-i18n="doc.s9.compP">Traditional trackers store everything on centralized servers &mdash; one breach exposes all users. AQMath stores nothing server-side. No accounts, no wallet connections, no analytics tracking. Your portfolio lives in your browser, and nowhere else.</p>
+                <p data-i18n="doc.s9.compP">Traditional trackers store everything on centralized servers &mdash; one breach exposes all users. AQMath stores nothing by default; the only stored data is what you opt into &mdash; pseudonymous and deletable. No accounts, no wallet connections, no analytics tracking.</p>
             </div>
             <div class="doc-tablewrap">
             <table class="doc-table">
                 <thead><tr><th data-i18n="doc.s9.compTh1">Feature</th><th data-i18n="doc.s9.compTh2">Traditional Trackers</th><th data-i18n="doc.s9.compTh3">AQMath</th></tr></thead>
                 <tbody>
-                    <tr><td data-i18n="doc.s9.c1a">Data storage</td><td data-i18n="doc.s9.c1b">Centralized server database</td><td data-i18n="doc.s9.c1c">Browser localStorage only</td></tr>
+                    <tr><td data-i18n="doc.s9.c1a">Data storage</td><td data-i18n="doc.s9.c1b">Centralized server database</td><td data-i18n="doc.s9.c1c">Browser localStorage; opt-in pseudonymous signal data only</td></tr>
                     <tr><td data-i18n="doc.s9.c2a">Account required</td><td data-i18n="doc.s9.c2b">Email + password + often KYC</td><td data-i18n="doc.s9.c2c">None &mdash; zero registration</td></tr>
                     <tr><td data-i18n="doc.s9.c3a">Wallet connection</td><td data-i18n="doc.s9.c3b">OAuth or wallet connect</td><td data-i18n="doc.s9.c3c">Never &mdash; manual input only</td></tr>
                     <tr><td data-i18n="doc.s9.c4a">Breach risk</td><td data-i18n="doc.s9.c4b">Single DB exposes all users</td><td data-i18n="doc.s9.c4c">Nothing to breach</td></tr>
@@ -2512,10 +2515,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=30884b79eb"></script>
-<script defer src="/app-backtest.js?v=30884b79eb"></script>
-<script defer src="/app.js?v=30884b79eb"></script>
-<script defer src="/app-notify.js?v=30884b79eb"></script>
+<script defer src="/app-widgets.js?v=29299c3706"></script>
+<script defer src="/app-backtest.js?v=29299c3706"></script>
+<script defer src="/app.js?v=29299c3706"></script>
+<script defer src="/app-notify.js?v=29299c3706"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -2529,8 +2532,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=30884b79eb"></script>
-<script defer src="/app-boot.js?v=30884b79eb"></script>
+<script defer src="/vendor/i18next.min.js?v=29299c3706"></script>
+<script defer src="/app-boot.js?v=29299c3706"></script>
 
 </body>
 </html>
