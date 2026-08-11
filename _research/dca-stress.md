@@ -1,10 +1,27 @@
 # Human Factor Stress Test: Does the Shield Break When You Do?
 
 **Date:** 2026-08-10 · **Updated:** 2026-08-11 (Test 2 + Test 2b results)
-**Engine:** v14 Deleverage Shield — production `evaluate_shield` / `backtest_modulator` imported unmodified
+**Engine:** v14 Deleverage Shield — the same code that runs in production, unchanged
 **Status:** Test 1 ✅ PASS 5/5 (DCA jitter) · Test 2 ⚠️ 3/4 (constant lag fails the Sharpe gate) · Test 2b ❌ 0/4 — on the production KKT 60/40 stack, every execution-error scenario fails the MaxDD gate · 30 seeds per scenario
 
 ---
+
+## Read this in 60 seconds
+
+- We deliberately broke the *human* side of the system: late deposits,
+  trades executed days late, days skipped entirely.
+- Messing up your *deposits* barely matters: protection weakens by at
+  most 0.5 percentage points.
+- Executing the engine's *signals* late matters a lot. On the real
+  production setup, **every** delay scenario breaks the drawdown
+  protection.
+- **The rule:** when a signal arrives, execute it the same day. Skipping
+  a day is far cheaper than being habitually late.
+
+*Vocabulary used below:* **MaxDD (maximum drawdown)** — how far the
+portfolio falls from its highest point, i.e. the pain you actually sit
+through. **Sharpe** — return earned per unit of risk; higher is better.
+**Vol spike** — an unusually turbulent day compared to the recent past.
 
 ## 1. Objective
 
@@ -19,7 +36,7 @@ months — does the shield still hold?**
 The shield was scored on MaxDD and Sharpe, not on beating Buy & Hold. The test
 measured exactly that: degradation of protection under human error.
 
-**No parameters were changed.** Every run uses production `default_config()`.
+**No parameters were changed.** Every run uses the production defaults.
 
 ## 2. Design
 
@@ -235,20 +252,21 @@ where the engine needs you most.
 
 Test 2 ran on a 100% risky equal-weight basket. Production is different:
 
-- KKT risk-parity weights — ERC on the trailing 180-day log-return
-  covariance, capped 40%/10% per token, risky sleeve max 60%
+- KKT risk-parity weights — each token weighted by the risk it
+  contributes, capped 40% per token, risky side max 60%
 - structural 40% USDC sleeve
 - weights frozen and re-optimised every 180 days, drifting with prices
   between re-opts (no drift-trading)
 - the shield reads the **full portfolio equity** (risky + parked USDC)
 
-Test 2b replays that exact stack locally — the real `_solve_erc`,
-`_kkt_project`, and `evaluate_shield` functions, unmodified — and re-runs the
+Test 2b replays that exact stack — the real production weight optimizer
+and risk shield, code unchanged — and re-runs the
 same A/N/L/M/W execution-error scenarios. The only human surface in
-production is executing the daily buy/sell signal (KKT and the shield are
-fully automated server-side), so that is exactly what the scenarios perturb.
-The first re-optimization happens at day 180, matching the production data
-gate (≥2 tokens with ≥30 closes); before it, the portfolio sits in USDC.
+production is executing the daily buy/sell signal (weight optimization
+and the shield are fully automated server-side), so that is exactly what
+the scenarios perturb. The first re-optimization happens at day 180,
+because there is not enough price history before it; until then, the
+portfolio sits in USDC.
 
 ### 7a. Headline numbers (median of 30 seeds)
 
@@ -312,9 +330,9 @@ drawdown protection the shield was built to deliver.
 - **Start capital:** $1,000
 - **DCA:** $100 every 30 days (75 scheduled contributions)
 - **Seeds per scenario:** 30
-- **Engine:** `backtest.simulate()` with `dca_schedule` parameter (new in v14.1)
-- **Fee:** 0.1% per trade (production `DL_FEE_RATE`)
-- **All parameters:** production `default_config()`, unchanged
+- **Engine:** the production simulator, unchanged
+- **Fee:** 0.1% per trade
+- **All parameters:** production defaults, unchanged
 
 The DCA jitter is implemented as a pre-computed per-day schedule: on each
 scheduled DCA day, a random delay (0–5 days), amount noise (±20%), and optional
@@ -324,25 +342,22 @@ the Buy & Hold reference, so the comparison is fair.
 Test 2 parameters: lag 3 days (L, W) and uniform 0–3 days (N); sleep model
 P(fall asleep) = 0.10 per awake day, P(wake) = 0.25 per asleep day (≈29% of
 days asleep in ~4-day episodes); vol spike = trailing 7-day realized vol,
-top decile of the window. Execution schedules are applied through the
-`exec_schedule` kwarg of `simulate()`; the shield's signal path itself is
-never altered.
+top decile of the window. Execution errors only change *when* the
+operator acts; the engine's signals themselves are never altered.
 
-Test 2b parameters: production KKT weights recomputed every 180 days via
-`_solve_erc` + `_kkt_project` on trailing 180-day log returns (gate: ≥2
-tokens with ≥30 closes), weights drift with prices between re-opts, shield
-equity/peak = full portfolio equity. The replay mirrors `simulate()`
-accounting on the drifting KKT 60/40 return stream; self-checked that
-`exec_schedule = targets` reproduces the same-day baseline exactly.
+Test 2b parameters: production KKT weights recomputed every 180 days
+from the trailing 180 days of prices, weights drift with prices between
+re-opts, the shield watches the full portfolio value including parked
+USDC. The replay uses the same accounting as production; self-checked
+that a perfect operator reproduces the production baseline exactly.
 
-## 9. Files
+## 9. Reproducibility
 
-- `backtest.py` — added `generate_dca_schedule()`, `dca_schedule` kwarg, `shield_target_series()` and `exec_schedule` kwarg on `simulate()`
-- `scratch/stress_test_dca.py` — Test 1 batch runner, 30 seeds × 5 scenarios
-- `scratch/stress_test_lag.py` — Test 2 batch runner, 30 seeds × 5 scenarios
-- `scratch/stress_test_lag_prod.py` — Test 2b production-stack replay runner
-- `scratch/make_stress_charts.py` / `scratch/make_lag_charts.py` / `scratch/make_lag_prod_charts.py` — branded SVG chart generators
-- `SHIELD_STRESS_TESTS.md` — full test plan and results
+All three tests run the unmodified production engine on the same 6.2
+years of daily closes, with 30 independent runs per scenario. Test
+scripts, chart generators, and raw result data live in the engine's
+internal research tooling; every number in this article is the median of
+those 30 runs.
 
 ---
 
