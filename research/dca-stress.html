@@ -52,7 +52,7 @@
 <p class="sim-notice"><strong>Simulated results &mdash; no real money.</strong> Every figure below is computed from historical price data by a backtest. No capital was invested and no orders were placed. Backtests apply a strategy to the past with full knowledge of how that period turned out, and the figures exclude slippage and liquidity effects, though a simulated 0.1% exchange fee is charged on every rebalance, DCA buy and redeployment. Simulated and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software, not investment advice.</p>
 <p><strong>Date:</strong> 2026-08-10<br>
 <strong>Engine:</strong> v14 Deleverage Shield — production <code>evaluate_shield</code> / <code>backtest_modulator</code> imported unmodified<br>
-<strong>Status:</strong> ✅ PASS — 5/5 scenarios, 0% failure rate, 30 seeds per scenario</p>
+<strong>Status:</strong> ✅ PASS — 5/5 scenarios, 0% failure rate, 30 seeds per scenario · scope: DCA deposits only — see §5 for the test that can actually fail</p>
 <hr>
 <h2>1. Objective</h2>
 <p>Every backtest published so far assumed a perfect DCA schedule: $100 every 30 days, on the dot, every time. Nobody trades like that. People forget. They pay late. The amount varies. If the shield&#x27;s protection collapses the moment the DCA schedule gets sloppy, the whole design is a lab toy.</p>
@@ -215,13 +215,52 @@
 <p>1. <strong>The shield is not fragile.</strong> DCA timing errors, amount variations, and skipped months degrade MaxDD by at most 0.5 pp — far below the 3 pp threshold that would indicate a real problem.</p>
 <p>2. <strong>The shield&#x27;s protection is structural, not lucky.</strong> The continuous modulator is driven by drawdown depth and downside volatility, not by the exact timing of cash inflows. As long as capital eventually enters the basket, the shield protects it the same way.</p>
 <p>3. <strong>You can be human.</strong> The shield does not require robotic precision. It protects the portfolio whether you DCA perfectly or sloppily.</p>
-<h2>5. Test details</h2>
+<h2>5. Honest limits: this test could not fail</h2>
+<p>An external review of this article (reader comment, 2026-08-11) made a point worth publishing in full, because it is correct:</p>
+<blockquote>drawdown, not the deposit schedule — so messing with when cash arrives was</blockquote>
+<blockquote>never going to touch it. You proved the two are decoupled, which is worth</blockquote>
+<blockquote>knowing, but it means the test couldn&#x27;t really fail.</blockquote>
+<p>That reframes what §4 actually proved: the DCA jitter tested a <strong>design property</strong> (deposit timing is decoupled from the risk engine), not a fragile edge. A test that cannot fail verifies robustness — it cannot discover weakness. We tested everything around the engine, but not the thing the engine actually reacts to.</p>
+<p><strong>The version that can fail: delay the deleverage, not the deposit.</strong> If a shield signal fires and you act 3 days late — or skip the rebalance entirely because you are asleep — that is the sloppiness that costs money. And it costs most exactly when vol is spiking, so the damage clusters in the worst weeks rather than spreading out evenly.</p>
+<p>One more distinction the review nailed: <strong>lag is not noise.</strong> If you are always late by the same amount, that is a lag, and lag has a direction. Random delays average out across seeds; consistent lateness does not. Any follow-up test must run the two separately or the seed averaging will hide the damage.</p>
+<h3>Test 2 — Signal execution lag (next)</h3>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">Scenario</th>
+<th style="text-align:left">Execution error</th>
+<th style="text-align:left">Why</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">N — Random delay</td>
+<td style="text-align:left">every signal executed 0–3 days late</td>
+<td style="text-align:left">noise — expected to average out</td>
+</tr>
+<tr>
+<td style="text-align:left">L — Constant lag</td>
+<td style="text-align:left">every signal exactly 3 days late</td>
+<td style="text-align:left">directional — does NOT average out</td>
+</tr>
+<tr>
+<td style="text-align:left">M — Missed rebalance</td>
+<td style="text-align:left">skip a share of signals entirely (&quot;asleep&quot;)</td>
+<td style="text-align:left">worst realistic case</td>
+</tr>
+<tr>
+<td style="text-align:left">W — Lag in worst weeks</td>
+<td style="text-align:left">delays only during vol spikes</td>
+<td style="text-align:left">where the money actually is</td>
+</tr>
+</tbody></table></div>
+<p>Pass criteria: the same 3 pp MaxDD degradation threshold as Test 1, plus a clustering report — where in the timeline the damage lands. If N passes and L fails, that is itself a finding: it would mean the shield tolerates sloppiness but not routine.</p>
+<h2>6. Test details</h2>
 <ul><li><strong>Basket:</strong> ADA, BNB, ETH, XRP, SOL (equal weight)</li><li><strong>Window:</strong> 2020-04-10 to 2026-07-04 (2,275 days, 6.2 years)</li><li><strong>Start capital:</strong> $1,000</li><li><strong>DCA:</strong> $100 every 30 days (75 scheduled contributions)</li><li><strong>Seeds per scenario:</strong> 30</li><li><strong>Engine:</strong> <code>backtest.simulate()</code> with <code>dca_schedule</code> parameter (new in v14.1)</li><li><strong>Fee:</strong> 0.1% per trade (production <code>DL_FEE_RATE</code>)</li><li><strong>All parameters:</strong> production <code>default_config()</code>, unchanged</li></ul>
 <p>The DCA jitter is implemented as a pre-computed per-day schedule: on each scheduled DCA day, a random delay (0–5 days), amount noise (±20%), and optional skip (every 4th) are applied. The same schedule feeds both the modulator and the Buy &amp; Hold reference, so the comparison is fair.</p>
-<h2>6. Files</h2>
+<h2>7. Files</h2>
 <ul><li><code>backtest.py</code> — added <code>generate_dca_schedule()</code> and <code>dca_schedule</code> kwarg on <code>simulate()</code></li><li><code>scratch/stress_test_dca.py</code> — batch runner, 30 seeds × 5 scenarios</li><li><code>scratch/make_stress_charts.py</code> — branded SVG chart generator</li><li><code>SHIELD_STRESS_TESTS.md</code> — full test plan and results</li></ul>
 <hr>
-<p><em>This is the first of five planned stress tests for the v14 Deleverage Shield. <a href="https://aqmath.xyz">See the full test plan</a> for the remaining four.</em></p>
+<p><em>This is the first of five planned stress tests for the v14 Deleverage Shield. Per the critique in §5, Test 2 moves from deposit jitter to signal execution lag — the first test in this series that can actually fail. <a href="https://aqmath.xyz">See the full test plan</a> for the remaining four.</em></p>
 </main>
 
 <footer class="site-footer">

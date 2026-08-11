@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-10
 **Engine:** v14 Deleverage Shield — production `evaluate_shield` / `backtest_modulator` imported unmodified
-**Status:** ✅ PASS — 5/5 scenarios, 0% failure rate, 30 seeds per scenario
+**Status:** ✅ PASS — 5/5 scenarios, 0% failure rate, 30 seeds per scenario · scope: DCA deposits only — see §5 for the test that can actually fail
 
 ---
 
@@ -100,7 +100,48 @@ drawdowns is identical between perfect and worst-case DCA:
 3. **You can be human.** The shield does not require robotic precision. It
    protects the portfolio whether you DCA perfectly or sloppily.
 
-## 5. Test details
+## 5. Honest limits: this test could not fail
+
+An external review of this article (reader comment, 2026-08-11) made a point
+worth publishing in full, because it is correct:
+
+> The reason it barely moved is that the risk engine reads portfolio vol and
+> drawdown, not the deposit schedule — so messing with when cash arrives was
+> never going to touch it. You proved the two are decoupled, which is worth
+> knowing, but it means the test couldn't really fail.
+
+That reframes what §4 actually proved: the DCA jitter tested a **design
+property** (deposit timing is decoupled from the risk engine), not a fragile
+edge. A test that cannot fail verifies robustness — it cannot discover
+weakness. We tested everything around the engine, but not the thing the engine
+actually reacts to.
+
+**The version that can fail: delay the deleverage, not the deposit.** If a
+shield signal fires and you act 3 days late — or skip the rebalance entirely
+because you are asleep — that is the sloppiness that costs money. And it costs
+most exactly when vol is spiking, so the damage clusters in the worst weeks
+rather than spreading out evenly.
+
+One more distinction the review nailed: **lag is not noise.** If you are always
+late by the same amount, that is a lag, and lag has a direction. Random delays
+average out across seeds; consistent lateness does not. Any follow-up test must
+run the two separately or the seed averaging will hide the damage.
+
+### Test 2 — Signal execution lag (next)
+
+| Scenario | Execution error | Why |
+|----------|-----------------|-----|
+| N — Random delay | every signal executed 0–3 days late | noise — expected to average out |
+| L — Constant lag | every signal exactly 3 days late | directional — does NOT average out |
+| M — Missed rebalance | skip a share of signals entirely ("asleep") | worst realistic case |
+| W — Lag in worst weeks | delays only during vol spikes | where the money actually is |
+
+Pass criteria: the same 3 pp MaxDD degradation threshold as Test 1, plus a
+clustering report — where in the timeline the damage lands. If N passes and L
+fails, that is itself a finding: it would mean the shield tolerates
+sloppiness but not routine.
+
+## 6. Test details
 
 - **Basket:** ADA, BNB, ETH, XRP, SOL (equal weight)
 - **Window:** 2020-04-10 to 2026-07-04 (2,275 days, 6.2 years)
@@ -116,7 +157,7 @@ scheduled DCA day, a random delay (0–5 days), amount noise (±20%), and option
 skip (every 4th) are applied. The same schedule feeds both the modulator and
 the Buy & Hold reference, so the comparison is fair.
 
-## 6. Files
+## 7. Files
 
 - `backtest.py` — added `generate_dca_schedule()` and `dca_schedule` kwarg on `simulate()`
 - `scratch/stress_test_dca.py` — batch runner, 30 seeds × 5 scenarios
@@ -126,4 +167,6 @@ the Buy & Hold reference, so the comparison is fair.
 ---
 
 *This is the first of five planned stress tests for the v14 Deleverage Shield.
+Per the critique in §5, Test 2 moves from deposit jitter to signal execution
+lag — the first test in this series that can actually fail.
 [See the full test plan](https://aqmath.xyz) for the remaining four.*
