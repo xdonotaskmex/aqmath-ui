@@ -542,3 +542,43 @@ Cross-Origin-Opener-Policy: same-origin
 5. Standardizirati CORS origins na env-driven pristup (L3)
 
 **Sustav je siguran za produkcijsku betu u trenutnom stanju.**
+
+---
+
+## 🔧 Remediation Log — 2026-08-11
+
+Naknadni scan je identificirao nove nalaze; svi su obrađeni istog dana.
+
+### High nalazi — POPRAVLJENO
+
+| Nalaz | Fix |
+|---|---|
+| `data-pipeline` javni `/api/symbols`, `/stats`, `/api/volatility`, `/symbols` | Novi `verify_beta_token_or_collector` dual-auth dependency (beta JWT ILI `X-Collector-Secret`); `/api/volatility` i `/stats` samo beta JWT. Kolektori (kraken, coinbase, coingecko) šalju `X-Collector-Secret` na `/api/symbols` poziv. |
+| `aqmath-engine` javni `/prices/*`, `/history/{symbol}`, `/symbols` | Sva 4 endpointa iza `Depends(verify_beta_token)`. UI `fetchPrices()` (app.js) sada šalje Bearer header — poziv je ionako Pro-only. |
+| `-aqmath-beta-auth` `/internal/*` na javnom URL-u | Engine već koristi `BETA_AUTH_INTERNAL_URL` env var → postaviti na `http://aqmath-beta-auth.railway.internal` (Railway internal domena, nedostupna s interneta). **ADMIN_SECRET rotiran** i upisan na beta-auth servis; engine treba isti secret u `BETA_AUTH_SECRET` env varu. |
+
+### Medium nalazi — obrađeno
+
+| Nalaz | Fix |
+|---|---|
+| `REQUIRE_KID=false` | Postavljeno `REQUIRE_KID=true` na sva 3 servisa (env, napravio owner). Kanonski auth uvijek izdaje `kid`, pa flip ne lomi aktivne tokene. |
+| `dca-engine` binance proxy bez validacije | `_BINANCE_SYMBOL_RE` (`^[A-Z0-9]{2,20}$`) + `_KLINE_INTERVALS` allowlist (`1m,5m,15m,1h,4h,1d`) prije svakog forwarda; symbol se normalizira u uppercase. |
+| `dca-engine` `/api/volatility` i `/api/available-tokens` proxy bez headera | Oba prosljeđuju callerov Bearer token pipeline-u (koji je sada beta-gated); `/api/available-tokens` je sada i sam beta-gated. |
+| Stripped `aqmath-beta-auth` (slabiji duplikat) | Railway service **obrisan** (owner); README dobio DEPRECATED banner. Repo ostaje samo za povijest. |
+| JWT u localStorage | Accepted risk, dokumentirano. Kanonski auth izdaje 30-min sliding tokene (ne 365-dnevne); CSP + `escapeHtml()` higijena već na mjestu. |
+
+### Low nalazi — obrađeno
+
+| Nalaz | Fix |
+|---|---|
+| Hardkodirani Railway URL-ovi u scratch skriptama | `upload_xmr.py`, `upload_paxg.py`, `data_source.py` → env var s praznim defaultom; `test_svg_update.py`, `test_rebal_forensics.py` → `BACKTESTING_URL` env var. |
+| `_archive/aqmath-beta-auth-old` | Ne postoji ni u jednom workspaceu — nalaz iz starog klona; N/A. |
+| Collector `/status`, `/pairs`, `/coins` | Ostaju javni (low-impact recon) — accepted risk. |
+| Dva auth repoa | Riješeno decommissionom stripped verzije. |
+
+### Preostale owner akcije (Railway dashboard)
+
+1. **`BETA_AUTH_SECRET` na aqmath-engine** = novi `ADMIN_SECRET` iz beta-auth servisa (bez toga dnevni cron pada s 401)
+2. **`BETA_AUTH_INTERNAL_URL` na aqmath-engine** = `http://aqmath-beta-auth.railway.internal`
+3. GitHub: arhivirati `aqmath-beta-auth` repo (Settings → Archive)
+4. `mexc-collector/main.py` (izvan workspacea): ručno dodati `headers={"X-Collector-Secret": COLLECTOR_SECRET}` na GET `/api/symbols` poziv — ista promjena kao kod ostala 3 kolektora

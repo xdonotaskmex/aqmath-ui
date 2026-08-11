@@ -1096,9 +1096,12 @@ async function fetchPrices(symbol, forceRefresh = false) {
 
     const maxRetries = 3;
     const delays = [1000, 2000, 4000];
+    // Engine /history is beta-gated; fetchPrices() is Pro-only so the token is
+    // always present here. Without the header the request 401s.
+    const authHeaders = { 'Authorization': 'Bearer ' + getBetaToken() };
     for (let attempt = 0; attempt < maxRetries; attempt++) {
         try {
-            const res = await fetch(`${API_URL}/history/${symbol}?days=180`);
+            const res = await fetch(`${API_URL}/history/${symbol}?days=180`, { headers: authHeaders });
             if (res.ok) {
                 const json = await res.json();
                 if (json.prices && Array.isArray(json.prices) && json.prices.length > 0) {
