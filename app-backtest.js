@@ -103,6 +103,17 @@ function btInputs() {
     };
 }
 
+// The engine enforces the same bounds (and would answer with a 422), but
+// checking here first gives the user a readable message instead of a
+// validation round-trip.
+function btValidateInputs(inp) {
+    if (!(inp.start_capital > 0)) return 'Start capital must be greater than 0.';
+    if (inp.dca_amount < 0) return 'DCA amount cannot be negative.';
+    if (inp.dca_amount > 0 && (inp.dca_interval < 1 || inp.dca_interval > 365))
+        return 'DCA interval must be between 1 and 365 days \u2014 set the DCA amount to 0 for a one-time lump-sum run.';
+    return null;
+}
+
 // Friendly beta gate: backtest runs on the server, so it needs a beta key
 // (same gate as the DCA / Optimize engines).
 function btRequireBeta() {
@@ -118,9 +129,25 @@ async function btPost(path, body) {
     var res = await pipelineFetch(API_URL + path, { method: 'POST', body: JSON.stringify(body) });
     if (!res.ok) {
         var err = await res.json().catch(function() { return {}; });
-        throw new Error(err.detail || ('request failed (' + res.status + ')'));
+        throw new Error(btErrDetail(err, res.status));
     }
     return res.json();
+}
+
+// FastAPI error bodies: `detail` is a plain string for HTTPExceptions, but an
+// array of {loc, msg, type} objects for 422 validation errors. Flatten both
+// into something a human can read instead of "[object Object]".
+function btErrDetail(err, status) {
+    var d = err && err.detail;
+    if (typeof d === 'string' && d) return d;
+    if (Array.isArray(d) && d.length) {
+        return d.map(function(it) {
+            var field = Array.isArray(it.loc) ? it.loc.slice(1).join('.') : '';
+            var msg = it.msg || 'invalid value';
+            return field ? field + ' \u2014 ' + msg : msg;
+        }).join(' | ');
+    }
+    return 'request failed (' + status + ')';
 }
 
 function btShowLoading() {
@@ -141,11 +168,13 @@ async function btRunBacktest() {
     if (!btRequireBeta()) return;
     var tokens = btActiveTokens();
     if (tokens.length < 2) { btShowStatus('Load at least 2 token CSVs to run a backtest.', 'error'); return; }
+    var inp = btInputs();
+    var bad = btValidateInputs(inp);
+    if (bad) { btShowStatus(bad, 'error'); return; }
 
     btShowLoading();
     btShowStatus('Running backtest...', 'running');
     try {
-        var inp = btInputs();
         var data = await btPost('/backtest', {
             tokens: tokens,
             start_capital: inp.start_capital,
@@ -447,6 +476,8 @@ async function btRunWFGrid() {
     btShowLoading();
     try {
         var inp = btInputs();
+        var bad = btValidateInputs(inp);
+        if (bad) { btShowStatus(bad, 'error'); return; }
         var sweep = document.getElementById('btWfSweep').value;
         var metric = document.getElementById('btWfMetric').value;
         btShowStatus('Running walk-forward grid...', 'running');
