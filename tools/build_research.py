@@ -134,12 +134,15 @@ DOCS = [
         "htmlLang": "en",
         "published": "2026-08-10",
         "title": "Human Factor Stress Test: Does the Shield Break When You Do? - AQMath",
-        "shortTitle": "Human Factor Stress Tests &mdash; DCA Jitter & Signal Lag",
+        "shortTitle": "Human Factor Stress Tests &mdash; DCA Jitter, Signal Lag &amp; Frozen Weights",
         "description": ("Test 1: DCA jitter costs at most 0.5 pp of MaxDD. Test 2 hits the signals "
                         "themselves: random delays and missed days pass, but a constant 3-day lag "
                         "fails the Sharpe gate - $5,058 of damage with zero seed variance. Test 2b "
                         "re-runs it on the production KKT 60/40 stack: every error scenario breaks "
-                        "the MaxDD gate. Same-day execution is the only policy that passes."),
+                        "the MaxDD gate. Test 2c runs the reader-proposed frozen-weights control "
+                        "and a 1-5 day lag sweep: freezing the weights still fails 3 of 4 scenarios "
+                        "and even a 1-day lag breaks the gate. Same-day execution is the only "
+                        "policy that passes."),
         "altLabel": "中文",
     },
     {
@@ -150,11 +153,13 @@ DOCS = [
         "htmlLang": "zh-CN",
         "published": "2026-08-10",
         "title": "人为因素压力测试：你犯错时，防护盾会崩吗？ - AQMath",
-        "shortTitle": "人为因素压力测试 &mdash; 定投抖动与信号滞后",
+        "shortTitle": "人为因素压力测试 &mdash; 定投抖动、信号滞后与冻结权重",
         "description": ("测试 1：定投抖动最多损失 0.5 个百分点的 MaxDD。测试 2 直接打在信号上："
                         "随机延迟与漏掉的交易日通过，但持续 3 天的滞后打破夏普门槛 — "
                         "$5,058 的损害、零种子方差。测试 2b 在生产 KKT 60/40 堆栈上重跑："
-                        "每一个误差场景都打破最大回撤门槛。当日执行是唯一能通过的做法。"),
+                        "每一个误差场景都打破最大回撤门槛。测试 2c 运行读者提出的冻结权重"
+                        "对照与 1–5 天滞后扫描：冻结权重后仍有 3/4 场景失败，连 1 天滞后"
+                        "都打破门槛。当日执行是唯一能通过的做法。"),
         "altLabel": "English",
     },
     {

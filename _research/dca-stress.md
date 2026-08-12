@@ -1,8 +1,8 @@
 # Human Factor Stress Test: Does the Shield Break When You Do?
 
-**Date:** 2026-08-10 · **Updated:** 2026-08-11 (Test 2 + Test 2b results)
+**Date:** 2026-08-10 · **Updated:** 2026-08-12 (Test 2c: frozen weights + lag knee)
 **Engine:** v14 Deleverage Shield — the same code that runs in production, unchanged
-**Status:** Test 1 ✅ PASS 5/5 (DCA jitter) · Test 2 ⚠️ 3/4 (constant lag fails the Sharpe gate) · Test 2b ❌ 0/4 — on the production KKT 60/40 stack, every execution-error scenario fails the MaxDD gate · 30 seeds per scenario
+**Status:** Test 1 ✅ PASS 5/5 (DCA jitter) · Test 2 ⚠️ 3/4 (constant lag fails the Sharpe gate) · Test 2b ❌ 0/4 — on the production KKT 60/40 stack, every execution-error scenario fails the MaxDD gate · Test 2c ❌ freezing the weights does not fix it, and there is no lag knee — even a 1-day lag fails the MaxDD gate · 30 seeds per scenario
 
 ---
 
@@ -17,6 +17,12 @@
   protection.
 - **The rule:** when a signal arrives, execute it the same day. Skipping
   a day is far cheaper than being habitually late.
+- Reader challenge ("maybe the fragility is the 180-day re-fit, not the
+  errors"): tested in Test 2c — freezing the weights still fails 3 of 4
+  scenarios. The fragility travels with late execution, not with the
+  re-optimization loop.
+- There is no comfortable lag knee: a constant 1-day lag already breaks
+  the drawdown gate. Same-day or nothing.
 
 *Vocabulary used below:* **MaxDD (maximum drawdown)** — how far the
 portfolio falls from its highest point, i.e. the pain you actually sit
@@ -323,7 +329,68 @@ execution standard that passes is acting on the signal **the same day it
 arrives**. Any "I'll do it in a couple of days" policy invalidates the
 drawdown protection the shield was built to deliver.
 
-## 8. Test details
+## 8. Test 2c — reader challenge: freeze the weights, find the knee
+
+External review of Test 2b (reader comment, 2026-08-12) made a sharper
+claim than the first review: the 0.5 pp result of Test 1 reflected the
+*setup*, not the protection, and the fragility in Test 2b sits in the
+180-day re-optimization — so the discriminating experiment is to freeze
+the weights and re-run the same error scenarios: "if frozen weights
+survive and re-optimizing weights break, the fragility is the refit and
+not the errors." It also asked for the operational knee: run constant
+lags of 1–5 days and plot damage against lag length.
+
+Both were run. One correction first: the proposed mechanism — a bad fill
+feeding into the data the next re-fit learns from — does not exist in
+this system. The re-fit reads trailing market prices only; fills never
+enter its data. But the discriminating test stands on its own.
+
+### 8a. Frozen weights: the fragility survives
+
+Two variants, same A/N/L/M/W scenarios, 30 seeds each:
+
+- **Constant weights (FC):** the first successful re-opt's weights
+  (2020-10-07) are reused at every 180-day boundary. Identical to the
+  Test 2b stack except the re-fit never adapts to recent data — the
+  clean control for "the refit".
+- **Never rebalance (FN):** weights set once at day 180, drifting
+  forever with no resets, portfolio mix renormalized daily.
+
+**Constant weights fail 3 of 4 scenarios on the MaxDD gate** (only the
+asleep scenario passes). Freezing the weights does not fix it.
+
+![MaxDD degradation: re-optimized vs constant weights](/research/assets/lag_2c_frozen.svg)
+
+What freezing actually costs: the constant-weight baseline earns a
+Sharpe of 0.314 vs 0.453 on the re-optimized stack, with final equity
+$23,634 vs $32,793. The re-fit is where the *return* comes from; the
+lag fragility is not the price of the re-fit specifically — it is the
+price of a deleverage ramp executed late, whichever weights the stack
+holds. The never-rebalance variant is worse still on every axis
+(Sharpe 0.160, final $15,366) and still fails 3 of 4. The reader's
+hypothesis predicted the opposite; the data reject it.
+
+### 8b. The lag knee: there is none
+
+Constant lags of 1–5 days on the production stack, 30 seeds each
+(deterministic: zero seed spread, as in §6b):
+
+- **1-day lag:** +3.3 pp MaxDD — already outside the 3 pp gate
+- **2-day lag:** +8.5 pp MaxDD, and the Sharpe gate breaks too (−0.114)
+- **3–5 days:** +7.6 to +11.9 pp MaxDD, Sharpe degradation deepening to
+  −0.165
+
+![Damage and MaxDD degradation vs constant lag length](/research/assets/lag_2c_knee.svg)
+
+Damage rises roughly monotonically with lag ($4,650 → $7,320), with
+phase effects — 3 days costs less than 2, 5 days dents the drawdown
+less than 4 — because a fixed lag lands differently against the crash
+dates. But the gate verdict has no knee: day one already fails. The
+operational number the sweep was meant to deliver is zero days of
+acceptable lag. Same-day execution is not a strictness preference; it
+is the tolerance budget.
+
+## 9. Test details
 
 - **Basket:** ADA, BNB, ETH, XRP, SOL (equal weight)
 - **Window:** 2020-04-10 to 2026-07-04 (2,275 days, 6.2 years)
@@ -351,9 +418,15 @@ re-opts, the shield watches the full portfolio value including parked
 USDC. The replay uses the same accounting as production; self-checked
 that a perfect operator reproduces the production baseline exactly.
 
-## 9. Reproducibility
+Test 2c parameters: FC reuses the day-180 weights (ADA 10.7%, BNB 14.0%,
+ETH 12.2%, XRP 17.1%, SOL 6.0%) at every 180-day boundary; FN applies
+them once and drifts forever with daily renormalization of the risky/
+USDC mix. The lag sweep runs constant lags of 1–5 days on the Test 2b
+stack; each lag is deterministic, so all 30 seeds coincide.
 
-All three tests run the unmodified production engine on the same 6.2
+## 10. Reproducibility
+
+All tests run the unmodified production engine on the same 6.2
 years of daily closes, with 30 independent runs per scenario. Test
 scripts, chart generators, and raw result data live in the engine's
 internal research tooling; every number in this article is the median of
@@ -366,6 +439,8 @@ Per the critique in §5, Test 2 moved from deposit jitter to signal execution
 lag — the first test in this series that can actually fail — and it delivered
 the first failure: a constant 3-day signal lag breaks the Sharpe gate. Test 2b
 then re-ran the same errors on the production KKT 60/40 stack, where every
-error scenario breaks the MaxDD gate — same-day signal execution is the only
-policy that passes.
+error scenario breaks the MaxDD gate. Test 2c ran the reader-proposed
+frozen-weights control and lag sweep: freezing the weights still fails 3 of 4
+scenarios, and even a 1-day lag breaks the MaxDD gate — same-day signal
+execution remains the only policy that passes.
 [See the full test plan](https://aqmath.xyz) for the remaining four.*

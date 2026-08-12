@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>人为因素压力测试：你犯错时，防护盾会崩吗？ - AQMath</title>
-<meta name="description" content="测试 1：定投抖动最多损失 0.5 个百分点的 MaxDD。测试 2 直接打在信号上：随机延迟与漏掉的交易日通过，但持续 3 天的滞后打破夏普门槛 — $5,058 的损害、零种子方差。测试 2b 在生产 KKT 60/40 堆栈上重跑：每一个误差场景都打破最大回撤门槛。当日执行是唯一能通过的做法。">
+<meta name="description" content="测试 1：定投抖动最多损失 0.5 个百分点的 MaxDD。测试 2 直接打在信号上：随机延迟与漏掉的交易日通过，但持续 3 天的滞后打破夏普门槛 — $5,058 的损害、零种子方差。测试 2b 在生产 KKT 60/40 堆栈上重跑：每一个误差场景都打破最大回撤门槛。测试 2c 运行读者提出的冻结权重对照与 1–5 天滞后扫描：冻结权重后仍有 3/4 场景失败，连 1 天滞后都打破门槛。当日执行是唯一能通过的做法。">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://aqmath.xyz/research/dca-stress-zh">
 <link rel="icon" href="/favicon.ico">
@@ -15,7 +15,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://aqmath.xyz/research/dca-stress-zh">
 <meta property="og:title" content="人为因素压力测试：你犯错时，防护盾会崩吗？ - AQMath">
-<meta property="og:description" content="测试 1：定投抖动最多损失 0.5 个百分点的 MaxDD。测试 2 直接打在信号上：随机延迟与漏掉的交易日通过，但持续 3 天的滞后打破夏普门槛 — $5,058 的损害、零种子方差。测试 2b 在生产 KKT 60/40 堆栈上重跑：每一个误差场景都打破最大回撤门槛。当日执行是唯一能通过的做法。">
+<meta property="og:description" content="测试 1：定投抖动最多损失 0.5 个百分点的 MaxDD。测试 2 直接打在信号上：随机延迟与漏掉的交易日通过，但持续 3 天的滞后打破夏普门槛 — $5,058 的损害、零种子方差。测试 2b 在生产 KKT 60/40 堆栈上重跑：每一个误差场景都打破最大回撤门槛。测试 2c 运行读者提出的冻结权重对照与 1–5 天滞后扫描：冻结权重后仍有 3/4 场景失败，连 1 天滞后都打破门槛。当日执行是唯一能通过的做法。">
 <meta property="og:site_name" content="AQMath">
 <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20260721b">
@@ -25,7 +25,7 @@
 <meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="人为因素压力测试：你犯错时，防护盾会崩吗？ - AQMath">
-<meta name="twitter:description" content="测试 1：定投抖动最多损失 0.5 个百分点的 MaxDD。测试 2 直接打在信号上：随机延迟与漏掉的交易日通过，但持续 3 天的滞后打破夏普门槛 — $5,058 的损害、零种子方差。测试 2b 在生产 KKT 60/40 堆栈上重跑：每一个误差场景都打破最大回撤门槛。当日执行是唯一能通过的做法。">
+<meta name="twitter:description" content="测试 1：定投抖动最多损失 0.5 个百分点的 MaxDD。测试 2 直接打在信号上：随机延迟与漏掉的交易日通过，但持续 3 天的滞后打破夏普门槛 — $5,058 的损害、零种子方差。测试 2b 在生产 KKT 60/40 堆栈上重跑：每一个误差场景都打破最大回撤门槛。测试 2c 运行读者提出的冻结权重对照与 1–5 天滞后扫描：冻结权重后仍有 3/4 场景失败，连 1 天滞后都打破门槛。当日执行是唯一能通过的做法。">
 <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <link rel="alternate" hreflang="en" href="https://aqmath.xyz/research/dca-stress">
@@ -50,12 +50,12 @@
 <h1>人为因素压力测试：你犯错时，防护盾会崩吗？</h1>
 <p class="legal-updated">发布日期: 2026-08-10</p>
 <p class="sim-notice"><strong>模拟结果 &mdash; 未使用真实资金。</strong>以下每一项数据均由回测根据历史价格数据计算得出。未投入任何资金，也未下过任何订单。回测是在完全知晓该时段结果的前提下把策略套用于过去，且数据不包含滑点与流动性影响，但会对每次再平衡、DCA 买入和资金重新部署收取 0.1% 的模拟交易所手续费。模拟表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是软件，不是投资建议。</p>
-<p><strong>日期：</strong> 2026-08-10 · <strong>更新：</strong> 2026-08-11（测试 2 + 测试 2b 结果）<br>
+<p><strong>日期：</strong> 2026-08-10 · <strong>更新：</strong> 2026-08-12（测试 2c：冻结权重 + 滞后拐点）<br>
 <strong>引擎：</strong> v14 去杠杆防护盾 — 与生产环境完全相同的代码，未做任何改动<br>
-<strong>状态：</strong> 测试 1 ✅ 通过 5/5（定投抖动）· 测试 2 ⚠️ 3/4（恒定滞后未通过夏普门槛）· 测试 2b ❌ 0/4 — 在生产 KKT 60/40 堆栈上，所有执行误差场景都未通过最大回撤门槛 · 每场景 30 个随机种子</p>
+<strong>状态：</strong> 测试 1 ✅ 通过 5/5（定投抖动）· 测试 2 ⚠️ 3/4（恒定滞后未通过夏普门槛）· 测试 2b ❌ 0/4 — 在生产 KKT 60/40 堆栈上，所有执行误差场景都未通过最大回撤门槛 · 测试 2c ❌ 冻结权重并不能修复问题，且不存在滞后拐点 — 连 1 天滞后都未通过最大回撤门槛 · 每场景 30 个随机种子</p>
 <hr>
 <h2>60 秒速览</h2>
-<ul><li>我们故意弄坏系统的<em>人</em>这一环：迟交定投、晚几天才执行交易、 整天漏掉。</li><li>弄砸<em>定投</em>几乎不影响保护：最坏只削弱 0.5 个百分点。</li><li>晚执行引擎的<em>信号</em>影响很大：在真实生产配置下，<strong>每一种</strong>拖延 都会打破回撤保护。</li><li><strong>规则：</strong>信号到达的当天就执行。偶尔漏一天，远比习惯性迟到 便宜。</li></ul>
+<ul><li>我们故意弄坏系统的<em>人</em>这一环：迟交定投、晚几天才执行交易、 整天漏掉。</li><li>弄砸<em>定投</em>几乎不影响保护：最坏只削弱 0.5 个百分点。</li><li>晚执行引擎的<em>信号</em>影响很大：在真实生产配置下，<strong>每一种</strong>拖延 都会打破回撤保护。</li><li><strong>规则：</strong>信号到达的当天就执行。偶尔漏一天，远比习惯性迟到 便宜。</li><li>读者挑战（“也许脆弱的是 180 天再拟合，不是误差”）：已在测试 2c 中检验 — 冻结权重后仍有 4 个场景中的 3 个失败。脆弱性跟随 晚执行，而不是再优化循环。</li><li>不存在舒适的滞后拐点：持续 1 天的滞后就已经打破回撤门槛。要么 当天执行，要么没有保护。</li></ul>
 <p><em>下文用到的词：</em> <strong>MaxDD（最大回撤）</strong> — 组合从最高点跌下去多远， 也就是你实际承受的跌幅。<strong>夏普（Sharpe）</strong> — 每承担一份风险赚到 的收益，越高越好。<strong>波动尖峰</strong> — 相对近期明显异常剧烈的日子。</p>
 <h2>1. 目标</h2>
 <p>迄今发布的每一个回测都假设了一份完美的定投计划：每 30 天投入 $100， 准时准点，一次不差。没有人是这样交易的。人会忘记，会迟交，金额也会 变动。如果防护盾的保护在定投计划一变得马虎时就垮掉，整个设计就是 实验室玩具。</p>
@@ -485,15 +485,30 @@
 <figure class="rs-fig"><img src="/research/assets/lag_prod_damage.svg" alt="累计执行损害与波动尖峰着色，生产堆栈" width="820" height="436" loading="lazy" decoding="async"></figure>
 <h3>7d. 操作结论</h3>
 <p>生产堆栈<strong>比等权测试所暗示的更不能容忍人为误差</strong>：连随机 0–3 天的 延迟都打破了最大回撤门槛。唯一能通过的执行标准是<strong>在信号到达的 当天行动</strong>。任何“过两天再做”的做法，都会让防护盾本来要提供的回撤 保护失效。</p>
-<h2>8. 测试细节</h2>
+<h2>8. 测试 2c — 读者挑战：冻结权重，找出拐点</h2>
+<p>对测试 2b 的外部评审（读者评论，2026-08-12）提出了比第一次评审更 尖锐的主张：测试 1 的 0.5 个百分点反映的是<em>配置</em>，不是保护，而 测试 2b 的脆弱性在于 180 天再优化 — 因此判别性实验是冻结权重并 重跑同样的误差场景：“如果冻结权重能存活而再优化权重会崩，那么 脆弱的是再拟合，不是误差。”它还要求给出操作拐点：跑 1–5 天的恒定 滞后，把损害画成滞后长度的函数。</p>
+<p>两者都跑了。先做一个更正：所提出的机制 — 糟糕的成交进入下一次 再拟合学习所用的数据 — 在本系统中并不存在。再拟合只读取最近的 市场价格，成交从不进入它的数据。但判别性测试本身依然成立。</p>
+<h3>8a. 冻结权重：脆弱性依然存在</h3>
+<p>两个变体，同样的 A/N/L/M/W 场景，各 30 个种子：</p>
+<ul><li><strong>恒定权重（FC）：</strong>第一次成功再优化（2020-10-07）的权重在每个 180 天边界被重复使用。与测试 2b 堆栈完全一致，只是再拟合永远 不适应新数据 — 对“再拟合”的干净对照。</li><li><strong>永不再平衡（FN）：</strong>权重在第 180 天设定一次，之后永远漂移、 不再重置，组合混合比例按日归一化。</li></ul>
+<p><strong>恒定权重在最大回撤门槛上有 4 个场景中的 3 个失败</strong>（只有睡觉 场景通过）。冻结权重并不能修复问题。</p>
+<figure class="rs-fig"><img src="/research/assets/lag_2c_frozen.svg" alt="最大回撤衰减：再优化 vs 恒定权重" width="820" height="422" loading="lazy" decoding="async"></figure>
+<p>冻结真正的代价：恒定权重基准的夏普为 0.314，再优化堆栈为 0.453， 最终权益 $23,634 对 $32,793。再拟合是<em>收益</em>的来源；滞后脆弱性并 不是再拟合特有的代价 — 无论堆栈持有什么权重，它都是晚执行的 去杠杆斜坡的代价。永不再平衡变体在每个维度上都更差（夏普 0.160， 最终 $15,366），同样有 3/4 失败。读者的假设预测的是相反的结果； 数据否定了它。</p>
+<h3>8b. 滞后拐点：不存在</h3>
+<p>在生产堆栈上以 1–5 天恒定滞后运行，各 30 个种子（确定性：零种子 散布，与 §6b 一致）：</p>
+<ul><li><strong>1 天滞后：</strong>最大回撤 +3.3 个百分点 — 已经在 3 个百分点门槛之外</li><li><strong>2 天滞后：</strong>最大回撤 +8.5 个百分点，夏普门槛也被打破（−0.114）</li><li><strong>3–5 天：</strong>最大回撤 +7.6 至 +11.9 个百分点，夏普衰减加深至 −0.165</li></ul>
+<figure class="rs-fig"><img src="/research/assets/lag_2c_knee.svg" alt="损害与最大回撤衰减 vs 恒定滞后长度" width="820" height="436" loading="lazy" decoding="async"></figure>
+<p>损害随滞后大致单调上升（$4,650 → $7,320），但存在相位效应 — 3 天比 2 天便宜，5 天对回撤的伤害小于 4 天 — 因为固定滞后落在 崩盘日期上的方式不同。但门槛结论没有拐点：第一天就已失败。这场 扫描本来要给出的操作数字是：可接受的滞后为零天。当日执行不是 严格与否的偏好，它就是容错预算本身。</p>
+<h2>9. 测试细节</h2>
 <ul><li><strong>篮子：</strong> ADA、BNB、ETH、XRP、SOL（等权重）</li><li><strong>窗口：</strong> 2020-04-10 至 2026-07-04（2,275 天，6.2 年）</li><li><strong>起始资金：</strong> $1,000</li><li><strong>定投：</strong> 每 30 天 $100（共 75 次计划投入）</li><li><strong>每场景种子数：</strong> 30</li><li><strong>引擎：</strong> 生产模拟器，未改动</li><li><strong>手续费：</strong> 每笔交易 0.1%</li><li><strong>全部参数：</strong> 生产默认配置，未改动</li></ul>
 <p>定投抖动以预计算的逐日计划实现：在每个计划定投日，施加随机延迟 （0–5 天）、金额噪声（±20%）与可选跳过（每第 4 次）。同一份计划 同时喂给调制器与买入持有参照，因此比较是公平的。</p>
 <p>测试 2 参数：滞后 3 天（L、W）与均匀 0–3 天（N）；睡眠模型 P(入睡) = 每个清醒日 0.10，P(醒来) = 每个睡眠日 0.25（约 29% 的时间 在睡觉，每次约 4 天）；波动尖峰 = 滚动 7 日实现波动率处于窗口顶部 十分位。执行误差只改变操作者<em>何时</em>行动；引擎的信号本身从未被 改动。</p>
 <p>测试 2b 参数：生产 KKT 权重每 180 天基于最近 180 天的价格重算， 权重在两次再优化之间随价格漂移，防护盾监控包括停泊 USDC 在内的 完整组合价值。重放使用与生产完全一致的记账；已自检一个完美操作 者能精确复现生产基准。</p>
-<h2>9. 可复现性</h2>
-<p>三项测试都在同一段 6.2 年的日线数据上运行未改动的生产引擎，每 场景 30 次独立运行。测试脚本、图表生成器与原始结果数据保存在 引擎的内部研究工具中；本文每个数字都是这 30 次运行的中位数。</p>
+<p>测试 2c 参数：FC 在每个 180 天边界重复使用第 180 天的权重 （ADA 10.7%、BNB 14.0%、ETH 12.2%、XRP 17.1%、SOL 6.0%）；FN 只 应用一次并永远漂移，风险/USDC 混合比例按日归一化。滞后扫描在 测试 2b 堆栈上以 1–5 天恒定滞后运行；每个滞后都是确定性的，因此 30 个种子完全重合。</p>
+<h2>10. 可复现性</h2>
+<p>全部测试都在同一段 6.2 年的日线数据上运行未改动的生产引擎，每 场景 30 次独立运行。测试脚本、图表生成器与原始结果数据保存在 引擎的内部研究工具中；本文每个数字都是这 30 次运行的中位数。</p>
 <hr>
-<p><em>这是 v14 去杠杆防护盾五项计划压力测试中的第一项。 按 §5 的批评，测试 2 从定投抖动转向信号执行滞后 — 本系列中第一个 真正可能失败的测试 — 而它交出了第一次失败：持续 3 天的信号滞后打破 夏普门槛。测试 2b 随后在生产 KKT 60/40 堆栈上重跑了同样的误差， 那里每一个误差场景都打破最大回撤门槛 — 当日执行信号是唯一能通过 的做法。 <a href="https://aqmath.xyz">查看完整测试计划</a>了解其余四项。</em></p>
+<p><em>这是 v14 去杠杆防护盾五项计划压力测试中的第一项。 按 §5 的批评，测试 2 从定投抖动转向信号执行滞后 — 本系列中第一个 真正可能失败的测试 — 而它交出了第一次失败：持续 3 天的信号滞后打破 夏普门槛。测试 2b 随后在生产 KKT 60/40 堆栈上重跑了同样的误差， 那里每一个误差场景都打破最大回撤门槛。测试 2c 运行了读者提出的 冻结权重对照与滞后扫描：冻结权重后仍有 3/4 场景失败，连 1 天滞后 都打破最大回撤门槛 — 当日执行信号依然是唯一能通过的做法。 <a href="https://aqmath.xyz">查看完整测试计划</a>了解其余四项。</em></p>
 </main>
 
 <footer class="site-footer">
