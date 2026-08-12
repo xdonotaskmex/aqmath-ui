@@ -83,6 +83,8 @@ NEEDS_SIM_NOTICE = {
     "research/feed-sensitivity-zh.html",
     "research/dca-stress.html",
     "research/dca-stress-zh.html",
+    "research/static-vs-dynamic.html",
+    "research/static-vs-dynamic-zh.html",
 }
 
 FORBIDDEN_ORIGINS = [

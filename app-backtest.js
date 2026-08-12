@@ -12,6 +12,8 @@
 
 var btSlots = [null, null, null, null, null];
 var btCharts = {};
+var btEventsData = null;   // { v14: [...], v15: [...], v16: [...] }
+var btEventLabels = [];
 
 function btParseCSV(text) {
     var lines = text.trim().split('\n');
@@ -160,47 +162,111 @@ async function btRunBacktest() {
 
 function btRenderBacktest(data, inp) {
     var pr = data.pr, sim = data.sim, m1 = data.m1, m2 = data.m2, cfg = data.cfg;
+    var sim15 = data.sim15 || null, m15 = data.m15 || null;
+    var sim16 = data.sim16 || null, m16 = data.m16 || null;
     var days = pr.rets_length;
     var years = days / 365.25;
     var dcaAmt = inp.dca_amount, dcaInt = inp.dca_interval;
     var dateLabels = pr.dates.slice(1);
 
     var redeploys = sim.events.filter(function(e) { return e.type === 'REDEPLOY'; });
-    var expFracs = sim.expT.map(function(v) { return cfg.risk_budget > 0 ? v / cfg.risk_budget : 0; });
-    var avgExp = expFracs.length ? expFracs.reduce(function(s, v) { return s + v; }, 0) / expFracs.length : 0;
-    var minExp = expFracs.length ? Math.min.apply(null, expFracs) : 0;
+    function expFracs(s) {
+        return s.expT.map(function(v) { return cfg.risk_budget > 0 ? v / cfg.risk_budget : 0; });
+    }
+    function expStats(s) {
+        var f = expFracs(s);
+        if (!f.length) return { avg: 0, min: 0 };
+        return { avg: f.reduce(function(a, v) { return a + v; }, 0) / f.length,
+                 min: Math.min.apply(null, f) };
+    }
+    var v14x = expStats(sim);
 
-    btShowStatus('Done: ' + days + ' days, ' + pr.n + ' tokens (' + pr.syms.join(', ') + '), ' + sim.dcaN + ' DCA, ' + sim.shDays + ' defensive days', 'success');
+    // The three engines run on identical terms; B&H is the reference only.
+    var engines = [
+        { key: 'v14', label: 'Deleverage v14', tag: 'production', m: m1, s: sim, color: '#06b6d4' },
+        { key: 'v15', label: 'CORR Regime v15', tag: 'beta', m: m15, s: sim15, color: '#a855f7' },
+        { key: 'v16', label: 'Trough-Tranche v16', tag: 'beta', m: m16, s: sim16, color: '#34d399' }
+    ].filter(function(e) { return e.m && e.s; });
+    var best = engines.reduce(function(a, b) { return b.m.cal > a.m.cal ? b : a; });
+
+    var finals = engines.map(function(e) { return e.key + ' $' + e.m.final.toLocaleString(undefined, { maximumFractionDigits: 0 }); });
+    btShowStatus('Done: ' + days + ' days, ' + pr.n + ' tokens (' + pr.syms.join(', ') + ') — final: '
+        + finals.join(' · ') + ' · B&H $' + m2.final.toLocaleString(undefined, { maximumFractionDigits: 0 }), 'success');
 
     // Strategy comparison — scored on Calmar + Sharpe (B&H shown as reference only)
     var sr = document.getElementById('btStrategyRow');
     sr.innerHTML = '';
-    var c1 = document.createElement('div');
-    c1.className = 'bt-strategy-card bt-best';
-    c1.innerHTML = '<h3>Deleverage Modulator \u2605</h3>'
-        + '<div class="bt-big" style="color:var(--blue)">Calmar ' + m1.cal.toFixed(2) + '</div>'
-        + '<div class="bt-sub">Max DD: ' + (m1.mdd * 100).toFixed(1) + '% | Sharpe: ' + m1.sh.toFixed(2) + '</div>'
-        + '<div class="bt-sub">Final: $' + m1.final.toLocaleString(undefined, { maximumFractionDigits: 0 }) + ' | Return: ' + (m1.ret * 100).toFixed(1) + '%</div>'
-        + '<div class="bt-sub">Avg exposure: ' + (avgExp * 100).toFixed(0) + '% | Defensive: ' + sim.shDays + '/' + days + ' days</div>'
-        + '<div class="bt-sub" style="color:var(--amber)">Fees: $' + sim.totalFees.toFixed(0) + ' (' + sim.rebN + ' rebalances, ' + redeploys.length + ' redeploys)</div>';
-    sr.appendChild(c1);
+    engines.forEach(function(e) {
+        var isBest = e.key === best.key;
+        var es = expStats(e.s);
+        var c = document.createElement('div');
+        c.className = 'bt-strategy-card' + (isBest ? ' bt-best' : '');
+        var extra = e.key === 'v16' ? ', ' + (e.s.episodes || 0) + ' episodes' : '';
+        c.innerHTML = '<h3>' + e.label + (isBest ? ' \u2605' : '') + '</h3>'
+            + '<div class="bt-big" style="color:' + (isBest ? 'var(--green)' : 'var(--blue)') + '">Calmar ' + e.m.cal.toFixed(2) + '</div>'
+            + '<div class="bt-sub">' + e.tag + ' | Max DD: ' + (e.m.mdd * 100).toFixed(1) + '% | Sharpe: ' + e.m.sh.toFixed(2) + '</div>'
+            + '<div class="bt-sub">Final: $' + e.m.final.toLocaleString(undefined, { maximumFractionDigits: 0 }) + ' | Return: ' + (e.m.ret * 100).toFixed(1) + '%</div>'
+            + '<div class="bt-sub">Avg exposure: ' + (es.avg * 100).toFixed(0) + '% | Defensive: ' + e.s.shDays + '/' + days + ' days</div>'
+            + '<div class="bt-sub" style="color:var(--amber)">Fees: $' + e.s.totalFees.toFixed(0) + ' (' + e.s.rebN + ' rebalances' + extra + ')</div>';
+        sr.appendChild(c);
+    });
 
     var c2 = document.createElement('div');
     c2.className = 'bt-strategy-card';
     c2.innerHTML = '<h3>Buy &amp; Hold + DCA (reference)</h3>'
         + '<div class="bt-big" style="color:var(--amber)">Calmar ' + m2.cal.toFixed(2) + '</div>'
-        + '<div class="bt-sub">Max DD: ' + (m2.mdd * 100).toFixed(1) + '% | Sharpe: ' + m2.sh.toFixed(2) + '</div>'
+        + '<div class="bt-sub">reference | Max DD: ' + (m2.mdd * 100).toFixed(1) + '% | Sharpe: ' + m2.sh.toFixed(2) + '</div>'
         + '<div class="bt-sub">Final: $' + m2.final.toLocaleString(undefined, { maximumFractionDigits: 0 }) + ' | Return: ' + (m2.ret * 100).toFixed(1) + '%</div>'
+        + '<div class="bt-sub">Avg exposure: 100% | Defensive: 0/' + days + ' days</div>'
         + '<div class="bt-sub" style="color:var(--amber)">Fees: $' + sim.bhFees.toFixed(0) + ' (DCA only)</div>';
     sr.appendChild(c2);
 
-    var ddCut = ((m2.mdd - m1.mdd) * 100).toFixed(1);
-    document.getElementById('btCompareExplain').innerHTML = 'Scored on <strong>Calmar</strong> and <strong>Sharpe</strong> (not on beating Buy &amp; Hold). Modulator Calmar <strong>' + m1.cal.toFixed(2) + '</strong>, Sharpe <strong>' + m1.sh.toFixed(2) + '</strong>, Max DD <strong>' + (m1.mdd * 100).toFixed(1) + '%</strong> — a <strong>' + ddCut + 'pp</strong> drawdown reduction vs the B&amp;H reference (' + (m2.mdd * 100).toFixed(1) + '%). Both received identical DCA ($' + dcaAmt + ' every ' + dcaInt + 'd, total $' + (sim.dcaN * dcaAmt).toLocaleString() + ').';
+    var ddCuts = engines.map(function(e) {
+        return e.label.split(' ')[0] + ' <strong>' + ((m2.mdd - e.m.mdd) * 100).toFixed(1) + 'pp</strong>';
+    });
+    var macroInt = pr.macro_interval_days || 180;
+    document.getElementById('btCompareExplain').innerHTML = 'All engines ran the <strong>same basket, capital and DCA</strong> ($' + dcaAmt + ' every ' + dcaInt + 'd, total $' + (sim.dcaN * dcaAmt).toLocaleString() + '). Scored on <strong>Calmar</strong> and <strong>Sharpe</strong> (not on beating Buy &amp; Hold). Best on Calmar: <strong>' + best.label + '</strong> (' + best.m.cal.toFixed(2) + ', Sharpe ' + best.m.sh.toFixed(2) + '). Drawdown reduction vs the B&amp;H reference (' + (m2.mdd * 100).toFixed(1) + '%): ' + ddCuts.join(' · ') + '. The basket follows the production <strong>' + macroInt + '-day macro loop</strong> &mdash; a KKT risk-parity re-optimisation every ' + macroInt + ' days (<strong>' + (pr.macro_reopts || 0) + '</strong> re-opts in this window).';
+
+    // Head-to-head metrics table (engines vs B&H reference)
+    var ct = document.getElementById('btCompareTable');
+    if (ct) {
+        function money(v) { return '$' + v.toLocaleString(undefined, { maximumFractionDigits: 0 }); }
+        var cols = engines.concat([{ key: 'bh', label: 'Buy & Hold', m: m2, s: null }]);
+        var rows = [
+            { l: 'Final Value', get: function(c) { return c.m.final; }, fmt: money, hi: true },
+            { l: 'Total Return', get: function(c) { return c.m.ret; }, fmt: function(v) { return (v * 100).toFixed(1) + '%'; }, hi: true },
+            { l: 'Ann. Return', get: function(c) { return c.m.ann; }, fmt: function(v) { return (v * 100).toFixed(1) + '%'; }, hi: true },
+            { l: 'XIRR', get: function(c) { return c.m.xi; }, fmt: function(v) { return (v * 100).toFixed(1) + '%'; }, hi: true },
+            { l: 'Max Drawdown', get: function(c) { return c.m.mdd; }, fmt: function(v) { return (v * 100).toFixed(1) + '%'; }, hi: false },
+            { l: 'Calmar', get: function(c) { return c.m.cal; }, fmt: function(v) { return v.toFixed(2); }, hi: true },
+            { l: 'Sharpe', get: function(c) { return c.m.sh; }, fmt: function(v) { return v.toFixed(2); }, hi: true },
+            { l: 'Defensive Days', get: function(c) { return c.s ? c.s.shDays : 0; }, fmt: function(v) { return String(v); }, hi: false },
+            { l: 'Rebalances', get: function(c) { return c.s ? c.s.rebN : 0; }, fmt: function(v) { return String(v); }, hi: false },
+            { l: 'Total Fees', get: function(c) { return c.s ? c.s.totalFees : sim.bhFees; }, fmt: function(v) { return '$' + v.toFixed(0); }, hi: false }
+        ];
+        var html = '<table class="bt-wf-grid"><thead><tr><th>Metric</th>';
+        cols.forEach(function(c) { html += '<th>' + c.label + '</th>'; });
+        html += '</tr></thead><tbody>';
+        rows.forEach(function(r) {
+            var vals = cols.map(function(c) { return r.get(c); });
+            var engVals = vals.slice(0, engines.length);   // best among engines only
+            var bv = r.hi ? Math.max.apply(null, engVals) : Math.min.apply(null, engVals);
+            html += '<tr><th>' + r.l + '</th>';
+            cols.forEach(function(c, ci) {
+                var v = vals[ci];
+                var isB = ci < engines.length && v === bv;
+                html += '<td' + (isB ? ' class="bt-cell-good"' : '') + '>' + r.fmt(v) + '</td>';
+            });
+            html += '</tr>';
+        });
+        html += '</tbody></table>';
+        ct.innerHTML = html;
+    }
 
     // Summary explain
-    document.getElementById('btSummaryExplain').innerHTML = '<strong>' + pr.n + ' tokens</strong> (' + escapeHtml(pr.syms.join(', ')) + ') over <strong>' + days + ' days</strong> (~' + years.toFixed(1) + 'y). Defensive (exposure &lt; ' + (cfg.redeploy_thresh * 100).toFixed(0) + '%) on <strong>' + sim.shDays + '</strong>/' + days + ' days. Avg exposure <strong>' + (avgExp * 100).toFixed(0) + '%</strong>, min <strong>' + (minExp * 100).toFixed(0) + '%</strong>. <strong>' + sim.dcaN + '</strong> DCA events, <strong>' + redeploys.length + '</strong> cash redeploys.';
+    document.getElementById('btSummaryExplain').innerHTML = '<strong>' + pr.n + ' tokens</strong> (' + escapeHtml(pr.syms.join(', ')) + ') over <strong>' + days + ' days</strong> (~' + years.toFixed(1) + 'y). v14 (production): defensive (exposure &lt; ' + (cfg.redeploy_thresh * 100).toFixed(0) + '%) on <strong>' + sim.shDays + '</strong>/' + days + ' days, avg exposure <strong>' + (v14x.avg * 100).toFixed(0) + '%</strong>, <strong>' + sim.dcaN + '</strong> DCA events, <strong>' + redeploys.length + '</strong> cash redeploys.' + (sim15 ? ' v15: ' + sim15.shDays + ' defensive days, ' + sim15.rebN + ' rebalances.' : '') + (sim16 ? ' v16: ' + sim16.shDays + ' defensive days, ' + (sim16.episodes || 0) + ' episodes.' : '');
 
-    // Metrics grid
+    // Metrics grid (v14 production detail)
     var mg = document.getElementById('btMetricsGrid');
     mg.innerHTML = '';
     var metrics = [
@@ -213,8 +279,8 @@ function btRenderBacktest(data, inp) {
         { l: 'Max DD', v: (m1.mdd * 100).toFixed(1) + '%', c: m1.mdd > 0.40 ? 'bad' : m1.mdd > 0.25 ? 'warn' : 'good' },
         { l: 'Calmar', v: m1.cal.toFixed(2), c: m1.cal > 1.5 ? 'good' : m1.cal > 1 ? 'warn' : '' },
         { l: 'Sharpe', v: m1.sh.toFixed(2), c: m1.sh > 1 ? 'good' : '' },
-        { l: 'Avg Exposure', v: (avgExp * 100).toFixed(0) + '%', c: '' },
-        { l: 'Min Exposure', v: (minExp * 100).toFixed(0) + '%', c: '' },
+        { l: 'Avg Exposure', v: (v14x.avg * 100).toFixed(0) + '%', c: '' },
+        { l: 'Min Exposure', v: (v14x.min * 100).toFixed(0) + '%', c: '' },
         { l: 'Defensive Days', v: sim.shDays, c: '' },
         { l: 'DCA Events', v: sim.dcaN, c: '' },
         { l: 'Cash Redeploys', v: redeploys.length, c: '' },
@@ -290,21 +356,21 @@ function btRenderBacktest(data, inp) {
         };
     };
 
-    // Equity curves
+    // Equity curves — all three engines + B&H reference
+    var eqDatasets = [
+        { label: 'Deleverage v14', data: sim.eqA.slice(1), borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.08)', fill: true, pointRadius: 0, borderWidth: 2 }
+    ];
+    if (sim15) eqDatasets.push({ label: 'CORR Regime v15', data: sim15.eqA.slice(1), borderColor: '#a855f7', fill: false, pointRadius: 0, borderWidth: 1.5 });
+    if (sim16) eqDatasets.push({ label: 'Trough-Tranche v16', data: sim16.eqA.slice(1), borderColor: '#34d399', fill: false, pointRadius: 0, borderWidth: 1.5 });
+    eqDatasets.push({ label: 'Buy & Hold + DCA', data: sim.eqB.slice(1), borderColor: '#fbbf24', borderDash: [4, 3], fill: false, pointRadius: 0, borderWidth: 1.5 });
     btCharts.eq = new Chart(document.getElementById('btEquityChart'), {
         type: 'line',
-        data: {
-            labels: dateLabels,
-            datasets: [
-                { label: 'Deleverage Modulator', data: sim.eqA.slice(1), borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.08)', fill: true, pointRadius: 0, borderWidth: 2 },
-                { label: 'Buy & Hold + DCA', data: sim.eqB.slice(1), borderColor: '#fbbf24', fill: false, pointRadius: 0, borderWidth: 1.5 }
-            ]
-        },
+        data: { labels: dateLabels, datasets: eqDatasets },
         options: (function() { var o = cO(); o.scales.y.ticks.callback = function(v) { return '$' + (v >= 1e3 ? (v / 1e3).toFixed(0) + 'k' : v.toFixed(0)); }; return o; })(),
         plugins: [emergencyBrakePlugin]
     });
 
-    // Capital breakdown
+    // Capital breakdown (v14 production engine)
     var tokInv = sim.invA.map(function(v, i) { return v - sim.usdcT[i]; });
     btCharts.cap = new Chart(document.getElementById('btCapitalChart'), {
         type: 'line',
@@ -319,39 +385,54 @@ function btRenderBacktest(data, inp) {
         options: (function() { var o = cO(); o.scales.y.stacked = true; o.scales.y.ticks.callback = function(v) { return '$' + v.toLocaleString(); }; return o; })()
     });
 
-    // Exposure + Shield status (merged) — stepped:'before' for instant transitions
+    // Exposure — all three engines (held exposure × risk budget)
+    var expDatasets = [
+        { label: 'v14', data: sim.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#06b6d4', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' }
+    ];
+    if (sim15) expDatasets.push({ label: 'v15', data: sim15.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#a855f7', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' });
+    if (sim16) expDatasets.push({ label: 'v16', data: sim16.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#34d399', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' });
     btCharts.exp = new Chart(document.getElementById('btExposureChart'), {
         type: 'line',
-        data: {
-            labels: dateLabels,
-            datasets: [
-                { label: 'Exposure', data: sim.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.15)', fill: true, pointRadius: 0, borderWidth: 1.5, stepped: 'before', yAxisID: 'y' },
-                { label: 'Shield', data: sim.shT, borderColor: function(ctx) { return ctx.raw ? '#f87171' : '#34d399'; }, backgroundColor: function(ctx) { return ctx.raw ? 'rgba(248,113,113,0.2)' : 'rgba(52,211,153,0.05)'; }, fill: true, pointRadius: 0, borderWidth: 1, stepped: true, yAxisID: 'y1' }
-            ]
-        },
+        data: { labels: dateLabels, datasets: expDatasets },
         options: (function() {
             var o = cO();
             o.scales.y = { min: 0, max: 100, ticks: { color: '#7a8ba5', callback: function(v) { return v + '%'; } }, grid: { color: '#1c2128' } };
-            o.scales.y1 = { position: 'right', min: -0.1, max: 1.2, ticks: { color: '#7a8ba5', callback: function(v) { return v >= 0.5 ? 'ON' : 'OFF'; } }, grid: { display: false } };
             return o;
         })(),
         plugins: [emergencyBrakePlugin]
     });
 
-    // Event log
-    // (volatility / drawdown signal charts removed — raw modulator inputs are server-side IP)
-    sim.events.sort(function(a, b) { return a.day - b.day; });
-    var tbody = document.querySelector('#btEventsTable tbody');
-    tbody.innerHTML = '';
-    sim.events.forEach(function(e) {
-        var tr = document.createElement('tr');
-        var dt = dateLabels[e.day - 1] || ('day ' + e.day);
-        tr.innerHTML = '<td>' + dt + '</td><td>' + e.day + '</td><td class="bt-ev-' + escapeHtml(e.type.toLowerCase().replace('+', '-')) + '">' + escapeHtml(e.type) + '</td><td>' + (e.eff * 100).toFixed(1) + '%</td><td>$' + (e.usdc || 0).toFixed(0) + '</td><td>' + escapeHtml(e.detail) + '</td>';
-        tbody.appendChild(tr);
-    });
+    // Event log — per-engine selector (v14 shown first)
+    btEventsData = { v14: sim.events.slice() };
+    if (sim15) btEventsData.v15 = sim15.events.slice();
+    if (sim16) btEventsData.v16 = sim16.events.slice();
+    btEventLabels = dateLabels;
+    var evSel = document.getElementById('btEventsEngine');
+    if (evSel) evSel.value = 'v14';
+    btRenderEvents('v14');
 
     document.getElementById('btResultsSection').classList.remove('hidden');
     document.getElementById('btResultsSection').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Render one engine's event table (called by the engine <select>).
+function btRenderEvents(key) {
+    if (!btEventsData || !btEventsData[key]) return;
+    var events = btEventsData[key].slice();
+    events.sort(function(a, b) { return a.day - b.day; });
+    var tbody = document.querySelector('#btEventsTable tbody');
+    tbody.innerHTML = '';
+    events.forEach(function(e) {
+        var tr = document.createElement('tr');
+        var dt = btEventLabels[e.day - 1] || ('day ' + e.day);
+        tr.innerHTML = '<td>' + dt + '</td><td>' + e.day + '</td><td class="bt-ev-' + escapeHtml(e.type.toLowerCase().replace('+', '-')) + '">' + escapeHtml(e.type) + '</td><td>' + (e.eff * 100).toFixed(1) + '%</td><td>$' + (e.usdc || 0).toFixed(0) + '</td><td>' + escapeHtml(e.detail) + '</td>';
+        tbody.appendChild(tr);
+    });
+}
+
+function btEventsEngineChange() {
+    var el = document.getElementById('btEventsEngine');
+    if (el) btRenderEvents(el.value);
 }
 
 // ============================================================
@@ -420,13 +501,13 @@ function btRenderWFGrid(data) {
             var cls = isB ? 'bt-cell-good' : (mk === 'maxdd' && v > 0.5 ? 'bt-cell-bad' : 'bt-cell-mid');
             html += '<td class="' + cls + '">' + metFmt(v) + '</td>';
         }
-        var any = row[0];
+        var any = row.filter(function(r) { return r[mk] === rowBest; })[0] || row[0];
         html += '<td>' + (any ? any.defDays : 0) + '</td><td>' + (any ? any.redeploys : 0) + '</td></tr>';
     }
     html += '</tbody></table>';
 
     var best = data.best;
-    html += '<div class="bt-explain" style="margin-top:12px"><strong>Best:</strong> ' + data.sweep_label + '=' + swFmt(best.sv) + ', ' + data.cross_label + '=' + crFmt(best.cv) + ' \u2192 ' + data.metric_label + ': ' + metFmt(bestVal) + ' (ranked by ' + data.metric_label + '; illustrative sweep around a neutral baseline \u2014 not the production preset).</div>';
+    html += '<div class="bt-explain" style="margin-top:12px"><strong>Best:</strong> ' + data.sweep_label + '=' + swFmt(best.sv) + ', ' + data.cross_label + '=' + crFmt(best.cv) + ' \u2192 ' + data.metric_label + ': ' + metFmt(bestVal) + ' (ranked by ' + data.metric_label + '; illustrative sweep of the v14 modulator around a neutral baseline \u2014 not the production preset. The v15/v16 betas run fixed knee configs and are not swept.) Def Days / Redeploys show the best cell of each row.</div>';
 
     document.getElementById('btWfGridContainer').innerHTML = html;
     document.getElementById('btWfSection').classList.remove('hidden');
@@ -447,5 +528,6 @@ window.btRemoveSlot = btRemoveSlot;
 window.btRunBacktest = btRunBacktest;
 window.btRunWFGrid = btRunWFGrid;
 window.btResetAll = btResetAll;
+window.btEventsEngineChange = btEventsEngineChange;
 
 })();

@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=29299c3706">
+    <link rel="stylesheet" href="/styles.min.css?v=144958d94b">
 </head>
 <body>
 
@@ -176,8 +176,9 @@
     <div class="bt-head">
         <div class="bt-kicker">Interactive Walk-Forward Backtest</div>
         <h1 class="bt-title">Backtest the Deleverage Shield on Your Own Data</h1>
-        <p class="bt-intro">Upload your own historical price CSVs for up to five tokens and run the <strong>exact deleverage modulator that ships in production (v14.0)</strong> against plain Buy &amp; Hold. Both strategies get identical DCA capital on the same schedule, so the only difference you see is the exposure control itself &mdash; how far drawdown and downside volatility pull risk off the table, and what that costs in upside.</p>
+        <p class="bt-intro">Upload your own historical price CSVs for up to five tokens and run <strong>three engines in parallel on identical terms</strong>: the production Deleverage Shield <strong>(v14.0)</strong>, the correlation-regime beta <strong>(v15)</strong> and the trough-tranche beta <strong>(v16)</strong> &mdash; all against plain Buy &amp; Hold. Every engine gets identical DCA capital on the same schedule, so the only difference you see is the exposure control itself &mdash; how far each rule pulls risk off the table in stress, and what that costs in upside.</p>
         <p class="bt-intro">Your CSV file never leaves your machine: it is parsed <strong>in your browser</strong>, and only the resulting price series is sent to the engine, where it is processed in-memory and discarded &mdash; never stored, never logged. The run happens on the server because the modulator's parameters stay there and are never shipped to the browser. Results are scored on <strong>risk-adjusted return</strong> (Sharpe and Calmar), not on whether they beat Buy &amp; Hold in raw percent.</p>
+        <div class="rv-v15-notice" data-i18n-html="bt.enginesNotice"><span class="rv-v15-tag">NEW ENGINES UNDER TEST</span> v15 and v16 Beta are now paper trading <strong>live, in parallel with v14</strong> &mdash; and this backtest now runs all three engines side by side on identical terms: the frozen v14 production Shield, the correlation-regime protection (v15) and the trough-tranche recovery shield (v16). <strong>v14 is completely unchanged.</strong> The live forward-log comparison is at the bottom of the Results page.</div>
         <p class="sim-notice" data-i18n-html="bt.simNotice"><strong>Hypothetical results.</strong> This page computes a simulation from the price history you upload. A backtest applies a strategy to the past with complete knowledge of how that period turned out &mdash; knowledge nobody had at the time &mdash; and it ignores slippage, spreads and taxes, though it does charge a simulated 0.1% exchange fee on every rebalance, DCA buy and redeployment. Hypothetical and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software for your own analysis: it is not investment advice, not a recommendation to buy or sell any asset, and it never places orders or holds funds.</p>
     </div>
 
@@ -196,7 +197,7 @@
         </div>
         <div class="tc-body">
             <div class="bt-explain bt-explain-intro" data-i18n-html="bt.intro">
-                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). The engine runs the exact same deleverage modulator <strong>(v14.0 &mdash; validated on 5-token 8.7y real data)</strong> used in production. Both strategies receive <strong>identical DCA capital</strong> on the same schedule. <strong>Buy &amp; Hold</strong> buys tokens unconditionally and stays fully exposed. <strong>Deleverage</strong> scales exposure <strong>continuously</strong> off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It <strong>moves exposure smoothly toward its target every bar</strong> in either direction, with no hard floor, redeploying parked DCA cash automatically once exposure recovers. v14 adds <strong>threshold rebalancing</strong> &mdash; a deadband that skips trades when the target barely moves, cutting rebalances ~64%. It is scored on <strong>risk-adjusted return (Sharpe)</strong>, not on beating Buy &amp; Hold.
+                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). Every run executes <strong>three engines in parallel</strong> on the exact same basket, capital and DCA schedule: <strong>Deleverage v14.0</strong> (the production modulator &mdash; continuous drawdown + downside-vol de-risking), <strong>CORR Regime v15</strong> (beta &mdash; trailing pairwise-correlation regime with a both-agree crash guard) and <strong>Trough-Tranche v16</strong> (beta &mdash; event-driven episodes with tranched trough recovery). <strong>Buy &amp; Hold</strong> buys tokens unconditionally and stays fully exposed. The basket follows the same <strong>180-day macro loop</strong> as production &mdash; a KKT risk-parity re-optimisation every 180 days on the trailing 180-day window. All engines charge the same simulated fees, redeploy parked DCA cash the same way, and are scored on <strong>risk-adjusted return (Sharpe and Calmar)</strong>, not on beating Buy &amp; Hold.
             </div>
             <!-- v14.0 continuous DD + downside-vol modulator flow -->
             <svg class="bt-flow-svg" viewBox="0 0 900 148" role="img" aria-label="Deleverage v14.0 continuous drawdown and downside-volatility modulator flow" preserveAspectRatio="xMidYMid meet">
@@ -291,6 +292,7 @@
             <div class="tc-body">
                 <div class="bt-explain bt-explain-sm" id="btCompareExplain"></div>
                 <div class="bt-strategy-row" id="btStrategyRow"></div>
+                <div id="btCompareTable" style="overflow-x:auto;margin-top:14px"></div>
             </div>
         </div>
 
@@ -323,7 +325,9 @@
         <div class="tc bt-card">
             <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--event-log</span></div>
             <div class="tc-body" style="padding:0;">
-                <div class="bt-explain bt-explain-sm" style="margin:12px 16px 0;"><span style="color:var(--blue);font-weight:700">DCA</span> (cyan) = periodic contribution &mdash; buys tokens when risk-on, parks to USDC when defensive (exposure &lt; 40%) | <span style="color:var(--green);font-weight:600">REDEPLOY</span> (green) = parked cash returns to tokens once exposure recovers &ge; 40%.</div>
+                <div class="bt-explain bt-explain-sm" style="margin:12px 16px 0;"><span style="color:var(--blue);font-weight:700">DCA</span> (cyan) = periodic contribution &mdash; buys tokens when risk-on, parks to USDC when defensive (exposure &lt; 40%) | <span style="color:var(--green);font-weight:600">REDEPLOY</span> (green) = parked cash returns to tokens once exposure recovers &ge; 40%.
+                    <span style="float:right"><label style="color:var(--muted);font-size:.75rem;margin-right:6px">Engine</label><select id="btEventsEngine" data-change="btEventsEngineChange" style="background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-family:var(--mono);font-size:.75rem"><option value="v14">Deleverage v14</option><option value="v15">CORR Regime v15</option><option value="v16">Trough-Tranche v16</option></select></span>
+                </div>
                 <div style="max-height:400px;overflow-y:auto;padding:0 16px 16px;">
                     <table class="bt-events-table" id="btEventsTable">
                         <thead><tr><th>Date</th><th>Day</th><th>Event</th><th>Exposure</th><th>USDC</th><th>Detail</th></tr></thead>
@@ -381,7 +385,7 @@
     <div class="logo-box-mini">AQ</div>
     <span>AQMath 2026</span>
     <span style="margin-left:12px;color:var(--dim);">|</span>
-    <span>Backtesting Engine v14.0</span>
+    <span>Backtesting Engines v14 / v15 / v16</span>
 </footer>
 
 </div><!-- /backtestView -->
@@ -400,10 +404,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=29299c3706"></script>
-<script defer src="/app-backtest.js?v=29299c3706"></script>
-<script defer src="/app.js?v=29299c3706"></script>
-<script defer src="/app-notify.js?v=29299c3706"></script>
+<script defer src="/app-widgets.js?v=144958d94b"></script>
+<script defer src="/app-backtest.js?v=144958d94b"></script>
+<script defer src="/app.js?v=144958d94b"></script>
+<script defer src="/app-notify.js?v=144958d94b"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -417,8 +421,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=29299c3706"></script>
-<script defer src="/app-boot.js?v=29299c3706"></script>
+<script defer src="/vendor/i18next.min.js?v=144958d94b"></script>
+<script defer src="/app-boot.js?v=144958d94b"></script>
 
 </body>
 </html>

@@ -163,6 +163,41 @@ DOCS = [
         "altLabel": "English",
     },
     {
+        "src": "static-vs-dynamic.md",
+        "out": "static-vs-dynamic.html",
+        "path": "/research/static-vs-dynamic",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-08-12",
+        "title": "Static vs. Dynamic: The Test the Shield Only Half-Passed - AQMath",
+        "shortTitle": "Static vs. Dynamic &mdash; Shield vs the 60/40 Humans Actually Hold",
+        "description": ("Crown Test 2: Shield v14 vs static crypto/stablecoin splits at three levels "
+                        "of human-ness - a robot (yearly rebalance), a drawer (never touched) and a "
+                        "human (capitulates when the pain breaks them, 30 seeds). Gates 2/4: MaxDD "
+                        "34.2% vs 60.7-81.1% and the best Calmar of all nine strategies pass; the "
+                        "robot 60/40's higher Sharpe (0.621 vs 0.493) and doubled equity fail. But "
+                        "zero of 30 simulated humans held the plan - every one capitulated 3-5 times "
+                        "and gave up $12.5k-$16.4k of equity."),
+        "altLabel": "中文",
+    },
+    {
+        "src": "static-vs-dynamic.zh-CN.md",
+        "out": "static-vs-dynamic-zh.html",
+        "path": "/research/static-vs-dynamic-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-08-12",
+        "title": "静态 vs 动态：防护盾只通过了一半的测试 - AQMath",
+        "shortTitle": "静态 vs 动态 &mdash; 防护盾对真人持有的 60/40",
+        "description": ("皇冠测试 2：Shield v14 对静态 加密币/稳定币 分配，按三种\u201c像人程度\u201d"
+                        "测试 — 机器人（年度再平衡）、抽屉党（从不触碰）与真人（疼到投降，"
+                        "30 个种子）。门槛 2/4：MaxDD 34.2% 对 60.7–81.1% 与九个策略中最高"
+                        "的 Calmar 通过；机器人 60/40 的更高夏普（0.621 对 0.493）与翻倍权益"
+                        "失败。但 30 个模拟人类没有一个撑住计划 — 每人投降 3–5 次，放弃"
+                        "$12.5k–$16.4k 的权益。"),
+        "altLabel": "English",
+    },
+    {
         "src": "feed-sensitivity.md",
         "out": "feed-sensitivity.html",
         "path": "/research/feed-sensitivity",
