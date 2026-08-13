@@ -471,8 +471,17 @@ function loadState() {
             const data = JSON.parse(saved);
             if (data.portfolio && Array.isArray(data.portfolio)) {
                 // Drop entries persisted before symbol validation existed.
+                // Default every numeric field render()/calcToken() read, so a
+                // legacy/minimal saved shape can never crash the table.
                 portfolio = data.portfolio.filter(t => t && isValidSymbol(t.sym)).map(t => ({
                     ...t,
+                    amount: Number(t.amount) || 0,
+                    price: Number(t.price) || 0,
+                    target: Number(t.target) || 0,
+                    apy: Number(t.apy) || 0,
+                    entry: Number(t.entry) || 0,
+                    costBasis: Number(t.costBasis) || 0,
+                    coinId: t.coinId || '',
                     frozen: t.frozen || false,
                     // Ne perzistiraj stari history-warning flag preko reloada — ponovno se izračuna na sljedeći /optimize
                     insufficientHistory: false
@@ -781,15 +790,28 @@ const TOKEN_CG_MAP = {
     'PYTH': 'pyth-network',
 };
 
+// CoinGecko's free tier rate-limits aggressively (HTTP 429). Once any CG
+// call is throttled, every further CG call in the same sync is skipped for
+// CG_BACKOFF_MS — hammering the API only extends the ban and burns time on
+// calls that cannot succeed. Affected tokens simply keep their last price.
+let cgBackoffUntil = 0;
+const CG_BACKOFF_MS = 45000;
+function cgAllowed() { return Date.now() >= cgBackoffUntil; }
+function cgMarkThrottled(where, status) {
+    cgBackoffUntil = Date.now() + CG_BACKOFF_MS;
+    console.warn(`[AQMath] CoinGecko throttled (${status}) at ${where} — backing off ${CG_BACKOFF_MS / 1000}s`);
+}
+
 async function dohvatiCijenu(symbol) {
     const sym = symbol.toUpperCase();
     const cgId = TOKEN_CG_MAP[sym];
 
     // If token has a known CoinGecko ID, use it directly (skip Binance)
-    if (cgId) {
+    if (cgId && cgAllowed()) {
         try {
             const priceRes = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${cgId}&vs_currencies=usd`);
-            if (priceRes.ok) {
+            if (priceRes.status === 429) cgMarkThrottled(`direct:${sym}`, 429);
+            else if (priceRes.ok) {
                 const priceData = await priceRes.json();
                 if (priceData[cgId] && priceData[cgId].usd) {
                     return priceData[cgId].usd;
@@ -799,10 +821,11 @@ async function dohvatiCijenu(symbol) {
     }
 
     // If token is in CG map but ID is null, use CoinGecko search
-    if (sym in TOKEN_CG_MAP && !cgId) {
+    if (sym in TOKEN_CG_MAP && !cgId && cgAllowed()) {
         try {
             const searchRes = await fetch(`https://api.coingecko.com/api/v3/search?query=${sym}`);
-            if (searchRes.ok) {
+            if (searchRes.status === 429) cgMarkThrottled(`search:${sym}`, 429);
+            else if (searchRes.ok) {
                 const searchData = await searchRes.json();
                 if (searchData.coins && searchData.coins.length > 0) {
                     const coinId = searchData.coins[0].id;
@@ -818,7 +841,7 @@ async function dohvatiCijenu(symbol) {
         } catch(e) { /* CoinGecko search failed, fall through to Binance */ }
     }
 
-    // Try Binance (free, no key needed)
+    // Try Binance (free, no key needed) via the dca-engine CORS proxy
     try {
         const pair = sym + 'USDT';
         const res = await fetch(`${DCA_API_URL}/api/binance/price?symbol=${pair}`);
@@ -829,23 +852,26 @@ async function dohvatiCijenu(symbol) {
         }
     } catch(e) { /* Binance failed, try CoinGecko */ }
 
-    // Fallback: Try CoinGecko search
-    try {
-        const searchRes = await fetch(`https://api.coingecko.com/api/v3/search?query=${sym}`);
-        if (searchRes.ok) {
-            const searchData = await searchRes.json();
-            if (searchData.coins && searchData.coins.length > 0) {
-                const coinId = searchData.coins[0].id;
-                const priceRes = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd`);
-                if (priceRes.ok) {
-                    const priceData = await priceRes.json();
-                    if (priceData[coinId] && priceData[coinId].usd) {
-                        return priceData[coinId].usd;
+    // Fallback: Try CoinGecko search (skipped while throttled)
+    if (cgAllowed()) {
+        try {
+            const searchRes = await fetch(`https://api.coingecko.com/api/v3/search?query=${sym}`);
+            if (searchRes.status === 429) cgMarkThrottled(`final-search:${sym}`, 429);
+            else if (searchRes.ok) {
+                const searchData = await searchRes.json();
+                if (searchData.coins && searchData.coins.length > 0) {
+                    const coinId = searchData.coins[0].id;
+                    const priceRes = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd`);
+                    if (priceRes.ok) {
+                        const priceData = await priceRes.json();
+                        if (priceData[coinId] && priceData[coinId].usd) {
+                            return priceData[coinId].usd;
+                        }
                     }
                 }
             }
-        }
-    } catch(e) { /* CoinGecko also failed */ }
+        } catch(e) { /* CoinGecko also failed */ }
+    }
 
     return null;
 }
@@ -880,23 +906,36 @@ async function fetchCoinGeckoBatch() {
     const symById = {};
     Object.entries(TOKEN_CG_MAP).forEach(([sym, id]) => { if (id) symById[id] = sym; });
     const result = {};
-    try {
-        const url = `https://api.coingecko.com/api/v3/simple/price?ids=${ids.join(',')}&vs_currencies=usd`;
-        console.log('[AQMath] CoinGecko batch fetch:', ids.length, 'tokens');
-        const res = await fetch(url);
-        if (!res.ok) {
-            console.warn('[AQMath] CoinGecko batch failed:', res.status, res.statusText);
+    const url = `https://api.coingecko.com/api/v3/simple/price?ids=${ids.join(',')}&vs_currencies=usd`;
+    console.log('[AQMath] CoinGecko batch fetch:', ids.length, 'tokens');
+    // One retry after a short pause: a 429 on the first attempt is usually a
+    // burst limit that clears within seconds, and this single call is the
+    // only CG request that matters for the mapped tokens.
+    for (let attempt = 1; attempt <= 2; attempt++) {
+        if (!cgAllowed()) break;
+        try {
+            const res = await fetch(url);
+            if (res.status === 429) {
+                if (attempt === 1) { await sleep(2500); continue; }
+                cgMarkThrottled('batch', 429);
+                return result;
+            }
+            if (!res.ok) {
+                console.warn('[AQMath] CoinGecko batch failed:', res.status, res.statusText);
+                return result;
+            }
+            const data = await res.json();
+            ids.forEach(id => {
+                if (data[id] && data[id].usd) {
+                    result[symById[id]] = data[id].usd;
+                }
+            });
+            console.log('[AQMath] CoinGecko batch result:', Object.keys(result).length, 'prices fetched');
+            return result;
+        } catch(e) {
+            console.warn('[AQMath] CoinGecko batch error:', e.message);
             return result;
         }
-        const data = await res.json();
-        ids.forEach(id => {
-            if (data[id] && data[id].usd) {
-                result[symById[id]] = data[id].usd;
-            }
-        });
-        console.log('[AQMath] CoinGecko batch result:', Object.keys(result).length, 'prices fetched');
-    } catch(e) {
-        console.warn('[AQMath] CoinGecko batch error:', e.message);
     }
     return result;
 }
@@ -925,15 +964,21 @@ async function osvjeziSveCijene() {
             if (p) priceMap[t.sym] = p;
         }
         let cnt = 0;
+        const skipped = [];
         portfolio.forEach(t => {
             if (t.sym && priceMap[t.sym]) { t.price = priceMap[t.sym]; cnt++; }
-            if (['USDC','USDT','DAI','BUSD','TUSD','FDUSD','USDP'].includes(t.sym)) { t.price = 1.0; cnt++; }
+            else if (['USDC','USDT','DAI','BUSD','TUSD','FDUSD','USDP'].includes(t.sym)) { t.price = 1.0; cnt++; }
+            else if (t.sym) skipped.push(t.sym);
         });
         render();
         updatePortfolioATH();
         const cgCount = Object.keys(cgPrices).length;
-        console.log(`[AQMath] synced ${cnt} prices (${cgCount} from CoinGecko, rest from Binance)`);
-        showToast(`Prices updated for ${cnt} ${cnt === 1 ? 'coin' : 'coins'}.`, 'success');
+        console.log(`[AQMath] synced ${cnt} prices (${cgCount} from CoinGecko, rest from Binance)` + (skipped.length ? ` — no source for: ${skipped.join(', ')}` : ''));
+        if (skipped.length) {
+            showToast(`Prices updated for ${cnt} coins. No price source for: ${skipped.join(', ')}.`, 'warning');
+        } else {
+            showToast(`Prices updated for ${cnt} ${cnt === 1 ? 'coin' : 'coins'}.`, 'success');
+        }
     } catch(e) {
         console.error('[AQMath] price sync failed:', e.message);
         showToast("Couldn't refresh prices — please try again.", 'error');
