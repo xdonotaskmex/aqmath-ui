@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=2f85a33803">
+    <link rel="stylesheet" href="/styles.min.css?v=3ce287965d">
 </head>
 <body>
 
@@ -914,6 +914,34 @@
                         <div class="dl-lbl off" id="dlLabel">DELEVERAGE <span class="dl-pro-badge">BLACK</span></div>
                         <div class="dl-dsc" id="dlDesc">OFF — KKT weights pass through unmodified</div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BETA CHAT (shared internal chat, visible only to beta users).
+             Floating widget: the fab is fixed in the bottom-right corner and the
+             panel opens above it, so the chat never adds to the page length. -->
+        <button class="chat-fab hidden" id="chatFab" title="Beta chat" aria-label="Beta chat">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.35 8.5 8.5 0 0 1-3.4-.7L3 21l1.85-5.55A8.38 8.38 0 0 1 4 11.5a8.5 8.5 0 1 1 17 0z"/></svg>
+            <span class="chat-dot hidden" id="chatDot" title="New messages"></span>
+        </button>
+        <div class="tc chat-card chat-panel hidden collapsed" id="betaChat">
+            <div class="tc-bar chat-bar" title="Click to minimize">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title">BETA CHAT</span>
+                <span class="chat-chevron" id="chatChevron">&#9660;</span>
+            </div>
+            <div class="tc-body">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-empty" id="chatEmpty">No messages yet. Be the first to post!</div>
+                </div>
+                <div class="chat-input-row">
+                    <input type="text" id="chatInput" placeholder="Type message..." maxlength="200" autocomplete="off">
+                    <button class="btn blue chat-send" id="btnChatSend" data-action="sendChatMessage" title="Send" aria-label="Send">&#10148;</button>
+                </div>
+                <div class="chat-info">
+                    <span class="chat-counter">Shared with all beta users — last 20 messages</span>
+                    <button class="btn ghost chat-clear" id="btnChatClear" data-action="clearMyChatMessages" title="Delete my messages">CLEAR</button>
                 </div>
             </div>
         </div>
@@ -2520,10 +2548,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=2f85a33803"></script>
-<script defer src="/app-backtest.js?v=2f85a33803"></script>
-<script defer src="/app.js?v=2f85a33803"></script>
-<script defer src="/app-notify.js?v=2f85a33803"></script>
+<script defer src="/app-widgets.js?v=3ce287965d"></script>
+<script defer src="/app-backtest.js?v=3ce287965d"></script>
+<script defer src="/app.js?v=3ce287965d"></script>
+<script defer src="/app-notify.js?v=3ce287965d"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -2537,8 +2565,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=2f85a33803"></script>
-<script defer src="/app-boot.js?v=2f85a33803"></script>
+<script defer src="/vendor/i18next.min.js?v=3ce287965d"></script>
+<script defer src="/app-boot.js?v=3ce287965d"></script>
 
 </body>
 </html>

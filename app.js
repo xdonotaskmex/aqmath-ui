@@ -370,6 +370,7 @@ async function activateBeta() {
         // acknowledged; if not, the modal opens and only "I have read" closes it.
         if (typeof ensureHowAqmathAck === 'function') ensureHowAqmathAck();
         if (typeof refreshNotifyUI === 'function') refreshNotifyUI();
+        setTimeout(initChat, 0);  // reveal the shared chat now that isPro is set
     } catch(e) {
         console.error('[AQMath] beta activation failed:', e.message);
         showToast("Couldn't reach the activation service — please check your connection and try again.", 'error');
@@ -387,6 +388,7 @@ function deactivateBeta() {
     showToast('Beta access turned off.', 'notice');
     updateProButtons();
     render();
+    setTimeout(initChat, 0);  // hides the chat card together with the rest
 }
 
 function updateProButtons() {
@@ -428,6 +430,9 @@ function checkBetaUI() {
     // load is booted from the bottom of app-notify.js instead. Here it only
     // serves later auth changes (activate / deactivate).
     if (typeof refreshNotifyUI === 'function') refreshNotifyUI();
+    // Chat visibility follows the auth state too (deferred: initChat touches
+    // top-level `let` state that may not exist yet during the boot parse).
+    if (typeof initChat === 'function') setTimeout(initChat, 0);
 }
 
 // ========== BACKEND API URLs ==========
@@ -2354,6 +2359,171 @@ function render() {
     });
 })();
 
+// ============ BETA CHAT (shared, internal, server-backed) ============
+// All beta users see the same conversation, stored server-side in beta-auth
+// (capped ring buffer, newest 20 messages + the oldest one swept at the end
+// of each UTC day). Nothing is kept locally except the id of the last
+// message the user has looked at, for the unread badge.
+const CHAT_POLL_MS = 20000;
+const CHAT_MAX_BODY = 200;
+const CHAT_SEEN_KEY = 'aqmath_chat_last_seen';
+
+let chatMessages = [];
+let chatLastSeenId = 0;
+try { chatLastSeenId = parseInt(localStorage.getItem(CHAT_SEEN_KEY) || '0', 10) || 0; } catch (e) {}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+async function fetchChat() {
+    if (!isPro) return;
+    const token = getBetaToken();
+    if (!token) return;
+    try {
+        const res = await fetch(BETA_AUTH_URL + '/chat', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) return;  // session expired etc. — the auth watchdog handles it
+        const data = await res.json();
+        chatMessages = data.messages || [];
+        renderChat();
+        updateChatBadge();
+    } catch (e) { /* offline — retry on the next poll */ }
+}
+
+async function sendChatMessage() {
+    const input = document.getElementById('chatInput');
+    if (!input) return;
+    const body = input.value.trim();
+    if (!body) return;
+    const token = getBetaToken();
+    if (!token) { showToast('Please log in with your beta key first.', 'warning'); return; }
+    try {
+        const res = await fetch(BETA_AUTH_URL + '/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({ body })
+        });
+        if (res.status === 429) { showToast('Please wait a moment before posting again.', 'warning'); return; }
+        if (!res.ok) { const d = await res.json().catch(() => ({})); showToast(d.detail || 'Message failed to send.', 'error'); return; }
+        input.value = '';
+        await fetchChat();
+    } catch (e) { showToast('Message failed to send — check your connection.', 'error'); }
+}
+
+function renderChat() {
+    const container = document.getElementById('chatMessages');
+    const emptyEl = document.getElementById('chatEmpty');
+    if (!container) return;
+    if (chatMessages.length === 0) {
+        container.innerHTML = '';
+        if (emptyEl) { container.appendChild(emptyEl); emptyEl.classList.remove('hidden'); }
+        return;
+    }
+    if (emptyEl) emptyEl.classList.add('hidden');
+    container.innerHTML = chatMessages.map(msg => {
+        const t = new Date(msg.at);
+        const time = isNaN(t) ? '' : t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const mineCls = msg.mine ? ' mine' : '';
+        // Your own messages show no author — you know who wrote them.
+        const author = msg.mine ? '' : `<span class="chat-message-author">${escapeHtml(msg.author)}</span>`;
+        return `<div class="chat-message${mineCls}">`
+            + `<span class="chat-message-time">${time}</span>`
+            + author
+            + `<span class="chat-message-text">${escapeHtml(msg.body)}</span>`
+            + `</div>`;
+    }).join('');
+    container.scrollTop = container.scrollHeight;
+}
+
+function chatIsOpen() {
+    const card = document.getElementById('betaChat');
+    return !!card && !card.classList.contains('collapsed');
+}
+
+function markChatSeen() {
+    if (chatMessages.length) {
+        chatLastSeenId = chatMessages[chatMessages.length - 1].id;
+        try { localStorage.setItem(CHAT_SEEN_KEY, String(chatLastSeenId)); } catch (e) {}
+    }
+    updateChatBadge();
+}
+
+function updateChatBadge() {
+    // Green dot on the fab while there are unread messages and the panel is
+    // closed; opening the chat marks everything as seen.
+    const dot = document.getElementById('chatDot');
+    if (!dot) return;
+    const unseen = chatMessages.filter(m => m.id > chatLastSeenId).length;
+    dot.classList.toggle('hidden', !(unseen > 0 && !chatIsOpen()));
+}
+
+function toggleChat() {
+    const card = document.getElementById('betaChat');
+    if (!card) return;
+    card.classList.toggle('collapsed');
+    if (chatIsOpen()) { markChatSeen(); fetchChat(); }
+}
+
+async function clearMyChatMessages() {
+    // Clears ONLY the caller's own messages server-side (DELETE /chat); other
+    // users' messages stay. Then re-pulls the shared view.
+    if (!isPro) return;
+    const token = getBetaToken();
+    if (!token) { showToast('Please log in with your beta key first.', 'warning'); return; }
+    try {
+        const res = await fetch(BETA_AUTH_URL + '/chat', {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) { showToast('Could not clear chat — check your connection.', 'error'); return; }
+        const data = await res.json().catch(() => ({}));
+        showToast(`Your messages cleared (${data.deleted ?? 0}).`);
+        await fetchChat();
+    } catch (e) { showToast('Could not clear chat — check your connection.', 'error'); }
+}
+
+function initChat() {
+    const chatCard = document.getElementById('betaChat');
+    const fab = document.getElementById('chatFab');
+    if (!chatCard) return;
+    // position:fixed anchors to the nearest ancestor with backdrop-filter —
+    // the sidebar has one, so the widget must live directly on <body> to be
+    // pinned to the viewport's bottom-right corner.
+    if (fab && fab.parentElement !== document.body) document.body.appendChild(fab);
+    if (chatCard.parentElement !== document.body) document.body.appendChild(chatCard);
+    chatCard.classList.toggle('hidden', !isPro);
+    if (fab) fab.classList.toggle('hidden', !isPro);
+    if (!isPro) return;
+    chatCard.classList.add('collapsed');  // starts closed; the fab dot pulls attention
+
+    // Wire the controls once (initChat also re-runs on login/logout).
+    if (!chatCard.dataset.chatWired) {
+        chatCard.dataset.chatWired = '1';
+        if (fab) fab.addEventListener('click', toggleChat);
+        const bar = chatCard.querySelector('.tc-bar');
+        if (bar) bar.addEventListener('click', toggleChat);
+        const sendBtn = document.getElementById('btnChatSend');
+        const clearBtn = document.getElementById('btnChatClear');
+        const input = document.getElementById('chatInput');
+        if (sendBtn) sendBtn.addEventListener('click', sendChatMessage);
+        if (clearBtn) clearBtn.addEventListener('click', clearMyChatMessages);
+        if (input) input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+        // Poll only while the tab is actually visible.
+        setInterval(() => { if (!document.hidden) fetchChat(); }, CHAT_POLL_MS);
+    }
+    fetchChat();
+}
+
+// Deferred to a macrotask so the whole script (incl. the chat `let` state)
+// is evaluated first — a synchronous call during parse hits a TDZ error.
+setTimeout(initChat, 0);
+
 // ============ EXPOSE TO GLOBAL SCOPE (for HTML onclick handlers) ============
 Object.assign(window, {
     navigate,
@@ -2366,6 +2536,8 @@ Object.assign(window, {
     obrisiSve, distribuirajDca, confirmDca, cancelDca, optimizePortfolio,
     exportJSON, importJSON, refreshHistory,
     toggleFreeze, popuniFormu, obrisiToken,
+    // Chat (shared beta chat, server-backed)
+    sendChatMessage, toggleChat, clearMyChatMessages,
     // app-notify.js writes into the holdings table (frozen shield targets,
     // holdings restored from the account) and must be able to persist and
     // repaint it. app.js is an IIFE, so anything it does not export here is a
