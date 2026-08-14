@@ -839,56 +839,6 @@
             </div>
         </div>
 
-        <!-- RECORD TRADE -->
-        <div class="tc">
-            <div class="tc-bar">
-                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title" data-i18n="app.recordTrade">--record-trade</span>
-            </div>
-            <div class="tc-body">
-                <div class="fg">
-                    <label data-i18n="app.tradeToken">Token</label>
-                    <select id="iTradeSym"><option value="">&mdash;</option></select>
-                </div>
-                <div class="fg-row">
-                    <div class="fg">
-                        <label data-i18n="app.tradeAmt">Amount (tokens)</label>
-                        <input type="number" id="iBuyAmt" step="any" placeholder="0.00000000" min="0">
-                    </div>
-                    <div class="fg">
-                        <label data-i18n="app.tradePrice">Price ($) &mdash; Auto</label>
-                        <input type="number" id="iBuyPrice" step="any" placeholder="Empty = API">
-                    </div>
-                </div>
-                <div class="fg-row">
-                    <button class="btn green btn-trade" id="btnRecordBuy" data-action="recordBuy" data-i18n="app.recordBuy">[ Record Buy ]</button>
-                    <button class="btn red btn-trade" id="btnRecordSell" data-action="recordSell" data-i18n="app.recordSell">[ Record Sell ]</button>
-                </div>
-                <div class="fg-hint" data-i18n="app.tradeHint">Buy adds to the position, sell removes from it &mdash; avg price updates automatically</div>
-            </div>
-        </div>
-
-        <!-- DCA + ENGINE -->
-        <div class="tc">
-            <div class="tc-bar">
-                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title" data-i18n="app.dcaEngine">--dca-engine</span>
-            </div>
-            <div class="tc-body">
-                <div class="btn-stack">
-                    <div class="fg" style="margin-bottom:8px;">
-                        <label data-i18n="app.dcaAmount">DCA Amount ($)</label>
-                        <input type="number" id="iDcaAmount" step="any" placeholder="500.00" min="0">
-                    </div>
-                    <button class="btn green" id="btnDca" data-action="distribuirajDca" data-i18n="app.distributeDca">Distribute DCA</button>
-                    <div class="fg-hint" data-i18n="app.smartAlloc">Smart allocation across positions</div>
-                    <button class="btn amber" id="btnEngine" data-action="optimizePortfolio" data-i18n="app.engineBtn">AQMath Engine — Black</button>
-                    <div class="engine-hint" data-i18n="app.engineHint">180-day covariance + ERC analysis</div>
-                    <button class="btn ghost" id="btnRefreshHistory" data-action="refreshHistory" disabled data-i18n="app.refreshHistory">Refresh History — Black</button>
-                </div>
-            </div>
-        </div>
-
         <!-- RISK SETTINGS -->
         <div class="tc" id="optSection">
             <div class="tc-bar">
@@ -944,14 +894,6 @@
                     <button class="btn ghost chat-clear" id="btnChatClear" data-action="clearMyChatMessages" title="Delete my messages">CLEAR</button>
                 </div>
             </div>
-        </div>
-
-        <!-- ALLOCATION METER -->
-        <div class="a-meter">
-            <div class="a-meter-top"><span data-i18n="app.allocation">ALLOCATION</span><span id="aPctLbl">0.00%</span></div>
-            <div class="a-track"><div class="a-fill" id="aFill" style="width:0%"></div></div>
-            <div class="a-num"><span id="aNumVal">0.00</span><span style="font-size:1rem;color:var(--muted)">%</span></div>
-            <div class="a-rem" id="aRem" data-i18n="app.remaining">Remaining: 100.00%</div>
         </div>
 
         <!-- FAQ -->
@@ -1024,6 +966,13 @@
                         <div class="sum-item"><div class="sum-l" data-i18n="app.allocationStat">Allocation</div><div class="sum-v" id="sAllocSt">—</div></div>
                     </div>
                     <div class="rebalance-reminder" id="reminderBox"><span id="reminderTxt">No scheduled rebalance.</span></div>
+                    <!-- ALLOCATION METER: sits directly under the rebalance reminder -->
+                    <div class="a-meter">
+                        <div class="a-meter-top"><span data-i18n="app.allocation">ALLOCATION</span><span id="aPctLbl">0.00%</span></div>
+                        <div class="a-track"><div class="a-fill" id="aFill" style="width:0%"></div></div>
+                        <div class="a-num"><span id="aNumVal">0.00</span><span style="font-size:1rem;color:var(--muted)">%</span></div>
+                        <div class="a-rem" id="aRem">Remaining: 100.00%</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1051,6 +1000,54 @@
             <div class="tc-body">
                 <div class="history-chart-wrap"><canvas id="historyChart"></canvas></div>
                 <div class="fg-hint" data-i18n="app.historyHint">Automatically updated after DCA distribution.</div>
+            </div>
+        </div>
+
+        <!-- RECORD TRADE + DCA/ENGINE: moved from the sidebar, directly above live-markets widgets -->
+        <div class="tc">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title" data-i18n="app.recordTrade">--record-trade</span>
+            </div>
+            <div class="tc-body">
+                <div class="fg">
+                    <label data-i18n="app.tradeToken">Token</label>
+                    <select id="iTradeSym"><option value="">&mdash;</option></select>
+                </div>
+                <div class="fg-row">
+                    <div class="fg">
+                        <label data-i18n="app.tradeAmt">Amount (tokens)</label>
+                        <input type="number" id="iBuyAmt" step="any" placeholder="0.00000000" min="0">
+                    </div>
+                    <div class="fg">
+                        <label data-i18n="app.tradePrice">Price ($) &mdash; Auto</label>
+                        <input type="number" id="iBuyPrice" step="any" placeholder="Empty = API">
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <button class="btn green btn-trade" id="btnRecordBuy" data-action="recordBuy" data-i18n="app.recordBuy">[ Record Buy ]</button>
+                    <button class="btn red btn-trade" id="btnRecordSell" data-action="recordSell" data-i18n="app.recordSell">[ Record Sell ]</button>
+                </div>
+                <div class="fg-hint" data-i18n="app.tradeHint">Buy adds to the position, sell removes from it &mdash; avg price updates automatically</div>
+            </div>
+        </div>
+        <div class="tc">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title" data-i18n="app.dcaEngine">--dca-engine</span>
+            </div>
+            <div class="tc-body">
+                <div class="btn-stack">
+                    <div class="fg" style="margin-bottom:8px;">
+                        <label data-i18n="app.dcaAmount">DCA Amount ($)</label>
+                        <input type="number" id="iDcaAmount" step="any" placeholder="500.00" min="0">
+                    </div>
+                    <button class="btn green" id="btnDca" data-action="distribuirajDca" data-i18n="app.distributeDca">Distribute DCA</button>
+                    <div class="fg-hint" data-i18n="app.smartAlloc">Smart allocation across positions</div>
+                    <button class="btn amber" id="btnEngine" data-action="optimizePortfolio" data-i18n="app.engineBtn">AQMath Engine — Black</button>
+                    <div class="engine-hint" data-i18n="app.engineHint">180-day covariance + ERC analysis</div>
+                    <button class="btn ghost" id="btnRefreshHistory" data-action="refreshHistory" disabled data-i18n="app.refreshHistory">Refresh History — Black</button>
+                </div>
             </div>
         </div>
 
