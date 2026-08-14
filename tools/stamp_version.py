@@ -81,6 +81,25 @@ TARGETS = [
 
 VER_RE = re.compile(r"\?v=[\w]+")
 
+# Hand-maintained pages outside the build_pages generator (research articles).
+# They reference the same first-party assets, but nothing else rewrites their
+# cache-busters, so they drift on every asset change and the CI audit fails
+# (happened with the 2f85a33803 -> d1dce1369a bump). The sweep lives here.
+HANDMADE_DIR = "research"
+_SOCIAL_RE = re.compile(r"social-preview[\w.-]*\.png\?v=[\w]+")
+_URL_STAMP_RE = re.compile(r"[^\"' >]+\?v=[\w]+")
+
+
+def _rewrite_url_stamps(body, want):
+    """Bump every ?v= stamp in a hand-maintained page, social-preview.png
+    excluded — it keeps its hand-set scraper stamp on purpose (see TARGETS)."""
+    def _repl(m):
+        url = m.group(0)
+        if "social-preview" in url:
+            return url
+        return re.sub(r"\?v=[\w]+$", "?v=" + want, url)
+    return _URL_STAMP_RE.sub(_repl, body)
+
 
 def build_id():
     """Short content hash over the whole asset set, stamps excluded."""
@@ -113,6 +132,16 @@ def run(check_only=False):
                 stale.append(f"{rel}: {old} -> {want}")
         edits[rel] = re.sub(pattern, want, body)
 
+    handmade = sorted((ROOT / HANDMADE_DIR).glob("*.html"))
+    hm_edits = {}
+    for path in handmade:
+        body = path.read_text(encoding="utf-8")
+        masked = _SOCIAL_RE.sub("", body)  # hand-versioned, never part of the app build id
+        for old in sorted(set(VER_RE.findall(masked))):
+            if old != "?v=" + want:
+                stale.append(f"{path.relative_to(ROOT)}: {old} -> ?v={want}")
+        hm_edits[path] = _rewrite_url_stamps(body, want)
+
     # Published build id for the runtime freshness check in app-boot.js.
     vtxt = ROOT / "version.txt"
     have = vtxt.read_text(encoding="utf-8").strip() if vtxt.exists() else ""
@@ -134,6 +163,8 @@ def run(check_only=False):
 
     for rel, body in edits.items():
         (ROOT / rel).write_text(body, encoding="utf-8")
+    for path, body in hm_edits.items():
+        path.write_text(body, encoding="utf-8")
     vtxt.write_text(want + "\n", encoding="utf-8")
     print(f"stamped v={want}")
     for s in stale:
