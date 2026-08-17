@@ -363,7 +363,7 @@
 
     /* ===== BETA CARD ===== */
     .beta-card { margin-bottom: 10px; }
-    .beta-active-card { background: rgba(6,182,212,0.03); border: 1px solid rgba(52,211,153,0.15); }
+    .beta-active-card { border: 1px solid var(--border); }
     .beta-active-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; }
     .pro-badge { display: inline-flex; align-items: center; gap: 6px;
         background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.3);
@@ -1045,7 +1045,6 @@
         line-height: 1.8;
     }
     .lp-math-box {
-        background: var(--s1);
         border: 1px solid rgba(56, 189, 248, 0.3);
         border-radius: 6px;
         padding: 20px 28px;
@@ -1283,7 +1282,7 @@
 
     .lp-features { display: flex; flex-direction: column; gap: 14px; }
     .lp-feature-card {
-        background: var(--s2); border: 1px solid var(--border);
+        border: 1px solid var(--border);
         padding: 18px 20px; border-radius: 2px;
         transition: all 0.3s ease;
     }
@@ -1308,7 +1307,7 @@
         position: relative; z-index: 1;
     }
     .lp-price-card {
-        background: var(--s2); border: 1px solid var(--border);
+        border: 1px solid var(--border);
         padding: 32px 28px; border-radius: 2px; text-align: center;
         transition: all 0.3s ease;
     }
@@ -3056,7 +3055,7 @@
     .chat-panel { position: fixed; right: 18px; bottom: 78px; width: 320px; max-width: calc(100vw - 36px); z-index: 1200; margin: 0; }
     .chat-panel.hidden { display: none; }
     .chat-panel.collapsed { display: none; }
-    .chat-card { background: rgba(6,182,212,0.03); border: 1px solid rgba(168,85,247,0.2); box-shadow: 0 8px 30px rgba(0,0,0,0.55); }
+    .chat-card { border: 1px solid var(--border); box-shadow: 0 8px 30px rgba(0,0,0,0.55); }
     .chat-messages { min-height: 180px; max-height: 220px; overflow-y: auto; padding: 10px 2px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 4px; background: rgba(0,0,0,0.2); }
     .chat-message { padding: 6px 10px; border-radius: 3px; margin-bottom: 6px; font-size: 0.68rem; font-family: var(--mono); }
     .chat-message:nth-child(even) { background: rgba(255,255,255,0.02); }
