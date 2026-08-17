@@ -2,7 +2,40 @@
 'use strict';
 
 // ============ BACKEND API URLs ============
-const BETA_AUTH_URL = 'https://api-auth.aqmath.xyz';
+const BETA_AUTH_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:8000' : 'https://api-auth.aqmath.xyz';
+
+// ============ PRIVACY-FIRST ERROR TELEMETRY ============
+// Reports JS crashes and unhandled promise rejections to the server.
+// NO PII: no IP, no key, no session, no user agent. Only error type + route + short message.
+(function() {
+    var _errEndpoint = BETA_AUTH_URL + '/internal/error-report';
+    function _reportError(type, msg) {
+        try {
+            var body = JSON.stringify({
+                t: type,
+                r: location.pathname,
+                m: (msg || '').slice(0, 100)
+            });
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon(_errEndpoint, new Blob([body], {type: 'application/json'}));
+            } else {
+                fetch(_errEndpoint, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: body,
+                    keepalive: true
+                }).catch(function(){});
+            }
+        } catch(e) {} // telemetry must never break the app
+    }
+    window.addEventListener('error', function(e) {
+        _reportError('js', e.message || 'unknown');
+    });
+    window.addEventListener('unhandledrejection', function(e) {
+        var msg = (e.reason && e.reason.message) ? e.reason.message : 'unhandled rejection';
+        _reportError('promise', msg);
+    });
+})();
 
 // ============ ROUTING ============
 // Clean URLs (aqmath.xyz/docs) via History API.
@@ -437,8 +470,8 @@ function checkBetaUI() {
 
 // ========== BACKEND API URLs ==========
 // Set these to your deployed Railway URLs
-const API_URL = 'https://api-engine.aqmath.xyz';   // aqmath-engine (Risk Parity + KKT) — Pro only
-const DCA_API_URL = 'https://api-dca.aqmath.xyz'; // dca-engine on Railway — DCA distribution only
+const API_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:8005' : 'https://api-engine.aqmath.xyz';   // aqmath-engine (Risk Parity + KKT) — Pro only
+const DCA_API_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:8005' : 'https://api-dca.aqmath.xyz'; // dca-engine on Railway — DCA distribution only
 
 let portfolioHistory = [];
 
