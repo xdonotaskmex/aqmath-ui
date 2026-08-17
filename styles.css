@@ -663,27 +663,67 @@
         padding: 6px 12px; border-radius: 3px; cursor: pointer; }
 .update-banner-btn:hover { background: rgba(6,182,212,0.08); }
 
-/* ── What's New card (shown once after version update) ── */
-.whats-new { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        z-index: 310; width: 340px; max-width: 90vw; background: var(--s2);
-        border: 1px solid rgba(6,182,212,0.35); border-radius: 8px;
-        box-shadow: 0 12px 40px rgba(0,0,0,0.55); animation: wnFadeIn 0.3s ease; }
+/* ── What's New modal (matches toast notification style) ── */
+.whats-new {
+        position: fixed; inset: 0; background: rgba(2,5,13,0.9);
+        backdrop-filter: blur(12px); z-index: 9998;
+        display: flex; align-items: center; justify-content: center;
+}
 .whats-new.hidden { display: none; }
-.whats-new-head { display: flex; align-items: center; justify-content: space-between;
-        padding: 10px 14px; border-bottom: 1px solid var(--border); }
-.whats-new-ver { font-family: var(--mono); font-size: 0.72rem; font-weight: 700;
-        letter-spacing: 1px; color: var(--blue); }
-.whats-new-close { background: none; border: none; color: var(--dim); font-size: 1.1rem;
-        cursor: pointer; line-height: 1; padding: 0 2px; }
-.whats-new-close:hover { color: var(--text); }
-.whats-new-body { padding: 12px 14px 14px; }
-.whats-new-en { font-size: 0.78rem; color: var(--text); margin: 0 0 6px; line-height: 1.5; }
-.whats-new-cz { font-size: 0.72rem; color: var(--muted); margin: 0 0 10px; line-height: 1.5; font-style: italic; }
-.whats-new-list { list-style: none; margin: 0; padding: 0; }
-.whats-new-list li { font-size: 0.7rem; color: var(--muted); padding: 3px 0; }
-.whats-new-list li::before { content: '→ '; color: var(--blue); font-family: var(--mono); }
-@keyframes wnFadeIn { from { opacity: 0; transform: translate(-50%, -48%); }
-        to { opacity: 1; transform: translate(-50%, -50%); } }
+.whats-new-box {
+        background: var(--s1); border: 1px solid rgba(6,182,212,0.4);
+        padding: 28px 32px; border-radius: 10px; text-align: center;
+        max-width: 500px; width: 92%;
+        max-height: 80vh; overflow-y: auto;
+        animation: toastIn 0.2s ease-out;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 0 24px 60px -15px rgba(0,0,0,0.7), 0 0 20px rgba(6,182,212,0.1);
+}
+.whats-new-head {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+}
+.whats-new-ver {
+        font-family: var(--mono); font-size: 0.72rem; font-weight: 700;
+        letter-spacing: 2px; color: var(--blue); text-transform: uppercase;
+}
+.whats-new-close {
+        background: none; border: 1px solid var(--border); color: var(--muted);
+        font-size: 0.9rem; cursor: pointer; line-height: 1; padding: 4px 10px;
+        border-radius: 4px; transition: all 0.2s;
+}
+.whats-new-close:hover { color: var(--text); border-color: var(--text); }
+.whats-new-body { text-align: left; }
+.whats-new-en {
+        font-family: var(--sans); font-size: 0.95rem; font-weight: 600;
+        color: var(--text); margin: 0 0 8px; line-height: 1.6;
+}
+.whats-new-cz {
+        font-family: var(--sans); font-size: 0.82rem; color: var(--muted);
+        margin: 0 0 20px; line-height: 1.5; font-style: italic;
+}
+.whats-new-list {
+        list-style: none; margin: 0; padding: 0;
+        border-top: 1px solid var(--border); padding-top: 16px;
+}
+.whats-new-list li {
+        font-family: var(--sans); font-size: 0.85rem; color: var(--text);
+        padding: 8px 0; display: flex; align-items: center; gap: 10px;
+}
+.whats-new-list li::before {
+        content: '→'; color: var(--blue); font-family: var(--mono);
+        font-weight: 600; flex-shrink: 0;
+}
+.whats-new-close-btn {
+        margin-top: 24px; width: 100%;
+        background: var(--text); border: 1px solid var(--text);
+        color: var(--bg); font-family: var(--mono); font-size: 0.65rem;
+        letter-spacing: 1px; padding: 12px 24px; cursor: pointer;
+        text-transform: lowercase; transition: all 0.2s; border-radius: 4px;
+        font-weight: 600;
+}
+.whats-new-close-btn:hover { background: #fff; box-shadow: 0 0 16px rgba(255,255,255,0.15); }
 
     /* ===== MOBILE GATE (the app is desktop-only, hidden below 768px) ===== */
     .mobile-gate { display: none; }
