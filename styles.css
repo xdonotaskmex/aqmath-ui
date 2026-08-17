@@ -695,13 +695,9 @@
 }
 .whats-new-close:hover { color: var(--text); border-color: var(--text); }
 .whats-new-body { text-align: left; }
-.whats-new-en {
+.whats-new-desc {
         font-family: var(--sans); font-size: 0.95rem; font-weight: 600;
-        color: var(--text); margin: 0 0 8px; line-height: 1.6;
-}
-.whats-new-zh {
-        font-family: var(--sans); font-size: 0.82rem; color: var(--muted);
-        margin: 0 0 20px; line-height: 1.5; font-style: italic;
+        color: var(--text); margin: 0 0 20px; line-height: 1.6;
 }
 .whats-new-list {
         list-style: none; margin: 0; padding: 0;
