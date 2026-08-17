@@ -222,6 +222,7 @@
                         <th>Type</th>
                         <th>Route</th>
                         <th>Status</th>
+                        <th>Detail</th>
                         <th>Last seen</th>
                     </tr>
                 </thead>
@@ -232,15 +233,18 @@
                     : e.http_status >= 400 ? 'status-4xx'
                     : 'status-js';
                 const statusText = e.http_status || '—';
-                const typeLabel = e.error_type.replace(/^(api_|engine_)?(api_)?error$/, 'API')
-                    .replace(/^js_/, 'JS: ');
+                const typeLabel = e.error_type.replace(/^(api_|engine_)*error$/, 'API')
+                    .replace(/^js_/, 'JS ');
                 const lastSeen = e.last_seen ? new Date(e.last_seen).toLocaleString() : '—';
+
+                const detail = e.sample_detail ? `<code style="color:#ff8888;font-size:0.8em">${e.sample_detail}</code>` : '<span style="color:#333">—</span>';
 
                 html += `<tr>
                     <td><strong>${e.count}</strong></td>
                     <td>${typeLabel}</td>
                     <td><code>${e.route || '—'}</code></td>
                     <td class="${statusClass}">${statusText}</td>
+                    <td>${detail}</td>
                     <td>${lastSeen}</td>
                 </tr>`;
             }

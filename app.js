@@ -16,16 +16,15 @@ const BETA_AUTH_URL = (location.hostname === 'localhost' || location.hostname ==
                 r: location.pathname,
                 m: (msg || '').slice(0, 100)
             });
-            if (navigator.sendBeacon) {
-                navigator.sendBeacon(_errEndpoint, new Blob([body], {type: 'application/json'}));
-            } else {
-                fetch(_errEndpoint, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: body,
-                    keepalive: true
-                }).catch(function(){});
-            }
+            // sendBeacon cannot handle CORS preflight (Content-Type: application/json
+            // triggers it), so cross-origin beacons silently fail.  fetch+keepalive
+            // survives page unload AND handles preflight correctly.
+            fetch(_errEndpoint, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: body,
+                keepalive: true
+            }).catch(function(){});
         } catch(e) {} // telemetry must never break the app
     }
     window.addEventListener('error', function(e) {
