@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=d1dce1369a">
+    <link rel="stylesheet" href="/styles.min.css?v=f61f0ba3d5">
 </head>
 <body>
 
@@ -53,6 +53,26 @@
 <div class="update-banner hidden" id="updateBanner">
     <span data-i18n="app.update.msg">A new version of AQMath is available - reload to get the latest build.</span>
     <button type="button" class="update-banner-btn" data-action="reloadApp" data-i18n="app.update.reload">[ reload ]</button>
+</div>
+
+<!-- WHAT'S NEW: shown by app-boot.js once after each version update -->
+<div class="whats-new hidden" id="whatsNew">
+    <div class="whats-new-box">
+        <div class="whats-new-head">
+            <span class="whats-new-ver">v2.1</span>
+            <button type="button" class="whats-new-close" data-action="closeWhatsNew">&times;</button>
+        </div>
+        <div class="whats-new-body">
+            <p class="whats-new-en">One-Tap Alignment is here. Confirm or adjust portfolio signals straight from the notification &mdash; no extra steps.</p>
+            <p class="whats-new-cz">One-Tap Alignment je tu. Potvrďte nebo upravte signály přímo z notifikace &mdash; bez zbytečných kroků.</p>
+            <ul class="whats-new-list">
+                <li>Confirm, skip or adjust signals in one tap</li>
+                <li>Regime-aware alerts (SHOCK / LOW_VOL)</li>
+                <li>Small fixes &amp; polish</li>
+            </ul>
+            <button type="button" class="whats-new-close-btn" data-action="closeWhatsNew">[ close ]</button>
+        </div>
+    </div>
 </div>
 
 <!-- ============ LANDING PAGE VIEW ============ -->
@@ -158,7 +178,7 @@
             </div>
             <div class="lp-terminal-body">
                 <div class="lp-term-line"><span class="lp-term-prompt">$</span> aqmath engine v2.0 &mdash; initializing...</div>
-                <div class="lp-term-line lp-term-ok">data pipeline: 3 market data sources &times; 180-day history &rarr; covariance matrix</div>
+                <div class="lp-term-line lp-term-ok">data pipeline: 4 market data sources &times; 180-day history &rarr; covariance matrix</div>
                 <div class="lp-term-line lp-term-dyn"><span class="lp-term-prompt">$</span> <span id="termLine0"></span></div>
                 <div class="lp-term-line lp-term-ok lp-term-dyn" id="termLine1"></div>
                 <div class="lp-term-line lp-term-dyn"><span class="lp-term-prompt">$</span> <span id="termLine2"></span></div>
@@ -178,7 +198,7 @@
             <ul class="lp-term-aside-list">
                 <li data-i18n="hero.termB1">risk parity + KKT projection on live market data</li>
                 <li data-i18n="hero.termB2">continuous de-risk &mdash; no indicators, no timers</li>
-                <li data-i18n="hero.termB3">0 bytes persisted &mdash; portfolio processed in-memory</li>
+                <li data-i18n="hero.termB3">0 bytes persisted by default &mdash; portfolio processed in-memory (opt-in signal service excepted)</li>
             </ul>
         </div>
     </div>
@@ -391,7 +411,7 @@
                 <div class="tc-body">
                     <div class="lp-trust-strip">
                         <div class="lp-trust-chip"><span class="lp-trust-dot">●</span> math fully documented — <a href="/docs">audit the model</a></div>
-                        <div class="lp-trust-chip"><span class="lp-trust-dot">●</span> no cookies · no tracking · simple analytics</div>
+                        <div class="lp-trust-chip"><span class="lp-trust-dot">●</span> no cookies · privacy-first analytics (Simple Analytics)</div>
                         <div class="lp-trust-chip"><span class="lp-trust-dot">●</span> portfolio stays in your browser — server data only if you opt in</div>
                         <div class="lp-trust-chip"><span class="lp-trust-dot">●</span> GDPR / DSGVO compliant infrastructure</div>
                     </div>
@@ -431,6 +451,7 @@
                         <li data-i18n="plans.betaF6">Non-custodial privacy — portfolio stays in your browser (server-side storage only if you opt in)</li>
                         <li data-i18n="plans.betaF7">365-day access from activation</li>
                         <li data-i18n="plans.betaF8">Send a message — we review and activate within 48h</li>
+                                                <li data-i18n="plans.betaF9">Shared beta chat — pseudonymous, 20-message rolling buffer, deletable anytime</li>
                     </ul>
                     <a class="lp-btn-secondary" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener" style="width:100%;text-align:center;" data-i18n="plans.betaApplyCta">Request Access</a>
                 </div>
@@ -528,6 +549,10 @@
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q11">Is there an automatic daily signal or notification service?</div>
                 <div class="lp-faq-a" data-i18n-html="faq.a11">Yes &mdash; as an <strong>optional, opt-in service</strong>. If you enable it, the engine computes your deleverage shield signal and DCA schedule once per day on the server and can push a notification to your device. To do that, your holdings are stored under the hash of your activation key &mdash; never under your name or wallet &mdash; and deleted completely the moment you withdraw consent. Full details are in Section 9 of our <a href="/privacy" style="color:var(--purple);">Privacy Policy</a>.</div>
+            </div>
+            <div class="lp-faq-item">
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q12">What is the beta chat?</div>
+                <div class="lp-faq-a" data-i18n-html="faq.a12">Beta users get access to a <strong>shared internal chat</strong> visible only to active beta members. Messages are pseudonymous (shown as a short code like B-XXXXXX, never your real key or IP), capped at 200 characters, and limited to the 20 most recent messages (older ones are automatically swept daily). You can clear your own messages anytime. The chat is stored server-side under the hash of your activation key and is deleted when your key is deactivated.</div>
             </div>
         </section>
     </div>
@@ -632,10 +657,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=d1dce1369a"></script>
-<script defer src="/app-backtest.js?v=d1dce1369a"></script>
-<script defer src="/app.js?v=d1dce1369a"></script>
-<script defer src="/app-notify.js?v=d1dce1369a"></script>
+<script defer src="/app-widgets.js?v=f61f0ba3d5"></script>
+<script defer src="/app-backtest.js?v=f61f0ba3d5"></script>
+<script defer src="/app.js?v=f61f0ba3d5"></script>
+<script defer src="/app-notify.js?v=f61f0ba3d5"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -649,8 +674,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=d1dce1369a"></script>
-<script defer src="/app-boot.js?v=d1dce1369a"></script>
+<script defer src="/vendor/i18next.min.js?v=f61f0ba3d5"></script>
+<script defer src="/app-boot.js?v=f61f0ba3d5"></script>
 
 </body>
 </html>

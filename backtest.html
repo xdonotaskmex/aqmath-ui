@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=d1dce1369a">
+    <link rel="stylesheet" href="/styles.min.css?v=f61f0ba3d5">
 </head>
 <body>
 
@@ -53,6 +53,26 @@
 <div class="update-banner hidden" id="updateBanner">
     <span data-i18n="app.update.msg">A new version of AQMath is available - reload to get the latest build.</span>
     <button type="button" class="update-banner-btn" data-action="reloadApp" data-i18n="app.update.reload">[ reload ]</button>
+</div>
+
+<!-- WHAT'S NEW: shown by app-boot.js once after each version update -->
+<div class="whats-new hidden" id="whatsNew">
+    <div class="whats-new-box">
+        <div class="whats-new-head">
+            <span class="whats-new-ver">v2.1</span>
+            <button type="button" class="whats-new-close" data-action="closeWhatsNew">&times;</button>
+        </div>
+        <div class="whats-new-body">
+            <p class="whats-new-en">One-Tap Alignment is here. Confirm or adjust portfolio signals straight from the notification &mdash; no extra steps.</p>
+            <p class="whats-new-cz">One-Tap Alignment je tu. Potvrďte nebo upravte signály přímo z notifikace &mdash; bez zbytečných kroků.</p>
+            <ul class="whats-new-list">
+                <li>Confirm, skip or adjust signals in one tap</li>
+                <li>Regime-aware alerts (SHOCK / LOW_VOL)</li>
+                <li>Small fixes &amp; polish</li>
+            </ul>
+            <button type="button" class="whats-new-close-btn" data-action="closeWhatsNew">[ close ]</button>
+        </div>
+    </div>
 </div>
 
 <!-- ============ LANDING PAGE VIEW ============ -->
@@ -211,7 +231,7 @@
                 <line x1="656" y1="84" x2="692" y2="84" stroke="var(--green)" stroke-width="1.5" marker-end="url(#btArrowGrn)"/>
                 <!-- arrow captions -->
                 <text x="214" y="120" class="bt-flow-cap red">weighted blend</text>
-                <text x="560" y="120" class="bt-flow-cap grn">exit fast · re-enter slow</text>
+                <text x="560" y="120" class="bt-flow-cap grn">symmetric ramp (0.30)</text>
                 <!-- nodes -->
                 <g>
                     <rect x="8" y="60" width="186" height="48" rx="6" class="bt-flow-node cyan"/>
@@ -404,10 +424,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=d1dce1369a"></script>
-<script defer src="/app-backtest.js?v=d1dce1369a"></script>
-<script defer src="/app.js?v=d1dce1369a"></script>
-<script defer src="/app-notify.js?v=d1dce1369a"></script>
+<script defer src="/app-widgets.js?v=f61f0ba3d5"></script>
+<script defer src="/app-backtest.js?v=f61f0ba3d5"></script>
+<script defer src="/app.js?v=f61f0ba3d5"></script>
+<script defer src="/app-notify.js?v=f61f0ba3d5"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -421,8 +441,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=d1dce1369a"></script>
-<script defer src="/app-boot.js?v=d1dce1369a"></script>
+<script defer src="/vendor/i18next.min.js?v=f61f0ba3d5"></script>
+<script defer src="/app-boot.js?v=f61f0ba3d5"></script>
 
 </body>
 </html>
