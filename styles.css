@@ -499,14 +499,39 @@
     .sum-l { font-size: 0.55rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; }
     .sum-v { font-size: 1.1rem; font-weight: 500; }
 
-    .tbl-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+    .tbl-wrap { overflow-x: auto; padding: 8px 12px; }
+    table { width: 100%; border-collapse: collapse; min-width: 1100px; }
         .rv-table { min-width: 0; }
     thead tr { border-bottom: 1px solid var(--border); }
     th { padding: 9px 6px; text-align: left; font-size: 0.52rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; font-weight: 500; font-family: var(--mono); }
     tbody tr { border-bottom: 1px solid rgba(255,255,255,0.03); transition: background 0.15s; }
     tbody tr:hover { background: rgba(56,189,248,0.03); }
     td { padding: 10px 6px; font-size: 0.76rem; white-space: nowrap; font-family: var(--mono); }
+
+    /* ===== COLUMN GROUPS ===== */
+    /* Group separators via left-border on the first cell of each group.
+       Column order: 1-Token | 2-Quantity 3-Price 4-Value | 5-Curr% 6-Drift
+       | 7-P&L 8-APY% 9-YieldGap | 10-Average | 11-Action 12-Freeze 13-EDIT 14-DEL */
+    .tr-groups th { padding: 3px 6px; }
+    .th-group { font-size: 0.42rem; letter-spacing: 3px; color: rgba(6,182,212,0.35); text-align: center; border-bottom: 1px solid rgba(6,182,212,0.06); padding: 4px 6px; font-weight: 400; }
+    /* Group borders: after Token(1), Value(4), Drift(6), Average(10) */
+    #tblWrap table td:nth-child(2),  #tblWrap table th:nth-child(2),
+    #tblWrap table td:nth-child(5),  #tblWrap table th:nth-child(5),
+    #tblWrap table td:nth-child(7),  #tblWrap table th:nth-child(7),
+    #tblWrap table td:nth-child(11), #tblWrap table th:nth-child(11) { border-left: 1px solid rgba(6,182,212,0.10); }
+
+    /* Sticky Token column (col 1) */
+    #tblWrap table th:first-child,
+    #tblWrap table td:first-child { position: sticky; left: 0; z-index: 2; background: var(--s1); }
+    #tblWrap table thead th:first-child { z-index: 3; }
+    #tblWrap table tbody tr:hover > td:first-child { background: rgba(10,16,28,0.95); }
+    #tblWrap table tbody tr.row-safe-haven > td:first-child { background: rgba(52,211,153,0.04); }
+    #tblWrap table tbody tr.row-safe-haven:hover > td:first-child { background: rgba(52,211,153,0.07); }
+
+    /* Dimmed secondary columns: APY%(8), Yield Gap(9), Average(10) */
+    #tblWrap table td:nth-child(8),
+    #tblWrap table td:nth-child(9),
+    #tblWrap table td:nth-child(10) { color: var(--dim); opacity: 0.6; }
 
     .sym { font-weight: 600; letter-spacing: 2px; font-size: 0.85rem; }
 
@@ -570,7 +595,15 @@
     .warn-icon::after { content: "⚠️"; }
 
     .history-card { margin-top: 16px; }
-    .history-chart-wrap { width: 100%; height: 200px; }
+    .history-chart-wrap { width: 100%; height: 280px; padding-bottom: 4px; }
+
+    /* History summary stats */
+    .history-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+    .hs-pill { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; }
+    .hs-pill-l { font-family: var(--mono); font-size: 0.45rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
+    .hs-pill-v { font-family: var(--mono); font-size: 0.85rem; font-weight: 600; color: var(--text); }
+    .hs-pill-v.up { color: var(--green); }
+    .hs-pill-v.down { color: var(--red); }
 
     .footer {
         height: 40px;
@@ -650,6 +683,7 @@
         .lp-grid { grid-template-columns: 1fr; }
         .lp-news-col { display: none; }
         .terminal-dashboard { grid-template-columns: 1fr; }
+        .history-stats { grid-template-columns: repeat(2, 1fr); }
     }
 
     /* ===== UPDATE BANNER (stale-build notice, toggled by app-boot.js) ===== */
@@ -2300,8 +2334,8 @@
     .lp-pro-modal.hidden { display: none; }
     .lp-pro-box {
         background: var(--s1); border: 1px solid var(--amber);
-        padding: 40px 48px; border-radius: 8px; text-align: center;
-        max-width: 420px;
+        padding: 40px 32px; border-radius: 8px; text-align: center;
+        max-width: 440px;
     }
     .lp-pro-box h3 {
         font-family: var(--mono); font-size: 1rem; letter-spacing: 3px;
@@ -2662,8 +2696,8 @@
     .lp-pro-close:hover { border-color: var(--text); color: var(--text); }
             .lp-pro-beta { margin-bottom: 18px; }
             .lp-pro-beta-label { font-family: var(--mono); font-size: 0.62rem; color: var(--green); letter-spacing: 1px; margin-bottom: 8px; }
-            .lp-pro-beta-links { display: flex; gap: 10px; justify-content: center; align-items: center; }
-            .lp-pro-beta-links a { font-family: var(--mono); font-size: 0.65rem; color: var(--blue); text-decoration: none; padding: 5px 12px; border: 1px solid rgba(6,182,212,0.3); border-radius: 4px; transition: all 0.2s; letter-spacing: 1px; }
+            .lp-pro-beta-links { display: flex; gap: 6px; justify-content: center; align-items: center; flex-wrap: nowrap; }
+            .lp-pro-beta-links a { font-family: var(--mono); font-size: 0.58rem; color: var(--blue); text-decoration: none; padding: 4px 10px; border: 1px solid rgba(6,182,212,0.3); border-radius: 4px; transition: all 0.2s; letter-spacing: 0.5px; white-space: nowrap; }
             .lp-pro-beta-links a:hover { border-color: var(--blue); background: rgba(6,182,212,0.08); }
             .lp-pro-beta-sep { color: var(--dim); font-size: 0.7rem; }
 
@@ -2898,6 +2932,8 @@
         .lp-pro-box { width: 92%; padding: 28px 20px; }
         .lp-pro-box h3 { font-size: 0.8rem; }
         .lp-pro-box p { font-size: 0.65rem; }
+        .lp-pro-beta-links { flex-wrap: wrap; gap: 4px; }
+        .lp-pro-beta-links a { font-size: 0.52rem; padding: 3px 8px; }
 
         .legal-page { padding: 36px 18px 20px; }
         .legal-page h1 { font-size: 0.8rem; }

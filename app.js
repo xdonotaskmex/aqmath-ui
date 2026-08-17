@@ -473,6 +473,9 @@ const API_URL = (location.hostname === 'localhost' || location.hostname === '127
 const DCA_API_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:8005' : 'https://api-dca.aqmath.xyz'; // dca-engine on Railway — DCA distribution only
 
 let portfolioHistory = [];
+let _autoHistTimer = null;
+let _lastAutoPortfolio = '';
+let _lastAutoHistBuild = 0;
 
 function loadHistory() {
     try {
@@ -2175,6 +2178,53 @@ function importJSON(event) {
     event.target.value = '';
 }
 
+// ============ AUTO HISTORY (silent, triggered on portfolio change) ============
+function scheduleAutoHistory() {
+    clearTimeout(_autoHistTimer);
+    _autoHistTimer = setTimeout(autoRefreshHistory, 2500);
+}
+
+async function autoRefreshHistory() {
+    const tokens = portfolio.filter(t => t.amount > 0 && !t.safeHaven);
+    if (tokens.length === 0) return;
+    const fp = tokens.map(t => `${t.sym}:${t.amount}`).sort().join('|');
+    if (fp === _lastAutoPortfolio && portfolioHistory.length > 0) return;
+    if (Date.now() - _lastAutoHistBuild < 30000) return;
+    _lastAutoPortfolio = fp;
+    _lastAutoHistBuild = Date.now();
+
+    const STABLES = ['USDC', 'USDT', 'DAI', 'BUSD', 'TUSD', 'FDUSD', 'USDP'];
+    const priceMap = {};
+    try {
+        for (const t of tokens) {
+            if (STABLES.includes(t.sym)) { priceMap[t.sym] = Array(90).fill(1.0); continue; }
+            const symbol = t.sym + 'USDT';
+            try {
+                const res = await fetch(`${DCA_API_URL}/api/binance/klines?symbol=${symbol}&interval=1d&limit=90`);
+                if (!res.ok) continue;
+                const klines = await res.json();
+                priceMap[t.sym] = klines.map(k => parseFloat(k[4]));
+            } catch(e) { continue; }
+        }
+        const syms = Object.keys(priceMap);
+        if (syms.length === 0) return;
+        const minLen = Math.min(...syms.map(s => priceMap[s].length));
+        const history = [];
+        for (let i = 0; i < minLen; i++) {
+            let total = 0;
+            for (const t of tokens) {
+                if (priceMap[t.sym] && priceMap[t.sym][i] != null) total += t.amount * priceMap[t.sym][i];
+            }
+            if (total > 0) history.push({ timestamp: Date.now() - (minLen - 1 - i) * 86400000, total });
+        }
+        if (history.length > 0) {
+            portfolioHistory = history;
+            saveHistory();
+            renderHistoryChart();
+        }
+    } catch(e) { console.warn('[AQMath] auto history failed:', e.message); }
+}
+
 // ============ REFRESH HISTORY (BLACK) ============
 async function refreshHistory() {
     if (!isPro) { updateProButtons(); return; }
@@ -2244,6 +2294,8 @@ async function refreshHistory() {
 function renderHistoryChart() {
     if (historyChart) { historyChart.destroy(); historyChart = null; }
     if (!portfolioHistory.length) {
+        const statsEl = document.getElementById('historyStats');
+        if (statsEl) statsEl.innerHTML = '';
         const ctx = document.getElementById('historyChart').getContext('2d');
         historyChart = new Chart(ctx, {
             type: 'line',
@@ -2256,6 +2308,23 @@ function renderHistoryChart() {
     const sorted = portfolioHistory.slice().sort((a,b) => a.timestamp - b.timestamp);
     const labels = sorted.map(p => new Date(p.timestamp).toLocaleDateString('en-US', { month:'short', day:'numeric' }));
     const values = sorted.map(p => p.total);
+
+    // Summary stats
+    const statsEl = document.getElementById('historyStats');
+    if (statsEl) {
+        const cur = values[values.length - 1];
+        const high = Math.max(...values);
+        const low = Math.min(...values);
+        const first = values[0];
+        const chg = first > 0 ? ((cur - first) / first) * 100 : 0;
+        const chgCls = chg >= 0 ? 'up' : 'down';
+        const chgSign = chg >= 0 ? '+' : '';
+        statsEl.innerHTML =
+            `<div class="hs-pill"><div class="hs-pill-l">Current</div><div class="hs-pill-v">$${fmtUSD(cur)}</div></div>` +
+            `<div class="hs-pill"><div class="hs-pill-l">High</div><div class="hs-pill-v">$${fmtUSD(high)}</div></div>` +
+            `<div class="hs-pill"><div class="hs-pill-l">Low</div><div class="hs-pill-v">$${fmtUSD(low)}</div></div>` +
+            `<div class="hs-pill"><div class="hs-pill-l">Change</div><div class="hs-pill-v ${chgCls}">${chgSign}${chg.toFixed(2)}%</div></div>`;
+    }
 
     historyChart = new Chart(historyCtx, {
         type: 'line',
@@ -2275,6 +2344,7 @@ function renderHistoryChart() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            layout: { padding: { bottom: 8 } },
             plugins: {
                 legend: { display: false },
                 tooltip: { callbacks: { label: ctx => '$' + ctx.raw.toFixed(2) } }
@@ -2373,7 +2443,6 @@ function render() {
                 <td>$${fmtPrice(t.price)}</td>
                 <td>$${fmtUSD(c.curVal)}</td>
                 <td>${c.curPct.toFixed(2)}% <span class="mbar"><span class="mbar-f" style="width:${barW}%;background:${colors[i]}"></span><span class="mbar-t" style="left:${barT}%"></span></span></td>
-                <td>${t.target.toFixed(1)}%</td>
                 <td><span class="drift ${Math.abs(c.drift) < 0.5 ? 'n' : (c.drift > 0 ? 'p' : 'm')}">${c.drift > 0 ? '+' : ''}${c.drift.toFixed(2)}%</span></td>
                 <td style="color:${c.pnl >= 0 ? 'var(--green)' : 'var(--red)'}">${pnlStr}</td>
                 <td>${t.apy.toFixed(1)}%</td>
@@ -2385,7 +2454,7 @@ function render() {
                 <td><button class="btn-del" data-action="obrisiToken" data-arg="${escapeHtml(t.sym)}">DEL</button></td>
             </tr>`;
         }).join('');
-        wrap.innerHTML = `<table><thead><tr><th>Token</th><th>Quantity</th><th>Price</th><th>Value</th><th>Curr%</th><th>Target%</th><th>Drift</th><th>P&amp;L</th><th>APY%</th><th>Yield Gap</th><th>Average</th><th>Action</th><th>Freeze</th><th></th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+        wrap.innerHTML = `<table><thead><tr class="tr-groups"><th class="th-group"></th><th class="th-group" colspan="3">VALUATION</th><th class="th-group" colspan="2">ALLOCATION</th><th class="th-group" colspan="3">PERFORMANCE</th><th class="th-group"></th><th class="th-group" colspan="4">ACTIONS</th></tr><tr><th>Token</th><th>Quantity</th><th>Price</th><th>Value</th><th>Curr%</th><th>Drift</th><th>P&amp;L</th><th>APY%</th><th>Yield Gap</th><th>Average</th><th>Action</th><th>Freeze</th><th></th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
     }
 
     const reminderTxt = document.getElementById('reminderTxt');
@@ -2399,6 +2468,9 @@ function render() {
     // Quantum Engine is locked for free tier - shows "Black Access" modal
     updateSafeHavenUI();
     updateDeleverageUI();
+
+    // Auto-populate history chart when portfolio composition changes
+    scheduleAutoHistory();
 }
 
 // ============ INITIALIZATION ============
@@ -2416,6 +2488,12 @@ function render() {
     hideLoading();
     loadState();
     ensureUSDC();
+    // Seed auto-history fingerprint so page load doesn't re-fetch when history already exists
+    if (portfolioHistory.length > 0) {
+        _lastAutoPortfolio = portfolio.filter(t => t.amount > 0 && !t.safeHaven)
+            .map(t => `${t.sym}:${t.amount}`).sort().join('|');
+        _lastAutoHistBuild = Date.now();
+    }
     updateSafeHavenUI();
     updateDeleverageUI();
     checkBetaUI();
