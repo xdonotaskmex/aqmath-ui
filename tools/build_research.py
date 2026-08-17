@@ -101,12 +101,13 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-07",
-        "title": "How AQMath Works: Signals, Frozen Weights and What You Execute - AQMath",
+        "title": "How AQMath Works: Signals & Frozen Weights - AQMath",
         "shortTitle": "How AQMath Works &mdash; Signals &amp; What You Execute",
         "description": ("The must-read user guide: AQMath produces signal-only trading guidance "
                         "from frozen KKT risk-parity weights (re-optimised every 180 days) and the "
                         "daily v14 Deleverage Shield - the user executes every trade manually, on "
                         "their own exchange account."),
+        "meta_description": "User guide: signal-only guidance from frozen KKT risk-parity weights and the daily v14 Deleverage Shield. You execute every trade manually.",
         # User guide, not a performance study: no simulated-results notice.
         "sim_notice": False,
         "altLabel": "中文",
@@ -118,11 +119,12 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-08-07",
-        "title": "AQMath 工作原理：信号、冻结权重与你执行什么 - AQMath",
+        "title": "AQMath 工作原理：信号与冻结权重 - AQMath",
         "shortTitle": "AQMath 工作原理 &mdash; 信号与你执行什么",
         "description": ("必读用户指南：AQMath 仅产生信号型交易指引，基于冻结的 KKT 风险平价"
                         "权重（每 180 天再优化）与每日 v14 去杠杆防护盾 — 用户在自己的交易所"
                         "账户上手动执行每一笔交易。"),
+        "meta_description": "必读指南：AQMath 基于冻结 KKT 风险平价权重与每日 v14 防护盾产生信号，用户在自有交易所手动执行。",
         "sim_notice": False,
         "altLabel": "English",
     },
@@ -133,7 +135,7 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-10",
-        "title": "Human Factor Stress Test: Does the Shield Break When You Do? - AQMath",
+        "title": "Human Factor Stress Test - AQMath",
         "shortTitle": "Human Factor Stress Tests &mdash; DCA Jitter, Signal Lag &amp; Frozen Weights",
         "description": ("Test 1: DCA jitter costs at most 0.5 pp of MaxDD. Test 2 hits the signals "
                         "themselves: random delays and missed days pass, but a constant 3-day lag "
@@ -143,6 +145,7 @@ DOCS = [
                         "and a 1-5 day lag sweep: freezing the weights still fails 3 of 4 scenarios "
                         "and even a 1-day lag breaks the gate. Same-day execution is the only "
                         "policy that passes."),
+        "meta_description": "DCA jitter costs 0.5 pp MaxDD. 3-day signal lag fails the Sharpe gate. Same-day execution is the only policy that passes all gates.",
         "altLabel": "中文",
     },
     {
@@ -152,7 +155,7 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-08-10",
-        "title": "人为因素压力测试：你犯错时，防护盾会崩吗？ - AQMath",
+        "title": "人为因素压力测试 - AQMath",
         "shortTitle": "人为因素压力测试 &mdash; 定投抖动、信号滞后与冻结权重",
         "description": ("测试 1：定投抖动最多损失 0.5 个百分点的 MaxDD。测试 2 直接打在信号上："
                         "随机延迟与漏掉的交易日通过，但持续 3 天的滞后打破夏普门槛 — "
@@ -160,6 +163,7 @@ DOCS = [
                         "每一个误差场景都打破最大回撤门槛。测试 2c 运行读者提出的冻结权重"
                         "对照与 1–5 天滞后扫描：冻结权重后仍有 3/4 场景失败，连 1 天滞后"
                         "都打破门槛。当日执行是唯一能通过的做法。"),
+        "meta_description": "定投抖动最多损失 0.5pp MaxDD；3 天信号滞后打破夏普门槛。当日执行是唯一通过全部门槛的策略。",
         "altLabel": "English",
     },
     {
@@ -169,7 +173,7 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-12",
-        "title": "Static vs. Dynamic: The Test the Shield Only Half-Passed - AQMath",
+        "title": "Static vs Dynamic Shield Test - AQMath",
         "shortTitle": "Static vs. Dynamic &mdash; Shield vs the 60/40 Humans Actually Hold",
         "description": ("Crown Test 2: Shield v14 vs static crypto/stablecoin splits at three levels "
                         "of human-ness - a robot (yearly rebalance), a drawer (never touched) and a "
@@ -178,6 +182,7 @@ DOCS = [
                         "robot 60/40's higher Sharpe (0.621 vs 0.493) and doubled equity fail. But "
                         "zero of 30 simulated humans held the plan - every one capitulated 3-5 times "
                         "and gave up $12.5k-$16.4k of equity."),
+        "meta_description": "Shield v14 vs static 60/40: MaxDD 34.2% vs 60.7-81.1%. Zero of 30 simulated humans held the plan \u2014 every one capitulated.",
         "altLabel": "中文",
     },
     {
@@ -187,7 +192,7 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-08-12",
-        "title": "静态 vs 动态：防护盾只通过了一半的测试 - AQMath",
+        "title": "静态 vs 动态防护盾测试 - AQMath",
         "shortTitle": "静态 vs 动态 &mdash; 防护盾对真人持有的 60/40",
         "description": ("皇冠测试 2：Shield v14 对静态 加密币/稳定币 分配，按三种\u201c像人程度\u201d"
                         "测试 — 机器人（年度再平衡）、抽屉党（从不触碰）与真人（疼到投降，"
@@ -195,6 +200,7 @@ DOCS = [
                         "的 Calmar 通过；机器人 60/40 的更高夏普（0.621 对 0.493）与翻倍权益"
                         "失败。但 30 个模拟人类没有一个撑住计划 — 每人投降 3–5 次，放弃"
                         "$12.5k–$16.4k 的权益。"),
+        "meta_description": "Shield v14 对静态 60/40：MaxDD 34.2% vs 60.7–81.1%。30 个模拟人类无一坚持计划，全部投降。",
         "altLabel": "English",
     },
     {
@@ -204,7 +210,7 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-09",
-        "title": "Three Price Feeds, One Strategy: Does the Signal Depend on Who Tells You the Price? - AQMath",
+        "title": "Three Price Feeds, One Strategy - AQMath",
         "shortTitle": "Three Price Feeds, One Strategy &mdash; Feed Sensitivity",
         "description": ("The pipeline merges three price feeds by per-date median - but 5 of the "
                         "8 frozen-plan tokens are collected by the free-tier aggregator alone. "
@@ -212,6 +218,7 @@ DOCS = [
                         "agreeing to ~0.1% while the aggregator prints 49 one-day moves above 30% "
                         "in a year - 41 corroborated by no exchange. The v14 replay outcome barely "
                         "moves, but trade timing and the macro loop's volatility input do."),
+        "meta_description": "Three price feeds compared: exchanges agree to ~0.1%, the aggregator prints 49 uncorroborated 30%+ moves/year. Outcome holds, timing shifts.",
         "altLabel": "中文",
     },
     {
@@ -221,12 +228,13 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-08-09",
-        "title": "三个价格源，一个策略：信号取决于谁告诉你价格吗？ - AQMath",
+        "title": "三个价格源，一个策略 - AQMath",
         "shortTitle": "三个价格源，一个策略 &mdash; 数据源敏感性",
         "description": ("管线用按日中位数合并三个价格源 — 但冻结计划的 8 个代币中有 5 个只由"
                         "免费档聚合器采集。把同样 8 个代币从三个独立价格源拉取：交易所之间分歧"
                         "仅 ~0.1%，而聚合器一年打出 49 次超 30% 单日波动 — 其中 41 次没有任何"
                         "交易所佐证。v14 回放结果几乎不动，但交易时机与宏观回路的波动率输入会动。"),
+        "meta_description": "三个价格源对比：交易所分歧仅 ~0.1%，聚合器一年打出 49 次无佐证 30%+ 波动。结果不变，时机偏移。",
         "altLabel": "English",
     },
     {
@@ -236,12 +244,13 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-07",
-        "title": "Institutional Risk Report: Does v14's Edge Survive 3,000 Synthetic Histories? - AQMath",
+        "title": "v14 Risk Report: 3,000 Synthetic Histories - AQMath",
         "shortTitle": "Institutional Risk Report &mdash; 3,000 Synthetic Histories",
         "description": ("Stationary block bootstrap, Deflated Sharpe, White's Reality Check and "
                         "CVaR on the production v14 wiring: the drawdown cut wins in 98.6-99.7% of "
                         "3,000 paired synthetic histories per basket and the one-month tail is ~40% "
                         "thinner everywhere - but excess return over buy & hold is statistically zero."),
+        "meta_description": "Bootstrap, Deflated Sharpe & CVaR on v14: drawdown cut wins in 98.6-99.7% of 3,000 synthetic histories. Excess return is statistically zero.",
         "altLabel": "中文",
     },
     {
@@ -251,11 +260,12 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-08-07",
-        "title": "机构级风险报告：v14 的优势能否经受 3,000 段合成历史？ - AQMath",
+        "title": "v14 风险报告：3,000 段合成历史 - AQMath",
         "shortTitle": "机构级风险报告 &mdash; 3,000 段合成历史",
         "description": ("对生产 v14 接线做平稳分块自助法、通缩夏普、White 现实检验与 CVaR："
                         "每个组合 3,000 段成对合成历史中 98.6-99.7% 的路径回撤削减为正，"
                         "一个月尾部处处薄约 40% — 但相对买入持有的超额收益在统计上为零。"),
+        "meta_description": "自助法、通缩夏普与 CVaR 验证 v14：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。",
         "altLabel": "English",
     },
     {
@@ -265,12 +275,13 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-07",
-        "title": "Graveyard Gauntlet: Who Saves the Basket When Tokens Die? - AQMath",
+        "title": "Graveyard Gauntlet: When Tokens Die - AQMath",
         "shortTitle": "Graveyard Gauntlet &mdash; Who Saves the Basket When Tokens Die?",
         "description": ("A worst-case basket holding CEL, LUNC and FTT through their 2022 deaths: "
                         "the system draws down 18% vs 62% for buy & hold, and the honest attribution "
                         "shows the optimizer dodging slow deaths, the Shield absorbing fast ones, and "
                         "the liveness screen cleaning up afterwards - not before."),
+        "meta_description": "Worst-case basket (CEL, LUNC, FTT): system drawdown 18% vs buy & hold 62%. Optimizer dodges slow deaths, Shield absorbs fast ones.",
         "altLabel": "中文",
     },
     {
@@ -280,11 +291,12 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-08-07",
-        "title": "墓地试炼：代币死亡时谁来拯救组合？ - AQMath",
+        "title": "墓地试炼：代币死亡时的组合救援 - AQMath",
         "shortTitle": "墓地试炼 &mdash; 代币死亡时谁来拯救组合？",
         "description": ("最坏情况组合持有 CEL、LUNC 与 FTT 度过其 2022 年死亡：系统回撤 18% "
                         "vs 买入持有 62%，诚实归因显示优化器避开缓慢死亡、防护盾吸收快速死亡、"
                         "活性筛查事后清理 — 而不是事前。"),
+        "meta_description": "最坏情况组合（CEL、LUNC、FTT）：系统回撤 18% vs 买入持有 62%。优化器避开慢死，防护盾吸收快死。",
         "altLabel": "English",
     },
     {
@@ -294,12 +306,13 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-07",
-        "title": "Robustness: How Far Can Reality Deviate Before the Shield Breaks? - AQMath",
+        "title": "Robustness: How Far Can Reality Deviate? - AQMath",
         "shortTitle": "Robustness &mdash; How Far Can Reality Deviate Before the Shield Breaks?",
         "description": ("129 walk-forward re-runs perturb every user-facing knob one at a time and "
                         "stress fees to 20x and execution to 2 days late: no cliff found - two knobs "
                         "are true plateaus, one is a clean protection dial, and the drawdown cut "
                         "survives late execution almost intact."),
+        "meta_description": "129 walk-forward re-runs perturb every knob, stress fees to 20x and execution to 2 days late. No cliff found; drawdown cut survives.",
         "altLabel": "中文",
     },
     {
@@ -309,11 +322,12 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-08-07",
-        "title": "稳健性：现实偏离多远防护盾才会失效？ - AQMath",
+        "title": "稳健性：现实偏离多远防护盾会失效？ - AQMath",
         "shortTitle": "稳健性 &mdash; 现实偏离多远防护盾才会失效？",
         "description": ("129 次滚动前推重跑逐一扰动每个面向用户的旋钮，并把手续费压到 20 倍、"
                         "执行延迟 2 天：未发现断崖 — 两个旋钮是真正的高原，一个是干净的保护旋钮，"
                         "回撤削减在延迟执行下几乎完整保留。"),
+        "meta_description": "129 次重跑扰动每个旋钮，手续费压到 20 倍、执行延迟 2 天。未发现断崖，回撤削减几乎完整保留。",
         "altLabel": "English",
     },
     {
@@ -323,12 +337,13 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-07",
-        "title": "Regime Autopsy: Does the Shield Survive Its Worst Regimes? - AQMath",
+        "title": "Regime Autopsy: Shield vs Worst Regimes - AQMath",
         "shortTitle": "Regime Autopsy &mdash; Does the Shield Survive Its Worst Regimes?",
         "description": ("Six named crash regimes - May 2021, LUNA, FTX, Aug 2024, 2025-26 - sliced "
                         "post-hoc on frozen-weight walk-forward series, with the ADV-K2 liveness "
                         "screen active: 15 of 15 covered regime-basket combinations show a positive "
                         "out-of-sample drawdown cut, LUNA contagion held to 16.8% vs 44.1% Buy & Hold."),
+        "meta_description": "Six crash regimes tested: 15/15 regime-basket combos show positive drawdown cut. LUNA contagion held to 16.8% vs 44.1% B&H.",
         "altLabel": "中文",
     },
     {
@@ -338,12 +353,13 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-08-07",
-        "title": "市场状态尸检：防护盾能否在最差的市场状态中存活？ - AQMath",
+        "title": "市场状态尸检：防护盾与最差市场状态 - AQMath",
         "shortTitle": "市场状态尸检 &mdash; 防护盾能否在最差的市场状态中存活？",
         "description": ("六个已命名的崩盘市场状态 — 2021 年 5 月、LUNA、FTX、2024 年 8 月、"
                         "2025-26 — 在冻结权重滚动前推序列上做事后切片，ADV-K2 活性筛查开启："
                         "15/15 个被覆盖的市场状态-组合搭配显示出正的样本外回撤削减，"
                         "LUNA 传染被控制在 16.8% vs 买入持有 44.1%。"),
+        "meta_description": "六个崩盘市场状态测试：15/15 组合显示正回撤削减。LUNA 传染控制在 16.8% vs 买入持有 44.1%。",
         "altLabel": "English",
     },
     {
@@ -353,13 +369,14 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-07",
-        "title": "Liveness Screen: Fixing the Dead-Token Weight Flaw - AQMath",
+        "title": "Liveness Screen: Dead-Token Fix - AQMath",
         "shortTitle": "Liveness Screen &mdash; Fixing the Dead-Token Weight Flaw",
         "description": ("The KKT risk-parity loop can hand a dead token a real allocation, because a "
                         "collapsed chart looks low-vol: a Celsius-style zombie won a 24.7% frozen "
                         "weight in our stress basket. We reproduce the flaw, reject three naive "
-                        "filters, and ship the ADV-K2 cap-zero screen — +8.5% final value, Sharpe "
+                        "filters, and ship the ADV-K2 cap-zero screen \u2014 +8.5% final value, Sharpe "
                         "0.24 to 0.32, zero cost on live-token baskets."),
+        "meta_description": "Dead tokens get real weights because collapsed charts look low-vol. ADV-K2 screen fixes it: +8.5% value, Sharpe 0.24\u21920.32, zero cost.",
         "altLabel": "中文",
     },
     {
@@ -369,12 +386,13 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-08-07",
-        "title": "活性筛查：修复死代币权重缺陷 - AQMath",
+        "title": "活性筛查：死代币权重修复 - AQMath",
         "shortTitle": "活性筛查 &mdash; 修复死代币权重缺陷",
         "description": ("KKT 风险平价回路可能把一个死代币赋予真实配置，因为崩塌后的图表看起来"
                         "低波动：一个 Celsius 式僵尸在我们的压力组合中赢得 24.7% 冻结权重。"
                         "我们复现该缺陷、否决三种朴素过滤器，并上线 ADV-K2 上限归零筛查 — "
                         "最终价值 +8.5%，Sharpe 从 0.24 升至 0.32，在存续代币组合上零成本。"),
+        "meta_description": "死代币因崩塌后图表看起来低波动而获真实配置。ADV-K2 筛查修复：+8.5% 价值，Sharpe 0.24\u21920.32。",
         "altLabel": "English",
     },
     {
@@ -384,12 +402,13 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-05",
-        "title": "Three-Basket Comparison: v14 Dual-Speed Engine - AQMath",
+        "title": "Three-Basket Comparison: v14 Engine - AQMath",
         "shortTitle": "Three-Basket Comparison &mdash; v14 KKT MACRO + Shield",
         "description": ("Walk-forward E2E comparison of three structurally different baskets "
                         "(majors+gold, veterans+gold, new-gen alts) on the shipped v14 stack: "
                         "shared-window max drawdown 9.8% vs 25.4% Buy & Hold; the Shield cut "
                         "drawdown 30-36 pp in every window."),
+        "meta_description": "Three baskets on v14: max drawdown 9.8% vs 25.4% Buy & Hold. Shield cut drawdown 30-36 pp in every window.",
         "altLabel": "中文",
     },
     {
@@ -399,11 +418,12 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-08-05",
-        "title": "三组合对比：v14 双速引擎 - AQMath",
+        "title": "三组合对比：v14 引擎 - AQMath",
         "shortTitle": "三组合对比 &mdash; v14 KKT MACRO + 防护盾",
         "description": ("三个结构不同组合（主流币+黄金、老将+黄金、新生代山寨币）在已上线 "
                         "v14 栈上的滚动前推 E2E 对比：共同窗口最大回撤 9.8% vs 买入持有 25.4%；"
                         "防护盾在每个窗口都把回撤削减 30-36 个百分点。"),
+        "meta_description": "三个组合在 v14 上对比：最大回撤 9.8% vs 买入持有 25.4%。防护盾每窗口削减回撤 30-36 个百分点。",
         "altLabel": "English",
     },
     {
@@ -413,11 +433,12 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-03",
-        "title": "E2E Study: TIA / QNT / XRP + PAXG Anchor - AQMath",
+        "title": "E2E Study: TIA/QNT/XRP + PAXG - AQMath",
         "shortTitle": "E2E Study &mdash; TIA / QNT / XRP + PAXG Anchor",
         "description": ("Walk-forward E2E test of a candidate basket (TIA, QNT, XRP, PAXG) on the "
                         "live dual-speed stack: max drawdown 16.9% vs 24.6% Buy & Hold, beta 0.62; "
                         "the KKT optimizer zero-weighted TIA on every re-optimisation."),
+        "meta_description": "Walk-forward E2E test (TIA, QNT, XRP, PAXG): max drawdown 16.9% vs 24.6% B&H, beta 0.62. KKT optimizer zero-weighted TIA.",
         "altLabel": "中文",
     },
     {
@@ -427,11 +448,12 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-08-03",
-        "title": "E2E 研究：TIA / QNT / XRP + PAXG 锚 - AQMath",
+        "title": "E2E 研究：TIA/QNT/XRP + PAXG - AQMath",
         "shortTitle": "E2E 研究 &mdash; TIA / QNT / XRP + PAXG 锚",
         "description": ("候选组合（TIA、QNT、XRP、PAXG）在实盘双速栈上的滚动前推 E2E 测试："
                         "最大回撤 16.9% vs 买入持有 24.6%，beta 0.62；KKT 优化器在每次再优化中"
                         "都把 TIA 赋予零权重。"),
+        "meta_description": "候选组合（TIA、QNT、XRP、PAXG）E2E 测试：最大回撤 16.9% vs 买入持有 24.6%，beta 0.62。",
         "altLabel": "English",
     },
     {
@@ -441,11 +463,12 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-07-17",
-        "title": "OOS Validation: Deleverage v14.0 on Unseen Tokens - AQMath",
+        "title": "OOS Validation: v14 on Unseen Tokens - AQMath",
         "shortTitle": "OOS Validation &mdash; v14.0 on Unseen Tokens",
         "description": ("Out-of-sample test of the shipped AQMath Deleverage Modulator v14.0 on 16 "
                         "baskets of never-tuned tokens: median 54.3 pp drawdown cut, Calmar up "
                         "in 16/16."),
+        "meta_description": "OOS test of Deleverage v14.0 on 16 never-tuned token baskets: median 54.3 pp drawdown cut, Calmar up in 16/16.",
         "altLabel": "\u4e2d\u6587",
     },
     {
@@ -455,13 +478,14 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-07-17",
-        "title": "\u6837\u672c\u5916\u9a8c\u8bc1\uff1av14.0 \u672a\u89c1\u4ee3\u5e01\u6d4b\u8bd5 - AQMath",
+        "title": "\u6837\u672c\u5916\u9a8c\u8bc1\uff1av14 \u672a\u89c1\u4ee3\u5e01 - AQMath",
         "shortTitle": "\u6837\u672c\u5916\u9a8c\u8bc1 &mdash; v14.0 \u672a\u89c1\u4ee3\u5e01",
         "description": ("AQMath \u53bb\u6760\u6746\u8c03\u8282\u5668 v14.0 \u7684\u6837\u672c\u5916\u6d4b\u8bd5\uff1a"
                         "\u5728 16 \u4e2a\u4ece\u672a\u7528\u4e8e\u8c03\u53c2\u7684\u4ee3\u5e01\u7ec4\u5408\u4e0a\u9a8c\u8bc1\uff0c"
                         "\u6700\u5927\u56de\u64a4\u4e2d\u4f4d\u6570\u524a\u51cf 54.3 \u4e2a\u767e\u5206\u70b9\uff0c"
                         "Calmar \u5728 16/16 \u4e2a\u7ec4\u5408\u4e2d\u5168\u90e8\u63d0\u5347\uff0c"
                         "\u5e76\u5305\u542b\u6b7b\u4ea1\u4ee3\u5e01\u4e0e\u77ed\u5386\u53f2\u538b\u529b\u6848\u4f8b\u3002"),
+        "meta_description": "v14.0 \u53bb\u6760\u6746\u8c03\u8282\u5668\u6837\u672c\u5916\u6d4b\u8bd5\uff1a16 \u4e2a\u672a\u89c1\u4ee3\u5e01\u7ec4\u5408\uff0c\u6700\u5927\u56de\u64a4\u4e2d\u4f4d\u6570\u524a\u51cf 54.3 pp\uff0cCalmar 16/16 \u63d0\u5347\u3002",
         "altLabel": "English",
     },
 ]
@@ -681,9 +705,13 @@ def alternates(path):
     return links
 
 
-def shell(lang, html_lang, title, description, path, body, extra_head=()):
+def shell(lang, html_lang, title, description, path, body, extra_head=(), jsonld=None):
     stamp = asset_stamp()
     head = "\n".join(list(extra_head) + alternates(path))
+    if jsonld:
+        import json as _json
+        ld_tag = '<script type="application/ld+json">' + _json.dumps(jsonld, ensure_ascii=False, separators=(",", ":")) + '</script>'
+        head = ld_tag + "\n" + head
     return BANNER + f"""<!DOCTYPE html>
 <html lang="{html_lang}">
 <head>
@@ -734,7 +762,7 @@ def shell(lang, html_lang, title, description, path, body, extra_head=()):
 
 <footer class="site-footer">
     &copy; 2026 AQMath &mdash; Private. Non-Custodial.<br>
-    <a href="/">Home</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
+    <a href="/">Home</a><span class="sep">|</span><a href="/app">App</a><span class="sep">|</span><a href="/backtest">Backtest</a><span class="sep">|</span><a href="/results">Results</a><span class="sep">|</span><a href="/docs">Docs</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
 </body>
@@ -777,8 +805,29 @@ def render_doc(doc):
     if doc.get("sim_notice", True):
         body += f'\n<p class="sim-notice">{SIM_NOTICE[doc["lang"]]}</p>'
     body += "\n" + rest
-    return shell(doc["lang"], doc["htmlLang"], doc["title"], doc["description"],
-                 doc["path"], body)
+    meta_desc = doc.get("meta_description", doc["description"])
+    # Article structured data for SEO
+    jsonld = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {"@type": "Article",
+             "headline": doc["shortTitle"].replace("&mdash;", "\u2014").replace("&amp;", "&"),
+             "url": SITE + doc["path"],
+             "datePublished": doc["published"],
+             "description": meta_desc,
+             "inLanguage": doc["lang"],
+             "publisher": {"@id": f"{SITE}/#organization"}},
+            {"@type": "BreadcrumbList",
+             "itemListElement": [
+                 {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
+                 {"@type": "ListItem", "position": 2, "name": "Research", "item": SITE + "/research/"},
+                 {"@type": "ListItem", "position": 3, "name": doc["shortTitle"].split("&mdash;")[0].strip().replace("&amp;", "&"),
+                  "item": SITE + doc["path"]},
+             ]},
+        ],
+    }
+    return shell(doc["lang"], doc["htmlLang"], doc["title"], meta_desc,
+                 doc["path"], body, jsonld=jsonld)
 
 
 def render_hub():
@@ -813,7 +862,19 @@ def render_hub():
         "en", "en", "Research &amp; Validation &mdash; AQMath",
         "Published out-of-sample validation reports for the AQMath Deleverage Modulator: "
         "test methodology, per-basket results, stress cases and caveats.",
-        "/research/", body)
+        "/research/", body,
+        jsonld={"@context": "https://schema.org",
+                "@graph": [
+                    {"@type": "CollectionPage",
+                     "name": "Research & Validation",
+                     "url": f"{SITE}/research/",
+                     "description": "Published out-of-sample validation reports for the AQMath Deleverage Modulator."},
+                    {"@type": "BreadcrumbList",
+                     "itemListElement": [
+                         {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
+                         {"@type": "ListItem", "position": 2, "name": "Research", "item": SITE + "/research/"},
+                     ]},
+                ]})
 
 
 def build():

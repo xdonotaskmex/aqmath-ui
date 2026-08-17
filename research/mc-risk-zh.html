@@ -5,8 +5,8 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>机构级风险报告：v14 的优势能否经受 3,000 段合成历史？ - AQMath</title>
-<meta name="description" content="对生产 v14 接线做平稳分块自助法、通缩夏普、White 现实检验与 CVaR：每个组合 3,000 段成对合成历史中 98.6-99.7% 的路径回撤削减为正，一个月尾部处处薄约 40% — 但相对买入持有的超额收益在统计上为零。">
+<title>v14 风险报告：3,000 段合成历史 - AQMath</title>
+<meta name="description" content="自助法、通缩夏普与 CVaR 验证 v14：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://aqmath.xyz/research/mc-risk-zh">
 <link rel="icon" href="/favicon.ico">
@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://aqmath.xyz/research/mc-risk-zh">
-<meta property="og:title" content="机构级风险报告：v14 的优势能否经受 3,000 段合成历史？ - AQMath">
-<meta property="og:description" content="对生产 v14 接线做平稳分块自助法、通缩夏普、White 现实检验与 CVaR：每个组合 3,000 段成对合成历史中 98.6-99.7% 的路径回撤削减为正，一个月尾部处处薄约 40% — 但相对买入持有的超额收益在统计上为零。">
+<meta property="og:title" content="v14 风险报告：3,000 段合成历史 - AQMath">
+<meta property="og:description" content="自助法、通缩夏普与 CVaR 验证 v14：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。">
 <meta property="og:site_name" content="AQMath">
 <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20260721b">
@@ -24,10 +24,11 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="机构级风险报告：v14 的优势能否经受 3,000 段合成历史？ - AQMath">
-<meta name="twitter:description" content="对生产 v14 接线做平稳分块自助法、通缩夏普、White 现实检验与 CVaR：每个组合 3,000 段成对合成历史中 98.6-99.7% 的路径回撤削减为正，一个月尾部处处薄约 40% — 但相对买入持有的超额收益在统计上为零。">
+<meta name="twitter:title" content="v14 风险报告：3,000 段合成历史 - AQMath">
+<meta name="twitter:description" content="自助法、通缩夏普与 CVaR 验证 v14：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。">
 <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"机构级风险报告 — 3,000 段合成历史","url":"https://aqmath.xyz/research/mc-risk-zh","datePublished":"2026-08-07","description":"自助法、通缩夏普与 CVaR 验证 v14：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。","inLanguage":"zh-Hans","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"机构级风险报告","item":"https://aqmath.xyz/research/mc-risk-zh"}]}]}</script>
 <link rel="alternate" hreflang="en" href="https://aqmath.xyz/research/mc-risk">
 <link rel="alternate" hreflang="zh-Hans" href="https://aqmath.xyz/research/mc-risk-zh">
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/mc-risk">
@@ -153,7 +154,7 @@
 
 <footer class="site-footer">
     &copy; 2026 AQMath &mdash; Private. Non-Custodial.<br>
-    <a href="/">Home</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
+    <a href="/">Home</a><span class="sep">|</span><a href="/app">App</a><span class="sep">|</span><a href="/backtest">Backtest</a><span class="sep">|</span><a href="/results">Results</a><span class="sep">|</span><a href="/docs">Docs</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
 </body>

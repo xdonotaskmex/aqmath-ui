@@ -5,8 +5,8 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>活性筛查：修复死代币权重缺陷 - AQMath</title>
-<meta name="description" content="KKT 风险平价回路可能把一个死代币赋予真实配置，因为崩塌后的图表看起来低波动：一个 Celsius 式僵尸在我们的压力组合中赢得 24.7% 冻结权重。我们复现该缺陷、否决三种朴素过滤器，并上线 ADV-K2 上限归零筛查 — 最终价值 +8.5%，Sharpe 从 0.24 升至 0.32，在存续代币组合上零成本。">
+<title>活性筛查：死代币权重修复 - AQMath</title>
+<meta name="description" content="死代币因崩塌后图表看起来低波动而获真实配置。ADV-K2 筛查修复：+8.5% 价值，Sharpe 0.24→0.32。">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://aqmath.xyz/research/liveness-screen-zh">
 <link rel="icon" href="/favicon.ico">
@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://aqmath.xyz/research/liveness-screen-zh">
-<meta property="og:title" content="活性筛查：修复死代币权重缺陷 - AQMath">
-<meta property="og:description" content="KKT 风险平价回路可能把一个死代币赋予真实配置，因为崩塌后的图表看起来低波动：一个 Celsius 式僵尸在我们的压力组合中赢得 24.7% 冻结权重。我们复现该缺陷、否决三种朴素过滤器，并上线 ADV-K2 上限归零筛查 — 最终价值 +8.5%，Sharpe 从 0.24 升至 0.32，在存续代币组合上零成本。">
+<meta property="og:title" content="活性筛查：死代币权重修复 - AQMath">
+<meta property="og:description" content="死代币因崩塌后图表看起来低波动而获真实配置。ADV-K2 筛查修复：+8.5% 价值，Sharpe 0.24→0.32。">
 <meta property="og:site_name" content="AQMath">
 <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20260721b">
@@ -24,10 +24,11 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="活性筛查：修复死代币权重缺陷 - AQMath">
-<meta name="twitter:description" content="KKT 风险平价回路可能把一个死代币赋予真实配置，因为崩塌后的图表看起来低波动：一个 Celsius 式僵尸在我们的压力组合中赢得 24.7% 冻结权重。我们复现该缺陷、否决三种朴素过滤器，并上线 ADV-K2 上限归零筛查 — 最终价值 +8.5%，Sharpe 从 0.24 升至 0.32，在存续代币组合上零成本。">
+<meta name="twitter:title" content="活性筛查：死代币权重修复 - AQMath">
+<meta name="twitter:description" content="死代币因崩塌后图表看起来低波动而获真实配置。ADV-K2 筛查修复：+8.5% 价值，Sharpe 0.24→0.32。">
 <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"活性筛查 — 修复死代币权重缺陷","url":"https://aqmath.xyz/research/liveness-screen-zh","datePublished":"2026-08-07","description":"死代币因崩塌后图表看起来低波动而获真实配置。ADV-K2 筛查修复：+8.5% 价值，Sharpe 0.24→0.32。","inLanguage":"zh-Hans","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"活性筛查","item":"https://aqmath.xyz/research/liveness-screen-zh"}]}]}</script>
 <link rel="alternate" hreflang="en" href="https://aqmath.xyz/research/liveness-screen">
 <link rel="alternate" hreflang="zh-Hans" href="https://aqmath.xyz/research/liveness-screen-zh">
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/liveness-screen">
@@ -191,7 +192,7 @@
 
 <footer class="site-footer">
     &copy; 2026 AQMath &mdash; Private. Non-Custodial.<br>
-    <a href="/">Home</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
+    <a href="/">Home</a><span class="sep">|</span><a href="/app">App</a><span class="sep">|</span><a href="/backtest">Backtest</a><span class="sep">|</span><a href="/results">Results</a><span class="sep">|</span><a href="/docs">Docs</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
 </body>

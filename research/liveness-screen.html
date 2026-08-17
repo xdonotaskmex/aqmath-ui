@@ -5,8 +5,8 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Liveness Screen: Fixing the Dead-Token Weight Flaw - AQMath</title>
-<meta name="description" content="The KKT risk-parity loop can hand a dead token a real allocation, because a collapsed chart looks low-vol: a Celsius-style zombie won a 24.7% frozen weight in our stress basket. We reproduce the flaw, reject three naive filters, and ship the ADV-K2 cap-zero screen — +8.5% final value, Sharpe 0.24 to 0.32, zero cost on live-token baskets.">
+<title>Liveness Screen: Dead-Token Fix - AQMath</title>
+<meta name="description" content="Dead tokens get real weights because collapsed charts look low-vol. ADV-K2 screen fixes it: +8.5% value, Sharpe 0.24→0.32, zero cost.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://aqmath.xyz/research/liveness-screen">
 <link rel="icon" href="/favicon.ico">
@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://aqmath.xyz/research/liveness-screen">
-<meta property="og:title" content="Liveness Screen: Fixing the Dead-Token Weight Flaw - AQMath">
-<meta property="og:description" content="The KKT risk-parity loop can hand a dead token a real allocation, because a collapsed chart looks low-vol: a Celsius-style zombie won a 24.7% frozen weight in our stress basket. We reproduce the flaw, reject three naive filters, and ship the ADV-K2 cap-zero screen — +8.5% final value, Sharpe 0.24 to 0.32, zero cost on live-token baskets.">
+<meta property="og:title" content="Liveness Screen: Dead-Token Fix - AQMath">
+<meta property="og:description" content="Dead tokens get real weights because collapsed charts look low-vol. ADV-K2 screen fixes it: +8.5% value, Sharpe 0.24→0.32, zero cost.">
 <meta property="og:site_name" content="AQMath">
 <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20260721b">
@@ -24,10 +24,11 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Liveness Screen: Fixing the Dead-Token Weight Flaw - AQMath">
-<meta name="twitter:description" content="The KKT risk-parity loop can hand a dead token a real allocation, because a collapsed chart looks low-vol: a Celsius-style zombie won a 24.7% frozen weight in our stress basket. We reproduce the flaw, reject three naive filters, and ship the ADV-K2 cap-zero screen — +8.5% final value, Sharpe 0.24 to 0.32, zero cost on live-token baskets.">
+<meta name="twitter:title" content="Liveness Screen: Dead-Token Fix - AQMath">
+<meta name="twitter:description" content="Dead tokens get real weights because collapsed charts look low-vol. ADV-K2 screen fixes it: +8.5% value, Sharpe 0.24→0.32, zero cost.">
 <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"Liveness Screen — Fixing the Dead-Token Weight Flaw","url":"https://aqmath.xyz/research/liveness-screen","datePublished":"2026-08-07","description":"Dead tokens get real weights because collapsed charts look low-vol. ADV-K2 screen fixes it: +8.5% value, Sharpe 0.24→0.32, zero cost.","inLanguage":"en","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"Liveness Screen","item":"https://aqmath.xyz/research/liveness-screen"}]}]}</script>
 <link rel="alternate" hreflang="en" href="https://aqmath.xyz/research/liveness-screen">
 <link rel="alternate" hreflang="zh-Hans" href="https://aqmath.xyz/research/liveness-screen-zh">
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/liveness-screen">
@@ -191,7 +192,7 @@
 
 <footer class="site-footer">
     &copy; 2026 AQMath &mdash; Private. Non-Custodial.<br>
-    <a href="/">Home</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
+    <a href="/">Home</a><span class="sep">|</span><a href="/app">App</a><span class="sep">|</span><a href="/backtest">Backtest</a><span class="sep">|</span><a href="/results">Results</a><span class="sep">|</span><a href="/docs">Docs</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
 </body>

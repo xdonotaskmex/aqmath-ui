@@ -33,6 +33,7 @@ Usage:  python tools/build_pages.py [--check]
         if they are stale, without writing anything.
 """
 import hashlib
+import json
 import re
 import sys
 from pathlib import Path
@@ -50,29 +51,29 @@ PAGES = {
         "path": "/",
         "view": "landingView",
         "robots": "index, follow",
-        "title": "AQMath — Crypto Portfolio Rebalancer | Risk Parity",
-        "description": "Non-custodial crypto portfolio rebalancer with Risk Parity math and Deleverage Shield crash protection. Private — no wallet connection, no account needed.",
+        "title": "AQMath \u2014 Crypto Portfolio Rebalancer | Risk Parity",
+        "description": "Non-custodial crypto portfolio rebalancer with Risk Parity math and Deleverage Shield crash protection. Private \u2014 no wallet connection, no account needed.",
     },
     "docs.html": {
         "path": "/docs",
         "view": "docView",
         "robots": "index, follow",
-        "title": "System Documentation — AQMath",
+        "title": "System Documentation \u2014 AQMath",
         "description": "Full technical documentation of AQMath: Risk Parity engine, Deleverage Shield, DCA safety pipeline and the non-custodial privacy architecture.",
     },
     "backtest.html": {
         "path": "/backtest",
         "view": "backtestView",
         "robots": "index, follow",
-        "title": "Backtest — AQMath Deleverage Shield",
-        "description": "Interactive 8.7-year walk-forward backtest of the AQMath Deleverage Shield — compare drawdowns and returns against plain Buy & Hold.",
+        "title": "Backtest \u2014 AQMath Deleverage Shield",
+        "description": "Interactive 8.7-year walk-forward backtest of the AQMath Deleverage Shield \u2014 compare drawdowns and returns against plain Buy & Hold.",
     },
     "results.html": {
         "path": "/results",
         "view": "resultsView",
         "robots": "index, follow",
-        "title": "New-Token Stress Test — AQMath",
-        "description": "Out-of-sample stress test of the AQMath Shield on 182 fresh coin baskets — including tokens never used to build or tune the model.",
+        "title": "New-Token Stress Test \u2014 AQMath",
+        "description": "Out-of-sample stress test of the AQMath Shield on 182 fresh coin baskets \u2014 including tokens never used to build or tune the model.",
     },
     # The app is a paid, closed tool behind a beta key: there is no public
     # content to rank, and leaving it indexable only added a fifth duplicate.
@@ -80,9 +81,102 @@ PAGES = {
         "path": "/app",
         "view": "appView",
         "robots": "noindex, follow",
-        "title": "App — AQMath Portfolio Rebalancer",
-        "description": "The AQMath app: track your portfolio, distribute DCA and optimize with Risk Parity math — non-custodial, private, no account needed.",
+        "title": "App \u2014 AQMath Portfolio Rebalancer",
+        "description": "The AQMath app: track your portfolio, distribute DCA and optimize with Risk Parity math \u2014 non-custodial, private, no account needed.",
     },
+}
+
+# ---------------------------------------------------------------- JSON-LD ---
+# Per-page structured data. The source (_src/index.html) ships a baseline
+# WebApplication block; render() replaces it with the page-specific graph.
+
+_SITE = "https://aqmath.xyz"
+_ORG = {
+    "@type": "Organization",
+    "@id": f"{_SITE}/#organization",
+    "name": "AQMath",
+    "url": _SITE,
+    "logo": f"{_SITE}/favicon.png",
+    "description": "Quantitative, non-custodial crypto portfolio rebalancer with KKT Risk-Parity weighting and Deleverage Modulator drawdown protection.",
+    "sameAs": [
+        "https://x.com/aqmathapp",
+        "https://t.me/DoNotAskMex",
+        "https://www.reddit.com/user/weaforex/",
+        "https://substack.com/@aqmathxyz",
+    ],
+}
+_WEBAPP = {
+    "@type": "WebApplication",
+    "name": "AQMath",
+    "url": _SITE,
+    "description": "Quantitative crypto portfolio rebalancer with Deleverage Modulator drawdown protection. Risk Parity mathematics, DCA optimization, and automatic de-risking during market crashes.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": [
+        {"@type": "Offer", "name": "Beta Access", "price": "0", "priceCurrency": "USD",
+         "description": "Limited slots, access review required"},
+        {"@type": "Offer", "name": "Black Annual Access", "price": "999", "priceCurrency": "EUR",
+         "description": "Annual subscription \u2014 \u20ac999/year, paid in USDC or EURC"},
+    ],
+    "featureList": [
+        "Risk Parity Optimization",
+        "Deleverage Modulator Drawdown Protection",
+        "DCA Distribution",
+        "Non-Custodial Privacy",
+        "Continuous Auto De-Risk",
+    ],
+}
+
+
+def _breadcrumb(label, path):
+    items = [{"@type": "ListItem", "position": 1, "name": "Home", "item": _SITE + "/"}]
+    items.append({"@type": "ListItem", "position": 2, "name": label, "item": _SITE + path})
+    return {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": items}
+
+
+PAGE_JSONLD = {
+    "index.html": lambda: {
+        "@context": "https://schema.org",
+        "@graph": [
+            _WEBAPP,
+            _ORG,
+        ],
+    },
+    "docs.html": lambda: {
+        "@context": "https://schema.org",
+        "@graph": [
+            {"@type": "TechArticle",
+             "name": "AQMath System Documentation",
+             "url": _SITE + "/docs",
+             "description": "Full technical documentation of AQMath: Risk Parity engine, Deleverage Shield, DCA safety pipeline and the non-custodial privacy architecture.",
+             "articleSection": "Technical Documentation",
+             "publisher": {"@id": f"{_SITE}/#organization"}},
+            _breadcrumb("Documentation", "/docs"),
+        ],
+    },
+    "backtest.html": lambda: {
+        "@context": "https://schema.org",
+        "@graph": [
+            {**_WEBAPP, "name": "AQMath Backtest",
+             "url": _SITE + "/backtest",
+             "description": "Interactive 8.7-year walk-forward backtest of the AQMath Deleverage Shield."},
+            _breadcrumb("Backtest", "/backtest"),
+        ],
+    },
+    "results.html": lambda: {
+        "@context": "https://schema.org",
+        "@graph": [
+            {"@type": "Article",
+             "name": "New-Token Stress Test",
+             "url": _SITE + "/results",
+             "description": "Out-of-sample stress test of the AQMath Shield on 182 fresh coin baskets.",
+             "articleSection": "Research Results",
+             "publisher": {"@id": f"{_SITE}/#organization"}},
+            _breadcrumb("Results", "/results"),
+        ],
+    },
+    # app.html is noindex; keep the baseline WebApplication only.
+    "app.html": lambda: {"@context": "https://schema.org", **_WEBAPP},
 }
 
 ALL_VIEWS = [meta["view"] for meta in PAGES.values()]
@@ -164,6 +258,13 @@ def render(src, name, meta):
                            ("name=\"twitter:description\"", meta["description"])):
             html = patch(html, r'(<meta ' + attr + r' content=")[^"]*(">)',
                          rf"\g<1>{value}\g<2>", name)
+    # Replace the source's baseline JSON-LD with the page-specific graph.
+    if name in PAGE_JSONLD:
+        ld_json = json.dumps(PAGE_JSONLD[name](), ensure_ascii=False, separators=(",", ":"))
+        html = re.sub(
+            r'<script type="application/ld\+json">.*?</script>',
+            f'<script type="application/ld+json">{ld_json}</script>',
+            html, count=1, flags=re.S)
     return BANNER + html
 
 

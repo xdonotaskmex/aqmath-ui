@@ -11,6 +11,17 @@
 	root * /srv
 	encode gzip
 
+	# Scanner / bot probes: return a hard 404 before try_files can serve the SPA
+	# fallback (index.html). Without this, every probe path returns 200 with the
+	# landing page content — a soft-404 that wastes crawl budget and confuses
+	# SEO crawlers into counting "links to broken page".
+	@scanner path_regexp ^/(js|css|assets|static|licensor|bot-connect|robots\.txt)
+	respond @scanner 404
+
+	# Collapse /index.html → / to avoid a redirect chain (try_files would serve
+	# the same content at both URLs; crawlers count the duplicate as a chain).
+	redir /index.html / 301
+
 	# Response headers GitHub Pages cannot set (it only sends HSTS). These are the
 	# HTTP-level counterparts to the <meta> CSP in the HTML: frame-ancestors and
 	# X-Frame-Options are ignored inside a meta tag, so clickjacking can only be

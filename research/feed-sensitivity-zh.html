@@ -5,8 +5,8 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>三个价格源，一个策略：信号取决于谁告诉你价格吗？ - AQMath</title>
-<meta name="description" content="管线用按日中位数合并三个价格源 — 但冻结计划的 8 个代币中有 5 个只由免费档聚合器采集。把同样 8 个代币从三个独立价格源拉取：交易所之间分歧仅 ~0.1%，而聚合器一年打出 49 次超 30% 单日波动 — 其中 41 次没有任何交易所佐证。v14 回放结果几乎不动，但交易时机与宏观回路的波动率输入会动。">
+<title>三个价格源，一个策略 - AQMath</title>
+<meta name="description" content="三个价格源对比：交易所分歧仅 ~0.1%，聚合器一年打出 49 次无佐证 30%+ 波动。结果不变，时机偏移。">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://aqmath.xyz/research/feed-sensitivity-zh">
 <link rel="icon" href="/favicon.ico">
@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://aqmath.xyz/research/feed-sensitivity-zh">
-<meta property="og:title" content="三个价格源，一个策略：信号取决于谁告诉你价格吗？ - AQMath">
-<meta property="og:description" content="管线用按日中位数合并三个价格源 — 但冻结计划的 8 个代币中有 5 个只由免费档聚合器采集。把同样 8 个代币从三个独立价格源拉取：交易所之间分歧仅 ~0.1%，而聚合器一年打出 49 次超 30% 单日波动 — 其中 41 次没有任何交易所佐证。v14 回放结果几乎不动，但交易时机与宏观回路的波动率输入会动。">
+<meta property="og:title" content="三个价格源，一个策略 - AQMath">
+<meta property="og:description" content="三个价格源对比：交易所分歧仅 ~0.1%，聚合器一年打出 49 次无佐证 30%+ 波动。结果不变，时机偏移。">
 <meta property="og:site_name" content="AQMath">
 <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20260721b">
@@ -24,10 +24,11 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="三个价格源，一个策略：信号取决于谁告诉你价格吗？ - AQMath">
-<meta name="twitter:description" content="管线用按日中位数合并三个价格源 — 但冻结计划的 8 个代币中有 5 个只由免费档聚合器采集。把同样 8 个代币从三个独立价格源拉取：交易所之间分歧仅 ~0.1%，而聚合器一年打出 49 次超 30% 单日波动 — 其中 41 次没有任何交易所佐证。v14 回放结果几乎不动，但交易时机与宏观回路的波动率输入会动。">
+<meta name="twitter:title" content="三个价格源，一个策略 - AQMath">
+<meta name="twitter:description" content="三个价格源对比：交易所分歧仅 ~0.1%，聚合器一年打出 49 次无佐证 30%+ 波动。结果不变，时机偏移。">
 <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"三个价格源，一个策略 — 数据源敏感性","url":"https://aqmath.xyz/research/feed-sensitivity-zh","datePublished":"2026-08-09","description":"三个价格源对比：交易所分歧仅 ~0.1%，聚合器一年打出 49 次无佐证 30%+ 波动。结果不变，时机偏移。","inLanguage":"zh-Hans","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"三个价格源，一个策略","item":"https://aqmath.xyz/research/feed-sensitivity-zh"}]}]}</script>
 <link rel="alternate" hreflang="en" href="https://aqmath.xyz/research/feed-sensitivity">
 <link rel="alternate" hreflang="zh-Hans" href="https://aqmath.xyz/research/feed-sensitivity-zh">
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/feed-sensitivity">
@@ -414,7 +415,7 @@
 
 <footer class="site-footer">
     &copy; 2026 AQMath &mdash; Private. Non-Custodial.<br>
-    <a href="/">Home</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
+    <a href="/">Home</a><span class="sep">|</span><a href="/app">App</a><span class="sep">|</span><a href="/backtest">Backtest</a><span class="sep">|</span><a href="/results">Results</a><span class="sep">|</span><a href="/docs">Docs</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
 </footer>
 
 </body>
