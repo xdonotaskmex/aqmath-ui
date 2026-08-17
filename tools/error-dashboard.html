@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQMath Error Dashboard (local admin)</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 { color: #00ff88; font-size: 1.4em; margin-bottom: 8px; }
+        .subtitle { color: #666; font-size: 0.85em; margin-bottom: 20px; }
+        .controls {
+            display: flex; gap: 10px; align-items: center;
+            margin-bottom: 20px; flex-wrap: wrap;
+        }
+        input, button, select {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            padding: 8px 12px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background: #111;
+            color: #e0e0e0;
+        }
+        input:focus, select:focus { outline: none; border-color: #00ff88; }
+        button {
+            background: #00ff88;
+            color: #000;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { background: #00cc66; }
+        button:disabled { background: #333; color: #666; cursor: not-allowed; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+        .stat-card .value { font-size: 1.8em; color: #00ff88; }
+        .stat-card .label { font-size: 0.75em; color: #666; margin-top: 4px; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85em;
+        }
+        th {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 2px solid #00ff88;
+            color: #00ff88;
+        }
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        tr:hover td { background: #111; }
+        .status-4xx { color: #ffaa00; }
+        .status-5xx { color: #ff4444; }
+        .status-js { color: #ff66ff; }
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #444;
+        }
+        .error-msg {
+            background: #1a0000;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .refresh-info {
+            color: #444;
+            font-size: 0.75em;
+            margin-top: 10px;
+        }
+        .privacy-note {
+            background: #0a1a0a;
+            border: 1px solid #004400;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 0.8em;
+            color: #00aa44;
+        }
+    </style>
+</head>
+<body>
+    <h1>⚡ AQMath Error Dashboard</h1>
+    <p class="subtitle">Privacy-first telemetry — NO IPs, NO keys, NO sessions, NO user agents</p>
+
+    <div class="privacy-note">
+        🔒 This dashboard reads from the error_telemetry table in your beta-auth PostgreSQL.
+        Only error type, route, HTTP status, and a short sanitized detail string are stored.
+    </div>
+
+    <div class="controls">
+        <input type="password" id="adminSecret" placeholder="ADMIN_SECRET" style="width: 200px;">
+        <select id="days">
+            <option value="1">Last 24h</option>
+            <option value="7" selected>Last 7 days</option>
+            <option value="14">Last 14 days</option>
+            <option value="30">Last 30 days</option>
+        </select>
+        <button id="btnLoad" onclick="loadErrors()">Load</button>
+        <button onclick="toggleAutoRefresh()" id="btnAuto">Auto-refresh: OFF</button>
+    </div>
+
+    <div id="errorBox"></div>
+    <div id="statsBox" class="stats"></div>
+    <div id="tableBox"></div>
+    <p class="refresh-info" id="refreshInfo"></p>
+
+    <script>
+        const API_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+            ? 'http://localhost:8000' : 'https://api-auth.aqmath.xyz';
+        let _autoInterval = null;
+
+        // Remember the secret in sessionStorage (not localStorage — gone on tab close)
+        const saved = sessionStorage.getItem('aq_admin_secret');
+        if (saved) document.getElementById('adminSecret').value = saved;
+
+        function getSecret() {
+            const s = document.getElementById('adminSecret').value.trim();
+            sessionStorage.setItem('aq_admin_secret', s);
+            return s;
+        }
+
+        async function loadErrors() {
+            const secret = getSecret();
+            if (!secret) {
+                document.getElementById('errorBox').innerHTML =
+                    '<div class="error-msg">Enter your ADMIN_SECRET above and click Load.</div>';
+                return;
+            }
+            const days = document.getElementById('days').value;
+            document.getElementById('btnLoad').disabled = true;
+            document.getElementById('btnLoad').textContent = 'Loading...';
+            try {
+                const res = await fetch(`${API_URL}/internal/errors?days=${days}`, {
+                    headers: { 'X-Admin-Secret': secret }
+                });
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.detail || `HTTP ${res.status}`);
+                }
+                const data = await res.json();
+                renderDashboard(data);
+                document.getElementById('errorBox').innerHTML = '';
+            } catch (e) {
+                document.getElementById('errorBox').innerHTML =
+                    `<div class="error-msg">Error: ${e.message}</div>`;
+                document.getElementById('statsBox').innerHTML = '';
+                document.getElementById('tableBox').innerHTML = '';
+            } finally {
+                document.getElementById('btnLoad').disabled = false;
+                document.getElementById('btnLoad').textContent = 'Load';
+                document.getElementById('refreshInfo').textContent =
+                    'Last loaded: ' + new Date().toLocaleTimeString();
+            }
+        }
+
+        function renderDashboard(data) {
+            const errors = data.errors || [];
+            const total = data.total_errors || 0;
+
+            // Count by type
+            const apiErrors = errors.filter(e => e.error_type === 'api_error' || e.error_type === 'engine_api_error')
+                                   .reduce((s, e) => s + e.count, 0);
+            const jsErrors = errors.filter(e => e.error_type.startsWith('js_'))
+                                   .reduce((s, e) => s + e.count, 0);
+            const uniqueRoutes = new Set(errors.map(e => e.route)).size;
+
+            // Stats cards
+            document.getElementById('statsBox').innerHTML = `
+                <div class="stat-card">
+                    <div class="value">${total}</div>
+                    <div class="label">Total errors (${data.period_days}d)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">${apiErrors}</div>
+                    <div class="label">Server (4xx/5xx)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">${jsErrors}</div>
+                    <div class="label">Browser JS crashes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">${uniqueRoutes}</div>
+                    <div class="label">Affected routes</div>
+                </div>
+            `;
+
+            // Table
+            if (errors.length === 0) {
+                document.getElementById('tableBox').innerHTML =
+                    '<div class="empty">🎉 No errors in this period. Everything is clean.</div>';
+                return;
+            }
+
+            let html = `<table>
+                <thead>
+                    <tr>
+                        <th>Count</th>
+                        <th>Type</th>
+                        <th>Route</th>
+                        <th>Status</th>
+                        <th>Last seen</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            for (const e of errors) {
+                const statusClass = e.http_status >= 500 ? 'status-5xx'
+                    : e.http_status >= 400 ? 'status-4xx'
+                    : 'status-js';
+                const statusText = e.http_status || '—';
+                const typeLabel = e.error_type.replace(/^(api_|engine_)?(api_)?error$/, 'API')
+                    .replace(/^js_/, 'JS: ');
+                const lastSeen = e.last_seen ? new Date(e.last_seen).toLocaleString() : '—';
+
+                html += `<tr>
+                    <td><strong>${e.count}</strong></td>
+                    <td>${typeLabel}</td>
+                    <td><code>${e.route || '—'}</code></td>
+                    <td class="${statusClass}">${statusText}</td>
+                    <td>${lastSeen}</td>
+                </tr>`;
+            }
+
+            html += '</tbody></table>';
+            document.getElementById('tableBox').innerHTML = html;
+        }
+
+        function toggleAutoRefresh() {
+            const btn = document.getElementById('btnAuto');
+            if (_autoInterval) {
+                clearInterval(_autoInterval);
+                _autoInterval = null;
+                btn.textContent = 'Auto-refresh: OFF';
+            } else {
+                _autoInterval = setInterval(loadErrors, 60000); // every 60s
+                btn.textContent = 'Auto-refresh: ON (60s)';
+                loadErrors();
+            }
+        }
+
+        // Auto-load if secret was remembered
+        if (saved) loadErrors();
+    </script>
+</body>
+</html>
