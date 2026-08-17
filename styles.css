@@ -663,6 +663,28 @@
         padding: 6px 12px; border-radius: 3px; cursor: pointer; }
 .update-banner-btn:hover { background: rgba(6,182,212,0.08); }
 
+/* ── What's New card (shown once after version update) ── */
+.whats-new { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        z-index: 310; width: 340px; max-width: 90vw; background: var(--s2);
+        border: 1px solid rgba(6,182,212,0.35); border-radius: 8px;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.55); animation: wnFadeIn 0.3s ease; }
+.whats-new.hidden { display: none; }
+.whats-new-head { display: flex; align-items: center; justify-content: space-between;
+        padding: 10px 14px; border-bottom: 1px solid var(--border); }
+.whats-new-ver { font-family: var(--mono); font-size: 0.72rem; font-weight: 700;
+        letter-spacing: 1px; color: var(--blue); }
+.whats-new-close { background: none; border: none; color: var(--dim); font-size: 1.1rem;
+        cursor: pointer; line-height: 1; padding: 0 2px; }
+.whats-new-close:hover { color: var(--text); }
+.whats-new-body { padding: 12px 14px 14px; }
+.whats-new-en { font-size: 0.78rem; color: var(--text); margin: 0 0 6px; line-height: 1.5; }
+.whats-new-cz { font-size: 0.72rem; color: var(--muted); margin: 0 0 10px; line-height: 1.5; font-style: italic; }
+.whats-new-list { list-style: none; margin: 0; padding: 0; }
+.whats-new-list li { font-size: 0.7rem; color: var(--muted); padding: 3px 0; }
+.whats-new-list li::before { content: '→ '; color: var(--blue); font-family: var(--mono); }
+@keyframes wnFadeIn { from { opacity: 0; transform: translate(-50%, -48%); }
+        to { opacity: 1; transform: translate(-50%, -50%); } }
+
     /* ===== MOBILE GATE (the app is desktop-only, hidden below 768px) ===== */
     .mobile-gate { display: none; }
 
@@ -2312,6 +2334,52 @@
     .dca-sec .fg { flex: 1; }
     .dca-sec .fg input {
         width: 100%; font-family: var(--mono); font-size: 0.78rem;
+    }
+
+    /* ── One-Tap Alignment: pending signal card ── */
+    .signal-card { border-color: rgba(6,182,212,0.25); }
+    .sig-block {
+        padding: 10px 0; border-bottom: 1px dashed var(--border);
+    }
+    .sig-block:last-child { border-bottom: none; }
+    .sig-header {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+        font-family: var(--mono); font-size: 0.65rem; margin-bottom: 8px;
+    }
+    .sig-side { font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .sig-buy { color: var(--green); }
+    .sig-sell { color: var(--red); }
+    .sig-sym { color: var(--text); font-weight: 600; }
+    .sig-amount { color: var(--dim); }
+    .sig-regime {
+        font-size: 0.52rem; letter-spacing: 1px; padding: 2px 6px;
+        border-radius: 3px; text-transform: uppercase;
+    }
+    .regime-shock { background: rgba(248,113,113,0.15); color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+    .regime-lowvol { background: rgba(52,211,153,0.1); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
+    .sig-days-ok { color: var(--green); font-size: 0.55rem; }
+    .sig-days-warn { color: var(--amber); font-size: 0.55rem; }
+    .sig-actions {
+        display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+    }
+    .sig-actions .btn { font-size: 0.58rem; padding: 4px 10px; }
+    .sig-adjust-form {
+        display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+        margin-top: 8px;
+    }
+    .sig-adjust-input {
+        width: 120px; font-family: var(--mono); font-size: 0.72rem;
+        padding: 4px 8px; background: var(--s1); border: 1px solid var(--border);
+        border-radius: 3px; color: var(--text);
+    }
+    .signal-stats-badge {
+        font-family: var(--mono); font-size: 0.52rem; color: var(--dim);
+        letter-spacing: 0.5px; padding: 2px 8px;
+        border: 1px solid var(--border); border-radius: 3px;
+    }
+    .signal-empty {
+        font-family: var(--mono); font-size: 0.6rem; color: var(--dim);
+        text-align: center; padding: 8px 0;
     }
     .ntfy-title {
         font-family: var(--mono); font-size: 0.62rem; letter-spacing: 2px;

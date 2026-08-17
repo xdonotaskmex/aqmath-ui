@@ -8,11 +8,11 @@
     "follow": "follow for updates & news: <a href=\"https://x.com/aqmathapp\" target=\"_blank\" rel=\"noopener\">twitter</a> <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" rel=\"noopener\">telegram</a> <a href=\"https://www.reddit.com/user/weaforex/\" target=\"_blank\" rel=\"noopener\">reddit</a> <a href=\"https://substack.com/@aqmathxyz\" target=\"_blank\" rel=\"noopener\">substack</a>",
     "followLabel": "follow for updates & news",
     "termLabel": "--what-you-are-watching",
-    "termTitle": "The engine loop, live",
+    "termTitle": "The engine loop, simulated",
     "termDesc": "A simulation of the exact cycle the engine runs on our backend: recompute the covariance matrix, read the drawdown / downside-volatility regime, scale exposure continuously. Every number shown is real — taken from the 8.7-year, 5-token validation backtest.",
     "termB1": "risk parity + KKT projection on live market data",
     "termB2": "continuous de-risk — no indicators, no timers",
-    "termB3": "0 bytes persisted — portfolio processed in-memory"
+    "termB3": "0 bytes persisted by default — portfolio processed in-memory (opt-in signal service excepted)"
   },
   "math": {
     "sectionTitle": "--mathematical-core",
@@ -69,6 +69,7 @@
     "betaF6": "Non-custodial privacy — portfolio stays in your browser (server-side storage only if you opt in to the signal & notification service)",
     "betaF7": "365-day access from activation",
     "betaF8": "Send a message — we review and activate within 48h",
+        "betaF9": "Shared beta chat — pseudonymous, 20-message rolling buffer, deletable anytime",
     "blackF1": "Risk Parity optimization with full Covariance &amp; Variance Matrix",
     "blackF2": "Deleverage Modulator with continuous drawdown protection",
     "blackF3": "Dynamic volatility-based allocation caps",
@@ -115,7 +116,9 @@
     "q10": "Do beta keys track my IP address?",
     "a10": "No &mdash; not in any readable form. A beta key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href=\"/privacy\" style=\"color:#a78bfa;\">Privacy Policy</a>.",
     "q11": "Is there an automatic daily signal or notification service?",
-    "a11": "Yes — as an <strong>optional, opt-in service</strong>. If you enable it, the engine computes your deleverage shield signal and DCA schedule once per day on the server and can push a notification to your device. To do that, your holdings are stored under the hash of your activation key — never under your name or wallet — and deleted completely the moment you withdraw consent. Full details are in Section 9 of our <a href=\"/privacy\" style=\"color:#a78bfa;\">Privacy Policy</a>."
+    "a11": "Yes — as an <strong>optional, opt-in service</strong>. If you enable it, the engine computes your deleverage shield signal and DCA schedule once per day on the server and can push a notification to your device. To do that, your holdings are stored under the hash of your activation key — never under your name or wallet — and deleted completely the moment you withdraw consent. Full details are in Section 9 of our <a href=\"/privacy\" style=\"color:#a78bfa;\">Privacy Policy</a>.",
+        "q12": "What is the beta chat?",
+        "a12": "Beta users get access to a <strong>shared internal chat</strong> visible only to active beta members. Messages are pseudonymous (shown as a short code like B-XXXXXX, never your real key or IP), capped at 200 characters, and limited to the 20 most recent messages (older ones are automatically swept daily). You can clear your own messages anytime. The chat is stored server-side under the hash of your activation key and is deleted when your key is deactivated."
   },
   "community": {
     "title": "--community-signals"
@@ -297,11 +300,11 @@
       "df4": "<strong>Backend computes</strong> → the DCA engine builds a plan-based proportional allocation, filtered through the full safety pipeline. All computation happens in-memory. Nothing is written to disk or database.",
       "df5": "<strong>Results returned</strong> → updated token amounts are sent back to the browser and written to localStorage. The backend discards the request data immediately after responding.",
       "cleanTitle": "2.2 Data Cleaning Pipeline",
-      "cleanP": "Before price data reaches the optimization engine, it passes through a multi-stage cleaning pipeline that ensures mathematical integrity. Raw market data from multiple sources (CoinGecko, Kraken, Coinbase) is often noisy — containing duplicates, exchange-specific outliers, and occasional gaps. The cleaning pipeline applies four sequential filters:",
+      "cleanP": "Before price data reaches the optimization engine, it passes through a multi-stage cleaning pipeline that ensures mathematical integrity. Raw market data from multiple sources (CoinGecko, Kraken, Coinbase, MEXC) is often noisy — containing duplicates, exchange-specific outliers, and occasional gaps. The cleaning pipeline applies four sequential filters:",
       "clean1": "<strong>Deduplication</strong> — removes duplicate timestamps, keeping the latest entry per date.",
       "clean2": "<strong>Outlier Removal</strong> — rejects prices that deviate several standard deviations from a 7-day rolling window, eliminating flash-crash spikes and stale quotes.",
-      "clean3": "<strong>Gap Interpolation</strong> — fills gaps of 2 days or fewer using linear interpolation, preserving trend continuity.",
-      "clean4": "<strong>Multi-Source Merge</strong> — when the same token is collected from multiple exchanges, the median price is used to eliminate exchange-specific bias.",
+      "clean3": "<strong>Multi-Source Merge</strong> — when the same token is collected from multiple exchanges, the median price is used to eliminate exchange-specific bias.",
+      "clean4": "<strong>Gap Interpolation</strong> — fills gaps of 2 days or fewer using linear interpolation, preserving trend continuity.",
       "cleanP2": "This pipeline runs daily at 01:00 UTC via a scheduled cron job. The result is a clean, continuous price series suitable for covariance and volatility calculations.",
       "zkTitle": "2.3 Non-Custodial Privacy Model",
       "zkP": "AQMath’s privacy architecture is non-custodial by design. The backend processes your DCA request statelessly — it receives position data, computes optimal allocation, returns results, and discards everything from memory. No persistent record of your holdings is created server-side unless you opt in to the signal & notification service (Section 9):",
@@ -344,11 +347,11 @@
       "l2Title": "L2 — Safety Factor",
       "l2P": "A per-token risk adjustment that reduces buy size for high-volatility assets. More volatile tokens receive proportionally less capital, ensuring that risky positions don’t get outsized allocations even when they’re the most underweight.",
       "l3Title": "L3 — Trend Filter",
-      "l3P": "Skips tokens currently trading above their moving average — effectively enforcing a “buy the dip” discipline. Capital flows to tokens during pullbacks, not during rallies.",
+      "l3P": "Skips tokens currently trading above their 50-day simple average of closes — effectively enforcing a “buy the dip” discipline. Capital flows to tokens during pullbacks, not during rallies.",
       "l5Title": "L4 — Hard Caps",
       "l5P": "No single risky token can exceed a structural concentration limit. If allocation would push a token beyond this cap, the excess is trimmed and redirected to the surplus pool.",
       "l5Pro": "🔧 DYNAMIC CAPS (Black Feature)",
-      "l5ProP": "The Black engine replaces the flat cap with <strong>volatility-adaptive limits</strong>: high-volatility tokens receive tighter caps, while low-volatility tokens can hold larger positions (up to 40%). Each token’s maximum weight is dynamically scaled based on how volatile it is relative to the most volatile token in the portfolio. The more volatile a token, the tighter its cap.",
+      "l5ProP": "The Black engine’s <strong>/optimize</strong> endpoint replaces the flat 20% DCA cap with <strong>volatility-adaptive limits</strong>: high-volatility tokens receive tighter caps, while low-volatility tokens can hold larger positions (up to 40%). Each token’s maximum weight is dynamically scaled based on how volatile it is relative to the most volatile token in the portfolio. Note: the flat 20% hard cap still applies to the DCA distribution engine for all tiers — the dynamic caps only govern the Risk Parity weight computation.",
       "l6Title": "L5 — Risk Budget",
       "l6P": "Total risky exposure is capped at a percentage of your portfolio, ensuring a safety buffer always exists. If risky tokens exceed the budget, all allocations are scaled down proportionally.",
       "l7Title": "L6 — Safe-Haven Redirect",
@@ -358,7 +361,7 @@
       "title": "6. Volatility Calculation",
       "p1": "Volatility is the foundational risk metric used throughout AQMath. It feeds into the safety factor, the Deleverage Shield's downside detection, and (in Black) the covariance matrix. The system computes a rolling volatility estimate for each token by measuring the magnitude of daily price swings — a standard approach in quantitative finance.",
       "pvTitle": "6.1 Portfolio Volatility",
-      "pvP": "Portfolio-level volatility is a weighted aggregate of each token’s individual volatility, proportional to its share of total portfolio value. Safe-haven tokens and frozen positions are excluded since they have near-zero volatility by definition. This portfolio-level metric drives adaptive thresholds across the entire safety pipeline.",
+      "pvP": "Portfolio-level volatility is computed from the <strong>covariance matrix</strong> of token returns: σ = √(w'Σw), where w is the weight vector and Σ is the covariance matrix. Safe-haven tokens and frozen positions are excluded since they have near-zero volatility by definition. This portfolio-level metric drives adaptive thresholds across the entire safety pipeline.",
       "covTitle": "📘 COVARIANCE MATRIX (Black Feature)",
       "covP": "The Black engine computes a full covariance matrix estimating how assets move <em>together</em>. Two tokens with moderate individual volatility but high correlation (like ETH and SOL) have amplified combined risk. The optimizer uses this to ensure each asset contributes equal risk — preventing hidden concentration through correlation."
     },
@@ -395,7 +398,7 @@
       "shieldCalloutP": "As the regime deteriorates, the modulator does <strong>two things simultaneously</strong>: (1) reduces all existing token positions by scaling their weights down proportionally &mdash; this is the actual \"selling\" of exposure; (2) reroutes all new DCA contributions into USDC while defensive. A strategy that only pauses DCA while letting existing positions ride through a -80% crash is <strong>not a shield</strong> &mdash; it&rsquo;s just a pause button.",
       "shieldHow": "How It Works",
       "shield1": "<strong>Two-signal regime read</strong> &mdash; the engine tracks only rising <strong>drawdown</strong> and rising <strong>downside volatility</strong> over a short rolling window. No moving averages, no timers, no correlation gate.",
-      "shield2": "<strong>Continuous scaling</strong> &mdash; target exposure is a smooth 0&ndash;100% dial that turns down as drawdown and downside volatility rise &mdash; not a set of discrete steps. There is <strong>no hard floor</strong>: in a deep, volatile crash exposure can approach zero.",
+      "shield2": "<strong>Continuous scaling</strong> &mdash; target exposure is a smooth 0&ndash;100% dial that turns down as drawdown and downside volatility rise &mdash; not a set of discrete steps. The formula has <strong>no hard floor</strong>: in a deep, volatile crash exposure can approach zero. A 5% structural buffer (risk budget capped at 95%) ensures a minimum stablecoin allocation always remains.",
       "shield3": "<strong>Capital preservation</strong> &mdash; while defensive the portfolio holds the majority in cash-equivalent (USDC), absorbing only a fraction of ongoing crash damage. Exposure scales continuously with the regime, holding cash when drawdown and downside volatility are elevated.",
       "shield4": "<strong>Steady ramp, trade less</strong> &mdash; exposure moves smoothly toward its target every bar, whether de-risking or re-entering. To avoid over-trading, v14 only rebalances when the target drifts meaningfully from the position it is holding &mdash; this deadband (not a slower re-entry) is what prevents whipsaw and keeps trading costs low. Parked DCA cash redeploys automatically once exposure recovers.",
       "shieldP2": "The shield&rsquo;s effectiveness comes from <strong>asymmetric crash math</strong>: during a -80% market crash, a shielded portfolio (with minimal exposure) loses only a fraction of that damage. When the market eventually recovers, the preserved capital base compounds &mdash; leading to dramatically better long-term outcomes compared to holding through the full crash.",
@@ -452,6 +455,7 @@
       "backend8": "<strong>Opt-in signal & notification service (stored, deletable):</strong> token symbols + amounts and the frozen weight plan, under the hash of your key",
       "backend9": "Consent receipts and must-read acknowledgements — GDPR audit records",
       "backend10": "Notification setup — a random unguessable topic; the read token is stored only as a hash",
+            "backend11": "<strong>Beta chat messages (stored, deletable):</strong> pseudonymous messages (≤200 chars) under the hash of your key, rolling cap of 20 messages + daily sweep of the oldest",
       "bnTitle": "9.1 What the Backend NEVER Sees",
       "bnP": "This is the most critical section. The following data is architecturally impossible for the backend to access:",
       "bnCt": "🔒 ARCHITECTURAL PRIVACY GUARANTEES",
@@ -504,7 +508,14 @@
       "c6a": "Analytics tracking",
       "c6b": "Google Analytics, Mixpanel",
       "c6c": "Simple Analytics (privacy-first)",
-      "closing": "AQMath gives you the computational power of a quantitative hedge fund’s allocation engine while maintaining the data sovereignty of a paper notebook."
+      "closing": "AQMath gives you the computational power of a quantitative hedge fund’s allocation engine while maintaining the data sovereignty of a paper notebook.",
+            "chatTitle": "9.3 Beta Chat",
+            "chatP1": "Beta users have access to a <strong>shared internal chat</strong> visible only to active beta members. The chat is designed for direct communication between beta testers and the team — no automated onboarding, no helpdesk.",
+            "chat1": "<strong>Pseudonymous:</strong> messages are shown under a short code (e.g., B-XXXXXX) derived from the hash of your activation key. Your real key, IP, and identity are never displayed.",
+            "chat2": "<strong>Rolling buffer:</strong> only the 20 most recent messages are kept. The oldest message is additionally swept once per UTC day.",
+            "chat3": "<strong>200-character limit</strong> per message, with a 3-second cooldown between posts to prevent flooding.",
+            "chat4": "<strong>Deletable:</strong> you can clear your own messages anytime via the Clear button. Deactivating your beta key deletes all your chat data.",
+            "chatP2": "The chat is stored server-side in the same pseudonymous manner as the opt-in signal service — under the one-way hash of your activation key, never under your name or wallet."
     },
     "version": "v1.0 — June 2026",
     "cap": {

@@ -691,6 +691,198 @@ async function disableNotifications() {
     }
 }
 
+// ---------- One-Tap Alignment: pending signal card ----------
+
+let _pendingSignals = [];
+
+async function loadPendingSignals() {
+    if (!isBetaActive()) return;
+    const card = document.getElementById('signalCard');
+    const list = document.getElementById('signalList');
+    const bulk = document.getElementById('signalBulkActions');
+    const empty = document.getElementById('signalEmpty');
+    if (!card || !list) return;
+    try {
+        const res = await _shieldFetch('/portfolio/signals');
+        if (!res.ok) { card.classList.add('hidden'); return; }
+        const data = await res.json();
+        _pendingSignals = data.signals || [];
+    } catch (e) {
+        console.warn('[AQMath] signal load failed:', e.message);
+        card.classList.add('hidden');
+        return;
+    }
+    if (!_pendingSignals.length) {
+        card.classList.add('hidden');
+        return;
+    }
+    card.classList.remove('hidden');
+    list.innerHTML = _pendingSignals.map(s => _renderSignalBlock(s)).join('');
+    if (bulk) bulk.classList.toggle('hidden', _pendingSignals.length < 2);
+    if (empty) empty.classList.add('hidden');
+    // Also load stats for the badge
+    loadSignalStats();
+}
+
+function _renderSignalBlock(s) {
+    const regime = s.shield_regime || 'LOW_VOL';
+    const regimeClass = regime === 'SHOCK' ? 'regime-shock' : 'regime-lowvol';
+    const regimeLabel = regime === 'SHOCK' ? 'SHOCK' : 'LOW VOL';
+    const sideClass = s.side === 'BUY' ? 'sig-buy' : 'sig-sell';
+    const daysWarn = s.days_pending > 0
+        ? '<span class="sig-days-warn">pending ' + s.days_pending + 'd</span>'
+        : '<span class="sig-days-ok">today</span>';
+    const unitsStr = s.units >= 1 ? s.units.toLocaleString(undefined, {maximumFractionDigits: 2}) : s.units.toPrecision(4);
+    const usdStr = '$' + Math.round(s.usd).toLocaleString();
+    return '<div class="sig-block" data-signal-id="' + s.signal_id + '">'
+        + '<div class="sig-header">'
+        +   '<span class="sig-side ' + sideClass + '">' + s.side + '</span>'
+        +   '<span class="sig-sym">' + s.sym + '</span>'
+        +   '<span class="sig-amount">' + unitsStr + ' &rarr; ' + usdStr + '</span>'
+        +   '<span class="sig-regime ' + regimeClass + '">' + regimeLabel + '</span>'
+        +   daysWarn
+        + '</div>'
+        + '<div class="sig-actions">'
+        +   '<button class="btn green" data-action="confirmSignal" data-arg="' + s.signal_id + '">[ confirm &amp; sync ]</button>'
+        +   '<button class="btn amber" data-action="showAdjustForm" data-arg="' + s.signal_id + '">[ adjust ]</button>'
+        +   '<button class="btn ghost" data-action="skipSignal" data-arg="' + s.signal_id + '">[ skip ]</button>'
+        + '</div>'
+        + '<div class="sig-adjust-form hidden" id="adj_' + s.signal_id + '">'
+        +   '<input type="number" step="any" min="0" placeholder="actual units" class="sig-adjust-input" id="adjInput_' + s.signal_id + '">'
+        +   '<button class="btn green" data-action="adjustSignal" data-arg="' + s.signal_id + '">[ save &amp; sync ]</button>'
+        +   '<button class="btn ghost" data-action="hideAdjustForm" data-arg="' + s.signal_id + '">[ cancel ]</button>'
+        + '</div>'
+        + '</div>';
+}
+
+async function confirmSignal(el, signalId) {
+    if (!signalId) return;
+    if (el) el.disabled = true;
+    try {
+        const res = await _shieldFetch('/portfolio/signals/confirm', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({signal_id: signalId}),
+        });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            showToast(err.detail || 'Confirm failed (HTTP ' + res.status + ')', 'error');
+            return;
+        }
+        const data = await res.json();
+        const deltaMsg = data.delta_applied ? 'portfolio synced' : 'confirmed but sync failed — re-sync manually';
+        const dayMsg = data.same_day ? 'same-day' : 'late';
+        showToast('Signal confirmed (' + dayMsg + ') — ' + deltaMsg, 'success');
+        await loadPendingSignals();
+        await restoreHoldingsFromServer();
+    } catch (e) {
+        showToast('Confirm failed: ' + e.message, 'error');
+    } finally {
+        if (el) el.disabled = false;
+    }
+}
+
+async function skipSignal(el, signalId) {
+    if (!signalId) return;
+    if (el) el.disabled = true;
+    try {
+        const res = await _shieldFetch('/portfolio/signals/skip', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({signal_id: signalId}),
+        });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            showToast(err.detail || 'Skip failed (HTTP ' + res.status + ')', 'error');
+            return;
+        }
+        showToast('Signal skipped', 'notice');
+        await loadPendingSignals();
+    } catch (e) {
+        showToast('Skip failed: ' + e.message, 'error');
+    } finally {
+        if (el) el.disabled = false;
+    }
+}
+
+async function skipAllSignals() {
+    if (!_pendingSignals.length) return;
+    for (const s of _pendingSignals) {
+        try {
+            await _shieldFetch('/portfolio/signals/skip', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({signal_id: s.signal_id}),
+            });
+        } catch (e) { /* continue with next */ }
+    }
+    showToast('All signals skipped', 'notice');
+    await loadPendingSignals();
+}
+
+function showAdjustForm(el, signalId) {
+    if (!signalId) return;
+    const form = document.getElementById('adj_' + signalId);
+    if (form) form.classList.remove('hidden');
+}
+
+function hideAdjustForm(el, signalId) {
+    if (!signalId) return;
+    const form = document.getElementById('adj_' + signalId);
+    if (form) form.classList.add('hidden');
+}
+
+async function adjustSignal(el, signalId) {
+    if (!signalId) return;
+    const input = document.getElementById('adjInput_' + signalId);
+    const val = input ? parseFloat(input.value) : NaN;
+    if (isNaN(val) || val < 0) {
+        showToast('Enter a valid amount', 'error');
+        return;
+    }
+    if (el) el.disabled = true;
+    try {
+        const res = await _shieldFetch('/portfolio/signals/adjust', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({signal_id: signalId, actual_units: val}),
+        });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            showToast(err.detail || 'Adjust failed (HTTP ' + res.status + ')', 'error');
+            return;
+        }
+        const data = await res.json();
+        const deltaMsg = data.delta_applied ? 'portfolio synced' : 'adjusted but sync failed — re-sync manually';
+        showToast('Adjusted to ' + val + ' — ' + deltaMsg, 'success');
+        await loadPendingSignals();
+        await restoreHoldingsFromServer();
+    } catch (e) {
+        showToast('Adjust failed: ' + e.message, 'error');
+    } finally {
+        if (el) el.disabled = false;
+    }
+}
+
+async function loadSignalStats() {
+    const badge = document.getElementById('signalStatsBadge');
+    if (!badge) return;
+    try {
+        const res = await _shieldFetch('/portfolio/signal-stats');
+        if (!res.ok) return;
+        const data = await res.json();
+        const stats = data.stats || [];
+        if (!stats.length) { badge.classList.add('hidden'); return; }
+        const parts = stats.map(s => {
+            const pct = Math.round(s.rate * 100);
+            const pass = s.pass ? 'pass' : 'fail';
+            return s.regime + ': ' + pct + '% (' + pass + ')';
+        });
+        badge.textContent = parts.join(' | ');
+        badge.classList.remove('hidden');
+    } catch (e) { /* silent */ }
+}
+
 // Called from checkBetaUI() (app.js) whenever the auth state changes.
 async function refreshNotifyUI() {
     if (!isBetaActive()) return;
@@ -707,6 +899,11 @@ async function refreshNotifyUI() {
         await refreshShieldStatus();
     } catch (e) {
         console.error('[AQMath] shield status aborted:', e.message);
+    }
+    try {
+        await loadPendingSignals();
+    } catch (e) {
+        console.error('[AQMath] pending signals aborted:', e.message);
     }
     refreshNtfyStatus();
 }

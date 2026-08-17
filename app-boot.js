@@ -412,6 +412,11 @@ function applyTranslations() {
         btResetAll: function () { btResetAll(); },
         hideProModal: function () { hideProModal(); },
         reloadApp: function () { window.location.reload(); },
+        closeWhatsNew: function () {
+            var card = document.getElementById('whatsNew');
+            if (card) card.classList.add('hidden');
+            localStorage.setItem('aqmath-whatsnew-seen', '2.1');
+        },
         // signal-only automation (app-notify.js)
         showHowAqmath: function () { showHowAqmath(false); },
         hideHowAqmath: function () { hideHowAqmath(); },
@@ -421,6 +426,13 @@ function applyTranslations() {
         enableNotifications: function () { enableNotifications(); },
         disableNotifications: function () { disableNotifications(); },
         copyField: function (el) { _copyText(el); },
+        // One-Tap Alignment signal actions (app-notify.js)
+        confirmSignal: function (el, arg) { confirmSignal(el, arg); },
+        skipSignal: function (el, arg) { skipSignal(el, arg); },
+        skipAllSignals: function () { skipAllSignals(); },
+        showAdjustForm: function (el, arg) { showAdjustForm(el, arg); },
+        hideAdjustForm: function (el, arg) { hideAdjustForm(el, arg); },
+        adjustSignal: function (el, arg) { adjustSignal(el, arg); },
         // argument actions (arg comes from data-arg)
         lang: function (el, arg) { switchLang(arg); },
         clickEl: function (el, arg) { var t = document.getElementById(arg); if (t) t.click(); },
@@ -502,4 +514,17 @@ function applyTranslations() {
     document.addEventListener('visibilitychange', function () {
         if (!document.hidden) check();
     });
+})();
+
+// ---------------------------------------------------------------------------
+// 6) What's New card — shown once after each version update.
+//    Compares localStorage flag against the current version label.
+//    Dismissed via the × button (closeWhatsNew action above).
+// ---------------------------------------------------------------------------
+(function () {
+    var VER = '2.1';
+    var seen = localStorage.getItem('aqmath-whatsnew-seen');
+    if (seen === VER) return;
+    var card = document.getElementById('whatsNew');
+    if (card) card.classList.remove('hidden');
 })();

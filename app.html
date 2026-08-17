@@ -55,6 +55,23 @@
     <button type="button" class="update-banner-btn" data-action="reloadApp" data-i18n="app.update.reload">[ reload ]</button>
 </div>
 
+<!-- WHAT'S NEW: shown by app-boot.js once after each version update -->
+<div class="whats-new hidden" id="whatsNew">
+    <div class="whats-new-head">
+        <span class="whats-new-ver">v2.1</span>
+        <button type="button" class="whats-new-close" data-action="closeWhatsNew">&times;</button>
+    </div>
+    <div class="whats-new-body">
+        <p class="whats-new-en">One-Tap Alignment is here. Confirm or adjust portfolio signals straight from the notification &mdash; no extra steps.</p>
+        <p class="whats-new-cz">One-Tap Alignment je tu. Potvrďte nebo upravte signály přímo z notifikace &mdash; bez zbytečných kroků.</p>
+        <ul class="whats-new-list">
+            <li>Confirm, skip or adjust signals in one tap</li>
+            <li>Regime-aware alerts (SHOCK / LOW_VOL)</li>
+            <li>Small fixes &amp; polish</li>
+        </ul>
+    </div>
+</div>
+
 <!-- ============ LANDING PAGE VIEW ============ -->
 <!-- #landingView omitted: this entry page ships only #appView -->
 
@@ -235,6 +252,26 @@
                     <a class="beta-link" href="https://x.com/aqmathapp" target="_blank" rel="noopener">twitter</a>
                     <a class="beta-link" href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">substack</a>
                 </div>
+            </div>
+        </div>
+
+        <!-- PENDING SIGNALS — One-Tap Alignment (shown when signals await confirmation) -->
+        <div class="tc signal-card hidden" id="signalCard">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title">--pending-signals</span>
+                <span class="tc-right">
+                    <span class="signal-stats-badge hidden" id="signalStatsBadge"></span>
+                </span>
+            </div>
+            <div class="tc-body">
+                <div id="signalList">
+                    <!-- Populated dynamically by app-notify.js: one block per pending signal -->
+                </div>
+                <div class="signal-actions hidden" id="signalBulkActions">
+                    <button class="btn ghost" data-action="skipAllSignals">[ skip all ]</button>
+                </div>
+                <div class="signal-empty hidden" id="signalEmpty">no pending signals</div>
             </div>
         </div>
 
