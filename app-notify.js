@@ -666,9 +666,19 @@ async function enableNotifications() {
     }
 }
 
-async function disableNotifications() {
-    // Disabling revokes the read token irreversibly — confirm first.
-    if (!confirm('Disable notifications? Your topic and token are deleted — if you enable again you get a NEW topic and token.')) return;
+function disableNotifications() {
+    // Disabling revokes the read token irreversibly — confirm via styled toast.
+    showToast(
+        'Disable notifications? Your topic and token are deleted \u2014 if you enable again you get a NEW topic and token.',
+        'warning',
+        [
+            { label: 'cancel' },
+            { label: 'yes, disable', primary: false, onClick: _doDisableNotifications }
+        ]
+    );
+}
+
+async function _doDisableNotifications() {
     const btn = document.getElementById('btnNtfyDisable');
     if (btn) { btn.disabled = true; }
     try {
@@ -682,7 +692,7 @@ async function disableNotifications() {
         const tokenEl = document.getElementById('ntfyToken');
         if (tokenEl) tokenEl.textContent = '';
         _hideNtfyPanel();
-        showToast('Notifications disabled — your token was revoked.', 'notice');
+        showToast('Notifications disabled \u2014 your token was revoked.', 'notice');
         await refreshNtfyStatus();
     } catch (e) {
         showToast('Could not disable notifications: ' + e.message, 'error');
