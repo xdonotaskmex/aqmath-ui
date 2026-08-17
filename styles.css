@@ -347,13 +347,13 @@
     .faq-a { margin-bottom: 10px; padding-left: 14px; font-size: 0.78rem; color: var(--muted); }
 
     /* ===== TERMINAL CARD (Unified) ===== */
-    .tc { background: rgba(6,182,212,0.03); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 10px; backdrop-filter: blur(12px); }
-    .tc-bar { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); }
+    .tc { background: rgba(6,182,212,0.03); border: 1px solid rgba(6,182,212,0.25); border-radius: 6px; overflow: hidden; margin-bottom: 10px; backdrop-filter: blur(12px); }
+    .tc-bar { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-bottom: 1px solid var(--border); background: rgba(6,182,212,0.06); }
     .tc-dot { width: 6px; height: 6px; border-radius: 50%; }
     .tc-dot.r { background: rgba(248,113,113,0.45); }
     .tc-dot.y { background: rgba(251,191,36,0.45); }
     .tc-dot.g { background: rgba(52,211,153,0.45); }
-    .tc-title { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 2px; color: var(--purple); margin-left: 6px; font-weight: 500; }
+    .tc-title { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 2px; color: var(--blue); margin-left: 6px; font-weight: 500; }
     .tc-right { margin-left: auto; display: flex; gap: 6px; align-items: center; }
     .tc-action { background: transparent; border: 1px solid rgba(6,182,212,0.2); color: var(--blue); font-family: var(--mono); font-size: 0.55rem; letter-spacing: 1px; padding: 3px 10px; cursor: pointer; border-radius: 3px; transition: all 0.2s; text-transform: uppercase; }
     .tc-action:hover { background: var(--blue); color: #000; }
@@ -363,7 +363,7 @@
 
     /* ===== BETA CARD ===== */
     .beta-card { margin-bottom: 10px; }
-    .beta-active-card { border: 1px solid var(--border); }
+    .beta-active-card { border: 1px solid rgba(6,182,212,0.25); }
     .beta-active-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; }
     .pro-badge { display: inline-flex; align-items: center; gap: 6px;
         background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.3);
@@ -436,11 +436,11 @@
 
     /* ===== UNIFIED FAQ CARDS ===== */
     .faq-item {
-        background: var(--s2); border: 1px solid var(--border);
+        background: rgba(6,182,212,0.03); border: 1px solid rgba(6,182,212,0.25);
         border-radius: 2px; margin-bottom: 8px;
         transition: all 0.3s ease;
     }
-    .faq-item:hover { border-color: rgba(56,189,248,0.35); }
+    .faq-item:hover { border-color: rgba(6,182,212,0.5); }
     .faq-item .faq-q {
         font-family: var(--mono); font-size: 0.7rem; color: var(--amber);
         letter-spacing: 0.5px; padding: 12px 14px 0; cursor: pointer;
@@ -604,8 +604,8 @@
         margin-top: 12px;
     }
     .terminal-chart-tile {
-        background: var(--s2);
-        border: 1px solid var(--border);
+        background: rgba(6,182,212,0.03);
+        border: 1px solid rgba(6,182,212,0.25);
         padding: 12px 14px 6px;
         border-radius: 6px;
         backdrop-filter: blur(20px);
@@ -1045,7 +1045,7 @@
         line-height: 1.8;
     }
     .lp-math-box {
-        border: 1px solid rgba(56, 189, 248, 0.3);
+        border: 1px solid rgba(6,182,212,0.25);
         border-radius: 6px;
         padding: 20px 28px;
         max-width: 640px;
@@ -1173,7 +1173,7 @@
         margin-bottom: 6px;
     }
     .lp-news-item {
-        background: var(--s2); border: 1px solid var(--border);
+        background: rgba(6,182,212,0.03); border: 1px solid rgba(6,182,212,0.25);
         padding: 12px 14px; border-radius: 2px;
         transition: all 0.25s ease;
     }
@@ -1282,12 +1282,13 @@
 
     .lp-features { display: flex; flex-direction: column; gap: 14px; }
     .lp-feature-card {
-        border: 1px solid var(--border);
+        background: rgba(6,182,212,0.03);
+        border: 1px solid rgba(6,182,212,0.25);
         padding: 18px 20px; border-radius: 2px;
         transition: all 0.3s ease;
     }
     .lp-feature-card:hover {
-        background: var(--s1); border-color: var(--blue);
+        background: rgba(6,182,212,0.08); border-color: var(--blue);
         box-shadow: 0 0 12px rgba(56,189,248,0.1);
     }
     .lp-feature-card .card-title {
@@ -1307,7 +1308,8 @@
         position: relative; z-index: 1;
     }
     .lp-price-card {
-        border: 1px solid var(--border);
+        background: rgba(6,182,212,0.03);
+        border: 1px solid rgba(6,182,212,0.25);
         padding: 32px 28px; border-radius: 2px; text-align: center;
         transition: all 0.3s ease;
     }
@@ -1370,8 +1372,7 @@
     }
     .lp-what-grid > .lp-card {
         padding: 22px 22px 24px;
-        border-left: 2px solid var(--green);
-        background: var(--s2);
+        background: rgba(6,182,212,0.03);
     }
     .lp-what-grid .card-title {
         font-family: var(--mono); font-size: 0.78rem; letter-spacing: 2px;
@@ -1406,7 +1407,7 @@
 
     /* ===== Landing: Trust anchors strip ===== */
     .lp-trust-section { max-width: 860px; margin: 0 auto; padding: 28px 0 8px; }
-    .lp-trust-card { margin-bottom: 0; }
+    .lp-trust-card { margin-bottom: 0; border: 1px solid rgba(6,182,212,0.25); }
     .lp-trust-strip {
         display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
     }
@@ -1425,7 +1426,7 @@
     .lp-trust-dot { color: var(--green); font-size: 0.55em; opacity: 0.7; }
 
     /* ===== Landing: Why we work this way card ===== */
-    .lp-why-card { margin-bottom: 0; border-color: rgba(168, 85, 247, 0.2); }
+    .lp-why-card { margin-bottom: 0; border-color: rgba(6,182,212,0.25); }
     .lp-why-card .tc-body { padding: 20px 22px; }
     .lp-why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 24px; }
     .lp-why-q {
@@ -1469,8 +1470,8 @@
     }
     .lp-shield-stat {
         display: flex; flex-direction: column; gap: 3px;
-        border: 1px solid var(--border); border-radius: 6px;
-        padding: 10px 8px; background: var(--s2); text-align: center;
+        border: 1px solid rgba(6,182,212,0.25); border-radius: 6px;
+        padding: 10px 8px; background: rgba(6,182,212,0.03); text-align: center;
     }
     .lp-shield-stat .v { font-family: var(--mono); font-size: 1.15rem; font-weight: 600; color: var(--green); }
     .lp-shield-stat .l { font-family: var(--mono); font-size: 0.55rem; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; }
@@ -1488,11 +1489,11 @@
         text-align: center; font-weight: 500;
     }
     .lp-faq-item {
-        background: var(--s2); border: 1px solid var(--border);
+        background: rgba(6,182,212,0.03); border: 1px solid rgba(6,182,212,0.25);
         border-radius: 2px; margin-bottom: 10px;
         transition: all 0.3s ease;
     }
-    .lp-faq-item:hover { border-color: rgba(56,189,248,0.35); }
+    .lp-faq-item:hover { border-color: rgba(6,182,212,0.5); }
     .lp-faq-q {
         font-family: var(--mono); font-size: 0.82rem; color: var(--amber);
         letter-spacing: 1px; padding: 14px 18px 0; cursor: pointer;
@@ -1534,12 +1535,11 @@
     text-align: center; font-weight: 500;
 }
 .lp-feedback-card {
-    background: var(--s2); border: 1px solid var(--border);
-    border-left: 3px solid var(--green); border-radius: 2px;
+    background: rgba(6,182,212,0.03); border: 1px solid rgba(6,182,212,0.25); border-radius: 2px;
     padding: 28px 32px; position: relative;
     transition: border-color 0.3s ease;
 }
-.lp-feedback-card:hover { border-color: rgba(52,211,153,0.5); }
+.lp-feedback-card:hover { border-color: rgba(6,182,212,0.5); }
 .lp-feedback-quote {
     font-family: var(--mono); font-size: 0.85rem; color: var(--text);
     line-height: 1.9; letter-spacing: 0.3px;
@@ -1612,8 +1612,8 @@
     .lp-news-item,
     .lp-faq-item,
     .terminal-chart-tile {
-        background: var(--s2);
-        border: 1px solid var(--border);
+        background: rgba(6,182,212,0.03);
+        border: 1px solid rgba(6,182,212,0.25);
         border-radius: 6px;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
@@ -1623,11 +1623,11 @@
     .lp-price-card,
     .lp-news-item,
     .terminal-chart-tile,
-    .lp-card { padding: 20px 22px; }
+    .lp-card { padding: 20px 22px; background: rgba(6,182,212,0.03); }
     .lp-feature-card:hover,
     .lp-price-card:hover,
     .lp-news-item:hover,
-    .terminal-chart-tile:hover { border-color: var(--borderB); background: var(--s2); transform: none; }
+    .terminal-chart-tile:hover { border-color: var(--borderB); background: rgba(6,182,212,0.08); transform: none; }
 
     /* ===== LANDING – HERO ===== */
     .lp-hero { padding: 48px 32px 36px; }
@@ -1806,8 +1806,8 @@
         .lp-term-aside-list { display: inline-block; text-align: left; }
     }
     .lp-terminal-window {
-        background: var(--s2);
-        border: 1px solid var(--border);
+        background: rgba(6,182,212,0.03);
+        border: 1px solid rgba(6,182,212,0.25);
         border-radius: 8px;
         overflow: hidden;
         backdrop-filter: blur(20px);
@@ -1913,8 +1913,8 @@
     .lp-ticker {
         display: block;
         overflow: hidden;
-        border: 1px solid var(--border);
-        background: var(--s2);
+        border: 1px solid rgba(6,182,212,0.25);
+        background: rgba(6,182,212,0.03);
         border-radius: 4px;
         backdrop-filter: blur(6px);
         padding: 0;
@@ -1952,7 +1952,7 @@
     }
 
     /* ===== LANDING – MATH NOTE ===== */
-    .lp-math-box { max-width: 100%; margin: 0; border-radius: 6px; background: var(--s2); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 24px 32px 36px; text-align: center; box-shadow: 0 24px 60px -15px rgba(0,0,0,0.7); }
+    .lp-math-box { max-width: 100%; margin: 0; border-radius: 6px; background: rgba(6,182,212,0.03); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 24px 32px 36px; text-align: center; box-shadow: 0 24px 60px -15px rgba(0,0,0,0.7); }
     .lp-math-box .card-title { text-align: center; color: var(--purple); }
     .lp-math-heading {
         font-family: var(--sans);
@@ -3055,7 +3055,7 @@
     .chat-panel { position: fixed; right: 18px; bottom: 78px; width: 320px; max-width: calc(100vw - 36px); z-index: 1200; margin: 0; }
     .chat-panel.hidden { display: none; }
     .chat-panel.collapsed { display: none; }
-    .chat-card { border: 1px solid var(--border); box-shadow: 0 8px 30px rgba(0,0,0,0.55); }
+    .chat-card { border: 1px solid rgba(6,182,212,0.25); }
     .chat-messages { min-height: 180px; max-height: 220px; overflow-y: auto; padding: 10px 2px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 4px; background: rgba(0,0,0,0.2); }
     .chat-message { padding: 6px 10px; border-radius: 3px; margin-bottom: 6px; font-size: 0.68rem; font-family: var(--mono); }
     .chat-message:nth-child(even) { background: rgba(255,255,255,0.02); }
