@@ -32,7 +32,9 @@
     "privLink": "[ 查看隐私数据流 ]",
     "shieldLabel": "--去杠杆调节器",
     "shieldCopy": "连续市场调节器：随着回撤和下行波动率上升，敞口连续下调 — 无技术指标、无计时器、无相关性门控。无论哪个方向，敞口每根 K 线都平滑地向目标移动，无硬性底仓；闲置的 DCA 资金会在敞口恢复后自动重新部署。",
-    "shieldLink": "[ 查看 8.7 年回测 ]"
+    "shieldLink": "[ 查看 8.7 年回测 ]",
+        "trustAnchors": "--信任锚点",
+        "whyWeWork": "--我们为何如此运作"
   },
   "beta": {
     "tag": "--年度访问权限",
@@ -190,6 +192,8 @@
     "engineHint": "180 天协方差 + ERC 分析",
     "refreshHistory": "刷新历史 — BLACK",
     "riskSettings": "--风险设置",
+    "pendingSignals": "--待处理信号",
+    "shieldSignals": "--防护信号",
     "safeHaven": "安全港 (USDC)",
     "safeHavenDesc": "开启 — 吸收硬上限盈余和未分配 DCA",
     "deleverage": "去杠杆",

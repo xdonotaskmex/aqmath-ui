@@ -32,7 +32,9 @@
     "privLink": "[ see the privacy data flow ]",
     "shieldLabel": "--deleverage-modulator",
     "shieldCopy": "Continuous regime modulator: exposure scales down as drawdown and downside volatility rise — no indicators, no timers, no correlation gate. It moves exposure smoothly toward its target every bar in either direction with no hard floor; parked DCA cash redeploys automatically once exposure recovers.",
-    "shieldLink": "[ see 8.7-year backtest ]"
+    "shieldLink": "[ see 8.7-year backtest ]",
+    "trustAnchors": "--trust-anchors",
+    "whyWeWork": "--why-we-work-this-way"
   },
   "beta": {
     "tag": "--annual-access",
@@ -190,6 +192,8 @@
     "engineHint": "180-day covariance + ERC analysis",
     "refreshHistory": "Refresh History — BLACK",
     "riskSettings": "--risk-settings",
+    "pendingSignals": "--pending-signals",
+    "shieldSignals": "--shield-signals",
     "safeHaven": "SAFE-HAVEN (USDC)",
     "safeHavenDesc": "ON — absorbs hard-cap surplus & unallocated DCA",
     "deleverage": "DELEVERAGE",
