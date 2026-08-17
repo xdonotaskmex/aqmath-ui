@@ -347,7 +347,7 @@
     .faq-a { margin-bottom: 10px; padding-left: 14px; font-size: 0.78rem; color: var(--muted); }
 
     /* ===== TERMINAL CARD (Unified) ===== */
-    .tc { background: var(--s2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 10px; backdrop-filter: blur(12px); }
+    .tc { background: rgba(6,182,212,0.03); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 10px; backdrop-filter: blur(12px); }
     .tc-bar { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); }
     .tc-dot { width: 6px; height: 6px; border-radius: 50%; }
     .tc-dot.r { background: rgba(248,113,113,0.45); }
@@ -363,7 +363,7 @@
 
     /* ===== BETA CARD ===== */
     .beta-card { margin-bottom: 10px; }
-    .beta-active-card { background: rgba(52,211,153,0.04); border: 1px solid rgba(52,211,153,0.15); }
+    .beta-active-card { background: rgba(6,182,212,0.03); border: 1px solid rgba(52,211,153,0.15); }
     .beta-active-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; }
     .pro-badge { display: inline-flex; align-items: center; gap: 6px;
         background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.3);
@@ -699,7 +699,7 @@
         font-family: var(--sans); font-size: 0.95rem; font-weight: 600;
         color: var(--text); margin: 0 0 8px; line-height: 1.6;
 }
-.whats-new-cz {
+.whats-new-zh {
         font-family: var(--sans); font-size: 0.82rem; color: var(--muted);
         margin: 0 0 20px; line-height: 1.5; font-style: italic;
 }
@@ -2377,7 +2377,7 @@
     }
 
     /* ── One-Tap Alignment: pending signal card ── */
-    .signal-card { border-color: rgba(6,182,212,0.25); background: rgba(6,182,212,0.03); }
+    .signal-card { border-color: rgba(6,182,212,0.25); }
     .signal-card .tc-bar { background: rgba(6,182,212,0.06); }
     .signal-card .tc-title { color: var(--blue); }
     .sig-block {
@@ -3060,7 +3060,7 @@
     .chat-panel { position: fixed; right: 18px; bottom: 78px; width: 320px; max-width: calc(100vw - 36px); z-index: 1200; margin: 0; }
     .chat-panel.hidden { display: none; }
     .chat-panel.collapsed { display: none; }
-    .chat-card { background: rgba(168,85,247,0.04); border: 1px solid rgba(168,85,247,0.2); box-shadow: 0 8px 30px rgba(0,0,0,0.55); }
+    .chat-card { background: rgba(6,182,212,0.03); border: 1px solid rgba(168,85,247,0.2); box-shadow: 0 8px 30px rgba(0,0,0,0.55); }
     .chat-messages { min-height: 180px; max-height: 220px; overflow-y: auto; padding: 10px 2px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 4px; background: rgba(0,0,0,0.2); }
     .chat-message { padding: 6px 10px; border-radius: 3px; margin-bottom: 6px; font-size: 0.68rem; font-family: var(--mono); }
     .chat-message:nth-child(even) { background: rgba(255,255,255,0.02); }

@@ -140,6 +140,13 @@
       "msg": "A new version of AQMath is available - reload to get the latest build.",
       "reload": "[ reload ]"
     },
+    "whatsNew": {
+      "desc": "One-Tap Alignment is here. Confirm or adjust portfolio signals straight from the notification \u2014 no extra steps.",
+      "item1": "Confirm, skip or adjust signals in one tap",
+      "item2": "Regime-aware alerts (SHOCK / LOW_VOL)",
+      "item3": "Small fixes & polish",
+      "close": "[ close ]"
+    },
     "sync": "SYNC",
     "csvImport": "CSV IMPORT",
     "export": "EXPORT",

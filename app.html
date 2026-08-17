@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=f61f0ba3d5">
+    <link rel="stylesheet" href="/styles.min.css?v=085574d49b">
 </head>
 <body>
 
@@ -63,14 +63,13 @@
             <button type="button" class="whats-new-close" data-action="closeWhatsNew">&times;</button>
         </div>
         <div class="whats-new-body">
-            <p class="whats-new-en">One-Tap Alignment is here. Confirm or adjust portfolio signals straight from the notification &mdash; no extra steps.</p>
-            <p class="whats-new-cz">One-Tap Alignment je tu. Potvrďte nebo upravte signály přímo z notifikace &mdash; bez zbytečných kroků.</p>
+            <p class="whats-new-desc" data-i18n="app.whatsNew.desc">One-Tap Alignment is here. Confirm or adjust portfolio signals straight from the notification &mdash; no extra steps.</p>
             <ul class="whats-new-list">
-                <li>Confirm, skip or adjust signals in one tap</li>
-                <li>Regime-aware alerts (SHOCK / LOW_VOL)</li>
-                <li>Small fixes &amp; polish</li>
+                <li data-i18n="app.whatsNew.item1">Confirm, skip or adjust signals in one tap</li>
+                <li data-i18n="app.whatsNew.item2">Regime-aware alerts (SHOCK / LOW_VOL)</li>
+                <li data-i18n="app.whatsNew.item3">Small fixes &amp; polish</li>
             </ul>
-            <button type="button" class="whats-new-close-btn" data-action="closeWhatsNew">[ close ]</button>
+            <button type="button" class="whats-new-close-btn" data-action="closeWhatsNew" data-i18n="app.whatsNew.close">[ close ]</button>
         </div>
     </div>
 </div>
@@ -652,10 +651,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=f61f0ba3d5"></script>
-<script defer src="/app-backtest.js?v=f61f0ba3d5"></script>
-<script defer src="/app.js?v=f61f0ba3d5"></script>
-<script defer src="/app-notify.js?v=f61f0ba3d5"></script>
+<script defer src="/app-widgets.js?v=085574d49b"></script>
+<script defer src="/app-backtest.js?v=085574d49b"></script>
+<script defer src="/app.js?v=085574d49b"></script>
+<script defer src="/app-notify.js?v=085574d49b"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -669,8 +668,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=f61f0ba3d5"></script>
-<script defer src="/app-boot.js?v=f61f0ba3d5"></script>
+<script defer src="/vendor/i18next.min.js?v=085574d49b"></script>
+<script defer src="/app-boot.js?v=085574d49b"></script>
 
 </body>
 </html>
