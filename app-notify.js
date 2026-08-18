@@ -238,10 +238,12 @@ async function restoreHoldingsFromServer() {
     // For synced users: server is authoritative. Build a new portfolio from
     // server data. Local-only tokens (not on server) are DROPPED — the server
     // is the source of truth for shield-synced portfolios.
-    // SAFETY: only replace if the server returned valid, non-zero holdings.
-    // A beta-auth redeploy or DB reset can return empty/garbage data — in
-    // that case, keep the local portfolio rather than wiping the user's table.
-    if (serverRows.length > 0) {
+    // SAFETY: only replace if the server returned valid, non-zero holdings
+    // AND at least as many tokens as the local portfolio. A beta-auth redeploy
+    // or DB reset can return partial data (e.g. only USDC) — replacing a
+    // 5-token portfolio with 1 token is indistinguishable from data loss.
+    const localCount = (portfolio || []).length;
+    if (serverRows.length > 0 && serverRows.length >= localCount) {
         const localMap = new Map((portfolio || []).map(t => [t.sym, t]));
         const newPortfolio = serverRows.map(h => {
             const local = localMap.get(h.sym);
@@ -263,7 +265,7 @@ async function restoreHoldingsFromServer() {
         });
         // Guard: if the new portfolio would be empty (all server amounts were
         // zero/invalid after normalization), keep the local data instead.
-        if (newPortfolio.length === 0 && (portfolio || []).length > 0) {
+        if (newPortfolio.length === 0 && localCount > 0) {
             console.warn('[AQMath] Server returned data but all amounts invalid — keeping local portfolio');
         } else {
             portfolio = newPortfolio;
@@ -271,6 +273,8 @@ async function restoreHoldingsFromServer() {
             render();
             console.log('[AQMath] Portfolio replaced with server data:', serverRows.map(h => `${h.sym}:${h.amount}`).join(', '));
         }
+    } else if (serverRows.length > 0 && serverRows.length < localCount) {
+        console.warn(`[AQMath] Server returned ${serverRows.length} tokens but local has ${localCount} — partial data, keeping local portfolio`);
     } else {
         console.log('[AQMath] Server has no holdings — keeping local portfolio');
     }
@@ -599,6 +603,7 @@ async function syncShieldPortfolio() {
             if (getRes.ok) {
                 const getData = await getRes.json();
                 const serverHoldings = getData.holdings || [];
+                const localCount = (portfolio || []).length;
                 if (serverHoldings.length > 0) {
                     const localMap = new Map((portfolio || []).map(t => [t.sym, t]));
                     const newPortfolio = serverHoldings
@@ -622,11 +627,15 @@ async function syncShieldPortfolio() {
                                 safeHaven
                             };
                         });
-                    // Safety: only replace if we got valid rows back
-                    if (newPortfolio.length > 0) {
+                    // Safety: only replace if server returned at least as many
+                    // tokens as local — partial data (e.g. only USDC) must not
+                    // wipe a multi-token portfolio.
+                    if (newPortfolio.length > 0 && newPortfolio.length >= localCount) {
                         portfolio = newPortfolio;
                         saveState();
                         render();
+                    } else if (newPortfolio.length > 0 && newPortfolio.length < localCount) {
+                        console.warn(`[AQMath] post-PUT re-read returned ${newPortfolio.length} tokens but local has ${localCount} — partial data, keeping local`);
                     } else {
                         console.warn('[AQMath] post-PUT re-read returned no valid rows — keeping local');
                     }
