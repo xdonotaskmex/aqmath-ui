@@ -17,6 +17,24 @@
 // Every handler is registered through the app-boot.js allowlist.
 // ============================================================================
 
+// Symbol aliases — local copy for normalize in this file (mirrors app.js).
+// Ensures normalization works even if app.js hasn't loaded yet.
+const _SYM_ALIASES_NOTIFY = {
+    'PYTH NETWORK': 'PYTH',
+    'CELESTIA': 'TIA',
+    'CONSTELLATION': 'DAG',
+    'ENERGY WEB': 'EWT',
+    'ENERGY-WEB': 'EWT',
+    'QUBETICS': 'TICS',
+    'AETHIR': 'ATH',
+};
+function _normSym(s) {
+    if (!s || typeof s !== 'string') return s;
+    // Prefer app.js function if available, fallback to local map
+    if (typeof _normalizeSym === 'function') return _normalizeSym(s);
+    return _SYM_ALIASES_NOTIFY[s] || s;
+}
+
 // ---------- must-read explainer ----------
 
 let _howLoaded = false;
@@ -208,7 +226,7 @@ async function restoreHoldingsFromServer() {
     let added = 0;
     for (const h of holdings) {
         const rawSym = String(h.token || '').toUpperCase();
-        const sym = (typeof _normalizeSym === 'function') ? _normalizeSym(rawSym) : rawSym;
+        const sym = _normSym(rawSym);
         const amount = Number(h.amount);
         if (!sym || !(amount > 0)) continue;
         if ((portfolio || []).some(t => t && t.sym === sym)) continue;
@@ -749,7 +767,7 @@ function _renderSignalBlock(s) {
     const unitsStr = s.units >= 1 ? s.units.toLocaleString(undefined, {maximumFractionDigits: 2}) : s.units.toPrecision(4);
     const usdStr = '$' + Math.round(s.usd).toLocaleString();
     // Normalize signal symbol (CELESTIA → TIA, etc.) for display consistency
-    const displaySym = (typeof _normalizeSym === 'function') ? _normalizeSym(s.sym) : s.sym;
+    const displaySym = _normSym(s.sym);
     return '<div class="sig-block" data-signal-id="' + s.signal_id + '">'
         + '<div class="sig-header">'
         +   '<span class="sig-side ' + sideClass + '">' + s.side + '</span>'
@@ -927,7 +945,7 @@ async function _syncHoldingsAfterSignal() {
         let changed = false;
         for (const h of holdings) {
             const rawSym = String(h.token || '').toUpperCase();
-            const sym = (typeof _normalizeSym === 'function') ? _normalizeSym(rawSym) : rawSym;
+            const sym = _normSym(rawSym);
             const amount = Number(h.amount);
             if (!sym || !(amount >= 0)) continue;
             const row = (portfolio || []).find(t => t && t.sym === sym);
