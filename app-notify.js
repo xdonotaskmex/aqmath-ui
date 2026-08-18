@@ -205,6 +205,7 @@ function _applyFrozenTargets(weights) {
 async function restoreHoldingsFromServer() {
     if (!isBetaActive() || _holdingsRestored) return 0;
     _holdingsRestored = true;
+    console.log('[AQMath] holdings restore: starting, local portfolio =', (portfolio || []).map(t => `${t.sym}:${t.amount}`).join(',') || '(empty)');
     let holdings = [];
     try {
         const res = await fetch(BETA_AUTH_URL + '/portfolio', {
@@ -214,6 +215,7 @@ async function restoreHoldingsFromServer() {
             // A rejected read is not a "restore done" — leaving the latch set
             // would keep the table empty for the rest of the page session even
             // after the session refreshes.
+            console.warn('[AQMath] holdings restore: beta-auth returned HTTP', res.status);
             _holdingsRestored = false;
             return 0;
         }
@@ -1201,6 +1203,7 @@ async function refreshNotifyUI() {
     } catch (e) {
         console.error('[AQMath] pending signals aborted:', e.message);
     }
+    console.log('[AQMath] refreshNotifyUI done, final portfolio =', (portfolio || []).map(t => `${t.sym}:${t.amount}@$${t.price}`).join(',') || '(empty)');
     refreshNtfyStatus();
 }
 
