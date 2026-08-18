@@ -821,8 +821,10 @@ const TOKEN_CG_MAP = {
     'TICS': 'qubetics',
     'ATH': 'aethir',
     'PEAQ': 'peaq-2',
-    'CELESTIA': 'celestia',
+    'TIA': 'celestia',
+    'CELESTIA': 'celestia',  // legacy alias — some portfolios stored the full name
     'PYTH': 'pyth-network',
+    'PYTH NETWORK': 'pyth-network',  // legacy alias
 };
 
 // CoinGecko's free tier rate-limits aggressively (HTTP 429). Once any CG
