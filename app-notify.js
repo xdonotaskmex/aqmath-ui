@@ -566,6 +566,16 @@ async function syncShieldPortfolio() {
         });
         if (!init.ok) {
             const err = await init.json().catch(() => ({}));
+            // Holdings were already saved (step 1 succeeded). A 409 means the
+            // frozen token set doesn't match (e.g. old alias names in the DB).
+            // Show a warning — not an error — because the data IS persisted.
+            if (init.status === 409) {
+                console.warn('[AQMath] holdings saved but init 409:', err.detail);
+                showToast('Holdings saved — but frozen weights need a reset (alias mismatch). Contact support to re-sync weights.', 'warning');
+                _setShieldSynced(true);
+                await refreshShieldStatus();
+                return;
+            }
             throw new Error(err.detail || 'init failed');
         }
         const data = await init.json();
