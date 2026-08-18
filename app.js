@@ -1020,7 +1020,6 @@ async function osvjeziSveCijene() {
     // guarantees no token ends up stuck at price 0.
     const snapshot = portfolio.slice();
     console.log('[AQMath] price sync start:', snapshot.length, 'tokens:', snapshot.map(t => t.sym).join(','));
-    if (typeof _dbg === 'function') _dbg('PRICES start | ' + snapshot.length + ' tokens: ' + snapshot.map(t => t.sym).join(','));
     const btn = document.getElementById('btnSyncAll');
     const originalText = btn.textContent;
     btn.textContent = "[ SYNC... ]";
@@ -1063,7 +1062,6 @@ async function osvjeziSveCijene() {
         updatePortfolioATH();
         const cgCount = Object.keys(cgPrices).length;
         console.log(`[AQMath] synced ${cnt} prices (${cgCount} from CoinGecko, rest from Binance)` + (skipped.length ? ` — no source for: ${skipped.join(', ')}` : ''));
-        if (typeof _dbg === 'function') _dbg(`PRICES done | cnt=${cnt} cg=${cgCount} skipped=${skipped.join(',') || '-'}`);
         if (skipped.length) {
             showToast(`Prices updated for ${cnt} coins. No price source for: ${skipped.join(', ')}.`, 'warning');
         } else {
@@ -2245,8 +2243,16 @@ function scheduleAutoHistory() {
 async function autoRefreshHistory() {
     const tokens = portfolio.filter(t => t.amount > 0 && !t.safeHaven);
     if (tokens.length === 0) return;
+    // Never snapshot while prices are still syncing — a partial price set
+    // records a false dip (e.g. $274 instead of $341 right after a restore).
+    if (tokens.some(t => !(Number(t.price) > 0))) return;
     const fp = tokens.map(t => `${t.sym}:${t.amount}`).sort().join('|');
-    if (fp === _lastAutoPortfolio && portfolioHistory.length > 0) return;
+    const total = totalValue();
+    const lastSnap = portfolioHistory[portfolioHistory.length - 1];
+    // Same composition AND same value as the last snapshot → nothing to record.
+    // (Previously the fingerprint match alone returned early, so price-only
+    // moves never updated the chart and "Current" stayed stale.)
+    if (fp === _lastAutoPortfolio && lastSnap && Math.abs(lastSnap.total - total) <= 0.01) return;
     if (Date.now() - _lastAutoHistBuild < 30000) return;
     _lastAutoPortfolio = fp;
     _lastAutoHistBuild = Date.now();
@@ -2254,7 +2260,6 @@ async function autoRefreshHistory() {
     // If history already has data, just append a current-value snapshot
     // instead of rebuilding from scratch (which destroys existing data points).
     if (portfolioHistory.length > 0) {
-        const total = totalValue();
         if (total > 0) {
             const last = portfolioHistory[portfolioHistory.length - 1];
             // Only append if value actually changed (avoid flat-line duplicates)
