@@ -224,12 +224,22 @@ async function restoreHoldingsFromServer() {
         return 0;
     }
     let added = 0;
+    let updated = 0;
     for (const h of holdings) {
         const rawSym = String(h.token || '').toUpperCase();
         const sym = _normSym(rawSym);
         const amount = Number(h.amount);
         if (!sym || !(amount > 0)) continue;
-        if ((portfolio || []).some(t => t && t.sym === sym)) continue;
+        const existing = (portfolio || []).find(t => t && t.sym === sym);
+        if (existing) {
+            // Update existing token's amount from server (fixes stale localStorage
+            // after signal confirmation in a previous session)
+            if (Math.abs((existing.amount || 0) - amount) > 1e-10) {
+                existing.amount = amount;
+                updated++;
+            }
+            continue;
+        }
         // entry/apy come back only if the user's sync included them (older
         // saves stored neither); a stablecoin row is rebuilt as safe-haven at
         // its $1 peg so the allocation view matches the pre-restore table.
@@ -243,14 +253,19 @@ async function restoreHoldingsFromServer() {
         });
         added++;
     }
-    if (added > 0) {
+    if (added > 0 || updated > 0) {
         saveState();
         render();
-        showToast(`Restored ${added} synced ${added === 1 ? 'holding' : 'holdings'} `
-            + 'from your account — press [ SYNC ALL ] to refresh prices. '
-            + 'Entry prices and APY only come back if your last sync stored them.', 'notice');
+        if (added > 0) {
+            showToast(`Restored ${added} synced ${added === 1 ? 'holding' : 'holdings'} `
+                + 'from your account — press [ SYNC ALL ] to refresh prices. '
+                + 'Entry prices and APY only come back if your last sync stored them.', 'notice');
+        }
+        if (updated > 0) {
+            console.log(`[AQMath] Synced ${updated} holding amounts from server`);
+        }
     }
-    return added;
+    return added + updated;
 }
 
 function _localHoldings() {
