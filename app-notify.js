@@ -789,7 +789,7 @@ async function confirmSignal(el, signalId) {
         // Optimistic: remove from local array immediately so card disappears
         _pendingSignals = _pendingSignals.filter(s => s.signal_id !== signalId);
         _rerenderSignalList();
-        await restoreHoldingsFromServer();
+        await _syncHoldingsAfterSignal();
         // Background sync — if server returns fresh data the card stays gone;
         // if the reload fails the optimistic update already hid the signal.
         loadPendingSignals();
@@ -882,7 +882,7 @@ async function adjustSignal(el, signalId) {
         // Optimistic: remove from local array immediately
         _pendingSignals = _pendingSignals.filter(s => s.signal_id !== signalId);
         _rerenderSignalList();
-        await restoreHoldingsFromServer();
+        await _syncHoldingsAfterSignal();
         loadPendingSignals();
     } catch (e) {
         showToast('Adjust failed: ' + e.message, 'error');
@@ -906,6 +906,38 @@ function _rerenderSignalList() {
         card.classList.remove('hidden');
         list.innerHTML = _pendingSignals.map(s => _renderSignalBlock(s)).join('');
         if (bulk) bulk.classList.toggle('hidden', _pendingSignals.length < 2);
+    }
+}
+
+// After a signal's delta-apply changed holdings on the server, pull the
+// updated amounts back into the local portfolio array and re-render.
+// Unlike restoreHoldingsFromServer() this UPDATES existing rows (amounts
+// change after SELL/BUY) and is NOT latched — it runs on every call.
+async function _syncHoldingsAfterSignal() {
+    try {
+        const res = await fetch(BETA_AUTH_URL + '/portfolio', {
+            headers: { 'Authorization': 'Bearer ' + getBetaToken() }
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const holdings = data.holdings || [];
+        let changed = false;
+        for (const h of holdings) {
+            const sym = String(h.token || '').toUpperCase();
+            const amount = Number(h.amount);
+            if (!sym || !(amount >= 0)) continue;
+            const row = (portfolio || []).find(t => t && t.sym === sym);
+            if (row && Math.abs((row.amount || 0) - amount) > 1e-10) {
+                row.amount = amount;
+                changed = true;
+            }
+        }
+        if (changed) {
+            saveState();
+            render();
+        }
+    } catch (e) {
+        console.warn('[AQMath] holdings sync after signal failed:', e.message);
     }
 }
 
