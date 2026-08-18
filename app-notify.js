@@ -272,6 +272,12 @@ async function restoreHoldingsFromServer() {
             saveState();
             render();
             console.log('[AQMath] Portfolio replaced with server data:', serverRows.map(h => `${h.sym}:${h.amount}`).join(', '));
+            // Server data carries no prices (only amounts, entry, APY).
+            // Without a price refresh, non-stablecoin tokens render at $0
+            // and appear invisible in the UI. Trigger a sync immediately.
+            if (typeof osvjeziSveCijene === 'function') {
+                try { await osvjeziSveCijene(); } catch (e) { console.warn('[AQMath] post-restore price sync failed:', e.message); }
+            }
         }
     } else if (serverRows.length > 0 && serverRows.length < localCount) {
         console.warn(`[AQMath] Server returned ${serverRows.length} tokens but local has ${localCount} — partial data, keeping local portfolio`);
