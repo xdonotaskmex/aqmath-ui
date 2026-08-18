@@ -508,8 +508,8 @@ function loadState() {
                 // Drop entries persisted before symbol validation existed.
                 // Default every numeric field render()/calcToken() read, so a
                 // legacy/minimal saved shape can never crash the table.
-                portfolio = data.portfolio.filter(t => t && isValidSymbol(t.sym)).map(t => {
-                    // Normalize legacy aliases (CELESTIA → TIA, etc.) on load
+                // Normalize aliases (CELESTIA → TIA, etc.) then deduplicate.
+                const normalized = data.portfolio.filter(t => t && isValidSymbol(t.sym)).map(t => {
                     const sym = _normalizeSym(t.sym);
                     return {
                     ...t,
@@ -522,9 +522,19 @@ function loadState() {
                     entry: Number(t.entry) || 0,
                     costBasis: Number(t.costBasis) || 0,
                     frozen: t.frozen || false,
-                    // Ne perzistiraj stari history-warning flag preko reloada — ponovno se izračuna na sljedeći /optimize
                     insufficientHistory: false
                 };});
+                // Deduplicate: if multiple rows have the same sym after
+                // normalization, keep the one with the higher price (more
+                // likely to be the "real" row with synced data).
+                const seen = new Map();
+                for (const t of normalized) {
+                    const existing = seen.get(t.sym);
+                    if (!existing || t.price > existing.price) {
+                        seen.set(t.sym, t);
+                    }
+                }
+                portfolio = Array.from(seen.values());
             } else {
                 portfolio = [];
             }
@@ -2388,6 +2398,25 @@ function renderHistoryChart() {
 
 // ============ RENDER ============
 function render() {
+    // Safety-net deduplication: if aliases created duplicate rows (e.g. both
+    // TIA and CELESTIA normalized to TIA), keep only the one with higher price.
+    if (portfolio && portfolio.length > 1) {
+        const seen = new Map();
+        let dupes = false;
+        for (const t of portfolio) {
+            const existing = seen.get(t.sym);
+            if (!existing) {
+                seen.set(t.sym, t);
+            } else {
+                dupes = true;
+                if (t.price > existing.price) seen.set(t.sym, t);
+            }
+        }
+        if (dupes) {
+            portfolio = Array.from(seen.values());
+            saveState();  // persist the cleaned state
+        }
+    }
     saveState();
     syncTargetFieldLock();
     renderTradeSymSelect();
