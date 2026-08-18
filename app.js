@@ -2232,6 +2232,26 @@ async function autoRefreshHistory() {
     _lastAutoPortfolio = fp;
     _lastAutoHistBuild = Date.now();
 
+    // If history already has data, just append a current-value snapshot
+    // instead of rebuilding from scratch (which destroys existing data points).
+    if (portfolioHistory.length > 0) {
+        const total = totalValue();
+        if (total > 0) {
+            const last = portfolioHistory[portfolioHistory.length - 1];
+            // Only append if value actually changed (avoid flat-line duplicates)
+            if (!last || Math.abs(last.total - total) > 0.01) {
+                portfolioHistory.push({ timestamp: Date.now(), total });
+                if (portfolioHistory.length > 100) portfolioHistory.shift();
+                saveHistory();
+                renderHistoryChart();
+            }
+        }
+        return;
+    }
+
+    // First-time build: reconstruct 90-day synthetic history from Binance klines.
+    // Uses CURRENT amounts × historical prices (approximation — assumes holdings
+    // were constant over the period).
     const STABLES = ['USDC', 'USDT', 'DAI', 'BUSD', 'TUSD', 'FDUSD', 'USDP'];
     const priceMap = {};
     try {
