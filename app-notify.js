@@ -1230,29 +1230,23 @@ async function _applyUnappliedDeltas() {
     if (data.status === 'applied' && data.applied > 0) {
         console.log('[AQMath] Retroactive delta apply:', data.applied, 'signals applied');
         console.log('[AQMath] Corrected holdings:', JSON.stringify(data.holdings));
-        // Update local portfolio with corrected holdings from the response
+        // Update local portfolio with corrected holdings from the response.
+        // IMPORTANT: update amounts IN-PLACE rather than replacing the entire
+        // portfolio. A full replacement loses prices (set by the preceding
+        // osvjeziSveCijene call) and can drop tokens not in the response.
         if (data.holdings && typeof data.holdings === 'object') {
             const serverMap = data.holdings;
-            const localMap = new Map((portfolio || []).map(t => [t.sym, t]));
-            const newPortfolio = [];
-            for (const [sym, amount] of Object.entries(serverMap)) {
-                if (amount <= 0) continue;
-                const local = localMap.get(sym);
-                const safeHaven = typeof isStablecoin === 'function' && isStablecoin(sym);
-                newPortfolio.push({
-                    sym, coinId: sym.toLowerCase(), amount,
-                    price: local ? local.price : (safeHaven ? 1 : 0),
-                    entry: local ? local.entry : 0,
-                    apy: local ? local.apy : 0,
-                    target: local ? local.target : 0,
-                    costBasis: local ? local.costBasis : 0,
-                    totalTokens: local ? local.totalTokens : 0,
-                    frozen: local ? local.frozen : false,
-                    insufficientHistory: local ? local.insufficientHistory : false,
-                    safeHaven
-                });
-            }
-            portfolio = newPortfolio;
+            const serverSyms = new Set(Object.keys(serverMap));
+            let updated = 0;
+            // Update amounts for tokens the engine returned
+            portfolio.forEach(t => {
+                if (serverMap[t.sym] !== undefined) {
+                    t.amount = serverMap[t.sym];
+                    updated++;
+                }
+            });
+            // Remove tokens whose amount dropped to 0 after delta apply
+            portfolio = portfolio.filter(t => t.amount > 0);
             saveState();
             render();
             showToast(`${data.applied} signal delta${data.applied > 1 ? 's' : ''} applied — holdings corrected.`, 'success');
