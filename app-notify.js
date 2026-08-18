@@ -224,8 +224,6 @@ async function restoreHoldingsFromServer() {
         _holdingsRestored = false;   // allow a retry on the next auth refresh
         return 0;
     }
-    // Log local portfolio before sync
-    console.log('[AQMath] Local portfolio before sync:', (portfolio || []).map(t => `${t.sym}:${t.amount}`).join(', '));
 
     // Filter to valid server holdings (normalize aliases, skip zero-amount)
     const serverRows = [];
@@ -263,12 +261,9 @@ async function restoreHoldingsFromServer() {
         saveState();
         render();
         console.log('[AQMath] Portfolio replaced with server data:', serverRows.map(h => `${h.sym}:${h.amount}`).join(', '));
-        showToast('Portfolio synced from server — server data is authoritative.', 'notice');
     } else {
         console.log('[AQMath] Server has no holdings — keeping local portfolio');
     }
-    // Log local portfolio after sync
-    console.log('[AQMath] Local portfolio after sync:', (portfolio || []).map(t => `${t.sym}:${t.amount}`).join(', '));
     return serverRows.length;
 }
 
@@ -547,6 +542,49 @@ async function syncShieldPortfolio() {
             throw new Error(err.detail || 'HTTP ' + res.status);
         }
         await res.json();
+
+        // PUT succeeded — beta-auth now has our data. Re-read from server so
+        // the local portfolio reflects the authoritative copy (amounts, entry,
+        // APY). This matters especially when the init call below 409s: without
+        // this refresh the local table keeps stale amounts even though beta-auth
+        // has the correct ones.
+        try {
+            const getRes = await fetch(BETA_AUTH_URL + '/portfolio', {
+                headers: { 'Authorization': 'Bearer ' + getBetaToken() }
+            });
+            if (getRes.ok) {
+                const getData = await getRes.json();
+                const serverHoldings = getData.holdings || [];
+                if (serverHoldings.length > 0) {
+                    const localMap = new Map((portfolio || []).map(t => [t.sym, t]));
+                    portfolio = serverHoldings
+                        .filter(h => Number(h.amount) > 0)
+                        .map(h => {
+                            const rawSym = String(h.token || '').toUpperCase();
+                            const sym = _normSym(rawSym);
+                            const local = localMap.get(sym);
+                            const safeHaven = typeof isStablecoin === 'function' && isStablecoin(sym);
+                            return {
+                                sym, coinId: sym.toLowerCase(),
+                                amount: Number(h.amount),
+                                price: local ? local.price : (safeHaven ? 1 : 0),
+                                entry: Number(h.entry) || (local ? local.entry : 0),
+                                apy: Number(h.apy) || (local ? local.apy : 0),
+                                target: local ? local.target : 0,
+                                costBasis: local ? local.costBasis : 0,
+                                totalTokens: local ? local.totalTokens : 0,
+                                frozen: local ? local.frozen : false,
+                                insufficientHistory: local ? local.insufficientHistory : false,
+                                safeHaven
+                            };
+                        });
+                    saveState();
+                    render();
+                }
+            }
+        } catch (e) {
+            console.warn('[AQMath] post-PUT re-read failed:', e.message);
+        }
 
         // Always call /portfolio/init. beta-auth's `first_time` says whether IT
         // had holdings, which is not the same question as "does the engine have
@@ -1048,8 +1086,24 @@ async function refreshNotifyUI() {
 // Calls the engine's /portfolio/signals/apply-all endpoint. If any deltas
 // were applied, updates the local portfolio with the corrected holdings.
 async function _applyUnappliedDeltas() {
-    const res = await _shieldFetch('/portfolio/signals/apply-all', { method: 'POST' });
-    if (!res || !res.ok) return;  // not a beta user or endpoint not available
+    let res;
+    try {
+        res = await _shieldFetch('/portfolio/signals/apply-all', { method: 'POST' });
+    } catch (e) {
+        // Engine unreachable — not critical, the deltas will apply on next visit.
+        console.warn('[AQMath] delta apply: engine unreachable:', e.message);
+        return;
+    }
+    if (!res) return;
+    if (res.status === 404 || res.status === 501) {
+        // Engine not yet deployed with apply-all endpoint — silent, no toast.
+        console.info('[AQMath] delta apply: endpoint not available (HTTP ' + res.status + ')');
+        return;
+    }
+    if (!res.ok) {
+        console.warn('[AQMath] delta apply: HTTP ' + res.status);
+        return;
+    }
     const data = await res.json();
     if (data.status === 'applied' && data.applied > 0) {
         console.log('[AQMath] Retroactive delta apply:', data.applied, 'signals applied');
