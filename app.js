@@ -2799,5 +2799,14 @@ Object.assign(window, {
 });
 // app-notify.js reads the live holdings array; a plain Object.assign copy
 // would go stale the moment loadState() reassigns `portfolio`.
-Object.defineProperty(window, 'portfolio', { get: () => portfolio });
+// The setter is equally critical: app-notify.js REASSIGNS the global
+// (portfolio = newPortfolio in restoreHoldingsFromServer / syncShieldPortfolio /
+// _applyUnappliedDeltas). Without a setter the assignment targets a getter-only
+// property and SILENTLY NO-OPS in sloppy mode — the server restore logged
+// "REPLACED" while the IIFE-local array stayed [USDC:0], which is exactly the
+// "portfolio shows only USDC" bug.
+Object.defineProperty(window, 'portfolio', {
+    get: () => portfolio,
+    set: (v) => { portfolio = v; }
+});
 })();
