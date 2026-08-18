@@ -44,6 +44,12 @@ function serveIndex(res) {
   });
 }
 
+function serveFile(filePath, res) {
+  const ext = path.extname(filePath).toLowerCase();
+  res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+  fs.createReadStream(filePath).pipe(res);
+}
+
 const server = http.createServer((req, res) => {
   let urlPath;
   try {
@@ -62,13 +68,18 @@ const server = http.createServer((req, res) => {
   }
 
   fs.stat(filePath, (err, stat) => {
-    if (!err && stat.isFile()) {
-      const ext = path.extname(filePath).toLowerCase();
-      res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
-      return fs.createReadStream(filePath).pipe(res);
+    if (!err && stat.isFile()) return serveFile(filePath, res);
+    // SPA fallback for extensionless routes (clean URLs): mirror the production
+    // Caddy `try_files {path} {path}.html ... /index.html` — a clean URL whose
+    // entry page exists (/docs -> docs.html) must serve that page, not
+    // index.html. index.html only ships the landing view, so routing /docs
+    // through it left the body on route-landing.
+    if (!path.extname(filePath)) {
+      return fs.stat(filePath + '.html', (errHtml, statHtml) => {
+        if (!errHtml && statHtml.isFile()) return serveFile(filePath + '.html', res);
+        return serveIndex(res);
+      });
     }
-    // SPA fallback for extensionless routes (clean URLs).
-    if (!path.extname(filePath)) return serveIndex(res);
     return end(res, 404, 'Not found');
   });
 });

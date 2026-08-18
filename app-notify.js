@@ -405,8 +405,7 @@ function _renderShieldStatus(data) {
         + `macro re-opt: ${(data.next_reopt_at || '').slice(0, 10)}<br>`
         + `last run: ${_lastRunText(data)}`
         + (data.next_dca_on ? `<br>next DCA: ${data.next_dca_on}` : '')
-        + (parked ? `<br>DCA parked in USDC: ~$${Number(parked).toLocaleString()}` : '')
-        + _autoExecuteBadge(data.settings);
+        + (parked ? `<br>DCA parked in USDC: ~$${Number(parked).toLocaleString()}` : '');
     _setShieldSynced(true);
     _applyShieldSettings(data.settings);
     // Push the frozen plan into the holdings table so Target% and this card can
@@ -472,38 +471,8 @@ function _applyShieldSettings(settings) {
     if (itv && settings.dca_interval != null) itv.value = Number(settings.dca_interval);
 }
 
-// Auto-execute badge for the shield card. Shows the escalation policy status:
-// OFF (default), ON/escalated (auto-execute activated after missing the gate).
-function _autoExecuteBadge(settings) {
-    if (!settings) return '';
-    const on = settings.auto_execute === true;
-    if (on) {
-        return '<br><span style="color:#ff9800;font-size:0.75rem">' +
-            '\u26a1 auto-execute: ON (escalated) ' +
-            '<button class="btn ghost" style="padding:1px 5px;font-size:0.65rem" ' +
-            'onclick="_toggleAutoExecute(false)">[ opt out ]</button></span>';
-    }
-    return '';  // Don't show anything when OFF — keeps the card clean
-}
-
-// Toggle auto-execute opt-out/in. Calls POST /portfolio/settings.
-async function _toggleAutoExecute(enable) {
-    try {
-        const res = await _shieldFetch('/portfolio/settings', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ auto_execute: enable }),
-        });
-        if (res && res.ok) {
-            showToast(enable ? 'Auto-execute enabled.' : 'Auto-execute disabled — you confirm signals manually.',
-                      enable ? 'success' : 'notice');
-            await refreshShieldStatus();
-        }
-    } catch (e) {
-        showToast('Settings update failed: ' + e.message, 'error');
-    }
-}
-window._toggleAutoExecute = _toggleAutoExecute;
+// Execution is strictly human-in-the-loop: there is no auto-execute mode.
+// Signals stay pending until the user confirms / adjusts / skips them here.
 
 async function saveShieldSettings() {
     if (!isBetaActive()) return showToast('Activate beta first.', 'warning');
@@ -1140,10 +1109,19 @@ function _promptExecutionTime(signalId) {
     // Use a toast-like bar at the bottom — non-blocking, dismissible
     const bar = document.createElement('div');
     bar.id = 'execTimePrompt';
+    bar.dataset.signalId = signalId;
     bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;' +
         'color:#e0e0e0;padding:8px 16px;z-index:9999;display:flex;align-items:center;' +
         'gap:8px;flex-wrap:wrap;font-size:0.8rem;border-top:1px solid #333';
+    // Quick offsets for the common case; the datetime-local input covers
+    // everything else ("executed yesterday at 19:30") — converted to UTC
+    // before reporting.
     bar.innerHTML = '<span>When did you execute?</span>' + buttons +
+        '<input type="datetime-local" id="execTimeCustom" style="background:#0f0f1e;' +
+        'color:#e0e0e0;border:1px solid #333;border-radius:4px;font-size:0.7rem;' +
+        'padding:2px 6px;color-scheme:dark">' +
+        '<button class="btn green" style="padding:2px 6px;font-size:0.7rem" ' +
+        'onclick="_reportExecTimeCustom()">[ set ]</button>' +
         '<button class="btn ghost" style="padding:2px 6px;font-size:0.7rem;margin-left:auto" ' +
         'onclick="document.getElementById(\'execTimePrompt\').remove()">skip</button>';
     document.body.appendChild(bar);
@@ -1151,10 +1129,36 @@ function _promptExecutionTime(signalId) {
     setTimeout(() => { const el = document.getElementById('execTimePrompt'); if (el) el.remove(); }, 60000);
 }
 
-// Called from the execution time prompt buttons. Reports the execution time
-// to the engine: POST /portfolio/signals/report-execution.
+// Free-form execution time from the datetime-local input. The value is
+// LOCAL time; convert through Date to a UTC ISO string for the engine.
+function _reportExecTimeCustom() {
+    const bar = document.getElementById('execTimePrompt');
+    if (!bar) return;
+    const input = document.getElementById('execTimeCustom');
+    if (!input || !input.value) {
+        if (typeof showToast === 'function') showToast('Pick a date and time first', 'warning');
+        return;
+    }
+    const d = new Date(input.value);
+    if (isNaN(d.getTime())) {
+        if (typeof showToast === 'function') showToast('Invalid date', 'error');
+        return;
+    }
+    if (d.getTime() > Date.now() + 60000) {
+        if (typeof showToast === 'function') showToast('Execution time cannot be in the future', 'warning');
+        return;
+    }
+    _reportExecTimeAt(bar.dataset.signalId, d.toISOString());
+}
+
+// Called from the execution time prompt quick-offset buttons. Reports the
+// execution time to the engine: POST /portfolio/signals/report-execution.
 async function _reportExecTime(signalId, minutesAgo) {
     const executedAt = new Date(Date.now() - minutesAgo * 60000).toISOString();
+    await _reportExecTimeAt(signalId, executedAt);
+}
+
+async function _reportExecTimeAt(signalId, executedAt) {
     try {
         const res = await _shieldFetch('/portfolio/signals/report-execution', {
             method: 'POST',
@@ -1163,6 +1167,9 @@ async function _reportExecTime(signalId, minutesAgo) {
         });
         if (res && res.ok) {
             console.log('[AQMath] Execution time reported:', signalId, executedAt);
+            if (typeof showToast === 'function') showToast('Execution time saved', 'success');
+        } else if (typeof showToast === 'function') {
+            showToast('Execution time save failed (HTTP ' + (res ? res.status : '?') + ')', 'warning');
         }
     } catch (e) {
         console.warn('[AQMath] Execution time report failed:', e.message);
