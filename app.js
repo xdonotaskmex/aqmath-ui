@@ -508,19 +508,23 @@ function loadState() {
                 // Drop entries persisted before symbol validation existed.
                 // Default every numeric field render()/calcToken() read, so a
                 // legacy/minimal saved shape can never crash the table.
-                portfolio = data.portfolio.filter(t => t && isValidSymbol(t.sym)).map(t => ({
+                portfolio = data.portfolio.filter(t => t && isValidSymbol(t.sym)).map(t => {
+                    // Normalize legacy aliases (CELESTIA → TIA, etc.) on load
+                    const sym = _normalizeSym(t.sym);
+                    return {
                     ...t,
+                    sym,
+                    coinId: t.coinId || sym.toLowerCase(),
                     amount: Number(t.amount) || 0,
                     price: Number(t.price) || 0,
                     target: Number(t.target) || 0,
                     apy: Number(t.apy) || 0,
                     entry: Number(t.entry) || 0,
                     costBasis: Number(t.costBasis) || 0,
-                    coinId: t.coinId || '',
                     frozen: t.frozen || false,
                     // Ne perzistiraj stari history-warning flag preko reloada — ponovno se izračuna na sljedeći /optimize
                     insufficientHistory: false
-                }));
+                };});
             } else {
                 portfolio = [];
             }
@@ -827,6 +831,26 @@ const TOKEN_CG_MAP = {
     'PYTH NETWORK': 'pyth-network',  // legacy alias
 };
 
+// Symbol aliases — mirror engine's SYMBOL_ALIASES so the UI displays the
+// proper ticker even if the portfolio/server stored a full name.
+// e.g. "CELESTIA" → "TIA", "CONSTELLATION" → "DAG"
+const SYMBOL_ALIASES = {
+    'PYTH NETWORK': 'PYTH',
+    'CELESTIA': 'TIA',
+    'CONSTELLATION': 'DAG',
+    'ENERGY WEB': 'EWT',
+    'ENERGY-WEB': 'EWT',
+    'QUBETICS': 'TICS',
+    'AETHIR': 'ATH',
+};
+
+// Normalize a symbol to its canonical ticker. Returns the input unchanged
+// if no alias exists (most tokens already use their proper ticker).
+function _normalizeSym(sym) {
+    if (!sym || typeof sym !== 'string') return sym;
+    return SYMBOL_ALIASES[sym] || sym;
+}
+
 // CoinGecko's free tier rate-limits aggressively (HTTP 429). Once any CG
 // call is throttled, every further CG call in the same sync is skipped for
 // CG_BACKOFF_MS — hammering the API only extends the ban and burns time on
@@ -1095,9 +1119,10 @@ async function importCSV(event) {
         document.getElementById('loadingSub').textContent = 'Creating portfolio...';
         const newPortfolio = [];
         const skipped = rejected.map(sym => `${sym} (invalid symbol)`);
-        for (const sym of symbols) {
-            const net = netMap[sym];
-            const price = prices[sym] || 0;
+        for (const rawSym of symbols) {
+            const sym = _normalizeSym(rawSym);  // CELESTIA → TIA, etc.
+            const net = netMap[rawSym];  // netMap keyed by original CSV symbol
+            const price = prices[rawSym] || 0;
             if (price <= 0) { skipped.push(sym); continue; }
             const value = net.amount * price;
             if (value < 5) { skipped.push(`${sym} (dust $${value.toFixed(2)})`); continue; }
@@ -1304,7 +1329,9 @@ function resetForme() {
 async function dodajToken() {
     const input = document.getElementById('iSym').value.trim();
     if (!input) return showToast('enter a symbol or name.', 'warning');
-    const sym = input.toUpperCase();
+    const rawSym = input.toUpperCase();
+    // Normalize aliases (CELESTIA → TIA, PYTH NETWORK → PYTH, etc.)
+    const sym = _normalizeSym(rawSym);
     if (!isValidSymbol(sym)) {
         return showToast('symbol may only contain letters, digits, dot, dash or underscore (max 20).', 'warning');
     }

@@ -207,7 +207,8 @@ async function restoreHoldingsFromServer() {
     }
     let added = 0;
     for (const h of holdings) {
-        const sym = String(h.token || '').toUpperCase();
+        const rawSym = String(h.token || '').toUpperCase();
+        const sym = (typeof _normalizeSym === 'function') ? _normalizeSym(rawSym) : rawSym;
         const amount = Number(h.amount);
         if (!sym || !(amount > 0)) continue;
         if ((portfolio || []).some(t => t && t.sym === sym)) continue;
@@ -747,10 +748,12 @@ function _renderSignalBlock(s) {
         : '<span class="sig-days-ok">today</span>';
     const unitsStr = s.units >= 1 ? s.units.toLocaleString(undefined, {maximumFractionDigits: 2}) : s.units.toPrecision(4);
     const usdStr = '$' + Math.round(s.usd).toLocaleString();
+    // Normalize signal symbol (CELESTIA → TIA, etc.) for display consistency
+    const displaySym = (typeof _normalizeSym === 'function') ? _normalizeSym(s.sym) : s.sym;
     return '<div class="sig-block" data-signal-id="' + s.signal_id + '">'
         + '<div class="sig-header">'
         +   '<span class="sig-side ' + sideClass + '">' + s.side + '</span>'
-        +   '<span class="sig-sym">' + s.sym + '</span>'
+        +   '<span class="sig-sym">' + displaySym + '</span>'
         +   '<span class="sig-amount">' + unitsStr + ' &rarr; ' + usdStr + '</span>'
         +   '<span class="sig-regime ' + regimeClass + '">' + regimeLabel + '</span>'
         +   daysWarn
@@ -923,7 +926,8 @@ async function _syncHoldingsAfterSignal() {
         const holdings = data.holdings || [];
         let changed = false;
         for (const h of holdings) {
-            const sym = String(h.token || '').toUpperCase();
+            const rawSym = String(h.token || '').toUpperCase();
+            const sym = (typeof _normalizeSym === 'function') ? _normalizeSym(rawSym) : rawSym;
             const amount = Number(h.amount);
             if (!sym || !(amount >= 0)) continue;
             const row = (portfolio || []).find(t => t && t.sym === sym);
