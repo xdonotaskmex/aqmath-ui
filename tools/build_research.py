@@ -204,6 +204,39 @@ DOCS = [
         "altLabel": "English",
     },
     {
+        "src": "recovery-test.md",
+        "out": "recovery-test.html",
+        "path": "/research/recovery-test",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-08-17",
+        "title": "Post-Shield Recovery Test - AQMath",
+        "shortTitle": "Locked Out? &mdash; What Happens After the Shield Goes Defensive",
+        "description": ("Crown Test 4: every defensive episode in 6.2 years of history analysed "
+                        "for re-entry speed and recovery capture. The Shield re-enters fast "
+                        "(median 2 days to 50% exposure) but captures only 19% of the Buy & Hold "
+                        "recovery at 12 months. Zero of nine cycles end with Shield equity above "
+                        "B&H equity. Gates 1/4: speed passes, participation fails."),
+        "meta_description": "Shield re-enters in 2 days but captures only 19% of B&H recovery at 12m. Zero of 9 cycles catch up. Gates 1/4.",
+        "altLabel": "\u4e2d\u6587",
+    },
+    {
+        "src": "recovery-test.zh-CN.md",
+        "out": "recovery-test-zh.html",
+        "path": "/research/recovery-test-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-08-17",
+        "title": "防护盾恢复测试 - AQMath",
+        "shortTitle": "被锁在外面？&mdash; 防护盾进入防守后会发生什么",
+        "description": ("皇冠测试 4：分析 6.2 年历史中每一次防守阶段的重新进入速度与恢复捕获。"
+                        "防护盾重新进入很快（中位数 2 天达到 50% 敞口），但在 12 个月仅捕获"
+                        "买入持有恢复量的 19%。九个周期中没有一个是 12 个月后权益超过买入"
+                        "持有的。门槛 1/4：速度通过，参与度失败。"),
+        "meta_description": "防护盾 2 天内重新进入，但 12 个月仅捕获买入持有恢复量的 19%。9 个周期中无一追上。门槛 1/4。",
+        "altLabel": "English",
+    },
+    {
         "src": "feed-sensitivity.md",
         "out": "feed-sensitivity.html",
         "path": "/research/feed-sensitivity",
@@ -503,6 +536,8 @@ TRANSLATION_SETS = [
     ["/research/liveness-screen", "/research/liveness-screen-zh"],
     ["/research/baskets-v14-hist3", "/research/baskets-v14-hist3-zh"],
     ["/research/e2e-tiaq", "/research/e2e-tiaq-zh"],
+    ["/research/recovery-test", "/research/recovery-test-zh"],
+    ["/research/static-vs-dynamic", "/research/static-vs-dynamic-zh"],
 ]
 
 

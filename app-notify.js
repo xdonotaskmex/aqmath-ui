@@ -1023,6 +1023,14 @@ async function refreshNotifyUI() {
     } catch (e) {
         console.error('[AQMath] holdings restore aborted:', e.message);
     }
+    // After restore: apply any confirmed signals whose delta was never
+    // persisted (e.g. caused by the CELESTIA alias bug). This corrects
+    // beta-auth holdings and updates the local portfolio.
+    try {
+        await _applyUnappliedDeltas();
+    } catch (e) {
+        console.error('[AQMath] delta apply aborted:', e.message);
+    }
     try {
         await refreshShieldStatus();
     } catch (e) {
@@ -1034,6 +1042,46 @@ async function refreshNotifyUI() {
         console.error('[AQMath] pending signals aborted:', e.message);
     }
     refreshNtfyStatus();
+}
+
+// Retroactively apply confirmed signals whose delta was never persisted.
+// Calls the engine's /portfolio/signals/apply-all endpoint. If any deltas
+// were applied, updates the local portfolio with the corrected holdings.
+async function _applyUnappliedDeltas() {
+    const res = await _shieldFetch('/portfolio/signals/apply-all', { method: 'POST' });
+    if (!res || !res.ok) return;  // not a beta user or endpoint not available
+    const data = await res.json();
+    if (data.status === 'applied' && data.applied > 0) {
+        console.log('[AQMath] Retroactive delta apply:', data.applied, 'signals applied');
+        console.log('[AQMath] Corrected holdings:', JSON.stringify(data.holdings));
+        // Update local portfolio with corrected holdings from the response
+        if (data.holdings && typeof data.holdings === 'object') {
+            const serverMap = data.holdings;
+            const localMap = new Map((portfolio || []).map(t => [t.sym, t]));
+            const newPortfolio = [];
+            for (const [sym, amount] of Object.entries(serverMap)) {
+                if (amount <= 0) continue;
+                const local = localMap.get(sym);
+                const safeHaven = typeof isStablecoin === 'function' && isStablecoin(sym);
+                newPortfolio.push({
+                    sym, coinId: sym.toLowerCase(), amount,
+                    price: local ? local.price : (safeHaven ? 1 : 0),
+                    entry: local ? local.entry : 0,
+                    apy: local ? local.apy : 0,
+                    target: local ? local.target : 0,
+                    costBasis: local ? local.costBasis : 0,
+                    totalTokens: local ? local.totalTokens : 0,
+                    frozen: local ? local.frozen : false,
+                    insufficientHistory: local ? local.insufficientHistory : false,
+                    safeHaven
+                });
+            }
+            portfolio = newPortfolio;
+            saveState();
+            render();
+            showToast(`${data.applied} signal delta${data.applied > 1 ? 's' : ''} applied — holdings corrected.`, 'success');
+        }
+    }
 }
 
 // Page-load gate: returning users with a stored token must also pass the
