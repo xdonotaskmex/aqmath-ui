@@ -383,7 +383,8 @@ function _renderShieldStatus(data) {
         + `macro re-opt: ${(data.next_reopt_at || '').slice(0, 10)}<br>`
         + `last run: ${_lastRunText(data)}`
         + (data.next_dca_on ? `<br>next DCA: ${data.next_dca_on}` : '')
-        + (parked ? `<br>DCA parked in USDC: ~$${Number(parked).toLocaleString()}` : '');
+        + (parked ? `<br>DCA parked in USDC: ~$${Number(parked).toLocaleString()}` : '')
+        + _autoExecuteBadge(data.settings);
     _setShieldSynced(true);
     _applyShieldSettings(data.settings);
     // Push the frozen plan into the holdings table so Target% and this card can
@@ -448,6 +449,39 @@ function _applyShieldSettings(settings) {
     if (amt && settings.dca_amount != null) amt.value = Number(settings.dca_amount);
     if (itv && settings.dca_interval != null) itv.value = Number(settings.dca_interval);
 }
+
+// Auto-execute badge for the shield card. Shows the escalation policy status:
+// OFF (default), ON/escalated (auto-execute activated after missing the gate).
+function _autoExecuteBadge(settings) {
+    if (!settings) return '';
+    const on = settings.auto_execute === true;
+    if (on) {
+        return '<br><span style="color:#ff9800;font-size:0.75rem">' +
+            '\u26a1 auto-execute: ON (escalated) ' +
+            '<button class="btn ghost" style="padding:1px 5px;font-size:0.65rem" ' +
+            'onclick="_toggleAutoExecute(false)">[ opt out ]</button></span>';
+    }
+    return '';  // Don't show anything when OFF — keeps the card clean
+}
+
+// Toggle auto-execute opt-out/in. Calls POST /portfolio/settings.
+async function _toggleAutoExecute(enable) {
+    try {
+        const res = await _shieldFetch('/portfolio/settings', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ auto_execute: enable }),
+        });
+        if (res && res.ok) {
+            showToast(enable ? 'Auto-execute enabled.' : 'Auto-execute disabled — you confirm signals manually.',
+                      enable ? 'success' : 'notice');
+            await refreshShieldStatus();
+        }
+    } catch (e) {
+        showToast('Settings update failed: ' + e.message, 'error');
+    }
+}
+window._toggleAutoExecute = _toggleAutoExecute;
 
 async function saveShieldSettings() {
     if (!isBetaActive()) return showToast('Activate beta first.', 'warning');
@@ -878,6 +912,8 @@ async function confirmSignal(el, signalId) {
         _pendingSignals = _pendingSignals.filter(s => s.signal_id !== signalId);
         _rerenderSignalList();
         await _syncHoldingsAfterSignal();
+        // Prompt for the SECOND timestamp: when did they actually execute?
+        _promptExecutionTime(signalId);
         // Background sync — if server returns fresh data the card stays gone;
         // if the reload fails the optimistic update already hid the signal.
         loadPendingSignals();
@@ -971,6 +1007,8 @@ async function adjustSignal(el, signalId) {
         _pendingSignals = _pendingSignals.filter(s => s.signal_id !== signalId);
         _rerenderSignalList();
         await _syncHoldingsAfterSignal();
+        // Prompt for the SECOND timestamp: when did they actually execute?
+        _promptExecutionTime(signalId);
         loadPendingSignals();
     } catch (e) {
         showToast('Adjust failed: ' + e.message, 'error');
@@ -1048,6 +1086,59 @@ async function loadSignalStats() {
         badge.classList.remove('hidden');
     } catch (e) { /* silent */ }
 }
+
+// Execution time reporter: the SECOND timestamp. After the user confirms or
+// adjusts a signal, prompt them with quick options for when they actually
+// executed the trade on the exchange. This captures the honest execution gap
+// that same_day=true hides on SHOCK days.
+function _promptExecutionTime(signalId) {
+    if (!signalId) return;
+    const offsets = [
+        { label: 'just now', min: 0 },
+        { label: '5 min ago', min: 5 },
+        { label: '15 min ago', min: 15 },
+        { label: '30 min ago', min: 30 },
+        { label: '1 hour ago', min: 60 },
+    ];
+    const buttons = offsets.map(o =>
+        `<button class="btn ghost" style="padding:2px 6px;font-size:0.7rem;margin:2px" ` +
+        `onclick="_reportExecTime('${signalId}', ${o.min})">${o.label}</button>`
+    ).join('');
+    // Use a toast-like bar at the bottom — non-blocking, dismissible
+    const bar = document.createElement('div');
+    bar.id = 'execTimePrompt';
+    bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;' +
+        'color:#e0e0e0;padding:8px 16px;z-index:9999;display:flex;align-items:center;' +
+        'gap:8px;flex-wrap:wrap;font-size:0.8rem;border-top:1px solid #333';
+    bar.innerHTML = '<span>When did you execute?</span>' + buttons +
+        '<button class="btn ghost" style="padding:2px 6px;font-size:0.7rem;margin-left:auto" ' +
+        'onclick="document.getElementById(\'execTimePrompt\').remove()">skip</button>';
+    document.body.appendChild(bar);
+    // Auto-dismiss after 60 seconds
+    setTimeout(() => { const el = document.getElementById('execTimePrompt'); if (el) el.remove(); }, 60000);
+}
+
+// Called from the execution time prompt buttons. Reports the execution time
+// to the engine: POST /portfolio/signals/report-execution.
+async function _reportExecTime(signalId, minutesAgo) {
+    const executedAt = new Date(Date.now() - minutesAgo * 60000).toISOString();
+    try {
+        const res = await _shieldFetch('/portfolio/signals/report-execution', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ signal_id: signalId, executed_at: executedAt }),
+        });
+        if (res && res.ok) {
+            console.log('[AQMath] Execution time reported:', signalId, executedAt);
+        }
+    } catch (e) {
+        console.warn('[AQMath] Execution time report failed:', e.message);
+    }
+    const bar = document.getElementById('execTimePrompt');
+    if (bar) bar.remove();
+}
+// Expose globally for inline onclick handlers
+window._reportExecTime = _reportExecTime;
 
 // Called from checkBetaUI() (app.js) whenever the auth state changes.
 async function refreshNotifyUI() {
