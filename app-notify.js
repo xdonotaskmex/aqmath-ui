@@ -238,9 +238,12 @@ async function restoreHoldingsFromServer() {
     // For synced users: server is authoritative. Build a new portfolio from
     // server data. Local-only tokens (not on server) are DROPPED — the server
     // is the source of truth for shield-synced portfolios.
+    // SAFETY: only replace if the server returned valid, non-zero holdings.
+    // A beta-auth redeploy or DB reset can return empty/garbage data — in
+    // that case, keep the local portfolio rather than wiping the user's table.
     if (serverRows.length > 0) {
         const localMap = new Map((portfolio || []).map(t => [t.sym, t]));
-        portfolio = serverRows.map(h => {
+        const newPortfolio = serverRows.map(h => {
             const local = localMap.get(h.sym);
             const safeHaven = typeof isStablecoin === 'function' && isStablecoin(h.sym);
             return {
@@ -258,9 +261,16 @@ async function restoreHoldingsFromServer() {
                 safeHaven
             };
         });
-        saveState();
-        render();
-        console.log('[AQMath] Portfolio replaced with server data:', serverRows.map(h => `${h.sym}:${h.amount}`).join(', '));
+        // Guard: if the new portfolio would be empty (all server amounts were
+        // zero/invalid after normalization), keep the local data instead.
+        if (newPortfolio.length === 0 && (portfolio || []).length > 0) {
+            console.warn('[AQMath] Server returned data but all amounts invalid — keeping local portfolio');
+        } else {
+            portfolio = newPortfolio;
+            saveState();
+            render();
+            console.log('[AQMath] Portfolio replaced with server data:', serverRows.map(h => `${h.sym}:${h.amount}`).join(', '));
+        }
     } else {
         console.log('[AQMath] Server has no holdings — keeping local portfolio');
     }
@@ -591,7 +601,7 @@ async function syncShieldPortfolio() {
                 const serverHoldings = getData.holdings || [];
                 if (serverHoldings.length > 0) {
                     const localMap = new Map((portfolio || []).map(t => [t.sym, t]));
-                    portfolio = serverHoldings
+                    const newPortfolio = serverHoldings
                         .filter(h => Number(h.amount) > 0)
                         .map(h => {
                             const rawSym = String(h.token || '').toUpperCase();
@@ -612,8 +622,14 @@ async function syncShieldPortfolio() {
                                 safeHaven
                             };
                         });
-                    saveState();
-                    render();
+                    // Safety: only replace if we got valid rows back
+                    if (newPortfolio.length > 0) {
+                        portfolio = newPortfolio;
+                        saveState();
+                        render();
+                    } else {
+                        console.warn('[AQMath] post-PUT re-read returned no valid rows — keeping local');
+                    }
                 }
             }
         } catch (e) {
