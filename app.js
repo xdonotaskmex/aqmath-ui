@@ -2782,6 +2782,11 @@ Object.assign(window, {
     showProModal, hideProModal, showToast, hideToast,
     activateBeta, deactivateBeta,
     isBetaActive, getBetaToken, pipelineFetch, API_URL, BETA_AUTH_URL,
+    // app-notify.js needs these to rebuild server-restored rows identically to
+    // the local ones: safeHaven flag (USDC absorbs the frozen-plan remainder —
+    // without it the restore created a safeHaven=false USDC and the allocation
+    // meter read 59.98% instead of 100%) and alias normalization.
+    isStablecoin, SYMBOL_ALIASES,
     saveSnapshot, toggleGlobalSafeHaven, deployUSDC, toggleDeleverage,
     osvjeziSveCijene, importCSV, dodajToken,
     recordBuy, recordSell,
