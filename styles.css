@@ -2465,7 +2465,11 @@
         opacity: 1; color: var(--red); border-color: rgba(248,113,113,0.3);
         font-size: 0.6rem;
     }
-    .signal-actions .btn.ghost:hover {
+    .signal-card.hidden,
+    .signal-actions.hidden,
+    .signal-empty.hidden { display: none; }
+
+.signal-actions .btn.ghost:hover {
         background: rgba(248,113,113,0.08); border-color: var(--red);
     }
     .ntfy-title {

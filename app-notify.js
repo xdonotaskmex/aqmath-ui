@@ -724,6 +724,9 @@ async function loadPendingSignals() {
     }
     if (!_pendingSignals.length) {
         card.classList.add('hidden');
+        list.innerHTML = '';
+        if (bulk) bulk.classList.add('hidden');
+        if (empty) empty.classList.add('hidden');
         return;
     }
     card.classList.remove('hidden');
@@ -783,8 +786,13 @@ async function confirmSignal(el, signalId) {
         const deltaMsg = data.delta_applied ? 'portfolio synced' : 'confirmed but sync failed — re-sync manually';
         const dayMsg = data.same_day ? 'same-day' : 'late';
         showToast('Signal confirmed (' + dayMsg + ') — ' + deltaMsg, 'success');
-        await loadPendingSignals();
+        // Optimistic: remove from local array immediately so card disappears
+        _pendingSignals = _pendingSignals.filter(s => s.signal_id !== signalId);
+        _rerenderSignalList();
         await restoreHoldingsFromServer();
+        // Background sync — if server returns fresh data the card stays gone;
+        // if the reload fails the optimistic update already hid the signal.
+        loadPendingSignals();
     } catch (e) {
         showToast('Confirm failed: ' + e.message, 'error');
     } finally {
@@ -807,7 +815,10 @@ async function skipSignal(el, signalId) {
             return;
         }
         showToast('Signal skipped', 'notice');
-        await loadPendingSignals();
+        // Optimistic: remove from local array immediately
+        _pendingSignals = _pendingSignals.filter(s => s.signal_id !== signalId);
+        _rerenderSignalList();
+        loadPendingSignals();
     } catch (e) {
         showToast('Skip failed: ' + e.message, 'error');
     } finally {
@@ -827,7 +838,10 @@ async function skipAllSignals() {
         } catch (e) { /* continue with next */ }
     }
     showToast('All signals skipped', 'notice');
-    await loadPendingSignals();
+    // Optimistic: clear all locally
+    _pendingSignals = [];
+    _rerenderSignalList();
+    loadPendingSignals();
 }
 
 function showAdjustForm(el, signalId) {
@@ -865,12 +879,33 @@ async function adjustSignal(el, signalId) {
         const data = await res.json();
         const deltaMsg = data.delta_applied ? 'portfolio synced' : 'adjusted but sync failed — re-sync manually';
         showToast('Adjusted to ' + val + ' — ' + deltaMsg, 'success');
-        await loadPendingSignals();
+        // Optimistic: remove from local array immediately
+        _pendingSignals = _pendingSignals.filter(s => s.signal_id !== signalId);
+        _rerenderSignalList();
         await restoreHoldingsFromServer();
+        loadPendingSignals();
     } catch (e) {
         showToast('Adjust failed: ' + e.message, 'error');
     } finally {
         if (el) el.disabled = false;
+    }
+}
+
+// Re-render the signal list from the current _pendingSignals array.
+// Hides the card when empty, shows it when there are signals.
+function _rerenderSignalList() {
+    const card = document.getElementById('signalCard');
+    const list = document.getElementById('signalList');
+    const bulk = document.getElementById('signalBulkActions');
+    if (!card || !list) return;
+    if (!_pendingSignals.length) {
+        card.classList.add('hidden');
+        list.innerHTML = '';
+        if (bulk) bulk.classList.add('hidden');
+    } else {
+        card.classList.remove('hidden');
+        list.innerHTML = _pendingSignals.map(s => _renderSignalBlock(s)).join('');
+        if (bulk) bulk.classList.toggle('hidden', _pendingSignals.length < 2);
     }
 }
 
