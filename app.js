@@ -1020,6 +1020,7 @@ async function osvjeziSveCijene() {
     // guarantees no token ends up stuck at price 0.
     const snapshot = portfolio.slice();
     console.log('[AQMath] price sync start:', snapshot.length, 'tokens:', snapshot.map(t => t.sym).join(','));
+    if (typeof _dbg === 'function') _dbg('PRICES start | ' + snapshot.length + ' tokens: ' + snapshot.map(t => t.sym).join(','));
     const btn = document.getElementById('btnSyncAll');
     const originalText = btn.textContent;
     btn.textContent = "[ SYNC... ]";
@@ -1036,7 +1037,8 @@ async function osvjeziSveCijene() {
         const cgPrices = await fetchCoinGeckoBatch();
         Object.entries(cgPrices).forEach(([sym, price]) => { priceMap[sym] = price; });
         // Fallback: fetch individual prices for remaining tokens not yet resolved
-        const missing = portfolio.filter(t => !priceMap[t.sym] && !['USDC','USDT','DAI','BUSD','TUSD','FDUSD','USDP'].includes(t.sym));
+        // (use the snapshot — the live portfolio may have been swapped mid-fetch)
+        const missing = snapshot.filter(t => !priceMap[t.sym] && !['USDC','USDT','DAI','BUSD','TUSD','FDUSD','USDP'].includes(t.sym));
         for (const t of missing) {
             const p = await dohvatiCijenu(t.sym);
             if (p) priceMap[t.sym] = p;
@@ -1061,6 +1063,7 @@ async function osvjeziSveCijene() {
         updatePortfolioATH();
         const cgCount = Object.keys(cgPrices).length;
         console.log(`[AQMath] synced ${cnt} prices (${cgCount} from CoinGecko, rest from Binance)` + (skipped.length ? ` — no source for: ${skipped.join(', ')}` : ''));
+        if (typeof _dbg === 'function') _dbg(`PRICES done | cnt=${cnt} cg=${cgCount} skipped=${skipped.join(',') || '-'}`);
         if (skipped.length) {
             showToast(`Prices updated for ${cnt} coins. No price source for: ${skipped.join(', ')}.`, 'warning');
         } else {

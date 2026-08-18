@@ -123,6 +123,25 @@ async function ensureHowAqmathAck() {
 
 // ---------- shield card: portfolio sync + status ----------
 
+// TEMP DEBUG PANEL — remove once the portfolio-restore bug is confirmed fixed.
+// Renders boot-trace lines into a fixed overlay so the user can screenshot /
+// copy them without needing DevTools. Writes to console.log too.
+function _dbg(line) {
+    try { console.log('[AQMath-dbg]', line); } catch (e) {}
+    try {
+        let box = document.getElementById('aqmathDbgPanel');
+        if (!box) {
+            box = document.createElement('pre');
+            box.id = 'aqmathDbgPanel';
+            box.style.cssText = 'position:fixed;left:8px;bottom:8px;max-width:92vw;max-height:40vh;overflow:auto;'
+                + 'background:#1a1a1a;color:#8fe388;border:1px solid #333;z-index:99999;padding:8px 10px;'
+                + 'font:11px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap;border-radius:6px;pointer-events:none;opacity:.92;';
+            (document.body || document.documentElement).appendChild(box);
+        }
+        box.textContent += line + '\n';
+    } catch (e) {}
+}
+
 let _holdingsRestored = false;
 let _shieldFrozen = false;
 // Last CONFIRMED setup state from the server. Kept separate from _shieldFrozen
@@ -205,7 +224,7 @@ function _applyFrozenTargets(weights) {
 async function restoreHoldingsFromServer() {
     if (!isBetaActive() || _holdingsRestored) return 0;
     _holdingsRestored = true;
-    console.log('[AQMath] holdings restore: starting, local portfolio =', (portfolio || []).map(t => `${t.sym}:${t.amount}`).join(',') || '(empty)');
+    _dbg('RESTORE start | local=' + ((portfolio || []).map(t => `${t.sym}:${t.amount}`).join(',') || '(empty)'));
     let holdings = [];
     try {
         const res = await fetch(BETA_AUTH_URL + '/portfolio', {
@@ -215,13 +234,16 @@ async function restoreHoldingsFromServer() {
             // A rejected read is not a "restore done" — leaving the latch set
             // would keep the table empty for the rest of the page session even
             // after the session refreshes.
+            _dbg('RESTORE fetch FAILED | HTTP ' + res.status);
             console.warn('[AQMath] holdings restore: beta-auth returned HTTP', res.status);
             _holdingsRestored = false;
             return 0;
         }
         holdings = (await res.json()).holdings || [];
+        _dbg('SERVER rows=' + holdings.length + ' | ' + holdings.map(h => `${h.token}:${h.amount}`).join(','));
         console.log('[AQMath] Server holdings:', holdings.map(h => `${h.token}:${h.amount}`).join(', '));
     } catch (e) {
+        _dbg('RESTORE exception | ' + e.message);
         console.warn('[AQMath] holdings restore failed:', e.message);
         _holdingsRestored = false;   // allow a retry on the next auth refresh
         return 0;
@@ -268,11 +290,13 @@ async function restoreHoldingsFromServer() {
         // Guard: if the new portfolio would be empty (all server amounts were
         // zero/invalid after normalization), keep the local data instead.
         if (newPortfolio.length === 0 && localCount > 0) {
+            _dbg('BRANCH: server rows invalid — kept local');
             console.warn('[AQMath] Server returned data but all amounts invalid — keeping local portfolio');
         } else {
             portfolio = newPortfolio;
             saveState();
             render();
+            _dbg('BRANCH: REPLACED | ' + serverRows.map(h => `${h.sym}:${h.amount}`).join(','));
             console.log('[AQMath] Portfolio replaced with server data:', serverRows.map(h => `${h.sym}:${h.amount}`).join(', '));
             // Server data carries no prices (only amounts, entry, APY).
             // Without a price refresh, non-stablecoin tokens render at $0
@@ -282,8 +306,10 @@ async function restoreHoldingsFromServer() {
             }
         }
     } else if (serverRows.length > 0 && serverRows.length < localCount) {
+        _dbg(`BRANCH: PARTIAL kept local | server=${serverRows.length} local=${localCount}`);
         console.warn(`[AQMath] Server returned ${serverRows.length} tokens but local has ${localCount} — partial data, keeping local portfolio`);
     } else {
+        _dbg('BRANCH: server empty — kept local');
         console.log('[AQMath] Server has no holdings — keeping local portfolio');
     }
     return serverRows.length;
@@ -1176,6 +1202,7 @@ window._reportExecTime = _reportExecTime;
 // Called from checkBetaUI() (app.js) whenever the auth state changes.
 async function refreshNotifyUI() {
     if (!isBetaActive()) return;
+    _dbg('refreshNotifyUI start');
     // Sequential on purpose: restored rows must exist BEFORE the status handler
     // writes the frozen targets into them, otherwise they keep Target% 0.
     // Each step is isolated so one failure cannot silently cancel the others —
@@ -1204,6 +1231,7 @@ async function refreshNotifyUI() {
         console.error('[AQMath] pending signals aborted:', e.message);
     }
     console.log('[AQMath] refreshNotifyUI done, final portfolio =', (portfolio || []).map(t => `${t.sym}:${t.amount}@$${t.price}`).join(',') || '(empty)');
+    _dbg('DONE | final=' + ((portfolio || []).map(t => `${t.sym}:${t.amount}@$${t.price}`).join(',') || '(empty)'));
     refreshNtfyStatus();
 }
 
@@ -1233,6 +1261,7 @@ async function _applyUnappliedDeltas() {
     if (data.status === 'applied' && data.applied > 0) {
         console.log('[AQMath] Retroactive delta apply:', data.applied, 'signals applied');
         console.log('[AQMath] Corrected holdings:', JSON.stringify(data.holdings));
+        _dbg('DELTA apply | applied=' + data.applied + ' holdings=' + JSON.stringify(data.holdings));
         // Update local portfolio with corrected holdings from the response.
         // IMPORTANT: update amounts IN-PLACE rather than replacing the entire
         // portfolio. A full replacement loses prices (set by the preceding

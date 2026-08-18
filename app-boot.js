@@ -333,7 +333,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=7224ce9fd0')
+    return fetch('/locales/' + lang + '.json?v=2c02f4da32')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
