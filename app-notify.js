@@ -197,11 +197,11 @@ function _applyFrozenTargets(weights) {
 }
 
 // beta-auth is the DURABLE home of the synced holdings; the table itself lives
-// in localStorage. Clearing browser data, a fresh browser profile or another
-// machine therefore left the table empty while the shield card kept showing the
-// frozen weights from the server — which reads as "the two sections disagree".
-// Only MISSING rows are restored: an existing local row is never overwritten,
-// so quantities edited but not yet synced survive.
+// in localStorage. For synced (shield-active) users, beta-auth is the PRIMARY
+// SOURCE OF TRUTH: the server data fully replaces the local portfolio. This
+// ensures that signal deltas applied on the server (or any other server-side
+// change) are always reflected in the UI, even if localStorage is stale.
+// localStorage becomes a cache/fallback — unsynced users keep their local data.
 async function restoreHoldingsFromServer() {
     if (!isBetaActive() || _holdingsRestored) return 0;
     _holdingsRestored = true;
@@ -226,56 +226,50 @@ async function restoreHoldingsFromServer() {
     }
     // Log local portfolio before sync
     console.log('[AQMath] Local portfolio before sync:', (portfolio || []).map(t => `${t.sym}:${t.amount}`).join(', '));
-    let added = 0;
-    let updated = 0;
-    const updatedSymbols = [];
+
+    // Filter to valid server holdings (normalize aliases, skip zero-amount)
+    const serverRows = [];
     for (const h of holdings) {
         const rawSym = String(h.token || '').toUpperCase();
         const sym = _normSym(rawSym);
         const amount = Number(h.amount);
         if (!sym || !(amount > 0)) continue;
-        const existing = (portfolio || []).find(t => t && t.sym === sym);
-        if (existing) {
-            // Update existing token's amount from server (fixes stale localStorage
-            // after signal confirmation in a previous session)
-            if (Math.abs((existing.amount || 0) - amount) > 1e-10) {
-                const oldAmount = existing.amount;
-                existing.amount = amount;
-                updated++;
-                updatedSymbols.push(`${sym}:${oldAmount}->${amount}`);
-            }
-            continue;
-        }
-        // entry/apy come back only if the user's sync included them (older
-        // saves stored neither); a stablecoin row is rebuilt as safe-haven at
-        // its $1 peg so the allocation view matches the pre-restore table.
-        const safeHaven = typeof isStablecoin === 'function' && isStablecoin(sym);
-        portfolio.push({
-            sym, coinId: sym.toLowerCase(), amount,
-            price: safeHaven ? 1 : 0,
-            entry: Number(h.entry) || 0, apy: Number(h.apy) || 0,
-            target: 0, costBasis: 0, totalTokens: 0,
-            frozen: false, insufficientHistory: false, safeHaven
-        });
-        added++;
+        serverRows.push({ sym, amount, entry: Number(h.entry) || 0, apy: Number(h.apy) || 0 });
     }
-    if (added > 0 || updated > 0) {
+
+    // For synced users: server is authoritative. Build a new portfolio from
+    // server data. Local-only tokens (not on server) are DROPPED — the server
+    // is the source of truth for shield-synced portfolios.
+    if (serverRows.length > 0) {
+        const localMap = new Map((portfolio || []).map(t => [t.sym, t]));
+        portfolio = serverRows.map(h => {
+            const local = localMap.get(h.sym);
+            const safeHaven = typeof isStablecoin === 'function' && isStablecoin(h.sym);
+            return {
+                sym: h.sym,
+                coinId: h.sym.toLowerCase(),
+                amount: h.amount,
+                price: local ? local.price : (safeHaven ? 1 : 0),
+                entry: h.entry || (local ? local.entry : 0),
+                apy: h.apy || (local ? local.apy : 0),
+                target: local ? local.target : 0,
+                costBasis: local ? local.costBasis : 0,
+                totalTokens: local ? local.totalTokens : 0,
+                frozen: local ? local.frozen : false,
+                insufficientHistory: local ? local.insufficientHistory : false,
+                safeHaven
+            };
+        });
         saveState();
         render();
-        if (added > 0) {
-            showToast(`Restored ${added} synced ${added === 1 ? 'holding' : 'holdings'} `
-                + 'from your account — press [ SYNC ALL ] to refresh prices. '
-                + 'Entry prices and APY only come back if your last sync stored them.', 'notice');
-        }
-        if (updated > 0) {
-            console.log(`[AQMath] Synced ${updated} holding amounts from server:`, updatedSymbols.join(', '));
-        }
+        console.log('[AQMath] Portfolio replaced with server data:', serverRows.map(h => `${h.sym}:${h.amount}`).join(', '));
+        showToast('Portfolio synced from server — server data is authoritative.', 'notice');
     } else {
-        console.log('[AQMath] No changes needed - local portfolio matches server');
+        console.log('[AQMath] Server has no holdings — keeping local portfolio');
     }
     // Log local portfolio after sync
     console.log('[AQMath] Local portfolio after sync:', (portfolio || []).map(t => `${t.sym}:${t.amount}`).join(', '));
-    return added + updated;
+    return serverRows.length;
 }
 
 function _localHoldings() {
