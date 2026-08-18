@@ -218,13 +218,17 @@ async function restoreHoldingsFromServer() {
             return 0;
         }
         holdings = (await res.json()).holdings || [];
+        console.log('[AQMath] Server holdings:', holdings.map(h => `${h.token}:${h.amount}`).join(', '));
     } catch (e) {
         console.warn('[AQMath] holdings restore failed:', e.message);
         _holdingsRestored = false;   // allow a retry on the next auth refresh
         return 0;
     }
+    // Log local portfolio before sync
+    console.log('[AQMath] Local portfolio before sync:', (portfolio || []).map(t => `${t.sym}:${t.amount}`).join(', '));
     let added = 0;
     let updated = 0;
+    const updatedSymbols = [];
     for (const h of holdings) {
         const rawSym = String(h.token || '').toUpperCase();
         const sym = _normSym(rawSym);
@@ -235,8 +239,10 @@ async function restoreHoldingsFromServer() {
             // Update existing token's amount from server (fixes stale localStorage
             // after signal confirmation in a previous session)
             if (Math.abs((existing.amount || 0) - amount) > 1e-10) {
+                const oldAmount = existing.amount;
                 existing.amount = amount;
                 updated++;
+                updatedSymbols.push(`${sym}:${oldAmount}->${amount}`);
             }
             continue;
         }
@@ -262,9 +268,13 @@ async function restoreHoldingsFromServer() {
                 + 'Entry prices and APY only come back if your last sync stored them.', 'notice');
         }
         if (updated > 0) {
-            console.log(`[AQMath] Synced ${updated} holding amounts from server`);
+            console.log(`[AQMath] Synced ${updated} holding amounts from server:`, updatedSymbols.join(', '));
         }
+    } else {
+        console.log('[AQMath] No changes needed - local portfolio matches server');
     }
+    // Log local portfolio after sync
+    console.log('[AQMath] Local portfolio after sync:', (portfolio || []).map(t => `${t.sym}:${t.amount}`).join(', '));
     return added + updated;
 }
 
