@@ -1013,6 +1013,13 @@ async function fetchCoinGeckoBatch() {
 
 async function osvjeziSveCijene() {
     if (portfolio.length === 0) return showToast('Add a position first.', 'warning');
+    // Snapshot the token objects NOW: the network awaits below can take
+    // seconds, and during that window a server restore may REPLACE the
+    // global `portfolio` array with a brand-new set of objects. Pricing the
+    // snapshot (and re-merging into whatever the live array is afterwards)
+    // guarantees no token ends up stuck at price 0.
+    const snapshot = portfolio.slice();
+    console.log('[AQMath] price sync start:', snapshot.length, 'tokens:', snapshot.map(t => t.sym).join(','));
     const btn = document.getElementById('btnSyncAll');
     const originalText = btn.textContent;
     btn.textContent = "[ SYNC... ]";
@@ -1036,11 +1043,20 @@ async function osvjeziSveCijene() {
         }
         let cnt = 0;
         const skipped = [];
-        portfolio.forEach(t => {
+        snapshot.forEach(t => {
             if (t.sym && priceMap[t.sym]) { t.price = priceMap[t.sym]; cnt++; }
             else if (['USDC','USDT','DAI','BUSD','TUSD','FDUSD','USDP'].includes(t.sym)) { t.price = 1.0; cnt++; }
             else if (t.sym) skipped.push(t.sym);
         });
+        // If the live portfolio was swapped out while we were fetching (server
+        // restore), carry the freshly fetched prices into the new objects too.
+        if (portfolio !== snapshot) {
+            console.log('[AQMath] price sync: portfolio was replaced mid-fetch — merging', cnt, 'prices into live portfolio');
+            portfolio.forEach(t => {
+                if (t.sym && priceMap[t.sym]) t.price = priceMap[t.sym];
+                else if (['USDC','USDT','DAI','BUSD','TUSD','FDUSD','USDP'].includes(t.sym)) t.price = 1.0;
+            });
+        }
         render();
         updatePortfolioATH();
         const cgCount = Object.keys(cgPrices).length;
