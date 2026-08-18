@@ -284,7 +284,7 @@ function _localHoldings() {
     // not part of the risky sleeve the engine freezes weights for.
     return (portfolio || [])
         .filter(t => t && t.sym && !t.safeHaven && Number(t.amount) > 0)
-        .map(t => ({ token: String(t.sym).toUpperCase(), amount: String(t.amount) }));
+        .map(t => ({ token: _normSym(String(t.sym).toUpperCase()), amount: String(t.amount) }));
 }
 
 // The DURABLE copy sent to beta-auth. Wider than _localHoldings on purpose:
@@ -299,7 +299,7 @@ function _durableHoldings() {
     return (portfolio || [])
         .filter(t => t && t.sym && Number(t.amount) > 0)
         .map(t => ({
-            token: String(t.sym).toUpperCase(),
+            token: _normSym(String(t.sym).toUpperCase()),
             amount: String(t.amount),
             entry: Number(t.entry) > 0 ? String(t.entry) : null,
             apy: Number(t.apy) > 0 ? String(t.apy) : null,
