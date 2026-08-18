@@ -85,6 +85,8 @@ NEEDS_SIM_NOTICE = {
     "research/dca-stress-zh.html",
     "research/static-vs-dynamic.html",
     "research/static-vs-dynamic-zh.html",
+    "research/recovery-test.html",
+    "research/recovery-test-zh.html",
 }
 
 FORBIDDEN_ORIGINS = [
