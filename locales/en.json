@@ -132,6 +132,7 @@
     "navLanding": "landing",
     "navApp": "app",
     "navDocs": "docs",
+    "navResearch": "research",
     "navBacktest": "backtest",
     "mobileGate": {
       "title": "--desktop-only",

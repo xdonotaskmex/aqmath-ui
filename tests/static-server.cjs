@@ -69,6 +69,9 @@ const server = http.createServer((req, res) => {
 
   fs.stat(filePath, (err, stat) => {
     if (!err && stat.isFile()) return serveFile(filePath, res);
+    // Directory URLs (/research/) serve their index.html — mirrors Caddy
+    // `try_files {path}/` in production.
+    if (!err && stat.isDirectory()) return serveFile(path.join(filePath, 'index.html'), res);
     // SPA fallback for extensionless routes (clean URLs): mirror the production
     // Caddy `try_files {path} {path}.html ... /index.html` — a clean URL whose
     // entry page exists (/docs -> docs.html) must serve that page, not
