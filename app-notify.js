@@ -1095,38 +1095,46 @@ async function loadSignalStats() {
 // that same_day=true hides on SHOCK days.
 function _promptExecutionTime(signalId) {
     if (!signalId) return;
+    // Remove any previous instance before showing a new one.
+    const old = document.getElementById('execTimePrompt');
+    if (old) old.remove();
     const offsets = [
         { label: 'just now', min: 0 },
         { label: '5 min ago', min: 5 },
         { label: '15 min ago', min: 15 },
         { label: '30 min ago', min: 30 },
-        { label: '1 hour ago', min: 60 },
+        { label: '1 h ago', min: 60 },
     ];
     const buttons = offsets.map(o =>
-        `<button class="btn ghost" style="padding:2px 6px;font-size:0.7rem;margin:2px" ` +
-        `onclick="_reportExecTime('${signalId}', ${o.min})">${o.label}</button>`
+        `<button class="btn blue" onclick="_reportExecTime('${signalId}', ${o.min})">${o.label}</button>`
     ).join('');
-    // Use a toast-like bar at the bottom — non-blocking, dismissible
-    const bar = document.createElement('div');
-    bar.id = 'execTimePrompt';
-    bar.dataset.signalId = signalId;
-    bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#1a1a2e;' +
-        'color:#e0e0e0;padding:8px 16px;z-index:9999;display:flex;align-items:center;' +
-        'gap:8px;flex-wrap:wrap;font-size:0.8rem;border-top:1px solid #333';
-    // Quick offsets for the common case; the datetime-local input covers
-    // everything else ("executed yesterday at 19:30") — converted to UTC
-    // before reporting.
-    bar.innerHTML = '<span>When did you execute?</span>' + buttons +
-        '<input type="datetime-local" id="execTimeCustom" style="background:#0f0f1e;' +
-        'color:#e0e0e0;border:1px solid #333;border-radius:4px;font-size:0.7rem;' +
-        'padding:2px 6px;color-scheme:dark">' +
-        '<button class="btn green" style="padding:2px 6px;font-size:0.7rem" ' +
-        'onclick="_reportExecTimeCustom()">[ set ]</button>' +
-        '<button class="btn ghost" style="padding:2px 6px;font-size:0.7rem;margin-left:auto" ' +
-        'onclick="document.getElementById(\'execTimePrompt\').remove()">skip</button>';
-    document.body.appendChild(bar);
+    // Brand-styled centered modal (styles: .exec-overlay/.exec-box). Quick
+    // offsets for the common case, datetime-local input for everything else
+    // ("executed yesterday at 19:30") — converted to UTC before reporting.
+    const overlay = document.createElement('div');
+    overlay.id = 'execTimePrompt';
+    overlay.className = 'exec-overlay';
+    overlay.dataset.signalId = signalId;
+    overlay.innerHTML =
+        '<div class="exec-box">' +
+            '<h4>⏱ execution time</h4>' +
+            '<p>When did you actually execute the trade on the exchange? ' +
+            '(optional — improves the timing stats)</p>' +
+            '<div class="exec-grid">' + buttons + '</div>' +
+            '<div class="exec-custom">' +
+                '<input type="datetime-local" id="execTimeCustom" aria-label="custom execution time">' +
+                '<button class="btn green" onclick="_reportExecTimeCustom()">[ set ]</button>' +
+            '</div>' +
+            '<button class="btn ghost exec-skip" ' +
+            'onclick="document.getElementById(\'execTimePrompt\').classList.add(\'hidden\')">[ skip ]</button>' +
+        '</div>';
+    // Tapping the backdrop dismisses (same as skip).
+    overlay.addEventListener('click', e => {
+        if (e.target === overlay) overlay.classList.add('hidden');
+    });
+    document.body.appendChild(overlay);
     // Auto-dismiss after 60 seconds
-    setTimeout(() => { const el = document.getElementById('execTimePrompt'); if (el) el.remove(); }, 60000);
+    setTimeout(() => { const el = document.getElementById('execTimePrompt'); if (el) el.classList.add('hidden'); }, 60000);
 }
 
 // Free-form execution time from the datetime-local input. The value is
@@ -1175,10 +1183,11 @@ async function _reportExecTimeAt(signalId, executedAt) {
         console.warn('[AQMath] Execution time report failed:', e.message);
     }
     const bar = document.getElementById('execTimePrompt');
-    if (bar) bar.remove();
+    if (bar) bar.classList.add('hidden');
 }
 // Expose globally for inline onclick handlers
 window._reportExecTime = _reportExecTime;
+window._reportExecTimeCustom = _reportExecTimeCustom;
 
 // Called from checkBetaUI() (app.js) whenever the auth state changes.
 async function refreshNotifyUI() {
