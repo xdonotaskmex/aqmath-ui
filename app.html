@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=8831d37c74">
+    <link rel="stylesheet" href="/styles.min.css?v=199db41e4f">
 </head>
 <body>
 
@@ -195,18 +195,6 @@
         <button class="hdr-btn c-green" data-action="clickEl" data-arg="importFile" data-i18n="app.import">IMPORT</button>
         <input type="file" id="importFile" accept=".json" style="display:none" data-change="importJSON">
         <button class="hdr-btn c-red" data-action="obrisiSve" data-i18n="app.reset">RESET</button>
-        <div class="hstat">
-            <div class="hstat-l" data-i18n="app.statPortfolio">Portfolio</div>
-            <div class="hstat-v" id="hTotal">$0.00</div>
-        </div>
-        <div class="hstat">
-            <div class="hstat-l" data-i18n="app.statPositions">Positions</div>
-            <div class="hstat-v" id="hPos">0</div>
-        </div>
-        <div class="hstat">
-            <div class="hstat-l" data-i18n="app.statStatus">Status</div>
-            <div class="hstat-v" id="hStatus">—</div>
-        </div>
     </div>
 </header>
 
@@ -522,15 +510,9 @@
                         <div class="sum-item"><div class="sum-l" data-i18n="app.maxDrift">Max Drift</div><div class="sum-v" id="sMaxDrift">—</div></div>
                         <div class="sum-item"><div class="sum-l" data-i18n="app.dcaNeeded">DCA needed</div><div class="sum-v" id="sNeedReb">—</div></div>
                         <div class="sum-item"><div class="sum-l" data-i18n="app.allocationStat">Allocation</div><div class="sum-v" id="sAllocSt">—</div></div>
+                        <div class="sum-item"><div class="sum-l" data-i18n="app.statStatus">Status</div><div class="sum-v" id="sStatusVal">—</div></div>
                     </div>
                     <div class="rebalance-reminder" id="reminderBox"><span id="reminderTxt">No scheduled rebalance.</span></div>
-                    <!-- ALLOCATION METER: sits directly under the rebalance reminder -->
-                    <div class="a-meter">
-                        <div class="a-meter-top"><span data-i18n="app.allocation">ALLOCATION</span><span id="aPctLbl">0.00%</span></div>
-                        <div class="a-track"><div class="a-fill" id="aFill" style="width:0%"></div></div>
-                        <div class="a-num"><span id="aNumVal">0.00</span><span style="font-size:1rem;color:var(--muted)">%</span></div>
-                        <div class="a-rem" id="aRem">Remaining: 100.00%</div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -653,10 +635,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=8831d37c74"></script>
-<script defer src="/app-backtest.js?v=8831d37c74"></script>
-<script defer src="/app.js?v=8831d37c74"></script>
-<script defer src="/app-notify.js?v=8831d37c74"></script>
+<script defer src="/app-widgets.js?v=199db41e4f"></script>
+<script defer src="/app-backtest.js?v=199db41e4f"></script>
+<script defer src="/app.js?v=199db41e4f"></script>
+<script defer src="/app-notify.js?v=199db41e4f"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -670,8 +652,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=8831d37c74"></script>
-<script defer src="/app-boot.js?v=8831d37c74"></script>
+<script defer src="/vendor/i18next.min.js?v=199db41e4f"></script>
+<script defer src="/app-boot.js?v=199db41e4f"></script>
 
 </body>
 </html>

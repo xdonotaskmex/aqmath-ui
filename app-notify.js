@@ -1060,6 +1060,22 @@ async function _syncHoldingsAfterSignal() {
                 row.amount = amount;
                 changed = true;
             }
+            // Sync entry and apy from the server so the user's cost basis
+            // survives page reloads and multi-device use.
+            if (row && h.entry !== null && h.entry !== undefined) {
+                const srvEntry = Number(h.entry);
+                if (srvEntry > 0 && srvEntry !== row.entry) {
+                    row.entry = srvEntry;
+                    changed = true;
+                }
+            }
+            if (row && h.apy !== null && h.apy !== undefined) {
+                const srvApy = Number(h.apy);
+                if (srvApy >= 0 && srvApy !== row.apy) {
+                    row.apy = srvApy;
+                    changed = true;
+                }
+            }
         }
         if (changed) {
             saveState();

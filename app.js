@@ -2470,13 +2470,15 @@ function render() {
     const colors = genColors(allTokens.length);
     const allocationOk = Math.abs(tgt - 100) < 0.01;
 
-    document.getElementById('hTotal').textContent = `$${fmtUSD(portVal)}`;
-    document.getElementById('hPos').textContent = allTokens.length;
-    const hStatus = document.getElementById('hStatus');
-    if (!allTokens.length) { hStatus.textContent = '—'; hStatus.className = 'hstat-v'; }
-    else if (tgt > 100.01) { hStatus.textContent = 'OVER'; hStatus.className = 'hstat-v col-red'; }
-    else if (!allocationOk) { hStatus.textContent = 'DRIFT'; hStatus.className = 'hstat-v col-red'; }
-    else { hStatus.textContent = 'SYNCED'; hStatus.className = 'hstat-v col-green'; }
+    // Status lives in the overview card now (removed from the header — it
+    // duplicated Allocation). Same OVER/DRIFT/SYNCED logic, colored via
+    // col-red/col-green. Positions count not shown: --allocation already
+    // lists every token.
+    const sStatus = document.getElementById('sStatusVal');
+    if (!allTokens.length) { sStatus.textContent = '—'; sStatus.className = 'sum-v'; }
+    else if (tgt > 100.01) { sStatus.textContent = 'OVER'; sStatus.className = 'sum-v col-red'; }
+    else if (!allocationOk) { sStatus.textContent = 'DRIFT'; sStatus.className = 'sum-v col-red'; }
+    else { sStatus.textContent = 'SYNCED'; sStatus.className = 'sum-v col-green'; }
 
     const bar = document.getElementById('statusBar');
     const txt = document.getElementById('statusTxt');
@@ -2489,14 +2491,6 @@ function render() {
     const canDca = activeTokens().length > 0 && allocationOk;
     dcaBtn.disabled = !canDca;
     dcaBtn.title = canDca ? 'Start DCA distribution' : 'DCA is available only when total target allocation equals 100%.';
-
-    const pct = Math.min(Math.max(tgt, 0), 100);
-    const fill = document.getElementById('aFill'); fill.style.width = `${pct}%`;
-    fill.className = `a-fill${tgt > 100.01 ? ' over' : tgt >= 99.99 ? ' full' : ''}`;
-    document.getElementById('aPctLbl').textContent = `${tgt}%`;
-    document.getElementById('aNumVal').textContent = tgt.toFixed(2);
-    const remEl = document.getElementById('aRem'), rem = r2(100 - tgt, 4);
-    remEl.textContent = rem > 0.005 ? `Remaining: ${rem}%` : (Math.abs(rem) < 0.01 ? 'Allocation full' : `Overage by ${Math.abs(rem)}%`);
 
     if (myChart) { myChart.destroy(); myChart = null; }
     document.getElementById('cCV').textContent = allTokens.length || '—';

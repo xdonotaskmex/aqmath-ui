@@ -237,9 +237,6 @@
     .hdr-btn.c-green:hover { background: var(--green); color: #000; }
     .hdr-btn.c-red { border-color: rgba(248,113,113,0.25); color: var(--red); background: rgba(248,113,113,0.06); }
     .hdr-btn.c-red:hover { background: var(--red); color: #000; }
-    .hstat { text-align: right; }
-    .hstat-l { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
-    .hstat-v { font-family: var(--mono); font-size: 1rem; font-weight: 600; }
     .col-blue  { color: var(--blue); }
     .col-green { color: var(--green); }
     .col-red   { color: var(--red); }
@@ -810,7 +807,6 @@
         #appView .hdr-nav { margin-left: 0; flex-wrap: wrap; gap: 6px; }
         #appView .hdr-right { margin-left: 0; justify-content: flex-start; gap: 8px; }
         #appView .hdr-btn { flex: 1 1 auto; text-align: center; }
-        #appView .hstat { flex: 1 1 auto; text-align: left; }
         #appView .content { padding: 16px; }
 
         /* App view: cards, status bar, sidebar padding */
