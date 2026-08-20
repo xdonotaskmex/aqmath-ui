@@ -247,6 +247,17 @@ async function restoreHoldingsFromServer() {
     const localCount = (portfolio || []).length;
     if (serverRows.length > 0 && serverRows.length >= localCount) {
         const localMap = new Map((portfolio || []).map(t => [t.sym, t]));
+        // Self-heal: a past signal delta-apply could wipe server-side entry/APY
+        // (see BUG_PNL_ENTRY_WIPE.md). If local still has what the server lost,
+        // push the durable copy back up after the replace so the server is
+        // re-populated — best effort, never blocks the restore itself.
+        let healNeeded = false;
+        for (const h of serverRows) {
+            const local = localMap.get(h.sym);
+            if (!local) continue;
+            if (!h.entry && Number(local.entry) > 0) healNeeded = true;
+            if (!h.apy && Number(local.apy) > 0) healNeeded = true;
+        }
         const newPortfolio = serverRows.map(h => {
             const local = localMap.get(h.sym);
             const safeHaven = typeof isStablecoin === 'function' && isStablecoin(h.sym);
@@ -274,6 +285,12 @@ async function restoreHoldingsFromServer() {
             saveState();
             render();
             console.log('[AQMath] Portfolio replaced with server data:', serverRows.map(h => `${h.sym}:${h.amount}`).join(', '));
+            if (healNeeded && typeof pushDurableHoldings === 'function') {
+                pushDurableHoldings().then(ok => {
+                    if (ok) console.log('[AQMath] Healed server entry/APY from local copy');
+                    else console.warn('[AQMath] entry/APY heal push failed — will retry next visit');
+                });
+            }
             // Server data carries no prices (only amounts, entry, APY).
             // Without a price refresh, non-stablecoin tokens render at $0
             // and appear invisible in the UI. Trigger a sync immediately.

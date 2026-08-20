@@ -313,6 +313,7 @@ Audit: `python tools/audit_pages.py` (checks all generated pages)
 | aqmath-ui/PRIORITIES.md | Dev priorities (P0-P3) | ✅ Created 2026-08-20 |
 | aqmath-ui/MARKETING.md | Marketing plan (Substack/Twitter/Reddit) | ✅ Created 2026-08-20 |
 | aqmath-ui/COMMIT_WORKFLOW.md | Commit rules, CI checks, security gates | ✅ Created 2026-08-20 |
+| aqmath-ui/BUG_PNL_ENTRY_WIPE.md | P&L/entry-price wipe bug + fix | ✅ Created 2026-08-20 |
 | aqmath-ui/_research/recovery-test.md | Crown Test 4 results | ✅ 2026-08-18 |
 | aqmath-ui/_research/static-vs-dynamic.md | Crown Test 2 results | ✅ 2026-08-12 |
 | aqmath-ui/_research/dca-stress.md | Crown Test 1 results | ✅ Current |
