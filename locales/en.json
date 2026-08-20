@@ -155,8 +155,6 @@
     "export": "EXPORT",
     "import": "IMPORT",
     "reset": "RESET",
-    "statPortfolio": "Portfolio",
-    "statPositions": "Positions",
     "statStatus": "Status",
     "betaAccess": "--beta-access",
     "proActive": "BLACK ACTIVE",
