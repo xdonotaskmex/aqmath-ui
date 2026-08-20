@@ -100,6 +100,39 @@
             font-size: 0.8em;
             color: #00aa44;
         }
+        .tabs {
+            display: flex; gap: 0; margin-bottom: 20px;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            background: #111;
+            border: 1px solid #333;
+            color: #888;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .tab-btn:first-child { border-radius: 6px 0 0 6px; }
+        .tab-btn:last-child { border-radius: 0 6px 6px 0; }
+        .tab-btn.active {
+            background: #00ff88;
+            color: #000;
+            border-color: #00ff88;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            font-weight: bold;
+        }
+        .badge-active { background: #003300; color: #00ff88; }
+        .badge-expired { background: #332200; color: #ffaa00; }
+        .badge-revoked { background: #330000; color: #ff4444; }
+        .badge-yes { color: #00ff88; }
+        .badge-no { color: #444; }
     </style>
 </head>
 <body>
@@ -119,13 +152,27 @@
             <option value="14">Last 14 days</option>
             <option value="30">Last 30 days</option>
         </select>
-        <button id="btnLoad" onclick="loadErrors()">Load</button>
+        <button id="btnLoad" onclick="loadAll()">Load</button>
         <button onclick="toggleAutoRefresh()" id="btnAuto">Auto-refresh: OFF</button>
     </div>
 
-    <div id="errorBox"></div>
-    <div id="statsBox" class="stats"></div>
-    <div id="tableBox"></div>
+    <div class="tabs">
+        <div class="tab-btn active" onclick="switchTab('errors')">Errors</div>
+        <div class="tab-btn" onclick="switchTab('beta')">Beta Keys</div>
+    </div>
+
+    <div id="tab-errors" class="tab-content active">
+        <div id="errorBox"></div>
+        <div id="statsBox" class="stats"></div>
+        <div id="tableBox"></div>
+    </div>
+
+    <div id="tab-beta" class="tab-content">
+        <div id="betaErrorBox"></div>
+        <div id="betaStatsBox" class="stats"></div>
+        <div id="betaTableBox"></div>
+    </div>
+
     <p class="refresh-info" id="refreshInfo"></p>
 
     <script>
@@ -175,6 +222,134 @@
                 document.getElementById('refreshInfo').textContent =
                     'Last loaded: ' + new Date().toLocaleTimeString();
             }
+        }
+
+        async function loadActivations() {
+            const secret = getSecret();
+            if (!secret) return;
+            try {
+                const res = await fetch(`${API_URL}/internal/activations`, {
+                    headers: { 'X-Admin-Secret': secret }
+                });
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.detail || `HTTP ${res.status}`);
+                }
+                const data = await res.json();
+                renderBetaDashboard(data);
+                document.getElementById('betaErrorBox').innerHTML = '';
+            } catch (e) {
+                document.getElementById('betaErrorBox').innerHTML =
+                    `<div class="error-msg">Error: ${e.message}</div>`;
+                document.getElementById('betaStatsBox').innerHTML = '';
+                document.getElementById('betaTableBox').innerHTML = '';
+            }
+        }
+
+        async function loadAll() {
+            await loadErrors();
+            await loadActivations();
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function renderBetaDashboard(data) {
+            const activations = data.activations || [];
+            const s = data.summary || {};
+
+            document.getElementById('betaStatsBox').innerHTML = `
+                <div class="stat-card">
+                    <div class="value">${s.total || 0}</div>
+                    <div class="label">Total keys</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" style="color:#00ff88">${s.active || 0}</div>
+                    <div class="label">Active</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" style="color:#ffaa00">${s.expired || 0}</div>
+                    <div class="label">Expired</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" style="color:#ff4444">${s.revoked || 0}</div>
+                    <div class="label">Revoked</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">${s.with_holdings || 0}</div>
+                    <div class="label">With portfolio</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">${s.with_ntfy || 0}</div>
+                    <div class="label">Ntfy enabled</div>
+                </div>
+            `;
+
+            if (activations.length === 0) {
+                document.getElementById('betaTableBox').innerHTML =
+                    '<div class="empty">No beta keys activated yet.</div>';
+                return;
+            }
+
+            const now = new Date();
+            const cutoff = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+
+            let html = `<table>
+                <thead>
+                    <tr>
+                        <th>Key ID</th>
+                        <th>Status</th>
+                        <th>Activated</th>
+                        <th>Last seen</th>
+                        <th>Logins</th>
+                        <th>Bound</th>
+                        <th>Portfolio</th>
+                        <th>Ntfy</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            for (const a of activations) {
+                const activatedAt = new Date(a.first_activated_at);
+                const isExpired = activatedAt <= cutoff;
+                const statusBadge = a.revoked
+                    ? '<span class="badge badge-revoked">REVOKED</span>'
+                    : isExpired
+                        ? '<span class="badge badge-expired">EXPIRED</span>'
+                        : '<span class="badge badge-active">ACTIVE</span>';
+
+                const lastSeen = a.last_seen_at
+                    ? new Date(a.last_seen_at).toLocaleString()
+                    : '<span style="color:#444">never</span>';
+                const activated = activatedAt.toLocaleDateString();
+                const bound = a.bound
+                    ? '<span class="badge-yes">Yes</span>'
+                    : '<span class="badge-no">No</span>';
+                const holdings = a.has_holdings
+                    ? '<span class="badge-yes">Yes</span>'
+                    : '<span class="badge-no">No</span>';
+                const ntfy = a.has_ntfy
+                    ? '<span class="badge-yes">Yes</span>'
+                    : '<span class="badge-no">No</span>';
+
+                html += `<tr>
+                    <td><code>${a.key_prefix}</code></td>
+                    <td>${statusBadge}</td>
+                    <td>${activated}</td>
+                    <td>${lastSeen}</td>
+                    <td>${a.activation_count}</td>
+                    <td>${bound}</td>
+                    <td>${holdings}</td>
+                    <td>${ntfy}</td>
+                </tr>`;
+            }
+
+            html += '</tbody></table>';
+            document.getElementById('betaTableBox').innerHTML = html;
         }
 
         function renderDashboard(data) {
@@ -260,14 +435,14 @@
                 _autoInterval = null;
                 btn.textContent = 'Auto-refresh: OFF';
             } else {
-                _autoInterval = setInterval(loadErrors, 60000); // every 60s
+                _autoInterval = setInterval(loadAll, 60000); // every 60s
                 btn.textContent = 'Auto-refresh: ON (60s)';
-                loadErrors();
+                loadAll();
             }
         }
 
         // Auto-load if secret was remembered
-        if (saved) loadErrors();
+        if (saved) loadAll();
     </script>
 </body>
 </html>
