@@ -20,3 +20,19 @@ jobs:
         run: python tools/stamp_version.py --check
       - name: Audit all published pages
         run: python tools/audit_pages.py
+      - name: No hardcoded credentials in the repo
+        run: >
+          if grep -rInE "(JWT_SECRET|COLLECTOR_SECRET|DATABASE_URL|ADMIN_SECRET|IP_HASH_PEPPER)\s*=\s*['\"][A-Za-z0-9_+/=-]{16,}"
+          --include='*.js' --include='*.json' --include='*.html' --include='*.yml' .; then
+          echo "::error::Hardcoded credentials detected"; exit 1; fi
+      - name: No real beta keys in the repo
+        run: >
+          if grep -rInE "AQMBETA-[A-Z0-9]{4}-[A-Z0-9]{4}"
+          --include='*.js' --include='*.json' --include='*.html' .
+          | grep -v "AQMBETA-XXXX-XXXX" | grep -v "AQMBETA-TEST"; then
+          echo "::error::Real beta keys detected"; exit 1; fi
+      - name: No cloud provider keys in the repo
+        run: >
+          if grep -rInE "(AKIA[0-9A-Z]{16}|ghp_[a-zA-Z0-9]{36}|sk_live_[a-zA-Z0-9]{24})"
+          --include='*.js' --include='*.json' --include='*.html' --include='*.yml' .; then
+          echo "::error::Cloud provider keys detected"; exit 1; fi
