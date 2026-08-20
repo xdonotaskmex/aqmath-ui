@@ -83,7 +83,16 @@ jobs:
           git add _src/index.html index.html docs.html backtest.html results.html app.html
           stamp=$(grep -oE 'Telemetry generated [0-9]{4}-[0-9]{2}-[0-9]{2}' results.html | head -1 | awk '{print $3}')
           git commit -m "Refresh Forward Log fallback snapshot (${stamp})"
-          git push
+          # Manual pushes to main can land between this job's checkout and its
+          # push (it takes ~2 min), which rejects the push as non-fast-forward.
+          # This commit only ever touches the six snapshot files, so rebasing
+          # over concurrent work is safe; retry a few times for good measure.
+          for i in 1 2 3; do
+            if git push; then break; fi
+            echo "push rejected - rebasing onto the new remote main (attempt ${i})"
+            git pull --rebase origin main
+            if [ "$i" = "3" ]; then exit 1; fi
+          done
 
       # A push made with GITHUB_TOKEN does not start a GitHub Pages build. Without
       # this the commit would land and the live site would keep serving the old
