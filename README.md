@@ -9,6 +9,8 @@ Frontend (staticka web stranica) za **AQMath** — kvantitativni rebalanser krip
 - **Opcijski Railway deploy:** Caddy poslužitelj (isti statički fajlovi)
 - **Jezici:** engleski (en) + kineski (zh-CN)
 - **Analitika:** Simple Analytics (privatnost)
+- **SEO:** IndexNow, JSON-LD structured data, meta descriptions, sitemap.xml
+- **WAF:** Cloudflare (Free tier — managed rules, bot fight, DDoS protection)
 
 ## Stranice
 
@@ -32,17 +34,19 @@ Frontend (staticka web stranica) za **AQMath** — kvantitativni rebalanser krip
 |----------|------|
 | `index.html` | Landing stranica (generirana iz `_src/index.html`) |
 | `app.html` | Glavna aplikacija |
-| `app.js` | Glavna aplikacijska logika |
+| `app.js` | Glavna aplikacijska logika (holdings, DCA, optimize, chart) |
 | `app-boot.js` | Boot logika (auth provjere, update banner) |
 | `app-backtest.js` | Backtest logika |
 | `app-widgets.js` | Widgeti (Binance cijene, ticker) |
-| `app-notify.js` | ntfy obavijesti |
+| `app-notify.js` | Signal-only automatizacija (One-Tap Alignment, ntfy, shield card) |
 | `styles.css` | Stilovi (izvor) |
 | `styles.min.css` | Minificirani stilovi (generirani) |
 | `locales/en.json` | Engleski prijevodi |
 | `locales/zh-CN.json` | Kineski prijevodi |
-| `Caddyfile` | Caddy konfiguracija (Railway) |
+| `Caddyfile` | Caddy konfiguracija (Railway) + 404 block |
 | `CNAME` | GitHub Pages custom domena |
+| `ONE_TAP_SIGNAL.md` | One-Tap Alignment feature dokumentacija |
+| `CLAIMS_AUDIT.md` | Claims vs code verification audit |
 
 ## Arhitektura
 
@@ -54,14 +58,29 @@ Preglednik  -->  aqmath-ui (statika)  -->  dca-engine (/dca, /api/binance/*)
 
 ## Build sustav
 
-Stranice se generiraju iz izvora u `_src/` pomoću Python alata:
+Stranice se generiraju iz izvora u `_src/` pomoću Python alata.
+
+**KRITIČNI REDOSLIJED** — preskakanje koraka uzrokuje CI greške:
 
 ```bash
-# Puni build (minificiraj CSS + stampaj verziju + generiraj stranice)
-npm run build
+# Puni build (4 koraka, točan redoslijed je obavezan)
+python tools/minify_css.py       # 1. styles.css → styles.min.css
+python tools/stamp_version.py    # 2. stampaj verziju u version.txt + sve HTML/JS
+python tools/build_pages.py      # 3. generiraj HTML stranice iz _src/
+python tools/build_research.py   # 4. generiraj research stranice iz _research/
 
-# Verifikacija (provjera i18n + verzija)
-npm run verify
+# Verifikacija (provjera stampi + i18n + audit)
+python tools/stamp_version.py --check   # exit 0 = sve stampi točne
+python tools/audit_pages.py             # provjeri sve generirane stranice
+npm run verify                          # i18n provjera
+```
+
+### npm skripte
+
+```bash
+npm run build     # puni build (sve 4 korake)
+npm run verify    # verifikacija (stamp + i18n + audit)
+npm run serve     # lokalni preview server
 ```
 
 ### Alati (`tools/`)
@@ -99,6 +118,25 @@ npm run test:ui
 npm run report
 ```
 
+### Trenutni testovi
+
+| Test | Stranica | Status |
+|------|----------|--------|
+| Landing snapshot | `/` | ✅ |
+| App snapshot | `/app` | ✅ |
+| Backtest snapshot | `/backtest` | ✅ |
+| Results snapshot | `/results` | ✅ |
+| Docs snapshot | `/docs` | ✅ |
+
+### Planirani testovi
+
+- [ ] E2E: beta key activation flow
+- [ ] E2E: portfolio sync + shield card
+- [ ] E2E: One-Tap Alignment (signal confirm/skip/adjust)
+- [ ] E2E: DCA distribution flow
+- [ ] Visual: mobile breakpoints (480px, 768px, 920px)
+- [ ] Visual: dark mode consistency
+
 ## Instalacija i pokretanje
 
 ### Lokalno (statika)
@@ -133,6 +171,8 @@ docker run -p 8090:80 aqmath-ui
 - **Self-hosted fontovi** — nijedan zahtjev ne ide na Google
 - **Non-custodial** — portfelj ostaje u pregledniku, bez povezivanja novčanika
 - **Privatnost** — Simple Analytics (bez kolačića, bez praćenja)
+- **Cloudflare WAF** — managed rules, bot fight mode, DDoS protection
+- **Error telemetry** — browser error reporter → `/internal/error-report` (privacy-first, no PII)
 
 ## Deploy
 
@@ -161,26 +201,29 @@ aqmath-ui/
 ├── impressum.html      # Impressum
 ├── widerruf.html       # Pravo na odustanak
 ├── 404.html            # 404 stranica
-├── app.js              # Glavna aplikacijska logika
-├── app-boot.js         # Boot logika
+├── app.js              # Glavna aplikacijska logika (holdings, DCA, optimize)
+├── app-boot.js         # Boot logika (auth, update banner)
 ├── app-backtest.js     # Backtest logika
-├── app-widgets.js      # Widgeti
-├── app-notify.js       # ntfy obavijesti
+├── app-widgets.js      # Widgeti (Binance ticker)
+├── app-notify.js       # One-Tap Alignment, shield card, ntfy, holdings sync
 ├── styles.css          # Stilovi (izvor)
-├── styles.min.css      # Minificirani stilovi
-├── _src/               # Izvori za generiranje
+├── styles.min.css      # Minificirani stilovi (generirani)
+├── _src/               # Izvori za generiranje (index.html je template)
 ├── locales/            # i18n prijevodi (en, zh-CN)
-├── research/           # Istraživačke stranice
-├── _research/          # Istraživački izvori (MD)
-├── tools/              # Build alati (Python)
-├── tests/              # Playwright testovi
-├── ops/                # Ops dokumentacija
+├── research/           # Istraživačke stranice (generirane)
+├── _research/          # Istraživački izvori (MD → HTML)
+├── tools/              # Build alati (Python) + error dashboard
+├── tests/              # Playwright testovi (visual snapshots)
+├── ops/                # Ops dokumentacija (Cloudflare, Railway, DDoS)
 ├── fonts/              # Self-hosted fontovi
-├── Caddyfile           # Caddy konfiguracija
+├── Caddyfile           # Caddy konfiguracija + 404 block
 ├── CNAME               # GitHub Pages domena
 ├── Dockerfile          # Docker image (Caddy)
 ├── railway.toml        # Railway konfiguracija
-└── package.json        # Playwright testovi
+├── package.json        # Playwright testovi + npm skripte
+├── ONE_TAP_SIGNAL.md   # One-Tap Alignment feature dokumentacija
+├── CLAIMS_AUDIT.md     # Claims vs code verification
+└── sitemap.xml         # SEO sitemap
 ```
 
 ## Povezane usluge

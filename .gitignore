@@ -27,3 +27,4 @@ test-results/
 playwright-report/
 blob-report/
 playwright/.cache/
+_commit_msg.txt
