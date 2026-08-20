@@ -310,6 +310,8 @@ Audit: `python tools/audit_pages.py` (checks all generated pages)
 | aqmath-engine/DELEVERAGE_V105_TEST_RESULTS.md | Deleverage v1.05 tests | ✅ Current |
 | aqmath-ui/CLAIMS_AUDIT.md | Claims vs code verification | ✅ Updated 2026-08-17 |
 | aqmath-ui/ONE_TAP_SIGNAL.md | One-Tap Alignment feature | ✅ Created 2026-08-20 |
+| aqmath-ui/PRIORITIES.md | Dev priorities (P0-P3) | ✅ Created 2026-08-20 |
+| aqmath-ui/MARKETING.md | Marketing plan (Substack/Twitter/Reddit) | ✅ Created 2026-08-20 |
 | aqmath-ui/_research/recovery-test.md | Crown Test 4 results | ✅ 2026-08-18 |
 | aqmath-ui/_research/static-vs-dynamic.md | Crown Test 2 results | ✅ 2026-08-12 |
 | aqmath-ui/_research/dca-stress.md | Crown Test 1 results | ✅ Current |
