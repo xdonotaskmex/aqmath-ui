@@ -527,7 +527,7 @@
             "chat4": "<strong>Deletable:</strong> you can clear your own messages anytime via the Clear button. Deactivating your beta key deletes all your chat data.",
             "chatP2": "The chat is stored server-side in the same pseudonymous manner as the opt-in signal service — under the one-way hash of your activation key, never under your name or wallet."
     },
-    "version": "v1.0 — June 2026",
+    "version": "v2.1 — August 2026",
     "cap": {
       "arch": "System Architecture Diagram",
       "positions": "Portfolio Position Overview (example)",
