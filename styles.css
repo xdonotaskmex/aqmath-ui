@@ -2416,6 +2416,7 @@
     .discipline-card .tc-title {
         color: var(--green);
     }
+    .discipline-card.hidden { display: none; }
     .disc-badge {
         font-family: var(--mono); font-size: 0.65rem; font-weight: 700;
         padding: 2px 8px; border-radius: 3px;

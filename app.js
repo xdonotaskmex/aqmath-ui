@@ -2273,7 +2273,9 @@ async function autoRefreshHistory() {
         return;
     }
 
-    // First-time build: reconstruct 90-day synthetic history from Binance klines.
+    // First-time build: reconstruct 90-day synthetic history from price data.
+    // Tries Binance klines first (fast, no auth); falls back to the engine's
+    // crypto_prices DB (CoinGecko/Kraken/Coinbase/MEXC) for tokens not on Binance.
     // Uses CURRENT amounts × historical prices (approximation — assumes holdings
     // were constant over the period).
     const STABLES = ['USDC', 'USDT', 'DAI', 'BUSD', 'TUSD', 'FDUSD', 'USDP'];
@@ -2282,12 +2284,28 @@ async function autoRefreshHistory() {
         for (const t of tokens) {
             if (STABLES.includes(t.sym)) { priceMap[t.sym] = Array(90).fill(1.0); continue; }
             const symbol = t.sym + 'USDT';
+            let gotPrices = false;
+            // 1) Binance klines (public, no auth)
             try {
                 const res = await fetch(`${DCA_API_URL}/api/binance/klines?symbol=${symbol}&interval=1d&limit=90`);
-                if (!res.ok) continue;
-                const klines = await res.json();
-                priceMap[t.sym] = klines.map(k => parseFloat(k[4]));
-            } catch(e) { continue; }
+                if (res.ok) {
+                    const klines = await res.json();
+                    priceMap[t.sym] = klines.map(k => parseFloat(k[4]));
+                    gotPrices = true;
+                }
+            } catch(e) { /* fall through */ }
+            // 2) Fallback: engine crypto_prices DB (CoinGecko/Kraken/Coinbase/MEXC)
+            if (!gotPrices && isBetaActive()) {
+                try {
+                    const res = await pipelineFetch(`${API_URL}/history/${t.sym}?days=90`);
+                    if (res.ok) {
+                        const json = await res.json();
+                        if (json.prices && json.prices.length > 0) {
+                            priceMap[t.sym] = json.prices.map(p => parseFloat(p));
+                        }
+                    }
+                } catch(e) { /* silent — token just skipped */ }
+            }
         }
         const syms = Object.keys(priceMap);
         if (syms.length === 0) return;
@@ -2314,7 +2332,7 @@ async function refreshHistory() {
     const tokens = portfolio.filter(t => t.amount > 0 && !t.safeHaven);
     if (tokens.length === 0) return showToast('no positions to build history from.', 'warning');
 
-    showLoading('Refresh History', 'Fetching 90-day price data from Binance...');
+    showLoading('Refresh History', 'Fetching 90-day price data...');
 
     const STABLES = ['USDC', 'USDT', 'DAI', 'BUSD', 'TUSD', 'FDUSD', 'USDP'];
     const priceMap = {};
@@ -2326,12 +2344,28 @@ async function refreshHistory() {
                 continue;
             }
             const symbol = t.sym + 'USDT';
+            let gotPrices = false;
+            // 1) Binance klines (public, no auth)
             try {
                 const res = await fetch(`${DCA_API_URL}/api/binance/klines?symbol=${symbol}&interval=1d&limit=90`);
-                if (!res.ok) continue;
-                const klines = await res.json();
-                priceMap[t.sym] = klines.map(k => parseFloat(k[4]));
-            } catch(e) { continue; }
+                if (res.ok) {
+                    const klines = await res.json();
+                    priceMap[t.sym] = klines.map(k => parseFloat(k[4]));
+                    gotPrices = true;
+                }
+            } catch(e) { /* fall through */ }
+            // 2) Fallback: engine crypto_prices DB (CoinGecko/Kraken/Coinbase/MEXC)
+            if (!gotPrices) {
+                try {
+                    const res = await pipelineFetch(`${API_URL}/history/${t.sym}?days=90`);
+                    if (res.ok) {
+                        const json = await res.json();
+                        if (json.prices && json.prices.length > 0) {
+                            priceMap[t.sym] = json.prices.map(p => parseFloat(p));
+                        }
+                    }
+                } catch(e) { /* silent — token just skipped */ }
+            }
         }
 
         const syms = Object.keys(priceMap);
