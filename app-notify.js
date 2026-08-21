@@ -872,6 +872,8 @@ async function loadPendingSignals() {
     list.innerHTML = _pendingSignals.map(s => _renderSignalBlock(s)).join('');
     if (bulk) bulk.classList.toggle('hidden', _pendingSignals.length < 2);
     if (empty) empty.classList.add('hidden');
+    // Start the 12h countdown timers (Discipline Module)
+    _startSignalCountdown();
     // Also load stats for the badge
     loadSignalStats();
 }
@@ -888,6 +890,8 @@ function _renderSignalBlock(s) {
     const usdStr = '$' + Math.round(s.usd).toLocaleString();
     // Normalize signal symbol (CELESTIA → TIA, etc.) for display consistency
     const displaySym = _normSym(s.sym);
+    // 12h countdown timer (Discipline Module)
+    const countdown = s.expires_at ? _renderCountdown(s.expires_at) : '';
     return '<div class="sig-block" data-signal-id="' + s.signal_id + '">'
         + '<div class="sig-header">'
         +   '<span class="sig-side ' + sideClass + '">' + s.side + '</span>'
@@ -895,6 +899,7 @@ function _renderSignalBlock(s) {
         +   '<span class="sig-amount">' + unitsStr + ' &rarr; ' + usdStr + '</span>'
         +   '<span class="sig-regime ' + regimeClass + '">' + regimeLabel + '</span>'
         +   daysWarn
+        +   countdown
         + '</div>'
         + '<div class="sig-actions">'
         +   '<button class="btn green" data-action="confirmSignal" data-arg="' + s.signal_id + '">[ confirm &amp; sync ]</button>'
@@ -909,6 +914,54 @@ function _renderSignalBlock(s) {
         + '</div>';
 }
 
+// Discipline Module: render a countdown badge for a signal's expires_at.
+function _renderCountdown(expiresAt) {
+    var r = _timeUntil(expiresAt);
+    if (r.total_sec <= 0) return '<span class="sig-timer sig-exp">expired</span>';
+    var cls = r.total_sec < 3600 ? 'sig-timer sig-urgent' : 'sig-timer';
+    var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+    return '<span class="' + cls + '">' + r.h + ':' + pad(r.m) + ':' + pad(r.s) + '</span>';
+}
+
+// Returns {h, m, s, total_sec} from now until the ISO timestamp.
+function _timeUntil(isoTs) {
+    var ms = new Date(isoTs).getTime() - Date.now();
+    var total_sec = Math.max(0, Math.floor(ms / 1000));
+    var h = Math.floor(total_sec / 3600);
+    var m = Math.floor((total_sec % 3600) / 60);
+    var s = total_sec % 60;
+    return {h: h, m: m, s: s, total_sec: total_sec};
+}
+
+// Discipline Module: tick every second, update countdown timers.
+// When a timer hits zero, reload pending signals (server will have expired it).
+var _countdownInterval = null;
+function _startSignalCountdown() {
+    if (_countdownInterval) clearInterval(_countdownInterval);
+    _countdownInterval = setInterval(function() {
+        if (!_pendingSignals.length) return;
+        var needsReload = false;
+        _pendingSignals.forEach(function(s) {
+            if (!s.expires_at) return;
+            var block = document.querySelector('[data-signal-id="' + s.signal_id + '"]');
+            if (!block) return;
+            var timerEl = block.querySelector('.sig-timer');
+            if (!timerEl) return;
+            var r = _timeUntil(s.expires_at);
+            if (r.total_sec <= 0) {
+                needsReload = true;
+                timerEl.textContent = 'expired';
+                timerEl.className = 'sig-timer sig-exp';
+            } else {
+                var pad = function(n) { return n < 10 ? '0' + n : '' + n; };
+                timerEl.textContent = r.h + ':' + pad(r.m) + ':' + pad(r.s);
+                if (r.total_sec < 3600) timerEl.className = 'sig-timer sig-urgent';
+            }
+        });
+        if (needsReload) loadPendingSignals();
+    }, 1000);
+}
+
 async function confirmSignal(el, signalId) {
     if (!signalId) return;
     if (el) el.disabled = true;
@@ -920,6 +973,11 @@ async function confirmSignal(el, signalId) {
         });
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
+            if (res.status === 410) {
+                showToast('Signal expired — execution window closed', 'error');
+                loadPendingSignals();
+                return;
+            }
             showToast(err.detail || 'Confirm failed (HTTP ' + res.status + ')', 'error');
             return;
         }
@@ -1122,6 +1180,62 @@ async function loadSignalStats() {
     } catch (e) { /* silent */ }
 }
 
+// Discipline Module: load and render the discipline meter card.
+// Shows overall confirmation rate + breakdown. Hidden until user has signals.
+async function loadDisciplineMeter() {
+    const card = document.getElementById('disciplineCard');
+    if (!card) return;
+    if (!isBetaActive()) return;
+    try {
+        const res = await _shieldFetch('/portfolio/discipline');
+        if (!res.ok) { card.classList.add('hidden'); return; }
+        const data = await res.json();
+        // Hide if no signals at all yet
+        if (data.total === 0 && data.pending === 0) { card.classList.add('hidden'); return; }
+        card.classList.remove('hidden');
+        const pct = Math.round((data.overall_rate || 0) * 100);
+        // Fill bar
+        var fill = document.getElementById('discFill');
+        if (fill) {
+            fill.style.width = pct + '%';
+            fill.style.background = pct >= 80 ? '#34d399' : pct >= 50 ? '#fbbf24' : '#f87171';
+        }
+        // Badge
+        var badge = document.getElementById('discBadge');
+        if (badge) badge.textContent = pct + '%';
+        // Stats breakdown
+        var stats = document.getElementById('discStats');
+        if (stats) {
+            stats.innerHTML =
+                '<span class="disc-confirmed">\u2713 confirmed: ' + data.confirmed + '</span>' +
+                '<span class="disc-missed">\u2717 missed: ' + data.missed + '</span>' +
+                '<span class="disc-skipped">\u25cb skipped: ' + data.skipped + '</span>' +
+                (data.pending > 0 ? '<span>pending: ' + data.pending + '</span>' : '');
+        }
+        // Discount badge
+        var disc = document.getElementById('discDiscount');
+        if (disc) disc.classList.toggle('hidden', !data.discount_eligible);
+    } catch (e) {
+        console.warn('[AQMath] discipline meter load failed:', e.message);
+    }
+}
+
+// Discipline Module: fetch ideal-vs-actual equity curves from signal data
+// and re-render the portfolio history chart with the extra datasets.
+var _disciplineHistory = null;
+async function loadDisciplineHistory() {
+    if (!isBetaActive()) return;
+    try {
+        const res = await _shieldFetch('/portfolio/discipline/history');
+        if (!res.ok) return;
+        _disciplineHistory = await res.json();
+        // Re-render the history chart if it exists (adds ideal/actual lines)
+        if (typeof renderHistoryChart === 'function') renderHistoryChart();
+    } catch (e) {
+        console.warn('[AQMath] discipline history load failed:', e.message);
+    }
+}
+
 // Execution time reporter: the SECOND timestamp. After the user confirms or
 // adjusts a signal, prompt them with quick options for when they actually
 // executed the trade on the exchange. This captures the honest execution gap
@@ -1251,6 +1365,18 @@ async function refreshNotifyUI() {
         await loadPendingSignals();
     } catch (e) {
         console.error('[AQMath] pending signals aborted:', e.message);
+    }
+    // Discipline Module: load the discipline meter (double-width card)
+    try {
+        await loadDisciplineMeter();
+    } catch (e) {
+        console.error('[AQMath] discipline meter aborted:', e.message);
+    }
+    // Discipline Module: fetch ideal-vs-actual equity curves
+    try {
+        await loadDisciplineHistory();
+    } catch (e) {
+        console.error('[AQMath] discipline history aborted:', e.message);
     }
     console.log('[AQMath] refreshNotifyUI done, final portfolio =', (portfolio || []).map(t => `${t.sym}:${t.amount}@$${t.price}`).join(',') || '(empty)');
     refreshNtfyStatus();

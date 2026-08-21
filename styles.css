@@ -2405,6 +2405,52 @@
     .signal-card { border-color: rgba(6,182,212,0.25); }
     .signal-card .tc-bar { background: rgba(6,182,212,0.06); }
     .signal-card .tc-title { color: var(--blue); }
+
+    /* ── Discipline Module: meter card ── */
+    .discipline-card {
+        border-color: rgba(52,211,153,0.25);
+    }
+    .discipline-card .tc-bar {
+        background: rgba(52,211,153,0.06);
+    }
+    .discipline-card .tc-title {
+        color: var(--green);
+    }
+    .disc-badge {
+        font-family: var(--mono); font-size: 0.65rem; font-weight: 700;
+        padding: 2px 8px; border-radius: 3px;
+        background: rgba(52,211,153,0.15); color: var(--green);
+    }
+    .disc-meter { margin-bottom: 12px; }
+    .disc-bar {
+        height: 20px; background: var(--s1); border-radius: 10px;
+        overflow: hidden; border: 1px solid var(--border);
+    }
+    .disc-fill {
+        height: 100%; border-radius: 10px;
+        transition: width 0.5s ease, background 0.3s;
+        width: 0%;
+    }
+    .disc-labels {
+        display: flex; justify-content: space-between;
+        font-size: 0.52rem; color: var(--dim); margin-top: 4px;
+        font-family: var(--mono);
+    }
+    .disc-thresh { color: var(--green); font-weight: 700; }
+    .disc-stats {
+        font-size: 0.6rem; color: var(--dim); font-family: var(--mono);
+        margin-bottom: 8px;
+    }
+    .disc-stats span { margin-right: 12px; }
+    .disc-stats .disc-confirmed { color: var(--green); }
+    .disc-stats .disc-missed { color: var(--red); }
+    .disc-stats .disc-skipped { color: var(--amber); }
+    .disc-discount {
+        font-size: 0.6rem; color: var(--green); font-weight: 600;
+        padding: 4px 10px; background: rgba(52,211,153,0.1);
+        border: 1px solid rgba(52,211,153,0.2); border-radius: 4px;
+        text-align: center;
+    }
     .sig-block {
         padding: 10px 0; border-bottom: 1px dashed var(--border);
     }
@@ -2426,6 +2472,26 @@
     .regime-lowvol { background: rgba(52,211,153,0.1); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
     .sig-days-ok { color: var(--green); font-size: 0.55rem; }
     .sig-days-warn { color: var(--amber); font-size: 0.55rem; }
+    /* Discipline Module: 12h countdown timer */
+    .sig-timer {
+        font-family: var(--mono); font-size: 0.58rem; padding: 2px 8px;
+        border-radius: 3px; background: rgba(6,182,212,0.1);
+        color: var(--cyan); border: 1px solid rgba(6,182,212,0.2);
+        margin-left: auto;
+    }
+    .sig-timer.sig-urgent {
+        background: rgba(251,191,36,0.15); color: var(--amber);
+        border-color: rgba(251,191,36,0.3);
+        animation: sig-pulse 2s ease-in-out infinite;
+    }
+    .sig-timer.sig-exp {
+        background: rgba(248,113,113,0.15); color: var(--red);
+        border-color: rgba(248,113,113,0.3);
+    }
+    @keyframes sig-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+    }
     .sig-actions {
         display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
     }

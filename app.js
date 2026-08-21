@@ -2376,7 +2376,11 @@ async function refreshHistory() {
 // ============ HISTORY CHART ============
 function renderHistoryChart() {
     if (historyChart) { historyChart.destroy(); historyChart = null; }
-    if (!portfolioHistory.length) {
+    const discData = (typeof _disciplineHistory !== 'undefined') ? _disciplineHistory : null;
+    const hasPortfolio = portfolioHistory.length > 0;
+    const hasDisc = discData && discData.dates && discData.dates.length > 0;
+
+    if (!hasPortfolio && !hasDisc) {
         const statsEl = document.getElementById('historyStats');
         if (statsEl) statsEl.innerHTML = '';
         const ctx = document.getElementById('historyChart').getContext('2d');
@@ -2388,17 +2392,45 @@ function renderHistoryChart() {
         return;
     }
 
-    const sorted = portfolioHistory.slice().sort((a,b) => a.timestamp - b.timestamp);
-    const labels = sorted.map(p => new Date(p.timestamp).toLocaleDateString('en-US', { month:'short', day:'numeric' }));
-    const values = sorted.map(p => p.total);
+    // Build a unified date axis merging portfolio snapshots + discipline dates
+    const dateMap = new Map();
+    if (hasPortfolio) {
+        portfolioHistory.forEach(p => {
+            const dk = new Date(p.timestamp).toLocaleDateString('en-US', { month:'short', day:'numeric' });
+            const prev = dateMap.get(dk);
+            if (!prev) dateMap.set(dk, { portfolio: p.total, ideal: null, actual: null });
+            else prev.portfolio = p.total; // last snapshot wins for same day
+        });
+    }
+    if (hasDisc) {
+        discData.dates.forEach((d, i) => {
+            // Normalise server date (YYYY-MM-DD or ISO) to the same label format
+            const dt = new Date(d);
+            const dk = isNaN(dt.getTime()) ? d : dt.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+            if (!dateMap.has(dk)) dateMap.set(dk, { portfolio: null, ideal: null, actual: null });
+            const entry = dateMap.get(dk);
+            entry.ideal = discData.ideal[i];
+            entry.actual = discData.actual[i];
+        });
+    }
 
-    // Summary stats
+    // Sort by parsing the date keys back to timestamps for correct ordering
+    const allDates = Array.from(dateMap.keys()).sort((a, b) => {
+        return new Date(a).getTime() - new Date(b).getTime();
+    });
+    const labels = allDates;
+    const values = allDates.map(d => dateMap.get(d).portfolio);
+    const idealData = allDates.map(d => dateMap.get(d).ideal);
+    const actualData = allDates.map(d => dateMap.get(d).actual);
+
+    // Summary stats (portfolio value only)
+    const portValues = values.filter(v => v != null);
     const statsEl = document.getElementById('historyStats');
-    if (statsEl) {
-        const cur = values[values.length - 1];
-        const high = Math.max(...values);
-        const low = Math.min(...values);
-        const first = values[0];
+    if (statsEl && portValues.length) {
+        const cur = portValues[portValues.length - 1];
+        const high = Math.max(...portValues);
+        const low = Math.min(...portValues);
+        const first = portValues[0];
         const chg = first > 0 ? ((cur - first) / first) * 100 : 0;
         const chgCls = chg >= 0 ? 'up' : 'down';
         const chgSign = chg >= 0 ? '+' : '';
@@ -2409,28 +2441,51 @@ function renderHistoryChart() {
             `<div class="hs-pill"><div class="hs-pill-l">Change</div><div class="hs-pill-v ${chgCls}">${chgSign}${chg.toFixed(2)}%</div></div>`;
     }
 
+    const datasets = [{
+        label: 'Portfolio Value',
+        data: values,
+        borderColor: '#06b6d4',
+        backgroundColor: 'rgba(56,189,248,0.05)',
+        fill: true,
+        tension: 0.2,
+        pointRadius: 2,
+        pointHoverRadius: 5,
+    }];
+    // Discipline Module: ideal vs actual equity lines
+    if (hasDisc) {
+        datasets.push({
+            label: 'Ideal (signal-time)',
+            data: idealData,
+            borderColor: '#34d399',
+            borderDash: [5, 5],
+            borderWidth: 1.5,
+            fill: false,
+            tension: 0.2,
+            pointRadius: 0,
+            pointHoverRadius: 3,
+        }, {
+            label: 'Actual (confirm-time)',
+            data: actualData,
+            borderColor: '#fbbf24',
+            borderDash: [2, 3],
+            borderWidth: 1.5,
+            fill: false,
+            tension: 0.2,
+            pointRadius: 0,
+            pointHoverRadius: 3,
+        });
+    }
+
     historyChart = new Chart(historyCtx, {
         type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Portfolio Value',
-                data: values,
-                borderColor: '#06b6d4',
-                backgroundColor: 'rgba(56,189,248,0.05)',
-                fill: true,
-                tension: 0.2,
-                pointRadius: 2,
-                pointHoverRadius: 5,
-            }]
-        },
+        data: { labels: labels, datasets: datasets },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             layout: { padding: { bottom: 8 } },
             plugins: {
-                legend: { display: false },
-                tooltip: { callbacks: { label: ctx => '$' + ctx.raw.toFixed(2) } }
+                legend: { display: hasDisc, labels: { color: '#7a8ba5', font: { size: 10 }, boxWidth: 14 } },
+                tooltip: { callbacks: { label: ctx => ctx.raw != null ? '$' + ctx.raw.toFixed(2) : '' } }
             },
             scales: {
                 x: { ticks: { color: '#7a8ba5', font: { size: 9 } }, grid: { display: false } },
