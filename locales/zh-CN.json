@@ -200,8 +200,6 @@
     "deleverageOn": "开启 — 在下行信号期间保护 KKT 权重",
     "deleverageOff": "关闭 — KKT 权重直接通过",
     "deployToDca": "部署到 DCA",
-    "allocation": "配置",
-    "remaining": "剩余: 100.00%",
     "faqTitle": "--常见问题",
     "faq": {
       "q1": "AQMath 是什么？",
@@ -227,6 +225,8 @@
     "maxDrift": "最大偏离",
     "dcaNeeded": "需要 DCA",
     "allocationStat": "配置",
+    "allocation": "目标配置",
+    "remaining": "剩余：100.00%",
     "holdingsTitle": "--持仓-再平衡引擎",
     "portfolioEmpty": "投资组合为空",
     "historyTitle": "--投资组合历史",

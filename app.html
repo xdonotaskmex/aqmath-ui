@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=a686df52e5">
+    <link rel="stylesheet" href="/styles.min.css?v=47739997f1">
 </head>
 <body>
 
@@ -509,10 +509,16 @@
                         <div class="sum-item"><div class="sum-l" data-i18n="app.largest">Largest</div><div class="sum-v" id="sLargest">—</div></div>
                         <div class="sum-item"><div class="sum-l" data-i18n="app.maxDrift">Max Drift</div><div class="sum-v" id="sMaxDrift">—</div></div>
                         <div class="sum-item"><div class="sum-l" data-i18n="app.dcaNeeded">DCA needed</div><div class="sum-v" id="sNeedReb">—</div></div>
-                        <div class="sum-item"><div class="sum-l" data-i18n="app.allocationStat">Allocation</div><div class="sum-v" id="sAllocSt">—</div></div>
                         <div class="sum-item"><div class="sum-l" data-i18n="app.statStatus">Status</div><div class="sum-v" id="sStatusVal">—</div></div>
                     </div>
                     <div class="rebalance-reminder" id="reminderBox"><span id="reminderTxt">No scheduled rebalance.</span></div>
+                    <!-- ALLOCATION METER: sits directly under the rebalance reminder -->
+                    <div class="a-meter">
+                        <div class="a-meter-top"><span data-i18n="app.allocation">ALLOCATION</span><span id="aPctLbl">0.00%</span></div>
+                        <div class="a-track"><div class="a-fill" id="aFill" style="width:0%"></div></div>
+                        <div class="a-num"><span id="aNumVal">0.00</span><span style="font-size:1rem;color:var(--muted)">%</span></div>
+                        <div class="a-rem" id="aRem">Remaining: 100.00%</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -541,6 +547,31 @@
                 <div class="history-stats" id="historyStats"></div>
                 <div class="history-chart-wrap"><canvas id="historyChart"></canvas></div>
                 <div class="fg-hint" data-i18n="app.historyHint">Automatically updated after DCA distribution.</div>
+            </div>
+        </div>
+
+        <!-- Discipline Module: meter card (shown only once signals exist) -->
+        <div class="tc discipline-card hidden" id="disciplineCard">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title">Discipline Meter</span>
+                <div class="tc-right"><span class="disc-badge" id="discBadge">&mdash;</span></div>
+            </div>
+            <div class="tc-body">
+                <div class="disc-meter">
+                    <div class="disc-bar"><div class="disc-fill" id="discFill"></div></div>
+                    <div class="disc-labels"><span>0%</span><span class="disc-thresh">&ge;80% target</span><span>100%</span></div>
+                </div>
+                <div class="disc-empty hidden" id="discEmpty">No signals yet &mdash; your discipline rate appears after the first rebalance signal.</div>
+                <div class="disc-tiles" id="discTiles">
+                    <div class="disc-tile"><div class="disc-tile-l disc-confirmed">&#10003; Confirmed</div><div class="disc-tile-v" id="discConfirmed">0</div></div>
+                    <div class="disc-tile"><div class="disc-tile-l disc-missed">&#10007; Missed</div><div class="disc-tile-v" id="discMissed">0</div></div>
+                    <div class="disc-tile"><div class="disc-tile-l disc-skipped">&#9675; Skipped</div><div class="disc-tile-v" id="discSkipped">0</div></div>
+                </div>
+                <div class="disc-note hidden" id="discPending"></div>
+                <div class="disc-note hidden" id="discReaction"></div>
+                <div class="disc-hint">Score: 100% within 1h &rarr; decays to 0% at the 12h deadline</div>
+                <div class="disc-discount hidden" id="discDiscount">Discount eligible: confirm &ge;80%</div>
             </div>
         </div>
 
@@ -635,10 +666,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=a686df52e5"></script>
-<script defer src="/app-backtest.js?v=a686df52e5"></script>
-<script defer src="/app.js?v=a686df52e5"></script>
-<script defer src="/app-notify.js?v=a686df52e5"></script>
+<script defer src="/app-widgets.js?v=47739997f1"></script>
+<script defer src="/app-backtest.js?v=47739997f1"></script>
+<script defer src="/app.js?v=47739997f1"></script>
+<script defer src="/app-notify.js?v=47739997f1"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -652,8 +683,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=a686df52e5"></script>
-<script defer src="/app-boot.js?v=a686df52e5"></script>
+<script defer src="/vendor/i18next.min.js?v=47739997f1"></script>
+<script defer src="/app-boot.js?v=47739997f1"></script>
 
 </body>
 </html>

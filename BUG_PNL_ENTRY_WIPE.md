@@ -2,7 +2,7 @@
 
 **Discovered:** 2026-08-20
 **Severity:** HIGH (user data loss — P&L column unusable)
-**Status:** ✅ FIXED (2026-08-20, second fix 2026-08-21)
+**Status:** ✅ FIXED (2026-08-20, second fix 2026-08-21, server-side guard 2026-08-21)
 **Affected repos:** `-aqmath-beta-auth`, `aqmath-engine`, `aqmath-ui`
 
 ---
@@ -133,13 +133,53 @@ for tok, amt in holdings.items():
     new_holdings.append(row)
 ```
 
+## Third occurrence (2026-08-21, after deploy) — server-side guard
+
+The entry/APY wipe returned a third time even with both engine fixes
+shipped. The audit found that the first two fixes only hardened the
+**engine** writers (`_apply_signal_delta`, `apply-all`). The remaining gap
+was on the **primary UI write path**: beta-auth `PUT /portfolio` had **no
+carry-forward**. Because `replace_holdings()` is a full DELETE+INSERT, any
+caller whose local table lacked entry/apy (stale localStorage cache, a
+failed `restoreHoldingsFromServer`, a cross-device race, or a page loaded
+during a redeploy window) sent `entry=null` for every token and blanked
+every average price the user had typed.
+
+### Third fix (2026-08-21) — make `PUT /portfolio` preserve, not delete
+
+Beta-auth `PUT /portfolio` now carries forward entry/APY from the existing
+rows whenever the incoming value is null/missing — the same guard that
+`internal_portfolio_write()` already had. A null field now means "keep what
+the server has", never "delete it":
+
+```python
+# beta-auth put_portfolio() — BEFORE: trusted caller blindly
+entry = _optional_price(item.get("entry"), tok, "entry")
+apy   = _optional_price(item.get("apy"),   tok, "apy")
+parsed.append((tok, amt, entry, apy))      # null -> NULL -> wipe
+
+# AFTER: read old rows and carry forward anything the caller omitted
+old = {r["token"]: r for r in await db.get_holdings(kh)}
+# ... per token ...
+prev = old.get(tok)
+if entry is None and prev is not None: entry = prev["entry"]
+if apy   is None and prev is not None: apy   = prev["apy"]
+parsed.append((tok, amt, entry, apy))      # null -> preserved
+```
+
+This closes the whole wipe **class**, not just one caller: every current and
+future writer to `user_holdings` now preserves entry/APY unless it
+explicitly supplies a replacement value.
+
 ## Verification checklist
 
 - [x] `replace_holdings` callers reviewed: `PUT /portfolio` (UI) sends
-      entry/APY from `_durableHoldings()` — unaffected.
-- [x] `internal_portfolio_write` is the only other writer — now preserves.
+      entry/APY from `_durableHoldings()` — now also carries forward
+      server-side when a field is null (fix #3).
+- [x] `internal_portfolio_write` is the only other writer — preserves.
 - [x] `_apply_signal_delta()` carries entry/APY through (fix #1).
 - [x] `apply-all` carries entry/APY through (fix #2, 2026-08-21).
+- [x] `PUT /portfolio` carries forward entry/APY on null (fix #3, 2026-08-21).
 - [ ] After deploy: enter average prices → trigger a signal apply-all →
       reload → P&L column must still show values.
 - [ ] Check one user in the error dashboard Beta Keys tab: `With portfolio`

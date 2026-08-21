@@ -2,7 +2,16 @@
 'use strict';
 
 // ============ BACKEND API URLs ============
-const BETA_AUTH_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:8000' : 'https://api-auth.aqmath.xyz';
+// Dev escape hatch (localhost only): open the local site with ?remote to point
+// at the PRODUCTION backends instead of localhost:8000/8005 — useful for
+// verifying against live data without running the whole stack locally. The
+// sessionStorage flag survives reloads; use ?local to switch back. All three
+// production services already allow http://localhost:8090 in CORS_ORIGINS.
+if (location.search.includes('remote')) sessionStorage.setItem('dev_remote', '1');
+if (location.search.includes('local')) sessionStorage.removeItem('dev_remote');
+const _LOCAL_BACKEND = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    && sessionStorage.getItem('dev_remote') !== '1';
+const BETA_AUTH_URL = _LOCAL_BACKEND ? 'http://localhost:8000' : 'https://api-auth.aqmath.xyz';
 
 // ============ PRIVACY-FIRST ERROR TELEMETRY ============
 // Reports JS crashes and unhandled promise rejections to the server.
@@ -469,8 +478,8 @@ function checkBetaUI() {
 
 // ========== BACKEND API URLs ==========
 // Set these to your deployed Railway URLs
-const API_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:8005' : 'https://api-engine.aqmath.xyz';   // aqmath-engine (Risk Parity + KKT) — Pro only
-const DCA_API_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:8005' : 'https://api-dca.aqmath.xyz'; // dca-engine on Railway — DCA distribution only
+const API_URL = _LOCAL_BACKEND ? 'http://localhost:8005' : 'https://api-engine.aqmath.xyz';   // aqmath-engine (Risk Parity + KKT) — Pro only
+const DCA_API_URL = _LOCAL_BACKEND ? 'http://localhost:8005' : 'https://api-dca.aqmath.xyz'; // dca-engine on Railway — DCA distribution only
 
 let portfolioHistory = [];
 let _autoHistTimer = null;
@@ -2241,7 +2250,10 @@ function scheduleAutoHistory() {
 }
 
 async function autoRefreshHistory() {
-    const tokens = portfolio.filter(t => t.amount > 0 && !t.safeHaven);
+    // Include safe-haven (USDC) — totalValue() and manual snapshots count it,
+    // so the synthetic history must too, otherwise the curve sits far below the
+    // overview Total and appended snapshots squash it flat against the axis.
+    const tokens = portfolio.filter(t => t.amount > 0);
     if (tokens.length === 0) return;
     // Never snapshot while prices are still syncing — a partial price set
     // records a false dip (e.g. $274 instead of $341 right after a restore).
@@ -2329,7 +2341,8 @@ async function autoRefreshHistory() {
 // ============ REFRESH HISTORY (BLACK) ============
 async function refreshHistory() {
     if (!isPro) { updateProButtons(); return; }
-    const tokens = portfolio.filter(t => t.amount > 0 && !t.safeHaven);
+    // Include safe-haven (USDC) — must match totalValue(), same as autoRefreshHistory.
+    const tokens = portfolio.filter(t => t.amount > 0);
     if (tokens.length === 0) return showToast('no positions to build history from.', 'warning');
 
     showLoading('Refresh History', 'Fetching 90-day price data...');
@@ -2426,32 +2439,52 @@ function renderHistoryChart() {
         return;
     }
 
-    // Build a unified date axis merging portfolio snapshots + discipline dates
+    // Build a unified date axis merging portfolio snapshots + discipline dates.
+    // Every entry keeps the timestamp it was first seen with, so sorting is done
+    // on real time — parsing display labels like "Aug 21" back through Date()
+    // silently assumes the CURRENT year and broke ordering across year edges.
     const dateMap = new Map();
     if (hasPortfolio) {
         portfolioHistory.forEach(p => {
             const dk = new Date(p.timestamp).toLocaleDateString('en-US', { month:'short', day:'numeric' });
             const prev = dateMap.get(dk);
-            if (!prev) dateMap.set(dk, { portfolio: p.total, ideal: null, actual: null });
+            if (!prev) dateMap.set(dk, { ts: p.timestamp, portfolio: p.total, ideal: null, actual: null });
             else prev.portfolio = p.total; // last snapshot wins for same day
         });
+    }
+    // Discipline Module: ideal vs actual equity lines.
+    // The engine returns equity curves on a fixed $10,000 baseline; next to a
+    // real portfolio of a few hundred dollars that squashes the portfolio line
+    // flat at the bottom of the axis. Rescale BOTH curves so the last point
+    // equals the CURRENT portfolio value — every line is then in real dollars
+    // and the gap between ideal/actual still shows the execution cost.
+    let idealScaled = null, actualScaled = null;
+    if (hasDisc) {
+        const lastIdx = discData.actual.length - 1;
+        const lastAct = discData.actual[lastIdx];
+        const lastIdeal = discData.ideal[lastIdx];
+        const curTotal = portfolioHistory.length ? portfolioHistory[portfolioHistory.length - 1].total : totalValue();
+        if (curTotal > 0 && Number(lastAct) > 0 && Number(lastIdeal) > 0) {
+            const fAct = curTotal / lastAct, fIdeal = curTotal / lastIdeal;
+            idealScaled = discData.ideal.map(v => v == null ? null : v * fIdeal);
+            actualScaled = discData.actual.map(v => v == null ? null : v * fAct);
+        }
     }
     if (hasDisc) {
         discData.dates.forEach((d, i) => {
             // Normalise server date (YYYY-MM-DD or ISO) to the same label format
             const dt = new Date(d);
-            const dk = isNaN(dt.getTime()) ? d : dt.toLocaleDateString('en-US', { month:'short', day:'numeric' });
-            if (!dateMap.has(dk)) dateMap.set(dk, { portfolio: null, ideal: null, actual: null });
+            const ts = dt.getTime();
+            const dk = isNaN(ts) ? d : dt.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+            if (!dateMap.has(dk)) dateMap.set(dk, { ts: isNaN(ts) ? 0 : ts, portfolio: null, ideal: null, actual: null });
             const entry = dateMap.get(dk);
-            entry.ideal = discData.ideal[i];
-            entry.actual = discData.actual[i];
+            entry.ideal = idealScaled ? idealScaled[i] : discData.ideal[i];
+            entry.actual = actualScaled ? actualScaled[i] : discData.actual[i];
         });
     }
 
-    // Sort by parsing the date keys back to timestamps for correct ordering
-    const allDates = Array.from(dateMap.keys()).sort((a, b) => {
-        return new Date(a).getTime() - new Date(b).getTime();
-    });
+    // Sort by the stored timestamps for correct chronological ordering
+    const allDates = Array.from(dateMap.keys()).sort((a, b) => dateMap.get(a).ts - dateMap.get(b).ts);
     const labels = allDates;
     const values = allDates.map(d => dateMap.get(d).portfolio);
     const idealData = allDates.map(d => dateMap.get(d).ideal);
@@ -2581,6 +2614,19 @@ function render() {
     dcaBtn.disabled = !canDca;
     dcaBtn.title = canDca ? 'Start DCA distribution' : 'DCA is available only when total target allocation equals 100%.';
 
+    // Allocation meter under the overview card: how much of the 100% budget the
+    // targets consume. Null-guarded so pages generated without the meter never crash.
+    const aFill = document.getElementById('aFill');
+    if (aFill) {
+        const pct = Math.min(Math.max(tgt, 0), 100);
+        aFill.style.width = `${pct}%`;
+        aFill.className = `a-fill${tgt > 100.01 ? ' over' : tgt >= 99.99 ? ' full' : ''}`;
+        document.getElementById('aPctLbl').textContent = `${tgt}%`;
+        document.getElementById('aNumVal').textContent = tgt.toFixed(2);
+        const remEl = document.getElementById('aRem'), rem = r2(100 - tgt, 4);
+        remEl.textContent = rem > 0.005 ? `Remaining: ${rem}%` : (Math.abs(rem) < 0.01 ? 'Allocation full' : `Overage by ${Math.abs(rem)}%`);
+    }
+
     if (myChart) { myChart.destroy(); myChart = null; }
     document.getElementById('cCV').textContent = allTokens.length || '—';
     document.getElementById('legend').innerHTML = '';
@@ -2595,7 +2641,7 @@ function render() {
     }
 
     document.getElementById('sTotalVal').textContent = `$${fmtUSD(portVal)}`;
-    if (!allTokens.length) { ['sPnl','sLargest','sMaxDrift','sNeedReb','sAllocSt'].forEach(id => document.getElementById(id).textContent = '—'); }
+    if (!allTokens.length) { ['sPnl','sLargest','sMaxDrift','sNeedReb'].forEach(id => document.getElementById(id).textContent = '—'); }
     else {
         let cost = 0, curTot = 0;
         allTokens.forEach(t => { if (t.entry) { cost += t.amount * t.entry; curTot += t.amount * t.price; } });
@@ -2606,7 +2652,6 @@ function render() {
         document.getElementById('sMaxDrift').textContent = drifts.length ? `${Math.max(...drifts).toFixed(2)}%` : 'N/A';
         const need = activeTokens().filter(t => calcToken(t, portVal).actionClass === 'buy').length;
         document.getElementById('sNeedReb').textContent = need > 0 ? `${need} positions` : 'No';
-        document.getElementById('sAllocSt').textContent = allocationOk ? '100% OK' : `${tgt}%`;
     }
 
     const wrap = document.getElementById('tblWrap');

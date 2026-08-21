@@ -200,8 +200,6 @@
     "deleverageOn": "ON — shields KKT weights during downside signature",
     "deleverageOff": "OFF — KKT weights pass through unmodified",
     "deployToDca": "DEPLOY TO DCA",
-    "allocation": "ALLOCATION",
-    "remaining": "Remaining: 100.00%",
     "faqTitle": "--frequently-asked-questions",
     "faq": {
       "q1": "What is AQMath?",
@@ -227,6 +225,8 @@
     "maxDrift": "Max Drift",
     "dcaNeeded": "DCA needed",
     "allocationStat": "Allocation",
+    "allocation": "ALLOCATION",
+    "remaining": "Remaining: 100.00%",
     "holdingsTitle": "--holdings-rebalance-engine",
     "portfolioEmpty": "Portfolio empty",
     "historyTitle": "--portfolio-history",

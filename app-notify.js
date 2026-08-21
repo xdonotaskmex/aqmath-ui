@@ -1180,44 +1180,85 @@ async function loadSignalStats() {
     } catch (e) { /* silent */ }
 }
 
+// Discipline Module: human-readable reaction time (e.g. "42 min", "3.5 h").
+function _fmtReaction(sec) {
+    if (sec < 60) return sec + 's';
+    if (sec < 3600) return Math.round(sec / 60) + ' min';
+    var h = sec / 3600;
+    return (h >= 10 ? Math.round(h) : h.toFixed(1)) + ' h';
+}
+
 // Discipline Module: load and render the discipline meter card.
-// Shows overall confirmation rate + breakdown. Hidden until user has signals.
+// Shows overall confirmation rate + 3-tile breakdown. Always visible for
+// beta users — an empty state is shown until the first signal exists.
 async function loadDisciplineMeter() {
     const card = document.getElementById('disciplineCard');
     if (!card) return;
-    if (!isBetaActive()) return;
+    // Not signed in: keep the card hidden but do NOT return "done" semantics —
+    // refreshNotifyUI() calls this again after beta activates.
+    if (!isBetaActive()) { card.classList.add('hidden'); return; }
+    // Beta active: the card stays visible; fetch the numbers, fall back to
+    // the empty state on failure/no-data instead of hiding the feature.
+    card.classList.remove('hidden');
+    let data = null;
     try {
         const res = await _shieldFetch('/portfolio/discipline');
-        if (!res.ok) { card.classList.add('hidden'); return; }
-        const data = await res.json();
-        // Hide if no signals at all yet
-        if (data.total === 0 && data.pending === 0) { card.classList.add('hidden'); return; }
-        card.classList.remove('hidden');
-        const pct = Math.round((data.overall_rate || 0) * 100);
-        // Fill bar
-        var fill = document.getElementById('discFill');
-        if (fill) {
-            fill.style.width = pct + '%';
-            fill.style.background = pct >= 80 ? '#34d399' : pct >= 50 ? '#fbbf24' : '#f87171';
-        }
-        // Badge
-        var badge = document.getElementById('discBadge');
-        if (badge) badge.textContent = pct + '%';
-        // Stats breakdown
-        var stats = document.getElementById('discStats');
-        if (stats) {
-            stats.innerHTML =
-                '<span class="disc-confirmed">\u2713 confirmed: ' + data.confirmed + '</span>' +
-                '<span class="disc-missed">\u2717 missed: ' + data.missed + '</span>' +
-                '<span class="disc-skipped">\u25cb skipped: ' + data.skipped + '</span>' +
-                (data.pending > 0 ? '<span>pending: ' + data.pending + '</span>' : '');
-        }
-        // Discount badge
-        var disc = document.getElementById('discDiscount');
-        if (disc) disc.classList.toggle('hidden', !data.discount_eligible);
+        if (res.ok) data = await res.json();
     } catch (e) {
         console.warn('[AQMath] discipline meter load failed:', e.message);
     }
+    const empty = document.getElementById('discEmpty');
+    const tiles = document.getElementById('discTiles');
+    const pend = document.getElementById('discPending');
+    const reac = document.getElementById('discReaction');
+    const badge = document.getElementById('discBadge');
+    const fill = document.getElementById('discFill');
+    if (!data || (data.total === 0 && data.pending === 0)) {
+        if (empty) empty.classList.remove('hidden');
+        if (tiles) tiles.classList.add('hidden');
+        if (pend) pend.classList.add('hidden');
+        if (reac) reac.classList.add('hidden');
+        if (badge) badge.textContent = '\u2014';
+        if (fill) { fill.style.width = '0%'; }
+        const disc = document.getElementById('discDiscount');
+        if (disc) disc.classList.add('hidden');
+        return;
+    }
+    if (empty) empty.classList.add('hidden');
+    if (tiles) tiles.classList.remove('hidden');
+    const pct = Math.round((data.overall_rate || 0) * 100);
+    // Fill bar
+    if (fill) {
+        fill.style.width = pct + '%';
+        fill.style.background = pct >= 80 ? '#34d399' : pct >= 50 ? '#fbbf24' : '#f87171';
+    }
+    // Badge
+    if (badge) badge.textContent = pct + '%';
+    // 3-tile breakdown: confirmed / missed / skipped
+    var vC = document.getElementById('discConfirmed');
+    var vM = document.getElementById('discMissed');
+    var vS = document.getElementById('discSkipped');
+    if (vC) vC.textContent = data.confirmed;
+    if (vM) vM.textContent = data.missed;
+    if (vS) vS.textContent = data.skipped;
+    // Pending note (only when there is something awaiting a decision)
+    if (pend) {
+        pend.textContent = data.pending > 0 ? 'pending: ' + data.pending : '';
+        pend.classList.toggle('hidden', !data.pending);
+    }
+    // Reaction-speed note (median time from signal to confirmation) —
+    // explains the latency-weighted score to the user.
+    if (reac) {
+        if (data.median_reaction_sec != null) {
+            reac.textContent = 'median reaction: ' + _fmtReaction(data.median_reaction_sec);
+            reac.classList.remove('hidden');
+        } else {
+            reac.classList.add('hidden');
+        }
+    }
+    // Discount badge
+    var disc = document.getElementById('discDiscount');
+    if (disc) disc.classList.toggle('hidden', !data.discount_eligible);
 }
 
 // Discipline Module: fetch ideal-vs-actual equity curves from signal data
