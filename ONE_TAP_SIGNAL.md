@@ -1,9 +1,10 @@
 # One-Tap Alignment — Feature Documentation
 
-**Status:** ✅ UI complete · 🔄 Backend endpoints in progress
-**Date:** 2026-08-20
-**Files:** `app-notify.js` (UI), `_src/index.html` (markup), `styles.css` (styling),
-`portfolio_service.py` (backend), `-aqmath-beta-auth/main.py` (signal CRUD)
+**Status:** ✅ Complete (UI + backend + discipline module)
+**Date:** 2026-08-21 (last update)
+**Files:** `app-notify.js` (UI), `app.js` (chart), `_src/index.html` (markup),
+`styles.css` (styling), `portfolio_service.py` (backend),
+`-aqmath-beta-auth/main.py` (signal CRUD + admin)
 
 ---
 
@@ -85,8 +86,19 @@ Each pending signal renders as a `.sig-block` with:
 | Amount | Units → USD equivalent | `.sig-amount` |
 | Regime | SHOCK (red) or LOW VOL (green) | `.sig-regime.regime-shock` / `.regime-lowvol` |
 | Age | "today" (green) or "pending Nd" (amber) | `.sig-days-ok` / `.sig-days-warn` |
+| **Countdown** | **12h expiry timer from ntfy delivery** | **`.sig-countdown`** |
 | Actions | [ confirm & sync ] [ adjust ] [ skip ] | `.sig-actions` |
 | Adjust form | Hidden by default, shown on [ adjust ] | `.sig-adjust-form.hidden` |
+
+#### Signal Expiry (12-hour window)
+
+Each signal has a 12-hour reaction window starting from `notified_at`
+(the ntfy delivery time), with fallback to `created_at` when ntfy is
+disabled. A lazy expiry (`_expire_stale_signals()`) runs on every
+signal-related API call. Expired signals return HTTP 410 on confirm.
+
+The countdown timer on each signal card shows the remaining time in
+`HH:MM:SS` format, turning red in the last 30 minutes.
 
 ### 2.3 Signal Stats Badge (`#signalStatsBadge`)
 
@@ -96,7 +108,37 @@ SHOCK: 85% (pass) | LOW VOL: 92% (pass)
 ```
 Fetched from `GET /portfolio/signal-stats`. Hidden when no stats available.
 
-### 2.4 Execution-Time Prompt (`.exec-overlay`)
+### 2.4 Discipline Meter Card (`#disciplineCard`)
+
+Double-width terminal card showing the user's discipline rate:
+
+```
+┌─────────────────────────────────────────────┐
+│ ◆ DISCIPLINE METER                          │
+├─────────────────────────────────────────────┤
+│ Confirmed: 12  Missed: 2  Skipped: 1       │
+│ Rate: 80.0% ████████████████░░░░ PASS       │
+│                                             │
+│ ≥80% → 10% renewal discount eligible        │
+└─────────────────────────────────────────────┘
+```
+
+Fetched from `GET /portfolio/discipline`. Rate = confirmed / (confirmed +
+missed + skipped). The meter bar fills green for pass (≥80%), amber for
+borderline (60-79%), red for fail (<60%).
+
+### 2.5 Portfolio History — Ideal vs Actual Equity
+
+The history chart (`renderHistoryChart()` in `app.js`) overlays two
+dashed lines from `GET /portfolio/discipline/history`:
+
+- **Ideal** (green dashed): every signal confirmed at `signal_price` (zero slippage)
+- **Actual** (amber dashed): confirmed at `confirm_price`, missed/skipped = no trade
+
+The gap between the two lines shows the cost of missed signals and
+slippage. Fetched from `loadDisciplineHistory()` in `app-notify.js`.
+
+### 2.6 Execution-Time Prompt (`.exec-overlay`)
 
 After confirming or adjusting a signal, a full-screen modal asks:
 "When did you actually execute the trade on the exchange?"
@@ -133,6 +175,8 @@ Auto-dismisses after 60 seconds. Backdrop click also dismisses.
 | `_reportExecTimeCustom()` | Custom datetime input | `POST /portfolio/signals/report-execution` |
 | `_syncHoldingsAfterSignal()` | After confirm/adjust | `GET /portfolio` (beta-auth) |
 | `_rerenderSignalList()` | After any signal action | (UI only) |
+| `loadDisciplineMeter()` | `refreshNotifyUI()` on page load | `GET /portfolio/discipline` |
+| `loadDisciplineHistory()` | `refreshNotifyUI()` on page load | `GET /portfolio/discipline/history` |
 
 ### Signal Data Shape (from `/portfolio/signals`)
 
@@ -176,8 +220,13 @@ Auto-dismisses after 60 seconds. Backdrop click also dismisses.
 | `/portfolio/signals/adjust` | POST | Beta JWT | ✅ Adjusts units + applies delta |
 | `/portfolio/signals/report-execution` | POST | Beta JWT | ✅ Stores execution timestamp |
 | `/portfolio/signal-stats` | GET | Beta JWT | ✅ Per-regime pass rates |
+| `/portfolio/discipline` | GET | Beta JWT | ✅ Per-user discipline rate |
+| `/portfolio/discipline/history` | GET | Beta JWT | ✅ Ideal vs actual equity curves |
+| `/admin/discipline` | GET | X-Admin-Secret | ✅ Per-user discipline rates (admin) |
+| `/admin/discipline/apply-discount` | POST | X-Admin-Secret | ✅ Renewal discount recording |
+| `/portfolio/signals/apply-all` | POST | Beta JWT | ✅ Retroactive delta apply |
 
-### Database Table
+### Database Tables
 
 `signal_confirmations` (engine PostgreSQL):
 - `id` (UUID)
@@ -186,7 +235,17 @@ Auto-dismisses after 60 seconds. Backdrop click also dismisses.
 - `action` (VARCHAR) — 'confirmed' | 'skipped' | 'adjusted'
 - `actual_units` (FLOAT, nullable) — for adjusted signals
 - `executed_at` (TIMESTAMP, nullable) — honest execution time
+- `signal_price` (NUMERIC, nullable) — daily close at generation
+- `confirm_price` (NUMERIC, nullable) — market price at confirmation
+- `notified_at` (TIMESTAMP, nullable) — ntfy delivery time
+- `notified_at` + 12h = `expires_at` (lazy expiry)
 - `created_at` (TIMESTAMP)
+
+`signal_discipline_snapshots` (engine PostgreSQL):
+- `key_hash` (VARCHAR)
+- `snap_date` (DATE)
+- `total_signals`, `confirmed`, `missed`, `skipped` (INTEGER)
+- Daily snapshot of signal counts for discipline rate computation
 
 ---
 
@@ -236,17 +295,19 @@ Auto-dismisses after 60 seconds. Backdrop click also dismisses.
 - Hidden classes for clean show/hide toggling
 - Backend signal_confirmations table schema
 - Backend CRUD endpoints for signals
+- **12h signal expiry** with countdown timer on each signal card
+- **Discipline meter card** (double-width, ≥80% = renewal discount)
+- **Ideal vs actual equity curves** overlaid on history chart
+- **Admin telemetry** — per-user discipline rates + discount recording
+- **Retroactive delta apply** (`/portfolio/signals/apply-all`)
+- **Entry/APY preservation** in all signal write-back paths
 
 ### 🔄 Needs Attention
-- Backend endpoint hardening (error handling, edge cases)
-- Signal stats aggregation optimization
 - Execution time analytics (dashboard, reporting)
 - Integration testing (E2E flow from cron → signal → confirm → execution)
 
 ### 🔴 Not Started
-- Signal history view (past signals with outcomes)
 - Execution gap analysis (planned vs actual timing)
-- Signal performance attribution (did following signals help?)
 - Mobile-specific UX improvements (swipe to confirm, etc.)
 
 ---

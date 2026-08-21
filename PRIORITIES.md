@@ -1,6 +1,6 @@
 # AQMath Priorities — What to Work On Next
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-21
 **Owner:** Momir Demirov (sole developer)
 **Stack:** 10 FastAPI services on Railway, static HTML/CSS/JS on GitHub Pages
 
@@ -46,26 +46,18 @@ highest-leverage piece of content the project can produce.
 
 ---
 
-### 2. One-Tap Alignment — Backend Hardening
+### 2. One-Tap Alignment — Backend Hardening ✅ DONE
 
 **What:** The UI is complete (signal card, confirm/skip/adjust, exec-time
 prompt) but the backend endpoints need production hardening — error
 handling, edge cases, idempotency guarantees.
 
-**Why urgent:** Beta users are seeing the signal card. If confirm/adjust
-fails silently or double-applies deltas, trust is destroyed instantly.
-This is the primary user-facing feature.
+**Status:** ✅ COMPLETED 2026-08-21 — Discipline & Execution Validation Module
+delivered: 12h expiry, discipline rate, admin telemetry, ideal/actual equity
+curves, entry/APY preservation in all write-back paths.
 
-**Effort:** 1-2 days
-**Blocker:** None
+**Effort:** 1-2 days (estimated) → 2 days (actual)
 **Repos:** `aqmath-engine` (portfolio_service.py), `-aqmath-beta-auth`
-
-**Steps:**
-1. Add idempotency keys to confirm/adjust endpoints
-2. Handle edge case: signal already confirmed (return cached result)
-3. Validate delta application (holdings can't go negative)
-4. Add retry logic for holdings sync after confirm
-5. Test with actual beta user flow
 
 ---
 
@@ -169,15 +161,16 @@ scale. Not urgent because current performance is acceptable.
 
 ---
 
-### 9. Signal History View
+### 9. Signal History View ✅ PARTIALLY DONE
 
 **What:** Show past signals with outcomes (confirmed, skipped, adjusted)
 in a scrollable list. Users should see their signal track record.
 
-**Why:** Completes the One-Tap Alignment loop. Without history, users
-can't evaluate whether following signals helped.
+**Status:** ✅ Backend done (discipline rate, ideal/actual equity curves,
+discipline snapshots). UI: discipline meter card + history chart overlay.
+Scrollable signal history list still pending.
 
-**Effort:** 2 days
+**Effort:** 2 days (estimated), ~1 day done
 **Repos:** `aqmath-ui` (new card), `aqmath-engine` (endpoint)
 
 ---
@@ -266,14 +259,14 @@ relevant for compliance/impressum reasons but not for growth.
 | Priority | Item | Effort | Impact | Can Wait? |
 |----------|------|--------|--------|-----------|
 | **P0** | Crown Test 5 (Strategy Benchmark) | 3-4d | 🔥🔥🔥🔥🔥 | No — blocks all marketing |
-| **P0** | One-Tap backend hardening | 1-2d | 🔥🔥🔥🔥 | No — beta users see it |
+| **P0** | One-Tap backend hardening | ✅ DONE | 🔥🔥🔥🔥 | Delivered (discipline module) |
 | **P0** | Forward log public summary | 1d | 🔥🔥🔥🔥 | No — proof of track record |
 | **P1** | Crown Test 3 (Liquidity) | 2-3d | 🔥🔥🔥🔥 | 1 week |
 | **P1** | v17 UI integration | 2d | 🔥🔥🔥 | 1 week |
 | **P1** | Substack articles (3) | 6-8h total | 🔥🔥🔥🔥 | 1 week |
 | **P1** | E2E beta key test | 1-2d | 🔥🔥🔥 | 1 week |
 | **P2** | 3-layer caching | 3d | 🔥🔥 | 2-4 weeks |
-| **P2** | Signal history view | 2d | 🔥🔥🔥 | 2 weeks |
+| **P2** | Signal history view | ✅ Partial | 🔥🔥🔥 | Backend done, UI list pending |
 | **P2** | Expanded Playwright | 2d | 🔥🔥 | 2-4 weeks |
 | **P2** | Conversion funnel | 2d | 🔥🔥 | 2-4 weeks |
 | **P3** | Staging environment | 1d | 🔥 | Whenever |

@@ -1,6 +1,6 @@
 # AQMath Project Status — Master Reference for AI Agents
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-21
 **Purpose:** single-file state of the entire AQMath system — what is done, what
 is in progress, and what remains. An AI agent reading this file should NOT need
 to scan the full workspace to understand current priorities.
@@ -86,14 +86,14 @@ Frontend: static HTML/CSS/JS, deployed on GitHub Pages + Cloudflare WAF.
 | Shield status hidden classes | ui | 2026-08 | `.signal-card.hidden`, `.signal-actions.hidden` |
 | v17 Circuit Breaker C4 (server-side) | engine scratch | 2026-08 | Single-day -8% → 15% floor, 5d cooldown |
 | Recovery test (Test 4) | engine scratch | 2026-08-18 | 1/4 gates pass (v14), 2/4 (v17) |
+| Discipline & Execution Validation Module | all 3 repos | 2026-08-21 | 12h expiry, discipline meter, ideal/actual equity, admin telemetry |
+| Entry/APY wipe bug fix (2nd occurrence) | engine | 2026-08-21 | apply-all endpoint now carries entry/APY through |
 
 ### 🔄 IN PROGRESS
 
 | Feature | Status | Next Step |
 |---------|--------|-----------|
-| One-Tap Alignment — backend signal endpoints | `/portfolio/signals` CRUD exists in engine | Needs: `/signals/confirm`, `/signals/skip`, `/signals/adjust` endpoint hardening |
 | Execution timestamp recording | UI overlay done, `_promptExecutionTime()` implemented | Server-side `/portfolio/signals/exec-time` POST endpoint needed |
-| Signal stats badge | `loadSignalStats()` called, badge element exists | Backend aggregation endpoint needed |
 
 ### 🔴 NOT STARTED (planned)
 
@@ -159,12 +159,21 @@ Audit: `python tools/audit_pages.py` (checks all generated pages)
 - Auto-populate history from Binance on portfolio change (debounced 2.5s, 30s cooldown)
 - Pro modal: fixed links wrapping (reduced padding, smaller font, nowrap flex)
 
-### One-Tap Alignment (in progress)
-- Signal card UI in `_src/index.html` (pending signals section)
-- Signal rendering in `app-notify.js` (`loadPendingSignals`, `confirmSignal`, `skipSignal`, `adjustSignal`)
-- Execution-time prompt modal (`.exec-overlay` CSS in `styles.css`)
-- Signal hidden classes (`.signal-card.hidden`, `.signal-actions.hidden`, `.signal-empty.hidden`)
-- **Pending:** backend hardening, exec-time server endpoint, signal stats aggregation
+### Discipline & Execution Validation Module (2026-08-21)
+- 12h signal expiry: `signal_price`, `notified_at`, `expires_at` columns on `signal_confirmations`
+- Lazy expiry: `_expire_stale_signals()` on every signal API call, `_expire_all_stale()` admin sweep
+- Discipline rate: confirmed/(confirmed+missed+skipped), ≥80% = 10% renewal discount
+- `signal_discipline_snapshots` table: daily snapshots via `_update_discipline_snapshot()`
+- `GET /portfolio/discipline` — per-user discipline rate
+- `GET /portfolio/discipline/history` — ideal vs actual equity curves (PnL model)
+- `GET /admin/discipline` — per-user discipline rates (X-Admin-Secret guarded)
+- `POST /admin/discipline/apply-discount` — renewal discount recording
+- UI: countdown timer on signal cards, discipline meter card (double-width)
+- UI: ideal/actual equity overlay on history chart
+- Beta-auth: key expiry tracking (`expires_at`, `days_until_renewal`), `expiring_soon` count
+- Bug fix: `apply-all` endpoint now carries entry/APY (same pattern as `_apply_signal_delta`)
+
+### One-Tap Alignment (completed)
 
 ### SEO (commit d827c50 + a98634d)
 - Caddyfile: 404 block for non-existent paths
@@ -309,11 +318,11 @@ Audit: `python tools/audit_pages.py` (checks all generated pages)
 | aqmath-engine/OOS_V14_NEW_TOKENS_RESULTS.md | Out-of-sample v14 | ✅ Current |
 | aqmath-engine/DELEVERAGE_V105_TEST_RESULTS.md | Deleverage v1.05 tests | ✅ Current |
 | aqmath-ui/CLAIMS_AUDIT.md | Claims vs code verification | ✅ Updated 2026-08-17 |
-| aqmath-ui/ONE_TAP_SIGNAL.md | One-Tap Alignment feature | ✅ Created 2026-08-20 |
+| aqmath-ui/ONE_TAP_SIGNAL.md | One-Tap Alignment + Discipline Module | ✅ Updated 2026-08-21 |
 | aqmath-ui/PRIORITIES.md | Dev priorities (P0-P3) | ✅ Created 2026-08-20 |
 | aqmath-ui/MARKETING.md | Marketing plan (Substack/Twitter/Reddit) | ✅ Created 2026-08-20 |
 | aqmath-ui/COMMIT_WORKFLOW.md | Commit rules, CI checks, security gates | ✅ Created 2026-08-20 |
-| aqmath-ui/BUG_PNL_ENTRY_WIPE.md | P&L/entry-price wipe bug + fix | ✅ Created 2026-08-20 |
+| aqmath-ui/BUG_PNL_ENTRY_WIPE.md | P&L/entry-price wipe bug + fix (2 occurrences) | ✅ Updated 2026-08-21 |
 | aqmath-ui/_research/recovery-test.md | Crown Test 4 results | ✅ 2026-08-18 |
 | aqmath-ui/_research/static-vs-dynamic.md | Crown Test 2 results | ✅ 2026-08-12 |
 | aqmath-ui/_research/dca-stress.md | Crown Test 1 results | ✅ Current |
