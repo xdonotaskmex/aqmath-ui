@@ -37,9 +37,17 @@ const BETA_AUTH_URL = _LOCAL_BACKEND ? 'http://localhost:8000' : 'https://api-au
         } catch(e) {} // telemetry must never break the app
     }
     window.addEventListener('error', function(e) {
+        // Injected scripts (wallet extensions, ads) fire with a foreign
+        // filename — that crash is not ours, don't pollute the count.
+        if (e.filename && e.filename.indexOf(location.origin) !== 0) return;
         _reportError('js', e.message || 'unknown');
     });
     window.addEventListener('unhandledrejection', function(e) {
+        // Extension/third-party rejections (e.g. "Failed to connect to
+        // MetaMask" from an injected wallet) carry a stack without our
+        // origin — only report rejections that touch our own code.
+        var st = e.reason && e.reason.stack;
+        if (typeof st === 'string' && st.indexOf(location.origin) === -1) return;
         var msg = (e.reason && e.reason.message) ? e.reason.message : 'unhandled rejection';
         _reportError('promise', msg);
     });

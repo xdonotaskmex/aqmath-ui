@@ -978,6 +978,13 @@ async function confirmSignal(el, signalId) {
                 loadPendingSignals();
                 return;
             }
+            if (res.status === 409) {
+                // Already resolved (double-tap or another tab) — not an
+                // error, just refresh the list so the card disappears.
+                showToast(err.detail || 'Signal already processed', 'notice');
+                loadPendingSignals();
+                return;
+            }
             showToast(err.detail || 'Confirm failed (HTTP ' + res.status + ')', 'error');
             return;
         }
@@ -1012,6 +1019,12 @@ async function skipSignal(el, signalId) {
         });
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
+            if (res.status === 409 || res.status === 410) {
+                // Already resolved or expired — refresh, don't alarm.
+                showToast(err.detail || 'Signal no longer pending', 'notice');
+                loadPendingSignals();
+                return;
+            }
             showToast(err.detail || 'Skip failed (HTTP ' + res.status + ')', 'error');
             return;
         }
@@ -1074,6 +1087,12 @@ async function adjustSignal(el, signalId) {
         });
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
+            if (res.status === 409 || res.status === 410) {
+                // Already resolved or expired — refresh, don't alarm.
+                showToast(err.detail || 'Signal no longer pending', 'notice');
+                loadPendingSignals();
+                return;
+            }
             showToast(err.detail || 'Adjust failed (HTTP ' + res.status + ')', 'error');
             return;
         }
