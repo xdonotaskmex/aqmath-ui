@@ -1213,11 +1213,38 @@ async function loadDisciplineMeter() {
     const reac = document.getElementById('discReaction');
     const badge = document.getElementById('discBadge');
     const fill = document.getElementById('discFill');
+    const thresh = document.getElementById('discThresh');
+    const rec = document.getElementById('discRecent');
+    const pat = document.getElementById('discPattern');
+    const opt = document.getElementById('chkEscOptIn');
+    const sel = document.getElementById('selDiscTarget');
+    // The user's OWN same-day goal (self-set friction). Rendered even in
+    // the empty state so a new user picks their number before the first
+    // signal — the server default applies until they actively choose.
+    const tgt = Math.round(((data && data.target != null) ? data.target : 0.8) * 100) / 100;
+    if (sel) {
+        if (!sel.options.length) {
+            for (var v = 50; v <= 100; v += 5) {
+                var o = document.createElement('option');
+                o.value = String(v / 100);
+                o.textContent = v + '%';
+                sel.appendChild(o);
+            }
+        }
+        sel.value = String(tgt);
+    }
+    // Meter label shows the USER's goal only — the hidden renewal-discount
+    // gate is never surfaced before it is earned (surprise reward).
+    if (thresh) thresh.textContent = 'your goal: ' + Math.round(tgt * 100) + '%';
+    // Opt-in toggle mirrors the server setting (silent by default).
+    if (opt) opt.checked = !!(data && data.escalation_opt_in);
     if (!data || (data.total === 0 && data.pending === 0)) {
         if (empty) empty.classList.remove('hidden');
         if (tiles) tiles.classList.add('hidden');
         if (pend) pend.classList.add('hidden');
         if (reac) reac.classList.add('hidden');
+        if (rec) rec.classList.add('hidden');
+        if (pat) pat.classList.add('hidden');
         if (badge) badge.textContent = '\u2014';
         if (fill) { fill.style.width = '0%'; }
         const disc = document.getElementById('discDiscount');
@@ -1227,10 +1254,12 @@ async function loadDisciplineMeter() {
     if (empty) empty.classList.add('hidden');
     if (tiles) tiles.classList.remove('hidden');
     const pct = Math.round((data.overall_rate || 0) * 100);
-    // Fill bar
+    const tgtPct = Math.round(tgt * 100);
+    // Fill bar — graded against the user's OWN goal, not a fixed number.
     if (fill) {
         fill.style.width = pct + '%';
-        fill.style.background = pct >= 80 ? '#34d399' : pct >= 50 ? '#fbbf24' : '#f87171';
+        fill.style.background = pct >= tgtPct ? '#34d399'
+            : pct >= Math.max(50, tgtPct - 30) ? '#fbbf24' : '#f87171';
     }
     // Badge
     if (badge) badge.textContent = pct + '%';
@@ -1241,6 +1270,31 @@ async function loadDisciplineMeter() {
     if (vC) vC.textContent = data.confirmed;
     if (vM) vM.textContent = data.missed;
     if (vS) vS.textContent = data.skipped;
+    // Rolling recent window — "most will assume they're at 90 and find out
+    // they're at 60". Showing the number does most of the work, no friction.
+    if (rec) {
+        if (data.recent) {
+            rec.textContent = 'last ' + data.recent.resolved + ' signals: '
+                + data.recent.confirmed + ' confirmed ('
+                + Math.round(data.recent.rate * 100) + '%)';
+            rec.classList.remove('hidden');
+        } else {
+            rec.classList.add('hidden');
+        }
+    }
+    // Pattern trigger: escalate on the pattern, not on the event — one miss
+    // is a normal day, >=4 of the last 10 SHOCK signals is a habit forming.
+    if (pat) {
+        if (data.pattern_alert) {
+            var sr = data.shock_recent || {};
+            pat.textContent = 'Pattern forming: ' + (sr.missed || 0)
+                + ' of your last ' + (sr.resolved || 0)
+                + ' SHOCK signals went unconfirmed. One miss is a normal day \u2014 this is starting to look like a habit.';
+            pat.classList.remove('hidden');
+        } else {
+            pat.classList.add('hidden');
+        }
+    }
     // Pending note (only when there is something awaiting a decision)
     if (pend) {
         pend.textContent = data.pending > 0 ? 'pending: ' + data.pending : '';
@@ -1256,9 +1310,66 @@ async function loadDisciplineMeter() {
             reac.classList.add('hidden');
         }
     }
-    // Discount badge
+    // Discount badge — appears ONLY once earned; the gate number is never
+    // advertised in advance (surprise reward).
     var disc = document.getElementById('discDiscount');
     if (disc) disc.classList.toggle('hidden', !data.discount_eligible);
+}
+
+// Discipline Module: save the user's OWN same-day confirmation goal.
+// Self-set friction feels completely different to an app deciding you've been
+// bad — same mechanism, but they chose the number.
+async function saveDisciplineTarget() {
+    if (!isBetaActive()) return showToast('Activate beta first.', 'warning');
+    const sel = document.getElementById('selDiscTarget');
+    if (!sel || sel.value === '') return;
+    const tgt = Number(sel.value);
+    try {
+        const res = await _shieldFetch('/portfolio/settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ discipline_target: tgt })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+            return showToast(data.detail || 'Could not save your goal.', 'error');
+        }
+        showToast('Goal saved: ' + Math.round(tgt * 100)
+            + '% same-day confirms — your number, your friction.', 'success');
+        loadDisciplineMeter();
+    } catch (e) {
+        console.error('[AQMath] discipline target save failed:', e.message);
+        showToast('Save failed: ' + e.message, 'error');
+    }
+}
+
+// Discipline Module: opt in/out of ACTIVE escalation reminders. Silent by
+// default — the ladder never punishes the behaviour we want (opening the
+// app). Users turn it on themselves once they see their rate and don't like it.
+async function toggleEscOptIn() {
+    if (!isBetaActive()) return showToast('Activate beta first.', 'warning');
+    const chk = document.getElementById('chkEscOptIn');
+    if (!chk) return;
+    const on = chk.checked;
+    try {
+        const res = await _shieldFetch('/portfolio/settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ escalation_opt_in: on })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+            chk.checked = !on;
+            return showToast(data.detail || 'Could not save.', 'error');
+        }
+        showToast(on
+            ? 'Active reminders ON — you get a nudge while a signal is still unconfirmed.'
+            : 'Active reminders OFF — the meter stays silent; check the app on your own terms.', 'success');
+    } catch (e) {
+        chk.checked = !on;
+        console.error('[AQMath] escalation opt-in save failed:', e.message);
+        showToast('Save failed: ' + e.message, 'error');
+    }
 }
 
 // Discipline Module: fetch ideal-vs-actual equity curves from signal data

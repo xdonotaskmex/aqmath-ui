@@ -43,7 +43,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=47739997f1">
+    <link rel="stylesheet" href="/styles.min.css?v=edc4c23484">
 </head>
 <body>
 
@@ -558,9 +558,17 @@
                 <div class="tc-right"><span class="disc-badge" id="discBadge">&mdash;</span></div>
             </div>
             <div class="tc-body">
+                <!-- Your goal: the user's OWN same-day confirmation target.
+                     Self-set friction feels different to an app deciding you've
+                     been bad. The hidden renewal-discount gate is deliberately
+                     never shown here — it appears only once earned. -->
+                <div class="disc-target-row">
+                    <span class="disc-target-l">your same-day goal</span>
+                    <select class="disc-target-sel" id="selDiscTarget" data-change="saveDisciplineTarget" aria-label="your same-day discipline goal"></select>
+                </div>
                 <div class="disc-meter">
                     <div class="disc-bar"><div class="disc-fill" id="discFill"></div></div>
-                    <div class="disc-labels"><span>0%</span><span class="disc-thresh">&ge;80% target</span><span>100%</span></div>
+                    <div class="disc-labels"><span>0%</span><span class="disc-thresh" id="discThresh">pick your goal</span><span>100%</span></div>
                 </div>
                 <div class="disc-empty hidden" id="discEmpty">No signals yet &mdash; your discipline rate appears after the first rebalance signal.</div>
                 <div class="disc-tiles" id="discTiles">
@@ -568,10 +576,20 @@
                     <div class="disc-tile"><div class="disc-tile-l disc-missed">&#10007; Missed</div><div class="disc-tile-v" id="discMissed">0</div></div>
                     <div class="disc-tile"><div class="disc-tile-l disc-skipped">&#9675; Skipped</div><div class="disc-tile-v" id="discSkipped">0</div></div>
                 </div>
+                <!-- Rolling window: "most assume they're at 90 and find out
+                     they're at 60" — showing this number does most of the work. -->
+                <div class="disc-recent hidden" id="discRecent"></div>
+                <!-- Pattern trigger: escalate on the pattern, not on the event. -->
+                <div class="disc-pattern hidden" id="discPattern"></div>
                 <div class="disc-note hidden" id="discPending"></div>
                 <div class="disc-note hidden" id="discReaction"></div>
+                <!-- Active reminders are opt-in: silent by default so the ladder
+                     never punishes opening the app. The user turns them on
+                     themselves once they see their own rate and don't like it. -->
+                <label class="disc-optin"><input type="checkbox" id="chkEscOptIn" data-change="toggleEscOptIn">
+                    <span>active reminders &mdash; push me when a signal is still unconfirmed (off by default)</span></label>
                 <div class="disc-hint">Score: 100% within 1h &rarr; decays to 0% at the 12h deadline</div>
-                <div class="disc-discount hidden" id="discDiscount">Discount eligible: confirm &ge;80%</div>
+                <div class="disc-discount hidden" id="discDiscount">Reward unlocked &mdash; your renewal discount is earned</div>
             </div>
         </div>
 
@@ -666,10 +684,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=47739997f1"></script>
-<script defer src="/app-backtest.js?v=47739997f1"></script>
-<script defer src="/app.js?v=47739997f1"></script>
-<script defer src="/app-notify.js?v=47739997f1"></script>
+<script defer src="/app-widgets.js?v=edc4c23484"></script>
+<script defer src="/app-backtest.js?v=edc4c23484"></script>
+<script defer src="/app.js?v=edc4c23484"></script>
+<script defer src="/app-notify.js?v=edc4c23484"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -683,8 +701,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=47739997f1"></script>
-<script defer src="/app-boot.js?v=47739997f1"></script>
+<script defer src="/vendor/i18next.min.js?v=edc4c23484"></script>
+<script defer src="/app-boot.js?v=edc4c23484"></script>
 
 </body>
 </html>

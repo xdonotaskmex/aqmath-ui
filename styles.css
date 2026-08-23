@@ -2417,6 +2417,9 @@
         color: var(--green);
     }
     .discipline-card.hidden { display: none; }
+    .disc-empty.hidden, .disc-tiles.hidden, .disc-note.hidden,
+    .disc-recent.hidden, .disc-pattern.hidden, .disc-optin.hidden,
+    .disc-discount.hidden { display: none; }
     .disc-badge {
         font-family: var(--mono); font-size: 0.65rem; font-weight: 700;
         padding: 2px 8px; border-radius: 3px;
@@ -2473,6 +2476,38 @@
         border: 1px solid rgba(52,211,153,0.2); border-radius: 4px;
         text-align: center;
     }
+    /* Discipline Module: user-set same-day goal (self-set friction) */
+    .disc-target-row {
+        display: flex; justify-content: space-between; align-items: center;
+        margin-bottom: 10px; font-family: var(--mono);
+    }
+    .disc-target-l {
+        font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase;
+        color: var(--muted);
+    }
+    .disc-target-sel {
+        font-family: var(--mono); font-size: 0.72rem; padding: 3px 8px;
+        background: var(--s1); border: 1px solid var(--border); border-radius: 3px;
+        color: var(--green); cursor: pointer;
+    }
+    /* Discipline Module: rolling recent window + SHOCK pattern alert */
+    .disc-recent {
+        font-size: 0.6rem; color: var(--dim); font-family: var(--mono);
+        margin-bottom: 8px; text-align: center;
+    }
+    .disc-pattern {
+        font-size: 0.62rem; line-height: 1.5; color: var(--red); font-weight: 600;
+        padding: 8px 10px; background: rgba(248,113,113,0.08);
+        border: 1px solid rgba(248,113,113,0.3); border-radius: 4px;
+        margin-bottom: 8px; text-align: center;
+    }
+    /* Discipline Module: opt-in active reminders (silent by default) */
+    .disc-optin {
+        display: flex; gap: 8px; align-items: flex-start; cursor: pointer;
+        font-size: 0.58rem; color: var(--dim); font-family: var(--mono);
+        margin: 10px 0 8px;
+    }
+    .disc-optin input { accent-color: var(--green); cursor: pointer; margin-top: 1px; }
     .sig-block {
         padding: 10px 0; border-bottom: 1px dashed var(--border);
     }

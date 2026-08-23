@@ -1,7 +1,7 @@
 # One-Tap Alignment — Feature Documentation
 
 **Status:** ✅ Complete (UI + backend + discipline module)
-**Date:** 2026-08-21 (last update)
+**Date:** 2026-08-23 (last update)
 **Files:** `app-notify.js` (UI), `app.js` (chart), `_src/index.html` (markup),
 `styles.css` (styling), `portfolio_service.py` (backend),
 `-aqmath-beta-auth/main.py` (signal CRUD + admin)
@@ -116,16 +116,36 @@ Double-width terminal card showing the user's discipline rate:
 ┌─────────────────────────────────────────────┐
 │ ◆ DISCIPLINE METER                          │
 ├─────────────────────────────────────────────┤
-│ Confirmed: 12  Missed: 2  Skipped: 1       │
-│ Rate: 80.0% ████████████████░░░░ PASS       │
-│                                             │
-│ ≥80% → 10% renewal discount eligible        │
+│ your same-day goal                [ 90% ▾ ] │
+│ Rate: 62% ██████████░░░░░░░░░░              │
+│ your goal: 90%                              │
+│ ✓ Confirmed: 12  ✗ Missed: 2  ○ Skipped: 1 │
+│ last 10 signals: 6 confirmed (60%)          │
+│ ⚠ Pattern forming: 4 of last 10 SHOCK ...  │
+│ ☐ active reminders (off by default)         │
+│ 🎁 Reward unlocked (only once earned)       │
 └─────────────────────────────────────────────┘
 ```
 
 Fetched from `GET /portfolio/discipline`. Rate = confirmed / (confirmed +
-missed + skipped). The meter bar fills green for pass (≥80%), amber for
-borderline (60-79%), red for fail (<60%).
+missed + skipped). The meter bar is graded against the USER'S OWN goal
+(`settings.discipline_target`, self-set via the dropdown, 50–100%): green at
+or above the goal, amber within 30 points, red below.
+
+Design principles ("escalate on the pattern, not on the event"):
+
+- **User-set goal** — the friction they chose themselves feels different to
+  an app deciding you've been bad. Saved via `POST /portfolio/settings`
+  (`discipline_target`, 0.5–1.0). Default 0.8 applies until they pick.
+- **Rolling window** — `recent`: last 10 resolved signals. Showing the
+  number does most of the work ("most assume 90 and find out they're at 60").
+- **Pattern trigger** — `pattern_alert`: ≥4 missed/skipped within the last
+  10 resolved SHOCK signals. One miss is a normal day; a string is a habit.
+- **Opt-in active reminders** — `escalation_opt_in` (OFF by default): the
+  escalation ladder only pushes to users who turned it on themselves after
+  seeing their rate, so it never punishes opening the app.
+- **Hidden discount gate** — the 80% renewal gate is applied server-side
+  only and NEVER surfaced before it is earned (surprise reward).
 
 ### 2.5 Portfolio History — Ideal vs Actual Equity
 

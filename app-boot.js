@@ -333,7 +333,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=47739997f1')
+    return fetch('/locales/' + lang + '.json?v=edc4c23484')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -455,7 +455,10 @@ function applyTranslations() {
         importCSV: function (el, arg, e) { importCSV(e); },
         importJSON: function (el, arg, e) { importJSON(e); },
         btRunWFGrid: function () { btRunWFGrid(); },
-        btHandleFile: function (el, arg) { btHandleFile(parseInt(arg, 10), el); }
+        btHandleFile: function (el, arg) { btHandleFile(parseInt(arg, 10), el); },
+        // Discipline Module (app-notify.js)
+        saveDisciplineTarget: function () { saveDisciplineTarget(); },
+        toggleEscOptIn: function () { toggleEscOptIn(); }
     };
 
     document.addEventListener('click', function (e) {
