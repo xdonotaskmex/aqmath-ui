@@ -91,7 +91,6 @@ PAGES = {
 # WebApplication block; render() replaces it with the page-specific graph.
 
 _SITE = "https://aqmath.xyz"
-_PERSON = {"@id": f"{_SITE}/#momir-demirov"}
 _ORG = {
     "@type": "Organization",
     "@id": f"{_SITE}/#organization",
@@ -135,38 +134,11 @@ def _breadcrumb(label, path):
     return {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": items}
 
 
-# ---------------------------------------------------------------- FAQ schema ---
-# Extracts the 12 FAQ Q&A pairs from the landing-page HTML so Google can
-# render FAQ rich results.  The regex matches the lp-faq-q / lp-faq-a div
-# pairs; answers may contain inline HTML (<a>, <strong>) which schema.org
-# allows verbatim inside acceptedAnswer.text.
-
-_FAQ_RE = re.compile(
-    r'<div class="lp-faq-q"[^>]*>([^<]+)</div>\s*'
-    r'<div class="lp-faq-a"[^>]*>(.*?)</div>',
-    re.S)
-
-
-def _extract_faq_schema(html):
-    """Build a FAQPage JSON-LD block from the landing-page FAQ section."""
-    items = []
-    for q, a in _FAQ_RE.findall(html):
-        items.append({"@type": "Question",
-                       "name": q.strip(),
-                       "acceptedAnswer": {"@type": "Answer",
-                                          "text": a.strip()}})
-    if not items:
-        return None
-    return {"@context": "https://schema.org",
-            "@type": "FAQPage",
-            "itemListElement": items}
-
-
 PAGE_JSONLD = {
     "index.html": lambda: {
         "@context": "https://schema.org",
         "@graph": [
-            {**_WEBAPP, "creator": _PERSON},
+            _WEBAPP,
             _ORG,
         ],
     },
@@ -178,7 +150,6 @@ PAGE_JSONLD = {
              "url": _SITE + "/docs",
              "description": "Full technical documentation of AQMath: Risk Parity engine, Deleverage Shield, DCA safety pipeline and the non-custodial privacy architecture.",
              "articleSection": "Technical Documentation",
-             "author": _PERSON,
              "publisher": {"@id": f"{_SITE}/#organization"}},
             _breadcrumb("Documentation", "/docs"),
         ],
@@ -188,8 +159,7 @@ PAGE_JSONLD = {
         "@graph": [
             {**_WEBAPP, "name": "AQMath Backtest",
              "url": _SITE + "/backtest",
-             "description": "Interactive 8.7-year walk-forward backtest of the AQMath Deleverage Shield.",
-             "creator": _PERSON},
+             "description": "Interactive 8.7-year walk-forward backtest of the AQMath Deleverage Shield."},
             _breadcrumb("Backtest", "/backtest"),
         ],
     },
@@ -201,7 +171,6 @@ PAGE_JSONLD = {
              "url": _SITE + "/results",
              "description": "Out-of-sample stress test of the AQMath Shield on 182 fresh coin baskets.",
              "articleSection": "Research Results",
-             "author": _PERSON,
              "publisher": {"@id": f"{_SITE}/#organization"}},
             _breadcrumb("Results", "/results"),
         ],
@@ -296,14 +265,6 @@ def render(src, name, meta):
             r'<script type="application/ld\+json">.*?</script>',
             f'<script type="application/ld+json">{ld_json}</script>',
             html, count=1, flags=re.S)
-    # Inject FAQPage schema on the landing page so Google can render rich results.
-    if meta["path"] == "/":
-        faq_schema = _extract_faq_schema(html)
-        if faq_schema:
-            faq_json = json.dumps(faq_schema, ensure_ascii=False, separators=(",", ":"))
-            html = html.replace(
-                "</head>",
-                f'<script type="application/ld+json">{faq_json}</script>\n</head>')
     return BANNER + html
 
 
