@@ -894,16 +894,16 @@ def render_hub():
     # "/research" 301-redirects to "/research/" on Pages, so canonical/og:url and
     # the sitemap must use the trailing-slash form or crawlers log a redirect hop.
     return shell(
-        "en", "en", "Research &amp; Validation &mdash; AQMath",
-        "Published out-of-sample validation reports for the AQMath Deleverage Modulator: "
-        "test methodology, per-basket results, stress cases and caveats.",
+        "en", "en", "Crypto Portfolio Research &amp; Backtests &mdash; AQMath",
+        "Backtested crypto portfolio research: out-of-sample validation, stress tests, drawdown protection "
+        "and risk parity analysis. 15+ published reports with full methodology and results.",
         "/research/", body,
         jsonld={"@context": "https://schema.org",
                 "@graph": [
                     {"@type": "CollectionPage",
-                     "name": "Research & Validation",
+                     "name": "Crypto Portfolio Research & Backtests",
                      "url": f"{SITE}/research/",
-                     "description": "Published out-of-sample validation reports for the AQMath Deleverage Modulator."},
+                     "description": "Backtested crypto portfolio research: out-of-sample validation, stress tests, drawdown protection and risk parity analysis."},
                     {"@type": "BreadcrumbList",
                      "itemListElement": [
                          {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
