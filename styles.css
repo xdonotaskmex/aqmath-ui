@@ -1508,6 +1508,23 @@
     .lp-shield-info p { font-family: var(--sans); font-size: 0.82rem; color: var(--text); line-height: 1.7; margin-bottom: 16px; }
     .lp-shield-info strong { color: var(--blue); }
     .lp-shield-info .lp-btn-secondary { display: inline-block; }
+    /* v18 next-gen note reuses the amber "under test" language from the results tab. */
+    .lp-shield-nextgen { margin-bottom: 16px; }
+    /* Animated drawdown chart: both lines draw in left-to-right once, then fills
+       and labels fade in. Pure CSS (no JS) so build_pages.py's div-depth
+       view-stripper stays safe; gated on prefers-reduced-motion so reduced-motion
+       visitors get the static chart. pathLength="1" on each polyline normalises
+       the dash math regardless of the chart's real pixel length. */
+    @media (prefers-reduced-motion: no-preference) {
+        .lp-sh-line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: lp-sh-draw 2s ease-out forwards; }
+        .lp-sh-line.cyan { animation-delay: 0.35s; }
+        .lp-sh-fill, .lp-sh-cap, .lp-sh-leg { opacity: 0; animation: lp-sh-fade 0.9s ease-out forwards; }
+        .lp-sh-fill.red, .lp-sh-cap.red { animation-delay: 1.45s; }
+        .lp-sh-fill.cyan, .lp-sh-cap.cyan { animation-delay: 1.7s; }
+        .lp-sh-leg { animation-delay: 2s; }
+    }
+    @keyframes lp-sh-draw { to { stroke-dashoffset: 0; } }
+    @keyframes lp-sh-fade { to { opacity: 1; } }
 
     .lp-faq {
         padding: 48px 32px; max-width: 1000px; margin: 0 auto;
@@ -1714,6 +1731,16 @@
         display: block;
         opacity: 0.7;
     }
+    /* Subtle "network breathing": the five token rings pulse out of phase.
+       Pure CSS, gated on prefers-reduced-motion (static rings otherwise). */
+    @media (prefers-reduced-motion: no-preference) {
+        .lp-hero-ring { animation: lp-hero-pulse 4.5s ease-in-out infinite; }
+        .lp-hero-ring:nth-of-type(2) { animation-delay: -0.9s; }
+        .lp-hero-ring:nth-of-type(3) { animation-delay: -1.8s; }
+        .lp-hero-ring:nth-of-type(4) { animation-delay: -2.7s; }
+        .lp-hero-ring:nth-of-type(5) { animation-delay: -3.6s; }
+    }
+    @keyframes lp-hero-pulse { 0%, 100% { opacity: 0.16; } 50% { opacity: 0.4; } }
 
     /* ===== LANDING – BETA RECRUITMENT ===== */
     .lp-beta-recruit {

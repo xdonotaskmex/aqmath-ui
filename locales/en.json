@@ -259,6 +259,7 @@
       "portfolio": "Portfolio",
       "metrics": "Position Metrics",
       "pnl": "P&L Tracking",
+      "discipline": "Discipline Meter",
       "dca": "DCA Engine",
       "dcaOverview": "Overview",
       "iterative": "How It Works",
@@ -333,7 +334,11 @@
       "pmP1": "Every time the UI renders or a DCA calculation runs, the system computes real-time metrics for each token. It measures how much each position is currently worth, what share of your total portfolio it represents, and how far it has drifted from your intended target.",
       "pmP2": "The DCA engine uses <strong>delta</strong> — the dollar gap between where a token is and where it should be — to prioritize which tokens receive new capital first. Tokens that are most underweight relative to their target get funded first. Safe-haven tokens (stablecoins) bypass this filter entirely and always receive capital when designated.",
       "pnlTitle": "3.2 P&L Tracking",
-      "pnlP": "Profit and loss is tracked against your cost basis — the true dollar-cost-averaged entry price across all purchases. As the DCA engine buys more tokens over time, it accumulates your cost basis and total tokens acquired, giving you an accurate average price and return percentage for each position."
+      "pnlP": "Profit and loss is tracked against your cost basis — the true dollar-cost-averaged entry price across all purchases. As the DCA engine buys more tokens over time, it accumulates your cost basis and total tokens acquired, giving you an accurate average price and return percentage for each position.",
+      "discTitle": "3.3 Discipline Meter",
+      "discP1": "AQMath is <strong>human-in-the-loop</strong>: the engine proposes each rebalance as a signal, and you confirm or adjust it &mdash; nothing ever executes by itself. The Discipline Meter tracks one thing: how reliably you act on those signals <strong>the same day</strong>. It is a mirror, not a judge. Showing the number does most of the work, because most people assume they confirm ~90% of signals and discover they are closer to ~60%.",
+      "discP2": "Each signal carries a <strong>12-hour deadline</strong>. Confirming within the first hour scores 100%, and the score decays to 0% at the deadline; a signal you never confirm counts as <strong>missed</strong>. Your overall rate is the average score across all resolved signals, shown with a <strong>Confirmed / Missed / Skipped</strong> breakdown and a rolling window of your last 10 signals. The history chart plots your <strong>actual equity against an &ldquo;ideal&rdquo; curve</strong> (every signal confirmed on time) on a fixed $10,000 baseline, so the cost of hesitation is visible.",
+      "discP3": "You set your <strong>own same-day goal</strong> (50&ndash;100%, default 80%) &mdash; self-set friction feels completely different from an app grading you, and the bar is colored against your own number. Active reminders are <strong>opt-in and silent by default</strong>, so opening the app is never punished. The meter counts only the signals you already have; it adds no new server-side data beyond the pseudonymous signal record described in Section 9."
     },
     "s4": {
       "title": "4. DCA Distribution Engine",
@@ -434,6 +439,7 @@
       "testingAudit4": "<strong>Threshold rebalancing</strong> &mdash; a steady smooth ramp in either direction, trading only on meaningful exposure drift, confirmed with no whipsaw.",
       "testingAudit5": "<strong>Out-of-sample check</strong> &mdash; on a sealed second half never used to pick the preset, the modulator still roughly halved drawdown (~24% vs ~63% Buy &amp; Hold) at a higher Sharpe (0.48 vs 0.37); a fuller walk-forward multi-fold study is still worthwhile.",
       "testingAudit6": "<strong>Survivorship stress (dead token)</strong> &mdash; adding Terra Classic (LUNC), which collapsed from ~$121 to ~$0, to the basket left the modulator's peak drawdown essentially unchanged (~23%), while Buy &amp; Hold's worsened by up to ~18 points; on the same window the modulator still cut drawdown ~49 points versus Buy &amp; Hold. The drawdown defense does not depend on hand-picking surviving tokens (though raw return figures remain flattered by crypto's post-crash rebounds).",
+      "nextgen": "<span class=\"rv-v15-tag\">NEXT-GEN UNDER TEST</span> A volatility-adaptive shield (<strong>v18</strong>) is validated but <strong>not live yet</strong>. Re-run through the <strong>exact production path</strong> &mdash; a rolling 180-day window, the same KKT-180 macro loop, and persisted shield state &mdash; it cut maximum drawdown below the live v14 on both a large-cap basket (<strong>25.7%&rarr;23.1%</strong>) and a high-volatility alt basket (<strong>36.8%&rarr;29.4%</strong>), with a higher Sharpe and Calmar. <strong>v14 remains the deployed engine</strong>; v18 awaits further forward testing before it goes live.",
       "m1": "Modulator Max Drawdown",
       "m2": "B&H Max Drawdown",
       "m3": "Drawdown Reduction",
@@ -628,6 +634,7 @@
     "s2l": "Sharpe (B&amp;H 0.75)",
     "s3l": "CAGR (8.7y)",
     "body": "Across an 8.7-year, 5-token backtest (ADA/BNB/ETH/XRP/XLM) the modulator held peak drawdown to <strong>35.0%</strong> versus <strong>83.8%</strong> for Buy &amp; Hold, and <strong>beats Buy &amp; Hold on Sharpe (0.93 vs 0.75)</strong> at <strong>32.9% CAGR</strong>. On a <strong>sealed out-of-sample second half</strong> never used to pick the preset it still roughly halved drawdown (~24% vs ~63%) at a higher Sharpe (0.48 vs 0.37). v14 adds <strong>threshold rebalancing</strong> (a deadband skips trades when the target barely moves), cutting rebalances ~64%. Backtest basket is survivor tokens; past results don't guarantee future performance.",
+    "nextgen": "<span class=\"rv-v15-tag\">NEXT-GEN UNDER TEST</span> A next-generation shield (<strong>v18</strong>) is validated but <strong>not live yet</strong>. Backtested on the exact production path, it cut maximum drawdown below v14 on both a large-cap basket (25.7%&rarr;23.1%) and a high-volatility alt basket (36.8%&rarr;29.4%), with a higher Sharpe and Calmar (risk-adjusted scores). <strong>v14 remains the live engine.</strong>",
     "cta": "--run-the-backtest"
   },
   "ft": {

@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=86b772276e">
+    <link rel="stylesheet" href="/styles.min.css?v=5971a29949">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","itemListElement":[{"@type":"Question","name":"How does the engine calculate risk?","acceptedAnswer":{"@type":"Answer","text":"The Black engine uses a <strong>Variance Matrix</strong>, asset <strong>Covariance</strong>, volatility estimates, and KKT-style projection to calculate Risk Parity allocations where each asset contributes a controlled share of portfolio risk. <a href=\"/docs\" style=\"color:var(--purple);\">You can audit the full mathematical model in our [Documentation].</a>"}},{"@type":"Question","name":"How is AQMath actually private?","acceptedAnswer":{"@type":"Answer","text":"We don&rsquo;t track your wallet, and we never store your identity or portfolio in any database &mdash; with one optional exception: if you enable the personalised signal &amp; notification service, your holdings are stored server-side under the hash of your activation key, solely to compute your daily signals and send notifications, and deleted at any time (Privacy Policy &sect;9). By default, your token balances live only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. The only other server-side record is a one-way hashed beta-activation record (see the beta-key question below) &mdash; never your financial data. Your financial privacy is architecturally enforced. <a href=\"/docs\" style=\"color:var(--purple);\">Read the full privacy architecture in our [Documentation].</a>"}},{"@type":"Question","name":"Do beta keys track my IP address?","acceptedAnswer":{"@type":"Answer","text":"No &mdash; not in any readable form. A beta key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href=\"/privacy\" style=\"color:var(--purple);\">Privacy Policy</a>."}},{"@type":"Question","name":"What's included in Beta vs Black?","acceptedAnswer":{"@type":"Answer","text":"Beta access includes the full engine — Risk Parity optimization, Deleverage Shield, DCA distribution, unlimited tokens, and the automated data pipeline. It's the same math as Black, limited to 10 slots with a 365-day activation period. Black adds annual renewals and direct support."}},{"@type":"Question","name":"Why are market widgets separated from features?","acceptedAnswer":{"@type":"Answer","text":"Live markets are informational context: ticker data, Fear &amp; Greed, BTC dominance, movers, and exchange status. They support decision-making but are intentionally separate from the product feature story."}},{"@type":"Question","name":"What is the Safe-Haven (USDC) feature?","acceptedAnswer":{"@type":"Answer","text":"When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token."}},{"@type":"Question","name":"How do I apply for Black access?","acceptedAnswer":{"@type":"Answer","text":"DM us on <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" style=\"color:var(--purple);\">Telegram</a> or <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:var(--purple);\">Twitter</a>. Annual access is <strong>€999 / year (~$1,090 USD)</strong>. No call required — send a message, we review and send your activation key within 48h. Payments accepted exclusively in USDC and EURC."}},{"@type":"Question","name":"Do you offer monthly plans?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath operates exclusively on an annual subscription model. We do not offer monthly, quarterly, or semi-annual plans. EU consumers keep the statutory 14-day right of withdrawal &mdash; see the <a href=\"/widerruf\" style=\"color:#a78bfa;\">withdrawal notice</a>; after that the annual term is firm and is not refunded pro rata on early cancellation."}},{"@type":"Question","name":"Is AQMath a trading bot?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath is an analytical web application. We do not execute trades, manage funds, or interact with any exchange or smart contract. You see the math, you make the decision."}},{"@type":"Question","name":"Is there a mobile app?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath is a web application only. Any app using our name on any app store is unauthorized and not affiliated with us."}},{"@type":"Question","name":"Is there an automatic daily signal or notification service?","acceptedAnswer":{"@type":"Answer","text":"Yes &mdash; as an <strong>optional, opt-in service</strong>. If you enable it, the engine computes your deleverage shield signal and DCA schedule once per day on the server and can push a notification to your device. To do that, your holdings are stored under the hash of your activation key &mdash; never under your name or wallet &mdash; and deleted completely the moment you withdraw consent. Full details are in Section 9 of our <a href=\"/privacy\" style=\"color:var(--purple);\">Privacy Policy</a>."}},{"@type":"Question","name":"What is the beta chat?","acceptedAnswer":{"@type":"Answer","text":"Beta users get access to a <strong>shared internal chat</strong> visible only to active beta members. Messages are pseudonymous (shown as a short code like B-XXXXXX, never your real key or IP), capped at 200 characters, and limited to the 20 most recent messages (older ones are automatically swept daily). You can clear your own messages anytime. The chat is stored server-side under the hash of your activation key and is deleted when your key is deactivated."}}]}</script>
 </head>
 <body>
@@ -132,11 +132,11 @@
             <line x1="210" y1="105" x2="350" y2="88" stroke="rgba(6,182,212,0.08)" stroke-width="1"/>
             <line x1="70" y1="80" x2="270" y2="65" stroke="rgba(168,85,247,0.06)" stroke-width="0.5" stroke-dasharray="4,4"/>
             <line x1="155" y1="45" x2="350" y2="88" stroke="rgba(168,85,247,0.06)" stroke-width="0.5" stroke-dasharray="4,4"/>
-            <circle cx="70" cy="80" r="18" fill="none" stroke="var(--blue)" stroke-width="1" opacity="0.25"/>
-            <circle cx="155" cy="45" r="15" fill="none" stroke="var(--green)" stroke-width="1" opacity="0.25"/>
-            <circle cx="210" cy="105" r="20" fill="none" stroke="var(--amber)" stroke-width="1" opacity="0.2"/>
-            <circle cx="270" cy="65" r="13" fill="none" stroke="var(--blue)" stroke-width="1" opacity="0.25"/>
-            <circle cx="350" cy="88" r="16" fill="none" stroke="var(--green)" stroke-width="1" opacity="0.2"/>
+            <circle class="lp-hero-ring" cx="70" cy="80" r="18" fill="none" stroke="var(--blue)" stroke-width="1" opacity="0.25"/>
+            <circle class="lp-hero-ring" cx="155" cy="45" r="15" fill="none" stroke="var(--green)" stroke-width="1" opacity="0.25"/>
+            <circle class="lp-hero-ring" cx="210" cy="105" r="20" fill="none" stroke="var(--amber)" stroke-width="1" opacity="0.2"/>
+            <circle class="lp-hero-ring" cx="270" cy="65" r="13" fill="none" stroke="var(--blue)" stroke-width="1" opacity="0.25"/>
+            <circle class="lp-hero-ring" cx="350" cy="88" r="16" fill="none" stroke="var(--green)" stroke-width="1" opacity="0.2"/>
             <circle cx="70" cy="80" r="5" fill="var(--blue)" opacity="0.7"/>
             <circle cx="155" cy="45" r="5" fill="var(--green)" opacity="0.7"/>
             <circle cx="210" cy="105" r="5" fill="var(--amber)" opacity="0.7"/>
@@ -265,10 +265,10 @@
                             <text x="36" y="213" class="lp-sh-axis">-100%</text>
                             <!-- Buy &amp; Hold drawdown (deeper) -->
                             <polygon class="lp-sh-fill red" points="40,40 90,96 140,150 180,183 220,150 300,104 380,70 460,52 460,40"/>
-                            <polyline class="lp-sh-line red" points="40,40 90,96 140,150 180,183 220,150 300,104 380,70 460,52"/>
+                            <polyline class="lp-sh-line red" pathLength="1" points="40,40 90,96 140,150 180,183 220,150 300,104 380,70 460,52"/>
                             <!-- Deleverage Modulator drawdown (shallower) -->
                             <polygon class="lp-sh-fill cyan" points="40,40 90,66 140,92 180,101 220,90 300,68 380,54 460,47 460,40"/>
-                            <polyline class="lp-sh-line cyan" points="40,40 90,66 140,92 180,101 220,90 300,68 380,54 460,47"/>
+                            <polyline class="lp-sh-line cyan" pathLength="1" points="40,40 90,66 140,92 180,101 220,90 300,68 380,54 460,47"/>
                             <!-- trough callouts -->
                             <text x="168" y="199" class="lp-sh-cap red">-83.8% B&amp;H</text>
                             <!-- Deleverage Modulator trough callout -->
@@ -287,6 +287,7 @@
                                 <div class="lp-shield-stat"><span class="v">32.9%</span><span class="l" data-i18n-html="shield.s3l">CAGR (8.7y)</span></div>
                             </div>
                             <p data-i18n-html="shield.body">Across an 8.7-year, 5-token backtest (ADA/BNB/ETH/XRP/XLM) the modulator held peak drawdown to <strong>35.0%</strong> versus <strong>83.8%</strong> for Buy &amp; Hold, and <strong>beats Buy &amp; Hold on Sharpe (0.93 vs 0.75)</strong> at <strong>32.9% CAGR</strong>. On a <strong>sealed out-of-sample second half</strong> never used to pick the preset it still roughly halved drawdown (~24% vs ~63%) at a higher Sharpe (0.48 vs 0.37). v14 adds <strong>threshold rebalancing</strong> (a deadband skips trades when the target barely moves), cutting rebalances ~64%. Backtest basket is survivor tokens; past results don't guarantee future performance.</p>
+                            <p class="rv-v15-notice lp-shield-nextgen" data-i18n-html="shield.nextgen"><span class="rv-v15-tag">NEXT-GEN UNDER TEST</span> A next-generation shield (<strong>v18</strong>) is validated but <strong>not live yet</strong>. Backtested on the exact production path, it cut maximum drawdown below v14 on both a large-cap basket (25.7%&rarr;23.1%) and a high-volatility alt basket (36.8%&rarr;29.4%), with a higher Sharpe and Calmar (risk-adjusted scores). <strong>v14 remains the live engine.</strong></p>
                             <a class="lp-btn-secondary" href="/backtest" data-i18n="shield.cta">--run-the-backtest</a>
                         </div>
                     </div>
@@ -657,10 +658,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=86b772276e"></script>
-<script defer src="/app-backtest.js?v=86b772276e"></script>
-<script defer src="/app.js?v=86b772276e"></script>
-<script defer src="/app-notify.js?v=86b772276e"></script>
+<script defer src="/app-widgets.js?v=5971a29949"></script>
+<script defer src="/app-backtest.js?v=5971a29949"></script>
+<script defer src="/app.js?v=5971a29949"></script>
+<script defer src="/app-notify.js?v=5971a29949"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -674,8 +675,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=86b772276e"></script>
-<script defer src="/app-boot.js?v=86b772276e"></script>
+<script defer src="/vendor/i18next.min.js?v=5971a29949"></script>
+<script defer src="/app-boot.js?v=5971a29949"></script>
 
 </body>
 </html>
