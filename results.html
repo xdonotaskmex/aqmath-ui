@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=5971a29949">
+    <link rel="stylesheet" href="/styles.min.css?v=805a69c1c9">
 </head>
 <body>
 
@@ -208,7 +208,7 @@
 <summary class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--changelog</span><span class="rv-cl-hint" data-i18n="rv.changelogMirror">engine change log &middot; click to expand</span></summary>
 <div class="tc-body">
 <div class="bt-explain bt-explain-sm" data-i18n-html="bt.changelogIntro"><strong>Change log.</strong> A dated record of engine updates, so any result you see can be traced back to the exact version that produced it.</div>
-<ul class="bt-changelog" data-i18n-html="bt.changelog"><li><span class="bt-cl-date">2026-08-12</span><span class="bt-cl-text"><strong>v16 Beta experiment started (parallel paper trading).</strong> A third paper account running the new trough-tranche recovery shield (v16) is now logging next to the v14 and v15 logs so all three can be compared on identical terms. <strong>Nothing in v14 or v15 was touched</strong> &mdash; their engines and their logs continue exactly as before.</span></li><li><span class="bt-cl-date">2026-08-05</span><span class="bt-cl-text"><strong>v15 Beta experiment started (parallel paper trading).</strong> A second paper account running the new correlation-regime protection (v15) is now logging next to the v14 log so the two can be compared on identical terms. <strong>Nothing in v14 was touched</strong> &mdash; its engine and its log continue exactly as before.</span></li><li><span class="bt-cl-date">2026-07-21</span><span class="bt-cl-text"><strong>Engine settings frozen (v14.0).</strong> The modulator's settings were locked on this date. Every result from this day onward comes from this exact, unchanged engine.</span></li><li><span class="bt-cl-date">2026-07-21</span><span class="bt-cl-text"><strong>Recurring contribution can be zero.</strong> You can now set the <strong>DCA Amount</strong> to <strong>0</strong> to test a one-time, lump-sum start. Earlier results are unaffected.</span></li></ul>
+<ul class="bt-changelog" data-i18n-html="bt.changelog"><li><span class="bt-cl-date">2026-09-03</span><span class="bt-cl-text"><strong>Backtest now runs v14 + v18; v15 and v16 retired.</strong> The backtest tab now compares <strong>v14</strong> (production fallback) and <strong>v18</strong> (vol-scaled adaptive test candidate). v15 (CORR regime) was retired because its correlation-rank signal needed more history than the production 180-day window provided (MaxDD 37.6% on MAJORS vs v14's 25.7%). v16 (trough-tranche) was retired because v18's vol-scaled approach outperformed it on both profiles. <strong>v14 is unchanged.</strong></span></li><li><span class="bt-cl-date">2026-08-12</span><span class="bt-cl-text"><strong>v16 Beta experiment started (parallel paper trading).</strong> A third paper account running the new trough-tranche recovery shield (v16) is now logging next to the v14 and v15 logs so all three can be compared on identical terms. <strong>Nothing in v14 or v15 was touched</strong> &mdash; their engines and their logs continue exactly as before.</span></li><li><span class="bt-cl-date">2026-08-05</span><span class="bt-cl-text"><strong>v15 Beta experiment started (parallel paper trading).</strong> A second paper account running the new correlation-regime protection (v15) is now logging next to the v14 log so the two can be compared on identical terms. <strong>Nothing in v14 was touched</strong> &mdash; its engine and its log continue exactly as before.</span></li><li><span class="bt-cl-date">2026-07-21</span><span class="bt-cl-text"><strong>Engine settings frozen (v14.0).</strong> The modulator's settings were locked on this date. Every result from this day onward comes from this exact, unchanged engine.</span></li><li><span class="bt-cl-date">2026-07-21</span><span class="bt-cl-text"><strong>Recurring contribution can be zero.</strong> You can now set the <strong>DCA Amount</strong> to <strong>0</strong> to test a one-time, lump-sum start. Earlier results are unaffected.</span></li></ul>
 </div>
 </details>
 </div>
@@ -522,10 +522,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=5971a29949"></script>
-<script defer src="/app-backtest.js?v=5971a29949"></script>
-<script defer src="/app.js?v=5971a29949"></script>
-<script defer src="/app-notify.js?v=5971a29949"></script>
+<script defer src="/app-widgets.js?v=805a69c1c9"></script>
+<script defer src="/app-backtest.js?v=805a69c1c9"></script>
+<script defer src="/app.js?v=805a69c1c9"></script>
+<script defer src="/app-notify.js?v=805a69c1c9"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -539,8 +539,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=5971a29949"></script>
-<script defer src="/app-boot.js?v=5971a29949"></script>
+<script defer src="/vendor/i18next.min.js?v=805a69c1c9"></script>
+<script defer src="/app-boot.js?v=805a69c1c9"></script>
 
 </body>
 </html>
