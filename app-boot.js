@@ -296,36 +296,6 @@ function localizeForwardLog(box) {
         .catch(function () { /* keep the bundled snapshot */ });
 })();
 
-// Parallel v15 experiment fragment: same sanitizer, revealed only when the
-// fetch succeeds — on any failure the section stays hidden.
-(function () {
-    var box = document.getElementById('forwardLogV15');
-    if (!box || !window.fetch) return;
-    fetch('https://api-backtest.aqmath.xyz/forward-log-v15')
-        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
-        .then(function (html) {
-            _flOriginals[box.id] = sanitizeFirstPartyHtml(html);
-            box.hidden = false;
-            renderForwardLog(box);
-        })
-        .catch(function () { /* experimental section stays hidden */ });
-})();
-
-// Parallel v16 experiment fragment: same sanitizer, revealed only when the
-// fetch succeeds — on any failure the section stays hidden.
-(function () {
-    var box = document.getElementById('forwardLogV16');
-    if (!box || !window.fetch) return;
-    fetch('https://api-backtest.aqmath.xyz/forward-log-v16')
-        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
-        .then(function (html) {
-            _flOriginals[box.id] = sanitizeFirstPartyHtml(html);
-            box.hidden = false;
-            renderForwardLog(box);
-        })
-        .catch(function () { /* experimental section stays hidden */ });
-})();
-
 // ---------------------------------------------------------------------------
 // 3) i18n / language switching (was inline block at index.html L2573)
 // ---------------------------------------------------------------------------
@@ -333,7 +303,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=805a69c1c9')
+    return fetch('/locales/' + lang + '.json?v=c7114552fa')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -370,7 +340,7 @@ function applyTranslations() {
     });
     // Server-rendered forward-log fragments carry no data-i18n — re-render
     // each box from its stored EN original for the active language.
-    ['forwardLogLive', 'forwardLogV15', 'forwardLogV16'].forEach(function (id) {
+    ['forwardLogLive'].forEach(function (id) {
         renderForwardLog(document.getElementById(id));
     });
 }
