@@ -56,6 +56,22 @@ and what is not:
 When a detail is needed but not writable, the docs say so explicitly instead of
 leaving a gap that a future edit might "helpfully" fill.
 
+### The same rule applies to `_research/`
+
+`_research/` holds the Markdown sources that `tools/build_research.py` renders
+into `research/*.html`. The underscore keeps them off the website, but they are
+still tracked in a public repository, so **anything in `_research/` is readable
+on GitHub whether or not it is built into a page.**
+
+On 2026-09-02 three sources that were never built into a page turned out to
+carry cross-service internals (the full operator API surface, the database
+schema, a plan referencing both). They were moved out of this repository into
+`aqmath-engine/_audit/`, which is private. The remaining `_research/` sources
+were checked and are clean.
+
+Rule: a `_research/` source may only contain what the rendered page may contain.
+Cross-service audits, schema dumps and internal plans belong in a private repo.
+
 ## Inventory
 
 | File | What it is |

@@ -196,8 +196,8 @@ confirm/skip/adjust.
 
 ### 11. Conversion Funnel Tracking
 
-**What:** Implement the approved A/B test plan (see
-`aqmath-ui/_research/conversion-funnel-ab-plan.md`). Privacy-first
+**What:** Implement the approved A/B test plan (the plan document lives in the
+private engine repo, `_audit/conversion-funnel-ab-plan.md`). Privacy-first
 counters only — no cookies, no PII, Simple Analytics only.
 
 **Why:** Currently no data on where users drop off. Can't optimize

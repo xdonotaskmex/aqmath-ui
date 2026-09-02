@@ -2,7 +2,7 @@
 
 **Datum:** 2026-08-11
 **Status:** PLAN (error capture još ne postoji u kodu)
-**Povezano:** `conversion-funnel-ab-plan.md` (D5/D7 drop-off točke), `security-architecture-audit.md`
+**Povezano:** `conversion-funnel-ab-plan.md` (D5/D7 drop-off točke), `security-architecture-audit.md` — oba žive u privatnom repu `aqmath-engine/_audit/` (preseljeno 2026-09-02).
 
 ---
 
