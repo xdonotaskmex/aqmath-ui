@@ -1,8 +1,15 @@
 # AQMath Commit & Deploy Workflow — Rules, Checks & Security Gates
 
-**Last updated:** 2026-08-20
-**Applies to:** All 10 repositories
+**Last updated:** 2026-09-02
+**Applies to:** All repositories
 **Audience:** Developer + AI agents working on the codebase
+
+> **Internal doc — not published.** It lives in `_internal/` because Jekyll serves
+> anything at the repo root on the public site. The `aqmath-ui` repo is public, so
+> the hardening backlog below is written as **work items**, not as a live list of
+> open weaknesses — a public "here is what is not protected" table is itself an
+> attack-surface disclosure. Secret *names* and grep patterns are fine (they are
+> already published in `.github/workflows/ci.yml`); secret *values* never appear.
 
 ---
 
@@ -18,6 +25,12 @@
    minimum. CI will reject pushes that fail import.
 5. **No direct production database access** — all changes go through CI
    → Railway deploy. No SSH, no psql directly.
+6. **No internal docs at the repo root (aqmath-ui)** — the site is built with
+   Jekyll, which serves every root-level file verbatim on `aqmath.xyz`
+   (`/CLAIMS_AUDIT.md` was publicly readable). Internal notes belong in
+   `_internal/` — underscore-prefixed directories are excluded from the
+   published site. Before adding any root-level file, ask: *should this be
+   readable on the public domain?*
 
 ---
 
@@ -98,6 +111,8 @@ Step 6: python tools/audit_pages.py             # checks all pages valid
 |-------|------|----------------|
 | Version stamps current | `stamp_version.py --check` | YES — CI fails |
 | Page audit passes | `audit_pages.py` | YES — CI fails |
+| i18n key parity | `check_i18n.py` | Local gate (`npm run verify`) — **not yet in CI**, see §7.6 |
+| Secret scans (credentials, beta keys, cloud keys) | `grep -rInE` (see §2) | YES — CI fails |
 | Forward log snapshot | Scheduled workflow (Mon/Thu 04:00 UTC) | Auto-commit |
 
 ### All Backend Services (engine, dca, data-pipeline, backtesting-, collectors)
@@ -106,7 +121,7 @@ Step 6: python tools/audit_pages.py             # checks all pages valid
 |-------|------|----------------|
 | Smoke import | `python -c "import main, ..."` | YES — CI fails |
 | Unit tests | `python test_*.py` (where exists) | YES — CI fails |
-| Credential scan | `grep -rInE` for hardcoded secrets | YES (backtesting- only, see §7) |
+| Credential scan | `grep -rInE` for hardcoded secrets | Partial — see §7.1 |
 | Deploy to Railway | Railway GraphQL API | ONLY if `RAILWAY_CI_ENABLED=true` |
 
 ### Deploy Gate
@@ -165,8 +180,8 @@ It performs a comprehensive code review for security vulnerabilities.
 
 | Layer | Protection | Implementation |
 |-------|-----------|----------------|
-| Secrets in code | `.gitignore` blocks `.env` | All 8 backend repos |
-| Hardcoded credentials | CI grep scan | **backtesting- only** (see §7) |
+| Secrets in code | `.gitignore` blocks `.env` | All backend repos |
+| Hardcoded credentials | CI grep scan | aqmath-ui + part of the backend (see §7.1) |
 | JWT tokens | Min 32 char secret, HS256 | All auth-enabled services |
 | API keys | Environment variables only | Railway dashboard |
 | Beta keys | SHA-256 hash only in DB | beta-auth (never stores raw) |
@@ -176,15 +191,19 @@ It performs a comprehensive code review for security vulnerabilities.
 | HTTP security | HSTS, X-Content-Type, CSP | All services |
 | Documentation | Disabled Swagger/ReDoc | All FastAPI services |
 
-### What's NOT Protected (Gaps)
+### Hardening Backlog
 
-| Gap | Risk | Fix (see §7) |
-|-----|------|--------------|
-| Credential scan only in backtesting- | Other repos could commit secrets silently | Add to ALL repos |
-| No pre-commit hook | Developer must remember to check manually | Add optional hook |
-| No `.env.example` validation | Could accidentally commit real values | Add pattern check |
-| No GitHub secret scanning | Leaked secrets visible only after push | Enable in GitHub settings |
-| No branch protection | Force push to main possible | Enable in GitHub settings |
+Remaining work items, tracked as tasks (deliberately described without the
+current exposure state — see the banner at the top):
+
+| Item | Fix (see §7) |
+|------|--------------|
+| Credential scan coverage | Roll the scan out to every backend repo (§7.1) |
+| Pre-commit hook | Add the optional hook so checks are not manual (§7.5) |
+| `.env.example` validation | Add a pattern check for real-looking values |
+| GitHub secret scanning + push protection | Enable in repo settings (§7.3) |
+| Branch protection | Enable on `main` in every repo (§7.4) |
+| i18n parity in CI | Add `check_i18n.py` to the UI workflow (§7.6) |
 
 ---
 
@@ -192,7 +211,8 @@ It performs a comprehensive code review for security vulnerabilities.
 
 ### 7.1 Add Credential Scan to ALL Backend Repos
 
-Currently only `backtesting-` has this. Add to every CI:
+`aqmath-ui` and `backtesting-` already run all three scans. Roll the same block
+out to every remaining CI:
 
 ```yaml
 # Add to the test job in every backend repo's ci.yml:
@@ -229,12 +249,16 @@ Currently only `backtesting-` has this. Add to every CI:
 - [ ] `coinbase-collector/.github/workflows/ci.yml`
 - [ ] `mexc-collector/.github/workflows/ci.yml`
 
-### 7.2 Add Credential Scan to aqmath-ui
+### 7.2 Credential Scan in aqmath-ui ✅ DONE
 
 The UI repo is static (no backend secrets) but could accidentally commit:
 - Beta keys in test code
 - API tokens in JS files
 - `.env` files
+
+All three scans are live in `.github/workflows/ci.yml` (credentials, real beta
+keys with the `AQMBETA-XXXX-XXXX` placeholder allowed, cloud provider keys).
+Kept here as the reference snippet for the other repos:
 
 ```yaml
 # Add to aqmath-ui ci.yml after existing checks:
@@ -292,6 +316,20 @@ if git diff --cached --diff-filter=ACM | grep -qE "(JWT_SECRET|COLLECTOR_SECRET|
   exit 1
 fi
 ```
+
+### 7.6 Add i18n Parity to CI
+
+`tools/check_i18n.py` currently only runs locally via `npm run verify`, so a
+missing zh-CN key can ship. Add it to the UI workflow next to the stamp check:
+
+```yaml
+- name: i18n keys must be in parity
+  run: python tools/check_i18n.py
+```
+
+It fails when `en.json` and `zh-CN.json` diverge or when a `data-i18n` key used
+in `_src/index.html` does not resolve — exactly the class of bug that produces
+raw keys on the Chinese site.
 
 ---
 

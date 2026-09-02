@@ -1,8 +1,14 @@
 # AQMath Priorities — What to Work On Next
 
-**Last updated:** 2026-08-21
-**Owner:** Momir Demirov (sole developer)
-**Stack:** 10 FastAPI services on Railway, static HTML/CSS/JS on GitHub Pages
+**Last updated:** 2026-09-02
+**Stack:** FastAPI services on Railway, static HTML/CSS/JS on GitHub Pages
+
+> **Internal doc — not published.** It lives in `_internal/` because Jekyll serves
+> anything at the repo root on the public site. The `aqmath-ui` repo is public, so
+> this backlog names **services and outcomes only**: no private file names, no
+> unreleased engine constants and no unpublished mechanics. A roadmap item that is
+> still server-side only gets a one-line description of what the user will see,
+> not how it is computed.
 
 ---
 
@@ -32,12 +38,12 @@ Reddit thread, every Twitter pitch needs this data. It's the single
 highest-leverage piece of content the project can produce.
 
 **Effort:** 3-4 days
-**Blocker:** None — all infrastructure exists (`backtest.py`, `deleverage.py`)
-**Repo:** `aqmath-engine` (scratch/), `backtesting-`
+**Blocker:** None — the backtesting infrastructure already exists
+**Repo:** `aqmath-engine` (research scratch), `backtesting-`
 **Output:** Research page + Substack article + Reddit post
 
 **Steps:**
-1. Implement each strategy as a pure function in `scratch/strategy_benchmark.py`
+1. Implement each strategy as a pure function in a dedicated research harness
 2. Batch runner on 3 baskets (v14 default, MEXC-only, mixed)
 3. Generate equity curve overlay, drawdown overlay, ranking table
 4. Write up results in `_research/strategy-benchmark.md`
@@ -53,11 +59,11 @@ prompt) but the backend endpoints need production hardening — error
 handling, edge cases, idempotency guarantees.
 
 **Status:** ✅ COMPLETED 2026-08-21 — Discipline & Execution Validation Module
-delivered: 12h expiry, discipline rate, admin telemetry, ideal/actual equity
+delivered: 12h expiry, discipline rate, operator telemetry, ideal/actual equity
 curves, entry/APY preservation in all write-back paths.
 
 **Effort:** 1-2 days (estimated) → 2 days (actual)
-**Repos:** `aqmath-engine` (portfolio_service.py), `-aqmath-beta-auth`
+**Repos:** `aqmath-engine`, `-aqmath-beta-auth`
 
 ---
 
@@ -92,24 +98,24 @@ just BTC/ETH. Essential for credibility with the DeFi/altcoin audience.
 
 **Effort:** 2-3 days
 **Blocker:** MEXC data must be sufficiently populated in data-pipeline
-**Repo:** `aqmath-engine` (scratch/), `backtesting-`
+**Repo:** `aqmath-engine` (research scratch), `backtesting-`
 
 ---
 
 ### 5. v17 Circuit Breaker — UI + Telemetry Integration
 
-**What:** v17 (single-day -8% → 15% floor, 5d cooldown) exists
-server-side only. Add user-visible status indicator and log v17
-events to the daily telemetry so users can see when the circuit
-breaker activated.
+**What:** the v17 circuit breaker (a hard single-day floor with a cooldown)
+exists server-side only. Add a user-visible status indicator and log v17
+events to the daily telemetry so users can see when the circuit breaker
+activated. Trigger levels stay unpublished until the feature ships.
 
 **Why important:** Users in a crash need to SEE the protection working.
-An invisible shield creates anxiety. "The system cut my exposure 15%
+An invisible shield creates anxiety. "The system cut my exposure
 and I didn't know" is a trust-killer.
 
 **Effort:** 2 days
 **Blocker:** None
-**Repos:** `aqmath-engine` (portfolio_service.py), `aqmath-ui` (shield card)
+**Repos:** `aqmath-engine`, `aqmath-ui` (shield card)
 
 ---
 
@@ -149,9 +155,9 @@ Without E2E tests, regressions ship to production.
 
 ### 8. 3-Layer Caching Plan
 
-**What:** Implement the approved caching architecture (see
-`aqmath-engine/CACHING_PLAN.md`): L1 in-process TTL, L2 PostgreSQL
-materialized views, L3 static JSON snapshots.
+**What:** Implement the approved caching architecture (documented in the
+private engine repo): L1 in-process TTL, L2 PostgreSQL materialized views,
+L3 static JSON snapshots.
 
 **Why:** Reduces Railway costs, improves response times, prepares for
 scale. Not urgent because current performance is acceptable.

@@ -45,8 +45,14 @@ Frontend (staticka web stranica) za **AQMath** — kvantitativni rebalanser krip
 | `locales/zh-CN.json` | Kineski prijevodi |
 | `Caddyfile` | Caddy konfiguracija (Railway) + 404 block |
 | `CNAME` | GitHub Pages custom domena |
-| `ONE_TAP_SIGNAL.md` | One-Tap Alignment feature dokumentacija |
-| `CLAIMS_AUDIT.md` | Claims vs code verification audit |
+| `_internal/` | Interni dokumenti (status, audit, workflow) — **nisu dio javne stranice** |
+
+> ⚠️ **Interni dokumenti idu u `_internal/`.** GitHub Pages koristi Jekyll, koji
+> poslužuje svaku datoteku u korijenu repo-a na `aqmath.xyz` (npr. `/CLAIMS_AUDIT.md`
+> je bio javno čitljiv). Jekyll preskače direktorije s donjom crtom (`_src/`,
+> `_research/`, `_internal/`), pa takve datoteke vraćaju 404. Repo je javan, pa
+> interni dokumenti uz to **ne smiju** sadržavati interne detalje privatnih
+> servisa (konstante, formule, shemu baze, admin endpointe).
 
 ## Arhitektura
 
@@ -78,10 +84,13 @@ npm run verify                          # i18n provjera
 ### npm skripte
 
 ```bash
-npm run build     # puni build (sve 4 korake)
-npm run verify    # verifikacija (stamp + i18n + audit)
+npm run build     # minify + stamp + build_pages (3 koraka)
+npm run verify    # verifikacija (i18n + stamp --check)
 npm run serve     # lokalni preview server
 ```
+
+> `npm run build` ne uključuje `build_research.py` — pokreni ga ručno kad mijenjaš
+> `_research/*.md`. `npm run verify` ne uključuje `audit_pages.py` — pokreni ga ručno.
 
 ### Alati (`tools/`)
 
@@ -209,20 +218,19 @@ aqmath-ui/
 ├── styles.css          # Stilovi (izvor)
 ├── styles.min.css      # Minificirani stilovi (generirani)
 ├── _src/               # Izvori za generiranje (index.html je template)
+├── _internal/          # Interni dokumenti + ops + operatori alati (Jekyll ih ne objavljuje)
 ├── locales/            # i18n prijevodi (en, zh-CN)
 ├── research/           # Istraživačke stranice (generirane)
 ├── _research/          # Istraživački izvori (MD → HTML)
-├── tools/              # Build alati (Python) + error dashboard
+├── tools/              # Build alati (Python) — javni, samo build logika
 ├── tests/              # Playwright testovi (visual snapshots)
-├── ops/                # Ops dokumentacija (Cloudflare, Railway, DDoS)
 ├── fonts/              # Self-hosted fontovi
 ├── Caddyfile           # Caddy konfiguracija + 404 block
 ├── CNAME               # GitHub Pages domena
 ├── Dockerfile          # Docker image (Caddy)
 ├── railway.toml        # Railway konfiguracija
 ├── package.json        # Playwright testovi + npm skripte
-├── ONE_TAP_SIGNAL.md   # One-Tap Alignment feature dokumentacija
-├── CLAIMS_AUDIT.md     # Claims vs code verification
+├── README.md           # Ovaj dokument (jedini .md u korijenu)
 └── sitemap.xml         # SEO sitemap
 ```
 

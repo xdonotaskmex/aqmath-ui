@@ -2,9 +2,15 @@
 
 **Status:** ✅ Complete (UI + backend + discipline module)
 **Date:** 2026-08-23 (last update)
-**Files:** `app-notify.js` (UI), `app.js` (chart), `_src/index.html` (markup),
-`styles.css` (styling), `portfolio_service.py` (backend),
-`-aqmath-beta-auth/main.py` (signal CRUD + admin)
+**UI files (this repo):** `app-notify.js`, `app.js`, `_src/index.html`, `styles.css`
+**Backend:** engine (signal generation) + beta-auth (signal storage/API)
+
+> **Internal doc — not published.** It lives in `_internal/` because Jekyll serves
+> anything at the repo root on the public site. The `aqmath-ui` repo is public, so
+> this file describes the **UI contract and the user-visible behaviour** only: no
+> database schema, no operator/admin endpoints, no private function names and no
+> unpublished business rules. Service names are fine (they are already in
+> `README.md`); anything below service level is not.
 
 ---
 
@@ -13,17 +19,17 @@
 One-Tap Alignment lets beta users **confirm, adjust, or skip** pending trading
 signals directly from the app — without leaving the page or opening a separate
 workflow. It is the user-facing counterpart to the server-side daily signal loop
-(`portfolio_service.py`).
+(engine).
 
 ### Flow
 
 ```
-Engine daily cron (00:45 UTC)
+Engine daily run (after the UTC close)
     │
     ├── computes shield-modulated target weights
     ├── compares with user's declared holdings
     ├── generates BUY/SELL signals for material deltas
-    └── stores in signal_confirmations table
+    └── stores them for the user
                 │
                 ▼
 User opens app → GET /portfolio/signals
@@ -55,7 +61,7 @@ User opens app → GET /portfolio/signals
 Terminal-style card (`.tc.signal-card`) shown above the Shield card when
 pending signals exist. Hidden when empty.
 
-**HTML** (`_src/index.html` line ~737):
+**HTML** (`_src/index.html`, app section):
 ```html
 <div class="tc signal-card hidden" id="signalCard">
     <div class="tc-bar">
@@ -92,10 +98,10 @@ Each pending signal renders as a `.sig-block` with:
 
 #### Signal Expiry (12-hour window)
 
-Each signal has a 12-hour reaction window starting from `notified_at`
-(the ntfy delivery time), with fallback to `created_at` when ntfy is
-disabled. A lazy expiry (`_expire_stale_signals()`) runs on every
-signal-related API call. Expired signals return HTTP 410 on confirm.
+Each signal has a 12-hour reaction window starting from the notification
+delivery time, with fallback to the creation time when notifications are
+disabled. Expiry is resolved lazily on every signal-related API call.
+Expired signals return HTTP 410 on confirm.
 
 The countdown timer on each signal card shows the remaining time in
 `HH:MM:SS` format, turning red in the last 30 minutes.
@@ -144,16 +150,17 @@ Design principles ("escalate on the pattern, not on the event"):
 - **Opt-in active reminders** — `escalation_opt_in` (OFF by default): the
   escalation ladder only pushes to users who turned it on themselves after
   seeing their rate, so it never punishes opening the app.
-- **Hidden discount gate** — the 80% renewal gate is applied server-side
-  only and NEVER surfaced before it is earned (surprise reward).
+- **Surprise reward** — any reward tied to the rate is evaluated server-side
+  and NEVER surfaced before it is earned. The gate itself is an unpublished
+  business rule and is deliberately not documented here.
 
 ### 2.5 Portfolio History — Ideal vs Actual Equity
 
 The history chart (`renderHistoryChart()` in `app.js`) overlays two
 dashed lines from `GET /portfolio/discipline/history`:
 
-- **Ideal** (green dashed): every signal confirmed at `signal_price` (zero slippage)
-- **Actual** (amber dashed): confirmed at `confirm_price`, missed/skipped = no trade
+- **Ideal** (green dashed): every signal confirmed at the signal price (zero slippage)
+- **Actual** (amber dashed): confirmed at the confirmation price, missed/skipped = no trade
 
 The gap between the two lines shows the cost of missed signals and
 slippage. Fetched from `loadDisciplineHistory()` in `app-notify.js`.
@@ -230,7 +237,7 @@ Auto-dismisses after 60 seconds. Backdrop click also dismisses.
 
 ## 4. Backend Endpoints
 
-### Implemented (beta-auth / engine)
+### User-facing (called by this repo's JS)
 
 | Endpoint | Method | Auth | Status |
 |----------|--------|------|--------|
@@ -242,30 +249,20 @@ Auto-dismisses after 60 seconds. Backdrop click also dismisses.
 | `/portfolio/signal-stats` | GET | Beta JWT | ✅ Per-regime pass rates |
 | `/portfolio/discipline` | GET | Beta JWT | ✅ Per-user discipline rate |
 | `/portfolio/discipline/history` | GET | Beta JWT | ✅ Ideal vs actual equity curves |
-| `/admin/discipline` | GET | X-Admin-Secret | ✅ Per-user discipline rates (admin) |
-| `/admin/discipline/apply-discount` | POST | X-Admin-Secret | ✅ Renewal discount recording |
 | `/portfolio/signals/apply-all` | POST | Beta JWT | ✅ Retroactive delta apply |
 
-### Database Tables
+Operator-side reporting endpoints also exist; they are **deliberately not listed
+here** (this repo is public). See the private beta-auth service.
 
-`signal_confirmations` (engine PostgreSQL):
-- `id` (UUID)
-- `key_hash` (VARCHAR) — user identifier
-- `signal_id` (UUID) — references the daily signal
-- `action` (VARCHAR) — 'confirmed' | 'skipped' | 'adjusted'
-- `actual_units` (FLOAT, nullable) — for adjusted signals
-- `executed_at` (TIMESTAMP, nullable) — honest execution time
-- `signal_price` (NUMERIC, nullable) — daily close at generation
-- `confirm_price` (NUMERIC, nullable) — market price at confirmation
-- `notified_at` (TIMESTAMP, nullable) — ntfy delivery time
-- `notified_at` + 12h = `expires_at` (lazy expiry)
-- `created_at` (TIMESTAMP)
+### Persistence
 
-`signal_discipline_snapshots` (engine PostgreSQL):
-- `key_hash` (VARCHAR)
-- `snap_date` (DATE)
-- `total_signals`, `confirmed`, `missed`, `skipped` (INTEGER)
-- Daily snapshot of signal counts for discipline rate computation
+Signals, their user actions (confirmed / skipped / adjusted), the optional
+adjusted size and honest execution time, plus the prices needed to build the
+ideal-vs-actual comparison, are stored server-side by the engine, with daily
+count snapshots kept for the discipline history.
+
+**Table names, columns and types are intentionally not written down here.**
+Schema lives in the private engine repo.
 
 ---
 
@@ -313,12 +310,12 @@ Auto-dismisses after 60 seconds. Backdrop click also dismisses.
 - Signal stats badge (per-regime pass rate display)
 - Post-confirm holdings sync (server → local portfolio)
 - Hidden classes for clean show/hide toggling
-- Backend signal_confirmations table schema
+- Backend persistence for signal actions
 - Backend CRUD endpoints for signals
 - **12h signal expiry** with countdown timer on each signal card
-- **Discipline meter card** (double-width, ≥80% = renewal discount)
+- **Discipline meter card** (double-width, graded against the user's own goal)
 - **Ideal vs actual equity curves** overlaid on history chart
-- **Admin telemetry** — per-user discipline rates + discount recording
+- **Operator telemetry** — per-user discipline reporting (server-side, not documented here)
 - **Retroactive delta apply** (`/portfolio/signals/apply-all`)
 - **Entry/APY preservation** in all signal write-back paths
 
@@ -340,10 +337,12 @@ Auto-dismisses after 60 seconds. Backdrop click also dismisses.
 | `app-notify.js` | All signal logic lives here |
 | `app-boot.js` | Calls `refreshNotifyUI()` on auth state change |
 | `styles.css` | Signal card + exec overlay styles |
-| `_src/index.html` | Signal card markup (line ~737) |
-| `portfolio_service.py` | Daily cron generates signals |
-| `-aqmath-beta-auth/main.py` | Signal CRUD endpoints |
-| `engine/portfolio_service.py` | `signal_confirmations` table |
+| `_src/index.html` | Signal card markup (app section) |
+| engine service | Daily run generates the signals; stores signal actions |
+| beta-auth service | Signal CRUD endpoints the UI calls |
+
+Backend internals (module names, function names, schema) stay in the private
+repos and are not mapped here.
 
 ---
 

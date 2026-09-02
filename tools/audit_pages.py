@@ -52,7 +52,15 @@ ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://aqmath.xyz"
 
 # Not part of the published surface.
-SKIP_DIRS = {"_src", "_research", "node_modules", "tools", ".git", ".qoder"}
+# The playwright/test dirs are git-ignored local test artifacts: they exist on a
+# dev machine but never in a CI checkout or a deploy, so auditing them only
+# produced local-only false failures (e.g. playwright-report/index.html has no
+# h1/canonical by design).
+# _internal/ holds working docs; Jekyll excludes underscore dirs from the site,
+# so anything landing there (including a stray .html) is not a published page.
+SKIP_DIRS = {"_src", "_research", "node_modules", "tools", ".git", ".qoder",
+             "playwright-report", "test-results", "blob-report", "_logs",
+             "_internal"}
 
 # 404.html is served by the host on an error, has no canonical route of its own
 # and must never be indexed or listed.

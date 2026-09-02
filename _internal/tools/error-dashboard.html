@@ -1,4 +1,18 @@
 <!DOCTYPE html>
+<!--
+  Operator console. Open it as a local file (file://) — do NOT move it back to
+  tools/ or anywhere else outside an underscore-prefixed directory.
+
+  GitHub Pages serves every path that is not inside a _-prefixed directory, so
+  while this lived at tools/error-dashboard.html it was publicly reachable at
+  https://aqmath.xyz/tools/error-dashboard.html. That published the operator
+  console together with the internal endpoint paths it calls and the name of the
+  secret it asks for — an attack-surface disclosure, even though the secret
+  itself was never in the file.
+
+  No secret is stored here: it is typed at runtime and kept in sessionStorage
+  only (cleared when the tab closes).
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">

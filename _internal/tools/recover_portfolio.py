@@ -6,14 +6,20 @@ Usage:
   2. F12 → Console → paste:
      JSON.parse(localStorage.getItem('aqmath_beta')||'{}').token
   3. Copy the token string (without quotes)
-  4. Run: python tools/recover_portfolio.py YOUR_TOKEN_HERE
+  4. Run: python _internal/tools/recover_portfolio.py YOUR_TOKEN_HERE
+
+Lives in _internal/tools/ (not tools/) on purpose: GitHub Pages serves
+everything outside underscore-prefixed directories, so this file used to be
+publicly downloadable from the site. It also used to point straight at the
+Railway origin, which bypasses the Cloudflare WAF — both base URLs below are
+the public api-* hosts, the same ones the UI uses.
 """
 import json
 import sys
 import urllib.request
 
 BETA_AUTH = "https://api-auth.aqmath.xyz"
-ENGINE = "https://aqmath-engine.up.railway.app"
+ENGINE = "https://api-engine.aqmath.xyz"
 
 
 def fetch_json(url, token):
@@ -27,7 +33,7 @@ def fetch_json(url, token):
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python tools/recover_portfolio.py YOUR_BETA_TOKEN")
+        print("Usage: python _internal/tools/recover_portfolio.py YOUR_BETA_TOKEN")
         print("  Get token from browser console on aqmath.xyz/app:")
         print("  JSON.parse(localStorage.getItem('aqmath_beta')||'{}').token")
         sys.exit(1)

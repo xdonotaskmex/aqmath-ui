@@ -3,6 +3,12 @@
 Kad Cloudflare pošalje notifikaciju (HTTP DDoS Attack Event) ili kad
 posumnjaš na napad. Bez SSH-a, sve iz browsera.
 
+> **Interni dokument — ne objavljuje se.** Živi u `_internal/` jer Jekyll
+> poslužuje sve izvan direktorija s donjom crtom direktno na `aqmath.xyz`
+> (ovo je bilo javno čitljivo na `/ops/RUNBOOK_DDOS.md`). Runbook je namjerno
+> pisan kao *postupak u dashboardu* — bez origin hostnameova, bez inventara WAF
+> pravila i bez pragova, tako da objavljen ne bi bio uputa za napad.
+
 ## 0. Prvih 60 sekundi — dijagnoza
 
 1. Cloudflare dashboard → **Security → Events** — vidi što se blokira i s kojih IP-ja
@@ -35,14 +41,15 @@ Ako Railway servisi ne dišu, a želiš posjetiteljima dati čist odgovor:
 ## 4. AKCIJA: Jedan klik rollback (ako je problem naš deploy, ne napad)
 
 GitHub repo servisa → **Actions → One-Click Rollback → Run workflow**
-(vidi ops/RAILWAY_CI_SETUP.md)
+(vidi `_internal/ops/RAILWAY_CI_SETUP.md`)
 
 ## 5. Nakon incidenta
 
 - [ ] Zabilježi vrijeme, trajanje, vrstu napada (Security Events export)
 - [ ] Provjeri Railway usage (DDoS promet kroz proxied Cloudflare NE troši
       Railway bandwidth — Cloudflare ga upija prije origin-a)
-- [ ] Ako se napad ponavlja: pooštri R1/R2 rate-limit pragove u WAF-u
+- [ ] Ako se napad ponavlja: pooštri rate-limit / auth pravila u WAF-u
+      (stvarni pragovi žive u Cloudflare dashboardu, ne u ovom repo-u)
 - [ ] Under Attack Mode natrag na OFF
 
 ## Notifikacije (postavljene po CLOUDFLARE_SETUP.md korak 8)

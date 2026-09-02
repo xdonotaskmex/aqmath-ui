@@ -6,9 +6,16 @@ bez deploya + aqmath-ui na Pages) ima dva workflowa:
 - `.github/workflows/ci.yml` — test/smoke pa deploy (samo na main push)
 - `.github/workflows/rollback.yml` — jedan klik vraća prethodni deploy
 
+> **Interni dokument — ne objavljuje se.** Živi u `_internal/` jer Jekyll
+> poslužuje sve izvan direktorija s donjom crtom direktno na `aqmath.xyz`
+> (ovo je bilo javno čitljivo na `/ops/RAILWAY_CI_SETUP.md`). Repo je javan, pa
+> ovdje nema: imena Railway workspacea, service/environment ID-ova, popisa
+> modula koje svaki privatni servis importira u smoke testu, niti stvarnih
+> vrijednosti secreta. ID-ovi žive u GitHub Secrets/Variables svakog repo-a.
+
 ## 1. Railway token (jednom)
 
-**Koristi se workspace token** (scope "DoNotAskMe's Projects"):
+**Koristi se workspace token** (scope: vlasnički Railway workspace):
 Railway → projekt → **Settings → Tokens → New Token** → kopiraj token
 (prikazuje se samo jednom, UUID oblika, vrijedi za SVE servise u projektu).
 
@@ -27,7 +34,7 @@ ali za servise s GitHub source-om NE kreira deploy (samo mijenja flag).
 GitHub repo → Settings → **Secrets and variables → Actions**:
 
 **Secrets → New repository secret:**
-- `RAILWAY_TOKEN` = workspace token iz koraka 1 (isti token za svih 8 repova)
+- `RAILWAY_TOKEN` = workspace token iz koraka 1 (isti token za sve backend repove)
 
 **Variables → New repository variable** (3 varijable; `RAILWAY_CI_ENABLED`
 može biti i org shared varijabla da vrijedi za sve repove odjednom):
@@ -70,16 +77,19 @@ postojeću sliku prethodnog deploya.
 
 | Repo | Gate |
 |---|---|
-| dca-engine | `python test_min_token_buy.py` (8 unit testova) |
-| data-pipeline | smoke import main/cleaner/validator/config |
-| aqmath-engine | smoke import main + engine moduli |
-| -aqmath-beta-auth | smoke import main (fail-fast env provjera, JWT_SECRET ≥ 32 znaka) |
-| 3 collectora | smoke import main/collector/config |
-| backtesting- | smoke import main + trading moduli + credential scan |
-| aqmath-ui | `stamp_version.py --check` + `audit_pages.py` |
+| dca-engine | unit testovi |
+| data-pipeline | smoke import |
+| aqmath-engine | smoke import |
+| -aqmath-beta-auth | smoke import (fail-fast env provjera, JWT secret ≥ 32 znaka) |
+| 3 collectora | smoke import |
+| backtesting- | smoke import + credential scan |
+| aqmath-ui | `stamp_version.py --check` + `audit_pages.py` + 3 secret scana |
 
-`data-pipeline/test_deleverage.py` je lokalni harness (Desktop CSV-ovi,
-import iz aqmath-engine) i ne može u CI — navedeno u komentaru workflowa.
+Točan popis modula koji se importiraju u svakom smoke testu vidi se u
+`.github/workflows/ci.yml` dotičnog privatnog repo-a.
+
+Jedan data-pipeline harness je lokalni (Desktop CSV-ovi + import iz privatnog
+engine repo-a) i ne može u CI — to je navedeno u komentaru tog workflowa.
 
 ## 6. Staging (faza 2, odgođeno po odluci)
 
