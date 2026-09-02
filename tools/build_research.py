@@ -521,6 +521,41 @@ DOCS = [
         "meta_description": "v14.0 \u53bb\u6760\u6746\u8c03\u8282\u5668\u6837\u672c\u5916\u6d4b\u8bd5\uff1a16 \u4e2a\u672a\u89c1\u4ee3\u5e01\u7ec4\u5408\uff0c\u6700\u5927\u56de\u64a4\u4e2d\u4f4d\u6570\u524a\u51cf 54.3 pp\uff0cCalmar 16/16 \u63d0\u5347\u3002",
         "altLabel": "English",
     },
+    {
+        "src": "exposure-capping.md",
+        "out": "exposure-capping.html",
+        "path": "/research/exposure-capping",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-09-02",
+        "title": "Adaptive Exposure Capping: Fixed vs Volatility-Scaled - AQMath",
+        "shortTitle": "Adaptive Exposure Capping &mdash; Why Fixed Drawdown Limits Fail in Regime Shifts",
+        "description": ("Fixed drawdown thresholds are basket-blind: a single number cannot serve both "
+                        "low-vol majors and high-vol alts. Walk-forward OOS on the production path: "
+                        "adaptive (volatility-scaled) wins both baskets on Sharpe, Calmar and MaxDD. "
+                        "Alt basket MaxDD 29.4% vs 36.8% fixed. Also covers the in-sample selection "
+                        "inversion that demoted the full-history winner to worst on the production path."),
+        "meta_description": "Fixed vs adaptive exposure capping: walk-forward OOS on production path. Adaptive wins both baskets. Alt MaxDD 29.4% vs 36.8% fixed.",
+        "sim_notice": True,
+        "altLabel": "\u4e2d\u6587",
+    },
+    {
+        "src": "exposure-capping.zh-CN.md",
+        "out": "exposure-capping-zh.html",
+        "path": "/research/exposure-capping-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-09-02",
+        "title": "\u81ea\u9002\u5e94\u6572\u53e3\u4e0a\u9650\uff1a\u56fa\u5b9a\u9608\u503c\u4e0e\u6ce2\u52a8\u7387\u7f29\u653e - AQMath",
+        "shortTitle": "\u81ea\u9002\u5e94\u6572\u53e3\u4e0a\u9650 &mdash; \u4e3a\u4f55\u56fa\u5b9a\u56de\u64a4\u9608\u503c\u5728\u5e02\u573a\u72b6\u6001\u5207\u6362\u4e2d\u5931\u6548",
+        "description": ("\u56fa\u5b9a\u56de\u64a4\u9608\u503c\u5bf9\u7ec4\u5408\u89c6\u800c\u4e0d\u89c1\uff1a\u5355\u4e00\u6570\u5b57\u65e0\u6cd5\u540c\u65f6\u670d\u52a1"
+                        "\u4f4e\u6ce2\u52a8\u4e3b\u6d41\u5e01\u4e0e\u9ad8\u6ce2\u52a8\u5c71\u5be8\u5e01\u3002\u751f\u4ea7\u8def\u5f84\u4e0a\u7684\u6eda\u52a8\u524d\u63a8\u6837\u672c\u5916\u9a8c\u8bc1\uff1a"
+                        "\u81ea\u9002\u5e94\uff08\u6ce2\u52a8\u7387\u7f29\u653e\uff09\u5728\u4e24\u4e2a\u7ec4\u5408\u7684\u5c16\u666e\u3001\u5361\u5c14\u739b\u548c\u6700\u5927\u56de\u64a4\u4e0a\u90fd\u80dc\u51fa\u3002"
+                        "\u5c71\u5be8\u5e01\u7ec4\u5408\u6700\u5927\u56de\u64a4 29.4% vs \u56fa\u5b9a 36.8%\u3002"),
+        "meta_description": "\u56fa\u5b9a vs \u81ea\u9002\u5e94\u6572\u53e3\u4e0a\u9650\uff1a\u751f\u4ea7\u8def\u5f84\u6eda\u52a8\u524d\u63a8\u6837\u672c\u5916\u3002\u81ea\u9002\u5e94\u4e24\u7ec4\u5408\u7686\u80dc\u3002\u5c71\u5be8\u5e01 MaxDD 29.4% vs \u56fa\u5b9a 36.8%\u3002",
+        "sim_notice": True,
+        "altLabel": "English",
+    },
 ]
 
 # Language pairs that describe the same document, for hreflang.
@@ -538,6 +573,7 @@ TRANSLATION_SETS = [
     ["/research/e2e-tiaq", "/research/e2e-tiaq-zh"],
     ["/research/recovery-test", "/research/recovery-test-zh"],
     ["/research/static-vs-dynamic", "/research/static-vs-dynamic-zh"],
+    ["/research/exposure-capping", "/research/exposure-capping-zh"],
 ]
 
 
