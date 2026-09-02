@@ -12,7 +12,7 @@
 
 var btSlots = [null, null, null, null, null];
 var btCharts = {};
-var btEventsData = null;   // { v14: [...], v15: [...], v16: [...] }
+var btEventsData = null;   // { v14: [...], v18: [...] }
 var btEventLabels = [];
 
 function btParseCSV(text) {
@@ -191,8 +191,7 @@ async function btRunBacktest() {
 
 function btRenderBacktest(data, inp) {
     var pr = data.pr, sim = data.sim, m1 = data.m1, m2 = data.m2, cfg = data.cfg;
-    var sim15 = data.sim15 || null, m15 = data.m15 || null;
-    var sim16 = data.sim16 || null, m16 = data.m16 || null;
+    var sim18 = data.sim18 || null, m18 = data.m18 || null;
     var days = pr.rets_length;
     var years = days / 365.25;
     var dcaAmt = inp.dca_amount, dcaInt = inp.dca_interval;
@@ -210,11 +209,10 @@ function btRenderBacktest(data, inp) {
     }
     var v14x = expStats(sim);
 
-    // The three engines run on identical terms; B&H is the reference only.
+    // Two engines on identical terms; B&H is the reference only.
     var engines = [
         { key: 'v14', label: 'Deleverage v14', tag: 'production', m: m1, s: sim, color: '#06b6d4' },
-        { key: 'v15', label: 'CORR Regime v15', tag: 'beta', m: m15, s: sim15, color: '#a855f7' },
-        { key: 'v16', label: 'Trough-Tranche v16', tag: 'beta', m: m16, s: sim16, color: '#34d399' }
+        { key: 'v18', label: 'v18 Adaptive', tag: 'test candidate', m: m18, s: sim18, color: '#a855f7' }
     ].filter(function(e) { return e.m && e.s; });
     var best = engines.reduce(function(a, b) { return b.m.cal > a.m.cal ? b : a; });
 
@@ -230,7 +228,7 @@ function btRenderBacktest(data, inp) {
         var es = expStats(e.s);
         var c = document.createElement('div');
         c.className = 'bt-strategy-card' + (isBest ? ' bt-best' : '');
-        var extra = e.key === 'v16' ? ', ' + (e.s.episodes || 0) + ' episodes' : '';
+        var extra = '';
         c.innerHTML = '<h3>' + e.label + (isBest ? ' \u2605' : '') + '</h3>'
             + '<div class="bt-big" style="color:' + (isBest ? 'var(--green)' : 'var(--blue)') + '">Calmar ' + e.m.cal.toFixed(2) + '</div>'
             + '<div class="bt-sub">' + e.tag + ' | Max DD: ' + (e.m.mdd * 100).toFixed(1) + '% | Sharpe: ' + e.m.sh.toFixed(2) + '</div>'
@@ -293,7 +291,7 @@ function btRenderBacktest(data, inp) {
     }
 
     // Summary explain
-    document.getElementById('btSummaryExplain').innerHTML = '<strong>' + pr.n + ' tokens</strong> (' + escapeHtml(pr.syms.join(', ')) + ') over <strong>' + days + ' days</strong> (~' + years.toFixed(1) + 'y). v14 (production): defensive (exposure &lt; ' + (cfg.redeploy_thresh * 100).toFixed(0) + '%) on <strong>' + sim.shDays + '</strong>/' + days + ' days, avg exposure <strong>' + (v14x.avg * 100).toFixed(0) + '%</strong>, <strong>' + sim.dcaN + '</strong> DCA events, <strong>' + redeploys.length + '</strong> cash redeploys.' + (sim15 ? ' v15: ' + sim15.shDays + ' defensive days, ' + sim15.rebN + ' rebalances.' : '') + (sim16 ? ' v16: ' + sim16.shDays + ' defensive days, ' + (sim16.episodes || 0) + ' episodes.' : '');
+    document.getElementById('btSummaryExplain').innerHTML = '<strong>' + pr.n + ' tokens</strong> (' + escapeHtml(pr.syms.join(', ')) + ') over <strong>' + days + ' days</strong> (~' + years.toFixed(1) + 'y). v14 (production): defensive (exposure &lt; ' + (cfg.redeploy_thresh * 100).toFixed(0) + '%) on <strong>' + sim.shDays + '</strong>/' + days + ' days, avg exposure <strong>' + (v14x.avg * 100).toFixed(0) + '%</strong>, <strong>' + sim.dcaN + '</strong> DCA events, <strong>' + redeploys.length + '</strong> cash redeploys.' + (sim18 ? ' v18: ' + sim18.shDays + ' defensive days, ' + sim18.rebN + ' rebalances.' : '');
 
     // Metrics grid (v14 production detail)
     var mg = document.getElementById('btMetricsGrid');
@@ -385,12 +383,11 @@ function btRenderBacktest(data, inp) {
         };
     };
 
-    // Equity curves — all three engines + B&H reference
+    // Equity curves — both engines + B&H reference
     var eqDatasets = [
         { label: 'Deleverage v14', data: sim.eqA.slice(1), borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.08)', fill: true, pointRadius: 0, borderWidth: 2 }
     ];
-    if (sim15) eqDatasets.push({ label: 'CORR Regime v15', data: sim15.eqA.slice(1), borderColor: '#a855f7', fill: false, pointRadius: 0, borderWidth: 1.5 });
-    if (sim16) eqDatasets.push({ label: 'Trough-Tranche v16', data: sim16.eqA.slice(1), borderColor: '#34d399', fill: false, pointRadius: 0, borderWidth: 1.5 });
+    if (sim18) eqDatasets.push({ label: 'v18 Adaptive', data: sim18.eqA.slice(1), borderColor: '#a855f7', fill: false, pointRadius: 0, borderWidth: 1.5 });
     eqDatasets.push({ label: 'Buy & Hold + DCA', data: sim.eqB.slice(1), borderColor: '#fbbf24', borderDash: [4, 3], fill: false, pointRadius: 0, borderWidth: 1.5 });
     btCharts.eq = new Chart(document.getElementById('btEquityChart'), {
         type: 'line',
@@ -414,12 +411,11 @@ function btRenderBacktest(data, inp) {
         options: (function() { var o = cO(); o.scales.y.stacked = true; o.scales.y.ticks.callback = function(v) { return '$' + v.toLocaleString(); }; return o; })()
     });
 
-    // Exposure — all three engines (held exposure × risk budget)
+    // Exposure — both engines (held exposure × risk budget)
     var expDatasets = [
         { label: 'v14', data: sim.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#06b6d4', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' }
     ];
-    if (sim15) expDatasets.push({ label: 'v15', data: sim15.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#a855f7', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' });
-    if (sim16) expDatasets.push({ label: 'v16', data: sim16.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#34d399', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' });
+    if (sim18) expDatasets.push({ label: 'v18', data: sim18.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#a855f7', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' });
     btCharts.exp = new Chart(document.getElementById('btExposureChart'), {
         type: 'line',
         data: { labels: dateLabels, datasets: expDatasets },
@@ -433,8 +429,7 @@ function btRenderBacktest(data, inp) {
 
     // Event log — per-engine selector (v14 shown first)
     btEventsData = { v14: sim.events.slice() };
-    if (sim15) btEventsData.v15 = sim15.events.slice();
-    if (sim16) btEventsData.v16 = sim16.events.slice();
+    if (sim18) btEventsData.v18 = sim18.events.slice();
     btEventLabels = dateLabels;
     var evSel = document.getElementById('btEventsEngine');
     if (evSel) evSel.value = 'v14';
@@ -538,7 +533,7 @@ function btRenderWFGrid(data) {
     html += '</tbody></table>';
 
     var best = data.best;
-    html += '<div class="bt-explain" style="margin-top:12px"><strong>Best:</strong> ' + data.sweep_label + '=' + swFmt(best.sv) + ', ' + data.cross_label + '=' + crFmt(best.cv) + ' \u2192 ' + data.metric_label + ': ' + metFmt(bestVal) + ' (ranked by ' + data.metric_label + '; illustrative sweep of the v14 modulator around a neutral baseline \u2014 not the production preset. The v15/v16 betas run fixed knee configs and are not swept.) Def Days / Redeploys show the best cell of each row.</div>';
+    html += '<div class="bt-explain" style="margin-top:12px"><strong>Best:</strong> ' + data.sweep_label + '=' + swFmt(best.sv) + ', ' + data.cross_label + '=' + crFmt(best.cv) + ' \u2192 ' + data.metric_label + ': ' + metFmt(bestVal) + ' (ranked by ' + data.metric_label + '; illustrative sweep of the v14 modulator around a neutral baseline \u2014 not the production preset. The v18 test candidate runs fixed constants and is not swept.) Def Days / Redeploys show the best cell of each row.</div>';
 
     document.getElementById('btWfGridContainer').innerHTML = html;
     document.getElementById('btWfSection').classList.remove('hidden');

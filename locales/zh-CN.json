@@ -33,8 +33,8 @@
     "shieldLabel": "--去杠杆调节器",
     "shieldCopy": "连续市场调节器：随着回撤和下行波动率上升，敞口连续下调 — 无技术指标、无计时器、无相关性门控。无论哪个方向，敞口每根 K 线都平滑地向目标移动，无硬性底仓；闲置的 DCA 资金会在敞口恢复后自动重新部署。",
     "shieldLink": "[ 查看 8.7 年回测 ]",
-        "trustAnchors": "--信任锚点",
-        "whyWeWork": "--我们为何如此运作"
+    "trustAnchors": "--信任锚点",
+    "whyWeWork": "--我们为何如此运作"
   },
   "beta": {
     "tag": "--年度访问权限",
@@ -71,7 +71,7 @@
     "betaF6": "非托管隐私 — 投资组合保存在您的浏览器中（仅当您选择启用信号与通知服务时才在服务器端存储）",
     "betaF7": "自激活起 365 天访问权限",
     "betaF8": "发送消息 — 我们在 48 小时内审核并激活",
-        "betaF9": "共享 Beta 聊天——伪匿名，20 条消息滚动缓冲，随时可删除",
+    "betaF9": "共享 Beta 聊天——伪匿名，20 条消息滚动缓冲，随时可删除",
     "blackF1": "风险平价优化，完整协方差与方差矩阵",
     "blackF2": "去杠杆调节器，连续回撤崩盘保护",
     "blackF3": "基于波动率的动态分配上限",
@@ -119,8 +119,8 @@
     "a10": "不会——不会以任何可读形式存储。Beta 密钥绑定到一台设备/网络以防止共享，但我们仅存储密钥的单向哈希和 IP 的单向 HMAC 指纹。两者都无法还原为您真实的密钥或 IP。它仅用于强制执行“一密钥一用户”并对暴力破解尝试进行速率限制——绝不用于追踪或画像。详情见我们<a href=\"/privacy\" style=\"color:#a78bfa;\">隐私政策</a>第 8 节。",
     "q11": "是否有自动每日信号或通知服务？",
     "a11": "有 — 这是一项<strong>可选的订阅式服务</strong>。如果您启用它，引擎每天在服务器上计算一次您的去杠杆护盾信号和 DCA 计划，并可以向您的设备推送通知。为此，您的持仓将存储在您激活密钥的哈希之下 — 绝不关联您的姓名或钱包 — 并在您撤回同意的那一刻完全删除。完整详情请参阅我们<a href=\"/privacy\" style=\"color:#a78bfa;\">隐私政策</a>第 9 节。",
-        "q12": "什么是 Beta 聊天？",
-        "a12": "Beta 用户可以访问<strong>共享内部聊天</strong>，仅对活跃的 Beta 成员可见。消息是伪匿名的（显示为类似 B-XXXXXX 的短代码，绝不显示您的真实密钥或 IP），限制为 200 个字符，最多保留最近 20 条消息（较旧的消息每天自动清除）。您可以随时清除自己的消息。聊天存储在服务器端，位于您激活密钥的哈希之下，并在密钥停用时删除。"
+    "q12": "什么是 Beta 聊天？",
+    "a12": "Beta 用户可以访问<strong>共享内部聊天</strong>，仅对活跃的 Beta 成员可见。消息是伪匿名的（显示为类似 B-XXXXXX 的短代码，绝不显示您的真实密钥或 IP），限制为 200 个字符，最多保留最近 20 条消息（较旧的消息每天自动清除）。您可以随时清除自己的消息。聊天存储在服务器端，位于您激活密钥的哈希之下，并在密钥停用时删除。"
   },
   "community": {
     "title": "--社区信号"
@@ -471,7 +471,7 @@
       "backend8": "<strong>选择加入的信号与通知服务（存储、可删除）：</strong>代币代码 + 数量和冻结权重计划，位于您密钥的哈希之下",
       "backend9": "同意回执和必读确认——GDPR 审计记录",
       "backend10": "通知设置——一个随机且不可猜测的主题；读取令牌仅以哈希形式存储",
-            "backend11": "<strong>Beta 聊天消息（已存储，可删除）：</strong>您密钥哈希下的伪匿名消息（≤200 字符），滚动上限 20 条消息 + 每天清除最旧消息",
+      "backend11": "<strong>Beta 聊天消息（已存储，可删除）：</strong>您密钥哈希下的伪匿名消息（≤200 字符），滚动上限 20 条消息 + 每天清除最旧消息",
       "bnTitle": "9.1 后端永远看不到什么",
       "bnP": "这是最关键的部分。以下数据在架构上不可能被后端访问：",
       "bnCt": "🔒 架构级隐私保证",
@@ -525,13 +525,13 @@
       "c6b": "Google Analytics、Mixpanel",
       "c6c": "Simple Analytics（隐私优先）",
       "closing": "AQMath 为您提供量化对冲基金分配引擎的计算能力，同时保持纸质笔记本般的数据主权。",
-            "chatTitle": "9.3 Beta 聊天",
-            "chatP1": "Beta 用户可以访问<strong>共享内部聊天</strong>，仅对活跃的 Beta 成员可见。该聊天旨在促进 Beta 测试者和团队之间的直接沟通——无自动引导，无帮助台。",
-            "chat1": "<strong>伪匿名：</strong>消息显示在源自您激活密钥哈希的短代码（例如 B-XXXXXX）下。您的真实密钥、IP 和身份永远不会显示。",
-            "chat2": "<strong>滚动缓冲：</strong>仅保留最近 20 条消息。最旧的消息还会在每个 UTC 日清除一次。",
-            "chat3": "每条消息<strong>200 字符限制</strong>，发帖间隔 3 秒冷却以防止刷屏。",
-            "chat4": "<strong>可删除：</strong>您可以随时通过清除按钮清除自己的消息。停用您的 Beta 密钥将删除所有聊天数据。",
-            "chatP2": "聊天以与可选信号服务相同的伪匿名方式存储在服务器端——位于您激活密钥的单向哈希之下，绝不关联您的姓名或钱包。"
+      "chatTitle": "9.3 Beta 聊天",
+      "chatP1": "Beta 用户可以访问<strong>共享内部聊天</strong>，仅对活跃的 Beta 成员可见。该聊天旨在促进 Beta 测试者和团队之间的直接沟通——无自动引导，无帮助台。",
+      "chat1": "<strong>伪匿名：</strong>消息显示在源自您激活密钥哈希的短代码（例如 B-XXXXXX）下。您的真实密钥、IP 和身份永远不会显示。",
+      "chat2": "<strong>滚动缓冲：</strong>仅保留最近 20 条消息。最旧的消息还会在每个 UTC 日清除一次。",
+      "chat3": "每条消息<strong>200 字符限制</strong>，发帖间隔 3 秒冷却以防止刷屏。",
+      "chat4": "<strong>可删除：</strong>您可以随时通过清除按钮清除自己的消息。停用您的 Beta 密钥将删除所有聊天数据。",
+      "chatP2": "聊天以与可选信号服务相同的伪匿名方式存储在服务器端——位于您激活密钥的单向哈希之下，绝不关联您的姓名或钱包。"
     },
     "version": "v2.1 — 2026年8月",
     "cap": {
@@ -547,16 +547,16 @@
     }
   },
   "bt": {
-    "intro": "<strong>工作原理：</strong>上传代币的历史价格 CSV（最多 5 个）。每次运行都会在完全相同的组合、资金与 DCA 时间表上<strong>并行执行三个引擎</strong>：<strong>去杠杆 v14.0</strong>（生产调节器 &mdash; 连续回撤 + 下行波动率降险）、<strong>相关性区间 v15</strong>（Beta &mdash; 滚动成对相关性区间，带双重一致的崩盘保护）与 <strong>低谷分批 v16</strong>（Beta &mdash; 事件驱动区间，带低谷分批恢复）。<strong>买入持有</strong>无条件购买代币并保持满仓敞口。组合遵循与生产环境相同的 <strong>180 天宏观循环</strong> &mdash; 每 180 天基于最近 180 天窗口进行一次 KKT 风险平价再优化。所有引擎收取相同的模拟费用、以相同方式重新部署闲置的 DCA 资金，并以<strong>风险调整后收益（Sharpe 与 Calmar）</strong>评分，而非是否跑赢买入持有。",
-    "enginesNotice": "<span class=\"rv-v15-tag\">新引擎测试中</span> v15 与 v16 Beta 现已<strong>与 v14 并行实时模拟交易</strong> &mdash; 本回测现在在完全相同的条件下并排运行全部三个引擎：已冻结的 v14 生产 Shield、相关性区间保护（v15）与低谷分批恢复护盾（v16）。<strong>v14 完全未改动。</strong>实时前向记录对比位于结果页底部。",
+    "intro": "<strong>工作原理：</strong>上传代币的历史价格 CSV（最多 5 个）。每次运行都会在完全相同的组合、资金与 DCA 时间表上<strong>并行执行两个引擎</strong>：<strong>去杠杆 v14.0</strong>（生产调节器 &mdash; 连续回撤 + 下行波动率降险）与 <strong>v18 波动率自适应</strong>（测试候选 &mdash; 波动率缩放动态阈值，带 V 型反弹恢复）。<strong>买入持有</strong>无条件购买代币并保持满仓敞口。组合遵循与生产环境相同的 <strong>180 天宏观循环</strong> &mdash; 每 180 天基于最近 180 天窗口进行一次 KKT 风险平价再优化。两个引擎收取相同的模拟费用、以相同方式重新部署闲置的 DCA 资金，并以<strong>风险调整后收益（Sharpe 与 Calmar）</strong>评分，而非是否跑赢买入持有。",
+    "enginesNotice": "<span class=\"rv-v15-tag\">v18 测试候选</span> 本回测现在在完全相同的条件下并排运行 <strong>v14 与 v18</strong>。v18 采用波动率自适应阈值，能自动适应大盘币和低波动率篮子以及高波动率山寨币篮子 &mdash; 一个自适应引擎取代了多个独立实验。<strong>v14 仍是生产环境的引擎。</strong>v18 已验证但尚未上线。",
     "csvFormat": "<strong>CSV 格式：</strong>包含日期列（<code>event_date</code>/<code>date</code>/<code>Date</code>）+ 价格列（<code>close_price_usd</code>/<code>Close</code>/<code>price</code>）的表头。等权重组合。",
     "navBacktest": "回测",
     "changelogIntro": "<strong>更新日志。</strong>引擎更新的带日期记录，让您看到的任何结果都能追溯到产生它的确切版本。",
-    "changelog": "<li><span class=\"bt-cl-date\">2026-08-12</span><span class=\"bt-cl-text\"><strong>回测页现以生产宏观循环运行全部三个引擎。</strong>每次回测与 WF 网格运行现在都会在完全相同的组合、资金与 DCA 条件下并排执行 v14、v15 与 v16，且组合遵循与生产环境相同的 <strong>180 天宏观循环</strong>（每 180 天一次 KKT 风险平价再优化）。<strong>v14 未改动。</strong></span></li><li><span class=\"bt-cl-date\">2026-08-12</span><span class=\"bt-cl-text\"><strong>v16 Beta 实验启动（并行模拟交易）。</strong>运行全新低谷分批恢复护盾（v16）的第三个模拟账户现已与 v14 和 v15 记录并行运行，以便在完全相同的条件下对比三者。<strong>v14 与 v15 均未做任何改动</strong> &mdash; 其引擎与记录完全照旧继续。</span></li><li><span class=\"bt-cl-date\">2026-08-05</span><span class=\"bt-cl-text\"><strong>v15 Beta 实验启动（并行模拟交易）。</strong>运行全新相关性区间保护（v15）的第二个模拟账户现已与 v14 记录并行运行，以便在完全相同的条件下对比两者。<strong>v14 未做任何改动</strong> &mdash; 其引擎与记录完全照旧继续。</span></li><li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>引擎设置已冻结（v14.0）。</strong>调节器的设置已于当日锁定。从这一天起的每个结果都来自这个完全相同、未改动的引擎。</span></li><li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>定投金额可为零。</strong>现在可将 <strong>DCA 金额</strong>设为 <strong>0</strong>，以测试一次性、整笔起始的投入。此前的结果不受影响。</span></li>",
+    "changelog": "<li><span class=\"bt-cl-date\">2026-09-03</span><span class=\"bt-cl-text\"><strong>回测现运行 v14 + v18；v15 与 v16 已停用。</strong>回测页现对比 <strong>v14</strong>（生产回退）与 <strong>v18</strong>（波动率自适应测试候选）。v15（相关性区间）已停用，因为其相关性排名信号需要比生产环境 180 天窗口更多的历史数据（MAJORS 最大回撤 37.6%，而 v14 为 25.7%）。v16（低谷分批）已停用，因为 v18 的波动率缩放方法在两个配置上都优于它。<strong>v14 未改动。</strong></span></li><li><span class=\"bt-cl-date\">2026-08-12</span><span class=\"bt-cl-text\"><strong>回测页现以生产宏观循环运行全部三个引擎。</strong>每次回测与 WF 网格运行现在都会在完全相同的组合、资金与 DCA 条件下并排执行 v14、v15 与 v16，且组合遵循与生产环境相同的 <strong>180 天宏观循环</strong>（每 180 天一次 KKT 风险平价再优化）。<strong>v14 未改动。</strong></span></li><li><span class=\"bt-cl-date\">2026-08-12</span><span class=\"bt-cl-text\"><strong>v16 Beta 实验启动（并行模拟交易）。</strong>运行全新低谷分批恢复护盾（v16）的第三个模拟账户现已与 v14 和 v15 记录并行运行，以便在完全相同的条件下对比三者。<strong>v14 与 v15 均未做任何改动</strong> &mdash; 其引擎与记录完全照旧继续。</span></li><li><span class=\"bt-cl-date\">2026-08-05</span><span class=\"bt-cl-text\"><strong>v15 Beta 实验启动（并行模拟交易）。</strong>运行全新相关性区间保护（v15）的第二个模拟账户现已与 v14 记录并行运行，以便在完全相同的条件下对比两者。<strong>v14 未做任何改动</strong> &mdash; 其引擎与记录完全照旧继续。</span></li><li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>引擎设置已冻结（v14.0）。</strong>调节器的设置已于当日锁定。从这一天起的每个结果都来自这个完全相同、未改动的引擎。</span></li><li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>定投金额可为零。</strong>现在可将 <strong>DCA 金额</strong>设为 <strong>0</strong>，以测试一次性、整笔起始的投入。此前的结果不受影响。</span></li>",
     "simNotice": "<strong>假设性结果。</strong>本页面根据您上传的价格历史进行模拟计算。回测是在完全知晓该时段结果的前提下把策略套用于过去 &mdash; 而当时没有人拥有这种信息 &mdash; 并且忽略了滑点、买卖价差和税费，但会对每次再平衡、DCA 买入和资金重新部署收取 0.1% 的模拟交易所手续费。假设性表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是供您自行分析的软件：它不是投资建议，不构成买入或卖出任何资产的推荐，也从不下单或持有资金。"
   },
   "rv": {
-    "enginesNotice": "<span class=\"rv-v15-tag\">新引擎测试中</span> v15 与 v16 Beta 现已<strong>与 v14 并行实时模拟交易</strong> &mdash; 在完全相同的条件下，对比全新相关性区间保护（v15）、全新低谷分批恢复护盾（v16）与已冻结的 v14 Shield 的实验。<strong>v14 完全未改动。</strong>完整对比见本页底部。",
+    "enginesNotice": "<span class=\"rv-v15-tag\">v18 测试候选</span> 本回测现在在完全相同的条件下并排运行 <strong>v14 与 v18</strong>。v18 采用波动率自适应阈值，能自动适应大盘币和低波动率篮子以及高波动率山寨币篮子。<strong>v14 仍是生产环境的引擎。</strong>v18 已验证但尚未上线。",
     "changelogMirror": "引擎更新日志 · 点击展开",
     "simNotice": "<strong>模拟结果 &mdash; 未使用真实资金。</strong>本页面的每一项数据均来自回测以及模拟交易记录：一种以<strong>虚拟资金</strong>对接实时行情运行的模拟。从未投入客户资金，从未下过任何订单，数据不包含滑点、买卖价差和税费，但确实计入了对每次再平衡、DCA 买入和资金重新部署收取的 0.1% 模拟交易所手续费 &mdash; 买入并持有基准按同一标准收费。模拟表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是软件，不是投资建议，也不代您管理资金。",
     "researchLink": "上一轮未见代币测试的完整报告 &mdash; 包含方法论、全部 16 个组合、已归零代币压力测试与注意事项 &mdash; 已发布于<a href=\"/research/oos-v14-new-tokens-zh\">研究与验证</a>。",
