@@ -56,9 +56,10 @@
 <strong>Status:</strong> RESEARCH — head-to-head comparison of fixed versus adaptive exposure capping on the production path</p>
 <hr>
 <h2>1. Objective</h2>
-<p>Standard backtests cap portfolio exposure using a fixed drawdown reference: when the portfolio drops by a set percentage from its peak, the system reduces risk. This approach works well when the reference level matches the basket&#x27;s volatility profile — and fails silently when it does not.</p>
-<p>This study demonstrates two specific failure modes of fixed-threshold exposure capping and measures the outcome of replacing the fixed threshold with an adaptive one that scales with the basket&#x27;s own trailing downside volatility.</p>
-<p><strong>No parameters of the adaptive engine were tuned for this comparison.</strong> The adaptive threshold engine uses the same configuration that was validated on the production path before this study. The fixed-threshold baseline uses the shipped production defaults.</p>
+<p>Capital is protected exclusively by deterministic reduction of exposure. Risk indicators — drawdown from peak, trailing downside volatility — are telemetry; they observe but never shield. The only mechanism that limits drawdown is the system&#x27;s physical inability to maintain full risky allocation when the downside signature rises.</p>
+<p>This separation between observation and enforcement is where standard backtests fail. A fixed drawdown reference — the most common exposure cap — works when it matches the basket&#x27;s volatility profile and fails silently when it does not. The failure is not visible in a full-history backtest because the optimiser selects the threshold that <em>looked</em> best in hindsight.</p>
+<p>This study demonstrates two specific failure modes of fixed-threshold exposure capping, defines the execution state machine that replaces it, and measures the outcome on both basket profiles using walk-forward out-of-sample validation on the exact production data path.</p>
+<p><strong>No parameters of the adaptive engine were tuned for this comparison.</strong> The adaptive threshold engine uses the same configuration validated on the production path before this study. The fixed-threshold baseline uses the shipped production defaults.</p>
 <h2>2. The two failure modes</h2>
 <h3>2.1 Fixed thresholds are basket-blind</h3>
 <p>A single drawdown reference level cannot serve structurally different baskets. A 15% drawdown on a low-volatility majors basket (BTC, ETH, PAXG) is a genuine stress signal. The same 15% dip on a high-volatility altcoin basket is routine noise — the kind of move that happens several times per month without signalling a regime change.</p>
@@ -71,13 +72,19 @@
 <p>On that path, the full-history winner was the <strong>worst</strong> performer. Max drawdown 37.6% versus alternatives at 23–26%.</p>
 <p>The reason: the winning engine relied on an expanding-percentile signal that needed long, continuous history. The bounded 180-day window silently truncated that signal. On the full dataset it was informative; on the production window it was noise.</p>
 <p>The ranking inverted between the two validation paths. The lesson: validate on the path you ship, not the path that looks best.</p>
-<h2>3. The adaptive approach</h2>
+<h2>3. Execution state machine</h2>
+<p>The adaptive engine replaces the binary shield state with a <strong>continuous regime modulator</strong> whose output maps to three operational zones. Exposure is a smooth function of the downside signature — there are no hard switches. The zones are diagnostic, not structural.</p>
+<figure class="rs-fig"><img src="/research/assets/exposure_state_machine.svg" alt="Execution state machine — continuous regime modulator with three operational zones" width="920" height="400" loading="lazy" decoding="async"></figure>
+<p><strong>Normal → Telemetry Alert.</strong> When the drawdown signal or downside volatility signal rises above its respective threshold, the composite risk measure begins to increase. The target exposure drops below 100%. The asymmetric ramp starts reducing exposure — fast on the way out (de-risk), slow on the way back in (anti-chop hysteresis). DCA is still deployed into the basket but the system is no longer fully invested.</p>
+<p><strong>Telemetry Alert → Hard Enforcement.</strong> When target exposure drops below the redeploy threshold, the system enters full defensive mode. Parked DCA accumulates in stablecoin. The shield is absorbing the crash at deterministically reduced risk. This is the only zone where capital is actually being protected — telemetry alone does nothing.</p>
+<p><strong>Hard Enforcement → Normal.</strong> Recovery is not a binary switch. The adaptive engine tracks the trough since the last basket all-time high and accelerates re-entry when a confirmed V-bounce is detected — but only when the bounce impulse clears a confirmation threshold, protecting against dead-cat rallies. The ramp naturally tracks the basket recovery because drawdown shrinks as the equity curve heals.</p>
+<p>The critical design property: <strong>telemetry never protects capital</strong>. The drawdown and volatility signals are inputs to a deterministic exposure function. The only thing that limits drawdown is the system&#x27;s physical reduction of risky exposure. This is the difference between a risk dashboard and a risk controller.</p>
+<h2>4. The adaptive approach</h2>
 <p>The adaptive threshold engine replaces the fixed drawdown reference with a volatility-scaled one. Instead of comparing the portfolio&#x27;s drawdown to a constant level, the system measures the basket&#x27;s own trailing annualised downside volatility and scales every threshold proportionally.</p>
 <p>The effect is basket-relative sensitivity: a 15% dip on a low-vol basket and a 30% dip on a high-vol basket produce the same response, because both represent the same number of standard deviations for their respective baskets. One engine, two sensitivity profiles, no manual tuning per basket type.</p>
-<p>The adaptive engine also improves re-entry after a crash. The fixed-threshold baseline re-enters at a constant rate regardless of the recovery shape. The adaptive engine tracks the trough since the last basket all-time high and accelerates entry when a confirmed V-bounce is detected — but only when the bounce impulse clears a confirmation threshold, protecting against dead-cat rallies.</p>
 <p>Exit speed (de-risking) is preserved at the same fast rate in both engines. The difference is entirely in threshold sensitivity and re-entry intelligence.</p>
 <figure class="rs-fig"><img src="/research/assets/exposure_concept.svg" alt="Adaptive threshold concept — fixed versus volatility-scaled drawdown reference" width="920" height="400" loading="lazy" decoding="async"></figure>
-<h2>4. Walk-forward head-to-head comparison</h2>
+<h2>5. Walk-forward head-to-head comparison</h2>
 <p>Both engines run on the <strong>identical</strong> production KKT-180 macro loop (risk-parity weights re-optimised every 180 days on trailing data), identical fee model (10 bps per trade, DCA buy and redeploy), identical DCA schedule. The only difference is the exposure-capping engine.</p>
 <p><strong>All metrics below are walk-forward out-of-sample.</strong> Each engine runs continuously on the rolling 180-day bounded window with cold replay and persisted shield state — the exact production data path. No in-sample full-window optimisation, no lookahead. The numbers represent what the system would have delivered in real time, not what looks best in hindsight.</p>
 <p>Two baskets, selected for structural contrast:</p>
@@ -98,7 +105,7 @@
 </tr>
 </tbody></table></div>
 <p>Settings: lump-sum start, 180-day optimizer warm-up, rolling 180-day bounded window, cold replay with persisted shield state. <strong>Walk-forward OOS — no in-sample fitting.</strong></p>
-<h3>4.1 Majors basket (walk-forward OOS)</h3>
+<h3>5.1 Majors basket (walk-forward OOS)</h3>
 <div class="rs-tablewrap">
 <table>
 <thead><tr>
@@ -123,7 +130,7 @@
 <td style="text-align:right"><strong>23.1%</strong></td>
 </tr>
 </tbody></table></div>
-<h3>4.2 Alt basket (walk-forward OOS)</h3>
+<h3>5.2 Alt basket (walk-forward OOS)</h3>
 <div class="rs-tablewrap">
 <table>
 <thead><tr>
@@ -150,22 +157,218 @@
 </tbody></table></div>
 <p>The adaptive engine wins on every metric for both baskets. The largest gap is on the alt basket&#x27;s max drawdown — 29.4% versus 36.8%, a 7.4 percentage-point reduction. That is the fixed-threshold failure mode in numbers: a reference level tuned for one volatility regime over-reacts on another.</p>
 <figure class="rs-fig"><img src="/research/assets/exposure_dd_comparison.svg" alt="Head-to-head max drawdown: fixed versus adaptive threshold, both baskets" width="920" height="380" loading="lazy" decoding="async"></figure>
-<h3>4.3 Reading</h3>
+<h3>5.3 Reading</h3>
 <p>On the majors basket the improvement is meaningful but modest — the fixed threshold was already a reasonable fit for the volatility profile. On the alt basket the improvement is large — the fixed threshold was structurally mismatched, producing near-permanent defense that barely protected during real crashes.</p>
 <p>The adaptive engine&#x27;s vol-scaled threshold automatically tunes itself to each basket. No separate configuration, no profile classification, no manual override.</p>
-<h2>5. Regime stress tests</h2>
-<p>The adaptive engine has been validated across six named crash regimes (May 2021 unwind, LUNA contagion, FTX collapse, August 2024 carry unwind, and two further correction windows) on three structurally different baskets. Every regime was scored by parameters frozen <strong>before</strong> it happened — by construction out of sample.</p>
-<p>Result: <strong>15 of 15</strong> covered regime-and-basket combinations show a positive out-of-sample drawdown cut. Headline worst segments:</p>
-<ul><li>LUNA contagion: 16.8% vs 44.1% buy-and-hold (majors+gold basket)</li><li>FTX collapse: 3.3% vs 13.3% buy-and-hold (majors+gold basket)</li><li>2025–26 corrections: 22.5% vs 34.9% buy-and-hold (2019–20 generation basket)</li></ul>
-<p>See the <a href="/research/regime-autopsy">Regime Autopsy study</a> for the full per-regime decomposition.</p>
-<p>An out-of-sample test on 16 baskets of tokens <strong>never used to design or tune</strong> the system (AVAX, CRO, DOGE, HBAR, LINK, PYTH, and CEL as a dead-token stress) showed a median <strong>54.3 percentage points</strong> of max-drawdown reduction, with Calmar improving in 16 of 16 baskets. See the <a href="/research/oos-v14-new-tokens">OOS Validation study</a>.</p>
-<p>A <a href="/research/robustness">robustness study</a> of 129 walk-forward re-runs — perturbing every user-facing knob one at a time, stress-testing fees to 20× and execution to 2 days late — found no cliff. The drawdown cut survives late execution almost intact.</p>
-<h2>6. Caveats</h2>
-<ul><li><strong>Absolute return trade-off.</strong> The adaptive engine, like any defensive system, gives up final equity versus buy-and-hold in windows that contain strong bull legs. In every full-window comparison the protective system trails buy-and-hold on raw final value. The improvement is in risk-adjusted efficiency (Calmar, Sharpe) and max drawdown.</li><li><strong>Warm-up period.</strong> The trailing-volatility measurement needs a minimum window to stabilise. During the first days of operation the system uses a conservative floor threshold — this is the graceful-degradation path, not the tuned behaviour.</li><li><strong>Same-day open gaps are uncatchable.</strong> Any daily-close system can only react to what happens between closes. A same-day open gap is uncatchable by design. Crypto crashes are drift-dominated (95–100% of damage unfolds in the intraday leg), but the uncatchable residual concentrates in single worst days.</li><li><strong>Simulated results.</strong> Every figure in this study is computed from historical price data by a backtest. No capital was invested and no orders were placed. Figures exclude slippage and liquidity effects, though a simulated 0.1% exchange fee is charged on every trade.</li></ul>
-<h2>7. Methodology</h2>
-<p>1. <strong>MACRO loop:</strong> KKT risk-parity optimisation on the trailing 180-day window, re-run every 180 days; weights frozen in between. Both engines share the identical macro loop and receive the same weights. 2. <strong>DAILY loop:</strong> Each exposure-capping engine evaluated on every daily close. Threshold rebalancing only trades when the target drifts beyond the deadband; 10 bps fee on every trade, DCA buy and redeploy. 3. <strong>Validation path:</strong> Rolling 180-day bounded window, cold replay, persisted shield state — the exact data path the production system runs. <strong>Not a continuous backtest on all available history. All reported metrics are walk-forward out-of-sample.</strong> 4. <strong>Metrics:</strong> TWR daily returns (DCA flows removed), risk-free rate 5%; max drawdown from the virtual equity peak. 5. <strong>Engines compared:</strong> The fixed-threshold baseline uses the shipped production defaults (constant drawdown reference, symmetric entry/exit ramp). The adaptive-threshold engine uses volatility-scaled thresholds and asymmetric V-bounce re-entry. Both are applied as post-processors to the same KKT weight stream — the relative token proportions are never altered, only total risky exposure changes.</p>
-<h2>8. Verdict</h2>
-<ul><li>Fixed drawdown thresholds are <strong>basket-blind</strong>: a single number cannot serve both a low-volatility majors basket and a high-volatility altcoin basket.</li><li>Full-history in-sample selection <strong>inverts</strong> on the production path when the winning signal depends on history longer than the production window.</li><li>An adaptive threshold that scales with the basket&#x27;s own trailing downside volatility solves both problems with a single engine — no per-basket tuning, no profile switching.</li><li>On the production path: adaptive wins both baskets on Sharpe, Calmar and MaxDD. The largest improvement is the alt basket&#x27;s MaxDD (29.4% vs 36.8%).</li><li>15+ published studies validate the approach across unseen tokens, named crash regimes, perturbed parameters and stressed fees.</li></ul>
+<h2>6. Per-profile empirical stress-test results</h2>
+<p>The adaptive engine has been validated across six named crash regimes on three structurally different baskets. Every regime was scored by parameters frozen <strong>before</strong> it happened — by construction out of sample. Below we decompose the results by profile.</p>
+<h3>6.1 Profile 1 — Majors + Gold (BTC, ETH, XRP, XMR + PAXG)</h3>
+<p>Low-volatility core with a gold anchor. The adaptive shield&#x27;s vol-scaled threshold maps to a relatively tight drawdown reference on this basket — the same number of standard deviations corresponds to a smaller absolute drawdown.</p>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">Regime</th>
+<th style="text-align:left">Window</th>
+<th style="text-align:right">Shield MDD</th>
+<th style="text-align:right">B&amp;H MDD</th>
+<th style="text-align:right">Cut</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">R2 May-2021 unwind</td>
+<td style="text-align:left">2021-04 → 2021-07</td>
+<td style="text-align:right">15.9%</td>
+<td style="text-align:right">23.9%</td>
+<td style="text-align:right"><strong>+8.0 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R3 LUNA contagion</td>
+<td style="text-align:left">2022-04 → 2022-06</td>
+<td style="text-align:right">16.8%</td>
+<td style="text-align:right">44.1%</td>
+<td style="text-align:right"><strong>+27.3 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R4 FTX collapse</td>
+<td style="text-align:left">2022-10 → 2023-01</td>
+<td style="text-align:right">3.3%</td>
+<td style="text-align:right">13.3%</td>
+<td style="text-align:right"><strong>+9.9 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R5 Aug-2024 carry unwind</td>
+<td style="text-align:left">2024-07 → 2024-09</td>
+<td style="text-align:right">12.4%</td>
+<td style="text-align:right">17.5%</td>
+<td style="text-align:right"><strong>+5.0 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R6 2025-26 corrections</td>
+<td style="text-align:left">2025-01 → 2026-08</td>
+<td style="text-align:right">18.9%</td>
+<td style="text-align:right">32.1%</td>
+<td style="text-align:right"><strong>+13.2 pp</strong></td>
+</tr>
+</tbody></table></div>
+<p>Full-window (2020-03 → 2026-08, 2,327 days): Calmar <strong>0.57</strong> vs 0.38 B&amp;H. MaxDD <strong>16.9%</strong> vs 43.2% B&amp;H. The shield gives up $7,414 of final equity ($15,650 vs $23,064 B&amp;H) but delivers 50% more risk-adjusted efficiency per unit of drawdown risk.</p>
+<h3>6.2 Profile 2 — 2019-20 Generation (ETH, LINK, ATOM, DOT + PAXG)</h3>
+<p>Higher-volatility basket from the last cycle generation. The adaptive threshold scales wider in absolute terms but the same number of standard deviations — the self-tuning property in action.</p>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">Regime</th>
+<th style="text-align:left">Window</th>
+<th style="text-align:right">Shield MDD</th>
+<th style="text-align:right">B&amp;H MDD</th>
+<th style="text-align:right">Cut</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">R2 May-2021 unwind</td>
+<td style="text-align:left">2021-04 → 2021-07</td>
+<td style="text-align:right">19.1%</td>
+<td style="text-align:right">40.8%</td>
+<td style="text-align:right"><strong>+21.7 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R3 LUNA contagion</td>
+<td style="text-align:left">2022-04 → 2022-06</td>
+<td style="text-align:right">21.3%</td>
+<td style="text-align:right">44.8%</td>
+<td style="text-align:right"><strong>+23.5 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R4 FTX collapse</td>
+<td style="text-align:left">2022-10 → 2023-01</td>
+<td style="text-align:right">1.9%</td>
+<td style="text-align:right">9.2%</td>
+<td style="text-align:right"><strong>+7.3 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R5 Aug-2024 carry unwind</td>
+<td style="text-align:left">2024-07 → 2024-09</td>
+<td style="text-align:right">9.5%</td>
+<td style="text-align:right">15.0%</td>
+<td style="text-align:right"><strong>+5.5 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R6 2025-26 corrections</td>
+<td style="text-align:left">2025-01 → 2026-08</td>
+<td style="text-align:right">22.5%</td>
+<td style="text-align:right">34.9%</td>
+<td style="text-align:right"><strong>+12.4 pp</strong></td>
+</tr>
+</tbody></table></div>
+<p>Full-window (2021-02 → 2026-08, 1,998 days): MaxDD <strong>18.9%</strong> vs 37.5% B&amp;H — the shield halved the drawdown. Per-regime cuts are uniformly positive. The full-window Calmar favours B&amp;H (0.12 vs 0.19) — this is the honest limit of the claim: per-regime protection yes, but on this specific basket the bull legs were large enough that the protection cost more in participation than it saved in drawdown.</p>
+<h3>6.3 Profile 2 stress — Landmine basket (BTC, ETH, CEL + PAXG)</h3>
+<p>Deliberately includes a token that went to zero (Celsius). The adaptive shield ran with the ADV-K2 liveness screen active, which zeroed CEL&#x27;s weight once it failed the $1M/day trailing-volume test.</p>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">Regime</th>
+<th style="text-align:left">Window</th>
+<th style="text-align:right">Shield MDD</th>
+<th style="text-align:right">B&amp;H MDD</th>
+<th style="text-align:right">Cut</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">R3 LUNA contagion</td>
+<td style="text-align:left">2022-04 → 2022-06</td>
+<td style="text-align:right">4.1%</td>
+<td style="text-align:right">11.4%</td>
+<td style="text-align:right"><strong>+7.3 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R4 FTX collapse</td>
+<td style="text-align:left">2022-10 → 2023-01</td>
+<td style="text-align:right">5.4%</td>
+<td style="text-align:right">17.8%</td>
+<td style="text-align:right"><strong>+12.4 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R5 Aug-2024 carry unwind</td>
+<td style="text-align:left">2024-07 → 2024-09</td>
+<td style="text-align:right">9.8%</td>
+<td style="text-align:right">11.8%</td>
+<td style="text-align:right"><strong>+1.9 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R6 2025-26 corrections</td>
+<td style="text-align:left">2025-01 → 2026-08</td>
+<td style="text-align:right">20.1%</td>
+<td style="text-align:right">32.9%</td>
+<td style="text-align:right"><strong>+12.8 pp</strong></td>
+</tr>
+</tbody></table></div>
+<p>Full-window Calmar <strong>0.65</strong> vs 0.50 B&amp;H — the best risk-adjusted efficiency of all three baskets. The dead token stress confirms: the shield + liveness screen handles catastrophic individual-asset failure without manual intervention.</p>
+<h3>6.4 OOS validation — 16 unseen token baskets</h3>
+<p>An out-of-sample test on 16 baskets of tokens <strong>never used to design or tune</strong> the system (AVAX, CRO, DOGE, HBAR, LINK, PYTH, and CEL as a dead-token stress) — all k=3 and k=4 combinations of the 5 survivors:</p>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">Metric</th>
+<th style="text-align:left">Result</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">Max-drawdown reduction</td>
+<td style="text-align:left">median <strong>+54.3 pp</strong> (min +46.7, max +65.8) — reduced DD in <strong>16 / 16</strong> baskets</td>
+</tr>
+<tr>
+<td style="text-align:left">Calmar delta</td>
+<td style="text-align:left">median <strong>+0.35</strong> — improved in <strong>16 / 16</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">Sharpe delta</td>
+<td style="text-align:left">median <strong>+0.16</strong> — improved in <strong>15 / 16</strong></td>
+</tr>
+</tbody></table></div>
+<p>The adaptive engine&#x27;s vol-scaled threshold generalises to baskets it was never designed for. No per-basket tuning was applied.</p>
+<h3>6.5 Execution robustness</h3>
+<p>A <a href="/research/robustness">robustness study</a> of 129 walk-forward re-runs — perturbing every user-facing knob one at a time, stress-testing fees to 20× and execution to 2 days late — found no cliff:</p>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">Stress</th>
+<th style="text-align:right">MaxDD degradation</th>
+<th style="text-align:right">Sharpe degradation</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">DCA delay (2-5 days)</td>
+<td style="text-align:right">−0.1 pp</td>
+<td style="text-align:right">−0.003</td>
+</tr>
+<tr>
+<td style="text-align:left">DCA amount ±20%</td>
+<td style="text-align:right">+0.0 pp</td>
+<td style="text-align:right">+0.001</td>
+</tr>
+<tr>
+<td style="text-align:left">Skip every 4th DCA</td>
+<td style="text-align:right">+0.5 pp</td>
+<td style="text-align:right">+0.051</td>
+</tr>
+<tr>
+<td style="text-align:left">Fee × 20</td>
+<td style="text-align:right">&lt; 2 pp</td>
+<td style="text-align:right">&lt; 0.10</td>
+</tr>
+<tr>
+<td style="text-align:left">Execution 2 days late</td>
+<td style="text-align:right">&lt; 3 pp</td>
+<td style="text-align:right">&lt; 0.08</td>
+</tr>
+</tbody></table></div>
+<p>The drawdown cut survives late execution almost intact. The shield&#x27;s threshold rebalancing (only trade when the target drifts beyond the deadband) naturally reduces fee drag — approximately 64% fewer rebalances versus continuous adjustment.</p>
+<p>See the <a href="/research/regime-autopsy">Regime Autopsy study</a> for the full per-regime decomposition, the <a href="/research/oos-v14-new-tokens">OOS Validation study</a> for per-basket detail, and the <a href="/research/static-vs-dynamic">Static vs Dynamic study</a> for the comparison against 60/40, 70/30, and 80/20 static allocations.</p>
+<h2>7. Caveats</h2>
+<ul><li><strong>Absolute return trade-off.</strong> The adaptive engine, like any defensive system, gives up final equity versus buy-and-hold in windows that contain strong bull legs. In every full-window comparison the protective system trails buy-and-hold on raw final value. The improvement is in risk-adjusted efficiency (Calmar, Sharpe) and max drawdown.</li><li><strong>Warm-up period.</strong> The trailing-volatility measurement needs a minimum window to stabilise. During the initial warm-up days the system uses a conservative floor threshold — this is the graceful-degradation path, not the tuned behaviour.</li><li><strong>Same-day open gaps are uncatchable.</strong> Any daily-close system can only react to what happens between closes. Crypto crashes are drift-dominated (95–100% of damage unfolds in the intraday leg), but the uncatchable residual concentrates in single worst days.</li><li><strong>Simulated results.</strong> Every figure in this study is computed from historical price data by a backtest. No capital was invested and no orders were placed. Figures exclude slippage and liquidity effects, though a simulated 0.1% exchange fee is charged on every trade.</li></ul>
+<h2>8. Methodology</h2>
+<p>1. <strong>MACRO loop:</strong> KKT risk-parity optimisation on the trailing 180-day window, re-run every 180 days; weights frozen in between. Both engines share the identical macro loop and receive the same weights. 2. <strong>DAILY loop:</strong> Each exposure-capping engine evaluated on every daily close. Threshold rebalancing only trades when the target drifts beyond the deadband; 10 bps fee on every trade, DCA buy and redeploy. 3. <strong>Validation path:</strong> Rolling 180-day bounded window, cold replay, persisted shield state — the exact data path the production system runs. <strong>Not a continuous backtest on all available history. All reported metrics are walk-forward out-of-sample.</strong> 4. <strong>Metrics:</strong> TWR daily returns (DCA flows removed), risk-free rate 5%; max drawdown from the virtual equity peak. 5. <strong>Engines compared:</strong> The fixed-threshold baseline uses the shipped production defaults (constant drawdown reference, symmetric entry/exit ramp). The adaptive-threshold engine uses volatility-scaled thresholds and asymmetric V-bounce re-entry. Both are applied as post-processors to the same KKT weight stream — the relative token proportions are never altered, only total risky exposure changes. 6. <strong>Data:</strong> Yahoo Finance daily closes (unadjusted) for regime stress tests; CoinGecko for the OOS token validation. Common-date alignment per basket.</p>
+<h2>9. Verdict</h2>
+<ul><li>Fixed drawdown thresholds are <strong>basket-blind</strong>: a single number cannot serve both a low-volatility majors basket and a high-volatility altcoin basket.</li><li>Full-history in-sample selection <strong>inverts</strong> on the production path when the winning signal depends on history longer than the production window.</li><li>The execution state machine separates telemetry (observation) from enforcement (deterministic exposure reduction). Only the latter protects capital.</li><li>An adaptive threshold that scales with the basket&#x27;s own trailing downside volatility solves both problems with a single engine — no per-basket tuning, no profile switching.</li><li>On the production path: adaptive wins both baskets on Sharpe, Calmar and MaxDD. The largest improvement is the alt basket&#x27;s MaxDD (29.4% vs 36.8%).</li><li>Per-profile stress tests: <strong>15/15</strong> regime-basket combinations show positive drawdown cuts. Profile 1 (Majors+Gold) full-window Calmar 0.57 vs 0.38 B&amp;H. Profile 2 (2019-20 Gen) MaxDD halved (18.9% vs 37.5%).</li><li>16/16 unseen-token baskets show improved Calmar; median MaxDD reduction 54.3 pp.</li><li>15+ published studies validate the approach across unseen tokens, named crash regimes, perturbed parameters and stressed fees.</li></ul>
 <hr>
 <p><em>Simulated results — no real money. Every figure is computed from historical price data by a backtest; no capital was invested and no orders were placed. Figures exclude slippage and liquidity effects, though a simulated 0.1% fee is charged on every trade. Simulated and past performance is not a reliable indicator of future results. AQMath is software, not investment advice.</em></p>
 </main>

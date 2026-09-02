@@ -56,8 +56,9 @@
 <strong>状态：</strong> 研究 — 生产路径上固定敞口上限与自适应敞口上限的对比</p>
 <hr>
 <h2>1. 目标</h2>
-<p>标准回测使用固定回撤参考值来限制组合敞口：当组合从峰值下跌某一固定百分比时，系统降低风险。当参考值与组合的波动率特征匹配时，该方法效果良好 — 不匹配时则悄然失效。</p>
-<p>本研究展示固定阈值敞口上限的两种具体失效模式，并测量将固定阈值替换为随组合自身滚动下行波动率缩放的自适应阈值后的效果。</p>
+<p>资本仅通过确定性地降低敞口来保护。风险指标 — 自峰值的回撤、滚动下行波动率 — 是遥测数据；它们观察但从不防护。唯一限制回撤的机制是系统在下行特征上升时物理上无法维持满仓风险配置。</p>
+<p>这种观察与执行之间的分离，正是标准回测失败的地方。固定回撤参考值 — 最常见的敞口上限 — 在匹配组合波动率特征时有效，不匹配时则悄然失效。这种失败在全历史回测中不可见，因为优化器选择了事后<em>看起来</em>最好的阈值。</p>
+<p>本研究展示固定阈值敞口上限的两种具体失效模式，定义替代它的执行状态机，并在完全相同的生产数据路径上使用滚动前推样本外验证测量两个组合配置的结果。</p>
 <p><strong>自适应引擎的参数未为本对比做任何调整。</strong> 自适应阈值引擎使用在本研究之前即已在生产路径上验证的同一配置。固定阈值基线使用已上线的生产默认值。</p>
 <h2>2. 两种失效模式</h2>
 <h3>2.1 固定阈值对组合视而不见</h3>
@@ -71,13 +72,19 @@
 <p>在该路径上，全历史赢家变成了<strong>最差</strong>表现者。最大回撤 37.6%，而替代方案为 23–26%。</p>
 <p>原因：获胜引擎依赖一个扩展百分位信号，需要长期连续历史。有界的 180 天窗口悄然截断了该信号。在完整数据集上它信息丰富；在生产窗口上它是伪装成信号的噪音。</p>
 <p>排名在两条验证路径之间反转。教训：在你上线的路径上验证，而不是在看起来最好的路径上。</p>
-<h2>3. 自适应方法</h2>
+<h2>3. 执行状态机</h2>
+<p>自适应引擎用<strong>连续市场状态调节器</strong>替代二元防护盾状态，其输出映射到三个运行区域。敞口是下行特征的平滑函数 — 没有硬切换。区域是诊断性的，非结构性的。</p>
+<figure class="rs-fig"><img src="/research/assets/exposure_state_machine.svg" alt="执行状态机 — 具有三个运行区域的连续市场状态调节器" width="920" height="400" loading="lazy" decoding="async"></figure>
+<p><strong>正常 → 遥测警报。</strong> 当下撤信号或下行波动率信号上升超过各自阈值时，综合风险度量开始上升。目标敞口降至 100% 以下。非对称斜坡开始降低敞口 — 退出时快速（去风险），返回时缓慢（防切割滞后）。DCA 仍部署到组合中，但系统不再 fully invested。</p>
+<p><strong>遥测警报 → 硬执行。</strong> 当目标敞口降至重新部署阈值以下时，系统进入完全防守模式。停泊的 DCA 累积在稳定币中。防护盾以确定性地降低的风险吸收崩盘。这是唯一真正保护资本的区域 — 仅遥测本身不起任何作用。</p>
+<p><strong>硬执行 → 正常。</strong> 恢复不是二元切换。自适应引擎追踪自上次组合历史高点以来的谷底，并在检测到确认的 V 型反弹时加速重新进入 — 但仅当反弹冲量超过确认阈值时，以防止死猫反弹。斜坡自然追踪组合恢复，因为回撤随权益曲线修复而缩小。</p>
+<p>关键设计属性：<strong>遥测从不保护资本</strong>。回撤和波动率信号是确定性敞口函数的输入。唯一限制回撤的是系统对风险敞口的物理性降低。这是风险仪表板与风险控制器之间的区别。</p>
+<h2>4. 自适应方法</h2>
 <p>自适应阈值引擎用波动率缩放的参考值替代固定回撤参考值。系统不再将组合的回撤与一个常数比较，而是测量组合自身的滚动年化下行波动率，并按比例缩放所有阈值。</p>
 <p>效果是组合相对敏感度：低波动组合上 15% 的下跌和高波动组合上 30% 的下跌产生相同的响应，因为两者都代表各自组合的相同标准差倍数。一个引擎，两套敏感度配置，无需按组合类型手动调校。</p>
-<p>自适应引擎还改善了崩盘后的重新进入。固定阈值基线以固定速率重新进入，不考虑恢复形态。自适应引擎追踪自上次组合历史高点以来的谷底，并在检测到确认的 V 型反弹时加速进入 — 但仅当反弹冲量超过确认阈值时，以防止死猫反弹的欺骗。</p>
 <p>退出速度（去风险）在两个引擎中保持一致的快速率。差异完全在于阈值敏感度和重新进入的智能程度。</p>
 <figure class="rs-fig"><img src="/research/assets/exposure_concept.svg" alt="自适应阈值概念 — 固定阈值与波动率缩放回撤参考值" width="920" height="400" loading="lazy" decoding="async"></figure>
-<h2>4. 滚动前推对比</h2>
+<h2>5. 滚动前推对比</h2>
 <p>两个引擎运行在<strong>完全相同</strong>的生产 KKT-180 宏观回路上（风险平价权重每 180 天在滚动数据上再优化），相同手续费模型（每笔交易 10 个基点，含 DCA 买入和资金重新部署），相同 DCA 计划。唯一差异是敞口上限引擎。</p>
 <p><strong>以下所有指标均为滚动前推样本外。</strong> 每个引擎在滚动 180 天有界窗口上连续运行，冷回放并持久化防护盾状态 — 完全相同的生产数据路径。无样本内全窗口优化，无前视。数字代表系统实时交付的结果，而非事后看起来最好的结果。</p>
 <p>两个组合，按结构差异选取：</p>
@@ -98,7 +105,7 @@
 </tr>
 </tbody></table></div>
 <p>设置：一次性启动资金，180 天优化器预热，滚动 180 天有界窗口，冷回放并持久化防护盾状态。<strong>滚动前推样本外 — 无样本内拟合。</strong></p>
-<h3>4.1 主流币组合（滚动前推样本外）</h3>
+<h3>5.1 主流币组合（滚动前推样本外）</h3>
 <div class="rs-tablewrap">
 <table>
 <thead><tr>
@@ -123,7 +130,7 @@
 <td style="text-align:right"><strong>23.1%</strong></td>
 </tr>
 </tbody></table></div>
-<h3>4.2 山寨币组合（滚动前推样本外）</h3>
+<h3>5.2 山寨币组合（滚动前推样本外）</h3>
 <div class="rs-tablewrap">
 <table>
 <thead><tr>
@@ -150,22 +157,218 @@
 </tbody></table></div>
 <p>自适应引擎在两个组合的每项指标上都胜出。最大差距在山寨币组合的最大回撤 — 29.4% 对比 36.8%，降低 7.4 个百分点。这就是固定阈值失效模式的数字体现：为一个波动率环境调校的参考值在另一个环境上过度反应。</p>
 <figure class="rs-fig"><img src="/research/assets/exposure_dd_comparison.svg" alt="对比最大回撤：固定阈值与自适应阈值，两个组合" width="920" height="380" loading="lazy" decoding="async"></figure>
-<h3>4.3 解读</h3>
+<h3>5.3 解读</h3>
 <p>主流币组合上的改善有意义但温和 — 固定阈值已经合理匹配该波动率特征。山寨币组合上的改善很大 — 固定阈值结构上不匹配，导致近乎永久的防守状态，在真正崩盘时几乎无法提供额外保护。</p>
 <p>自适应引擎的波动率缩放阈值自动为每个组合调校。无需独立配置，无需组合分类，无需手动覆盖。</p>
-<h2>5. 市场状态压力测试</h2>
-<p>自适应引擎已在六个已命名的崩盘市场状态（2021 年 5 月解绑、LUNA 传染、FTX 崩盘、2024 年 8 日 carry 平仓，以及另外两个修正窗口）上，在三个结构不同的组合上进行了验证。每个市场状态都由发生<strong>之前</strong>冻结的参数打分 — 按构造即为样本外。</p>
-<p>结果：<strong>15/15</strong> 被覆盖的市场状态-组合搭配显示正的样本外回撤削减。最差片段标题数据：</p>
-<ul><li>LUNA 传染：16.8% vs 44.1% 买入持有（主流币+黄金组合）</li><li>FTX 崩盘：3.3% vs 13.3% 买入持有（主流币+黄金组合）</li><li>2025–26 修正：22.5% vs 34.9% 买入持有（2019–20 代组合）</li></ul>
-<p>完整的市场状态切片见<a href="/research/regime-autopsy">市场状态尸检研究</a>。</p>
-<p>一项在 16 个<strong>从未用于设计或调校</strong>系统的代币组合（AVAX、CRO、DOGE、HBAR、LINK、PYTH，以及 CEL 作为死币压力）上的样本外测试显示，最大回撤中位数削减 <strong>54.3 个百分点</strong>，卡尔玛在 16/16 个组合中改善。见<a href="/research/oos-v14-new-tokens">样本外验证研究</a>。</p>
-<p>一项<a href="/research/robustness">稳健性研究</a>的 129 次滚动前推重跑 — 逐一扰动每个面向用户的旋钮，手续费压力测试至 20 倍、执行延迟至 2 天 — 未发现断崖。回撤削减在延迟执行下几乎完整保留。</p>
-<h2>6. 注意事项</h2>
-<ul><li><strong>绝对回报取舍。</strong> 自适应引擎与任何防守系统一样，在包含强劲牛腿的窗口中放弃最终权益相对买入持有。在每次全窗口对比中，保护系统在原始最终价值上落后于买入持有。改善在于风险调整效率（卡尔玛、夏普）和最大回撤。</li><li><strong>预热期。</strong> 滚动波动率测量需要最短窗口来稳定。在运行的最初几天，系统使用保守的地板阈值 — 这是优雅降级路径，而非调校后的行为。</li><li><strong>当日开盘跳空不可捕捉。</strong> 任何日收系统只能对收盘之间发生的事情做出反应。当日开盘跳空按设计不可捕捉。加密崩盘是漂移主导的（95–100% 的损害在日内段展开），但不可捕捉的残余集中在最差单日。</li><li><strong>模拟结果。</strong> 本研究中的每一项数据均由回测根据历史价格数据计算得出。未投入任何资金，也未下过任何订单。数据不包含滑点与流动性影响，但会对每笔交易收取 0.1% 的模拟交易所手续费。</li></ul>
-<h2>7. 方法论</h2>
-<p>1. <strong>MACRO 回路：</strong> KKT 风险平价优化在滚动 180 天窗口上进行，每 180 天重新运行；权重在期间冻结。两个引擎共享完全相同的宏观回路并接收相同权重。 2. <strong>DAILY 回路：</strong> 每个敞口上限引擎在每个日收盘时评估。阈值再平衡仅在目标偏离超出死区时交易；每笔交易 10 个基点手续费，含 DCA 买入和重新部署。 3. <strong>验证路径：</strong> 滚动 180 天有界窗口，冷回放，持久化防护盾状态 — 生产系统运行的完全相同的数据路径。<strong>非全历史连续回测。所有报告指标均为滚动前推样本外。</strong> 4. <strong>指标：</strong> TWR 日收益（移除 DCA 流），无风险利率 5%；最大回撤自虚拟权益峰值。 5. <strong>对比引擎：</strong> 固定阈值基线使用已上线的生产默认值（恒定回撤参考值，对称进入/退出斜坡）。自适应阈值引擎使用波动率缩放阈值和非对称 V 型反弹重新进入。两者都作为同一 KKT 权重流的后处理器应用 — 代币之间的相对比例从不改变，仅总风险敞口变化。</p>
-<h2>8. 结论</h2>
-<ul><li>固定回撤阈值是<strong>组合盲</strong>的：一个数字无法同时服务低波动主流币组合和高波动山寨币组合。</li><li>全历史样本内选择在获胜信号依赖长于生产窗口的历史时，在生产路径上<strong>反转</strong>。</li><li>随组合自身滚动下行波动率缩放的自适应阈值用单一引擎解决两个问题 — 无需按组合调校，无需配置切换。</li><li>在生产路径上：自适应在两个组合的夏普、卡尔玛和最大回撤上都胜出。最大改善为山寨币组合的最大回撤（29.4% vs 36.8%）。</li><li>15+ 项已发布研究在未见代币、已命名崩盘市场状态、扰动参数和压力手续费上验证了该方法。</li></ul>
+<h2>6. 各配置实证压力测试结果</h2>
+<p>自适应引擎已在六个已命名的崩盘市场状态上，在三个结构不同的组合上进行了验证。每个市场状态都由发生<strong>之前</strong>冻结的参数打分 — 按构造即为样本外。以下按配置分解结果。</p>
+<h3>6.1 配置 1 — 主流币 + 黄金（BTC、ETH、XRP、XMR + PAXG）</h3>
+<p>低波动核心加黄金锚。自适应防护盾的波动率缩放阈值在该组合上映射到相对较紧的回撤参考值 — 相同数量的标准差对应较小的绝对回撤。</p>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">市场状态</th>
+<th style="text-align:left">窗口</th>
+<th style="text-align:right">防护盾 MDD</th>
+<th style="text-align:right">买入持有 MDD</th>
+<th style="text-align:right">削减</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">R2 2021年5月解绑</td>
+<td style="text-align:left">2021-04 → 2021-07</td>
+<td style="text-align:right">15.9%</td>
+<td style="text-align:right">23.9%</td>
+<td style="text-align:right"><strong>+8.0 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R3 LUNA 传染</td>
+<td style="text-align:left">2022-04 → 2022-06</td>
+<td style="text-align:right">16.8%</td>
+<td style="text-align:right">44.1%</td>
+<td style="text-align:right"><strong>+27.3 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R4 FTX 崩盘</td>
+<td style="text-align:left">2022-10 → 2023-01</td>
+<td style="text-align:right">3.3%</td>
+<td style="text-align:right">13.3%</td>
+<td style="text-align:right"><strong>+9.9 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R5 2024年8月carry平仓</td>
+<td style="text-align:left">2024-07 → 2024-09</td>
+<td style="text-align:right">12.4%</td>
+<td style="text-align:right">17.5%</td>
+<td style="text-align:right"><strong>+5.0 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R6 2025-26 修正</td>
+<td style="text-align:left">2025-01 → 2026-08</td>
+<td style="text-align:right">18.9%</td>
+<td style="text-align:right">32.1%</td>
+<td style="text-align:right"><strong>+13.2 pp</strong></td>
+</tr>
+</tbody></table></div>
+<p>全窗口（2020-03 → 2026-08，2,327 天）：卡尔玛 <strong>0.57</strong> vs 0.38 买入持有。最大回撤 <strong>16.9%</strong> vs 43.2% 买入持有。防护盾放弃了 $7,414 的最终权益（$15,650 vs $23,064 买入持有），但每单位回撤风险的风险调整效率提高了 50%。</p>
+<h3>6.2 配置 2 — 2019-20 代组合（ETH、LINK、ATOM、DOT + PAXG）</h3>
+<p>上一周期的高波动组合。自适应阈值在绝对值上缩放更宽，但标准差倍数相同 — 自调校特性的实际体现。</p>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">市场状态</th>
+<th style="text-align:left">窗口</th>
+<th style="text-align:right">防护盾 MDD</th>
+<th style="text-align:right">买入持有 MDD</th>
+<th style="text-align:right">削减</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">R2 2021年5月解绑</td>
+<td style="text-align:left">2021-04 → 2021-07</td>
+<td style="text-align:right">19.1%</td>
+<td style="text-align:right">40.8%</td>
+<td style="text-align:right"><strong>+21.7 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R3 LUNA 传染</td>
+<td style="text-align:left">2022-04 → 2022-06</td>
+<td style="text-align:right">21.3%</td>
+<td style="text-align:right">44.8%</td>
+<td style="text-align:right"><strong>+23.5 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R4 FTX 崩盘</td>
+<td style="text-align:left">2022-10 → 2023-01</td>
+<td style="text-align:right">1.9%</td>
+<td style="text-align:right">9.2%</td>
+<td style="text-align:right"><strong>+7.3 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R5 2024年8月carry平仓</td>
+<td style="text-align:left">2024-07 → 2024-09</td>
+<td style="text-align:right">9.5%</td>
+<td style="text-align:right">15.0%</td>
+<td style="text-align:right"><strong>+5.5 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R6 2025-26 修正</td>
+<td style="text-align:left">2025-01 → 2026-08</td>
+<td style="text-align:right">22.5%</td>
+<td style="text-align:right">34.9%</td>
+<td style="text-align:right"><strong>+12.4 pp</strong></td>
+</tr>
+</tbody></table></div>
+<p>全窗口（2021-02 → 2026-08，1,998 天）：最大回撤 <strong>18.9%</strong> vs 37.5% 买入持有 — 防护盾将回撤减半。各市场状态削减均为正。全窗口卡尔玛偏向买入持有（0.12 vs 0.19）— 这是声明的诚实边界：各市场状态保护是的，但在该特定组合上牛腿足够大，保护的参与成本超过了回撤节省。</p>
+<h3>6.3 配置 2 压力 — 地雷组合（BTC、ETH、CEL + PAXG）</h3>
+<p>刻意包含一个归零代币（Celsius）。自适应防护盾在 ADV-K2 活性筛查开启下运行，当 CEL 未通过 $1M/天滚动成交量测试时将其权重归零。</p>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">市场状态</th>
+<th style="text-align:left">窗口</th>
+<th style="text-align:right">防护盾 MDD</th>
+<th style="text-align:right">买入持有 MDD</th>
+<th style="text-align:right">削减</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">R3 LUNA 传染</td>
+<td style="text-align:left">2022-04 → 2022-06</td>
+<td style="text-align:right">4.1%</td>
+<td style="text-align:right">11.4%</td>
+<td style="text-align:right"><strong>+7.3 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R4 FTX 崩盘</td>
+<td style="text-align:left">2022-10 → 2023-01</td>
+<td style="text-align:right">5.4%</td>
+<td style="text-align:right">17.8%</td>
+<td style="text-align:right"><strong>+12.4 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R5 2024年8月carry平仓</td>
+<td style="text-align:left">2024-07 → 2024-09</td>
+<td style="text-align:right">9.8%</td>
+<td style="text-align:right">11.8%</td>
+<td style="text-align:right"><strong>+1.9 pp</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">R6 2025-26 修正</td>
+<td style="text-align:left">2025-01 → 2026-08</td>
+<td style="text-align:right">20.1%</td>
+<td style="text-align:right">32.9%</td>
+<td style="text-align:right"><strong>+12.8 pp</strong></td>
+</tr>
+</tbody></table></div>
+<p>全窗口卡尔玛 <strong>0.65</strong> vs 0.50 买入持有 — 三个组合中最佳的风险调整效率。死币压力测试确认：防护盾 + 活性筛查无需人工干预即可处理灾难性单资产失败。</p>
+<h3>6.4 样本外验证 — 16 个未见代币组合</h3>
+<p>一项在 16 个<strong>从未用于设计或调校</strong>系统的代币组合（AVAX、CRO、DOGE、HBAR、LINK、PYTH，以及 CEL 作为死币压力）上的样本外测试 — 5 个存活者的所有 k=3 和 k=4 组合：</p>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">指标</th>
+<th style="text-align:left">结果</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">最大回撤削减</td>
+<td style="text-align:left">中位数 <strong>+54.3 pp</strong>（最小 +46.7，最大 +65.8）— <strong>16/16</strong> 个组合回撤降低</td>
+</tr>
+<tr>
+<td style="text-align:left">卡尔玛变化</td>
+<td style="text-align:left">中位数 <strong>+0.35</strong> — <strong>16/16</strong> 改善</td>
+</tr>
+<tr>
+<td style="text-align:left">夏普变化</td>
+<td style="text-align:left">中位数 <strong>+0.16</strong> — <strong>15/16</strong> 改善</td>
+</tr>
+</tbody></table></div>
+<p>自适应引擎的波动率缩放阈值可推广到从未为其设计的组合。未应用按组合调校。</p>
+<h3>6.5 执行稳健性</h3>
+<p>一项<a href="/research/robustness">稳健性研究</a>的 129 次滚动前推重跑 — 逐一扰动每个面向用户的旋钮，手续费压力测试至 20 倍、执行延迟至 2 天 — 未发现断崖：</p>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">压力</th>
+<th style="text-align:right">MaxDD 退化</th>
+<th style="text-align:right">夏普退化</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">DCA 延迟（2-5 天）</td>
+<td style="text-align:right">−0.1 pp</td>
+<td style="text-align:right">−0.003</td>
+</tr>
+<tr>
+<td style="text-align:left">DCA 金额 ±20%</td>
+<td style="text-align:right">+0.0 pp</td>
+<td style="text-align:right">+0.001</td>
+</tr>
+<tr>
+<td style="text-align:left">每 4 次跳过 1 次</td>
+<td style="text-align:right">+0.5 pp</td>
+<td style="text-align:right">+0.051</td>
+</tr>
+<tr>
+<td style="text-align:left">手续费 × 20</td>
+<td style="text-align:right">&lt; 2 pp</td>
+<td style="text-align:right">&lt; 0.10</td>
+</tr>
+<tr>
+<td style="text-align:left">执行延迟 2 天</td>
+<td style="text-align:right">&lt; 3 pp</td>
+<td style="text-align:right">&lt; 0.08</td>
+</tr>
+</tbody></table></div>
+<p>回撤削减在延迟执行下几乎完整保留。防护盾的阈值再平衡（仅在目标偏离超出死区时交易）自然降低手续费拖累 — 与连续调整相比约减少 64% 的再平衡次数。</p>
+<p>完整的市场状态切片见<a href="/research/regime-autopsy">市场状态尸检研究</a>，逐组合详情见<a href="/research/oos-v14-new-tokens">样本外验证研究</a>，与 60/40、70/30 和 80/20 静态配置的对比见<a href="/research/static-vs-dynamic">静态 vs 动态研究</a>。</p>
+<h2>7. 注意事项</h2>
+<ul><li><strong>绝对回报取舍。</strong> 自适应引擎与任何防守系统一样，在包含强劲牛腿的窗口中放弃最终权益相对买入持有。在每次全窗口对比中，保护系统在原始最终价值上落后于买入持有。改善在于风险调整效率（卡尔玛、夏普）和最大回撤。</li><li><strong>预热期。</strong> 滚动波动率测量需要最短窗口来稳定。在运行的最初几天，系统使用保守的地板阈值 — 这是优雅降级路径，而非调校后的行为。</li><li><strong>当日开盘跳空不可捕捉。</strong> 任何日收系统只能对收盘之间发生的事情做出反应。加密崩盘是漂移主导的（95–100% 的损害在日内段展开），但不可捕捉的残余集中在最差单日。</li><li><strong>模拟结果。</strong> 本研究中的每一项数据均由回测根据历史价格数据计算得出。未投入任何资金，也未下过任何订单。数据不包含滑点与流动性影响，但会对每笔交易收取 0.1% 的模拟交易所手续费。</li></ul>
+<h2>8. 方法论</h2>
+<p>1. <strong>MACRO 回路：</strong> KKT 风险平价优化在滚动 180 天窗口上进行，每 180 天重新运行；权重在期间冻结。两个引擎共享完全相同的宏观回路并接收相同权重。 2. <strong>DAILY 回路：</strong> 每个敞口上限引擎在每个日收盘时评估。阈值再平衡仅在目标偏离超出死区时交易；每笔交易 10 个基点手续费，含 DCA 买入和重新部署。 3. <strong>验证路径：</strong> 滚动 180 天有界窗口，冷回放，持久化防护盾状态 — 生产系统运行的完全相同的数据路径。<strong>非全历史连续回测。所有报告指标均为滚动前推样本外。</strong> 4. <strong>指标：</strong> TWR 日收益（移除 DCA 流），无风险利率 5%；最大回撤自虚拟权益峰值。 5. <strong>对比引擎：</strong> 固定阈值基线使用已上线的生产默认值（恒定回撤参考值，对称进入/退出斜坡）。自适应阈值引擎使用波动率缩放阈值和非对称 V 型反弹重新进入。两者都作为同一 KKT 权重流的后处理器应用 — 代币之间的相对比例从不改变，仅总风险敞口变化。 6. <strong>数据：</strong> 市场状态压力测试使用 Yahoo Finance 日收数据（未调整）；样本外代币验证使用 CoinGecko。逐组合公共日期对齐。</p>
+<h2>9. 结论</h2>
+<ul><li>固定回撤阈值是<strong>组合盲</strong>的：一个数字无法同时服务低波动主流币组合和高波动山寨币组合。</li><li>全历史样本内选择在获胜信号依赖长于生产窗口的历史时，在生产路径上<strong>反转</strong>。</li><li>执行状态机将遥测（观察）与执行（确定性敞口降低）分离。仅后者保护资本。</li><li>随组合自身滚动下行波动率缩放的自适应阈值用单一引擎解决两个问题 — 无需按组合调校，无需配置切换。</li><li>在生产路径上：自适应在两个组合的夏普、卡尔玛和最大回撤上都胜出。最大改善为山寨币组合的最大回撤（29.4% vs 36.8%）。</li><li>各配置压力测试：<strong>15/15</strong> 市场状态-组合搭配显示正回撤削减。配置 1（主流币+黄金）全窗口卡尔玛 0.57 vs 0.38 买入持有。配置 2（2019-20 代）最大回撤减半（18.9% vs 37.5%）。</li><li>16/16 未见代币组合显示卡尔玛改善；中位数最大回撤削减 54.3 pp。</li><li>15+ 项已发布研究在未见代币、已命名崩盘市场状态、扰动参数和压力手续费上验证了该方法。</li></ul>
 <hr>
 <p><em>模拟结果 — 未使用真实资金。以下每一项数据均由回测根据历史价格数据计算得出。未投入任何资金，也未下过任何订单。数据不包含滑点与流动性影响，但会对每笔交易收取 0.1% 的模拟交易所手续费。模拟表现与过往表现不能可靠地预示未来结果。AQMath 是软件，不是投资建议。</em></p>
 </main>
