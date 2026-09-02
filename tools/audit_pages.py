@@ -95,6 +95,8 @@ NEEDS_SIM_NOTICE = {
     "research/static-vs-dynamic-zh.html",
     "research/recovery-test.html",
     "research/recovery-test-zh.html",
+    "research/exposure-capping.html",
+    "research/exposure-capping-zh.html",
 }
 
 FORBIDDEN_ORIGINS = [
