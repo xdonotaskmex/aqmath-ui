@@ -296,6 +296,19 @@ function localizeForwardLog(box) {
         .catch(function () { /* keep the bundled snapshot */ });
 })();
 
+// The v18 Adaptive tab (/v18) ships its own two-basket fragment. It is pure
+// engine telemetry rendered in English, so it is injected once and left alone
+// on language switches - the page chrome around it (title, intro, footer)
+// localises via data-i18n. On any failure the bundled loading note stays.
+(function () {
+    var box = document.getElementById('forwardLogV18');
+    if (!box || !window.fetch) return;
+    fetch('https://api-backtest.aqmath.xyz/forward-log-v18')
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+        .then(function (html) { box.innerHTML = sanitizeFirstPartyHtml(html); })
+        .catch(function () { /* keep the bundled loading note */ });
+})();
+
 // ---------------------------------------------------------------------------
 // 3) i18n / language switching (was inline block at index.html L2573)
 // ---------------------------------------------------------------------------
@@ -303,7 +316,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=c7114552fa')
+    return fetch('/locales/' + lang + '.json?v=0dfe938505')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }

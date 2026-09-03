@@ -75,6 +75,13 @@ PAGES = {
         "title": "Crypto Drawdown Protection Backtest Results \u2014 182 Baskets | AQMath",
         "description": "Out-of-sample stress test results: 182 crypto portfolio baskets validated, including tokens never used to tune the model. Median 54.3% drawdown reduction vs Buy & Hold.",
     },
+    "v18.html": {
+        "path": "/v18",
+        "view": "v18View",
+        "robots": "index, follow",
+        "title": "v18 Adaptive Shield \u2014 Live Two-Basket Paper Trading | AQMath",
+        "description": "Live paper-trading telemetry for the v18 vol-scaled adaptive shield on two frozen baskets \u2014 MAJORS (BTC/ETH/BNB/SOL/XRP) and ALTS (ATH/SUI/XMR/DOGE/LINK). Simulated, no real money; v14 remains the production engine.",
+    },
     # The app is a paid, closed tool behind a beta key: there is no public
     # content to rank, and leaving it indexable only added a fifth duplicate.
     "app.html": {
@@ -199,6 +206,19 @@ PAGE_JSONLD = {
              "author": _PERSON,
              "publisher": {"@id": f"{_SITE}/#organization"}},
             _breadcrumb("Results", "/results"),
+        ],
+    },
+    "v18.html": lambda: {
+        "@context": "https://schema.org",
+        "@graph": [
+            {"@type": "Article",
+             "name": "v18 Adaptive Shield \u2014 Live Two-Basket Paper Trading",
+             "url": _SITE + "/v18",
+             "description": "Live paper-trading telemetry for the v18 vol-scaled adaptive shield on two frozen baskets (MAJORS and ALTS), compared against Buy & Hold on identical terms. Simulated results, no real money.",
+             "articleSection": "Research Results",
+             "author": _PERSON,
+             "publisher": {"@id": f"{_SITE}/#organization"}},
+            _breadcrumb("v18 Adaptive", "/v18"),
         ],
     },
     # app.html is noindex; keep the baseline WebApplication only.

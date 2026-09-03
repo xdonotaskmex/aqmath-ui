@@ -69,7 +69,8 @@ const ROUTES = {
     '/app':      { cls: 'route-app',      view: 'appView',       title: 'App — AQMath Portfolio Rebalancer' },
     '/docs':     { cls: 'route-doc',      view: 'docView',       title: 'System Documentation — AQMath' },
     '/backtest': { cls: 'route-backtest', view: 'backtestView',  title: 'Backtest — AQMath Deleverage Shield' },
-    '/results':  { cls: 'route-results',  view: 'resultsView',   title: 'New-Token Stress Test — AQMath' }
+    '/results':  { cls: 'route-results',  view: 'resultsView',   title: 'New-Token Stress Test — AQMath' },
+    '/v18':      { cls: 'route-v18',      view: 'v18View',       title: 'v18 Adaptive Telemetry — AQMath' }
 };
 
 // True only when this document actually contains the route's view container.
@@ -104,7 +105,7 @@ function currentPath() {
 function handleRoute() {
     const path = currentPath();
     const route = ROUTES[path];
-    document.body.classList.remove('route-landing', 'route-app', 'route-doc', 'route-backtest', 'route-results');
+    document.body.classList.remove('route-landing', 'route-app', 'route-doc', 'route-backtest', 'route-results', 'route-v18');
     document.body.classList.add(route.cls);
     document.title = route.title;
     const canonical = document.querySelector('link[rel="canonical"]');

@@ -41,7 +41,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=c7114552fa">
+    <link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
 </head>
 <body>
 
@@ -88,6 +88,7 @@
             <a class="hdr-nav-btn" href="/app" data-i18n="app.navApp">app</a>
             <a class="hdr-nav-btn" href="/backtest" data-i18n="app.navBacktest">backtest</a>
             <a class="hdr-nav-btn" href="/results" data-i18n="app.navResults">results</a>
+            <a class="hdr-nav-btn" href="/v18" data-i18n="app.navV18">v18</a>
             <a class="hdr-nav-btn" href="/research/" data-i18n="app.navResearch">research</a>
             <a class="hdr-nav-btn" href="/docs" data-i18n="app.navDocs">docs</a>
         </div>
@@ -672,6 +673,7 @@
         <a class="hdr-nav-btn active" href="/app" data-i18n="app.navApp">app</a>
         <a class="hdr-nav-btn" href="/backtest" data-i18n="app.navBacktest">backtest</a>
         <a class="hdr-nav-btn" href="/results" data-i18n="app.navResults">results</a>
+        <a class="hdr-nav-btn" href="/v18" data-i18n="app.navV18">v18</a>
         <a class="hdr-nav-btn" href="/research/" data-i18n="app.navResearch">research</a>
         <a class="hdr-nav-btn" href="/docs" data-i18n="app.navDocs">docs</a>
     </div>
@@ -1173,6 +1175,7 @@
         <a class="hdr-nav-btn" href="/app" data-i18n="app.navApp">app</a>
         <a class="hdr-nav-btn active" href="/backtest" data-i18n="app.navBacktest">backtest</a>
         <a class="hdr-nav-btn" href="/results" data-i18n="app.navResults">results</a>
+        <a class="hdr-nav-btn" href="/v18" data-i18n="app.navV18">v18</a>
         <a class="hdr-nav-btn" href="/research/" data-i18n="app.navResearch">research</a>
         <a class="hdr-nav-btn" href="/docs" data-i18n="app.navDocs">docs</a>
     </div>
@@ -1431,6 +1434,7 @@
         <a class="hdr-nav-btn" href="/app" data-i18n="app.navApp">app</a>
         <a class="hdr-nav-btn" href="/backtest" data-i18n="app.navBacktest">backtest</a>
         <a class="hdr-nav-btn active" href="/results" data-i18n="app.navResults">results</a>
+        <a class="hdr-nav-btn" href="/v18" data-i18n="app.navV18">v18</a>
         <a class="hdr-nav-btn" href="/research/" data-i18n="app.navResearch">research</a>
         <a class="hdr-nav-btn" href="/docs" data-i18n="app.navDocs">docs</a>
     </div>
@@ -1770,6 +1774,119 @@
 </footer>
 </div><!-- /resultsView -->
 
+<!-- ============ V18 ADAPTIVE VIEW ============ -->
+<div id="v18View">
+<div class="scanlines"></div>
+<header class="hdr">
+    <div class="logo">
+        <div class="logo-box">AQ</div>
+        <div>
+            <div class="logo-name">AQMath</div>
+            <div class="logo-tag" data-i18n="v18.logoTag">v18 adaptive telemetry</div>
+        </div>
+    </div>
+    <button class="hdr-burger" type="button" aria-label="Menu" data-action="toggleHamburger">&#9776;</button>
+    <div class="hdr-nav">
+        <a class="hdr-nav-btn" href="/" data-i18n="app.navLanding">landing</a>
+        <a class="hdr-nav-btn" href="/app" data-i18n="app.navApp">app</a>
+        <a class="hdr-nav-btn" href="/backtest" data-i18n="app.navBacktest">backtest</a>
+        <a class="hdr-nav-btn" href="/results" data-i18n="app.navResults">results</a>
+        <a class="hdr-nav-btn active" href="/v18" data-i18n="app.navV18">v18</a>
+        <a class="hdr-nav-btn" href="/research/" data-i18n="app.navResearch">research</a>
+        <a class="hdr-nav-btn" href="/docs" data-i18n="app.navDocs">docs</a>
+    </div>
+    <div class="hdr-right">
+        <div class="hdr-socials">
+            <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">telegram</a>
+            <span class="hdr-sep">|</span>
+            <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">twitter</a>
+            <span class="hdr-sep">|</span>
+            <a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener">reddit</a>
+            <span class="hdr-sep">|</span>
+            <a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">substack</a>
+        </div>
+        <div class="lp-lang-wrap">
+            <button class="lp-lang-btn" data-lang="en" data-action="lang" data-arg="en">EN</button>
+            <button class="lp-lang-btn" data-lang="zh-CN" data-action="lang" data-arg="zh-CN">中文</button>
+        </div>
+    </div>
+</header>
+<div class="rv-wrap">
+<!-- V18_VIEW_START -->
+<div class="rv-head">
+<div class="rv-kicker" data-i18n="v18.kicker">V18 ADAPTIVE &middot; LIVE PAPER TRADING</div>
+<h1 class="rv-title" data-i18n="v18.title">v18 Adaptive Telemetry</h1>
+<div class="rv-date"><span data-i18n="v18.genBefore">Weights frozen</span> 2026-09-02 &middot; <span data-i18n="v18.genAfter">vol-scaled adaptive shield &middot; test candidate</span></div>
+<p class="rv-intro" data-i18n-html="v18.intro1">This is the live telemetry tab for the <strong>v18 vol-scaled adaptive shield</strong> &mdash; the validated next-generation test candidate. It runs two paper accounts on baskets <strong>frozen on 2026-09-02</strong>: <strong style="color:#06b6d4">MAJORS</strong> (BTC/ETH/BNB/SOL/XRP) and <strong style="color:#a855f7">ALTS</strong> (ATH/SUI/XMR/DOGE/LINK). <strong>v14 remains the production engine</strong>; v18 is shown alongside it for an honest, side-by-side comparison.</p>
+<p class="rv-intro" data-i18n-html="v18.intro2">Where v14 uses fixed thresholds, v18 scales its drawdown trigger by each basket&#39;s own recent volatility and re-enters fast after a sharp bounce, so a single configuration self-tunes to both a calm large-cap basket and a wild alt basket. Each account carries its full backtest history and continues live from the freeze day, with one point appended after every daily close.</p>
+<p class="sim-notice" data-i18n-html="rv.simNotice"><strong>Simulated results — no real money.</strong> Every figure on this page comes from backtests and from a paper-trading log: a simulation that runs against live market data with <strong>virtual capital</strong>. No client funds were ever invested, no orders were ever placed, and the numbers exclude slippage, spreads and taxes, but do include a simulated 0.1% exchange fee on every rebalance, DCA buy and redeployment &mdash; charged to the Buy &amp; Hold benchmark on the same basis. Simulated and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software, not investment advice, and does not manage money on your behalf.</p>
+</div>
+<!-- Frozen full-history replay snapshot: static, crawler-readable headline
+     figures for both baskets in the same rv-card style as /results. These are
+     the backtest numbers the two accounts were seeded with; the live forward
+     log fetched into #forwardLogV18 below continues from the freeze day. -->
+<h2 class="rv-h2" data-i18n="v18.snapH2">Frozen backtest snapshot &mdash; full-history replay</h2>
+<p class="rv-note" data-i18n-html="v18.snapNote">Headline figures from replaying each basket across its <strong>entire common price history</strong> on the v18 vol-scaled adaptive shield, with the weights frozen on <strong>2026-09-02</strong>. The terms are identical to the production log: a $1,000 start plus $100 every 30 days, with a simulated 0.1% fee charged to the shield and to the Buy &amp; Hold benchmark alike. The shield is built to <strong>cut the deep drawdowns</strong>, not to beat Buy &amp; Hold on absolute return &mdash; across both replays it roughly halves the worst peak-to-trough loss while improving the risk-adjusted numbers.</p>
+<div class="rv-chart"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 860 176" font-family="Segoe UI,Arial,sans-serif" style="max-width:860px">
+<rect width="860" height="176" fill="#070d1a"/>
+<text x="20" y="30" font-size="18" font-weight="700" fill="#e2e8f0">Max drawdown: v18 shield vs Buy &amp; Hold</text>
+<text x="20" y="50" font-size="12" fill="#8a9bb5">Lower is better. Full-history replay, weights frozen 2026-09-02. The v18 shield roughly halves the worst drawdown on both baskets.</text>
+<rect x="556" y="22" width="12" height="12" fill="#06b6d4"/>
+<text x="572" y="32" font-size="11" fill="#e2e8f0">v18 MAJORS</text>
+<rect x="656" y="22" width="12" height="12" fill="#a855f7"/>
+<text x="672" y="32" font-size="11" fill="#e2e8f0">v18 ALTS</text>
+<rect x="744" y="22" width="12" height="12" fill="#f87171" opacity="0.85"/>
+<text x="760" y="32" font-size="11" fill="#e2e8f0">Buy &amp; Hold</text>
+<line x1="210.0" y1="60" x2="210.0" y2="140" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+<text x="210.0" y="158" font-size="11" fill="#8a9bb5" text-anchor="middle">0%</text>
+<line x1="328.0" y1="60" x2="328.0" y2="140" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+<text x="328.0" y="158" font-size="11" fill="#8a9bb5" text-anchor="middle">20%</text>
+<line x1="446.0" y1="60" x2="446.0" y2="140" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+<text x="446.0" y="158" font-size="11" fill="#8a9bb5" text-anchor="middle">40%</text>
+<line x1="564.0" y1="60" x2="564.0" y2="140" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+<text x="564.0" y="158" font-size="11" fill="#8a9bb5" text-anchor="middle">60%</text>
+<line x1="682.0" y1="60" x2="682.0" y2="140" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+<text x="682.0" y="158" font-size="11" fill="#8a9bb5" text-anchor="middle">80%</text>
+<line x1="800.0" y1="60" x2="800.0" y2="140" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+<text x="800.0" y="158" font-size="11" fill="#8a9bb5" text-anchor="middle">100%</text>
+<text x="200" y="86" font-size="12" fill="#e2e8f0" text-anchor="end">MAJORS</text>
+<rect x="210" y="70" width="462.6" height="11" fill="#f87171" opacity="0.85"/>
+<text x="676.6" y="79" font-size="10" fill="#f87171">78.4%</text>
+<rect x="210" y="83" width="208.9" height="11" fill="#06b6d4"/>
+<text x="422.9" y="92" font-size="10" fill="#06b6d4">35.4%</text>
+<text x="200" y="120" font-size="12" fill="#e2e8f0" text-anchor="end">ALTS</text>
+<rect x="210" y="104" width="370.5" height="11" fill="#f87171" opacity="0.85"/>
+<text x="584.5" y="113" font-size="10" fill="#f87171">62.8%</text>
+<rect x="210" y="117" width="148.1" height="11" fill="#a855f7"/>
+<text x="362.1" y="126" font-size="10" fill="#a855f7">25.1%</text>
+</svg></div>
+<h3 class="rv-h2" style="color:#06b6d4;font-size:1rem" data-i18n-html="v18.mLabel">MAJORS &mdash; BTC/ETH/BNB/SOL/XRP &middot; 6.2-year replay to 2026-07-04</h3>
+<div class="rv-cards">
+<div class="rv-card"><div class="rv-big" style="color:#06b6d4">$42,134</div><div class="rv-lbl" data-i18n="v18.mC1Lbl">v18 virtual equity</div><div class="rv-sub" data-i18n="v18.mC1Sub">from $8,500 deposited since 2020-04-11</div></div>
+<div class="rv-card"><div class="rv-big" style="color:#06b6d4">35.4%</div><div class="rv-lbl" data-i18n="v18.mC2Lbl">max drawdown (shield)</div><div class="rv-sub" data-i18n="v18.mC2Sub">vs 78.4% for Buy &amp; Hold &middot; cut 43 pp</div></div>
+<div class="rv-card"><div class="rv-big" style="color:#06b6d4">0.83</div><div class="rv-lbl" data-i18n="v18.mC3Lbl">Calmar ratio</div><div class="rv-sub" data-i18n="v18.mC3Sub">vs 0.55 B&amp;H &middot; Sharpe 0.65 vs 0.54</div></div>
+<div class="rv-card"><div class="rv-big" style="color:#06b6d4">$80,285</div><div class="rv-lbl" data-i18n="v18.mC4Lbl">buy &amp; hold benchmark</div><div class="rv-sub" data-i18n="v18.mC4Sub">same $8,500 in &middot; but 78.4% peak-to-trough</div></div>
+</div>
+<h3 class="rv-h2" style="color:#a855f7;font-size:1rem" data-i18n-html="v18.aLabel">ALTS &mdash; ATH/SUI/XMR/DOGE/LINK &middot; 2.1-year replay to 2026-07-19</h3>
+<div class="rv-cards">
+<div class="rv-card"><div class="rv-big" style="color:#a855f7">$3,040</div><div class="rv-lbl" data-i18n="v18.aC1Lbl">v18 virtual equity</div><div class="rv-sub" data-i18n="v18.aC1Sub">from $3,500 deposited since 2024-06-13</div></div>
+<div class="rv-card"><div class="rv-big" style="color:#a855f7">25.1%</div><div class="rv-lbl" data-i18n="v18.aC2Lbl">max drawdown (shield)</div><div class="rv-sub" data-i18n="v18.aC2Sub">vs 62.8% for Buy &amp; Hold &middot; cut 38 pp</div></div>
+<div class="rv-card"><div class="rv-big" style="color:#a855f7">-0.26</div><div class="rv-lbl" data-i18n="v18.aC3Lbl">Calmar ratio</div><div class="rv-sub" data-i18n="v18.aC3Sub">vs -0.30 B&amp;H &middot; Sharpe -0.31 vs -0.33</div></div>
+<div class="rv-card"><div class="rv-big" style="color:#a855f7">$2,241</div><div class="rv-lbl" data-i18n="v18.aC4Lbl">buy &amp; hold benchmark</div><div class="rv-sub" data-i18n="v18.aC4Sub">same $3,500 in &middot; shield preserved more</div></div>
+</div>
+<p class="rv-note" data-i18n-html="v18.snapFoot">Each replay stops where that basket&#39;s common price history ends, which is before the freeze day; the live forward log below continues from the freeze and appends one point after every daily close. Read honestly: on MAJORS the shield finished <strong>below</strong> Buy &amp; Hold in absolute dollars ($42,134 vs $80,285) but with less than half the drawdown and the better risk-adjusted return; on the shorter ALTS window &mdash; a falling market &mdash; both lost money and the shield gave up far less ($3,040 vs $2,241). <strong>v18 is a validated test candidate; v14 remains the production engine.</strong></p>
+<div id="forwardLogV18">
+<p class="rv-note" data-i18n="v18.loading">Loading the live v18 two-basket telemetry &mdash; MAJORS and ALTS&hellip;</p>
+</div>
+<!-- V18_VIEW_END -->
+</div>
+<footer class="footer">
+    <span>AQMath</span>
+    <span style="margin-left:12px;color:var(--dim);">|</span>
+    <span data-i18n="v18.footTag">v18 Adaptive Telemetry &middot; test candidate</span>
+</footer>
+</div><!-- /v18View -->
+
 <!-- ============ DOC VIEW ============ -->
 <div id="docView">
     <header class="hdr">
@@ -1786,6 +1903,7 @@
             <a class="hdr-nav-btn" href="/app" data-i18n="app.navApp">app</a>
             <a class="hdr-nav-btn" href="/backtest" data-i18n="app.navBacktest">backtest</a>
             <a class="hdr-nav-btn" href="/results" data-i18n="app.navResults">results</a>
+            <a class="hdr-nav-btn" href="/v18" data-i18n="app.navV18">v18</a>
             <a class="hdr-nav-btn" href="/research/" data-i18n="app.navResearch">research</a>
             <a class="hdr-nav-btn active" href="/docs" data-i18n="app.navDocs">docs</a>
         </div>
@@ -2642,10 +2760,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=c7114552fa"></script>
-<script defer src="/app-backtest.js?v=c7114552fa"></script>
-<script defer src="/app.js?v=c7114552fa"></script>
-<script defer src="/app-notify.js?v=c7114552fa"></script>
+<script defer src="/app-widgets.js?v=0dfe938505"></script>
+<script defer src="/app-backtest.js?v=0dfe938505"></script>
+<script defer src="/app.js?v=0dfe938505"></script>
+<script defer src="/app-notify.js?v=0dfe938505"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -2659,8 +2777,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=c7114552fa"></script>
-<script defer src="/app-boot.js?v=c7114552fa"></script>
+<script defer src="/vendor/i18next.min.js?v=0dfe938505"></script>
+<script defer src="/app-boot.js?v=0dfe938505"></script>
 
 </body>
 </html>

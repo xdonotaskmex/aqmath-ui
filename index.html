@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=c7114552fa">
+    <link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","itemListElement":[{"@type":"Question","name":"How does the engine calculate risk?","acceptedAnswer":{"@type":"Answer","text":"The Black engine uses a <strong>Variance Matrix</strong>, asset <strong>Covariance</strong>, volatility estimates, and KKT-style projection to calculate Risk Parity allocations where each asset contributes a controlled share of portfolio risk. <a href=\"/docs\" style=\"color:var(--purple);\">You can audit the full mathematical model in our [Documentation].</a>"}},{"@type":"Question","name":"How is AQMath actually private?","acceptedAnswer":{"@type":"Answer","text":"We don&rsquo;t track your wallet, and we never store your identity or portfolio in any database &mdash; with one optional exception: if you enable the personalised signal &amp; notification service, your holdings are stored server-side under the hash of your activation key, solely to compute your daily signals and send notifications, and deleted at any time (Privacy Policy &sect;9). By default, your token balances live only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. The only other server-side record is a one-way hashed beta-activation record (see the beta-key question below) &mdash; never your financial data. Your financial privacy is architecturally enforced. <a href=\"/docs\" style=\"color:var(--purple);\">Read the full privacy architecture in our [Documentation].</a>"}},{"@type":"Question","name":"Do beta keys track my IP address?","acceptedAnswer":{"@type":"Answer","text":"No &mdash; not in any readable form. A beta key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href=\"/privacy\" style=\"color:var(--purple);\">Privacy Policy</a>."}},{"@type":"Question","name":"What's included in Beta vs Black?","acceptedAnswer":{"@type":"Answer","text":"Beta access includes the full engine — Risk Parity optimization, Deleverage Shield, DCA distribution, unlimited tokens, and the automated data pipeline. It's the same math as Black, limited to 10 slots with a 365-day activation period. Black adds annual renewals and direct support."}},{"@type":"Question","name":"Why are market widgets separated from features?","acceptedAnswer":{"@type":"Answer","text":"Live markets are informational context: ticker data, Fear &amp; Greed, BTC dominance, movers, and exchange status. They support decision-making but are intentionally separate from the product feature story."}},{"@type":"Question","name":"What is the Safe-Haven (USDC) feature?","acceptedAnswer":{"@type":"Answer","text":"When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token."}},{"@type":"Question","name":"How do I apply for Black access?","acceptedAnswer":{"@type":"Answer","text":"DM us on <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" style=\"color:var(--purple);\">Telegram</a> or <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:var(--purple);\">Twitter</a>. Annual access is <strong>€999 / year (~$1,090 USD)</strong>. No call required — send a message, we review and send your activation key within 48h. Payments accepted exclusively in USDC and EURC."}},{"@type":"Question","name":"Do you offer monthly plans?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath operates exclusively on an annual subscription model. We do not offer monthly, quarterly, or semi-annual plans. EU consumers keep the statutory 14-day right of withdrawal &mdash; see the <a href=\"/widerruf\" style=\"color:#a78bfa;\">withdrawal notice</a>; after that the annual term is firm and is not refunded pro rata on early cancellation."}},{"@type":"Question","name":"Is AQMath a trading bot?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath is an analytical web application. We do not execute trades, manage funds, or interact with any exchange or smart contract. You see the math, you make the decision."}},{"@type":"Question","name":"Is there a mobile app?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath is a web application only. Any app using our name on any app store is unauthorized and not affiliated with us."}},{"@type":"Question","name":"Is there an automatic daily signal or notification service?","acceptedAnswer":{"@type":"Answer","text":"Yes &mdash; as an <strong>optional, opt-in service</strong>. If you enable it, the engine computes your deleverage shield signal and DCA schedule once per day on the server and can push a notification to your device. To do that, your holdings are stored under the hash of your activation key &mdash; never under your name or wallet &mdash; and deleted completely the moment you withdraw consent. Full details are in Section 9 of our <a href=\"/privacy\" style=\"color:var(--purple);\">Privacy Policy</a>."}},{"@type":"Question","name":"What is the beta chat?","acceptedAnswer":{"@type":"Answer","text":"Beta users get access to a <strong>shared internal chat</strong> visible only to active beta members. Messages are pseudonymous (shown as a short code like B-XXXXXX, never your real key or IP), capped at 200 characters, and limited to the 20 most recent messages (older ones are automatically swept daily). You can clear your own messages anytime. The chat is stored server-side under the hash of your activation key and is deleted when your key is deactivated."}}]}</script>
 </head>
 <body>
@@ -90,6 +90,7 @@
             <a class="hdr-nav-btn" href="/app" data-i18n="app.navApp">app</a>
             <a class="hdr-nav-btn" href="/backtest" data-i18n="app.navBacktest">backtest</a>
             <a class="hdr-nav-btn" href="/results" data-i18n="app.navResults">results</a>
+            <a class="hdr-nav-btn" href="/v18" data-i18n="app.navV18">v18</a>
             <a class="hdr-nav-btn" href="/research/" data-i18n="app.navResearch">research</a>
             <a class="hdr-nav-btn" href="/docs" data-i18n="app.navDocs">docs</a>
         </div>
@@ -647,6 +648,9 @@
 <!-- ============ RESULTS VIEW ============ -->
 <!-- #resultsView omitted: this entry page ships only #landingView -->
 
+<!-- ============ V18 ADAPTIVE VIEW ============ -->
+<!-- #v18View omitted: this entry page ships only #landingView -->
+
 <!-- ============ DOC VIEW ============ -->
 <!-- #docView omitted: this entry page ships only #landingView -->
 
@@ -658,10 +662,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=c7114552fa"></script>
-<script defer src="/app-backtest.js?v=c7114552fa"></script>
-<script defer src="/app.js?v=c7114552fa"></script>
-<script defer src="/app-notify.js?v=c7114552fa"></script>
+<script defer src="/app-widgets.js?v=0dfe938505"></script>
+<script defer src="/app-backtest.js?v=0dfe938505"></script>
+<script defer src="/app.js?v=0dfe938505"></script>
+<script defer src="/app-notify.js?v=0dfe938505"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -675,8 +679,8 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=c7114552fa"></script>
-<script defer src="/app-boot.js?v=c7114552fa"></script>
+<script defer src="/vendor/i18next.min.js?v=0dfe938505"></script>
+<script defer src="/app-boot.js?v=0dfe938505"></script>
 
 </body>
 </html>

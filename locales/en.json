@@ -234,7 +234,8 @@
     "historyHint": "Automatically updated after DCA distribution.",
     "liveMarkets": "--live-markets",
     "footerDisclaimer": "AQMath does not provide financial advice.",
-    "navResults": "results"
+    "navResults": "results",
+    "navV18": "v18"
   },
   "doc": {
     "logoTag": "system documentation",
@@ -625,6 +626,38 @@
     "flReoptSub": "macro loop, 180-day cadence",
     "flTelemetry": "Paper trading — no real funds. Telemetry generated {{date}} by the daily loop (deleverage v14.0, weights v1 frozen {{frozen}}). Past performance does not guarantee future results; not financial advice.",
     "discTo": "to"
+  },
+  "v18": {
+    "logoTag": "v18 adaptive telemetry",
+    "kicker": "V18 ADAPTIVE · LIVE PAPER TRADING",
+    "title": "v18 Adaptive Telemetry",
+    "genBefore": "Weights frozen",
+    "genAfter": "vol-scaled adaptive shield · test candidate",
+    "intro1": "This is the live telemetry tab for the <strong>v18 vol-scaled adaptive shield</strong> &mdash; the validated next-generation test candidate. It runs two paper accounts on baskets <strong>frozen on 2026-09-02</strong>: <strong style='color:#06b6d4'>MAJORS</strong> (BTC/ETH/BNB/SOL/XRP) and <strong style='color:#a855f7'>ALTS</strong> (ATH/SUI/XMR/DOGE/LINK). <strong>v14 remains the production engine</strong>; v18 is shown alongside it for an honest, side-by-side comparison.",
+    "intro2": "Where v14 uses fixed thresholds, v18 scales its drawdown trigger by each basket's own recent volatility and re-enters fast after a sharp bounce, so a single configuration self-tunes to both a calm large-cap basket and a wild alt basket. Each account carries its full backtest history and continues live from the freeze day, with one point appended after every daily close.",
+    "snapH2": "Frozen backtest snapshot — full-history replay",
+    "snapNote": "Headline figures from replaying each basket across its <strong>entire common price history</strong> on the v18 vol-scaled adaptive shield, with the weights frozen on <strong>2026-09-02</strong>. The terms are identical to the production log: a $1,000 start plus $100 every 30 days, with a simulated 0.1% fee charged to the shield and to the Buy &amp; Hold benchmark alike. The shield is built to <strong>cut the deep drawdowns</strong>, not to beat Buy &amp; Hold on absolute return &mdash; across both replays it roughly halves the worst peak-to-trough loss while improving the risk-adjusted numbers.",
+    "mLabel": "MAJORS &mdash; BTC/ETH/BNB/SOL/XRP &middot; 6.2-year replay to 2026-07-04",
+    "mC1Lbl": "v18 virtual equity",
+    "mC1Sub": "from $8,500 deposited since 2020-04-11",
+    "mC2Lbl": "max drawdown (shield)",
+    "mC2Sub": "vs 78.4% for Buy & Hold · cut 43 pp",
+    "mC3Lbl": "Calmar ratio",
+    "mC3Sub": "vs 0.55 B&H · Sharpe 0.65 vs 0.54",
+    "mC4Lbl": "buy & hold benchmark",
+    "mC4Sub": "same $8,500 in · but 78.4% peak-to-trough",
+    "aLabel": "ALTS &mdash; ATH/SUI/XMR/DOGE/LINK &middot; 2.1-year replay to 2026-07-19",
+    "aC1Lbl": "v18 virtual equity",
+    "aC1Sub": "from $3,500 deposited since 2024-06-13",
+    "aC2Lbl": "max drawdown (shield)",
+    "aC2Sub": "vs 62.8% for Buy & Hold · cut 38 pp",
+    "aC3Lbl": "Calmar ratio",
+    "aC3Sub": "vs -0.30 B&H · Sharpe -0.31 vs -0.33",
+    "aC4Lbl": "buy & hold benchmark",
+    "aC4Sub": "same $3,500 in · shield preserved more",
+    "snapFoot": "Each replay stops where that basket's common price history ends, which is before the freeze day; the live forward log below continues from the freeze and appends one point after every daily close. Read honestly: on MAJORS the shield finished <strong>below</strong> Buy &amp; Hold in absolute dollars ($42,134 vs $80,285) but with less than half the drawdown and the better risk-adjusted return; on the shorter ALTS window &mdash; a falling market &mdash; both lost money and the shield gave up far less ($3,040 vs $2,241). <strong>v18 is a validated test candidate; v14 remains the production engine.</strong>",
+    "loading": "Loading the live v18 two-basket telemetry — MAJORS and ALTS…",
+    "footTag": "v18 Adaptive Telemetry · test candidate"
   },
   "shield": {
     "label": "--deleverage-modulator &middot; v14.0",

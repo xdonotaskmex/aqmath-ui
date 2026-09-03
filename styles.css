@@ -860,12 +860,13 @@
     }
 
     /* ===== ROUTING ===== */
-    #landingView, #appView, #docView, #backtestView, #resultsView { display: none; }
+    #landingView, #appView, #docView, #backtestView, #resultsView, #v18View { display: none; }
     body.route-landing #landingView { display: block; }
     body.route-app #appView { display: block; }
     body.route-doc #docView { display: block; }
     body.route-backtest #backtestView { display: block; }
     body.route-results #resultsView { display: block; }
+    body.route-v18 #v18View { display: block; }
 
     /* ===== RESULTS VIEW (static OOS report) ===== */
     .rv-wrap { max-width: 1180px; margin: 0 auto; padding: 32px 24px 80px; }
