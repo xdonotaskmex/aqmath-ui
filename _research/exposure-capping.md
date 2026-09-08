@@ -1,8 +1,9 @@
 # Adaptive Exposure Capping — why fixed drawdown limits fail in crypto regime shifts
 
-**Date:** 2026-09-02 · **Revised:** 2026-09-08 (exposure-matched control added, §6 engine attribution corrected)
+**Date:** 2026-09-02 · **Revised:** 2026-09-08 (exposure-matched control added, §6 engine attribution corrected, engine settings and formulas withheld)
 **Engine:** Production Deleverage Shield — rolling 180-day KKT risk-parity MACRO loop, Aegis (v14) fixed-threshold baseline versus Proteus (v18) adaptive volatility-scaled threshold, identical data and fees
 **Status:** RESEARCH — head-to-head comparison of fixed versus adaptive exposure capping on the production path, plus the signal-free constant-exposure control that separates de-risking from timing
+**Disclosure:** No numeric engine setting and no closed-form expression appears on this page. Reference levels, signal weightings, ramp speeds and their symmetry, scaling multipliers, clamp bands, warm-up floors and bounce-confirmation triggers are withheld, as is the arithmetic behind the variance handicap in §5.4. What is published is the *class* of mechanism, the measured behaviour, and outcome-level metrics. See §8.5.
 
 ---
 
@@ -20,7 +21,7 @@ This study demonstrates two specific failure modes of fixed-threshold exposure c
 
 ### 2.1 Fixed thresholds are basket-blind
 
-A single drawdown reference level cannot serve structurally different baskets. A 15% drawdown on a low-volatility majors basket (BTC, ETH, PAXG) is a genuine stress signal. The same 15% dip on a high-volatility altcoin basket is routine noise — the kind of move that happens several times per month without signalling a regime change.
+A single drawdown reference level cannot serve structurally different baskets. A drawdown of a given size on a low-volatility majors basket (BTC, ETH, PAXG) is a genuine stress signal. The same-sized dip on a high-volatility altcoin basket is routine noise — the kind of move that happens several times per month without signalling a regime change. The production reference level itself is withheld; the argument needs only the fact that it is one constant applied to both baskets.
 
 When the threshold is too low for the basket's volatility, the shield spends most of its time in permanent defense. On the production path the shipped fixed-threshold baseline spends **56.9% of all days** in defensive mode on the high-volatility basket against **44.6%** on the low-volatility one — same engine, same code, different basket, materially different duty cycle. An earlier internal test with a majors-calibrated reference pushed an altcoin basket to roughly 95% defensive days; that configuration never shipped, and the figure is quoted only to show the direction of the failure, not its production size.
 
@@ -52,7 +53,7 @@ The adaptive engine replaces the binary shield state with a **continuous regime 
 
 ![Execution state machine — continuous regime modulator with three operational zones](/research/assets/exposure_state_machine.svg)
 
-**Normal → Telemetry Alert.** When the drawdown signal or downside volatility signal rises above its respective threshold, the composite risk measure begins to increase. The target exposure drops below 100%. The asymmetric ramp starts reducing exposure — fast on the way out (de-risk), slow on the way back in (anti-chop hysteresis). DCA is still deployed into the basket but the system is no longer fully invested.
+**Normal → Telemetry Alert.** When the drawdown signal or downside volatility signal rises above its respective threshold, the composite risk measure begins to increase. The target exposure drops below 100%. The exposure ramp begins reducing risk, with hysteresis between the de-risk and re-entry directions so that ordinary chop does not generate round-trip trades. DCA is still deployed into the basket but the system is no longer fully invested.
 
 **Telemetry Alert → Hard Enforcement.** When target exposure drops below the redeploy threshold, the system enters full defensive mode. Parked DCA accumulates in stablecoin. The shield is absorbing the crash at deterministically reduced risk. This is the only zone where capital is actually being protected — telemetry alone does nothing.
 
@@ -64,9 +65,9 @@ The critical design property: **telemetry never protects capital**. The drawdown
 
 The adaptive threshold engine replaces the fixed drawdown reference with a volatility-scaled one. Instead of comparing the portfolio's drawdown to a constant level, the system measures the basket's own trailing annualised downside volatility and scales every threshold proportionally.
 
-The effect is basket-relative sensitivity: a 15% dip on a low-vol basket and a 30% dip on a high-vol basket produce the same response, because both represent the same number of standard deviations for their respective baskets. One engine, two sensitivity profiles, no manual tuning per basket type.
+The effect is basket-relative sensitivity: a dip that is statistically ordinary for a low-volatility basket and a considerably larger dip that is statistically ordinary for a high-volatility basket produce the same response, because the reference moves with each basket's own realised risk instead of sitting at a fixed level. **The scaling law and its multiplier are withheld.** One engine, two sensitivity profiles, no manual tuning per basket type.
 
-Exit speed (de-risking) is preserved at the same fast rate in both engines. The difference is entirely in threshold sensitivity and re-entry intelligence.
+The difference between the two engines lies in threshold sensitivity and in how re-entry behaves once a bounce is confirmed. Ramp speeds and signal weightings are withheld for both.
 
 ![Adaptive threshold concept — fixed versus volatility-scaled drawdown reference](/research/assets/exposure_concept.svg)
 
@@ -154,7 +155,7 @@ Four conclusions.
 
 **3. The return advantage is significant on majors and not on alts.** A paired block bootstrap (1,000 resamples, 20-day blocks drawn jointly so the pairing survives) puts the adaptive engine's annualised log-growth advantage over its own constant at **+11.7 pp on majors (90% interval +3.1 to +21.7)** and **+4.5 pp on alts (90% interval −4.2 to +14.4)**. The majors advantage clears zero; the alts advantage does not. Against the fixed engine's constant, the fixed engine itself scores +8.4 pp on majors (interval −0.7 to +18.2) and +3.9 pp on alts (interval −5.6 to +14.2).
 
-**4. The control's own handicap is measured, not assumed.** Matching the *mean* of a time-varying exposure does not match its *variance*. Writing `c` for the exposure path, `μ` for the basket's mean return and `σ²` for its variance, a constant leg grows at `E[c]·μ − ½·E[c]²·σ²` while a varying leg with the same mean grows at `E[c]·μ − ½·(E[c]² + Var(c))·σ²`. The difference, `½·Var(c)·σ²`, is free log-growth handed to the constant before any skill is measured. On the realised series (exposure std 0.245 majors / 0.223 alts) that is **+0.65 pp/yr on majors and +0.83 pp/yr on alts in the control's favour** — small against the gaps above, but it belongs on the record, and it is why a mean-matched constant is a strong control rather than a strawman.
+**4. The control's own handicap is measured, not assumed.** Matching the *mean* of a time-varying exposure does not match its *variance*, and the difference is not neutral: under standard log-growth arithmetic a constant leg receives a variance-related growth allowance for free that a time-varying leg with the same mean does not. We evaluated that allowance on the realised exposure path (dispersion 0.245 majors / 0.223 alts) rather than assuming it away. It runs **in the control's favour, at +0.65 pp/yr on majors and +0.83 pp/yr on alts** — small against the gaps above, but it belongs on the record, and it is why a mean-matched constant is a strong control rather than a strawman: the shield's advantage is measured *after* granting the control that head start. The closed-form expression is withheld along with the rest of the engine's mathematics.
 
 **Where the control wins.** Max drawdown is an extremum statistic: its effective sample size is the number of independent crash episodes (five or six across 6.5 years), not the 2,095 daily observations. Sliced per regime, the adaptive engine is shallower than its own constant in **3 of 5** regimes on majors and **3 of 6** on alts.
 
@@ -173,7 +174,7 @@ The full-window advantage is concentrated in the **deepest** regimes — LUNA-cl
 
 ### 5.5 Where the exposure minimum sits
 
-A volatility-scaled rule has a known failure mode. Realised volatility rises *after* the drop and falls *after* the bounce, so the rule reaches its smallest exposure near the bottom — exactly when it should be re-entering. An asymmetric ramp that de-risks fast and re-enters slow makes this worse on V-shaped recoveries, and V-shaped is most of what crypto does.
+A volatility-scaled rule has a known failure mode. Realised volatility rises *after* the drop and falls *after* the bounce, so the rule reaches its smallest exposure near the bottom — exactly when it should be re-entering. If the ramp in addition de-risks faster than it re-enters, that makes the problem worse on V-shaped recoveries, and V-shaped is most of what crypto does.
 
 The adaptive engine is designed against this: once a bounce clears a confirmation threshold measured off the trough, its re-entry speed accelerates sharply and an exposure floor is unlocked, so that a genuine V is not sat out at minimum size. But a design intention is not a measurement, so we measured it. For every named regime and every defensive episode: the date of the basket's cumulative low versus the date of the shield's exposure low. **Positive lag = exposure bottomed after price = the failure mode.** Negative lag = the shield was already light going into the trough.
 
@@ -192,7 +193,7 @@ The adaptive engine is designed against this: once a bounce clears a confirmatio
 
 The 2025-26 lag (+305/+312 days) is not a missed bounce. That regime window is open-ended and the shield is still inside a live defensive episode at the time of writing, so its exposure minimum is recent by construction. The number measures "still defending," not "re-entered late."
 
-Across **all** defensive episodes (18 on majors, 30 on alts) the median lag is **+26 days** and **+54 days**, with 67% and 70% of episodes bottoming after the basket. Read honestly: in short chop the shield systematically reaches its lowest exposure after the local low. That is a real cost. It is concentrated in episodes too small to move the full-window maximum, and it is the strongest argument in this study for the confirmed-bounce accelerator — which is also the part of the engine that short chop defeats, because a chop bounce never clears the +8% confirmation.
+Across **all** defensive episodes (18 on majors, 30 on alts) the median lag is **+26 days** and **+54 days**, with 67% and 70% of episodes bottoming after the basket. Read honestly: in short chop the shield systematically reaches its lowest exposure after the local low. That is a real cost. It is concentrated in episodes too small to move the full-window maximum, and it is the strongest argument in this study for the confirmed-bounce accelerator — which is also the part of the engine that short chop defeats, because a chop bounce never clears the confirmation threshold.
 
 ## 6. Per-profile empirical stress-test results — Aegis (v14) baseline
 
@@ -218,7 +219,7 @@ Full-window (2020-03 → 2026-08, 2,327 days): Calmar **0.57** vs 0.38 B&H. MaxD
 
 ### 6.2 Profile 2 — 2019-20 Generation (ETH, LINK, ATOM, DOT + PAXG)
 
-Higher-volatility basket from the last cycle generation. The fixed 15% drawdown reference is a poor fit here, and the per-regime cuts below are the concept working despite that mismatch rather than because of any self-tuning.
+Higher-volatility basket from the last cycle generation. The fixed drawdown reference is a poor fit here, and the per-regime cuts below are the concept working despite that mismatch rather than because of any self-tuning.
 
 | Regime | Window | Shield MDD | B&H MDD | Cut |
 |--------|--------|----------:|--------:|----:|
@@ -296,8 +297,8 @@ See the [Regime Autopsy study](/research/regime-autopsy) for the full per-regime
 2. **DAILY loop:** Each exposure-capping engine evaluated on every daily close. Threshold rebalancing only trades when the target drifts beyond the deadband; 10 bps fee on every trade, DCA buy and redeploy.
 3. **Validation path:** Rolling 180-day bounded window, cold replay, persisted shield state — the exact data path the production system runs. **Not a continuous backtest on all available history. All reported metrics are walk-forward out-of-sample.**
 4. **Metrics:** TWR daily returns (DCA flows removed), risk-free rate 5%; max drawdown from the virtual equity peak.
-5. **Engines compared:** Aegis (v14), the fixed-threshold baseline, uses the shipped production defaults — a constant drawdown reference (the 15% level discussed in §2.1), a fixed weighting between the drawdown and downside-volatility signals, and a symmetric de-risk / re-entry ramp. Proteus (v18), the adaptive engine, replaces the constant reference with one that scales with the basket's own trailing annualised volatility and is clamped to an absolute band, and scales the volatility ramp band by the same statistic. Its baseline ramp is *also* symmetric; the asymmetry appears only during a confirmed bounce, where re-entry accelerates sharply and an exposure floor is unlocked once the bounce impulse clears a confirmation threshold. **The numeric constants of both engines are withheld.** They are the tunable surface of the product and publishing them would make the rule replicable from this page alone; what is disclosed here is the structure, the measured behaviour, and the fact that neither engine was re-tuned for this comparison. Both are post-processors on the same KKT weight stream — relative token proportions are never altered, only total risky exposure changes.
-6. **Constant-exposure control:** no signal, no state, no thresholds. The identical KKT weight stream scaled to a fixed fraction equal to each shield's own time-average exposure, on the same window and fee convention. The control pays no turnover fee. Exposure dispersion (mean and standard deviation of the daily exposure path) is reported alongside so the control's analytic variance handicap — `½·Var(c)·σ²` of log-growth, which a mean-matched constant receives for free — can be discounted from its result.
+5. **Engines compared:** Aegis (v14) is the fixed-threshold baseline and runs the shipped production defaults. Proteus (v18) is the adaptive engine; it replaces the constant drawdown reference with one that scales with the basket's own trailing volatility, and it accelerates re-entry once a bounce is confirmed rather than waiting for the drawdown to shrink on its own. **Every numeric setting of both engines is withheld** — reference levels, the weighting between the drawdown and downside-volatility signals, ramp speeds and whether they are symmetric, scaling multipliers, clamp bands, warm-up floors and bounce-confirmation triggers — as is the closed-form arithmetic behind the variance handicap in §5.4. These are the tunable surface of the product: publishing the numbers together with the structure would make the rule replicable from this page alone. What is disclosed here is the *class* of mechanism, the measured behaviour, and the fact that neither engine was re-tuned for this comparison. Both are post-processors on the same KKT weight stream — relative token proportions are never altered, only total risky exposure changes.
+6. **Constant-exposure control:** no signal, no state, no thresholds. The identical KKT weight stream scaled to a fixed fraction equal to each shield's own time-average exposure, on the same window and fee convention. The control pays no turnover fee. Exposure dispersion is measured on the daily exposure path so the control's analytic variance handicap — a log-growth allowance a mean-matched constant receives for free, quantified in §5.4 and whose closed form is withheld — can be discounted from its result.
 7. **Uncertainty:** paired block bootstrap, 1,000 resamples of 20-day blocks drawn *jointly* on the paired daily returns so the pairing survives. Applied to the annualised log-growth gap, which is additive and therefore validly resampled. **Deliberately not** applied to max drawdown: reordering blocks destroys the exposure/crash alignment a state-dependent rule depends on, so a day-level bootstrap on a path-dependent extremum is a permutation robustness check, not a sampling interval. Drawdown uncertainty is reported per regime instead, where the independent unit is the crash episode.
 8. **Lag diagnostic:** per named regime and per defensive episode, the index of the basket's cumulative low versus the index of the shield's exposure low, in days. Positive = exposure bottomed after price (the vol-targeting failure mode); negative = already light going in.
 9. **Data:** Yahoo Finance daily closes (unadjusted) for the §6 regime stress tests; CoinGecko-derived daily closes for the §5 production path and the §6.4 OOS token validation. Common-date alignment per basket.
