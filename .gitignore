@@ -21,6 +21,12 @@ dca-engine/
 # uncommitted copy is ever present in a deploy.
 _logs/
 
+# Local scratch scripts and their output. The _ prefix marks a throwaway probe
+# (e.g. a post-deploy live health check) as opposed to a versioned build tool,
+# so neither the script nor its report belongs in the repo.
+/_*.cjs
+/_*.txt
+
 # Playwright / Node test tooling
 node_modules/
 test-results/
@@ -28,3 +34,8 @@ playwright-report/
 blob-report/
 playwright/.cache/
 _commit_msg.txt
+
+# Ad-hoc verification screenshots. The !tests/**/*.png rule above exists for the
+# visual-regression baselines in tests/visual.spec.cjs-snapshots/; a _-prefixed
+# capture is a one-off probe, not a baseline, so re-ignore it here (last rule wins).
+tests/_*.png
