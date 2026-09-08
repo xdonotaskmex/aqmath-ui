@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
+    <link rel="stylesheet" href="/styles.min.css?v=f204f22f4b">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
 </head>
@@ -922,7 +922,7 @@
                 <li data-i18n-html="doc.s8.testingAudit5"><strong>Out-of-sample check</strong> &mdash; on a sealed second half never used to pick the preset, the modulator still roughly halved drawdown (~24% vs ~63% Buy &amp; Hold) at a higher Sharpe (0.48 vs 0.37); a fuller walk-forward multi-fold study is still worthwhile.</li>
                 <li data-i18n-html="doc.s8.testingAudit6"><strong>Survivorship stress (dead token)</strong> &mdash; adding Terra Classic (LUNC), which collapsed from ~$121 to ~$0, to the basket left the modulator&rsquo;s peak drawdown essentially unchanged (~23%), while Buy &amp; Hold&rsquo;s worsened by up to ~18 points; on the same window the modulator still cut drawdown ~49 points versus Buy &amp; Hold. The drawdown defense does not depend on hand-picking surviving tokens (though raw return figures remain flattered by crypto&rsquo;s post-crash rebounds).</li>
             </ul>
-            <p class="rv-v15-notice" data-i18n-html="doc.s8.nextgen"><span class="rv-v15-tag">NEXT-GEN UNDER TEST</span> A volatility-adaptive shield, <strong>Proteus (v18)</strong>, is validated but <strong>not live yet</strong>. Re-run through the <strong>exact production path</strong> &mdash; a rolling 180-day window, the same KKT-180 macro loop, and persisted shield state &mdash; it cut maximum drawdown below the live Aegis (v14) on both a large-cap basket (<strong>25.7%&rarr;23.1%</strong>) and a high-volatility alt basket (<strong>36.8%&rarr;29.4%</strong>), with a higher Sharpe and Calmar. <strong>Aegis (v14) remains the deployed engine</strong>; Proteus (v18) awaits further forward testing before it goes live.</p>
+            <p class="rv-v15-notice" data-i18n-html="doc.s8.nextgen"><span class="rv-v15-tag">LIVE ENGINE</span> The deployed shield is <strong>Proteus (v18)</strong>, a volatility-adaptive engine. Re-run through the <strong>exact production path</strong> &mdash; a rolling 180-day window, the same KKT-180 macro loop, and persisted shield state &mdash; it cut maximum drawdown below its fixed-threshold predecessor Aegis (v14) on both a large-cap basket (<strong>25.7%&rarr;23.1%</strong>) and a high-volatility alt basket (<strong>36.8%&rarr;29.4%</strong>), with a higher Sharpe and Calmar. <strong>Aegis (v14) now runs only as a warm-up fallback</strong>, for portfolios with too little history for the adaptive threshold to calibrate. These figures and the 8.7-year figures in section 8.5 come from two different studies and must not be combined.</p>
         </div>
 
 
@@ -1034,10 +1034,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=2e9ad32e5a"></script>
-<script defer src="/app-backtest.js?v=2e9ad32e5a"></script>
-<script defer src="/app.js?v=2e9ad32e5a"></script>
-<script defer src="/app-notify.js?v=2e9ad32e5a"></script>
+<script defer src="/app-widgets.js?v=f204f22f4b"></script>
+<script defer src="/app-backtest.js?v=f204f22f4b"></script>
+<script defer src="/app.js?v=f204f22f4b"></script>
+<script defer src="/app-notify.js?v=f204f22f4b"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -1051,11 +1051,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=2e9ad32e5a"></script>
+<script defer src="/vendor/i18next.min.js?v=f204f22f4b"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=2e9ad32e5a"></script>
-<script defer src="/app-boot.js?v=2e9ad32e5a"></script>
+<script defer src="/app-tour.js?v=f204f22f4b"></script>
+<script defer src="/app-boot.js?v=f204f22f4b"></script>
 
 </body>
 </html>

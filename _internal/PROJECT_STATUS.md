@@ -1,6 +1,6 @@
 # AQMath Project Status — Master Reference for AI Agents
 
-**Last updated:** 2026-09-02
+**Last updated:** 2026-09-08
 **Purpose:** single-file state of the entire AQMath system — what is done, what
 is in progress, and what remains. An AI agent reading this file should NOT need
 to scan the full workspace to understand current priorities.
@@ -104,6 +104,9 @@ Frontend: static HTML/CSS/JS, deployed on GitHub Pages + Cloudflare WAF.
 | Production wiring behind a feature flag | engine | 2026-09-02 | Flag defaults OFF — deploy is behaviour-neutral, 77/77 tests pass |
 | Landing/docs refresh + animated SVG | ui | 2026-09-02 | v18 "next-gen under test" note (EN+zh), docs §3.3 Discipline Meter, CSS draw-in/pulse |
 | Internal docs moved off the public surface | ui | 2026-09-02 | 7 root `.md` files → `_internal/` + IP scrub (see §5) |
+| **v18 activated in production** | engine | flip date not recorded; confirmed 2026-09-08 | The engine service's shield-profile feature flag is on in production → Proteus (v18) runs real portfolios, Aegis (v14) is the short-history warm-up fallback. Read once at service start, so it needs a redeploy to take effect. Not verifiable from outside — see CLAIMS_AUDIT §5. The flag's name and trigger level stay in the private engine repo |
+| **Public copy corrected: v18 is live** | ui | 2026-09-08 | 13 stale claims × (`en.json` + `zh-CN.json` + `_src` baked fallback) + the `v18.html` meta description in `build_pages.py`; headline figures re-attributed to v14; changelog entry added |
+| ⚠️ **Re-measure the public evidence base on v18** | engine | open | 8.7y headline, sealed-OOS half, OOS-182, MC-3000, graveyard and liveness studies are all v14 output. Labelled as such, but not yet re-run on the live engine. Pre-launch blocker |
 
 ### 🔄 IN PROGRESS
 

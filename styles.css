@@ -1509,7 +1509,7 @@
     .lp-shield-info p { font-family: var(--sans); font-size: 0.82rem; color: var(--text); line-height: 1.7; margin-bottom: 16px; }
     .lp-shield-info strong { color: var(--blue); }
     .lp-shield-info .lp-btn-secondary { display: inline-block; }
-    /* v18 next-gen note reuses the amber "under test" language from the results tab. */
+    /* v18 live-engine note reuses the amber notice styling from the results tab. */
     .lp-shield-nextgen { margin-bottom: 16px; }
     /* Animated drawdown chart: both lines draw in left-to-right once, then fills
        and labels fade in. Pure CSS (no JS) so build_pages.py's div-depth

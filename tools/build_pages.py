@@ -80,7 +80,7 @@ PAGES = {
         "view": "v18View",
         "robots": "index, follow",
         "title": "Proteus (v18) Adaptive Shield \u2014 Live Two-Basket Paper Trading | AQMath",
-        "description": "Live paper-trading telemetry for Proteus (v18), the vol-scaled adaptive shield, on two frozen baskets \u2014 MAJORS (BTC/ETH/BNB/SOL/XRP) and ALTS (ATH/SUI/XMR/DOGE/LINK). Simulated, no real money; Aegis (v14) remains the production engine.",
+        "description": "Live paper-trading telemetry for Proteus (v18), the vol-scaled adaptive shield and the production engine, on two frozen baskets \u2014 MAJORS (BTC/ETH/BNB/SOL/XRP) and ALTS (ATH/SUI/XMR/DOGE/LINK). Simulated, no real money; Aegis (v14) is shown alongside as its fixed-threshold predecessor.",
     },
     # The app is a paid, closed tool behind a beta key: there is no public
     # content to rank, and leaving it indexable only added a fifth duplicate.
