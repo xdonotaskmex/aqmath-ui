@@ -533,9 +533,11 @@ DOCS = [
         "description": ("Fixed drawdown thresholds are basket-blind: a single number cannot serve both "
                         "low-vol majors and high-vol alts. Walk-forward OOS on the production path: "
                         "adaptive (volatility-scaled) wins both baskets on Sharpe, Calmar and MaxDD. "
-                        "Alt basket MaxDD 29.4% vs 36.8% fixed. Also covers the in-sample selection "
+                        "Alt basket MaxDD 29.4% vs 36.8% fixed, at identical average exposure. Includes "
+                        "the exposure-matched constant control that separates de-risking from timing, the "
+                        "exposure-minimum vs price-minimum lag diagnostic, and the lookback-truncation "
                         "inversion that demoted the full-history winner to worst on the production path."),
-        "meta_description": "Fixed vs adaptive exposure capping: walk-forward OOS on production path. Adaptive wins both baskets. Alt MaxDD 29.4% vs 36.8% fixed.",
+        "meta_description": "Fixed vs adaptive exposure capping on the production path, plus the signal-free constant-exposure control that separates de-risking from timing. Alt MaxDD 29.4% vs 36.8% fixed at identical average exposure.",
         "sim_notice": True,
         "altLabel": "\u4e2d\u6587",
     },
