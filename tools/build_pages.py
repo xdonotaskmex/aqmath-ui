@@ -73,7 +73,7 @@ PAGES = {
         "view": "resultsView",
         "robots": "index, follow",
         "title": "Crypto Drawdown Protection Backtest Results \u2014 182 Baskets | AQMath",
-        "description": "Out-of-sample stress test results: 182 crypto portfolio baskets validated, including tokens never used to tune the model. Median 54.3% drawdown reduction vs Buy & Hold.",
+        "description": "Out-of-sample stress test results: 182 crypto portfolio baskets validated, including tokens never used to tune the model. Median 45% drawdown reduction vs Buy & Hold.",
     },
     "v18.html": {
         "path": "/v18",
@@ -201,7 +201,7 @@ PAGE_JSONLD = {
             {"@type": "Article",
              "name": "Crypto Drawdown Protection Backtest Results \u2014 182 Baskets Validated",
              "url": _SITE + "/results",
-             "description": "Out-of-sample stress test: 182 crypto portfolio baskets validated with median 54.3% drawdown reduction vs Buy & Hold, including tokens never used to tune the model.",
+             "description": "Out-of-sample stress test: 182 crypto portfolio baskets validated with median 45% drawdown reduction vs Buy & Hold, including tokens never used to tune the model.",
              "articleSection": "Research Results",
              "author": _PERSON,
              "publisher": {"@id": f"{_SITE}/#organization"}},

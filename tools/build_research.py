@@ -522,6 +522,41 @@ DOCS = [
         "altLabel": "English",
     },
     {
+        "src": "oos-v18-new-tokens.md",
+        "out": "oos-v18-new-tokens.html",
+        "path": "/research/oos-v18-new-tokens",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-09-09",
+        "title": "OOS Validation: Proteus (v18) on 182 Unseen-Token Baskets - AQMath",
+        "shortTitle": "OOS Validation &mdash; Proteus (v18) on 182 Unseen Baskets",
+        "description": ("Out-of-sample re-measurement of the live Proteus (v18) engine on the same "
+                        "182 unseen-token baskets published on /results (those figures were produced "
+                        "by Aegis v14): v18 cuts the worst drop in 182/182 baskets, median -45 pp, "
+                        "and modestly beats v14 (median MaxDD 16.8% vs 18.3%, Calmar +0.55 vs +0.46). "
+                        "No re-tuning; the v14 leg reproduces the published figures exactly."),
+        "meta_description": "Proteus (v18) re-measured on 182 unseen-token baskets: cuts drawdown in 182/182, median -45 pp, MaxDD 16.8% vs v14's 18.3%. A modest, honestly caveated win.",
+        "sim_notice": True,
+        "altLabel": "中文",
+    },
+    {
+        "src": "oos-v18-new-tokens.zh-CN.md",
+        "out": "oos-v18-new-tokens-zh.html",
+        "path": "/research/oos-v18-new-tokens-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-09-09",
+        "title": "样本外验证：Proteus（v18）182 个未见代币组合 - AQMath",
+        "shortTitle": "样本外验证 &mdash; Proteus（v18）182 个未见组合",
+        "description": ("在 /results 发布的同一 182 个未见代币组合上重新测量现役 Proteus（v18）引擎"
+                        "（那些数字由 Aegis v14 产生）：v18 在 182/182 个组合中削减最深跌幅，中位数 -45 pp，"
+                        "并略胜 v14（最大回撤中位数 16.8% 对 18.3%，Calmar +0.55 对 +0.46）。"
+                        "无重新调参；v14 腿精确复现已发布数字。"),
+        "meta_description": "Proteus（v18）在 182 个未见代币组合上重测：182/182 削减回撤，中位数 -45 pp，最大回撤 16.8% 对 v14 的 18.3%。小幅胜出，如实标注。",
+        "sim_notice": True,
+        "altLabel": "English",
+    },
+    {
         "src": "exposure-capping.md",
         "out": "exposure-capping.html",
         "path": "/research/exposure-capping",
@@ -563,6 +598,7 @@ DOCS = [
 # Language pairs that describe the same document, for hreflang.
 TRANSLATION_SETS = [
     ["/research/oos-v14-new-tokens", "/research/oos-v14-new-tokens-zh"],
+    ["/research/oos-v18-new-tokens", "/research/oos-v18-new-tokens-zh"],
     ["/research/how-aqmath-works", "/research/how-aqmath-works-zh"],
     ["/research/dca-stress", "/research/dca-stress-zh"],
     ["/research/feed-sensitivity", "/research/feed-sensitivity-zh"],

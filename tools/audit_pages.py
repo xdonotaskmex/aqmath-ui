@@ -78,6 +78,8 @@ NEEDS_SIM_NOTICE = {
     "research/e2e-tiaq-zh.html",
     "research/oos-v14-new-tokens.html",
     "research/oos-v14-new-tokens-zh.html",
+    "research/oos-v18-new-tokens.html",
+    "research/oos-v18-new-tokens-zh.html",
     "research/liveness-screen.html",
     "research/liveness-screen-zh.html",
     "research/regime-autopsy.html",
