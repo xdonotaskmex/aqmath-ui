@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/e2e-tiaq">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
+<link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
 </head>
 <body>
 
@@ -52,11 +52,11 @@
 <p class="legal-updated">发布日期: 2026-08-03</p>
 <p class="sim-notice"><strong>模拟结果 &mdash; 未使用真实资金。</strong>以下每一项数据均由回测根据历史价格数据计算得出。未投入任何资金，也未下过任何订单。回测是在完全知晓该时段结果的前提下把策略套用于过去，且数据不包含滑点与流动性影响，但会对每次再平衡、DCA 买入和资金重新部署收取 0.1% 的模拟交易所手续费。模拟表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是软件，不是投资建议。</p>
 <p><strong>日期：</strong> 2026-08-03<br>
-<strong>引擎：</strong> 双速 E2E — 与实盘模拟交易服务完全相同的接线（KKT MACRO 回路 + v14 去杠杆防护盾）<br>
+<strong>引擎：</strong> 双速 E2E — 与实盘模拟交易服务完全相同的接线（KKT MACRO 回路 + Aegis（v14）去杠杆防护盾）<br>
 <strong>状态：</strong> 📊 研究 — 候选组合已评估，未晋级</p>
 <hr>
 <h2>1. 目标</h2>
-<p>在<strong>完全相同的生产控制栈</strong>下评估一个<strong>围绕两个新加入代币（TIA、QNT） 构建的候选组合</strong>：用 180 天 KKT 风险平价 MACRO 回路确定基础权重， 用 v14 去杠杆防护盾做每日敞口控制。问题不是&quot;这能否跑赢买入持有&quot;， 而是<em>已上线</em>的机器在这种资产组合上如何表现 — 包括配置决策、 防御行为与风险调整后结果。</p>
+<p>在<strong>完全相同的生产控制栈</strong>下评估一个<strong>围绕两个新加入代币（TIA、QNT） 构建的候选组合</strong>：用 180 天 KKT 风险平价 MACRO 回路确定基础权重， 用 Aegis（v14）去杠杆防护盾做每日敞口控制。问题不是&quot;这能否跑赢买入持有&quot;， 而是<em>已上线</em>的机器在这种资产组合上如何表现 — 包括配置决策、 防御行为与风险调整后结果。</p>
 <p><strong>未改动任何参数。</strong> 所有运行均使用生产环境 <code>default_config()</code> 与未经修改的生产代码路径。</p>
 <h2>2. 组合与数据</h2>
 <div class="rs-tablewrap">
@@ -225,7 +225,7 @@
 <h2>5. 配置发现（定性）</h2>
 <ul><li><strong>TIA 在每次再优化中都被赋予零权重。</strong> 在风险平价目标下， 它近期的风险特征从未赢得与其他三项资产并列的一席之地 — 优化器在没有任何人工干预的情况下将其筛除。</li><li><strong>PAXG 始终持有最大的单一权重</strong>（风险部分内的低波动黄金锚）， 这对一个混合波动率组合而言在预期之内。</li><li>精确配置不予披露（知识产权）。只披露零权重/最大权重这两项 事实 — 与公开前瞻日志相同的详细程度。</li></ul>
 <h2>6. 方法（E2E — 与实盘模拟交易服务完全相同的接线）</h2>
-<p>1. <strong>MACRO 回路：</strong> 在过去 180 天窗口上做 KKT 风险平价优化， 每 180 天重跑一次；期间权重冻结（共 5 次再优化）。 2. <strong>DAILY 回路：</strong> 每个收盘评估 v14 去杠杆防护盾；阈值再平衡 只在目标偏离超出死区时才交易；每笔交易、DCA 买入和资金 重新部署收取 10 个基点手续费。 3. <strong>DCA 停泊：</strong> 防御期间，每 30 天 $100 的定投资金停泊于 USDC，待防护盾重新加险时一次性重新部署。 4. <strong>数据：</strong> CoinGecko 日收盘价，共同窗口 2023-10-31 → 2026-07-27。 5. <strong>代码路径：</strong> <code>paper_trading.daily_step</code> / <code>macro_reoptimize</code> 从生产服务原样导入 — 与运行公开前瞻日志的数学逐位一致。</p>
+<p>1. <strong>MACRO 回路：</strong> 在过去 180 天窗口上做 KKT 风险平价优化， 每 180 天重跑一次；期间权重冻结（共 5 次再优化）。 2. <strong>DAILY 回路：</strong> 每个收盘评估 Aegis（v14）去杠杆防护盾；阈值再平衡 只在目标偏离超出死区时才交易；每笔交易、DCA 买入和资金 重新部署收取 10 个基点手续费。 3. <strong>DCA 停泊：</strong> 防御期间，每 30 天 $100 的定投资金停泊于 USDC，待防护盾重新加险时一次性重新部署。 4. <strong>数据：</strong> CoinGecko 日收盘价，共同窗口 2023-10-31 → 2026-07-27。 5. <strong>代码路径：</strong> <code>paper_trading.daily_step</code> / <code>macro_reoptimize</code> 从生产服务原样导入 — 与运行公开前瞻日志的数学逐位一致。</p>
 <h2>7. 结论</h2>
 <ul><li>防护盾机器在该组合上按设计工作：回撤 16.9% vs 24.6%， beta 0.62，29% 的日子处于防御状态。</li><li>绝对收益落后于买入持有（年化 alpha −4.65%），而该窗口 B&amp;H 本身收正 — 这是约 43% 平均降险的成本。</li><li>优化器完全拒绝了 TIA；以 TIA 为中心的投资论点在该窗口 不被这套机器支持。</li><li><strong>候选组合未晋级。</strong> 仅作为研究证据记录。</li></ul>
 <hr>

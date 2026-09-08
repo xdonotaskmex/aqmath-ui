@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/e2e-tiaq">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
+<link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
 </head>
 <body>
 
@@ -52,11 +52,11 @@
 <p class="legal-updated">Published: 2026-08-03</p>
 <p class="sim-notice"><strong>Simulated results &mdash; no real money.</strong> Every figure below is computed from historical price data by a backtest. No capital was invested and no orders were placed. Backtests apply a strategy to the past with full knowledge of how that period turned out, and the figures exclude slippage and liquidity effects, though a simulated 0.1% exchange fee is charged on every rebalance, DCA buy and redeployment. Simulated and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software, not investment advice.</p>
 <p><strong>Date:</strong> 2026-08-03<br>
-<strong>Engine:</strong> Dual-Speed E2E — identical wiring to the live paper trading service (KKT MACRO loop + v14 Deleverage Shield)<br>
+<strong>Engine:</strong> Dual-Speed E2E — identical wiring to the live paper trading service (KKT MACRO loop + Aegis (v14) Deleverage Shield)<br>
 <strong>Status:</strong> 📊 RESEARCH — candidate basket evaluated, not promoted</p>
 <hr>
 <h2>1. Objective</h2>
-<p>Evaluate a <strong>candidate basket built around two newly added tokens (TIA, QNT)</strong> under the exact production control stack: the 180-day KKT risk-parity MACRO loop for base weights and the v14 Deleverage Shield for daily exposure control. The question is not &quot;can this beat Buy &amp; Hold&quot; but how the <em>shipped</em> machinery behaves on this asset mix — allocation decisions, defensive behaviour and risk-adjusted outcome included.</p>
+<p>Evaluate a <strong>candidate basket built around two newly added tokens (TIA, QNT)</strong> under the exact production control stack: the 180-day KKT risk-parity MACRO loop for base weights and the Aegis (v14) Deleverage Shield for daily exposure control. The question is not &quot;can this beat Buy &amp; Hold&quot; but how the <em>shipped</em> machinery behaves on this asset mix — allocation decisions, defensive behaviour and risk-adjusted outcome included.</p>
 <p><strong>No parameters were changed.</strong> Every run uses production <code>default_config()</code> and the unmodified production code path.</p>
 <h2>2. Basket and data</h2>
 <div class="rs-tablewrap">
@@ -225,7 +225,7 @@
 <h2>5. Allocation findings (qualitative)</h2>
 <ul><li><strong>TIA was zero-weighted on every re-optimisation.</strong> On the risk-parity objective its recent risk profile never earned a slot next to the other three assets — the optimizer screened it out without any manual intervention.</li><li><strong>PAXG consistently carried the largest single weight</strong> (low-vol gold anchor inside the risky sleeve), as expected for a mixed-vol basket.</li><li>Exact allocations are withheld (IP). Only the zero/largest-weight facts are disclosed — the same level of detail as the public forward log.</li></ul>
 <h2>6. Methodology (E2E — identical wiring to the live paper trading service)</h2>
-<p>1. <strong>MACRO loop:</strong> KKT risk-parity optimisation on the trailing 180-day window, re-run every 180 days; weights frozen in between (5 re-optimisations). 2. <strong>DAILY loop:</strong> v14 Deleverage Shield evaluated on each close; threshold rebalancing only trades when the target drifts beyond the deadband; 10 bps fee on every trade, DCA buy and redeploy. 3. <strong>DCA parking:</strong> while defensive, the $100/30-day contribution parks in USDC and redeploys in one tranche when the Shield re-risks. 4. <strong>Data:</strong> CoinGecko daily closes, common window 2023-10-31 → 2026-07-27. 5. <strong>Code path:</strong> <code>paper_trading.daily_step</code> / <code>macro_reoptimize</code> imported unmodified from the production service — bit-for-bit the math that runs the public forward log.</p>
+<p>1. <strong>MACRO loop:</strong> KKT risk-parity optimisation on the trailing 180-day window, re-run every 180 days; weights frozen in between (5 re-optimisations). 2. <strong>DAILY loop:</strong> Aegis (v14) Deleverage Shield evaluated on each close; threshold rebalancing only trades when the target drifts beyond the deadband; 10 bps fee on every trade, DCA buy and redeploy. 3. <strong>DCA parking:</strong> while defensive, the $100/30-day contribution parks in USDC and redeploys in one tranche when the Shield re-risks. 4. <strong>Data:</strong> CoinGecko daily closes, common window 2023-10-31 → 2026-07-27. 5. <strong>Code path:</strong> <code>paper_trading.daily_step</code> / <code>macro_reoptimize</code> imported unmodified from the production service — bit-for-bit the math that runs the public forward log.</p>
 <h2>7. Verdict</h2>
 <ul><li>The Shield machinery worked as designed on this mix: drawdown 16.9% vs 24.6%, beta 0.62, defensive 29% of days.</li><li>Absolute return trailed Buy &amp; Hold (alpha −4.65% p.a.) in a window where B&amp;H itself finished positive — the cost of ~43% average de-risking.</li><li>The optimizer refused TIA entirely; a TIA-centred thesis is not supported by this machinery on this window.</li><li><strong>Candidate basket NOT promoted.</strong> Recorded as research evidence only.</li></ul>
 <hr>

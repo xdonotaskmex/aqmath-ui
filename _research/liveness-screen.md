@@ -1,7 +1,7 @@
 # Liveness Screen — Fixing the Dead-Token Weight Flaw in the KKT Macro Loop
 
 **Date:** 2026-08-07
-**Engine:** Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop + v14 Deleverage Shield)
+**Engine:** Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop + Aegis (v14) Deleverage Shield)
 **Status:** 📊 RESEARCH — component design study, implemented in the production service
 
 ---

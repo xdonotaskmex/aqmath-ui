@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/regime-autopsy">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
+<link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
 </head>
 <body>
 
@@ -52,7 +52,7 @@
 <p class="legal-updated">发布日期: 2026-08-07</p>
 <p class="sim-notice"><strong>模拟结果 &mdash; 未使用真实资金。</strong>以下每一项数据均由回测根据历史价格数据计算得出。未投入任何资金，也未下过任何订单。回测是在完全知晓该时段结果的前提下把策略套用于过去，且数据不包含滑点与流动性影响，但会对每次再平衡、DCA 买入和资金重新部署收取 0.1% 的模拟交易所手续费。模拟表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是软件，不是投资建议。</p>
 <p><strong>日期：</strong> 2026-08-07<br>
-<strong>引擎：</strong> v14 双速 E2E — 与实盘模拟交易服务完全相同的接线（带 ADV-K2 活性筛查的 180 天 KKT 风险平价 MACRO 回路 + v14 去杠杆防护盾）<br>
+<strong>引擎：</strong> Aegis（v14）双速 E2E — 与实盘模拟交易服务完全相同的接线（带 ADV-K2 活性筛查的 180 天 KKT 风险平价 MACRO 回路 + Aegis（v14）去杠杆防护盾）<br>
 <strong>状态：</strong> 📊 研究 — 最差市场状态的样本外压力研究，无组合晋级</p>
 <hr>
 <h2>1. 目标</h2>
@@ -337,7 +337,7 @@
 <h2>7. 注意事项（披露，不隐藏）</h2>
 <ul><li><strong>R1 2020 年 3 月按设计未被覆盖</strong>（PAXG 锚 + 180 天预热 使组合从 2020-03-24 开始）。本研究对那次崩盘没有发言权。</li><li><strong>R6 防御占比高。</strong> 在 2025-26 窗口中，防护盾约有 40% 的日子 停泊于 USDC（组合 B 的 583 个市场状态日中有 236 天）。这与 实盘前瞻日志中可见的防御倾向相同 — 它提供保护，但也付出 参与度的代价。</li><li><strong>本文替代了一份被扣下的早期草稿。</strong> 本研究的第一版没有 运行活性筛查，波动率上限曾在一个组合 C 的再优化中把已死亡 的 CEL 代币赋予 24.7% 的冻结权重，污染了结果。该缺陷已在 生产和本研究中修复 — 见<a href="/research/liveness-screen">活性筛查文章</a>。 筛查在全部 38 次再优化中恰好触发了一次（CEL，2025-08-24）； 组合 A 和 B 与其未筛查运行逐位一致。</li><li><strong>数据源变更：</strong> 使用 Yahoo Finance（未复权收盘价）替代 CoinGecko；数字与早先研究可比，但并非完全相同。</li></ul>
 <h2>8. 方法</h2>
-<p>1. <strong>MACRO 回路：</strong> 在过去 180 天窗口上做 KKT 风险平价优化， 每 180 天重跑一次；期间权重冻结（每个组合 12-13 次再优化）。 每次再优化后，ADV-K2 活性筛查会把连续两次再优化都未通过 每日 100 万美元过去成交量测试的代币权重归零（失败时放行， 只用过去数据）— 与生产服务中运行的是同一个筛查。 2. <strong>DAILY 回路：</strong> 每个收盘评估 v14 去杠杆防护盾；阈值再平衡 只在目标偏离超出死区时才交易；每笔交易、DCA 买入和资金 重新部署收取 10 个基点手续费。 3. <strong>市场状态切片：</strong> 对冻结权重的滚动前推序列沿已命名的崩盘 窗口做事后切片 — 每个市场状态都由在它之前冻结的参数打分。 切片内至少 20 天才参与评分。 4. <strong>指标：</strong> TWR 日收益（剔除 DCA 现金流），rf 5%；最大回撤 从虚拟权益峰值起算。买入持有始终跟踪完整的原始组合构成， 包括筛查归零的代币。 5. <strong>数据：</strong> Yahoo Finance 日收盘价（未复权），获取于 2026-08-07；跳空/漂移分解的 OHLC 来自同一数据源。 6. <strong>代码路径：</strong> <code>paper_trading.daily_step</code> / <code>macro_reoptimize</code> 从生产服务原样导入 — 与运行公开前瞻日志的数学逐位一致。</p>
+<p>1. <strong>MACRO 回路：</strong> 在过去 180 天窗口上做 KKT 风险平价优化， 每 180 天重跑一次；期间权重冻结（每个组合 12-13 次再优化）。 每次再优化后，ADV-K2 活性筛查会把连续两次再优化都未通过 每日 100 万美元过去成交量测试的代币权重归零（失败时放行， 只用过去数据）— 与生产服务中运行的是同一个筛查。 2. <strong>DAILY 回路：</strong> 每个收盘评估 Aegis（v14）去杠杆防护盾；阈值再平衡 只在目标偏离超出死区时才交易；每笔交易、DCA 买入和资金 重新部署收取 10 个基点手续费。 3. <strong>市场状态切片：</strong> 对冻结权重的滚动前推序列沿已命名的崩盘 窗口做事后切片 — 每个市场状态都由在它之前冻结的参数打分。 切片内至少 20 天才参与评分。 4. <strong>指标：</strong> TWR 日收益（剔除 DCA 现金流），rf 5%；最大回撤 从虚拟权益峰值起算。买入持有始终跟踪完整的原始组合构成， 包括筛查归零的代币。 5. <strong>数据：</strong> Yahoo Finance 日收盘价（未复权），获取于 2026-08-07；跳空/漂移分解的 OHLC 来自同一数据源。 6. <strong>代码路径：</strong> <code>paper_trading.daily_step</code> / <code>macro_reoptimize</code> 从生产服务原样导入 — 与运行公开前瞻日志的数学逐位一致。</p>
 <h2>9. 结论</h2>
 <ul><li><strong>15/15 个被覆盖的市场状态-组合搭配显示出正的样本外回撤 削减。</strong> 调节器在它从未见过的市场状态上依然成立。</li><li>头条最差几段：LUNA 传染 <strong>16.8% vs 44.1%</strong>（A）和 <strong>21.3% vs 44.8%</strong>（B）；FTX 崩盘 <strong>3.3% vs 13.3%</strong>（A）。</li><li>收益代价是真实的，在每个 CAGR 列中都清晰可见：防护盾在全部 三个全窗口的绝对收益上落后于买入持有。</li><li>组合 B 展示了该论断的诚实边界：分市场状态的削减成立，但该 组合的全窗口风险调整后指标偏向买入持有。</li><li>在活性筛查开启的情况下，雷区组合是干净的 — 2025-08 之后 死代币不再携带真实权重，且该组合的全窗口 Calmar 是三者中 最高的（0.65）。</li><li><strong>无组合晋级。</strong> 仅作为研究证据记录。</li></ul>
 <hr>

@@ -1,7 +1,7 @@
 # Human Factor Stress Test: Does the Shield Break When You Do?
 
 **Date:** 2026-08-10 · **Updated:** 2026-08-12 (Test 2c: frozen weights + lag knee)
-**Engine:** v14 Deleverage Shield — the same code that runs in production, unchanged
+**Engine:** Aegis (v14) Deleverage Shield — the same code that runs in production, unchanged
 **Status:** Test 1 ✅ PASS 5/5 (DCA jitter) · Test 2 ⚠️ 3/4 (constant lag fails the Sharpe gate) · Test 2b ❌ 0/4 — on the production KKT 60/40 stack, every execution-error scenario fails the MaxDD gate · Test 2c ❌ freezing the weights does not fix it, and there is no lag knee — even a 1-day lag fails the MaxDD gate · 30 seeds per scenario
 
 ---
@@ -434,7 +434,7 @@ those 30 runs.
 
 ---
 
-*This is the first of five planned stress tests for the v14 Deleverage Shield.
+*This is the first of five planned stress tests for the Aegis (v14) Deleverage Shield.
 Per the critique in §5, Test 2 moved from deposit jitter to signal execution
 lag — the first test in this series that can actually fail — and it delivered
 the first failure: a constant 3-day signal lag breaks the Sharpe gate. Test 2b

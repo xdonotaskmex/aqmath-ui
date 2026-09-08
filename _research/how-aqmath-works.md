@@ -33,13 +33,13 @@ button and not recomputed when prices move. The only thing that changes them
 is the macro loop: every **180 days** the engine re-optimises once and freezes
 the new weights. You are notified when this happens.
 
-### The daily loop — Deleverage Shield v14 (fast, frozen parameters)
+### The daily loop — Aegis (v14) Deleverage Shield (fast, frozen parameters)
 
-Once per day, after market close, the engine runs the **v14 Deleverage
+Once per day, after market close, the engine runs the **Aegis (v14) Deleverage
 Shield** over your frozen weights. The shield is a regime modulator: it reads
 the drawdown and downside volatility of your basket and continuously scales
 your target exposure between fully invested and defensive (more reserve, less
-risk). Its parameters are **frozen at v14** — they were validated out-of-sample
+risk). Its parameters are **frozen at Aegis (v14)** — they were validated out-of-sample
 and are no longer tuned.
 
 ## 3. What a signal means

@@ -1,7 +1,7 @@
 # Static vs. Dynamic: The Test the Shield Only Half-Passed
 
 **Date:** 2026-08-12
-**Engine:** v14 Deleverage Shield — the same code that runs in production, unchanged
+**Engine:** Aegis (v14) Deleverage Shield — the same code that runs in production, unchanged
 **Status:** Gates 2/4 — Shield wins protection (MaxDD, Calmar) but loses the
 return gates: a robot-rebalanced 60/40 beats it on Sharpe and doubles its
 final equity · 30 seeds per behavioral scenario
@@ -63,7 +63,7 @@ jitter was already tested in the Human Factor series.
 | **S1 — Textbook (robot)** | 60/70/80% | rest | rebalanced to target once per year |
 | **S2 — Drawer (drift)** | 60/70/80% | rest | never rebalanced — the sleeve drifts |
 | **S3 — Capitulation (human)** | 60% plan | rest | holds the S1 plan until own equity drawdown crosses ~35%, then all-stable; three re-entry rules |
-| **Shield v14** | dynamic | dynamic | production config, same-day execution |
+| **Aegis (v14) Shield** | dynamic | dynamic | production config, same-day execution |
 
 S3 details: the pain threshold is 35% ± 5 percentage points, jittered
 per seed (30 seeds). Re-entry variants: **never** return, return only
@@ -87,7 +87,7 @@ most common real-world version of a static split.
 | S2 60/40 drawer | 80.5% | 0.452 | 0.482 | 38.8% | $65,595 |
 | S2 70/30 drawer | 80.8% | 0.458 | 0.489 | 39.6% | $67,746 |
 | S2 80/20 drawer | 81.1% | 0.464 | 0.497 | 40.3% | $69,897 |
-| **Shield v14** | **34.2%** | 0.493 | **0.659** | 22.5% | $30,121 |
+| **Aegis (v14) Shield** | **34.2%** | 0.493 | **0.659** | 22.5% | $30,121 |
 
 Three facts stand out:
 
@@ -198,7 +198,7 @@ tooling; every reported median is across 30 seeds.
 
 ---
 
-*This is the second of five planned crown tests for the v14 Deleverage
+*This is the second of five planned crown tests for the Aegis (v14) Deleverage
 Shield. Test 1 (Human Factor) is published
 [here](/research/dca-stress). Verdict here: 2/4 gates — the Shield
 dominates protection and pain-adjusted return, loses the return gates

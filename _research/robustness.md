@@ -1,7 +1,7 @@
 # Robustness — how far can reality deviate before the Shield breaks?
 
 **Date:** 2026-08-07
-**Engine:** v14 Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop with the ADV-K2 liveness screen + v14 Deleverage Shield)
+**Engine:** Aegis (v14) Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop with the ADV-K2 liveness screen + Aegis (v14) Deleverage Shield)
 **Status:** 📊 RESEARCH — parameter plateau + reality stress, no basket promoted
 
 ---
@@ -74,7 +74,7 @@ Basket B remains the weak basket at every setting, consistent with the
 Regime Autopsy: its full-window case never rested on tuning.
 
 **The no-op.** The risk-budget knob scales the *reported* risky exposure but
-is not applied to returns in the v14 accounting — the grid confirms this is
+is not applied to returns in the Aegis (v14) accounting — the grid confirms this is
 exact, not approximate: five settings, identical equity to the cent. We
 publish this because a knob that looks protective but is cosmetic should be
 known, not assumed.

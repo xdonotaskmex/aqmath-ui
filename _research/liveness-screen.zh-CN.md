@@ -1,7 +1,7 @@
 # 活性筛查 — 修复 KKT MACRO 回路中的死代币权重缺陷
 
 **日期：** 2026-08-07
-**引擎：** 双速 E2E — 与实盘模拟交易服务完全相同的接线（180 天 KKT 风险平价 MACRO 回路 + v14 去杠杆防护盾）
+**引擎：** 双速 E2E — 与实盘模拟交易服务完全相同的接线（180 天 KKT 风险平价 MACRO 回路 + Aegis（v14）去杠杆防护盾）
 **状态：** 📊 研究 — 组件设计研究，已在生产服务中实现
 
 > English version: [Liveness Screen](/research/liveness-screen)

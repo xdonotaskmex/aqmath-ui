@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/feed-sensitivity">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
+<link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
 </head>
 <body>
 
@@ -52,13 +52,13 @@
 <p class="legal-updated">发布日期: 2026-08-09</p>
 <p class="sim-notice"><strong>模拟结果 &mdash; 未使用真实资金。</strong>以下每一项数据均由回测根据历史价格数据计算得出。未投入任何资金，也未下过任何订单。回测是在完全知晓该时段结果的前提下把策略套用于过去，且数据不包含滑点与流动性影响，但会对每次再平衡、DCA 买入和资金重新部署收取 0.1% 的模拟交易所手续费。模拟表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是软件，不是投资建议。</p>
 <p><strong>日期：</strong> 2026-08-09<br>
-<strong>引擎：</strong> v14 去杠杆防护盾 — 原样导入生产 <code>evaluate_shield</code> / <code>backtest_modulator</code>；日线收盘价独立取自三个公开价格源<br>
+<strong>引擎：</strong> Aegis（v14）去杠杆防护盾 — 原样导入生产 <code>evaluate_shield</code> / <code>backtest_modulator</code>；日线收盘价独立取自三个公开价格源<br>
 <strong>状态：</strong> 📊 研究 — 数据源敏感性研究，未改动任何参数，未提升任何组合</p>
 <hr>
 <h2>1. 目标</h2>
 <p>迄今发布的每一项研究（<a href="/research/oos-v14-new-tokens-zh">样本外验证</a>、 <a href="/research/mc-risk-zh">蒙特卡洛</a>、<a href="/research/regime-autopsy-zh">市场状态尸检</a>、 <a href="/research/robustness-zh">稳健性</a>）都把价格序列当作地面真值。它不是 — 而且生产管线就是按&quot;知道这一点&quot;来构建的。三个独立 collector（聚合器、 Coinbase、Kraken）把原始日线价格推入数据管线；管线对每个代币、每个日期 先去重，再按源剔除离群值（7 天滚动窗口的 4.5 个标准差），然后取该日 各源的<strong>中位数</strong>价格，并对 ≤2 天的缺口做插值 — 策略看到的数字已经过这 一切处理。防护盾并不是盲目只读一个源 — 但前提是该代币确实被不止一个 collector 采集。第 2 节展示这个前提在哪里失效。</p>
 <p>本研究要问的是：<em>如果防护盾当初信任另一个源，用户得到的信号会不同吗？</em></p>
-<p>我们为冻结 v14 计划中的 8 个代币独立拉取了三个源：生产 collector 使用的 聚合器（CoinGecko），以及两个交易所原生源（Coinbase Exchange K 线、 Kraken OHLC）。</p>
+<p>我们为冻结 Aegis（v14）计划中的 8 个代币独立拉取了三个源：生产 collector 使用的 聚合器（CoinGecko），以及两个交易所原生源（Coinbase Exchange K 线、 Kraken OHLC）。</p>
 <h2>2. 覆盖范围 — 本身就是一个发现</h2>
 <p>2026-08-09 的上币情况 — 以及生产 collector 实际采集的范围（按配置）：</p>
 <div class="rs-tablewrap">
@@ -233,7 +233,7 @@
 </tr>
 </tbody></table></div>
 <figure class="rs-fig"><img src="/research/assets/feed_divergence.svg" alt="每个代币-源对同日分歧的中位数与 p95，对数轴" width="920" height="400" loading="lazy" decoding="async"></figure>
-<p><em>同日源分歧的中位数（蓝）与 p95（红），按代币与源对；对数轴。虚线： 0.5%，v14 再平衡阈值。</em></p>
+<p><em>同日源分歧的中位数（蓝）与 p95（红），按代币与源对；对数轴。虚线： 0.5%，Aegis（v14）再平衡阈值。</em></p>
 <p><strong>交易所之间彼此一致。</strong>同日跨所分歧就是噪声：中位数 0.04–0.21%， p95 低于 0.9%。价格发现不是问题所在。</p>
 <p><strong>聚合器大体一致 — 直到它不一致。</strong>中位数分歧同样很小，但尾部巨大： p95 介于 13% 到 59%，单日最大差距达 76%。分歧不是一个宽的分布，而是 少数极端报价。第 4 节展示它们的来源。</p>
 <h2>4. 坏报价的解剖</h2>
@@ -307,7 +307,7 @@
 <p>生产源在一年内打出了 <strong>49 次超 30% 的单日波动，其中 41 次没有任何 交易所佐证</strong> — 例如 TIA 在数周内先后出现 +107% 与 −52%，而两个交易所 全程横盘。相比之下交易所的跳变几乎全是共享事件（2025 年 10 月的清算 级联出现在每个上币该代币的源上）。污染恰好集中在小型股计划必须持有的 薄流动性代币上。</p>
 <p>关于它为何能进入策略：管线的离群值过滤器会按源剔除偏离 7 天滚动均值 超过 4.5 个标准差的价格 — 对蓝筹币是好筛子，但薄代币自身的波动率会抬高 局部标准差，极端报价可以存活下来。在合并有三个源的地方（TIA、PYTH、 PAXG），跨源中位数随后能吸收幸存者；在代币为单一来源的地方（第 2 节）， 坏报价与防护盾之间没有任何屏障。validator 另外会<em>标记</em>超 50% 的波动但 不拒绝，30–50% 的波动则完全不被检查。</p>
 <h2>5. 回放 — 同一防护盾，三个源</h2>
-<p>真实 v14 防护盾（<code>evaluate_shield</code>、生产常数、10 bps 手续费、阈值再平衡） 按每个源各回放一次，外加一个<strong>共识</strong>组 — 每代币取三源中位数，也就是生产 管线对 TIA/PYTH/PAXG 实际使用的同一条合并规则 — 标的为处处上币的 4 代币 子组合（权重：冻结计划重归一 — ATH 20.1%、PAXG 52.6%、PYTH 14.4%、 TIA 12.9%）。窗口：364 天，2025-08-09 → 2026-08-07。$10,000 起步 + 每 30 天 $300 DCA。</p>
+<p>真实 Aegis（v14）防护盾（<code>evaluate_shield</code>、生产常数、10 bps 手续费、阈值再平衡） 按每个源各回放一次，外加一个<strong>共识</strong>组 — 每代币取三源中位数，也就是生产 管线对 TIA/PYTH/PAXG 实际使用的同一条合并规则 — 标的为处处上币的 4 代币 子组合（权重：冻结计划重归一 — ATH 20.1%、PAXG 52.6%、PYTH 14.4%、 TIA 12.9%）。窗口：364 天，2025-08-09 → 2026-08-07。$10,000 起步 + 每 30 天 $300 DCA。</p>
 <div class="rs-tablewrap">
 <table>
 <thead><tr>

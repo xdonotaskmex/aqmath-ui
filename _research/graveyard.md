@@ -1,7 +1,7 @@
 # Graveyard Gauntlet — who saves the basket when tokens die?
 
 **Date:** 2026-08-07
-**Engine:** v14 Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop with the ADV-K2 liveness screen + v14 Deleverage Shield)
+**Engine:** Aegis (v14) Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop with the ADV-K2 liveness screen + Aegis (v14) Deleverage Shield)
 **Status:** 📊 RESEARCH — worst-case stress basket, no basket promoted
 
 ---

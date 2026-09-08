@@ -1,7 +1,7 @@
-# Institutional risk report — does v14's edge survive 3,000 synthetic histories?
+# Institutional risk report — does Aegis (v14)'s edge survive 3,000 synthetic histories?
 
 **Date:** 2026-08-07
-**Engine:** v14 Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop with the ADV-K2 liveness screen + v14 Deleverage Shield)
+**Engine:** Aegis (v14) Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop with the ADV-K2 liveness screen + Aegis (v14) Deleverage Shield)
 **Status:** 📊 RESEARCH — Monte Carlo statistical validation, no basket promoted
 
 ---

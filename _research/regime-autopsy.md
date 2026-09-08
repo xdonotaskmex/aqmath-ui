@@ -1,7 +1,7 @@
 # Regime Autopsy — does the Shield survive its worst regimes?
 
 **Date:** 2026-08-07
-**Engine:** v14 Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop with the ADV-K2 liveness screen + v14 Deleverage Shield)
+**Engine:** Aegis (v14) Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop with the ADV-K2 liveness screen + Aegis (v14) Deleverage Shield)
 **Status:** 📊 RESEARCH — worst-regime out-of-sample stress study, no basket promoted
 
 ---
@@ -162,7 +162,7 @@ The uncatchable residual is concentrated in single worst days (May 19 2021:
    liveness screen zeroes the weight of any token that failed the $1M/day
    trailing-volume test at two consecutive re-opts (fail-open, trailing data
    only) — the same screen running in the production service.
-2. **DAILY loop:** v14 Deleverage Shield evaluated on each close; threshold
+2. **DAILY loop:** Aegis (v14) Deleverage Shield evaluated on each close; threshold
    rebalancing only trades when the target drifts beyond the deadband; 10 bps
    fee on every trade, DCA buy and redeploy.
 3. **Regime cuts:** post-hoc slices of the frozen-weight walk-forward series

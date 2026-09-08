@@ -105,9 +105,9 @@ DOCS = [
         "shortTitle": "How AQMath Works &mdash; Signals &amp; What You Execute",
         "description": ("The must-read user guide: AQMath produces signal-only trading guidance "
                         "from frozen KKT risk-parity weights (re-optimised every 180 days) and the "
-                        "daily v14 Deleverage Shield - the user executes every trade manually, on "
+                        "daily Aegis (v14) Deleverage Shield - the user executes every trade manually, on "
                         "their own exchange account."),
-        "meta_description": "User guide: signal-only guidance from frozen KKT risk-parity weights and the daily v14 Deleverage Shield. You execute every trade manually.",
+        "meta_description": "User guide: signal-only guidance from frozen KKT risk-parity weights and the daily Aegis (v14) Deleverage Shield. You execute every trade manually.",
         # User guide, not a performance study: no simulated-results notice.
         "sim_notice": False,
         "altLabel": "中文",
@@ -122,9 +122,9 @@ DOCS = [
         "title": "AQMath 工作原理：信号与冻结权重 - AQMath",
         "shortTitle": "AQMath 工作原理 &mdash; 信号与你执行什么",
         "description": ("必读用户指南：AQMath 仅产生信号型交易指引，基于冻结的 KKT 风险平价"
-                        "权重（每 180 天再优化）与每日 v14 去杠杆防护盾 — 用户在自己的交易所"
+                        "权重（每 180 天再优化）与每日 Aegis（v14）去杠杆防护盾 — 用户在自己的交易所"
                         "账户上手动执行每一笔交易。"),
-        "meta_description": "必读指南：AQMath 基于冻结 KKT 风险平价权重与每日 v14 防护盾产生信号，用户在自有交易所手动执行。",
+        "meta_description": "必读指南：AQMath 基于冻结 KKT 风险平价权重与每日 Aegis（v14）防护盾产生信号，用户在自有交易所手动执行。",
         "sim_notice": False,
         "altLabel": "English",
     },
@@ -175,14 +175,14 @@ DOCS = [
         "published": "2026-08-12",
         "title": "Static vs Dynamic Shield Test - AQMath",
         "shortTitle": "Static vs. Dynamic &mdash; Shield vs the 60/40 Humans Actually Hold",
-        "description": ("Crown Test 2: Shield v14 vs static crypto/stablecoin splits at three levels "
+        "description": ("Crown Test 2: Aegis (v14) Shield vs static crypto/stablecoin splits at three levels "
                         "of human-ness - a robot (yearly rebalance), a drawer (never touched) and a "
                         "human (capitulates when the pain breaks them, 30 seeds). Gates 2/4: MaxDD "
                         "34.2% vs 60.7-81.1% and the best Calmar of all nine strategies pass; the "
                         "robot 60/40's higher Sharpe (0.621 vs 0.493) and doubled equity fail. But "
                         "zero of 30 simulated humans held the plan - every one capitulated 3-5 times "
                         "and gave up $12.5k-$16.4k of equity."),
-        "meta_description": "Shield v14 vs static 60/40: MaxDD 34.2% vs 60.7-81.1%. Zero of 30 simulated humans held the plan \u2014 every one capitulated.",
+        "meta_description": "Aegis (v14) Shield vs static 60/40: MaxDD 34.2% vs 60.7-81.1%. Zero of 30 simulated humans held the plan \u2014 every one capitulated.",
         "altLabel": "中文",
     },
     {
@@ -194,13 +194,13 @@ DOCS = [
         "published": "2026-08-12",
         "title": "静态 vs 动态防护盾测试 - AQMath",
         "shortTitle": "静态 vs 动态 &mdash; 防护盾对真人持有的 60/40",
-        "description": ("皇冠测试 2：Shield v14 对静态 加密币/稳定币 分配，按三种\u201c像人程度\u201d"
+        "description": ("皇冠测试 2：Aegis（v14） Shield 对静态 加密币/稳定币 分配，按三种\u201c像人程度\u201d"
                         "测试 — 机器人（年度再平衡）、抽屉党（从不触碰）与真人（疼到投降，"
                         "30 个种子）。门槛 2/4：MaxDD 34.2% 对 60.7–81.1% 与九个策略中最高"
                         "的 Calmar 通过；机器人 60/40 的更高夏普（0.621 对 0.493）与翻倍权益"
                         "失败。但 30 个模拟人类没有一个撑住计划 — 每人投降 3–5 次，放弃"
                         "$12.5k–$16.4k 的权益。"),
-        "meta_description": "Shield v14 对静态 60/40：MaxDD 34.2% vs 60.7–81.1%。30 个模拟人类无一坚持计划，全部投降。",
+        "meta_description": "Aegis（v14） Shield 对静态 60/40：MaxDD 34.2% vs 60.7–81.1%。30 个模拟人类无一坚持计划，全部投降。",
         "altLabel": "English",
     },
     {
@@ -249,7 +249,7 @@ DOCS = [
                         "8 frozen-plan tokens are collected by the free-tier aggregator alone. "
                         "Pulling the same eight tokens from three independent feeds shows exchanges "
                         "agreeing to ~0.1% while the aggregator prints 49 one-day moves above 30% "
-                        "in a year - 41 corroborated by no exchange. The v14 replay outcome barely "
+                        "in a year - 41 corroborated by no exchange. The Aegis (v14) replay outcome barely "
                         "moves, but trade timing and the macro loop's volatility input do."),
         "meta_description": "Three price feeds compared: exchanges agree to ~0.1%, the aggregator prints 49 uncorroborated 30%+ moves/year. Outcome holds, timing shifts.",
         "altLabel": "中文",
@@ -266,7 +266,7 @@ DOCS = [
         "description": ("管线用按日中位数合并三个价格源 — 但冻结计划的 8 个代币中有 5 个只由"
                         "免费档聚合器采集。把同样 8 个代币从三个独立价格源拉取：交易所之间分歧"
                         "仅 ~0.1%，而聚合器一年打出 49 次超 30% 单日波动 — 其中 41 次没有任何"
-                        "交易所佐证。v14 回放结果几乎不动，但交易时机与宏观回路的波动率输入会动。"),
+                        "交易所佐证。Aegis（v14）回放结果几乎不动，但交易时机与宏观回路的波动率输入会动。"),
         "meta_description": "三个价格源对比：交易所分歧仅 ~0.1%，聚合器一年打出 49 次无佐证 30%+ 波动。结果不变，时机偏移。",
         "altLabel": "English",
     },
@@ -277,13 +277,13 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-07",
-        "title": "v14 Risk Report: 3,000 Synthetic Histories - AQMath",
+        "title": "Aegis (v14) Risk Report: 3,000 Synthetic Histories - AQMath",
         "shortTitle": "Institutional Risk Report &mdash; 3,000 Synthetic Histories",
         "description": ("Stationary block bootstrap, Deflated Sharpe, White's Reality Check and "
-                        "CVaR on the production v14 wiring: the drawdown cut wins in 98.6-99.7% of "
+                        "CVaR on the production Aegis (v14) wiring: the drawdown cut wins in 98.6-99.7% of "
                         "3,000 paired synthetic histories per basket and the one-month tail is ~40% "
                         "thinner everywhere - but excess return over buy & hold is statistically zero."),
-        "meta_description": "Bootstrap, Deflated Sharpe & CVaR on v14: drawdown cut wins in 98.6-99.7% of 3,000 synthetic histories. Excess return is statistically zero.",
+        "meta_description": "Bootstrap, Deflated Sharpe & CVaR on Aegis (v14): drawdown cut wins in 98.6-99.7% of 3,000 synthetic histories. Excess return is statistically zero.",
         "altLabel": "中文",
     },
     {
@@ -293,12 +293,12 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-08-07",
-        "title": "v14 风险报告：3,000 段合成历史 - AQMath",
+        "title": "Aegis（v14）风险报告：3,000 段合成历史 - AQMath",
         "shortTitle": "机构级风险报告 &mdash; 3,000 段合成历史",
-        "description": ("对生产 v14 接线做平稳分块自助法、通缩夏普、White 现实检验与 CVaR："
+        "description": ("对生产 Aegis（v14）接线做平稳分块自助法、通缩夏普、White 现实检验与 CVaR："
                         "每个组合 3,000 段成对合成历史中 98.6-99.7% 的路径回撤削减为正，"
                         "一个月尾部处处薄约 40% — 但相对买入持有的超额收益在统计上为零。"),
-        "meta_description": "自助法、通缩夏普与 CVaR 验证 v14：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。",
+        "meta_description": "自助法、通缩夏普与 CVaR 验证 Aegis（v14）：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。",
         "altLabel": "English",
     },
     {
@@ -435,13 +435,13 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-05",
-        "title": "Three-Basket Comparison: v14 Engine - AQMath",
-        "shortTitle": "Three-Basket Comparison &mdash; v14 KKT MACRO + Shield",
+        "title": "Three-Basket Comparison: Aegis (v14) Engine - AQMath",
+        "shortTitle": "Three-Basket Comparison &mdash; Aegis (v14) KKT MACRO + Shield",
         "description": ("Walk-forward E2E comparison of three structurally different baskets "
-                        "(majors+gold, veterans+gold, new-gen alts) on the shipped v14 stack: "
+                        "(majors+gold, veterans+gold, new-gen alts) on the shipped Aegis (v14) stack: "
                         "shared-window max drawdown 9.8% vs 25.4% Buy & Hold; the Shield cut "
                         "drawdown 30-36 pp in every window."),
-        "meta_description": "Three baskets on v14: max drawdown 9.8% vs 25.4% Buy & Hold. Shield cut drawdown 30-36 pp in every window.",
+        "meta_description": "Three baskets on Aegis (v14): max drawdown 9.8% vs 25.4% Buy & Hold. Shield cut drawdown 30-36 pp in every window.",
         "altLabel": "中文",
     },
     {
@@ -451,12 +451,12 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-08-05",
-        "title": "三组合对比：v14 引擎 - AQMath",
-        "shortTitle": "三组合对比 &mdash; v14 KKT MACRO + 防护盾",
+        "title": "三组合对比：Aegis（v14）引擎 - AQMath",
+        "shortTitle": "三组合对比 &mdash; Aegis（v14） KKT MACRO + 防护盾",
         "description": ("三个结构不同组合（主流币+黄金、老将+黄金、新生代山寨币）在已上线 "
-                        "v14 栈上的滚动前推 E2E 对比：共同窗口最大回撤 9.8% vs 买入持有 25.4%；"
+                        "Aegis（v14）栈上的滚动前推 E2E 对比：共同窗口最大回撤 9.8% vs 买入持有 25.4%；"
                         "防护盾在每个窗口都把回撤削减 30-36 个百分点。"),
-        "meta_description": "三个组合在 v14 上对比：最大回撤 9.8% vs 买入持有 25.4%。防护盾每窗口削减回撤 30-36 个百分点。",
+        "meta_description": "三个组合在 Aegis（v14）上对比：最大回撤 9.8% vs 买入持有 25.4%。防护盾每窗口削减回撤 30-36 个百分点。",
         "altLabel": "English",
     },
     {
@@ -496,12 +496,12 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-07-17",
-        "title": "OOS Validation: v14 on Unseen Tokens - AQMath",
-        "shortTitle": "OOS Validation &mdash; v14.0 on Unseen Tokens",
-        "description": ("Out-of-sample test of the shipped AQMath Deleverage Modulator v14.0 on 16 "
+        "title": "OOS Validation: Aegis (v14) on Unseen Tokens - AQMath",
+        "shortTitle": "OOS Validation &mdash; Aegis (v14.0) on Unseen Tokens",
+        "description": ("Out-of-sample test of the shipped AQMath Aegis (v14.0) Deleverage Modulator on 16 "
                         "baskets of never-tuned tokens: median 54.3 pp drawdown cut, Calmar up "
                         "in 16/16."),
-        "meta_description": "OOS test of Deleverage v14.0 on 16 never-tuned token baskets: median 54.3 pp drawdown cut, Calmar up in 16/16.",
+        "meta_description": "OOS test of Aegis (v14.0) Deleverage on 16 never-tuned token baskets: median 54.3 pp drawdown cut, Calmar up in 16/16.",
         "altLabel": "\u4e2d\u6587",
     },
     {
@@ -511,14 +511,14 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-07-17",
-        "title": "\u6837\u672c\u5916\u9a8c\u8bc1\uff1av14 \u672a\u89c1\u4ee3\u5e01 - AQMath",
-        "shortTitle": "\u6837\u672c\u5916\u9a8c\u8bc1 &mdash; v14.0 \u672a\u89c1\u4ee3\u5e01",
-        "description": ("AQMath \u53bb\u6760\u6746\u8c03\u8282\u5668 v14.0 \u7684\u6837\u672c\u5916\u6d4b\u8bd5\uff1a"
+        "title": "\u6837\u672c\u5916\u9a8c\u8bc1\uff1aAegis\uff08v14\uff09\u672a\u89c1\u4ee3\u5e01 - AQMath",
+        "shortTitle": "\u6837\u672c\u5916\u9a8c\u8bc1 &mdash; Aegis\uff08v14.0\uff09\u672a\u89c1\u4ee3\u5e01",
+        "description": ("Aegis\uff08v14.0\uff09AQMath \u53bb\u6760\u6746\u8c03\u8282\u5668\u7684\u6837\u672c\u5916\u6d4b\u8bd5\uff1a"
                         "\u5728 16 \u4e2a\u4ece\u672a\u7528\u4e8e\u8c03\u53c2\u7684\u4ee3\u5e01\u7ec4\u5408\u4e0a\u9a8c\u8bc1\uff0c"
                         "\u6700\u5927\u56de\u64a4\u4e2d\u4f4d\u6570\u524a\u51cf 54.3 \u4e2a\u767e\u5206\u70b9\uff0c"
                         "Calmar \u5728 16/16 \u4e2a\u7ec4\u5408\u4e2d\u5168\u90e8\u63d0\u5347\uff0c"
                         "\u5e76\u5305\u542b\u6b7b\u4ea1\u4ee3\u5e01\u4e0e\u77ed\u5386\u53f2\u538b\u529b\u6848\u4f8b\u3002"),
-        "meta_description": "v14.0 \u53bb\u6760\u6746\u8c03\u8282\u5668\u6837\u672c\u5916\u6d4b\u8bd5\uff1a16 \u4e2a\u672a\u89c1\u4ee3\u5e01\u7ec4\u5408\uff0c\u6700\u5927\u56de\u64a4\u4e2d\u4f4d\u6570\u524a\u51cf 54.3 pp\uff0cCalmar 16/16 \u63d0\u5347\u3002",
+        "meta_description": "Aegis\uff08v14.0\uff09\u53bb\u6760\u6746\u8c03\u8282\u5668\u6837\u672c\u5916\u6d4b\u8bd5\uff1a16 \u4e2a\u672a\u89c1\u4ee3\u5e01\u7ec4\u5408\uff0c\u6700\u5927\u56de\u64a4\u4e2d\u4f4d\u6570\u524a\u51cf 54.3 pp\uff0cCalmar 16/16 \u63d0\u5347\u3002",
         "altLabel": "English",
     },
     {

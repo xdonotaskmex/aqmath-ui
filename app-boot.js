@@ -316,7 +316,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=0dfe938505')
+    return fetch('/locales/' + lang + '.json?v=2e9ad32e5a')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -403,7 +403,11 @@ function applyTranslations() {
         // signal-only automation (app-notify.js)
         showHowAqmath: function () { showHowAqmath(false); },
         hideHowAqmath: function () { hideHowAqmath(); },
-        ackHowAqmath: function () { ackHowAqmath(); },
+        ackHowAqmath: function () { ackHowAqmath().then(function () {
+            // After acknowledging "How AQMath Works", auto-launch the product tour
+            if (typeof maybeAutoTour === 'function') maybeAutoTour();
+        }).catch(function () {}); },
+        startTour: function () { if (typeof startProductTour === 'function') startProductTour(); },
         syncShieldPortfolio: function () { syncShieldPortfolio(); },
         saveShieldSettings: function () { saveShieldSettings(); },
         enableNotifications: function () { enableNotifications(); },
@@ -416,6 +420,7 @@ function applyTranslations() {
         showAdjustForm: function (el, arg) { showAdjustForm(el, arg); },
         hideAdjustForm: function (el, arg) { hideAdjustForm(el, arg); },
         adjustSignal: function (el, arg) { adjustSignal(el, arg); },
+        executeDcaSignal: function (el, arg) { executeDcaSignal(el, arg); },
         // argument actions (arg comes from data-arg)
         lang: function (el, arg) { switchLang(arg); },
         clickEl: function (el, arg) { var t = document.getElementById(arg); if (t) t.click(); },
@@ -513,4 +518,17 @@ function applyTranslations() {
     if (seen === VER) return;
     var card = document.getElementById('whatsNew');
     if (card) card.classList.remove('hidden');
+})();
+
+// ---------------------------------------------------------------------------
+// 7) Product Tour auto-launch — on /app, if the user hasn't seen the tour
+//    and hasn't just dismissed the What's New, offer the tour after a delay.
+// ---------------------------------------------------------------------------
+(function () {
+    if (location.pathname !== '/app') return;
+    if (localStorage.getItem('aqmath_tour_done')) return;
+    // Wait for dynamic content to settle, then launch
+    setTimeout(function () {
+        if (typeof maybeAutoTour === 'function') maybeAutoTour();
+    }, 3000);
 })();

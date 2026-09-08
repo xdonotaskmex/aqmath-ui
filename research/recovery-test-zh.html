@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/recovery-test">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
+<link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
 </head>
 <body>
 
@@ -51,7 +51,7 @@
 <h1>被锁在外面？防护盾进入防守后会发生什么</h1>
 <p class="legal-updated">发布日期: 2026-08-18</p>
 <p class="sim-notice"><strong>模拟结果 &mdash; 未使用真实资金。</strong>以下每一项数据均由回测根据历史价格数据计算得出。未投入任何资金，也未下过任何订单。回测是在完全知晓该时段结果的前提下把策略套用于过去，且数据不包含滑点与流动性影响，但会对每次再平衡、DCA 买入和资金重新部署收取 0.1% 的模拟交易所手续费。模拟表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是软件，不是投资建议。</p>
-<p><strong>日期：</strong> 2026-08-18 <strong>引擎：</strong> v14 去杠杆防护盾，运行在生产 KKT 堆栈上 — ERC 风险平价 权重（180 天回溯、180 天重优化、60/40 风险/USDC），与生产环境完全 相同的代码，未做任何修改 <strong>状态：</strong> 门槛 1/4 — 防护盾重新进入很快（中位数 1 天达到 50% 敞口）， 但在 12 个月内仅捕获买入持有恢复量的 32% · 6.2 年内 11 次防守阶段 · 没有 一个周期在防守后 12 个月权益超过买入持有</p>
+<p><strong>日期：</strong> 2026-08-18 <strong>引擎：</strong> Aegis（v14）去杠杆防护盾，运行在生产 KKT 堆栈上 — ERC 风险平价 权重（180 天回溯、180 天重优化、60/40 风险/USDC），与生产环境完全 相同的代码，未做任何修改 <strong>状态：</strong> 门槛 1/4 — 防护盾重新进入很快（中位数 1 天达到 50% 敞口）， 但在 12 个月内仅捕获买入持有恢复量的 32% · 6.2 年内 11 次防守阶段 · 没有 一个周期在防守后 12 个月权益超过买入持有</p>
 <hr>
 <h2>60 秒速读</h2>
 <ul><li>关于防护盾最大的心理恐惧：它把你踢出市场，然后你错过复苏。</li><li>本测试精确度量这一点：每次防护盾进入防守，它多快重新进入， 以及捕获了多少后续买入持有的复苏？</li><li>速度没问题：中位数 1 天达到 50% 敞口。没有人被&quot;锁在外面&quot; 很久。</li><li>参与度不行：12 个月中位数恢复捕获仅为买入持有的 32%，最差 为 28%。防护盾确实重新进入了，但以降低的敞口 — 只捕获了 上行的一小部分。</li><li>有 12 个月数据的七个周期中零个：防护盾权益在防守阶段结束 12 个月后从未超过买入持有权益。</li></ul>
@@ -72,7 +72,7 @@
 </tr></thead>
 <tbody>
 <tr>
-<td style="text-align:left"><strong>Shield v14</strong></td>
+<td style="text-align:left"><strong>Aegis（v14） Shield</strong></td>
 <td style="text-align:left">生产 KKT 配置，阈值再平衡，防守时定投存入稳定币</td>
 </tr>
 <tr>
@@ -271,7 +271,7 @@
 <h2>7. 可复现性</h2>
 <p>两个工具跑在同一段 6.2 年的日线收盘价上，防护盾腿使用未修改的 生产引擎。组合使用真实的 KKT 风险平价优化器（ERC + KKT 投影） 构建，而非等权 — 这与服务器上运行的完全一致。测试脚本、图表 生成器与原始结果数据存放在引擎的内部研究工具中。</p>
 <hr>
-<p><em>这是 v14 去杠杆防护盾五项计划皇冠测试中的第四项。测试 1（人为 因素）已发布于<a href="/research/dca-stress-zh">此处</a>。测试 2（静态 vs 动态）已发布于<a href="/research/static-vs-dynamic-zh">此处</a>。本次判定： 4 过 1 — 防护盾重新进入很快，但仅捕获复苏的一小部分。下一项： 测试 3，流动性执行。</em></p>
+<p><em>这是 Aegis（v14）去杠杆防护盾五项计划皇冠测试中的第四项。测试 1（人为 因素）已发布于<a href="/research/dca-stress-zh">此处</a>。测试 2（静态 vs 动态）已发布于<a href="/research/static-vs-dynamic-zh">此处</a>。本次判定： 4 过 1 — 防护盾重新进入很快，但仅捕获复苏的一小部分。下一项： 测试 3，流动性执行。</em></p>
 </main>
 
 <footer class="site-footer">

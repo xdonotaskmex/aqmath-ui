@@ -211,12 +211,12 @@ function btRenderBacktest(data, inp) {
 
     // Two engines on identical terms; B&H is the reference only.
     var engines = [
-        { key: 'v14', label: 'Deleverage v14', tag: 'production', m: m1, s: sim, color: '#06b6d4' },
-        { key: 'v18', label: 'v18 Adaptive', tag: 'test candidate', m: m18, s: sim18, color: '#a855f7' }
+        { key: 'v14', shortName: 'Aegis v14', label: 'Aegis v14 · Deleverage', tag: 'production', m: m1, s: sim, color: '#06b6d4' },
+        { key: 'v18', shortName: 'Proteus v18', label: 'Proteus v18 · Adaptive', tag: 'test candidate', m: m18, s: sim18, color: '#a855f7' }
     ].filter(function(e) { return e.m && e.s; });
     var best = engines.reduce(function(a, b) { return b.m.cal > a.m.cal ? b : a; });
 
-    var finals = engines.map(function(e) { return e.key + ' $' + e.m.final.toLocaleString(undefined, { maximumFractionDigits: 0 }); });
+    var finals = engines.map(function(e) { return e.shortName + ' $' + e.m.final.toLocaleString(undefined, { maximumFractionDigits: 0 }); });
     btShowStatus('Done: ' + days + ' days, ' + pr.n + ' tokens (' + pr.syms.join(', ') + ') — final: '
         + finals.join(' · ') + ' · B&H $' + m2.final.toLocaleString(undefined, { maximumFractionDigits: 0 }), 'success');
 
@@ -291,7 +291,7 @@ function btRenderBacktest(data, inp) {
     }
 
     // Summary explain
-    document.getElementById('btSummaryExplain').innerHTML = '<strong>' + pr.n + ' tokens</strong> (' + escapeHtml(pr.syms.join(', ')) + ') over <strong>' + days + ' days</strong> (~' + years.toFixed(1) + 'y). v14 (production): defensive (exposure &lt; ' + (cfg.redeploy_thresh * 100).toFixed(0) + '%) on <strong>' + sim.shDays + '</strong>/' + days + ' days, avg exposure <strong>' + (v14x.avg * 100).toFixed(0) + '%</strong>, <strong>' + sim.dcaN + '</strong> DCA events, <strong>' + redeploys.length + '</strong> cash redeploys.' + (sim18 ? ' v18: ' + sim18.shDays + ' defensive days, ' + sim18.rebN + ' rebalances.' : '');
+    document.getElementById('btSummaryExplain').innerHTML = '<strong>' + pr.n + ' tokens</strong> (' + escapeHtml(pr.syms.join(', ')) + ') over <strong>' + days + ' days</strong> (~' + years.toFixed(1) + 'y). Aegis v14 (production): defensive (exposure &lt; ' + (cfg.redeploy_thresh * 100).toFixed(0) + '%) on <strong>' + sim.shDays + '</strong>/' + days + ' days, avg exposure <strong>' + (v14x.avg * 100).toFixed(0) + '%</strong>, <strong>' + sim.dcaN + '</strong> DCA events, <strong>' + redeploys.length + '</strong> cash redeploys.' + (sim18 ? ' Proteus v18: ' + sim18.shDays + ' defensive days, ' + sim18.rebN + ' rebalances.' : '');
 
     // Metrics grid (v14 production detail)
     var mg = document.getElementById('btMetricsGrid');
@@ -385,9 +385,9 @@ function btRenderBacktest(data, inp) {
 
     // Equity curves — both engines + B&H reference
     var eqDatasets = [
-        { label: 'Deleverage v14', data: sim.eqA.slice(1), borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.08)', fill: true, pointRadius: 0, borderWidth: 2 }
+        { label: 'Aegis v14 · Deleverage', data: sim.eqA.slice(1), borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.08)', fill: true, pointRadius: 0, borderWidth: 2 }
     ];
-    if (sim18) eqDatasets.push({ label: 'v18 Adaptive', data: sim18.eqA.slice(1), borderColor: '#a855f7', fill: false, pointRadius: 0, borderWidth: 1.5 });
+    if (sim18) eqDatasets.push({ label: 'Proteus v18 · Adaptive', data: sim18.eqA.slice(1), borderColor: '#a855f7', fill: false, pointRadius: 0, borderWidth: 1.5 });
     eqDatasets.push({ label: 'Buy & Hold + DCA', data: sim.eqB.slice(1), borderColor: '#fbbf24', borderDash: [4, 3], fill: false, pointRadius: 0, borderWidth: 1.5 });
     btCharts.eq = new Chart(document.getElementById('btEquityChart'), {
         type: 'line',
@@ -413,9 +413,9 @@ function btRenderBacktest(data, inp) {
 
     // Exposure — both engines (held exposure × risk budget)
     var expDatasets = [
-        { label: 'v14', data: sim.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#06b6d4', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' }
+        { label: 'Aegis v14', data: sim.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#06b6d4', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' }
     ];
-    if (sim18) expDatasets.push({ label: 'v18', data: sim18.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#a855f7', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' });
+    if (sim18) expDatasets.push({ label: 'Proteus v18', data: sim18.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#a855f7', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' });
     btCharts.exp = new Chart(document.getElementById('btExposureChart'), {
         type: 'line',
         data: { labels: dateLabels, datasets: expDatasets },
@@ -533,7 +533,7 @@ function btRenderWFGrid(data) {
     html += '</tbody></table>';
 
     var best = data.best;
-    html += '<div class="bt-explain" style="margin-top:12px"><strong>Best:</strong> ' + data.sweep_label + '=' + swFmt(best.sv) + ', ' + data.cross_label + '=' + crFmt(best.cv) + ' \u2192 ' + data.metric_label + ': ' + metFmt(bestVal) + ' (ranked by ' + data.metric_label + '; illustrative sweep of the v14 modulator around a neutral baseline \u2014 not the production preset. The v18 test candidate runs fixed constants and is not swept.) Def Days / Redeploys show the best cell of each row.</div>';
+    html += '<div class="bt-explain" style="margin-top:12px"><strong>Best:</strong> ' + data.sweep_label + '=' + swFmt(best.sv) + ', ' + data.cross_label + '=' + crFmt(best.cv) + ' \u2192 ' + data.metric_label + ': ' + metFmt(bestVal) + ' (ranked by ' + data.metric_label + '; illustrative sweep of the Aegis v14 modulator around a neutral baseline \u2014 not the production preset. The Proteus v18 test candidate runs fixed constants and is not swept.) Def Days / Redeploys show the best cell of each row.</div>';
 
     document.getElementById('btWfGridContainer').innerHTML = html;
     document.getElementById('btWfSection').classList.remove('hidden');

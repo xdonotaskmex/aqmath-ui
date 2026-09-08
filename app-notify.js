@@ -879,6 +879,8 @@ async function loadPendingSignals() {
 }
 
 function _renderSignalBlock(s) {
+    // DCA-due events are pseudo-signals (side='DCA') with their own card.
+    if (s.side === 'DCA') return _renderDcaBlock(s);
     const regime = s.shield_regime || 'LOW_VOL';
     const regimeClass = regime === 'SHOCK' ? 'regime-shock' : 'regime-lowvol';
     const regimeLabel = regime === 'SHOCK' ? 'SHOCK' : 'LOW VOL';
@@ -912,6 +914,113 @@ function _renderSignalBlock(s) {
         +   '<button class="btn ghost" data-action="hideAdjustForm" data-arg="' + s.signal_id + '">[ cancel ]</button>'
         + '</div>'
         + '</div>';
+}
+
+// ---- DCA-due pending card (side='DCA') ----
+// A DCA-due day becomes ONE pseudo-signal so the web app has an actionable
+// surface (it used to be ntfy-only). The route detail (USDC vs per-token buys
+// + redeploy) lives in dca_payload. Execution stays client-side via the
+// dca-engine; the card is confirmed server-side only AFTER applyDcaResult()
+// succeeds, so it never clears before the money actually moved.
+let _pendingDcaSignalId = null;
+
+function _renderDcaBlock(s) {
+    const p = s.dca_payload || {};
+    const route = String(p.route || 'USDC').toLowerCase();
+    const amount = Number(p.amount || s.usd || 0);
+    const amountStr = '$' + Math.round(amount).toLocaleString();
+    const regime = s.shield_regime || 'LOW_VOL';
+    const regimeClass = regime === 'SHOCK' ? 'regime-shock' : 'regime-lowvol';
+    const regimeLabel = regime === 'SHOCK' ? 'SHOCK' : 'LOW VOL';
+    const daysWarn = s.days_pending > 0
+        ? '<span class="sig-days-warn">pending ' + s.days_pending + 'd</span>'
+        : '<span class="sig-days-ok">today</span>';
+    const countdown = s.expires_at ? _renderCountdown(s.expires_at) : '';
+
+    let routeHtml;
+    if (route === 'usdc') {
+        const parked = Number(p.parked_total || 0);
+        routeHtml = '<strong>Defensive mode</strong> &mdash; ' + amountStr
+            + ' parks in your stablecoin.'
+            + (parked > 0
+                ? ' Total parked: <strong>$' + Math.round(parked).toLocaleString() + '</strong>.'
+                : '');
+    } else {
+        const buys = Array.isArray(p.buys) ? p.buys : [];
+        const buyTxt = buys.map(function (b) {
+            return escapeHtml(_normSym(String(b.sym || '').toUpperCase()))
+                + ' $' + Math.round(Number(b.usd || 0)).toLocaleString();
+        }).join(' &middot; ');
+        routeHtml = '<strong>Risk-on</strong> &mdash; ' + amountStr + ' into tokens'
+            + (buyTxt ? ': ' + buyTxt : '') + '.';
+        const redeploy = Number(p.redeploy_usdc || 0);
+        if (redeploy > 0) {
+            routeHtml += ' <strong>+$' + Math.round(redeploy).toLocaleString()
+                + '</strong> redeployed from parked USDC at the same weights.';
+        }
+    }
+
+    return '<div class="sig-block sig-dca" data-signal-id="' + s.signal_id + '">'
+        + '<div class="sig-header">'
+        +   '<span class="sig-side sig-dca-badge">DCA</span>'
+        +   '<span class="sig-sym">Contribution due</span>'
+        +   '<span class="sig-amount">' + amountStr + ' &rarr; ' + route.toUpperCase() + '</span>'
+        +   '<span class="sig-regime ' + regimeClass + '">' + regimeLabel + '</span>'
+        +   daysWarn
+        +   countdown
+        + '</div>'
+        + '<div class="sig-dca-detail">' + routeHtml + '</div>'
+        + '<div class="sig-actions">'
+        +   '<button class="btn green" data-action="executeDcaSignal" data-arg="' + s.signal_id + '">[ execute DCA ]</button>'
+        +   '<button class="btn ghost" data-action="skipSignal" data-arg="' + s.signal_id + '">[ dismiss ]</button>'
+        + '</div>'
+        + '</div>';
+}
+
+// [ execute DCA ] — pre-fill the amount from the server notice, remember which
+// card to confirm, then run the normal client-side DCA preview flow. The card
+// is confirmed server-side only AFTER applyDcaResult() succeeds (see app.js).
+async function executeDcaSignal(el, signalId) {
+    if (!signalId) return;
+    const sig = _pendingSignals.find(function (s) { return s.signal_id === signalId; });
+    const payload = (sig && sig.dca_payload) || {};
+    const amount = Number(payload.amount || (sig && sig.usd) || 0);
+    const amtInput = document.getElementById('iDcaAmount');
+    if (amtInput && amount > 0) amtInput.value = amount;
+    _pendingDcaSignalId = signalId;
+    if (typeof distribuirajDca === 'function') await distribuirajDca();
+    // If the preview never opened (validation toast), don't hold the marker.
+    const overlay = document.getElementById('dcaPreviewOverlay');
+    if (!overlay || overlay.classList.contains('hidden')) _pendingDcaSignalId = null;
+}
+
+// Called by applyDcaResult() (app.js) once the DCA plan hit the portfolio.
+// The DCA branch of /portfolio/signals/confirm records the confirmation and
+// does NOT run a holdings delta (execution already happened client-side).
+async function confirmPendingDcaSignal() {
+    const signalId = _pendingDcaSignalId;
+    if (!signalId) return;
+    _pendingDcaSignalId = null;
+    try {
+        const res = await _shieldFetch('/portfolio/signals/confirm', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({signal_id: signalId}),
+        });
+        if (!res.ok && res.status !== 409 && res.status !== 410) {
+            console.warn('[AQMath] DCA confirm failed:', res.status);
+        }
+    } catch (e) {
+        console.warn('[AQMath] DCA confirm error:', e.message);
+    }
+    _pendingSignals = _pendingSignals.filter(function (s) { return s.signal_id !== signalId; });
+    _rerenderSignalList();
+    loadPendingSignals();
+}
+
+// cancelDca() (app.js) clears the marker so a cancelled preview never confirms.
+function clearPendingDcaSignal() {
+    _pendingDcaSignalId = null;
 }
 
 // Discipline Module: render a countdown badge for a signal's expires_at.

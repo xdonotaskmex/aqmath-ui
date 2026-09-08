@@ -1,7 +1,7 @@
-# Three-Basket Historical Comparison — v14 Dual-Speed Engine (KKT MACRO Loop + Deleverage Shield)
+# Three-Basket Historical Comparison — Aegis (v14) Dual-Speed Engine (KKT MACRO Loop + Deleverage Shield)
 
 **Date:** 2026-08-05
-**Engine:** Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop + v14 Deleverage Shield)
+**Engine:** Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop + Aegis (v14) Deleverage Shield)
 **Status:** 📊 RESEARCH — basket comparison, no basket promoted
 
 ---
@@ -11,7 +11,7 @@
 Build **three structurally different baskets** from a 17-token pool of daily
 price history (2013-2026) and find out which one has historically produced the
 best results under the exact shipped production stack: the 180-day KKT
-risk-parity MACRO loop for base weights and the v14 Deleverage Shield for daily
+risk-parity MACRO loop for base weights and the Aegis (v14) Deleverage Shield for daily
 exposure control.
 
 **No parameters were changed.** Every run uses production `default_config()`
@@ -138,7 +138,7 @@ or below Buy & Hold's.
 1. **MACRO loop:** KKT risk-parity optimisation on the trailing 180-day
    window, re-run every 180 days; weights frozen in between (3-13
    re-optimisations per run).
-2. **DAILY loop:** v14 Deleverage Shield evaluated on each close; threshold
+2. **DAILY loop:** Aegis (v14) Deleverage Shield evaluated on each close; threshold
    rebalancing only trades when the target drifts beyond the 8% deadband;
    10 bps fee on every trade, DCA buy and redeploy.
 3. **DCA parking:** while defensive, the $100/30-day contribution parks in

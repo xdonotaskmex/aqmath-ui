@@ -79,8 +79,8 @@ PAGES = {
         "path": "/v18",
         "view": "v18View",
         "robots": "index, follow",
-        "title": "v18 Adaptive Shield \u2014 Live Two-Basket Paper Trading | AQMath",
-        "description": "Live paper-trading telemetry for the v18 vol-scaled adaptive shield on two frozen baskets \u2014 MAJORS (BTC/ETH/BNB/SOL/XRP) and ALTS (ATH/SUI/XMR/DOGE/LINK). Simulated, no real money; v14 remains the production engine.",
+        "title": "Proteus (v18) Adaptive Shield \u2014 Live Two-Basket Paper Trading | AQMath",
+        "description": "Live paper-trading telemetry for Proteus (v18), the vol-scaled adaptive shield, on two frozen baskets \u2014 MAJORS (BTC/ETH/BNB/SOL/XRP) and ALTS (ATH/SUI/XMR/DOGE/LINK). Simulated, no real money; Aegis (v14) remains the production engine.",
     },
     # The app is a paid, closed tool behind a beta key: there is no public
     # content to rank, and leaving it indexable only added a fifth duplicate.
@@ -121,8 +121,8 @@ _WEBAPP = {
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
     "offers": [
-        {"@type": "Offer", "name": "Beta Access", "price": "0", "priceCurrency": "USD",
-         "description": "Limited slots, access review required"},
+        {"@type": "Offer", "name": "Free Access", "price": "0", "priceCurrency": "USD",
+         "description": "Core DCA distribution, live price sync, non-custodial portfolio tracking"},
         {"@type": "Offer", "name": "Black Annual Access", "price": "999", "priceCurrency": "EUR",
          "description": "Annual subscription \u2014 \u20ac999/year, paid in USDC or EURC"},
     ],
@@ -212,13 +212,13 @@ PAGE_JSONLD = {
         "@context": "https://schema.org",
         "@graph": [
             {"@type": "Article",
-             "name": "v18 Adaptive Shield \u2014 Live Two-Basket Paper Trading",
+             "name": "Proteus (v18) Adaptive Shield \u2014 Live Two-Basket Paper Trading",
              "url": _SITE + "/v18",
-             "description": "Live paper-trading telemetry for the v18 vol-scaled adaptive shield on two frozen baskets (MAJORS and ALTS), compared against Buy & Hold on identical terms. Simulated results, no real money.",
+             "description": "Live paper-trading telemetry for Proteus (v18), the vol-scaled adaptive shield, on two frozen baskets (MAJORS and ALTS), compared against Buy & Hold on identical terms. Simulated results, no real money.",
              "articleSection": "Research Results",
              "author": _PERSON,
              "publisher": {"@id": f"{_SITE}/#organization"}},
-            _breadcrumb("v18 Adaptive", "/v18"),
+            _breadcrumb("Proteus v18 Adaptive", "/v18"),
         ],
     },
     # app.html is noindex; keep the baseline WebApplication only.

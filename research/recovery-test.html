@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/recovery-test">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
+<link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
 </head>
 <body>
 
@@ -51,7 +51,7 @@
 <h1>Locked Out? What Happens After the Shield Goes Defensive</h1>
 <p class="legal-updated">Published: 2026-08-18</p>
 <p class="sim-notice"><strong>Simulated results &mdash; no real money.</strong> Every figure below is computed from historical price data by a backtest. No capital was invested and no orders were placed. Backtests apply a strategy to the past with full knowledge of how that period turned out, and the figures exclude slippage and liquidity effects, though a simulated 0.1% exchange fee is charged on every rebalance, DCA buy and redeployment. Simulated and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software, not investment advice.</p>
-<p><strong>Date:</strong> 2026-08-18 <strong>Engine:</strong> v14 Deleverage Shield on the production KKT stack — ERC risk-parity weights (180d lookback, 180d re-opt, 60/40 risky/USDC), same code that runs in production, unchanged <strong>Status:</strong> Gates 1/4 — Shield re-enters fast (median 1 day to 50% exposure) but captures only 32% of the Buy &amp; Hold recovery at 12 months · 11 defensive episodes across 6.2 years · zero cycles where Shield equity exceeds B&amp;H after 12m</p>
+<p><strong>Date:</strong> 2026-08-18 <strong>Engine:</strong> Aegis (v14) Deleverage Shield on the production KKT stack — ERC risk-parity weights (180d lookback, 180d re-opt, 60/40 risky/USDC), same code that runs in production, unchanged <strong>Status:</strong> Gates 1/4 — Shield re-enters fast (median 1 day to 50% exposure) but captures only 32% of the Buy &amp; Hold recovery at 12 months · 11 defensive episodes across 6.2 years · zero cycles where Shield equity exceeds B&amp;H after 12m</p>
 <hr>
 <h2>Read this in 60 seconds</h2>
 <ul><li>The biggest psychological fear about the Shield: it kicks you out of the market and you miss the recovery.</li><li>This test measures exactly that: every time the Shield went defensive, how fast did it re-enter, and how much of the subsequent B&amp;H recovery did it capture?</li><li>Speed is fine: median 1 day to reach 50% exposure. Nobody was &quot;locked out&quot; for long.</li><li>Participation is not: median 12-month recovery capture is 32% of B&amp;H, worst is 28%. The Shield re-enters, but at reduced exposure — it captures a fraction of the upside.</li><li>Zero of seven cycles with 12m data: Shield equity never exceeds B&amp;H equity 12 months after a defensive episode.</li></ul>
@@ -72,7 +72,7 @@
 </tr></thead>
 <tbody>
 <tr>
-<td style="text-align:left"><strong>Shield v14</strong></td>
+<td style="text-align:left"><strong>Aegis (v14) Shield</strong></td>
 <td style="text-align:left">production KKT config, threshold rebalancing, DCA parked in stablecoin when defensive</td>
 </tr>
 <tr>
@@ -271,7 +271,7 @@
 <h2>7. Reproducibility</h2>
 <p>Both instruments run on the same 6.2 years of daily closes with the unmodified production engine for the Shield leg. The portfolio is constructed with the real KKT risk-parity optimizer (ERC + KKT projection), not equal weights — this is exactly what runs on the server. Test scripts, chart generators, and raw result data live in the engine&#x27;s internal research tooling.</p>
 <hr>
-<p><em>This is the fourth of five planned crown tests for the v14 Deleverage Shield. Test 1 (Human Factor) is published <a href="/research/dca-stress">here</a>. Test 2 (Static vs Dynamic) is published <a href="/research/static-vs-dynamic">here</a>. Verdict here: 1/4 gates — the Shield re-enters fast but captures only a fraction of the recovery. Next: Test 3, liquidity execution.</em></p>
+<p><em>This is the fourth of five planned crown tests for the Aegis (v14) Deleverage Shield. Test 1 (Human Factor) is published <a href="/research/dca-stress">here</a>. Test 2 (Static vs Dynamic) is published <a href="/research/static-vs-dynamic">here</a>. Verdict here: 1/4 gates — the Shield re-enters fast but captures only a fraction of the recovery. Next: Test 3, liquidity execution.</em></p>
 </main>
 
 <footer class="site-footer">

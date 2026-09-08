@@ -1,7 +1,7 @@
 # E2E Walk-Forward Study — Candidate Basket TIA / QNT / XRP + PAXG Anchor
 
 **Date:** 2026-08-03
-**Engine:** Dual-Speed E2E — identical wiring to the live paper trading service (KKT MACRO loop + v14 Deleverage Shield)
+**Engine:** Dual-Speed E2E — identical wiring to the live paper trading service (KKT MACRO loop + Aegis (v14) Deleverage Shield)
 **Status:** 📊 RESEARCH — candidate basket evaluated, not promoted
 
 ---
@@ -10,7 +10,7 @@
 
 Evaluate a **candidate basket built around two newly added tokens (TIA, QNT)**
 under the exact production control stack: the 180-day KKT risk-parity MACRO
-loop for base weights and the v14 Deleverage Shield for daily exposure
+loop for base weights and the Aegis (v14) Deleverage Shield for daily exposure
 control. The question is not "can this beat Buy & Hold" but how the
 *shipped* machinery behaves on this asset mix — allocation decisions,
 defensive behaviour and risk-adjusted outcome included.
@@ -103,7 +103,7 @@ held max drawdown to 17.6% while Buy & Hold went 29.9% underwater (−12.3 pp).
 
 1. **MACRO loop:** KKT risk-parity optimisation on the trailing 180-day
    window, re-run every 180 days; weights frozen in between (5 re-optimisations).
-2. **DAILY loop:** v14 Deleverage Shield evaluated on each close; threshold
+2. **DAILY loop:** Aegis (v14) Deleverage Shield evaluated on each close; threshold
    rebalancing only trades when the target drifts beyond the deadband; 10 bps
    fee on every trade, DCA buy and redeploy.
 3. **DCA parking:** while defensive, the $100/30-day contribution parks in

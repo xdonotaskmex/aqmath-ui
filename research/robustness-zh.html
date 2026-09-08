@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/robustness">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
+<link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
 </head>
 <body>
 
@@ -52,7 +52,7 @@
 <p class="legal-updated">发布日期: 2026-08-07</p>
 <p class="sim-notice"><strong>模拟结果 &mdash; 未使用真实资金。</strong>以下每一项数据均由回测根据历史价格数据计算得出。未投入任何资金，也未下过任何订单。回测是在完全知晓该时段结果的前提下把策略套用于过去，且数据不包含滑点与流动性影响，但会对每次再平衡、DCA 买入和资金重新部署收取 0.1% 的模拟交易所手续费。模拟表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是软件，不是投资建议。</p>
 <p><strong>日期：</strong> 2026-08-07<br>
-<strong>引擎：</strong> v14 双速 E2E — 与实盘模拟交易服务完全相同的接线（带 ADV-K2 活性筛查的 180 天 KKT 风险平价 MACRO 回路 + v14 去杠杆防护盾）<br>
+<strong>引擎：</strong> Aegis（v14）双速 E2E — 与实盘模拟交易服务完全相同的接线（带 ADV-K2 活性筛查的 180 天 KKT 风险平价 MACRO 回路 + Aegis（v14）去杠杆防护盾）<br>
 <strong>状态：</strong> 📊 研究 — 参数高原 + 现实压力测试，无组合晋级</p>
 <hr>
 <h2>1. 目标</h2>
@@ -127,7 +127,7 @@
 <p><strong>平坦的旋钮。</strong> 再平衡阈值与下行波动率窗口在整个网格上几乎 不动任何东西 — 在组合 A 上 Calmar 区间为 0.50-0.57，最大回撤 区间不到 2.4 个百分点。这是真正的高原：系统不在乎它们在测试 范围内处于哪个位置。</p>
 <p><strong>旋钮。</strong> 防护盾的回撤参考值表现起来完全像一个保护旋钮， 而不是一个脆弱的常数。收紧它会<strong>单调地</strong>用参与度换保护 — 在组合 A 上，全窗口最大回撤从 2.67× 时的 25.1% 移动到生产值 0.53× 时的 14.6% — 而 Calmar 在每一个点上都保持在 0.49-0.62 区间内。没有任何网格点击破了机制；这个旋钮选择的是保护<em>多少</em>， 而不是<em>是否</em>有效。</p>
 <p><strong>宏观旋钮。</strong> 回看期与再优化节奏产生的离散度最大（在 A 上， 仅回看期一项就让最终权益在 $14.5k-$23.3k 之间变动）。这是 诚实，不是稳健性表演：协方差窗口确实会改变哪些权重被冻结。 对本研究重要的是形状 — 组合 A 和 C 上的每个网格点都保持正的 Calmar，并留在狭窄的最大回撤区间内（A 上 16.9-18.9%）。 网格中任何地方都没有断崖。组合 B 在每一个设置下都仍是弱组合， 与市场状态尸检一致：它的全窗口案例从来就不建立在调参上。</p>
-<p><strong>无作用的旋钮。</strong> 风险预算旋钮缩放<em>报告的</em>风险敞口，但在 v14 记账中不应用于收益 — 网格确认这是精确成立而非近似的：五个 设置，权益精确到分都相同。我们公布这一点，因为一个看起来有 保护作用、实际只是装饰的旋钮应该被知道，而不是被假设。</p>
+<p><strong>无作用的旋钮。</strong> 风险预算旋钮缩放<em>报告的</em>风险敞口，但在 Aegis（v14） 记账中不应用于收益 — 网格确认这是精确成立而非近似的：五个 设置，权益精确到分都相同。我们公布这一点，因为一个看起来有 保护作用、实际只是装饰的旋钮应该被知道，而不是被假设。</p>
 <h2>3. 现实压力 — 手续费</h2>
 <p>系统中的每笔交易（防护盾再平衡、DCA 买入、分批资金重新部署） 都支付模拟手续费。网格把它从生产的 10 个基点压到该水平的 20 倍。</p>
 <div class="rs-tablewrap">

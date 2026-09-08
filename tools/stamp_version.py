@@ -48,6 +48,7 @@ ASSETS = [
     "app-widgets.js",
     "app-backtest.js",
     "app-notify.js",
+    "app-tour.js",
     "app-boot.js",
     "locales/en.json",
     "locales/zh-CN.json",
@@ -55,6 +56,7 @@ ASSETS = [
     # across builds and could not be replaced — which breaks the "one atomic
     # version per visitor" guarantee this whole file exists to enforce.
     "vendor/i18next.min.js",
+    "vendor/driver.min.js",
 ]
 
 # Every place a stamp has to be written. Each regex must have exactly one
@@ -68,6 +70,7 @@ TARGETS = [
     ("_src/index.html", r'(?<=src="/app-widgets\.js\?v=)([\w]+)(?=")'),
     ("_src/index.html", r'(?<=src="/app-backtest\.js\?v=)([\w]+)(?=")'),
     ("_src/index.html", r'(?<=src="/app-notify\.js\?v=)([\w]+)(?=")'),
+    ("_src/index.html", r'(?<=src="/app-tour\.js\?v=)([\w]+)(?=")'),
     ("_src/index.html", r'(?<=src="/app-boot\.js\?v=)([\w]+)(?=")'),
     ("_src/index.html", r'(?<=src="/vendor/i18next\.min\.js\?v=)([\w]+)(?=")'),
     ("about.html", r'(?<=href="/styles\.min\.css\?v=)([\w]+)(?=")'),

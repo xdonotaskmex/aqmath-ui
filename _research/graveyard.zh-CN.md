@@ -1,7 +1,7 @@
 # 墓地试炼 — 代币死亡时谁来拯救组合？
 
 **日期：** 2026-08-07
-**引擎：** v14 双速 E2E — 与实盘模拟交易服务完全相同的接线（带 ADV-K2 活性筛查的 180 天 KKT 风险平价 MACRO 回路 + v14 去杠杆防护盾）
+**引擎：** Aegis（v14）双速 E2E — 与实盘模拟交易服务完全相同的接线（带 ADV-K2 活性筛查的 180 天 KKT 风险平价 MACRO 回路 + Aegis（v14）去杠杆防护盾）
 **状态：** 📊 研究 — 最坏情况压力组合，无组合晋级
 
 > English version: [Graveyard Gauntlet](/research/graveyard)

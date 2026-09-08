@@ -5,8 +5,8 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>v14 Risk Report: 3,000 Synthetic Histories - AQMath</title>
-<meta name="description" content="Bootstrap, Deflated Sharpe & CVaR on v14: drawdown cut wins in 98.6-99.7% of 3,000 synthetic histories. Excess return is statistically zero.">
+<title>Aegis (v14) Risk Report: 3,000 Synthetic Histories - AQMath</title>
+<meta name="description" content="Bootstrap, Deflated Sharpe & CVaR on Aegis (v14): drawdown cut wins in 98.6-99.7% of 3,000 synthetic histories. Excess return is statistically zero.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://aqmath.xyz/research/mc-risk">
 <link rel="icon" href="/favicon.ico">
@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://aqmath.xyz/research/mc-risk">
-<meta property="og:title" content="v14 Risk Report: 3,000 Synthetic Histories - AQMath">
-<meta property="og:description" content="Bootstrap, Deflated Sharpe & CVaR on v14: drawdown cut wins in 98.6-99.7% of 3,000 synthetic histories. Excess return is statistically zero.">
+<meta property="og:title" content="Aegis (v14) Risk Report: 3,000 Synthetic Histories - AQMath">
+<meta property="og:description" content="Bootstrap, Deflated Sharpe & CVaR on Aegis (v14): drawdown cut wins in 98.6-99.7% of 3,000 synthetic histories. Excess return is statistically zero.">
 <meta property="og:site_name" content="AQMath">
 <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20260721b">
@@ -24,17 +24,17 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="v14 Risk Report: 3,000 Synthetic Histories - AQMath">
-<meta name="twitter:description" content="Bootstrap, Deflated Sharpe & CVaR on v14: drawdown cut wins in 98.6-99.7% of 3,000 synthetic histories. Excess return is statistically zero.">
+<meta name="twitter:title" content="Aegis (v14) Risk Report: 3,000 Synthetic Histories - AQMath">
+<meta name="twitter:description" content="Bootstrap, Deflated Sharpe & CVaR on Aegis (v14): drawdown cut wins in 98.6-99.7% of 3,000 synthetic histories. Excess return is statistically zero.">
 <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"Institutional Risk Report — 3,000 Synthetic Histories","url":"https://aqmath.xyz/research/mc-risk","datePublished":"2026-08-07","description":"Bootstrap, Deflated Sharpe & CVaR on v14: drawdown cut wins in 98.6-99.7% of 3,000 synthetic histories. Excess return is statistically zero.","inLanguage":"en","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"Institutional Risk Report","item":"https://aqmath.xyz/research/mc-risk"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"Institutional Risk Report — 3,000 Synthetic Histories","url":"https://aqmath.xyz/research/mc-risk","datePublished":"2026-08-07","description":"Bootstrap, Deflated Sharpe & CVaR on Aegis (v14): drawdown cut wins in 98.6-99.7% of 3,000 synthetic histories. Excess return is statistically zero.","inLanguage":"en","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"Institutional Risk Report","item":"https://aqmath.xyz/research/mc-risk"}]}]}</script>
 <link rel="alternate" hreflang="en" href="https://aqmath.xyz/research/mc-risk">
 <link rel="alternate" hreflang="zh-Hans" href="https://aqmath.xyz/research/mc-risk-zh">
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/mc-risk">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
+<link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
 </head>
 <body>
 
@@ -48,11 +48,11 @@
     </a>
 
 <p class="rs-nav"><a href="/research/">&larr; All research</a><span class="sep">|</span>Also available in <a href="/research/mc-risk-zh" hreflang="zh-Hans">中文</a></p>
-<h1>Institutional risk report — does v14&#x27;s edge survive 3,000 synthetic histories?</h1>
+<h1>Institutional risk report — does Aegis (v14)&#x27;s edge survive 3,000 synthetic histories?</h1>
 <p class="legal-updated">Published: 2026-08-07</p>
 <p class="sim-notice"><strong>Simulated results &mdash; no real money.</strong> Every figure below is computed from historical price data by a backtest. No capital was invested and no orders were placed. Backtests apply a strategy to the past with full knowledge of how that period turned out, and the figures exclude slippage and liquidity effects, though a simulated 0.1% exchange fee is charged on every rebalance, DCA buy and redeployment. Simulated and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software, not investment advice.</p>
 <p><strong>Date:</strong> 2026-08-07<br>
-<strong>Engine:</strong> v14 Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop with the ADV-K2 liveness screen + v14 Deleverage Shield)<br>
+<strong>Engine:</strong> Aegis (v14) Dual-Speed E2E — identical wiring to the live paper trading service (180-day KKT risk-parity MACRO loop with the ADV-K2 liveness screen + Aegis (v14) Deleverage Shield)<br>
 <strong>Status:</strong> 📊 RESEARCH — Monte Carlo statistical validation, no basket promoted</p>
 <hr>
 <h2>1. Objective</h2>

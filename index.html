@@ -32,7 +32,7 @@
     <meta name="twitter:description" content="Free non-custodial crypto portfolio rebalancer with Risk Parity optimization and Deleverage Shield crash protection. Backtest included. No wallet connection, no API keys.">
     <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
     <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer with Deleverage Shield">
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"AQMath","url":"https://aqmath.xyz","description":"Quantitative crypto portfolio rebalancer with Deleverage Modulator drawdown protection. Risk Parity mathematics, DCA optimization, and automatic de-risking during market crashes.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":[{"@type":"Offer","name":"Beta Access","price":"0","priceCurrency":"USD","description":"Limited slots, access review required"},{"@type":"Offer","name":"Black Annual Access","price":"999","priceCurrency":"EUR","description":"Annual subscription — €999/year, paid in USDC or EURC"}],"featureList":["Risk Parity Optimization","Deleverage Modulator Drawdown Protection","DCA Distribution","Non-Custodial Privacy","Continuous Auto De-Risk"],"creator":{"@id":"https://aqmath.xyz/#momir-demirov"}},{"@type":"Organization","@id":"https://aqmath.xyz/#organization","name":"AQMath","url":"https://aqmath.xyz","logo":"https://aqmath.xyz/favicon.png","description":"Quantitative, non-custodial crypto portfolio rebalancer with KKT Risk-Parity weighting and Deleverage Modulator drawdown protection.","sameAs":["https://x.com/aqmathapp","https://t.me/DoNotAskMex","https://www.reddit.com/user/weaforex/","https://substack.com/@aqmathxyz"]}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"AQMath","url":"https://aqmath.xyz","description":"Quantitative crypto portfolio rebalancer with Deleverage Modulator drawdown protection. Risk Parity mathematics, DCA optimization, and automatic de-risking during market crashes.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":[{"@type":"Offer","name":"Free Access","price":"0","priceCurrency":"USD","description":"Core DCA distribution, live price sync, non-custodial portfolio tracking"},{"@type":"Offer","name":"Black Annual Access","price":"999","priceCurrency":"EUR","description":"Annual subscription — €999/year, paid in USDC or EURC"}],"featureList":["Risk Parity Optimization","Deleverage Modulator Drawdown Protection","DCA Distribution","Non-Custodial Privacy","Continuous Auto De-Risk"],"creator":{"@id":"https://aqmath.xyz/#momir-demirov"}},{"@type":"Organization","@id":"https://aqmath.xyz/#organization","name":"AQMath","url":"https://aqmath.xyz","logo":"https://aqmath.xyz/favicon.png","description":"Quantitative, non-custodial crypto portfolio rebalancer with KKT Risk-Parity weighting and Deleverage Modulator drawdown protection.","sameAs":["https://x.com/aqmathapp","https://t.me/DoNotAskMex","https://www.reddit.com/user/weaforex/","https://substack.com/@aqmathxyz"]}]}</script>
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -42,8 +42,10 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","itemListElement":[{"@type":"Question","name":"How does the engine calculate risk?","acceptedAnswer":{"@type":"Answer","text":"The Black engine uses a <strong>Variance Matrix</strong>, asset <strong>Covariance</strong>, volatility estimates, and KKT-style projection to calculate Risk Parity allocations where each asset contributes a controlled share of portfolio risk. <a href=\"/docs\" style=\"color:var(--purple);\">You can audit the full mathematical model in our [Documentation].</a>"}},{"@type":"Question","name":"How is AQMath actually private?","acceptedAnswer":{"@type":"Answer","text":"We don&rsquo;t track your wallet, and we never store your identity or portfolio in any database &mdash; with one optional exception: if you enable the personalised signal &amp; notification service, your holdings are stored server-side under the hash of your activation key, solely to compute your daily signals and send notifications, and deleted at any time (Privacy Policy &sect;9). By default, your token balances live only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. The only other server-side record is a one-way hashed beta-activation record (see the beta-key question below) &mdash; never your financial data. Your financial privacy is architecturally enforced. <a href=\"/docs\" style=\"color:var(--purple);\">Read the full privacy architecture in our [Documentation].</a>"}},{"@type":"Question","name":"Do beta keys track my IP address?","acceptedAnswer":{"@type":"Answer","text":"No &mdash; not in any readable form. A beta key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href=\"/privacy\" style=\"color:var(--purple);\">Privacy Policy</a>."}},{"@type":"Question","name":"What's included in Beta vs Black?","acceptedAnswer":{"@type":"Answer","text":"Beta access includes the full engine — Risk Parity optimization, Deleverage Shield, DCA distribution, unlimited tokens, and the automated data pipeline. It's the same math as Black, limited to 10 slots with a 365-day activation period. Black adds annual renewals and direct support."}},{"@type":"Question","name":"Why are market widgets separated from features?","acceptedAnswer":{"@type":"Answer","text":"Live markets are informational context: ticker data, Fear &amp; Greed, BTC dominance, movers, and exchange status. They support decision-making but are intentionally separate from the product feature story."}},{"@type":"Question","name":"What is the Safe-Haven (USDC) feature?","acceptedAnswer":{"@type":"Answer","text":"When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token."}},{"@type":"Question","name":"How do I apply for Black access?","acceptedAnswer":{"@type":"Answer","text":"DM us on <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" style=\"color:var(--purple);\">Telegram</a> or <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:var(--purple);\">Twitter</a>. Annual access is <strong>€999 / year (~$1,090 USD)</strong>. No call required — send a message, we review and send your activation key within 48h. Payments accepted exclusively in USDC and EURC."}},{"@type":"Question","name":"Do you offer monthly plans?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath operates exclusively on an annual subscription model. We do not offer monthly, quarterly, or semi-annual plans. EU consumers keep the statutory 14-day right of withdrawal &mdash; see the <a href=\"/widerruf\" style=\"color:#a78bfa;\">withdrawal notice</a>; after that the annual term is firm and is not refunded pro rata on early cancellation."}},{"@type":"Question","name":"Is AQMath a trading bot?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath is an analytical web application. We do not execute trades, manage funds, or interact with any exchange or smart contract. You see the math, you make the decision."}},{"@type":"Question","name":"Is there a mobile app?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath is a web application only. Any app using our name on any app store is unauthorized and not affiliated with us."}},{"@type":"Question","name":"Is there an automatic daily signal or notification service?","acceptedAnswer":{"@type":"Answer","text":"Yes &mdash; as an <strong>optional, opt-in service</strong>. If you enable it, the engine computes your deleverage shield signal and DCA schedule once per day on the server and can push a notification to your device. To do that, your holdings are stored under the hash of your activation key &mdash; never under your name or wallet &mdash; and deleted completely the moment you withdraw consent. Full details are in Section 9 of our <a href=\"/privacy\" style=\"color:var(--purple);\">Privacy Policy</a>."}},{"@type":"Question","name":"What is the beta chat?","acceptedAnswer":{"@type":"Answer","text":"Beta users get access to a <strong>shared internal chat</strong> visible only to active beta members. Messages are pseudonymous (shown as a short code like B-XXXXXX, never your real key or IP), capped at 200 characters, and limited to the 20 most recent messages (older ones are automatically swept daily). You can clear your own messages anytime. The chat is stored server-side under the hash of your activation key and is deleted when your key is deactivated."}}]}</script>
+    <link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
+    <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
+    <link rel="stylesheet" href="/vendor/driver.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","itemListElement":[{"@type":"Question","name":"How does the engine calculate risk?","acceptedAnswer":{"@type":"Answer","text":"The Black engine uses a <strong>Variance Matrix</strong>, asset <strong>Covariance</strong>, volatility estimates, and KKT-style projection to calculate Risk Parity allocations where each asset contributes a controlled share of portfolio risk. <a href=\"/docs\" style=\"color:var(--purple);\">You can audit the full mathematical model in our [Documentation].</a>"}},{"@type":"Question","name":"How is AQMath actually private?","acceptedAnswer":{"@type":"Answer","text":"We don&rsquo;t track your wallet, and we never store your identity or portfolio in any database &mdash; with one optional exception: if you enable the personalised signal &amp; notification service, your holdings are stored server-side under the hash of your activation key, solely to compute your daily signals and send notifications, and deleted at any time (Privacy Policy &sect;9). By default, your token balances live only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. The only other server-side record is a one-way hashed activation record (see the Black key question below) &mdash; never your financial data. Your financial privacy is architecturally enforced. <a href=\"/docs\" style=\"color:var(--purple);\">Read the full privacy architecture in our [Documentation].</a>"}},{"@type":"Question","name":"Do Black keys track my IP address?","acceptedAnswer":{"@type":"Answer","text":"No &mdash; not in any readable form. A Black key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href=\"/privacy\" style=\"color:var(--purple);\">Privacy Policy</a>."}},{"@type":"Question","name":"What does Black access include?","acceptedAnswer":{"@type":"Answer","text":"Black access includes the full engine &mdash; Risk Parity optimization, Deleverage Shield, DCA distribution, unlimited tokens, automated data pipeline, and the shared Black chat. It&rsquo;s a 365-day term with direct support from the team."}},{"@type":"Question","name":"Why are market widgets separated from features?","acceptedAnswer":{"@type":"Answer","text":"Live markets are informational context: ticker data, Fear &amp; Greed, BTC dominance, movers, and exchange status. They support decision-making but are intentionally separate from the product feature story."}},{"@type":"Question","name":"What is the Safe-Haven (USDC) feature?","acceptedAnswer":{"@type":"Answer","text":"When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token."}},{"@type":"Question","name":"How do I apply for Black access?","acceptedAnswer":{"@type":"Answer","text":"DM us on <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" style=\"color:var(--purple);\">Telegram</a> or <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:var(--purple);\">Twitter</a>. Annual access is <strong>€999 / year</strong>. No call required — send a message, we review and send your activation key within 48h. Payments accepted exclusively in USDC and EURC."}},{"@type":"Question","name":"Do you offer monthly plans?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath operates exclusively on an annual subscription model. We do not offer monthly, quarterly, or semi-annual plans. EU consumers keep the statutory 14-day right of withdrawal &mdash; see the <a href=\"/widerruf\" style=\"color:#a78bfa;\">withdrawal notice</a>; after that the annual term is firm and is not refunded pro rata on early cancellation."}},{"@type":"Question","name":"Is AQMath a trading bot?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath is an analytical web application. We do not execute trades, manage funds, or interact with any exchange or smart contract. You see the math, you make the decision."}},{"@type":"Question","name":"Is there a mobile app?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath is a web application only. Any app using our name on any app store is unauthorized and not affiliated with us."}},{"@type":"Question","name":"Is there an automatic daily signal or notification service?","acceptedAnswer":{"@type":"Answer","text":"Yes &mdash; as an <strong>optional, opt-in service</strong>. If you enable it, the engine computes your deleverage shield signal and DCA schedule once per day on the server and can push a notification to your device. To do that, your holdings are stored under the hash of your activation key &mdash; never under your name or wallet &mdash; and deleted completely the moment you withdraw consent. Full details are in Section 9 of our <a href=\"/privacy\" style=\"color:var(--purple);\">Privacy Policy</a>."}},{"@type":"Question","name":"What is the Black chat?","acceptedAnswer":{"@type":"Answer","text":"Black users get access to a <strong>shared internal chat</strong> visible only to active Black members. Messages are pseudonymous (shown as a short code like B-XXXXXX, never your real key or IP), capped at 200 characters, and limited to the 20 most recent messages (older ones are automatically swept daily). You can clear your own messages anytime. The chat is stored server-side under the hash of your activation key and is deleted when your key is deactivated."}}]}</script>
 </head>
 <body>
 
@@ -90,7 +92,7 @@
             <a class="hdr-nav-btn" href="/app" data-i18n="app.navApp">app</a>
             <a class="hdr-nav-btn" href="/backtest" data-i18n="app.navBacktest">backtest</a>
             <a class="hdr-nav-btn" href="/results" data-i18n="app.navResults">results</a>
-            <a class="hdr-nav-btn" href="/v18" data-i18n="app.navV18">v18</a>
+            <a class="hdr-nav-btn" href="/v18" data-i18n="app.navV18">proteus</a>
             <a class="hdr-nav-btn" href="/research/" data-i18n="app.navResearch">research</a>
             <a class="hdr-nav-btn" href="/docs" data-i18n="app.navDocs">docs</a>
         </div>
@@ -249,11 +251,11 @@
             <div class="tc lp-shield-card">
                 <div class="tc-bar">
                     <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                    <span class="tc-title" data-i18n-html="shield.label">--deleverage-modulator &middot; v14.0</span>
+                    <span class="tc-title" data-i18n-html="shield.label">--deleverage-modulator &middot; aegis v14.0</span>
                 </div>
                 <div class="tc-body lp-shield-body">
                     <h3 data-i18n-html="shield.title">Deleverage Modulator &mdash; validated on real data</h3>
-                    <p class="lp-what-lead" data-i18n-html="shield.lead">v14.0 scales exposure continuously off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It ramps exposure toward its target steadily in either direction, and uses threshold rebalancing.</p>
+                    <p class="lp-what-lead" data-i18n-html="shield.lead">Aegis (v14) scales exposure continuously off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It ramps exposure toward its target steadily in either direction, and only rebalances when target exposure drifts meaningfully.</p>
                     <div class="lp-shield-grid">
                     <div class="lp-shield-viz">
                         <svg viewBox="0 0 480 250" role="img" aria-label="Max drawdown: Buy and Hold minus 83.8 percent versus Deleverage Modulator minus 35.0 percent" preserveAspectRatio="xMidYMid meet">
@@ -287,8 +289,8 @@
                                 <div class="lp-shield-stat"><span class="v">0.93</span><span class="l" data-i18n-html="shield.s2l">Sharpe (B&amp;H 0.75)</span></div>
                                 <div class="lp-shield-stat"><span class="v">32.9%</span><span class="l" data-i18n-html="shield.s3l">CAGR (8.7y)</span></div>
                             </div>
-                            <p data-i18n-html="shield.body">Across an 8.7-year, 5-token backtest (ADA/BNB/ETH/XRP/XLM) the modulator held peak drawdown to <strong>35.0%</strong> versus <strong>83.8%</strong> for Buy &amp; Hold, and <strong>beats Buy &amp; Hold on Sharpe (0.93 vs 0.75)</strong> at <strong>32.9% CAGR</strong>. On a <strong>sealed out-of-sample second half</strong> never used to pick the preset it still roughly halved drawdown (~24% vs ~63%) at a higher Sharpe (0.48 vs 0.37). v14 adds <strong>threshold rebalancing</strong> (a deadband skips trades when the target barely moves), cutting rebalances ~64%. Backtest basket is survivor tokens; past results don't guarantee future performance.</p>
-                            <p class="rv-v15-notice lp-shield-nextgen" data-i18n-html="shield.nextgen"><span class="rv-v15-tag">NEXT-GEN UNDER TEST</span> A next-generation shield (<strong>v18</strong>) is validated but <strong>not live yet</strong>. Backtested on the exact production path, it cut maximum drawdown below v14 on both a large-cap basket (25.7%&rarr;23.1%) and a high-volatility alt basket (36.8%&rarr;29.4%), with a higher Sharpe and Calmar (risk-adjusted scores). <strong>v14 remains the live engine.</strong></p>
+                            <p data-i18n-html="shield.body">Across an 8.7-year, 5-token backtest (ADA/BNB/ETH/XRP/XLM) the modulator held peak drawdown to <strong>35.0%</strong> versus <strong>83.8%</strong> for Buy &amp; Hold, and <strong>beats Buy &amp; Hold on Sharpe (0.93 vs 0.75)</strong> at <strong>32.9% CAGR</strong>. On a <strong>sealed out-of-sample second half</strong> never used to pick the preset it still roughly halved drawdown (~24% vs ~63%) at a higher Sharpe (0.48 vs 0.37). Aegis (v14) adds <strong>threshold rebalancing</strong> (a deadband skips trades when the target barely moves), cutting rebalances ~64%. Backtest basket is survivor tokens; past results don't guarantee future performance.</p>
+                            <p class="rv-v15-notice lp-shield-nextgen" data-i18n-html="shield.nextgen"><span class="rv-v15-tag">NEXT-GEN UNDER TEST</span> A next-generation shield, <strong>Proteus (v18)</strong>, is validated but <strong>not live yet</strong>. Backtested on the exact production path, it cut maximum drawdown below Aegis (v14) on both a large-cap basket (25.7%&rarr;23.1%) and a high-volatility alt basket (36.8%&rarr;29.4%), with a higher Sharpe and Calmar (risk-adjusted scores). <strong>Aegis (v14) remains the live engine.</strong></p>
                             <a class="lp-btn-secondary" href="/backtest" data-i18n="shield.cta">--run-the-backtest</a>
                         </div>
                     </div>
@@ -358,7 +360,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">01</span></div>
                         <div class="metric-label" data-i18n="math.riskLabel">--risk-model</div>
-                        <div class="metric-copy" data-i18n-html="math.riskCopy">The covariance matrix estimates how assets move together. Risk Parity then targets equal risk contribution &mdash; so no single token dominates your volatility.</div>
+                        <div class="metric-copy" data-i18n-html="math.riskCopy">The covariance matrix estimates how assets move together. Themis, our Risk Parity allocator, then targets equal risk contribution &mdash; so no single token dominates your volatility.</div>
                         <a href="/docs" class="doc-formula-link" data-i18n="math.riskLink">[ read mathematical proof in docs ]</a>
                     </div>
                     <div class="lp-math-metric">
@@ -396,7 +398,7 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">04</span></div>
                         <div class="metric-label" data-i18n="math.shieldLabel">--deleverage-modulator</div>
-                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Continuous regime modulator: exposure scales down as drawdown and downside volatility rise &mdash; no indicators, no timers, no correlation gate. It moves exposure smoothly toward its target every bar in either direction, with <strong>no hard floor</strong>; parked DCA cash redeploys automatically once exposure recovers.</div>
+                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Aegis, the Deleverage Shield, is a continuous regime modulator: exposure scales down as drawdown and downside volatility rise &mdash; no indicators, no timers, no correlation gate. It moves exposure smoothly toward its target every bar in either direction, with <strong>no hard floor</strong>; parked DCA cash redeploys automatically once exposure recovers.</div>
                         <a href="/backtest" class="doc-formula-link" data-i18n="math.shieldLink">[ see 8.7-year backtest ]</a>
                     </div>
                 </div>
@@ -423,11 +425,11 @@
 
         <section class="lp-section lp-tiers-section">
             <div class="lp-section-label" data-i18n="plans.sectionTitle">--access-tiers</div>
-            <div class="lp-plan-grid">
+            <div class="lp-plan-grid" style="grid-template-columns:repeat(2,1fr);">
                 <div class="lp-card lp-plan-card free">
                     <div class="lp-plan-title" data-i18n="plans.freeTitle">FREE ACCESS</div>
                     <div class="lp-plan-price">€0 <span style="font-size:0.6em;opacity:0.65;font-weight:400" data-i18n="plans.freePriceNote">/ forever</span></div>
-                    <div class="lp-plan-subtitle" data-i18n="plans.freeSubtitle">Open to everyone · No account · No beta key</div>
+                    <div class="lp-plan-subtitle" data-i18n="plans.freeSubtitle">Open to everyone · No account · No key needed</div>
                     <ul class="lp-feature-list">
                         <li data-i18n="plans.freeF1">Core DCA distribution with volatility safety factors</li>
                         <li data-i18n="plans.freeF2">Live price sync (Binance / CoinGecko)</li>
@@ -437,39 +439,22 @@
                     </ul>
                     <a class="lp-btn-secondary" href="/app" style="width:100%;text-align:center;" data-i18n="plans.freeCta">Open App — no key needed</a>
                 </div>
-                <div class="lp-card lp-plan-card beta">
-                    <div class="lp-plan-title" data-i18n="plans.betaTitle">BETA ACCESS</div>
-                    <div class="lp-plan-slots">
-                        <span id="slotCounter" class="lp-slots-count">7</span>
-                        <span data-i18n="plans.betaSlotsLabel">slots remaining</span>
-                    </div>
-                    <div class="lp-plan-subtitle" data-i18n="plans.betaSubtitle">Limited slots &middot; Access review required &middot; Full engine access</div>
-                    <ul class="lp-feature-list">
-                        <li data-i18n="plans.betaF1">Full Risk Parity optimization (same as Black)</li>
-                        <li data-i18n="plans.betaF2">Deleverage Modulator with continuous drawdown protection</li>
-                        <li data-i18n="plans.betaF3">Unlimited tokens and portfolio optimization</li>
-                        <li data-i18n="plans.betaF4">Automatic 180-day historical data pipeline</li>
-                        <li data-i18n="plans.betaF5">DCA distribution with full safety pipeline</li>
-                        <li data-i18n="plans.betaF6">Non-custodial privacy — portfolio stays in your browser (server-side storage only if you opt in)</li>
-                        <li data-i18n="plans.betaF7">365-day access from activation</li>
-                        <li data-i18n="plans.betaF8">Send a message — we review and activate within 48h</li>
-                                                <li data-i18n="plans.betaF9">Shared beta chat — pseudonymous, 20-message rolling buffer, deletable anytime</li>
-                    </ul>
-                    <a class="lp-btn-secondary" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener" style="width:100%;text-align:center;" data-i18n="plans.betaApplyCta">Request Access</a>
-                </div>
                 <div class="lp-card lp-plan-card pro">
                     <div class="lp-plan-title" data-i18n-html="plans.proTitle">BLACK <span class="lp-plan-badge">Annual Access</span></div>
-                    <div class="lp-plan-price pro">€999 <span style="font-size:0.6em;opacity:0.65;font-weight:400">/ year &nbsp;·&nbsp; ~$1,090 USD</span></div>
-                    <div class="lp-plan-subtitle">Annual access · Paid in USDC or EURC · No name, no card, no bank record required.</div>
+                    <div class="lp-plan-price pro">€999 <span style="font-size:0.6em;opacity:0.65;font-weight:400">/ year</span></div>
+                    <div class="lp-plan-subtitle">Full engine access · Paid in USDC or EURC · No name, no card, no bank record required.</div>
                     <ul class="lp-feature-list">
                         <li data-i18n-html="plans.blackF1">Risk Parity optimization with full Covariance &amp; Variance Matrix</li>
                         <li data-i18n-html="plans.blackF2">Deleverage Modulator with continuous drawdown protection</li>
                         <li data-i18n-html="plans.blackF3">Dynamic volatility-based allocation caps</li>
                         <li data-i18n-html="plans.blackF4">Automatic 180-day historical data pipeline</li>
                         <li data-i18n-html="plans.blackF5">Unlimited token support and portfolio optimization</li>
-                        <li data-i18n-html="plans.blackF6">Non-custodial privacy &mdash; portfolio stays in your browser (server-side storage only if you opt in)</li>
-                        <li data-i18n-html="plans.blackF7">Annual access only &mdash; no monthly or quarterly plans</li>
-                        <li data-i18n-html="plans.blackF8">14-day EU right of withdrawal &mdash; firm annual term afterwards <a href="/widerruf" style="color:var(--purple);font-size:0.85em">[details]</a></li>
+                        <li data-i18n-html="plans.blackF6">DCA distribution with full safety pipeline</li>
+                        <li data-i18n-html="plans.blackF7">Non-custodial privacy &mdash; portfolio stays in your browser (server-side storage only if you opt in)</li>
+                        <li data-i18n-html="plans.blackF8">Shared Black chat &mdash; pseudonymous, 20-message rolling buffer, deletable anytime</li>
+                        <li data-i18n-html="plans.blackF9">365-day term from activation &mdash; annual access only</li>
+                        <li data-i18n-html="plans.blackF10">14-day EU right of withdrawal &mdash; firm annual term afterwards <a href="/widerruf" style="color:var(--purple);font-size:0.85em">[details]</a></li>
+                        <li data-i18n-html="plans.blackF11">Send a message &mdash; we review and activate within 48h</li>
                     </ul>
                     <a class="lp-btn-secondary" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener" style="width:100%;display:block;text-align:center;" data-i18n="plans.applyNow">Apply for Access</a>
                 </div>
@@ -514,15 +499,15 @@
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q2">How is AQMath actually private?</div>
-                <div class="lp-faq-a" data-i18n-html="faq.a2">We don&rsquo;t track your wallet, and we never store your identity or portfolio in any database &mdash; with one optional exception: if you enable the personalised signal &amp; notification service, your holdings are stored server-side under the hash of your activation key, solely to compute your daily signals and send notifications, and deleted at any time (Privacy Policy &sect;9). By default, your token balances live only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. The only other server-side record is a one-way hashed beta-activation record (see the beta-key question below) &mdash; never your financial data. Your financial privacy is architecturally enforced. <a href="/docs" style="color:var(--purple);">Read the full privacy architecture in our [Documentation].</a></div>
+                <div class="lp-faq-a" data-i18n-html="faq.a2">We don&rsquo;t track your wallet, and we never store your identity or portfolio in any database &mdash; with one optional exception: if you enable the personalised signal &amp; notification service, your holdings are stored server-side under the hash of your activation key, solely to compute your daily signals and send notifications, and deleted at any time (Privacy Policy &sect;9). By default, your token balances live only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. The only other server-side record is a one-way hashed activation record (see the Black key question below) &mdash; never your financial data. Your financial privacy is architecturally enforced. <a href="/docs" style="color:var(--purple);">Read the full privacy architecture in our [Documentation].</a></div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q10">Do beta keys track my IP address?</div>
-                <div class="lp-faq-a" data-i18n-html="faq.a10">No &mdash; not in any readable form. A beta key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href="/privacy" style="color:var(--purple);">Privacy Policy</a>.</div>
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q10">Do Black keys track my IP address?</div>
+                <div class="lp-faq-a" data-i18n-html="faq.a10">No &mdash; not in any readable form. A Black key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href="/privacy" style="color:var(--purple);">Privacy Policy</a>.</div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q3">What's included in Beta vs Black?</div>
-                <div class="lp-faq-a" data-i18n="faq.a3">Beta access includes the full engine — Risk Parity optimization, Deleverage Shield, DCA distribution, unlimited tokens, and the automated data pipeline. It's the same math as Black, limited to 10 slots with a 365-day activation period. Black adds annual renewals and direct support.</div>
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q3">What does Black access include?</div>
+                <div class="lp-faq-a" data-i18n="faq.a3">Black access includes the full engine &mdash; Risk Parity optimization, Deleverage Shield, DCA distribution, unlimited tokens, automated data pipeline, and the shared Black chat. It&rsquo;s a 365-day term with direct support from the team.</div>
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q4">Why are market widgets separated from features?</div>
@@ -534,7 +519,7 @@
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q6">How do I apply for Black access?</div>
-                <div class="lp-faq-a" data-i18n-html="faq.a6">DM us on <a href="https://t.me/DoNotAskMex" target="_blank" style="color:var(--purple);">Telegram</a> or <a href="https://x.com/aqmathapp" target="_blank" style="color:var(--purple);">Twitter</a>. Annual access is <strong>€999 / year (~$1,090 USD)</strong>. No call required — send a message, we review and send your activation key within 48h. Payments accepted exclusively in USDC and EURC.</div>
+                <div class="lp-faq-a" data-i18n-html="faq.a6">DM us on <a href="https://t.me/DoNotAskMex" target="_blank" style="color:var(--purple);">Telegram</a> or <a href="https://x.com/aqmathapp" target="_blank" style="color:var(--purple);">Twitter</a>. Annual access is <strong>€999 / year</strong>. No call required — send a message, we review and send your activation key within 48h. Payments accepted exclusively in USDC and EURC.</div>
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q7">Do you offer monthly plans?</div>
@@ -553,8 +538,8 @@
                 <div class="lp-faq-a" data-i18n-html="faq.a11">Yes &mdash; as an <strong>optional, opt-in service</strong>. If you enable it, the engine computes your deleverage shield signal and DCA schedule once per day on the server and can push a notification to your device. To do that, your holdings are stored under the hash of your activation key &mdash; never under your name or wallet &mdash; and deleted completely the moment you withdraw consent. Full details are in Section 9 of our <a href="/privacy" style="color:var(--purple);">Privacy Policy</a>.</div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q12">What is the beta chat?</div>
-                <div class="lp-faq-a" data-i18n-html="faq.a12">Beta users get access to a <strong>shared internal chat</strong> visible only to active beta members. Messages are pseudonymous (shown as a short code like B-XXXXXX, never your real key or IP), capped at 200 characters, and limited to the 20 most recent messages (older ones are automatically swept daily). You can clear your own messages anytime. The chat is stored server-side under the hash of your activation key and is deleted when your key is deactivated.</div>
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q12">What is the Black chat?</div>
+                <div class="lp-faq-a" data-i18n-html="faq.a12">Black users get access to a <strong>shared internal chat</strong> visible only to active Black members. Messages are pseudonymous (shown as a short code like B-XXXXXX, never your real key or IP), capped at 200 characters, and limited to the 20 most recent messages (older ones are automatically swept daily). You can clear your own messages anytime. The chat is stored server-side under the hash of your activation key and is deleted when your key is deactivated.</div>
             </div>
         </section>
     </div>
@@ -572,7 +557,7 @@
 <div class="lp-pro-modal hidden" id="proModal">
     <div class="lp-pro-box">
         <h3>&#128274; AQMath Black &mdash; Apply for Access</h3>
-        <p>AQMath Black is <strong>€999 / year (~$1,090 USD)</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card, no bank transfer, no personal data collected.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
+        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card, no bank transfer, no personal data collected.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
         <div class="lp-pro-beta">
             <div class="lp-pro-beta-label">Send a message to request access:</div>
             <div class="lp-pro-beta-links">
@@ -662,10 +647,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=0dfe938505"></script>
-<script defer src="/app-backtest.js?v=0dfe938505"></script>
-<script defer src="/app.js?v=0dfe938505"></script>
-<script defer src="/app-notify.js?v=0dfe938505"></script>
+<script defer src="/app-widgets.js?v=2e9ad32e5a"></script>
+<script defer src="/app-backtest.js?v=2e9ad32e5a"></script>
+<script defer src="/app.js?v=2e9ad32e5a"></script>
+<script defer src="/app-notify.js?v=2e9ad32e5a"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -679,8 +664,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=0dfe938505"></script>
-<script defer src="/app-boot.js?v=0dfe938505"></script>
+<script defer src="/vendor/i18next.min.js?v=2e9ad32e5a"></script>
+<!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
+<script defer src="/vendor/driver.min.js"></script>
+<script defer src="/app-tour.js?v=2e9ad32e5a"></script>
+<script defer src="/app-boot.js?v=2e9ad32e5a"></script>
 
 </body>
 </html>

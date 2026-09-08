@@ -5,8 +5,8 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>v14 风险报告：3,000 段合成历史 - AQMath</title>
-<meta name="description" content="自助法、通缩夏普与 CVaR 验证 v14：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。">
+<title>Aegis（v14）风险报告：3,000 段合成历史 - AQMath</title>
+<meta name="description" content="自助法、通缩夏普与 CVaR 验证 Aegis（v14）：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://aqmath.xyz/research/mc-risk-zh">
 <link rel="icon" href="/favicon.ico">
@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://aqmath.xyz/research/mc-risk-zh">
-<meta property="og:title" content="v14 风险报告：3,000 段合成历史 - AQMath">
-<meta property="og:description" content="自助法、通缩夏普与 CVaR 验证 v14：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。">
+<meta property="og:title" content="Aegis（v14）风险报告：3,000 段合成历史 - AQMath">
+<meta property="og:description" content="自助法、通缩夏普与 CVaR 验证 Aegis（v14）：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。">
 <meta property="og:site_name" content="AQMath">
 <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20260721b">
@@ -24,17 +24,17 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="v14 风险报告：3,000 段合成历史 - AQMath">
-<meta name="twitter:description" content="自助法、通缩夏普与 CVaR 验证 v14：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。">
+<meta name="twitter:title" content="Aegis（v14）风险报告：3,000 段合成历史 - AQMath">
+<meta name="twitter:description" content="自助法、通缩夏普与 CVaR 验证 Aegis（v14）：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。">
 <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"机构级风险报告 — 3,000 段合成历史","url":"https://aqmath.xyz/research/mc-risk-zh","datePublished":"2026-08-07","description":"自助法、通缩夏普与 CVaR 验证 v14：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。","inLanguage":"zh-Hans","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"机构级风险报告","item":"https://aqmath.xyz/research/mc-risk-zh"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"机构级风险报告 — 3,000 段合成历史","url":"https://aqmath.xyz/research/mc-risk-zh","datePublished":"2026-08-07","description":"自助法、通缩夏普与 CVaR 验证 Aegis（v14）：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。","inLanguage":"zh-Hans","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"机构级风险报告","item":"https://aqmath.xyz/research/mc-risk-zh"}]}]}</script>
 <link rel="alternate" hreflang="en" href="https://aqmath.xyz/research/mc-risk">
 <link rel="alternate" hreflang="zh-Hans" href="https://aqmath.xyz/research/mc-risk-zh">
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/mc-risk">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
+<link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
 </head>
 <body>
 
@@ -48,11 +48,11 @@
     </a>
 
 <p class="rs-nav"><a href="/research/">&larr; 全部研究</a><span class="sep">|</span>其他语言版本 <a href="/research/mc-risk" hreflang="en">English</a></p>
-<h1>机构级风险报告 — v14 的优势能否经受 3,000 段合成历史的检验？</h1>
+<h1>机构级风险报告 — Aegis（v14）的优势能否经受 3,000 段合成历史的检验？</h1>
 <p class="legal-updated">发布日期: 2026-08-07</p>
 <p class="sim-notice"><strong>模拟结果 &mdash; 未使用真实资金。</strong>以下每一项数据均由回测根据历史价格数据计算得出。未投入任何资金，也未下过任何订单。回测是在完全知晓该时段结果的前提下把策略套用于过去，且数据不包含滑点与流动性影响，但会对每次再平衡、DCA 买入和资金重新部署收取 0.1% 的模拟交易所手续费。模拟表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是软件，不是投资建议。</p>
 <p><strong>日期：</strong> 2026-08-07<br>
-<strong>引擎：</strong> v14 双速 E2E — 与实盘模拟交易服务完全相同的接线（带 ADV-K2 活性筛查的 180 天 KKT 风险平价 MACRO 回路 + v14 去杠杆防护盾）<br>
+<strong>引擎：</strong> Aegis（v14）双速 E2E — 与实盘模拟交易服务完全相同的接线（带 ADV-K2 活性筛查的 180 天 KKT 风险平价 MACRO 回路 + Aegis（v14）去杠杆防护盾）<br>
 <strong>状态：</strong> 📊 研究 — 蒙特卡洛统计验证，无组合晋级</p>
 <hr>
 <h2>1. 目标</h2>

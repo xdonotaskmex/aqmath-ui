@@ -2590,6 +2590,19 @@
         padding: 4px 8px; background: var(--s1); border: 1px solid var(--border);
         border-radius: 3px; color: var(--text);
     }
+    /* DCA-due pseudo-signal card (side='DCA') — cyan accent to set it apart
+       from BUY/SELL rebalance trades in the same One-Tap list. */
+    .sig-dca { border-left: 2px solid var(--cyan); padding-left: 10px; }
+    .sig-dca-badge {
+        color: var(--cyan); background: rgba(6,182,212,0.1);
+        border: 1px solid rgba(6,182,212,0.25); border-radius: 3px;
+        padding: 1px 6px; font-size: 0.55rem;
+    }
+    .sig-dca-detail {
+        font-family: var(--mono); font-size: 0.62rem; color: var(--dim);
+        line-height: 1.55; margin: 2px 0 8px;
+    }
+    .sig-dca-detail strong { color: var(--text); font-weight: 600; }
     .signal-stats-badge {
         font-family: var(--mono); font-size: 0.52rem; color: var(--dim);
         letter-spacing: 0.5px; padding: 2px 8px;
@@ -3323,4 +3336,94 @@
         .bt-upload-grid { grid-template-columns: repeat(2, 1fr); }
         .bt-settings-grid { gap: 8px; }
         .bt-setting input, .bt-setting select { width: 80px; }
+    }
+
+    /* ===== DRIVER.JS PRODUCT TOUR THEME ===== */
+    /* Overrides to match AQMath dark terminal aesthetic.
+       NOTE: Do NOT set background-color on .driver-overlay — Driver.js uses
+       an SVG overlay with a cutout hole for the spotlight. A CSS background
+       paints over the SVG and hides the cutout entirely. */
+    .driver-popover.aqmath-tour-popover {
+        background: var(--s1, rgba(5,10,24,0.85)) !important;
+        border: 1px solid var(--borderB, rgba(6,182,212,0.35)) !important;
+        border-radius: 6px !important;
+        box-shadow: 0 0 20px rgba(6,182,212,0.12) !important;
+        font-family: var(--mono, 'JetBrains Mono', monospace) !important;
+        color: var(--text, #e2e8f0) !important;
+        max-width: 360px !important;
+    }
+    .driver-popover.aqmath-tour-popover .driver-popover-title {
+        font-family: var(--mono, 'JetBrains Mono', monospace) !important;
+        font-size: 0.85rem !important;
+        font-weight: 700 !important;
+        color: var(--blue, #06b6d4) !important;
+        letter-spacing: 0.5px !important;
+        margin-bottom: 6px !important;
+    }
+    .driver-popover.aqmath-tour-popover .driver-popover-description {
+        font-family: var(--sans, 'Plus Jakarta Sans', sans-serif) !important;
+        font-size: 0.78rem !important;
+        line-height: 1.55 !important;
+        color: var(--text, #e2e8f0) !important;
+    }
+    .driver-popover.aqmath-tour-popover .driver-popover-navigation-btns {
+        font-family: var(--mono, 'JetBrains Mono', monospace) !important;
+    }
+    .driver-popover.aqmath-tour-popover .driver-popover-next-btn,
+    .driver-popover.aqmath-tour-popover .driver-popover-close-btn {
+        background: transparent !important;
+        border: 1px solid var(--borderB, rgba(6,182,212,0.35)) !important;
+        color: var(--blue, #06b6d4) !important;
+        font-family: var(--mono, 'JetBrains Mono', monospace) !important;
+        font-size: 0.7rem !important;
+        border-radius: 3px !important;
+        padding: 5px 14px !important;
+        cursor: pointer !important;
+        text-shadow: none !important;
+    }
+    .driver-popover.aqmath-tour-popover .driver-popover-next-btn:hover,
+    .driver-popover.aqmath-tour-popover .driver-popover-close-btn:hover {
+        background: rgba(6,182,212,0.08) !important;
+        border-color: var(--blue, #06b6d4) !important;
+    }
+    .driver-popover.aqmath-tour-popover .driver-popover-prev-btn {
+        background: transparent !important;
+        border: none !important;
+        color: var(--muted, #7a8ba5) !important;
+        font-family: var(--mono, 'JetBrains Mono', monospace) !important;
+        font-size: 0.7rem !important;
+        text-shadow: none !important;
+        box-shadow: none !important;
+    }
+    .driver-popover.aqmath-tour-popover .driver-popover-progress-text {
+        color: var(--muted, #7a8ba5) !important;
+        font-family: var(--mono, 'JetBrains Mono', monospace) !important;
+        font-size: 0.65rem !important;
+    }
+    /* Highlighted element frame: consistent cyan glow on ALL element types.
+       Uses outline (not clipped by overflow) + box-shadow with !important to
+       override existing element transitions/borders/shadows. */
+    .driver-active-element {
+        outline: 2px solid #06b6d4 !important;
+        outline-offset: 2px !important;
+        box-shadow: 0 0 0 4px rgba(6,182,212,0.5), 0 0 20px rgba(6,182,212,0.2) !important;
+        border-color: rgba(6,182,212,0.6) !important;
+        border-radius: 4px !important;
+        transition: none !important;
+    }
+    /* Tour trigger button — bright, always visible */
+    .btn-tour {
+        opacity: 1 !important;
+        color: var(--purple, #a855f7) !important;
+        border: 1px solid rgba(168,85,247,0.4) !important;
+        background: rgba(168,85,247,0.06) !important;
+        font-size: 0.65rem !important;
+        padding: 6px 12px !important;
+        margin-top: 6px;
+        cursor: pointer;
+        transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-tour:hover {
+        background: rgba(168,85,247,0.14) !important;
+        border-color: var(--purple, #a855f7) !important;
     }

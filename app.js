@@ -70,7 +70,7 @@ const ROUTES = {
     '/docs':     { cls: 'route-doc',      view: 'docView',       title: 'System Documentation — AQMath' },
     '/backtest': { cls: 'route-backtest', view: 'backtestView',  title: 'Backtest — AQMath Deleverage Shield' },
     '/results':  { cls: 'route-results',  view: 'resultsView',   title: 'New-Token Stress Test — AQMath' },
-    '/v18':      { cls: 'route-v18',      view: 'v18View',       title: 'v18 Adaptive Telemetry — AQMath' }
+    '/v18':      { cls: 'route-v18',      view: 'v18View',       title: 'Proteus (v18) Adaptive Telemetry — AQMath' }
 };
 
 // True only when this document actually contains the route's view container.
@@ -300,7 +300,7 @@ async function refreshBetaSession() {
             isPro = false;
             checkBetaUI();
             render();
-            showToast('Your beta session expired — please re-enter your key.', 'warning');
+            showToast('Your Black session expired — please re-enter your key.', 'warning');
         } else if (res.ok) {
             const data = await res.json().catch(() => null);
             if (data && data.token) {
@@ -340,7 +340,7 @@ function expiryWatchdog() {
     checkBetaUI();
     render();
     updateProButtons();
-    showToast('Your beta session expired — please re-enter your key.', 'warning');
+    showToast('Your Black session expired — please re-enter your key.', 'warning');
 }
 
 async function pipelineFetch(url, options = {}) {
@@ -348,7 +348,7 @@ async function pipelineFetch(url, options = {}) {
     if (!token) {
         isPro = false;
         checkBetaUI();
-        showToast('Please re-enter your beta key to continue.', 'warning');
+        showToast('Please re-enter your Black key to continue.', 'warning');
         throw new Error('beta token missing');
     }
     // A pro call is genuine activity: keep the idle session alive if it's past
@@ -359,7 +359,7 @@ async function pipelineFetch(url, options = {}) {
         if (!token) {
             isPro = false;
             checkBetaUI();
-            showToast('Your beta session expired — please re-enter your key.', 'warning');
+            showToast('Your Black session expired — please re-enter your key.', 'warning');
             throw new Error('beta session expired');
         }
     }
@@ -376,7 +376,7 @@ async function pipelineFetch(url, options = {}) {
             render();
         }
         console.warn('[AQMath] engine auth rejected:', detail);
-        showToast(detail.toLowerCase().includes('expired') ? 'Your beta session expired — please re-enter your key.' : 'Beta access needed — please re-enter your beta key.', 'warning');
+        showToast(detail.toLowerCase().includes('expired') ? 'Your Black session expired — please re-enter your key.' : 'Black access needed — please re-enter your Black key.', 'warning');
         throw new Error(detail);
     }
     return res;
@@ -384,7 +384,7 @@ async function pipelineFetch(url, options = {}) {
 
 async function activateBeta() {
     const key = document.getElementById('iBetaKey').value.trim();
-    if (!key) return showToast('Enter your beta key first.', 'warning');
+    if (!key) return showToast('Enter your Black key first.', 'warning');
     const btn = document.getElementById('btnBeta');
     btn.textContent = '[ verifying... ]';
     btn.disabled = true;
@@ -403,7 +403,7 @@ async function activateBeta() {
                 showToast('Too many attempts. Please wait ' + wait + ' and try again.', 'warning');
             } else {
                 // Server messages are already user-friendly (invalid / revoked / expired / in-use).
-                showToast(err.detail || "That beta key didn't work — please double-check it and try again.", 'error');
+                showToast(err.detail || "That Black key didn't work — please double-check it and try again.", 'error');
             }
             return;
         }
@@ -413,7 +413,7 @@ async function activateBeta() {
         console.log('[AQMath] Beta activated: isPro=' + isPro);
         document.getElementById('betaSection').classList.add('hidden');
         document.getElementById('betaActive').classList.remove('hidden');
-        showToast("You're in — beta access unlocked.", 'success');
+        showToast("You're in — Black access unlocked.", 'success');
         updateProButtons();
         render();
         // Must-read gate: server says whether the current explainer version was
@@ -425,7 +425,7 @@ async function activateBeta() {
         console.error('[AQMath] beta activation failed:', e.message);
         showToast("Couldn't reach the activation service — please check your connection and try again.", 'error');
     } finally {
-        btn.textContent = '[ Activate Beta ]';
+        btn.textContent = '[ Activate Black ]';
         btn.disabled = false;
     }
 }
@@ -435,7 +435,7 @@ function deactivateBeta() {
     isPro = false;
     document.getElementById('betaSection').classList.remove('hidden');
     document.getElementById('betaActive').classList.add('hidden');
-    showToast('Beta access turned off.', 'notice');
+    showToast('Black access turned off.', 'notice');
     updateProButtons();
     render();
     setTimeout(initChat, 0);  // hides the chat card together with the rest
@@ -1357,7 +1357,7 @@ function syncTargetFieldLock() {
     const hint = document.getElementById('iTargetHint');
     if (hint) {
         hint.textContent = frozen
-            ? 'managed by the v14 shield — quantity and APY stay editable'
+            ? 'managed by the Aegis (v14) shield — quantity and APY stay editable'
             : '';
         hint.hidden = !frozen;
     }
@@ -1838,6 +1838,7 @@ function confirmDca() {
 
 function cancelDca() {
     pendingDca = null;
+    if (typeof clearPendingDcaSignal === 'function') clearPendingDcaSignal();
     document.getElementById('dcaPreviewOverlay').classList.add('hidden');
     showToast('DCA cancelled — nothing was changed.', 'notice');
 }
@@ -1941,6 +1942,11 @@ async function applyDcaResult(result, dcaAmount) {
     showToast(msg, 'success', [
         { label: '[ export json ]', primary: true, onClick: () => exportJSON() }
     ]);
+
+    // If this run was triggered from a pending DCA card, record the server-side
+    // confirmation now that the contribution actually moved (human-in-the-loop:
+    // the card only clears after applyDcaResult succeeded).
+    if (typeof confirmPendingDcaSignal === 'function') confirmPendingDcaSignal();
 }
 
 // ============ AQMath ENGINE OPTIMIZATION (data-pipeline /optimize) — BLACK ONLY ============
@@ -2794,7 +2800,7 @@ async function sendChatMessage() {
     const body = input.value.trim();
     if (!body) return;
     const token = getBetaToken();
-    if (!token) { showToast('Please log in with your beta key first.', 'warning'); return; }
+    if (!token) { showToast('Please log in with your Black key first.', 'warning'); return; }
     try {
         const res = await fetch(BETA_AUTH_URL + '/chat', {
             method: 'POST',
@@ -2867,7 +2873,7 @@ async function clearMyChatMessages() {
     // users' messages stay. Then re-pulls the shared view.
     if (!isPro) return;
     const token = getBetaToken();
-    if (!token) { showToast('Please log in with your beta key first.', 'warning'); return; }
+    if (!token) { showToast('Please log in with your Black key first.', 'warning'); return; }
     try {
         const res = await fetch(BETA_AUTH_URL + '/chat', {
             method: 'DELETE',

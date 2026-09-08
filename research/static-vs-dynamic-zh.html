@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>静态 vs 动态防护盾测试 - AQMath</title>
-<meta name="description" content="Shield v14 对静态 60/40：MaxDD 34.2% vs 60.7–81.1%。30 个模拟人类无一坚持计划，全部投降。">
+<meta name="description" content="Aegis（v14） Shield 对静态 60/40：MaxDD 34.2% vs 60.7–81.1%。30 个模拟人类无一坚持计划，全部投降。">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://aqmath.xyz/research/static-vs-dynamic-zh">
 <link rel="icon" href="/favicon.ico">
@@ -15,7 +15,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://aqmath.xyz/research/static-vs-dynamic-zh">
 <meta property="og:title" content="静态 vs 动态防护盾测试 - AQMath">
-<meta property="og:description" content="Shield v14 对静态 60/40：MaxDD 34.2% vs 60.7–81.1%。30 个模拟人类无一坚持计划，全部投降。">
+<meta property="og:description" content="Aegis（v14） Shield 对静态 60/40：MaxDD 34.2% vs 60.7–81.1%。30 个模拟人类无一坚持计划，全部投降。">
 <meta property="og:site_name" content="AQMath">
 <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20260721b">
@@ -25,16 +25,16 @@
 <meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="静态 vs 动态防护盾测试 - AQMath">
-<meta name="twitter:description" content="Shield v14 对静态 60/40：MaxDD 34.2% vs 60.7–81.1%。30 个模拟人类无一坚持计划，全部投降。">
+<meta name="twitter:description" content="Aegis（v14） Shield 对静态 60/40：MaxDD 34.2% vs 60.7–81.1%。30 个模拟人类无一坚持计划，全部投降。">
 <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"静态 vs 动态 — 防护盾对真人持有的 60/40","url":"https://aqmath.xyz/research/static-vs-dynamic-zh","datePublished":"2026-08-12","description":"Shield v14 对静态 60/40：MaxDD 34.2% vs 60.7–81.1%。30 个模拟人类无一坚持计划，全部投降。","inLanguage":"zh-Hans","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"静态 vs 动态","item":"https://aqmath.xyz/research/static-vs-dynamic-zh"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"静态 vs 动态 — 防护盾对真人持有的 60/40","url":"https://aqmath.xyz/research/static-vs-dynamic-zh","datePublished":"2026-08-12","description":"Aegis（v14） Shield 对静态 60/40：MaxDD 34.2% vs 60.7–81.1%。30 个模拟人类无一坚持计划，全部投降。","inLanguage":"zh-Hans","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"静态 vs 动态","item":"https://aqmath.xyz/research/static-vs-dynamic-zh"}]}]}</script>
 <link rel="alternate" hreflang="en" href="https://aqmath.xyz/research/static-vs-dynamic">
 <link rel="alternate" hreflang="zh-Hans" href="https://aqmath.xyz/research/static-vs-dynamic-zh">
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/static-vs-dynamic">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
+<link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
 </head>
 <body>
 
@@ -51,7 +51,7 @@
 <h1>静态 vs 动态：防护盾只通过了一半的测试</h1>
 <p class="legal-updated">发布日期: 2026-08-12</p>
 <p class="sim-notice"><strong>模拟结果 &mdash; 未使用真实资金。</strong>以下每一项数据均由回测根据历史价格数据计算得出。未投入任何资金，也未下过任何订单。回测是在完全知晓该时段结果的前提下把策略套用于过去，且数据不包含滑点与流动性影响，但会对每次再平衡、DCA 买入和资金重新部署收取 0.1% 的模拟交易所手续费。模拟表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是软件，不是投资建议。</p>
-<p><strong>日期：</strong> 2026-08-12 <strong>引擎：</strong> v14 去杠杆防护盾 — 与生产环境完全相同的代码，未做任何修改 <strong>状态：</strong> 门槛 2/4 — 防护盾赢下防护类指标（MaxDD、Calmar），但输掉收益类 门槛：机器人再平衡 60/40 的夏普更高，最终权益是它的两倍多 · 每个行为类 场景 30 个种子</p>
+<p><strong>日期：</strong> 2026-08-12 <strong>引擎：</strong> Aegis（v14）去杠杆防护盾 — 与生产环境完全相同的代码，未做任何修改 <strong>状态：</strong> 门槛 2/4 — 防护盾赢下防护类指标（MaxDD、Calmar），但输掉收益类 门槛：机器人再平衡 60/40 的夏普更高，最终权益是它的两倍多 · 每个行为类 场景 30 个种子</p>
 <hr>
 <h2>60 秒速读</h2>
 <ul><li>最简单的价值检验：防护盾能否击败一张餐巾纸就能画出来的静态 加密币/ 稳定币 分配？</li><li>跳出框架的设计：竞争者按三种&quot;像人程度&quot;分别测试 — <strong>机器人</strong> （每年再平衡）、<strong>抽屉党</strong>（从不触碰）与<strong>真人</strong>（疼到受不了就 投降）。</li><li>防护门槛通过：防护盾 MaxDD 34.2%，而每一个静态变体在 60.7–81.1% 之间；Calmar 是九个策略中最高的。</li><li>收益门槛失败：机器人 60/40 的夏普更高（0.621 对 0.493），最终权益 超过两倍。</li><li>但机器人并不存在。同一个计划的&quot;人类版本&quot;每个都违约 3–5 次，每个 模拟生命周期放弃 $12.5k–$16.4k 的权益，而且约 81% 的时间都待在 稳定币里。</li></ul>
@@ -96,7 +96,7 @@
 <td style="text-align:left">按 S1 计划持有，直到自身权益回撤越过 ~35%，然后全部转稳定币；三种回归规则</td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>Shield v14</strong></td>
+<td style="text-align:left"><strong>Aegis（v14） Shield</strong></td>
 <td style="text-align:center">动态</td>
 <td style="text-align:center">动态</td>
 <td style="text-align:left">生产配置，当日执行</td>
@@ -173,7 +173,7 @@
 <td style="text-align:center">$69,897</td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>Shield v14</strong></td>
+<td style="text-align:left"><strong>Aegis（v14） Shield</strong></td>
 <td style="text-align:center"><strong>34.2%</strong></td>
 <td style="text-align:center">0.493</td>
 <td style="text-align:center"><strong>0.659</strong></td>
@@ -277,7 +277,7 @@
 <h2>8. 可复现性</h2>
 <p>所有策略跑在同一段 6.2 年的日线收盘价上，防护盾腿使用未修改的 生产引擎。测试脚本、图表生成器与原始结果数据存放在引擎的内部 研究工具中；所有报告的中位数都来自 30 个种子。</p>
 <hr>
-<p><em>这是 v14 去杠杆防护盾五项计划皇冠测试中的第二项。测试 1（人为因素） 已发布于<a href="/research/dca-stress-zh">此处</a>。本次判定：4 过 2 — 防护盾在防护与痛苦调整后收益上占优，收益门槛输给一个不存在的机器人， 并在除终端财富外的每一个维度上击败其竞争者的人类版本。下一项： 测试 3，流动性执行。</em></p>
+<p><em>这是 Aegis（v14）去杠杆防护盾五项计划皇冠测试中的第二项。测试 1（人为因素） 已发布于<a href="/research/dca-stress-zh">此处</a>。本次判定：4 过 2 — 防护盾在防护与痛苦调整后收益上占优，收益门槛输给一个不存在的机器人， 并在除终端财富外的每一个维度上击败其竞争者的人类版本。下一项： 测试 3，流动性执行。</em></p>
 </main>
 
 <footer class="site-footer">

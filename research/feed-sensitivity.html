@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/feed-sensitivity">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
+<link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
 </head>
 <body>
 
@@ -52,13 +52,13 @@
 <p class="legal-updated">Published: 2026-08-09</p>
 <p class="sim-notice"><strong>Simulated results &mdash; no real money.</strong> Every figure below is computed from historical price data by a backtest. No capital was invested and no orders were placed. Backtests apply a strategy to the past with full knowledge of how that period turned out, and the figures exclude slippage and liquidity effects, though a simulated 0.1% exchange fee is charged on every rebalance, DCA buy and redeployment. Simulated and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software, not investment advice.</p>
 <p><strong>Date:</strong> 2026-08-09<br>
-<strong>Engine:</strong> v14 Deleverage Shield — production <code>evaluate_shield</code> / <code>backtest_modulator</code> imported unmodified; daily-close series pulled independently from three public price feeds<br>
+<strong>Engine:</strong> Aegis (v14) Deleverage Shield — production <code>evaluate_shield</code> / <code>backtest_modulator</code> imported unmodified; daily-close series pulled independently from three public price feeds<br>
 <strong>Status:</strong> 📊 RESEARCH — data-source sensitivity study, no parameter changed, no basket promoted</p>
 <hr>
 <h2>1. Objective</h2>
 <p>Every study published so far (<a href="/research/oos-v14-new-tokens">OOS</a>, <a href="/research/mc-risk">Monte Carlo</a>, <a href="/research/regime-autopsy">Regime Autopsy</a>, <a href="/research/robustness">Robustness</a>) treated the price series as ground truth. It is not — and the live pipeline is built as if it knows. Three independent collectors (aggregator, Coinbase, Kraken) push raw daily prices into the data pipeline, which for every token and date de-duplicates, removes per-source outliers (4.5 standard deviations on a 7-day rolling window), takes the <strong>cross-source median</strong> of that date&#x27;s prices, and fills gaps of ≤2 days by interpolation before the strategy ever sees the number. The shield does not read one feed blindly — but only for the tokens that more than one collector actually collects. Section 2 shows where that condition fails.</p>
 <p>The question this study asks: <em>if the shield had trusted a different feed, would the user have gotten different signals?</em></p>
-<p>Three feeds were pulled independently for the eight tokens in the frozen v14 plan: the aggregator the production collector uses (CoinGecko), and two exchange-native feeds (Coinbase Exchange candles, Kraken OHLC).</p>
+<p>Three feeds were pulled independently for the eight tokens in the frozen Aegis (v14) plan: the aggregator the production collector uses (CoinGecko), and two exchange-native feeds (Coinbase Exchange candles, Kraken OHLC).</p>
 <h2>2. Coverage — already a finding</h2>
 <p>Listing status on 2026-08-09 — and what the production collectors actually pull (per their configs):</p>
 <div class="rs-tablewrap">
@@ -233,7 +233,7 @@
 </tr>
 </tbody></table></div>
 <figure class="rs-fig"><img src="/research/assets/feed_divergence.svg" alt="median and p95 same-day feed divergence per token pair, log axis" width="920" height="400" loading="lazy" decoding="async"></figure>
-<p><em>Median (blue) and p95 (red) same-day feed divergence, per token and feed pair; log axis. Dashed guide: 0.5%, the v14 rebalance threshold.</em></p>
+<p><em>Median (blue) and p95 (red) same-day feed divergence, per token and feed pair; log axis. Dashed guide: 0.5%, the Aegis (v14) rebalance threshold.</em></p>
 <p><strong>The exchanges agree with each other.</strong> Venue-to-venue divergence on the same day is noise: median 0.04–0.21%, p95 under 0.9%. Price discovery is not the issue.</p>
 <p><strong>The aggregator mostly agrees — until it doesn&#x27;t.</strong> Median divergence is equally small, but the tail is enormous: p95 between 13% and 59%, worst single-day gaps up to 76%. The disagreement is not a wide distribution; it is a handful of extreme prints. Section 4 shows where they come from.</p>
 <h2>4. Anatomy of the bad prints</h2>
@@ -307,7 +307,7 @@
 <p>The production feed printed <strong>49 one-day moves above 30% in a single year, 41 of them corroborated by no exchange</strong> — prints like +107% and −52% on TIA in consecutive weeks while both exchanges traded flat. The exchanges&#x27; jumps, by contrast, are nearly all shared events (the October 2025 liquidation cascade appears on every feed that lists the token). The contamination concentrates in exactly the thin-liquidity tokens a small-cap plan must hold.</p>
 <p>For context on why this reaches the strategy: the pipeline&#x27;s outlier filter drops prices deviating more than 4.5 standard deviations from a 7-day rolling mean, per source — a useful sieve for blue chips, but a thin token&#x27;s own volatility inflates the local std, so extreme prints can survive it. Where the merge has three sources (TIA, PYTH, PAXG) the cross-source median then absorbs any survivor; where a token is single-source (§2), nothing stands between the print and the shield. The validator additionally <em>flags</em> moves above 50% but does not reject them, and moves of 30–50% are not checked at all.</p>
 <h2>5. Replay — same shield, three feeds</h2>
-<p>The real v14 shield (<code>evaluate_shield</code>, production constants, 10 bps fees, threshold rebalancing) was replayed once per feed plus a <strong>consensus</strong> arm — the per-token median across the three feeds, i.e. the same merge rule the production pipeline applies to TIA/PYTH/PAXG — on the 4-token sub-basket listed everywhere (weights: the frozen plan renormalised — ATH 20.1%, PAXG 52.6%, PYTH 14.4%, TIA 12.9%). Window: 364 days, 2025-08-09 → 2026-08-07. $10,000 start + $300/30d DCA.</p>
+<p>The real Aegis (v14) shield (<code>evaluate_shield</code>, production constants, 10 bps fees, threshold rebalancing) was replayed once per feed plus a <strong>consensus</strong> arm — the per-token median across the three feeds, i.e. the same merge rule the production pipeline applies to TIA/PYTH/PAXG — on the 4-token sub-basket listed everywhere (weights: the frozen plan renormalised — ATH 20.1%, PAXG 52.6%, PYTH 14.4%, TIA 12.9%). Window: 364 days, 2025-08-09 → 2026-08-07. $10,000 start + $300/30d DCA.</p>
 <div class="rs-tablewrap">
 <table>
 <thead><tr>

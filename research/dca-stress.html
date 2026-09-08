@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/dca-stress">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
+<link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
 </head>
 <body>
 
@@ -52,7 +52,7 @@
 <p class="legal-updated">Published: 2026-08-10</p>
 <p class="sim-notice"><strong>Simulated results &mdash; no real money.</strong> Every figure below is computed from historical price data by a backtest. No capital was invested and no orders were placed. Backtests apply a strategy to the past with full knowledge of how that period turned out, and the figures exclude slippage and liquidity effects, though a simulated 0.1% exchange fee is charged on every rebalance, DCA buy and redeployment. Simulated and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software, not investment advice.</p>
 <p><strong>Date:</strong> 2026-08-10 · <strong>Updated:</strong> 2026-08-12 (Test 2c: frozen weights + lag knee)<br>
-<strong>Engine:</strong> v14 Deleverage Shield — the same code that runs in production, unchanged<br>
+<strong>Engine:</strong> Aegis (v14) Deleverage Shield — the same code that runs in production, unchanged<br>
 <strong>Status:</strong> Test 1 ✅ PASS 5/5 (DCA jitter) · Test 2 ⚠️ 3/4 (constant lag fails the Sharpe gate) · Test 2b ❌ 0/4 — on the production KKT 60/40 stack, every execution-error scenario fails the MaxDD gate · Test 2c ❌ freezing the weights does not fix it, and there is no lag knee — even a 1-day lag fails the MaxDD gate · 30 seeds per scenario</p>
 <hr>
 <h2>Read this in 60 seconds</h2>
@@ -510,7 +510,7 @@
 <h2>10. Reproducibility</h2>
 <p>All tests run the unmodified production engine on the same 6.2 years of daily closes, with 30 independent runs per scenario. Test scripts, chart generators, and raw result data live in the engine&#x27;s internal research tooling; every number in this article is the median of those 30 runs.</p>
 <hr>
-<p><em>This is the first of five planned stress tests for the v14 Deleverage Shield. Per the critique in §5, Test 2 moved from deposit jitter to signal execution lag — the first test in this series that can actually fail — and it delivered the first failure: a constant 3-day signal lag breaks the Sharpe gate. Test 2b then re-ran the same errors on the production KKT 60/40 stack, where every error scenario breaks the MaxDD gate. Test 2c ran the reader-proposed frozen-weights control and lag sweep: freezing the weights still fails 3 of 4 scenarios, and even a 1-day lag breaks the MaxDD gate — same-day signal execution remains the only policy that passes. <a href="https://aqmath.xyz">See the full test plan</a> for the remaining four.</em></p>
+<p><em>This is the first of five planned stress tests for the Aegis (v14) Deleverage Shield. Per the critique in §5, Test 2 moved from deposit jitter to signal execution lag — the first test in this series that can actually fail — and it delivered the first failure: a constant 3-day signal lag breaks the Sharpe gate. Test 2b then re-ran the same errors on the production KKT 60/40 stack, where every error scenario breaks the MaxDD gate. Test 2c ran the reader-proposed frozen-weights control and lag sweep: freezing the weights still fails 3 of 4 scenarios, and even a 1-day lag breaks the MaxDD gate — same-day signal execution remains the only policy that passes. <a href="https://aqmath.xyz">See the full test plan</a> for the remaining four.</em></p>
 </main>
 
 <footer class="site-footer">

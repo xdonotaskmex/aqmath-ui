@@ -1,7 +1,7 @@
 # Locked Out? What Happens After the Shield Goes Defensive
 
 **Date:** 2026-08-18
-**Engine:** v14 Deleverage Shield on the production KKT stack — ERC risk-parity
+**Engine:** Aegis (v14) Deleverage Shield on the production KKT stack — ERC risk-parity
 weights (180d lookback, 180d re-opt, 60/40 risky/USDC), same code that runs
 in production, unchanged
 **Status:** Gates 1/4 — Shield re-enters fast (median 1 day to 50% exposure)
@@ -63,7 +63,7 @@ Two instruments run in parallel with identical accounting:
 
 | Instrument | Behavior |
 |------------|----------|
-| **Shield v14** | production KKT config, threshold rebalancing, DCA parked in stablecoin when defensive |
+| **Aegis (v14) Shield** | production KKT config, threshold rebalancing, DCA parked in stablecoin when defensive |
 | **Buy & Hold** | 100% invested in the same KKT portfolio at all times, same DCA schedule and fees |
 
 A **defensive episode** is a contiguous period where the Shield's held
@@ -179,7 +179,7 @@ the engine's internal research tooling.
 
 ---
 
-*This is the fourth of five planned crown tests for the v14 Deleverage
+*This is the fourth of five planned crown tests for the Aegis (v14) Deleverage
 Shield. Test 1 (Human Factor) is published
 [here](/research/dca-stress). Test 2 (Static vs Dynamic) is published
 [here](/research/static-vs-dynamic). Verdict here: 1/4 gates — the

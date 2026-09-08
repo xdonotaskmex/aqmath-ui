@@ -42,7 +42,9 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=0dfe938505">
+    <link rel="stylesheet" href="/styles.min.css?v=2e9ad32e5a">
+    <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
+    <link rel="stylesheet" href="/vendor/driver.css">
 </head>
 <body>
 
@@ -80,7 +82,7 @@
 <div class="lp-pro-modal hidden" id="proModal">
     <div class="lp-pro-box">
         <h3>&#128274; AQMath Black &mdash; Apply for Access</h3>
-        <p>AQMath Black is <strong>€999 / year (~$1,090 USD)</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card, no bank transfer, no personal data collected.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
+        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card, no bank transfer, no personal data collected.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
         <div class="lp-pro-beta">
             <div class="lp-pro-beta-label">Send a message to request access:</div>
             <div class="lp-pro-beta-links">
@@ -175,7 +177,7 @@
             <a class="hdr-nav-btn" href="/app" data-i18n="app.navApp">app</a>
             <a class="hdr-nav-btn" href="/backtest" data-i18n="app.navBacktest">backtest</a>
             <a class="hdr-nav-btn" href="/results" data-i18n="app.navResults">results</a>
-            <a class="hdr-nav-btn" href="/v18" data-i18n="app.navV18">v18</a>
+            <a class="hdr-nav-btn" href="/v18" data-i18n="app.navV18">proteus</a>
             <a class="hdr-nav-btn" href="/research/" data-i18n="app.navResearch">research</a>
             <a class="hdr-nav-btn active" href="/docs" data-i18n="app.navDocs">docs</a>
         </div>
@@ -548,7 +550,7 @@
             <p data-i18n="doc.s6.p1">Volatility is the foundational risk metric used throughout AQMath. It feeds into the safety factor, the circuit breaker threshold, and (in Black) the covariance matrix. The system computes a rolling volatility estimate for each token by measuring the magnitude of daily price swings &mdash; a standard approach in quantitative finance.</p>
 
             <h3 id="doc-portvol" data-i18n="doc.s6.pvTitle">6.1 Portfolio Volatility</h3>
-            <p data-i18n="doc.s6.pvP">Portfolio-level volatility is a weighted aggregate of each token&rsquo;s individual volatility, proportional to its share of total portfolio value. Safe-haven tokens and frozen positions are excluded since they have near-zero volatility by definition. This portfolio-level metric drives adaptive thresholds across the entire safety pipeline.</p>
+            <p data-i18n-html="doc.s6.pvP">Portfolio-level volatility is computed from the <strong>covariance matrix</strong> of token returns: σ = √(w'Σw), where w is the weight vector and Σ is the covariance matrix. Safe-haven tokens and frozen positions are excluded since they have near-zero volatility by definition. This portfolio-level metric drives adaptive thresholds across the entire safety pipeline.</p>
             <div class="doc-callout blue">
                 <div class="doc-ct" data-i18n-html="doc.s6.covTitle">&#128216; COVARIANCE MATRIX (Black Feature)</div>
                 <p data-i18n-html="doc.s6.covP">The Black engine computes a full covariance matrix estimating how assets move <em>together</em>. Two tokens with moderate individual volatility but high correlation (like ETH and SOL) have amplified combined risk. The optimizer uses this to ensure each asset contributes equal risk &mdash; preventing hidden concentration through correlation.</p>
@@ -639,7 +641,7 @@
                 <li data-i18n-html="doc.s8.shield1"><strong>Two-signal regime read</strong> &mdash; the engine tracks only rising <strong>drawdown</strong> and rising <strong>downside volatility</strong> over a short rolling window. No moving averages, no timers, no correlation gate.</li>
                 <li data-i18n-html="doc.s8.shield2"><strong>Continuous scaling</strong> &mdash; target exposure is a smooth 0&ndash;100% dial that turns down as drawdown and downside volatility rise &mdash; not a set of discrete steps. There is <strong>no hard floor</strong>: in a deep, volatile crash exposure can approach zero.</li>
                 <li data-i18n-html="doc.s8.shield3"><strong>Capital preservation</strong> &mdash; while defensive the portfolio holds the majority in cash-equivalent (USDC), absorbing only a fraction of ongoing crash damage. Exposure scales continuously with the regime, holding cash when drawdown and downside volatility are elevated.</li>
-                <li data-i18n-html="doc.s8.shield4"><strong>Steady ramp, trade less</strong> &mdash; exposure moves smoothly toward its target every bar, whether de-risking or re-entering. To avoid over-trading, v14 only rebalances when the target drifts meaningfully from the position it is holding &mdash; this deadband (not a slower re-entry) is what prevents whipsaw and keeps trading costs low. Parked DCA cash redeploys automatically once exposure recovers.</li>
+                <li data-i18n-html="doc.s8.shield4"><strong>Steady ramp, trade less</strong> &mdash; exposure moves smoothly toward its target every bar, whether de-risking or re-entering. To avoid over-trading, Aegis (v14) only rebalances when the target drifts meaningfully from the position it is holding &mdash; this deadband (not a slower re-entry) is what prevents whipsaw and keeps trading costs low. Parked DCA cash redeploys automatically once exposure recovers.</li>
             </ul>
 
             <div class="doc-diagram">
@@ -798,10 +800,10 @@
         <!-- DL vs B&H COMPARISON -->
         <div class="doc-block" id="doc-shield-vs-bh-block">
             <h3 id="doc-shield-vs-bh" data-i18n-html="doc.s8.vsBhTitle">8.5 Performance: Drawdown &amp; Risk-Adjusted Scoring</h3>
-            <p data-i18n-html="doc.s8.vsBhP1">The chart below compares the <strong>Deleverage Modulator</strong> against a classic <strong>Buy &amp; Hold</strong> strategy over an <strong>8.7-year, 5-token backtest</strong> spanning multiple bull/bear cycles (including the 2022 crypto winter and 2024 corrections). Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. The curves track <strong>peak-to-trough drawdown</strong> &mdash; how deep each strategy fell from its highs. The modulator is scored on <strong>risk-adjusted return</strong> (Sharpe) and drawdown; the v14 preset now beats Buy &amp; Hold on Sharpe, though not on raw dollars.</p>
+            <p data-i18n-html="doc.s8.vsBhP1">The chart below compares the <strong>Deleverage Modulator</strong> against a classic <strong>Buy &amp; Hold</strong> strategy over an <strong>8.7-year, 5-token backtest</strong> spanning multiple bull/bear cycles (including the 2022 crypto winter and 2024 corrections). Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. The curves track <strong>peak-to-trough drawdown</strong> &mdash; how deep each strategy fell from its highs. The modulator is scored on <strong>risk-adjusted return</strong> (Sharpe) and drawdown; the Aegis (v14) preset now beats Buy &amp; Hold on Sharpe, though not on raw dollars.</p>
 
             <div class="doc-diagram">
-                <div class="doc-fl" data-i18n="doc.cap.ddChart">Peak-to-Trough Drawdown &middot; Deleverage Modulator vs Buy &amp; Hold (v14.0)</div>
+                <div class="doc-fl" data-i18n="doc.cap.ddChart">Peak-to-Trough Drawdown · Deleverage Modulator vs Buy &amp; Hold (Aegis v14.0)</div>
                 <svg viewBox="0 0 720 260" role="img" aria-label="Max drawdown: Buy and Hold minus 83.8 percent versus Deleverage Modulator minus 35.0 percent" preserveAspectRatio="xMidYMid meet" style="max-width:700px;width:100%;height:auto;">
                     <!-- gridlines -->
                     <line x1="60" y1="40" x2="690" y2="40" class="lp-sh-grid dash"/>
@@ -857,15 +859,15 @@
                 </div>
             </div>
 
-            <p data-i18n-html="doc.s8.vsBhP2"><strong>A fraction of the pain, and now a higher Sharpe.</strong> Across the full 8.7-year, 5-token backtest the modulator cut peak drawdown from <strong>83.8%</strong> (Buy &amp; Hold) to <strong>35.0%</strong> &mdash; a <strong>48.8-point reduction</strong> &mdash; while lifting Sharpe from <strong>0.75 (Buy &amp; Hold) to 0.93</strong> at <strong>32.9% CAGR</strong>. Exposure is a continuous 0&ndash;100% dial driven only by drawdown and downside volatility: it moves smoothly toward its target every bar in either direction, and redeploys parked USDC automatically as exposure recovers. v14 adds <strong>threshold rebalancing</strong> &mdash; a deadband that skips trades when the target barely moves, slashing fees without changing the signal. There are <strong>no timers, no tranches, and no correlation gate</strong>.</p>
-            <p data-i18n-html="doc.s8.vsBhP3"><strong>Honestly scoped: this does not beat Buy &amp; Hold on raw dollars.</strong> Buy &amp; Hold ends the sample higher in absolute value because it stays fully exposed through the bull run &mdash; the modulator is not designed to win that race. Its edge is <em>risk-adjusted</em>: less than half the drawdown and a higher Sharpe (0.93 vs 0.75). Crucially this edge is <strong>not only in-sample</strong>: on a <strong>sealed second half</strong> of the data never used to choose the v14 preset, the modulator still cut peak drawdown from <strong>~63% to ~24%</strong> and kept a <strong>higher Sharpe (0.48 vs 0.37)</strong> at a comparable total return. <strong>Methodology note:</strong> the backtest basket is composed of tokens that survived to today (survivorship bias); we stress-tested that directly by dropping a dead token &mdash; Terra Classic (LUNC), which fell from ~$121 to ~$0 &mdash; into the basket, and the modulator&rsquo;s peak drawdown barely moved (~23%) while Buy &amp; Hold&rsquo;s worsened by up to ~18 points. Past results do not guarantee future performance.</p>
+            <p data-i18n-html="doc.s8.vsBhP2"><strong>Less than half the drawdown, and now a higher Sharpe.</strong> Across the full 8.7-year, 5-token backtest the modulator cut peak drawdown from <strong>83.8%</strong> (Buy &amp; Hold) to <strong>35.0%</strong> &mdash; a <strong>48.8-point reduction</strong> &mdash; while lifting Sharpe from <strong>0.75 (Buy &amp; Hold) to 0.93</strong> at <strong>32.9% CAGR</strong>. Exposure is a continuous 0&ndash;100% dial driven only by drawdown and downside volatility: it moves smoothly toward its target every bar in either direction, and redeploys parked USDC automatically as exposure recovers. Aegis (v14) adds <strong>threshold rebalancing</strong> &mdash; a deadband that skips trades when the target barely moves, slashing fees without changing the signal. There are <strong>no timers, no tranches, and no correlation gate</strong>.</p>
+            <p data-i18n-html="doc.s8.vsBhP3"><strong>Honestly scoped: this does not beat Buy &amp; Hold on raw dollars.</strong> Buy &amp; Hold ends the sample higher in absolute value because it stays fully exposed through the bull run &mdash; the modulator is not designed to win that race. Its edge is <em>risk-adjusted</em>: less than half the drawdown and a higher Sharpe (0.93 vs 0.75). Crucially this edge is <strong>not only in-sample</strong>: on a <strong>sealed second half</strong> of the data never used to choose the Aegis (v14) preset, the modulator still cut peak drawdown from <strong>~63% to ~24%</strong> and kept a <strong>higher Sharpe (0.48 vs 0.37)</strong> at a comparable total return. <strong>Methodology note:</strong> the backtest basket is composed of tokens that survived to today (survivorship bias); we stress-tested that directly by dropping a dead token &mdash; Terra Classic (LUNC), which fell from ~$121 to ~$0 &mdash; into the basket, and the modulator's peak drawdown barely moved (~23%) while Buy &amp; Hold's worsened by up to ~18 points. Past results do not guarantee future performance.</p>
         </div>
 
 
         <!-- TESTING & VALIDATION -->
         <div class="doc-block" id="doc-testing">
             <h3 id="doc-testing-title" data-i18n-html="doc.s8.testingTitle">8.6 Testing &amp; Validation</h3>
-            <p data-i18n-html="doc.s8.testingP1">The v14.0 Deleverage Modulator was <strong>measured on real market data</strong>, not hand-guessed. We replayed the full 8.7-year, 5-token price history through the exact production formula &mdash; a continuous exposure dial driven only by drawdown and downside volatility &mdash; and scored it on <strong>drawdown, Sharpe, and CAGR</strong>.</p>
+            <p data-i18n-html="doc.s8.testingP1">The Aegis (v14.0) Deleverage Modulator was <strong>measured on real market data</strong>, not hand-guessed. We replayed the full 8.7-year, 5-token price history through the exact production formula &mdash; a continuous exposure dial driven only by drawdown and downside volatility &mdash; and scored it on <strong>drawdown, Sharpe, and CAGR</strong>.</p>
 
             <div class="doc-callout green">
                 <div class="doc-ct" data-i18n-html="doc.s8.testingCallout">&#9989; VALIDATED ON REAL DATA</div>
@@ -876,7 +878,7 @@
             <ul>
                 <li data-i18n-html="doc.s8.testing1"><strong>Signal construction</strong> &mdash; each bar we compute rolling drawdown from the running equity peak and downside volatility over a short rolling window, then map each to a 0&ndash;1 signal.</li>
                 <li data-i18n-html="doc.s8.testing2"><strong>Exposure rule</strong> &mdash; the combined risk signal drives a continuous exposure dial with no hard floor and no correlation gate.</li>
-                <li data-i18n-html="doc.s8.testing3"><strong>Hysteresis + threshold rebalancing</strong> &mdash; exposure moves smoothly toward target every bar in either direction, and (v14) only trades when the target drifts meaningfully from the held position &mdash; fewer rebalances with an identical signal. Parked USDC redeploys once exposure recovers.</li>
+                <li data-i18n-html="doc.s8.testing3"><strong>Hysteresis + threshold rebalancing</strong> &mdash; exposure moves smoothly toward target every bar in either direction, and Aegis (v14) only trades when the target drifts meaningfully from the held position &mdash; fewer rebalances with an identical signal. Parked USDC redeploys once exposure recovers.</li>
                 <li data-i18n-html="doc.s8.testing4"><strong>Engine/backtester parity</strong> &mdash; the live engine and the backtester run the same formula, verified to produce matching drawdown and Sharpe on the full sample.</li>
             </ul>
 
@@ -895,7 +897,7 @@
                     <text x="360" y="60" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">-48.8pp</text>
                     <!-- DL bar -->
                     <rect x="400" y="40" width="280" height="60" rx="6" fill="rgba(6,182,212,0.15)" stroke="var(--blue)" stroke-width="1.5"/>
-                    <text x="540" y="65" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">Deleverage v14.0</text>
+                    <text x="540" y="65" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">Aegis v14.0 Deleverage</text>
                     <text x="540" y="85" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">35.0% Max DD</text>
                     <!-- Metrics below -->
                     <text x="180" y="130" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="9">Sharpe: 0.75</text>
@@ -906,7 +908,7 @@
                     <text x="540" y="160" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Final $493.8k</text>
                     <!-- Recalibration badge -->
                     <rect x="470" y="170" width="140" height="20" rx="10" fill="rgba(52,211,153,0.2)" stroke="var(--green)" stroke-width="1"/>
-                    <text x="540" y="184" text-anchor="middle" fill="var(--green)" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="700">v14.0 · FULL-SAMPLE</text>
+                    <text x="540" y="184" text-anchor="middle" fill="var(--green)" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="700">Aegis v14.0 · FULL-SAMPLE</text>
                 </svg>
             </div>
 
@@ -920,7 +922,7 @@
                 <li data-i18n-html="doc.s8.testingAudit5"><strong>Out-of-sample check</strong> &mdash; on a sealed second half never used to pick the preset, the modulator still roughly halved drawdown (~24% vs ~63% Buy &amp; Hold) at a higher Sharpe (0.48 vs 0.37); a fuller walk-forward multi-fold study is still worthwhile.</li>
                 <li data-i18n-html="doc.s8.testingAudit6"><strong>Survivorship stress (dead token)</strong> &mdash; adding Terra Classic (LUNC), which collapsed from ~$121 to ~$0, to the basket left the modulator&rsquo;s peak drawdown essentially unchanged (~23%), while Buy &amp; Hold&rsquo;s worsened by up to ~18 points; on the same window the modulator still cut drawdown ~49 points versus Buy &amp; Hold. The drawdown defense does not depend on hand-picking surviving tokens (though raw return figures remain flattered by crypto&rsquo;s post-crash rebounds).</li>
             </ul>
-            <p class="rv-v15-notice" data-i18n-html="doc.s8.nextgen"><span class="rv-v15-tag">NEXT-GEN UNDER TEST</span> A volatility-adaptive shield (<strong>v18</strong>) is validated but <strong>not live yet</strong>. Re-run through the <strong>exact production path</strong> &mdash; a rolling 180-day window, the same KKT-180 macro loop, and persisted shield state &mdash; it cut maximum drawdown below the live v14 on both a large-cap basket (<strong>25.7%&rarr;23.1%</strong>) and a high-volatility alt basket (<strong>36.8%&rarr;29.4%</strong>), with a higher Sharpe and Calmar. <strong>v14 remains the deployed engine</strong>; v18 awaits further forward testing before it goes live.</p>
+            <p class="rv-v15-notice" data-i18n-html="doc.s8.nextgen"><span class="rv-v15-tag">NEXT-GEN UNDER TEST</span> A volatility-adaptive shield, <strong>Proteus (v18)</strong>, is validated but <strong>not live yet</strong>. Re-run through the <strong>exact production path</strong> &mdash; a rolling 180-day window, the same KKT-180 macro loop, and persisted shield state &mdash; it cut maximum drawdown below the live Aegis (v14) on both a large-cap basket (<strong>25.7%&rarr;23.1%</strong>) and a high-volatility alt basket (<strong>36.8%&rarr;29.4%</strong>), with a higher Sharpe and Calmar. <strong>Aegis (v14) remains the deployed engine</strong>; Proteus (v18) awaits further forward testing before it goes live.</p>
         </div>
 
 
@@ -955,7 +957,7 @@
                         <li data-i18n-html="doc.s9.backend8"><strong>Opt-in signal &amp; notification service (stored, deletable):</strong> token symbols + amounts and the frozen weight plan, under the hash of your key</li>
                         <li data-i18n="doc.s9.backend9">Consent receipts and must-read acknowledgements &mdash; GDPR audit records</li>
                         <li data-i18n="doc.s9.backend10">Notification setup &mdash; a random unguessable topic; the read token is stored only as a hash</li>
-                                                <li data-i18n-html="doc.s9.backend11"><strong>Beta chat messages (stored, deletable):</strong> pseudonymous messages (&le;200 chars) under the hash of your key, rolling cap of 20 messages + daily sweep of the oldest</li>
+                                                <li data-i18n-html="doc.s9.backend11"><strong>Black chat messages (stored, deletable):</strong> pseudonymous messages (&le;200 chars) under the hash of your key, rolling cap of 20 messages + daily sweep of the oldest</li>
                     </ul>
                 </div>
             </div>
@@ -1010,13 +1012,13 @@
             </div>
             <p style="margin-top:24px;font-size:0.82rem;color:var(--muted);text-align:center;font-family:var(--mono);letter-spacing:1px;" data-i18n="doc.s9.closing">AQMath gives you the computational power of a quantitative hedge fund&rsquo;s allocation engine while maintaining the data sovereignty of a paper notebook.</p>
             
-                        <h3 id="doc-beta-chat" data-i18n="doc.s9.chatTitle">9.3 Beta Chat</h3>
-                        <p data-i18n-html="doc.s9.chatP1">Beta users have access to a <strong>shared internal chat</strong> visible only to active beta members. The chat is designed for direct communication between beta testers and the team &mdash; no automated onboarding, no helpdesk.</p>
+                        <h3 id="doc-beta-chat" data-i18n="doc.s9.chatTitle">9.3 Black Chat</h3>
+                        <p data-i18n-html="doc.s9.chatP1">Black users have access to a <strong>shared internal chat</strong> visible only to active Black members. The chat is designed for direct communication between Black members and the team &mdash; no automated onboarding, no helpdesk.</p>
                         <ul>
                             <li data-i18n-html="doc.s9.chat1"><strong>Pseudonymous:</strong> messages are shown under a short code (e.g., B-XXXXXX) derived from the hash of your activation key. Your real key, IP, and identity are never displayed.</li>
                             <li data-i18n-html="doc.s9.chat2"><strong>Rolling buffer:</strong> only the 20 most recent messages are kept. The oldest message is additionally swept once per UTC day.</li>
                             <li data-i18n-html="doc.s9.chat3"><strong>200-character limit</strong> per message, with a 3-second cooldown between posts to prevent flooding.</li>
-                            <li data-i18n-html="doc.s9.chat4"><strong>Deletable:</strong> you can clear your own messages anytime via the Clear button. Deactivating your beta key deletes all your chat data.</li>
+                            <li data-i18n-html="doc.s9.chat4"><strong>Deletable:</strong> you can clear your own messages anytime via the Clear button. Deactivating your Black key deletes all your chat data.</li>
                         </ul>
                         <p data-i18n-html="doc.s9.chatP2">The chat is stored server-side in the same pseudonymous manner as the opt-in signal service &mdash; under the one-way hash of your activation key, never under your name or wallet.</p>
         </div>
@@ -1032,10 +1034,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=0dfe938505"></script>
-<script defer src="/app-backtest.js?v=0dfe938505"></script>
-<script defer src="/app.js?v=0dfe938505"></script>
-<script defer src="/app-notify.js?v=0dfe938505"></script>
+<script defer src="/app-widgets.js?v=2e9ad32e5a"></script>
+<script defer src="/app-backtest.js?v=2e9ad32e5a"></script>
+<script defer src="/app.js?v=2e9ad32e5a"></script>
+<script defer src="/app-notify.js?v=2e9ad32e5a"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -1049,8 +1051,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=0dfe938505"></script>
-<script defer src="/app-boot.js?v=0dfe938505"></script>
+<script defer src="/vendor/i18next.min.js?v=2e9ad32e5a"></script>
+<!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
+<script defer src="/vendor/driver.min.js"></script>
+<script defer src="/app-tour.js?v=2e9ad32e5a"></script>
+<script defer src="/app-boot.js?v=2e9ad32e5a"></script>
 
 </body>
 </html>

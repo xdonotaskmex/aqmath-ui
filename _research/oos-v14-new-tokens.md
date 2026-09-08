@@ -1,8 +1,8 @@
-# OOS Validation — Deleverage Modulator v14.0 on an Unseen Token Universe
+# OOS Validation — Aegis (v14.0) Deleverage Modulator on an Unseen Token Universe
 
 **Date:** 2026-07-17
-**Engine:** Backtesting Engine v14.0 (production `default_config`)
-**Status:** ✅ PASS — v14 generalizes out-of-sample on its design objective
+**Engine:** Aegis (v14.0) Backtesting Engine (production `default_config`)
+**Status:** ✅ PASS — Aegis (v14) generalizes out-of-sample on its design objective
 
 > 中文版本：[`OOS_V14_NEW_TOKENS_RESULTS.zh-CN.md`](OOS_V14_NEW_TOKENS_RESULTS.zh-CN.md)
 
@@ -10,10 +10,10 @@
 
 ## 1. Objective
 
-Test whether the **shipped production configuration** (v14.0) holds up on tokens
+Test whether the **shipped production configuration** (Aegis v14.0) holds up on tokens
 that were **never used to design or tune it**. This is a genuine
 *asset-selection out-of-sample* test: none of the assets below were part of the
-v14 tuning/validation basket.
+Aegis (v14) tuning/validation basket.
 
 The modulator is scored on **drawdown reduction and risk-adjusted return
 (Calmar / Sharpe)** — *not* on beating Buy & Hold final value. The test measures
@@ -124,7 +124,7 @@ final equity ~2.19× at the same drawdown. Out-of-sample it collapsed:
 sealed second-half only ~1.12× (DD +3.2 pp worse), and across a cross-basket
 panel only ~9–14% of combos held DD within +1 pt. A dedicated OOS-driven sweep
 (selection by sealed half + cross-basket, hard DD gate) passed **0 of 48**
-candidates. Conclusion: **do not change v14 constants.**
+candidates. Conclusion: **do not change Aegis (v14) constants.**
 
 ## 8. Caveats
 
@@ -146,6 +146,6 @@ Historical CSVs are sourced locally and are not committed.
 
 ---
 
-**Bottom line:** v14.0 delivers its mandate — large, consistent drawdown
+**Bottom line:** Aegis (v14.0) delivers its mandate — large, consistent drawdown
 reduction and improved risk-adjusted returns — on tokens it has never seen,
-including a collapsed token. **Recommendation: keep v14 unchanged.**
+including a collapsed token. **Recommendation: keep Aegis (v14) unchanged.**

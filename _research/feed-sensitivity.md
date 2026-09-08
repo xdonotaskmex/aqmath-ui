@@ -1,7 +1,7 @@
 # Three Price Feeds, One Strategy — does the signal depend on who tells you the price?
 
 **Date:** 2026-08-09
-**Engine:** v14 Deleverage Shield — production `evaluate_shield` / `backtest_modulator` imported unmodified; daily-close series pulled independently from three public price feeds
+**Engine:** Aegis (v14) Deleverage Shield — production `evaluate_shield` / `backtest_modulator` imported unmodified; daily-close series pulled independently from three public price feeds
 **Status:** 📊 RESEARCH — data-source sensitivity study, no parameter changed, no basket promoted
 
 ---
@@ -23,7 +23,7 @@ actually collects. Section 2 shows where that condition fails.
 The question this study asks: *if the shield had trusted a different feed,
 would the user have gotten different signals?*
 
-Three feeds were pulled independently for the eight tokens in the frozen v14
+Three feeds were pulled independently for the eight tokens in the frozen Aegis (v14)
 plan: the aggregator the production collector uses (CoinGecko), and two
 exchange-native feeds (Coinbase Exchange candles, Kraken OHLC).
 
@@ -83,7 +83,7 @@ comparison.)
 ![median and p95 same-day feed divergence per token pair, log axis](/research/assets/feed_divergence.svg)
 
 *Median (blue) and p95 (red) same-day feed divergence, per token and feed
-pair; log axis. Dashed guide: 0.5%, the v14 rebalance threshold.*
+pair; log axis. Dashed guide: 0.5%, the Aegis (v14) rebalance threshold.*
 
 **The exchanges agree with each other.** Venue-to-venue divergence on the
 same day is noise: median 0.04–0.21%, p95 under 0.9%. Price discovery is not
@@ -137,7 +137,7 @@ all.
 
 ## 5. Replay — same shield, three feeds
 
-The real v14 shield (`evaluate_shield`, production constants, 10 bps fees,
+The real Aegis (v14) shield (`evaluate_shield`, production constants, 10 bps fees,
 threshold rebalancing) was replayed once per feed plus a **consensus** arm —
 the per-token median across the three feeds, i.e. the same merge rule the
 production pipeline applies to TIA/PYTH/PAXG — on the 4-token sub-basket
