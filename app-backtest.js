@@ -209,10 +209,12 @@ function btRenderBacktest(data, inp) {
     }
     var v14x = expStats(sim);
 
-    // Two engines on identical terms; B&H is the reference only.
+    // Two engines on the same basket/capital/DCA; B&H is the reference only.
+    // Tags must match the deployed engine: Proteus (v18) is production, Aegis
+    // (v14) is the warm-up fallback (see bt.enginesNotice / shield.nextgen).
     var engines = [
-        { key: 'v14', shortName: 'Aegis v14', label: 'Aegis v14 · Deleverage', tag: 'production', m: m1, s: sim, color: '#06b6d4' },
-        { key: 'v18', shortName: 'Proteus v18', label: 'Proteus v18 · Adaptive', tag: 'test candidate', m: m18, s: sim18, color: '#a855f7' }
+        { key: 'v14', shortName: 'Aegis v14', label: 'Aegis v14 · Deleverage', tag: 'warm-up fallback', m: m1, s: sim, color: '#06b6d4' },
+        { key: 'v18', shortName: 'Proteus v18', label: 'Proteus v18 · Adaptive', tag: 'production', m: m18, s: sim18, color: '#a855f7' }
     ].filter(function(e) { return e.m && e.s; });
     var best = engines.reduce(function(a, b) { return b.m.cal > a.m.cal ? b : a; });
 
