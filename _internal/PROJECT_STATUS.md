@@ -129,6 +129,7 @@ Frontend: static HTML/CSS/JS, deployed on GitHub Pages + Cloudflare WAF.
 | Staging environment | Low | 1 day | Decision: duplicate Railway cost |
 | v17 UI/telemetry integration | Medium | 2 days | Server-side only currently |
 | Playwright E2E tests (expanded) | Medium | 2 days | Only 5 visual snapshot tests exist |
+| Obfuscate `/backtest` WF-grid sweep keys | Low | backend change | The public "Sweep Parameter" dropdown (`_src/index.html` L1361-1369) ships raw engine config keys as `<option value>`: `dd_ref`, `w_dd`, `vol_low`, `vol_high`, `exit_speed`, `entry_speed`. Pre-existing and a real feature (the user picks which parameter to sweep). A cosmetic JS remap does not help because the names also live in `app-backtest.js`; a real fix makes the `/backtest` API accept opaque sweep IDs and map them server-side. Deferred 2026-09-08 |
 
 ---
 
