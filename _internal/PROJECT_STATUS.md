@@ -202,7 +202,7 @@ Audit: `python tools/audit_pages.py` (checks all generated pages)
 - `_internal/ops/ENVIRONMENTS.md` published the whole per-service environment-variable inventory (which secret each service needs, which are shared, and the rate-limit constants); `tools/error-dashboard.html` published the operator console and the internal telemetry paths it calls
 - Fixed: `git mv ops _internal/ops` and `git mv tools/{error-dashboard.html,recover_portfolio.py} _internal/tools/`; then scrubbed all four ops docs to *procedure only* (no hostnames, no rule expressions, no thresholds, no env inventory) and repointed `recover_portfolio.py` from the origin URL to the public `api-engine.aqmath.xyz`
 - Re-scanned the remaining published surface for `up.railway.app`, `/admin/`, `/internal/`, `X-Admin`, `ADMIN_SECRET`, `ADMIN_KEY` → the only hits left are the CI grep *patterns* in `ci.yml` (intentionally public) and `/internal/error-report` in `app.js` (the browser calls it, so it must be public)
-- 🔴 **Still open, needs the Railway dashboard (cannot be fixed from this repo):** the `*.up.railway.app` public domains on the four API services are active, so the Cloudflare WAF can be bypassed by calling the origin directly. Close it per service (Settings → Networking → remove the public domain, or restrict to Cloudflare IP ranges), then confirm `api-*.aqmath.xyz` still works and the origin no longer answers. The hostnames were also in this repo's git history — assume they are known
+- ✅ **CLOSED 2026-09-08 (Railway dashboard, operator action):** the `*.up.railway.app` public domains were removed from all four API services, so the Cloudflare WAF can no longer be bypassed by calling the origin directly. Verified live: all four origins (`aqmath-beta-auth-production`, `aqmath-engine-production`, `dca-engine-production`, `backtesting-production-be57`) return **404** on `/` *and* on sensitive paths (`/metrics`, `/admin/stats`, `/forward-log`, `/dca/plan`), while `api-auth` / `api-engine` / `api-dca` / `api-backtest` `.aqmath.xyz` all still return 200 with healthy payloads. The hostnames remain in this repo's git history — treat them as known-but-dead
 - `tools/*.py` stays published on purpose: CI and the npm scripts invoke `python tools/<name>.py`. They must contain build logic only
 
 ### UI Visual Cleanup (commit c28f7be)
@@ -284,7 +284,7 @@ the authoritative source.
 | Service | Local Port | Production Port | Railway Service Name |
 |---------|-----------|-----------------|---------------------|
 | beta-auth | 8000 | 443 (via CF) | api-auth |
-| data-pipeline | 8004 | 443 (via CF) | data-pipeline |
+| data-pipeline | 8004 | — (private network only, internal `:8080`) | data-pipeline |
 | aqmath-engine | 8005 | 443 (via CF) | api-engine |
 | dca-engine | 8006 | 443 (via CF) | api-dca |
 | backtesting- | 8005 (separate) | 443 (via CF) | api-backtest |
@@ -293,6 +293,15 @@ the authoritative source.
 | coinbase-collector | 8003 | — | coinbase-collector |
 | mexc-collector | 8005 | — | mexc-collector |
 | aqmath-ui (local) | 8090 | GitHub Pages | — |
+
+### Railway networking after the origin shutdown (2026-09-08)
+
+- No backend service has a public `*.up.railway.app` domain any more, **including data-pipeline**. Service-to-service traffic runs on the private network: `http://<service>.railway.internal:<port>` — scheme and port are both mandatory, a bare hostname means port 80 where nothing listens.
+- data-pipeline needs an explicit service variable `PORT=8080`: Railway injects `PORT` only while public networking exists, and its Dockerfile runs `uvicorn --port $PORT`. Never put `PORT` in Shared Variables — every service binds its own.
+- Consumers of `DATA_PIPELINE_URL`: the four collectors plus dca-engine (`api-dca`). Their code default is `http://localhost:8004`, so a missing or blank production value crashes nothing — collectors stop ingesting and dca-engine silently drops its safety factor and trend filter while every health endpoint still returns 200.
+- Railway Shared Variables written with a `${{service.RAILWAY_PRIVATE_DOMAIN}}` reference can be stored with the reference resolved to nothing, leaving the literal value `http://:8080`. Enter internal URLs as plain text.
+- Reachability check when the dependency has no public endpoint: `POST https://api-dca.aqmath.xyz/dca` with tokens currently **above** their 50-day average. Prices arriving ⇒ the trend filter fires ⇒ `buy_summary: []` plus the warning "…all are above trend average. DCA not needed.". Prices missing ⇒ the same request allocates the budget. Both states were observed on 2026-09-08 — allocating before the variable was corrected, refusing after the redeploy.
+- End-to-end proof of the whole chain: `https://api-backtest.aqmath.xyz/` → `last_close` advances only after the 00:05–00:20 UTC collector crons, the 01:00 clean and the 01:30 daily loop all succeed.
 
 ---
 

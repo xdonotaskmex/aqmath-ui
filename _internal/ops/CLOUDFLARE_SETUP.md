@@ -14,20 +14,30 @@ Cijena: 0 EUR. Vrijeme: ~30 min + DNS propagacija (do 24 h, obično minuta).
 
 ---
 
-## ⚠️ OTVORENI SIGURNOSNI ITEM (najvažnije u ovom dokumentu)
+## ✅ ZATVORENO 2026-09-08 — origin domene ugašene (bio najvažniji item ovog dokumenta)
 
-Backend servisi na Railwayu imaju **vlastiti javni `*.up.railway.app` domain**
-koji je i dalje aktivan. Cloudflare WAF štiti samo promet koji ide preko
-`api-*.aqmath.xyz`; direktan poziv na origin **zaobilazi WAF u potpunosti**.
+Backend servisi na Railwayu imali su **vlastiti javni `*.up.railway.app` domain**,
+pa je direktan poziv na origin **zaobilazio Cloudflare WAF u potpunosti**.
+Javne domene su uklonjene sa svih backend servisa (4 API servisa + data-pipeline)
+preko Railway → Service → Settings → Networking.
 
-Dok se to ne zatvori, javno objavljeni origin hostname = uputa za zaobilaženje
-zaštite. Zato se hostnameovi ne smiju zapisivati u ovaj repo (niti u commit
-poruke, niti u issue).
+Provjereno izvana nakon gašenja: origin hostnameovi vraćaju **404** na `/` i na
+osjetljivim putanjama (`/metrics`, `/admin/stats`, `/forward-log`, `/dca/plan`),
+dok `api-auth` / `api-engine` / `api-dca` / `api-backtest` `.aqmath.xyz` i dalje
+vraćaju 200. Hostnameovi ostaju u git historiji ovog repo-a — smatraju se
+poznatima, ali su mrtvi.
 
-**Akcija (Railway dashboard, po svakom API servisu):**
-Settings → Networking → ukloni javni domain, ili ograniči pristup na Cloudflare
-IP rangeove. Nakon toga provjeri da `api-*.aqmath.xyz` i dalje radi, a da
-direktan origin URL više ne odgovara.
+**Što gašenje javne domene mijenja za interne pozive (naučeno 2026-09-08):**
+- Servisi međusobno pričaju preko privatne mreže: `http://<service>.railway.internal:<port>`
+- **Port je obavezan** — goli hostname znači port 80, a tamo ništa ne sluša
+- Railway injektira `PORT` samo dok servis ima javni networking, pa svaki servis
+  bez javne domene treba **eksplicitnu `PORT` varijablu** (data-pipeline: `PORT=8080`,
+  jer mu Dockerfile vrti `uvicorn --port $PORT`)
+- Vrijednost upisivati kao običan tekst. Referentni oblik
+  `${{service.RAILWAY_PRIVATE_DOMAIN}}` zna se spremiti **prazan**, pa adresa
+  ispadne `http://:8080` — pozivi tada tiho padnu, servisi ostaju zeleni
+- Klijenti koji izgube tu varijablu ne padaju: vraćaju se na `localhost` default
+  iz koda, pa ingestija/zaštite stanu bez ikakve greške na ekranu
 
 ---
 
@@ -132,7 +142,7 @@ Sva 4 API endpointa verificirana kroz Cloudflare prije prebacivanja.
 2. U `app-boot.js`: forward-log fetch ide na `https://api-backtest.aqmath.xyz`
 3. Isto i u `tools/refresh_forward_log.py` (ENDPOINT)
 4. Pipeline + audit prošli; commit + push nakon L3 gate-a
-5. **OTVORENO:** origin URL-ovi su i dalje aktivni — vidi sigurnosni item na vrhu
+5. **ZATVORENO 2026-09-08:** origin URL-ovi su ugašeni — vidi sigurnosni item na vrhu
 
 Pravilo za ubuduće: nijedan fajl u ovom repo-u ne zove `*.up.railway.app`.
 Promet ide isključivo preko `api-*.aqmath.xyz`, inače WAF ne radi.
