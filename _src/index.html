@@ -41,7 +41,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=24c17f2396">
+    <link rel="stylesheet" href="/styles.min.css?v=f6bbc9671c">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
 </head>
@@ -195,7 +195,7 @@
             </div>
             <div class="lp-term-aside-label" data-i18n="hero.termLabel">--what-you-are-watching</div>
             <h3 data-i18n="hero.termTitle">The engine loop, live</h3>
-            <p data-i18n-html="hero.termDesc">A simulation of the exact cycle the engine runs on our backend: recompute the covariance matrix, read the drawdown / downside-volatility regime, scale exposure continuously. Every number shown is real &mdash; taken from the 8.7-year, 5-token validation backtest.</p>
+            <p data-i18n-html="hero.termDesc">A simulation of the exact cycle the engine runs on our backend: recompute the covariance matrix, read the drawdown / downside-volatility regime, scale exposure continuously. Every number shown is real &mdash; taken from the production-path validation backtest.</p>
             <ul class="lp-term-aside-list">
                 <li data-i18n="hero.termB1">risk parity + KKT projection on live market data</li>
                 <li data-i18n="hero.termB2">continuous de-risk &mdash; no indicators, no timers</li>
@@ -249,14 +249,14 @@
             <div class="tc lp-shield-card">
                 <div class="tc-bar">
                     <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                    <span class="tc-title" data-i18n-html="shield.label">--deleverage-modulator &middot; aegis v14.0</span>
+                    <span class="tc-title" data-i18n-html="shield.label">--deleverage-shield &middot; proteus v18.0</span>
                 </div>
                 <div class="tc-body lp-shield-body">
-                    <h3 data-i18n-html="shield.title">Deleverage Modulator &mdash; validated on real data</h3>
-                    <p class="lp-what-lead" data-i18n-html="shield.lead">Aegis (v14) scales exposure continuously off rising drawdown and rising downside volatility &mdash; no indicators, no timers, no correlation gate. It ramps exposure toward its target steadily in either direction, and only rebalances when target exposure drifts meaningfully.</p>
+                    <h3 data-i18n-html="shield.title">Deleverage Shield &mdash; validated on the production path</h3>
+                    <p class="lp-what-lead" data-i18n-html="shield.lead">Proteus (v18) scales exposure continuously off a volatility-adaptive drawdown threshold &mdash; no indicators, no timers, no correlation gate. It ramps exposure toward its target steadily in either direction, and only rebalances when target exposure drifts meaningfully.</p>
                     <div class="lp-shield-grid">
                     <div class="lp-shield-viz">
-                        <svg viewBox="0 0 480 250" role="img" aria-label="Max drawdown: Buy and Hold minus 83.8 percent versus Deleverage Modulator minus 35.0 percent" preserveAspectRatio="xMidYMid meet">
+                        <svg viewBox="0 0 480 250" role="img" aria-label="Max drawdown on the large-cap basket: Buy and Hold minus 55.9 percent versus Proteus v18 minus 23.1 percent" preserveAspectRatio="xMidYMid meet">
                             <!-- gridlines -->
                             <line x1="40" y1="40" x2="460" y2="40" class="lp-sh-grid dash"/>
                             <line x1="40" y1="125" x2="460" y2="125" class="lp-sh-grid"/>
@@ -265,30 +265,30 @@
                             <text x="36" y="128" class="lp-sh-axis">-50%</text>
                             <text x="36" y="213" class="lp-sh-axis">-100%</text>
                             <!-- Buy &amp; Hold drawdown (deeper) -->
-                            <polygon class="lp-sh-fill red" points="40,40 90,96 140,150 180,183 220,150 300,104 380,70 460,52 460,40"/>
-                            <polyline class="lp-sh-line red" pathLength="1" points="40,40 90,96 140,150 180,183 220,150 300,104 380,70 460,52"/>
-                            <!-- Deleverage Modulator drawdown (shallower) -->
-                            <polygon class="lp-sh-fill cyan" points="40,40 90,66 140,92 180,101 220,90 300,68 380,54 460,47 460,40"/>
-                            <polyline class="lp-sh-line cyan" pathLength="1" points="40,40 90,66 140,92 180,101 220,90 300,68 380,54 460,47"/>
+                            <polygon class="lp-sh-fill red" points="40,40 90,72 140,110 180,135 220,113 300,86 380,63 460,52 460,40"/>
+                            <polyline class="lp-sh-line red" pathLength="1" points="40,40 90,72 140,110 180,135 220,113 300,86 380,63 460,52"/>
+                            <!-- Proteus (v18) drawdown (shallower, trough -23.1%) -->
+                            <polygon class="lp-sh-fill cyan" points="40,40 90,52 140,66 180,79 220,68 300,57 380,49 460,45 460,40"/>
+                            <polyline class="lp-sh-line cyan" pathLength="1" points="40,40 90,52 140,66 180,79 220,68 300,57 380,49 460,45"/>
                             <!-- trough callouts -->
-                            <text x="168" y="199" class="lp-sh-cap red">-83.8% B&amp;H</text>
-                            <!-- Deleverage Modulator trough callout -->
-                            <text x="186" y="118" class="lp-sh-cap cyan">-35.0% modulator</text>
+                            <text x="168" y="151" class="lp-sh-cap red">-55.9% B&amp;H</text>
+                            <!-- Proteus (v18) trough callout -->
+                            <text x="186" y="96" class="lp-sh-cap cyan">-23.1% Proteus v18</text>
                             <!-- legend -->
                             <rect x="120" y="232" width="10" height="10" rx="2" class="lp-sh-fill red"/>
                             <text x="136" y="241" class="lp-sh-leg">Buy &amp; Hold</text>
                             <rect x="250" y="232" width="10" height="10" rx="2" class="lp-sh-fill cyan"/>
-                            <text x="266" y="241" class="lp-sh-leg">Deleverage Modulator</text>
+                            <text x="266" y="241" class="lp-sh-leg">Proteus (v18)</text>
                         </svg>
                     </div>
                         <div class="lp-shield-info">
                             <div class="lp-shield-stats">
-                                <div class="lp-shield-stat"><span class="v">&minus;48.8pp</span><span class="l" data-i18n="shield.s1l">max drawdown cut</span></div>
-                                <div class="lp-shield-stat"><span class="v">0.93</span><span class="l" data-i18n-html="shield.s2l">Sharpe (B&amp;H 0.75)</span></div>
-                                <div class="lp-shield-stat"><span class="v">32.9%</span><span class="l" data-i18n-html="shield.s3l">CAGR (8.7y)</span></div>
+                                <div class="lp-shield-stat"><span class="v">&minus;32.8pp</span><span class="l" data-i18n="shield.s1l">max drawdown cut (large-cap)</span></div>
+                                <div class="lp-shield-stat"><span class="v">1.63</span><span class="l" data-i18n-html="shield.s2l">Sharpe (B&amp;H 1.37)</span></div>
+                                <div class="lp-shield-stat"><span class="v">2.00</span><span class="l" data-i18n-html="shield.s3l">Calmar (B&amp;H 1.23)</span></div>
                             </div>
-                            <p data-i18n-html="shield.body">Across an 8.7-year, 5-token backtest (ADA/BNB/ETH/XRP/XLM) the modulator held peak drawdown to <strong>35.0%</strong> versus <strong>83.8%</strong> for Buy &amp; Hold, and <strong>beats Buy &amp; Hold on Sharpe (0.93 vs 0.75)</strong> at <strong>32.9% CAGR</strong>. On a <strong>sealed out-of-sample second half</strong> never used to pick the preset it still roughly halved drawdown (~24% vs ~63%) at a higher Sharpe (0.48 vs 0.37). Aegis (v14) adds <strong>threshold rebalancing</strong> (a deadband skips trades when the target barely moves), cutting rebalances ~64%. <strong>Every figure above was measured on Aegis (v14)</strong>, the fixed-threshold engine, which is now a warm-up fallback rather than the live shield; the live engine is Proteus (v18), measured separately in the note below. Backtest basket is survivor tokens; past results don't guarantee future performance.</p>
-                            <p class="rv-v15-notice lp-shield-nextgen" data-i18n-html="shield.nextgen"><span class="rv-v15-tag">LIVE ENGINE</span> The production shield is <strong>Proteus (v18)</strong>, a volatility-adaptive engine. Backtested on the exact production path, it cut maximum drawdown below its fixed-threshold predecessor Aegis (v14) on both a large-cap basket (25.7%&rarr;23.1%) and a high-volatility alt basket (36.8%&rarr;29.4%), with a higher Sharpe and Calmar (risk-adjusted scores). <strong>Proteus (v18) is live</strong>; Aegis (v14) still runs as a fallback for portfolios too young to warm the adaptive threshold. These numbers and the 8.7-year numbers above come from two different studies and are not comparable with each other.</p>
+                            <p data-i18n-html="shield.body">Replayed through the <strong>exact production path</strong> &mdash; a rolling 180-day window, the live re-optimisation cadence, persisted shield state and turnover at the live fee rate &mdash; Proteus (v18) held peak drawdown to <strong>23.1%</strong> against <strong>55.9%</strong> for Buy &amp; Hold on a large-cap basket, at <strong>Sharpe 1.63 vs 1.37</strong> and <strong>Calmar 2.00 vs 1.23</strong>. On a high-volatility alt basket it cut drawdown from <strong>59.8% to 29.4%</strong> and won Calmar (1.29 vs 1.23) &mdash; but <strong>lost Sharpe there, 1.10 vs 1.18</strong>, and Buy &amp; Hold ends both samples with more dollars. The shield&rsquo;s edge is drawdown and consistency, not terminal wealth. On a <strong>sealed out-of-sample second half</strong> of an earlier survivor basket, Aegis (v14) still cut drawdown from 63.2% to 25.3%, but its Sharpe was <strong>lower</strong> than Buy &amp; Hold&rsquo;s (0.24 vs 0.30) &mdash; an earlier version of this page had those two numbers the wrong way round. Backtest baskets include survivor tokens; past results don&rsquo;t guarantee future performance.</p>
+                            <p class="rv-v15-notice lp-shield-nextgen" data-i18n-html="shield.nextgen"><span class="rv-v15-tag">LIVE ENGINE</span> <strong>Proteus (v18) is the production shield.</strong> Aegis (v14), its fixed-threshold predecessor, still runs as a warm-up fallback for portfolios too young to calibrate the adaptive threshold; where v14 figures appear on this site they are labelled as historical. The figures above are measured on the exact production path, not on a continuous full-history replay.</p>
                             <a class="lp-btn-secondary" href="/backtest" data-i18n="shield.cta">--run-the-backtest</a>
                         </div>
                     </div>
@@ -396,8 +396,8 @@
                         </svg>
                         <div class="mc-head"><span class="mc-num">04</span></div>
                         <div class="metric-label" data-i18n="math.shieldLabel">--deleverage-modulator</div>
-                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Aegis, the Deleverage Shield, is a continuous regime modulator: exposure scales down as drawdown and downside volatility rise &mdash; no indicators, no timers, no correlation gate. It moves exposure smoothly toward its target every bar in either direction, with <strong>no hard floor</strong>; parked DCA cash redeploys automatically once exposure recovers.</div>
-                        <a href="/backtest" class="doc-formula-link" data-i18n="math.shieldLink">[ see 8.7-year backtest ]</a>
+                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Proteus, the Deleverage Shield, is a continuous regime modulator: exposure scales down as drawdown rises against a volatility-adaptive threshold &mdash; no indicators, no timers, no correlation gate. It moves exposure smoothly toward its target every bar in either direction with no hard floor; parked DCA cash redeploys automatically once exposure recovers.</div>
+                        <a href="/backtest" class="doc-formula-link" data-i18n="math.shieldLink">[ see the production-path backtest ]</a>
                     </div>
                 </div>
             </div>
@@ -2513,11 +2513,11 @@
         <!-- DL vs B&H COMPARISON -->
         <div class="doc-block" id="doc-shield-vs-bh-block">
             <h3 id="doc-shield-vs-bh" data-i18n-html="doc.s8.vsBhTitle">8.5 Performance: Drawdown &amp; Risk-Adjusted Scoring</h3>
-            <p data-i18n-html="doc.s8.vsBhP1">The chart below compares the <strong>Deleverage Modulator</strong> against a classic <strong>Buy &amp; Hold</strong> strategy over an <strong>8.7-year, 5-token backtest</strong> spanning multiple bull/bear cycles (including the 2022 crypto winter and 2024 corrections). Both strategies receive <strong>identical DCA capital</strong> on the same schedule for a methodologically fair comparison. The curves track <strong>peak-to-trough drawdown</strong> &mdash; how deep each strategy fell from its highs. The modulator is scored on <strong>risk-adjusted return</strong> (Sharpe) and drawdown; the Aegis (v14) preset now beats Buy &amp; Hold on Sharpe, though not on raw dollars.</p>
+            <p data-i18n-html="doc.s8.vsBhP1">The chart below compares the <strong>live production shield, Proteus (v18)</strong>, against a classic <strong>Buy &amp; Hold</strong> strategy, measured through the <strong>exact production path</strong>: a rolling 180-day window re-read every day, the same 180-day strategic re-optimisation cadence the live service runs, shield state persisted from one interval to the next, and turnover charged at the live fee rate. This is deliberately <em>not</em> a continuous full-history replay &mdash; production never sees one &mdash; so these are the figures a live deployment would actually have produced. Both legs receive identical inputs and identical DCA treatment. The shield is scored on <strong>risk-adjusted return</strong> (Sharpe and Calmar) and on <strong>peak-to-trough drawdown</strong>, not on raw dollars.</p>
 
             <div class="doc-diagram">
-                <div class="doc-fl" data-i18n="doc.cap.ddChart">Peak-to-Trough Drawdown · Deleverage Modulator vs Buy &amp; Hold (Aegis v14.0)</div>
-                <svg viewBox="0 0 720 260" role="img" aria-label="Max drawdown: Buy and Hold minus 83.8 percent versus Deleverage Modulator minus 35.0 percent" preserveAspectRatio="xMidYMid meet" style="max-width:700px;width:100%;height:auto;">
+                <div class="doc-fl" data-i18n="doc.cap.ddChart">Peak-to-Trough Drawdown · Proteus (v18) vs Buy &amp; Hold (large-cap basket)</div>
+                <svg viewBox="0 0 720 260" role="img" aria-label="Max drawdown on the large-cap basket: Buy and Hold minus 55.9 percent versus Proteus v18 minus 23.1 percent" preserveAspectRatio="xMidYMid meet" style="max-width:700px;width:100%;height:auto;">
                     <!-- gridlines -->
                     <line x1="60" y1="40" x2="690" y2="40" class="lp-sh-grid dash"/>
                     <line x1="60" y1="130" x2="690" y2="130" class="lp-sh-grid"/>
@@ -2525,66 +2525,66 @@
                     <text x="54" y="43" class="lp-sh-axis">0%</text>
                     <text x="54" y="133" class="lp-sh-axis">-50%</text>
                     <text x="54" y="223" class="lp-sh-axis">-100%</text>
-                    <!-- Buy &amp; Hold drawdown (deeper, trough -83.8%) -->
-                    <polygon class="lp-sh-fill red" points="60,40 130,75 200,130 270,191 340,150 410,120 480,165 550,125 620,85 690,60 690,40"/>
-                    <polyline class="lp-sh-line red" pathLength="1" points="60,40 130,75 200,130 270,191 340,150 410,120 480,165 550,125 620,85 690,60"/>
-                    <!-- Deleverage Modulator drawdown (shallower, trough -35.0%) -->
-                    <polygon class="lp-sh-fill cyan" points="60,40 130,60 200,88 270,104 340,90 410,74 480,96 550,78 620,60 690,50 690,40"/>
-                    <polyline class="lp-sh-line cyan" pathLength="1" points="60,40 130,60 200,88 270,104 340,90 410,74 480,96 550,78 620,60 690,50"/>
+                    <!-- Buy &amp; Hold drawdown (deeper, trough -55.9%) -->
+                    <polygon class="lp-sh-fill red" points="60,40 130,72 200,112 270,141 340,118 410,96 480,124 550,101 620,74 690,58 690,40"/>
+                    <polyline class="lp-sh-line red" pathLength="1" points="60,40 130,72 200,112 270,141 340,118 410,96 480,124 550,101 620,74 690,58"/>
+                    <!-- Proteus (v18) drawdown (shallower, trough -23.1%) -->
+                    <polygon class="lp-sh-fill cyan" points="60,40 130,52 200,66 270,82 340,71 410,60 480,74 550,62 620,51 690,45 690,40"/>
+                    <polyline class="lp-sh-line cyan" pathLength="1" points="60,40 130,52 200,66 270,82 340,71 410,60 480,74 550,62 620,51 690,45"/>
                     <!-- trough callouts -->
-                    <text x="248" y="206" class="lp-sh-cap red">-83.8% B&amp;H</text>
-                    <text x="285" y="120" class="lp-sh-cap cyan">-35.0% modulator</text>
+                    <text x="248" y="156" class="lp-sh-cap red">-55.9% B&amp;H</text>
+                    <text x="285" y="98" class="lp-sh-cap cyan">-23.1% Proteus v18</text>
                     <!-- legend -->
                     <rect x="250" y="240" width="10" height="10" rx="2" class="lp-sh-fill red"/>
                     <text x="266" y="249" class="lp-sh-leg">Buy &amp; Hold</text>
                     <rect x="400" y="240" width="10" height="10" rx="2" class="lp-sh-fill cyan"/>
-                    <text x="416" y="249" class="lp-sh-leg">Deleverage Modulator</text>
+                    <text x="416" y="249" class="lp-sh-leg">Proteus (v18)</text>
                 </svg>
             </div>
 
             <div class="doc-callout cyan">
-                <div class="doc-ct" data-i18n-html="doc.s8.vsBhMetrics">&#128202; BACKTEST METRICS (8.7 YEARS, 5 TOKENS)</div>
+                <div class="doc-ct" data-i18n-html="doc.s8.vsBhMetrics">&#128202; PRODUCTION-PATH RESULTS (ROLLING 180-DAY WINDOW)</div>
                 <div class="doc-metrics-grid">
                     <div>
-                        <div class="doc-metric-label" data-i18n="doc.s8.m1">Modulator Max Drawdown</div>
-                        <div class="doc-metric-value" style="color:var(--blue);">35.0%</div>
+                        <div class="doc-metric-label" data-i18n="doc.s8.m1">Proteus Max Drawdown (large-cap)</div>
+                        <div class="doc-metric-value" style="color:var(--blue);">23.1%</div>
                     </div>
                     <div>
-                        <div class="doc-metric-label" data-i18n="doc.s8.m2">B&amp;H Max Drawdown</div>
-                        <div class="doc-metric-value" style="color:var(--amber);">83.8%</div>
+                        <div class="doc-metric-label" data-i18n="doc.s8.m2">B&amp;H Max Drawdown (large-cap)</div>
+                        <div class="doc-metric-value" style="color:var(--amber);">55.9%</div>
                     </div>
                     <div>
-                        <div class="doc-metric-label" data-i18n="doc.s8.m3">Drawdown Reduction</div>
-                        <div class="doc-metric-value" style="color:var(--green);">&minus;48.8pp</div>
+                        <div class="doc-metric-label" data-i18n="doc.s8.m3">Drawdown Reduction (large-cap)</div>
+                        <div class="doc-metric-value" style="color:var(--green);">&minus;32.8pp</div>
                     </div>
                     <div>
-                        <div class="doc-metric-label" data-i18n="doc.s8.m4">Sharpe (Modulator vs B&amp;H)</div>
-                        <div class="doc-metric-value" style="color:var(--green);">0.93 vs 0.75</div>
+                        <div class="doc-metric-label" data-i18n="doc.s8.m4">Sharpe (Proteus vs B&amp;H)</div>
+                        <div class="doc-metric-value" style="color:var(--green);">1.63 vs 1.37</div>
                     </div>
                     <div>
-                        <div class="doc-metric-label" data-i18n="doc.s8.m5">CAGR (8.7y)</div>
-                        <div class="doc-metric-value" style="color:var(--blue);">32.9%</div>
+                        <div class="doc-metric-label" data-i18n="doc.s8.m5">Calmar (Proteus vs B&amp;H)</div>
+                        <div class="doc-metric-value" style="color:var(--blue);">2.00 vs 1.23</div>
                     </div>
                     <div>
-                        <div class="doc-metric-label" data-i18n="doc.s8.m6">Regime Signal</div>
-                        <div class="doc-metric-value" style="color:var(--purple);" data-i18n="doc.s8.m7">drawdown + downside vol</div>
+                        <div class="doc-metric-label" data-i18n="doc.s8.m6">Alt Basket Max Drawdown</div>
+                        <div class="doc-metric-value" style="color:var(--purple);" data-i18n="doc.s8.m7">59.8% B&amp;H &rarr; 29.4%</div>
                     </div>
                 </div>
             </div>
 
-            <p data-i18n-html="doc.s8.vsBhP2"><strong>Less than half the drawdown, and now a higher Sharpe.</strong> Across the full 8.7-year, 5-token backtest the modulator cut peak drawdown from <strong>83.8%</strong> (Buy &amp; Hold) to <strong>35.0%</strong> &mdash; a <strong>48.8-point reduction</strong> &mdash; while lifting Sharpe from <strong>0.75 (Buy &amp; Hold) to 0.93</strong> at <strong>32.9% CAGR</strong>. Exposure is a continuous 0&ndash;100% dial driven only by drawdown and downside volatility: it moves smoothly toward its target every bar in either direction, and redeploys parked USDC automatically as exposure recovers. Aegis (v14) adds <strong>threshold rebalancing</strong> &mdash; a deadband that skips trades when the target barely moves, slashing fees without changing the signal. There are <strong>no timers, no tranches, and no correlation gate</strong>.</p>
-            <p data-i18n-html="doc.s8.vsBhP3"><strong>Honestly scoped: this does not beat Buy &amp; Hold on raw dollars.</strong> Buy &amp; Hold ends the sample higher in absolute value because it stays fully exposed through the bull run &mdash; the modulator is not designed to win that race. Its edge is <em>risk-adjusted</em>: less than half the drawdown and a higher Sharpe (0.93 vs 0.75). Crucially this edge is <strong>not only in-sample</strong>: on a <strong>sealed second half</strong> of the data never used to choose the Aegis (v14) preset, the modulator still cut peak drawdown from <strong>~63% to ~24%</strong> and kept a <strong>higher Sharpe (0.48 vs 0.37)</strong> at a comparable total return. <strong>Methodology note:</strong> the backtest basket is composed of tokens that survived to today (survivorship bias); we stress-tested that directly by dropping a dead token &mdash; Terra Classic (LUNC), which fell from ~$121 to ~$0 &mdash; into the basket, and the modulator's peak drawdown barely moved (~23%) while Buy &amp; Hold's worsened by up to ~18 points. Past results do not guarantee future performance.</p>
+            <p data-i18n-html="doc.s8.vsBhP2"><strong>Under half the drawdown, at a better risk-adjusted score.</strong> On a large-cap basket run through the exact production path, Proteus (v18) held peak drawdown to <strong>23.1%</strong> against <strong>55.9%</strong> for Buy &amp; Hold &mdash; a <strong>32.8-point reduction</strong> &mdash; while scoring higher on both risk-adjusted measures: <strong>Sharpe 1.63 vs 1.37</strong> and <strong>Calmar 2.00 vs 1.23</strong>. On a high-volatility alt basket it cut peak drawdown from <strong>59.8% to 29.4%</strong> and beat Buy &amp; Hold on Calmar (<strong>1.29 vs 1.23</strong>). Exposure is a continuous 0&ndash;100% dial: it moves smoothly toward its target every bar in either direction, and redeploys parked USDC automatically as exposure recovers. Aegis (v14) adds <strong>threshold rebalancing</strong> &mdash; a deadband that skips trades when the target barely moves, slashing fees without changing the signal. There are <strong>no timers, no tranches, and no correlation gate</strong>.</p>
+            <p data-i18n-html="doc.s8.vsBhP3"><strong>Honestly scoped: this does not beat Buy &amp; Hold on raw dollars, and on the alt basket it does not beat it on Sharpe either.</strong> Buy &amp; Hold ends both samples higher in absolute value because it stays fully exposed through the bull run (large-cap CAGR 68.7% vs 46.2%; alt 73.2% vs 37.9%), and on the <strong>alt basket its Sharpe is higher too, 1.18 vs 1.10</strong> &mdash; there Proteus wins Calmar and halves the drawdown, but it does not win the risk-adjusted race outright and we are not going to imply otherwise. The shield&rsquo;s edge is drawdown and consistency, not terminal wealth. <strong>Out-of-sample, stated correctly:</strong> on a sealed second half of an earlier 5-token survivor basket never used to choose the Aegis (v14) preset, Aegis still cut peak drawdown from <strong>63.2% to 25.3%</strong> &mdash; that result reproduces. Its Sharpe on the same sealed half was <strong>lower</strong> than Buy &amp; Hold&rsquo;s, <strong>0.24 vs 0.30</strong>; an earlier version of this page reported those two figures the other way round, and that was wrong. <strong>Methodology note:</strong> that earlier basket is composed of tokens that survived to today (survivorship bias); see the stress test in section 8.6. Past results do not guarantee future performance.</p>
         </div>
 
 
         <!-- TESTING & VALIDATION -->
         <div class="doc-block" id="doc-testing">
             <h3 id="doc-testing-title" data-i18n-html="doc.s8.testingTitle">8.6 Testing &amp; Validation</h3>
-            <p data-i18n-html="doc.s8.testingP1">The Aegis (v14.0) Deleverage Modulator was <strong>measured on real market data</strong>, not hand-guessed. We replayed the full 8.7-year, 5-token price history through the exact production formula &mdash; a continuous exposure dial driven only by drawdown and downside volatility &mdash; and scored it on <strong>drawdown, Sharpe, and CAGR</strong>.</p>
+            <p data-i18n-html="doc.s8.testingP1">The Deleverage Shield was <strong>measured on real market data</strong>, not hand-guessed. Every figure in section 8.5 comes from replaying the <strong>exact production path</strong> &mdash; a rolling 180-day window, the live strategic re-optimisation cadence, persisted shield state and turnover at the live fee rate &mdash; over two baskets, scored on <strong>drawdown, Sharpe, Calmar and CAGR</strong>. Earlier versions of this page quoted a continuous 8.7-year replay instead; that frame measures something production never does and its headline figures no longer reproduce from current data, so it has been retired rather than re-quoted.</p>
 
             <div class="doc-callout green">
                 <div class="doc-ct" data-i18n-html="doc.s8.testingCallout">&#9989; VALIDATED ON REAL DATA</div>
-                <p data-i18n-html="doc.s8.testingCalloutP">Over ~8.7 years (3,184 days) of real market data across <strong>5 tokens (ADA, BNB, ETH, XRP, XLM)</strong> &mdash; spanning the 2018 and 2022 bear markets &mdash; the modulator cut peak drawdown from <strong>83.8% to 35.0%</strong> and lifted Sharpe from <strong>0.75 to 0.93</strong> at <strong>32.9% CAGR</strong>. The modulator is out-of-sample honest: on a sealed second half never used to pick the preset, it still roughly halved drawdown (~24% vs ~63% Buy &amp; Hold) at a higher Sharpe (0.48 vs 0.37).</p>
+                <p data-i18n-html="doc.s8.testingCalloutP">Over <strong>2,095 daily intervals (~5.7 years)</strong> on a large-cap basket and <strong>2,316 intervals (~6.3 years)</strong> on a high-volatility alt basket, replayed through the exact production path, Proteus (v18) held peak drawdown to <strong>23.1%</strong> against <strong>55.9%</strong> for Buy &amp; Hold on large-caps, and <strong>29.4%</strong> against <strong>59.8%</strong> on alts. It beat Buy &amp; Hold on Sharpe on large-caps (<strong>1.63 vs 1.37</strong>) but <strong>not on alts (1.10 vs 1.18)</strong>, and it beat its own fixed-threshold predecessor on Sharpe, Calmar and maximum drawdown on both baskets. Both engine selections passed their ship gate.</p>
             </div>
 
             <h4 data-i18n="doc.s8.testingHow">Validation Process</h4>
@@ -2592,7 +2592,7 @@
                 <li data-i18n-html="doc.s8.testing1"><strong>Signal construction</strong> &mdash; each bar we compute rolling drawdown from the running equity peak and downside volatility over a short rolling window, then map each to a 0&ndash;1 signal.</li>
                 <li data-i18n-html="doc.s8.testing2"><strong>Exposure rule</strong> &mdash; the combined risk signal drives a continuous exposure dial with no hard floor and no correlation gate.</li>
                 <li data-i18n-html="doc.s8.testing3"><strong>Hysteresis + threshold rebalancing</strong> &mdash; exposure moves smoothly toward target every bar in either direction, and Aegis (v14) only trades when the target drifts meaningfully from the held position &mdash; fewer rebalances with an identical signal. Parked USDC redeploys once exposure recovers.</li>
-                <li data-i18n-html="doc.s8.testing4"><strong>Engine/backtester parity</strong> &mdash; the live engine and the backtester run the same formula, verified to produce matching drawdown and Sharpe on the full sample.</li>
+                <li data-i18n-html="doc.s8.testing4"><strong>Engine/backtester parity</strong> &mdash; the live engine and the backtester run the same shield function on the same drawdown definition, so the public comparison is measured on one basis rather than two.</li>
             </ul>
 
             <div class="doc-diagram">
@@ -2603,39 +2603,39 @@
                     <!-- B&H bar -->
                     <rect x="40" y="40" width="280" height="60" rx="6" fill="rgba(251,191,36,0.15)" stroke="var(--amber)" stroke-width="1.5"/>
                     <text x="180" y="65" text-anchor="middle" fill="var(--amber)" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">Buy &amp; Hold</text>
-                    <text x="180" y="85" text-anchor="middle" fill="var(--amber)" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">83.8% Max DD</text>
+                    <text x="180" y="85" text-anchor="middle" fill="var(--amber)" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">55.9% Max DD</text>
                     <!-- Arrow -->
                     <line x1="340" y1="70" x2="380" y2="70" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4,3"/>
                     <polygon points="378,66 378,74 384,70" fill="var(--muted)"/>
-                    <text x="360" y="60" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">-48.8pp</text>
+                    <text x="360" y="60" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700">-32.8pp</text>
                     <!-- DL bar -->
                     <rect x="400" y="40" width="280" height="60" rx="6" fill="rgba(6,182,212,0.15)" stroke="var(--blue)" stroke-width="1.5"/>
-                    <text x="540" y="65" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">Aegis v14.0 Deleverage</text>
-                    <text x="540" y="85" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">35.0% Max DD</text>
+                    <text x="540" y="65" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="11" font-weight="700">Proteus v18.0 Adaptive</text>
+                    <text x="540" y="85" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="14" font-weight="800">23.1% Max DD</text>
                     <!-- Metrics below -->
-                    <text x="180" y="130" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="9">Sharpe: 0.75</text>
+                    <text x="180" y="130" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="9">Sharpe: 1.37</text>
                     <text x="180" y="145" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="9">full exposure</text>
-                    <text x="180" y="160" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="9">8.7y real data</text>
-                    <text x="540" y="130" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Sharpe: 0.93</text>
-                    <text x="540" y="145" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">CAGR: 32.9%</text>
-                    <text x="540" y="160" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Final $493.8k</text>
+                    <text x="180" y="160" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="9">~5.7y production path</text>
+                    <text x="540" y="130" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Sharpe: 1.63</text>
+                    <text x="540" y="145" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">Calmar: 2.00</text>
+                    <text x="540" y="160" text-anchor="middle" fill="var(--blue)" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="600">CAGR: 46.2%</text>
                     <!-- Recalibration badge -->
-                    <rect x="470" y="170" width="140" height="20" rx="10" fill="rgba(52,211,153,0.2)" stroke="var(--green)" stroke-width="1"/>
-                    <text x="540" y="184" text-anchor="middle" fill="var(--green)" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="700">Aegis v14.0 · FULL-SAMPLE</text>
+                    <rect x="455" y="170" width="170" height="20" rx="10" fill="rgba(52,211,153,0.2)" stroke="var(--green)" stroke-width="1"/>
+                    <text x="540" y="184" text-anchor="middle" fill="var(--green)" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="700">Proteus v18.0 · PRODUCTION PATH</text>
                 </svg>
             </div>
 
             <h4 data-i18n="doc.s8.testingAudit">Validation Checks</h4>
-            <p data-i18n-html="doc.s8.testingAuditP">The modulator is validated through the following checks on the full 8.7-year, 5-token sample:</p>
+            <p data-i18n-html="doc.s8.testingAuditP">The shield is validated through the following checks on the production path:</p>
             <ul>
-                <li data-i18n-html="doc.s8.testingAudit1"><strong>Formula parity</strong> &mdash; the live engine and the backtester produce matching exposure, drawdown, and Sharpe.</li>
-                <li data-i18n-html="doc.s8.testingAudit2"><strong>Drawdown reduction</strong> &mdash; peak drawdown cut from 83.8% (Buy &amp; Hold) to 35.0%.</li>
-                <li data-i18n-html="doc.s8.testingAudit3"><strong>Beats Buy &amp; Hold on Sharpe</strong> &mdash; Sharpe 0.75 &rarr; 0.93 at 32.9% CAGR.</li>
+                <li data-i18n-html="doc.s8.testingAudit1"><strong>Formula parity</strong> &mdash; the live engine and the backtester call the same shield function on the same drawdown definition (the window-local basket curve), so neither leg of the public comparison is measured on a basis the other cannot see.</li>
+                <li data-i18n-html="doc.s8.testingAudit2"><strong>Drawdown reduction</strong> &mdash; on the production path, peak drawdown cut from 55.9% (Buy &amp; Hold) to 23.1% on the large-cap basket, and from 59.8% to 29.4% on the alt basket.</li>
+                <li data-i18n-html="doc.s8.testingAudit3"><strong>Risk-adjusted return</strong> &mdash; large-caps: Sharpe 1.37 &rarr; 1.63 and Calmar 1.23 &rarr; 2.00 versus Buy &amp; Hold. Alts: Calmar 1.23 &rarr; 1.29, but Sharpe <strong>1.18 &rarr; 1.10, lower than Buy &amp; Hold</strong> &mdash; stated here because it is the one metric the shield loses.</li>
                 <li data-i18n-html="doc.s8.testingAudit4"><strong>Threshold rebalancing</strong> &mdash; a steady smooth ramp in either direction, trading only on meaningful exposure drift, confirmed with no whipsaw.</li>
-                <li data-i18n-html="doc.s8.testingAudit5"><strong>Out-of-sample check</strong> &mdash; on a sealed second half never used to pick the preset, the modulator still roughly halved drawdown (~24% vs ~63% Buy &amp; Hold) at a higher Sharpe (0.48 vs 0.37); a fuller walk-forward multi-fold study is still worthwhile.</li>
-                <li data-i18n-html="doc.s8.testingAudit6"><strong>Survivorship stress (dead token)</strong> &mdash; adding Terra Classic (LUNC), which collapsed from ~$121 to ~$0, to the basket left the modulator&rsquo;s peak drawdown essentially unchanged (~23%), while Buy &amp; Hold&rsquo;s worsened by up to ~18 points; on the same window the modulator still cut drawdown ~49 points versus Buy &amp; Hold. The drawdown defense does not depend on hand-picking surviving tokens (though raw return figures remain flattered by crypto&rsquo;s post-crash rebounds).</li>
+                <li data-i18n-html="doc.s8.testingAudit5"><strong>Out-of-sample check (Aegis v14, historical)</strong> &mdash; on a sealed second half of an earlier 5-token survivor basket, never used to pick the preset, Aegis (v14) cut peak drawdown from <strong>63.2% to 25.3%</strong>; that result reproduces. Its Sharpe on the same half was <strong>0.24 against Buy &amp; Hold&rsquo;s 0.30 &mdash; lower, not higher</strong>. This page previously reported those two Sharpe figures reversed, and previously reported a full-sample CAGR that no current run produces; both corrections are deliberate and unfavourable to us. That study ran a retired v14 preset, so it is historical context rather than a current claim, and a fuller walk-forward multi-fold study is still worthwhile.</li>
+                <li data-i18n-html="doc.s8.testingAudit6"><strong>Survivorship stress (dead token)</strong> &mdash; the earlier basket is all survivors, which flatters both legs. Re-run on a window opening at Terra Classic&rsquo;s April-2022 peak with LUNC (which fell from ~$121 to ~$0) added, Aegis (v14) held peak drawdown to <strong>20.8%</strong> against <strong>24.7%</strong> for the survivor-only basket &mdash; the defense did not degrade &mdash; while Buy &amp; Hold worsened from <strong>63.2% to 70.7%</strong>, a <strong>7.5-point</strong> deterioration, and the shield still cut drawdown by <strong>~50 points</strong> on that window. An earlier version of this page said Buy &amp; Hold worsened by &ldquo;up to ~18 points&rdquo;; the measured figure is 7.5. Same retired v14 preset, so historical context (and raw return figures remain flattered by crypto&rsquo;s post-crash rebounds).</li>
             </ul>
-            <p class="rv-v15-notice" data-i18n-html="doc.s8.nextgen"><span class="rv-v15-tag">LIVE ENGINE</span> The deployed shield is <strong>Proteus (v18)</strong>, a volatility-adaptive engine. Re-run through the <strong>exact production path</strong> &mdash; a rolling 180-day window, the same KKT-180 macro loop, and persisted shield state &mdash; it cut maximum drawdown below its fixed-threshold predecessor Aegis (v14) on both a large-cap basket (<strong>25.7%&rarr;23.1%</strong>) and a high-volatility alt basket (<strong>36.8%&rarr;29.4%</strong>), with a higher Sharpe and Calmar. <strong>Aegis (v14) now runs only as a warm-up fallback</strong>, for portfolios with too little history for the adaptive threshold to calibrate. These figures and the 8.7-year figures in section 8.5 come from two different studies and must not be combined.</p>
+            <p class="rv-v15-notice" data-i18n-html="doc.s8.nextgen"><span class="rv-v15-tag">LIVE ENGINE</span> The deployed shield is <strong>Proteus (v18)</strong>, a volatility-adaptive engine. Every figure in sections 8.5 and 8.6 is measured on the <strong>exact production path</strong> &mdash; a rolling 180-day window, the same 180-day strategic re-optimisation cadence, and persisted shield state &mdash; so the two sections describe one study, not two. Against its fixed-threshold predecessor Aegis (v14) it cut maximum drawdown on both a large-cap basket (<strong>25.7%&rarr;23.1%</strong>) and a high-volatility alt basket (<strong>36.8%&rarr;29.4%</strong>), with a higher Sharpe and Calmar. <strong>Aegis (v14) now runs only as a warm-up fallback</strong>, for portfolios with too little history for the adaptive threshold to calibrate; where v14 appears above it is labelled as historical.</p>
         </div>
 
 
@@ -2747,10 +2747,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=24c17f2396"></script>
-<script defer src="/app-backtest.js?v=24c17f2396"></script>
-<script defer src="/app.js?v=24c17f2396"></script>
-<script defer src="/app-notify.js?v=24c17f2396"></script>
+<script defer src="/app-widgets.js?v=f6bbc9671c"></script>
+<script defer src="/app-backtest.js?v=f6bbc9671c"></script>
+<script defer src="/app.js?v=f6bbc9671c"></script>
+<script defer src="/app-notify.js?v=f6bbc9671c"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -2764,11 +2764,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=24c17f2396"></script>
+<script defer src="/vendor/i18next.min.js?v=f6bbc9671c"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=24c17f2396"></script>
-<script defer src="/app-boot.js?v=24c17f2396"></script>
+<script defer src="/app-tour.js?v=f6bbc9671c"></script>
+<script defer src="/app-boot.js?v=f6bbc9671c"></script>
 
 </body>
 </html>

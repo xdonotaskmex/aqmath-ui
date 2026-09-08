@@ -122,7 +122,7 @@ Every piece of content should hit at least ONE of these differentiators:
 |------|--------|---------|
 | **Insight tweet** | 1-2 sentences + chart | "Your crypto portfolio's biggest risk isn't the crash. It's the 3 days you waited before cutting exposure. We measured it: +11pp drawdown for a constant 3-day lag." |
 | **Thread** | 5-12 tweets | Summary of Substack article with key charts |
-| **Data point** | Single stat + context | "Shield v14 MaxDD: 35.0%. Buy & Hold same basket: 58.3%. Same tokens, same period, same DCA." |
+| **Data point** | Single stat + context | "Proteus MaxDD: 23.1%. Buy & Hold same basket: 55.9%. Same tokens, same period, same DCA — replayed through the exact production path." |
 | **Build-in-public** | Progress update | "Just finished Crown Test 4. The shield re-enters in 1 day median. But full recovery participation? Only 32%. Re-entry is fast. Catching the rally? Not yet. Working on it." |
 | **Quote-tweet** | React to crypto news | When a major crash happens: "This is exactly what the Shield is designed for. Here's what it would have done today: [chart]" |
 | **Poll** | Engagement | "What's your biggest portfolio fear? A) Missing the next rally B) The next -50% crash C) Both equally" |

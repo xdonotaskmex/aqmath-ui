@@ -66,7 +66,7 @@ PAGES = {
         "view": "backtestView",
         "robots": "index, follow",
         "title": "Free Crypto Backtest Tool \u2014 DCA & Shield Strategy | AQMath",
-        "description": "Free interactive crypto backtest tool: 8.7-year walk-forward backtest with DCA simulation and crash protection. Compare drawdowns and returns against Buy & Hold. No signup required.",
+        "description": "Free interactive crypto backtest tool: replays years of real daily prices with DCA simulation and crash protection. Compare drawdowns and returns against Buy & Hold on identical terms. No signup required.",
     },
     "results.html": {
         "path": "/results",
@@ -190,7 +190,7 @@ PAGE_JSONLD = {
         "@graph": [
             {**_WEBAPP, "name": "Free Crypto Backtest Tool",
              "url": _SITE + "/backtest",
-             "description": "Free interactive crypto backtest tool: 8.7-year walk-forward backtest with DCA simulation and crash protection. Compare strategies against Buy & Hold.",
+             "description": "Free interactive crypto backtest tool: replays years of real daily prices with DCA simulation and crash protection. Compare strategies against Buy & Hold on identical terms.",
              "creator": _PERSON},
             _breadcrumb("Backtest", "/backtest"),
         ],

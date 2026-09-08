@@ -33,7 +33,7 @@
             'deleverage modulator: tracking drawdown + downside volatility...',
             '\u26a0 DE-RISK \u2014 drawdown + downside vol rising, exposure scaled down fast',
             'rerouting DCA to USDC reserve while defensive...',
-            'capital preserved \u2014 drawdown held to 35.0% vs 83.8% buy & hold'
+            'capital preserved \u2014 drawdown held to 23.1% vs 55.9% buy & hold'
         ],
         [
             'regime clearing: drawdown/vol easing \u2014 re-entering gradually...',
@@ -42,10 +42,10 @@
             'exposure fully data-driven across 106 DCA events'
         ],
         [
-            'backtest validation: 3,184 days (ADA/BNB/ETH/XRP/XLM) \u2014 8.7 years...',
+            'backtest validation: 2,095 daily intervals on the production path \u2014 ~5.7 years...',
             'scored on risk-adjusted return, not on beating buy & hold',
-            'Sharpe 0.93 vs B&H 0.75 \u2014 now beats buy & hold risk-adjusted',
-            'max drawdown 35.0% vs 83.8% \u2014 less than half the pain'
+            'Sharpe 1.63 vs B&H 1.37 \u2014 better risk-adjusted on large-caps',
+            'max drawdown 23.1% vs 55.9% \u2014 less than half the pain'
         ],
         [
             'privacy audit: processing portfolio in-memory...',
@@ -316,7 +316,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=24c17f2396')
+    return fetch('/locales/' + lang + '.json?v=f6bbc9671c')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
