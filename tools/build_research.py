@@ -942,9 +942,12 @@ def render_doc(doc):
 def render_hub():
     ui = UI["en"]
     cards = []
-    for doc in DOCS:
-        if doc["lang"] != "en":
-            continue
+    # Reverse-chronological (newest-first) so the latest study leads the list.
+    # sorted() is stable, so same-date cards keep their DOCS order; ISO
+    # YYYY-MM-DD strings sort correctly as plain text.
+    en_docs = sorted((d for d in DOCS if d["lang"] == "en"),
+                     key=lambda d: d["published"], reverse=True)
+    for doc in en_docs:
         other = next((d for d in DOCS
                       for g in TRANSLATION_SETS
                       if doc["path"] in g and d["path"] in g and d["path"] != doc["path"]), None)
