@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How AQMath Works: Signals & Frozen Weights - AQMath</title>
-<meta name="description" content="User guide: signal-only guidance from frozen KKT risk-parity weights and the daily Aegis (v14) Deleverage Shield. You execute every trade manually.">
+<meta name="description" content="User guide: signal-only guidance from frozen KKT risk-parity weights and the daily Proteus (v18) Deleverage Shield. You execute every trade manually.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://aqmath.xyz/research/how-aqmath-works">
 <link rel="icon" href="/favicon.ico">
@@ -15,7 +15,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://aqmath.xyz/research/how-aqmath-works">
 <meta property="og:title" content="How AQMath Works: Signals & Frozen Weights - AQMath">
-<meta property="og:description" content="User guide: signal-only guidance from frozen KKT risk-parity weights and the daily Aegis (v14) Deleverage Shield. You execute every trade manually.">
+<meta property="og:description" content="User guide: signal-only guidance from frozen KKT risk-parity weights and the daily Proteus (v18) Deleverage Shield. You execute every trade manually.">
 <meta property="og:site_name" content="AQMath">
 <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20260721b">
@@ -25,16 +25,16 @@
 <meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="How AQMath Works: Signals & Frozen Weights - AQMath">
-<meta name="twitter:description" content="User guide: signal-only guidance from frozen KKT risk-parity weights and the daily Aegis (v14) Deleverage Shield. You execute every trade manually.">
+<meta name="twitter:description" content="User guide: signal-only guidance from frozen KKT risk-parity weights and the daily Proteus (v18) Deleverage Shield. You execute every trade manually.">
 <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"How AQMath Works — Signals & What You Execute","url":"https://aqmath.xyz/research/how-aqmath-works","datePublished":"2026-08-07","description":"User guide: signal-only guidance from frozen KKT risk-parity weights and the daily Aegis (v14) Deleverage Shield. You execute every trade manually.","inLanguage":"en","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"How AQMath Works","item":"https://aqmath.xyz/research/how-aqmath-works"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"How AQMath Works — Signals & What You Execute","url":"https://aqmath.xyz/research/how-aqmath-works","datePublished":"2026-08-07","description":"User guide: signal-only guidance from frozen KKT risk-parity weights and the daily Proteus (v18) Deleverage Shield. You execute every trade manually.","inLanguage":"en","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"How AQMath Works","item":"https://aqmath.xyz/research/how-aqmath-works"}]}]}</script>
 <link rel="alternate" hreflang="en" href="https://aqmath.xyz/research/how-aqmath-works">
 <link rel="alternate" hreflang="zh-Hans" href="https://aqmath.xyz/research/how-aqmath-works-zh">
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/how-aqmath-works">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=f6bbc9671c">
+<link rel="stylesheet" href="/styles.min.css?v=f7dc1cc028">
 </head>
 <body>
 
@@ -61,8 +61,8 @@
 <h3>The MACRO loop — KKT risk parity (slow, frozen)</h3>
 <p>When you save your portfolio for the <strong>first time</strong>, the engine computes <strong>KKT risk-parity weights</strong> for your token set: each token receives a share of capital proportional to how much <em>risk</em> (not price movement) it contributes, subject to structural limits (per-token caps, at most 60% of capital in risky assets, the rest treated as stable reserve).</p>
 <p>These weights are then <strong>frozen</strong>. They are not recomputed when you press a button and not recomputed when prices move. The only thing that changes them is the macro loop: every <strong>180 days</strong> the engine re-optimises once and freezes the new weights. You are notified when this happens.</p>
-<h3>The daily loop — Aegis (v14) Deleverage Shield (fast, frozen parameters)</h3>
-<p>Once per day, after market close, the engine runs the <strong>Aegis (v14) Deleverage Shield</strong> over your frozen weights. The shield is a regime modulator: it reads the drawdown and downside volatility of your basket and continuously scales your target exposure between fully invested and defensive (more reserve, less risk). Its parameters are <strong>frozen at Aegis (v14)</strong> — they were validated out-of-sample and are no longer tuned.</p>
+<h3>The daily loop — Proteus (v18) Deleverage Shield (fast, frozen configuration)</h3>
+<p>Once per day, after market close, the engine runs the <strong>Proteus (v18) Deleverage Shield</strong> over your frozen weights. The shield is a regime modulator: it reads the drawdown and downside volatility of your basket and continuously scales your target exposure between fully invested and defensive (more reserve, less risk). Its drawdown trigger is scaled by your basket&#x27;s own trailing volatility, so one configuration adapts to calm and wild baskets alike. The configuration is <strong>frozen at Proteus (v18)</strong> — validated out-of-sample on the exact production path and no longer tuned. Portfolios with too little history to calibrate the adaptive threshold fall back to its fixed-threshold predecessor, Aegis (v14), until they have warmed up.</p>
 <h2>3. What a signal means</h2>
 <p>After each daily run the engine compares the shield-adjusted target weights with the holdings you declared. If the difference for a token is material, you receive a signal of the form:</p>
 <ul><li><strong>SELL 0.5 BTC ≈ 31,200 USD</strong> — your position is above target; the model suggests reducing it by roughly this amount.</li><li><strong>BUY 120 SOL ≈ 18,400 USD</strong> — your position is below target; the model suggests adding roughly this amount.</li></ul>

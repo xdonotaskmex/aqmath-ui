@@ -105,9 +105,9 @@ DOCS = [
         "shortTitle": "How AQMath Works &mdash; Signals &amp; What You Execute",
         "description": ("The must-read user guide: AQMath produces signal-only trading guidance "
                         "from frozen KKT risk-parity weights (re-optimised every 180 days) and the "
-                        "daily Aegis (v14) Deleverage Shield - the user executes every trade manually, on "
+                        "daily Proteus (v18) Deleverage Shield - the user executes every trade manually, on "
                         "their own exchange account."),
-        "meta_description": "User guide: signal-only guidance from frozen KKT risk-parity weights and the daily Aegis (v14) Deleverage Shield. You execute every trade manually.",
+        "meta_description": "User guide: signal-only guidance from frozen KKT risk-parity weights and the daily Proteus (v18) Deleverage Shield. You execute every trade manually.",
         # User guide, not a performance study: no simulated-results notice.
         "sim_notice": False,
         "altLabel": "中文",
@@ -122,9 +122,9 @@ DOCS = [
         "title": "AQMath 工作原理：信号与冻结权重 - AQMath",
         "shortTitle": "AQMath 工作原理 &mdash; 信号与你执行什么",
         "description": ("必读用户指南：AQMath 仅产生信号型交易指引，基于冻结的 KKT 风险平价"
-                        "权重（每 180 天再优化）与每日 Aegis（v14）去杠杆防护盾 — 用户在自己的交易所"
+                        "权重（每 180 天再优化）与每日 Proteus（v18）去杠杆防护盾 — 用户在自己的交易所"
                         "账户上手动执行每一笔交易。"),
-        "meta_description": "必读指南：AQMath 基于冻结 KKT 风险平价权重与每日 Aegis（v14）防护盾产生信号，用户在自有交易所手动执行。",
+        "meta_description": "必读指南：AQMath 基于冻结 KKT 风险平价权重与每日 Proteus（v18）防护盾产生信号，用户在自有交易所手动执行。",
         "sim_notice": False,
         "altLabel": "English",
     },
@@ -280,7 +280,8 @@ DOCS = [
         "title": "Aegis (v14) Risk Report: 3,000 Synthetic Histories - AQMath",
         "shortTitle": "Institutional Risk Report &mdash; 3,000 Synthetic Histories",
         "description": ("Stationary block bootstrap, Deflated Sharpe, White's Reality Check and "
-                        "CVaR on the production Aegis (v14) wiring: the drawdown cut wins in 98.6-99.7% of "
+                        "CVaR on the then-production Aegis (v14) wiring (Proteus v18 has since replaced it): the "
+                        "drawdown cut wins in 98.6-99.7% of "
                         "3,000 paired synthetic histories per basket and the one-month tail is ~40% "
                         "thinner everywhere - but excess return over buy & hold is statistically zero."),
         "meta_description": "Bootstrap, Deflated Sharpe & CVaR on Aegis (v14): drawdown cut wins in 98.6-99.7% of 3,000 synthetic histories. Excess return is statistically zero.",
@@ -295,7 +296,7 @@ DOCS = [
         "published": "2026-08-07",
         "title": "Aegis（v14）风险报告：3,000 段合成历史 - AQMath",
         "shortTitle": "机构级风险报告 &mdash; 3,000 段合成历史",
-        "description": ("对生产 Aegis（v14）接线做平稳分块自助法、通缩夏普、White 现实检验与 CVaR："
+        "description": ("对当时生产环境下的 Aegis（v14）接线（其后已由 Proteus（v18）取代）做平稳分块自助法、通缩夏普、White 现实检验与 CVaR："
                         "每个组合 3,000 段成对合成历史中 98.6-99.7% 的路径回撤削减为正，"
                         "一个月尾部处处薄约 40% — 但相对买入持有的超额收益在统计上为零。"),
         "meta_description": "自助法、通缩夏普与 CVaR 验证 Aegis（v14）：98.6-99.7% 合成历史回撤削减为正，超额收益统计上为零。",

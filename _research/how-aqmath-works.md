@@ -33,14 +33,18 @@ button and not recomputed when prices move. The only thing that changes them
 is the macro loop: every **180 days** the engine re-optimises once and freezes
 the new weights. You are notified when this happens.
 
-### The daily loop — Aegis (v14) Deleverage Shield (fast, frozen parameters)
+### The daily loop — Proteus (v18) Deleverage Shield (fast, frozen configuration)
 
-Once per day, after market close, the engine runs the **Aegis (v14) Deleverage
+Once per day, after market close, the engine runs the **Proteus (v18) Deleverage
 Shield** over your frozen weights. The shield is a regime modulator: it reads
 the drawdown and downside volatility of your basket and continuously scales
 your target exposure between fully invested and defensive (more reserve, less
-risk). Its parameters are **frozen at Aegis (v14)** — they were validated out-of-sample
-and are no longer tuned.
+risk). Its drawdown trigger is scaled by your basket's own trailing volatility,
+so one configuration adapts to calm and wild baskets alike. The configuration
+is **frozen at Proteus (v18)** — validated out-of-sample on the exact
+production path and no longer tuned. Portfolios with too little history to
+calibrate the adaptive threshold fall back to its fixed-threshold predecessor,
+Aegis (v14), until they have warmed up.
 
 ## 3. What a signal means
 

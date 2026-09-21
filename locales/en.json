@@ -596,7 +596,7 @@
     "htrTitle": "How to read this",
     "htr1": "<strong>Drawdown</strong> is the worst peak-to-trough drop — how much your balance fell at the scariest moment.",
     "htr2": "<strong>Calmar</strong> is annual return divided by that worst drawdown — higher means more reward for each unit of pain. It improved on every basket.",
-    "htr3": "<strong>Shield &mdash; Aegis (v14)</strong> is the live production model; <strong>Buy & Hold</strong> just holds the same coins with the same monthly buys.",
+    "htr3": "<strong>Shield &mdash; Aegis (v14)</strong> was the production model when this report was generated &mdash; <strong>Proteus (v18)</strong> has since replaced it as the live engine; <strong>Buy & Hold</strong> just holds the same coins with the same monthly buys.",
     "htr4": "These coins were <strong>not</strong> used to design the model, so this is a genuine out-of-sample check, not a curve-fit.",
     "blTitle": "Bottom line",
     "blA": "On coins the model had never seen before, the Shield cut the worst drop in",

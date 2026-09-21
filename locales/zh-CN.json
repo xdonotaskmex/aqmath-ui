@@ -596,7 +596,7 @@
     "htrTitle": "如何解读",
     "htr1": "<strong>回撤（Drawdown）</strong>是最严重的峰谷跌幅 — 即在最令人恐慌的时刻您的余额下跌了多少。",
     "htr2": "<strong>Calmar</strong> 是年化收益除以该最大回撤 — 越高意味着每承受一单位痛苦获得的回报越多。它在每一个组合中都有提升。",
-    "htr3": "<strong>防护盾 &mdash; Aegis（v14）</strong>是正在生产环境运行的模型；<strong>买入持有</strong>只是以相同的每月买入持有同样的代币。",
+    "htr3": "<strong>防护盾 &mdash; Aegis（v14）</strong>是本报告生成时的生产环境模型 — 此后 <strong>Proteus（v18）</strong>已取代它成为现役引擎；<strong>买入持有</strong>只是以相同的每月买入持有同样的代币。",
     "htr4": "这些代币<strong>没有</strong>被用于设计该模型，因此这是一次真正的样本外检验，而非曲线拟合。",
     "blTitle": "结论",
     "blA": "在该模型从未见过的代币上，防护盾削减了",
