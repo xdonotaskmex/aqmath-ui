@@ -100,6 +100,8 @@ NEEDS_SIM_NOTICE = {
     "research/recovery-test-zh.html",
     "research/exposure-capping.html",
     "research/exposure-capping-zh.html",
+    "research/aqmath-crypto-problems.html",
+    "research/aqmath-crypto-problems-zh.html",
 }
 
 FORBIDDEN_ORIGINS = [

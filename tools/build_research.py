@@ -593,6 +593,40 @@ DOCS = [
         "sim_notice": True,
         "altLabel": "English",
     },
+    {
+        "src": "aqmath-crypto-problems.md",
+        "out": "aqmath-crypto-problems.html",
+        "path": "/research/aqmath-crypto-problems",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-09-21",
+        "title": "How AQMath Solves Real Problems in Crypto - AQMath",
+        "shortTitle": "How AQMath Solves Real Problems in Crypto &mdash; Tested Against Buy &amp; Hold",
+        "description": ("AQMath's four crypto answers - KKT risk-parity allocation, the volatility-scaled "
+                        "Deleverage Shield, disciplined DCA/rebalance and dead-token safety - measured "
+                        "head-to-head against Buy & Hold + DCA on one diversified 8-asset basket (PAXG gold "
+                        "anchor + high-beta SOL + majors) over 6.2 years. The honest result: it nearly halves "
+                        "the worst drop (57.3% to 27.1%) and wins on Calmar, but buy & hold keeps the edge on "
+                        "raw return and Sharpe."),
+        "meta_description": "AQMath's 4 crypto fixes benchmarked vs Buy & Hold + DCA on a diversified basket: MaxDD 57.3%\u219227.1%, Calmar win, return/Sharpe parity stated honestly.",
+        "sim_notice": True,
+        "altLabel": "\u4e2d\u6587",
+    },
+    {
+        "src": "aqmath-crypto-problems.zh-CN.md",
+        "out": "aqmath-crypto-problems-zh.html",
+        "path": "/research/aqmath-crypto-problems-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-09-21",
+        "title": "AQMath \u5982\u4f55\u89e3\u51b3\u52a0\u5bc6\u5e02\u573a\u7684\u771f\u5b9e\u95ee\u9898 - AQMath",
+        "shortTitle": "AQMath \u5982\u4f55\u89e3\u51b3\u52a0\u5bc6\u5e02\u573a\u7684\u771f\u5b9e\u95ee\u9898 &mdash; \u4e0e\u4e70\u5165\u6301\u6709\u5bf9\u7167\u5b9e\u6d4b",
+        "description": ("AQMath \u9762\u5bf9\u52a0\u5bc6\u5e02\u573a\u7684\u56db\u4e2a\u7b54\u6848 \u2014 KKT \u98ce\u9669\u5e73\u4ef7\u914d\u7f6e\u3001\u6ce2\u52a8\u7387\u7f29\u653e\u7684\u53bb\u6760\u6746\u9632\u62a4\u76fe\u3001\u6709\u7eaa\u5f8b\u7684\u5b9a\u6295/\u518d\u5e73\u8861\u4e0e\u6b7b\u4ee3\u5e01\u5b89\u5168 \u2014 "
+                        "在一个多元化 8 资产组合（PAXG 黄金锚 + 高贝塔 SOL + 主流币）、6.2 年窗口上与买入持有 + 定投逐项对托。诚实的结果：它把最深跌幅从 57.3% 近乎腰斩到 27.1%，\n在卡玛上获胜，但买入持有在绝对收益与夏普上仍占优。"),
+        "meta_description": "AQMath 四大加密问题解决方案与买入持有 + 定投对测（多元组合，含 PAXG 黄金锚）：最大回撤 57.3%\u219227.1%，卡玛获胜，收益与夏普如实标注落后。",
+        "sim_notice": True,
+        "altLabel": "English",
+    },
 ]
 
 # Language pairs that describe the same document, for hreflang.
@@ -612,6 +646,7 @@ TRANSLATION_SETS = [
     ["/research/recovery-test", "/research/recovery-test-zh"],
     ["/research/static-vs-dynamic", "/research/static-vs-dynamic-zh"],
     ["/research/exposure-capping", "/research/exposure-capping-zh"],
+    ["/research/aqmath-crypto-problems", "/research/aqmath-crypto-problems-zh"],
 ]
 
 
