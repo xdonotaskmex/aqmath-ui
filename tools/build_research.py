@@ -628,6 +628,25 @@ DOCS = [
         "sim_notice": True,
         "altLabel": "English",
     },
+    {
+        "src": "v18-shock-windows.md",
+        "out": "v18-shock-windows.html",
+        "path": "/research/v18-shock-windows",
+        "lang": "en",
+        "htmlLang": "en",
+        "published": "2026-10-10",
+        "title": "Proteus (v18) on Six Real Shock Windows - AQMath",
+        "shortTitle": "Six Real Shock Windows &mdash; v18 Drawdown Delta vs Fixed Weights",
+        "description": ("Does the live Proteus (v18) Shield cut drawdown on real shock windows, out "
+                        "of sample? Across Aug-2015, late-2018, Mar-2020, May-2022, Mar-2023 and "
+                        "Aug-2024 on the exact production path (KKT risk-parity macro loop, "
+                        "full-history cold-replay), it cut max drawdown in 6/6 windows vs a "
+                        "fixed-weight baseline - average -13.3 pp, no single episode driving it - "
+                        "with a small, quantified calm-period cost (net benefit positive in 5/6)."),
+        "meta_description": "Proteus (v18) on 6 real shock windows (2015-2024), production path: drawdown cut in 6/6 vs fixed weights, avg -13.3 pp, calm-period cost quantified. 2008 not runnable (no crypto data).",
+        "sim_notice": True,
+        "altLabel": "\u4e2d\u6587",
+    },
 ]
 
 # Language pairs that describe the same document, for hreflang.
