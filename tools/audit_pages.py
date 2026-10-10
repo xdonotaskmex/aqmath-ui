@@ -81,6 +81,7 @@ NEEDS_SIM_NOTICE = {
     "research/oos-v18-new-tokens.html",
     "research/oos-v18-new-tokens-zh.html",
     "research/v18-shock-windows.html",
+    "research/v18-shock-windows-zh.html",
     "research/liveness-screen.html",
     "research/liveness-screen-zh.html",
     "research/regime-autopsy.html",

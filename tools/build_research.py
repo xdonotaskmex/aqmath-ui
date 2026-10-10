@@ -647,12 +647,31 @@ DOCS = [
         "sim_notice": True,
         "altLabel": "\u4e2d\u6587",
     },
+    {
+        "src": "v18-shock-windows.zh-CN.md",
+        "out": "v18-shock-windows-zh.html",
+        "path": "/research/v18-shock-windows-zh",
+        "lang": "zh-Hans",
+        "htmlLang": "zh-CN",
+        "published": "2026-10-10",
+        "title": "Proteus（v18）在六个真实冲击窗口上 - AQMath",
+        "shortTitle": "六个真实冲击窗口 &mdash; v18 相对固定权重的回撤差",
+        "description": ("现役 Proteus（v18）防护盾能否在真实冲击窗口上、样本外地削减回撤？"
+                        "在 2015 年 8 月、2018 年末、2020 年 3 月、2022 年 5 月、2023 年 3 月与 "
+                        "2024 年 8 月，经过完全相同的生产路径（KKT 风险平价宏观回路、全历史冷回放），"
+                        "它在 6/6 个窗口相对固定权重基线削减了最大回撤 —— 平均 -13.3 pp，无任何单一 "
+                        "窗口带动 —— 并伴随很小且已量化的平静期成本（净收益在 5/6 为正）。"),
+        "meta_description": "Proteus（v18）在 6 个真实冲击窗口（2015-2024）、生产路径上：相对固定权重在 6/6 削减回撤，平均 -13.3 pp，平静期成本已量化。2008 无法运行（无加密数据）。",
+        "sim_notice": True,
+        "altLabel": "English",
+    },
 ]
 
 # Language pairs that describe the same document, for hreflang.
 TRANSLATION_SETS = [
     ["/research/oos-v14-new-tokens", "/research/oos-v14-new-tokens-zh"],
     ["/research/oos-v18-new-tokens", "/research/oos-v18-new-tokens-zh"],
+    ["/research/v18-shock-windows", "/research/v18-shock-windows-zh"],
     ["/research/how-aqmath-works", "/research/how-aqmath-works-zh"],
     ["/research/dca-stress", "/research/dca-stress-zh"],
     ["/research/feed-sensitivity", "/research/feed-sensitivity-zh"],
