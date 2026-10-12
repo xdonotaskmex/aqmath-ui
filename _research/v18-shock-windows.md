@@ -143,8 +143,10 @@ window:
 | Mar 2023 | 4.83% | 8.12% | 4.83% | 4.88% | **+0.00 pp** | +0.05 pp |
 | Aug 2024 | 11.03% | 18.32% | 11.03% | 11.01% | **+0.00 pp** | −0.03 pp |
 
-Against the zero-fee CONST, the Shield is shallower in 3 of 6 windows with a
-mean residual of **−0.09 pp** — essentially zero. A **causal variant**, where `c`
+Against the zero-fee CONST, the Shield is shallower in 2 of 6 windows, deeper
+in 2, and identical in 2 (the flat-exposure windows where the Shield never
+changed exposure, so it matches the constant by construction); the mean
+residual is **−0.09 pp** — essentially zero. A **causal variant**, where `c`
 is calibrated on the 420-day warm-up preceding the shock (no look-ahead into
 the window), reverses that: the Shield is shallower in **5 of 6** with a mean
 residual of **+5.37 pp**. The honest reading: against a constant that already
@@ -176,7 +178,8 @@ count, not the daily observations.
   ahead in 5 of 6 windows; the exception is a shallow bank-failure scare.
 - **Timing vs de-risking.** Against a zero-fee signal-free constant sized to the
   Shield's own in-window mean exposure, the drawdown cut was mostly de-risking
-  (mean residual −0.09 pp, 3/6). Against a causal constant that cannot see the
+  (mean residual −0.09 pp; 2/6 shallower, 2 flat-exposure ties, 2 deeper).
+  Against a causal constant that cannot see the
   shock ahead, or against a fee-paying volatility-targeting rule at the same
   average exposure, the Shield's timing buys a clear edge (+5.37 pp and +1.79
   pp mean residual, 5/6 in each case).
