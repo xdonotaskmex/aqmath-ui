@@ -190,37 +190,27 @@ async function btRunBacktest() {
 function btRenderBacktest(data, inp) {
     var pr = data.pr, cfg = data.cfg;
 
-    // ── Response shape ──────────────────────────────────────────────────────
     // /backtest returns ONE engine leg: Proteus (v18), the production shield,
-    // as { engine, sim, bh, m, mBh }. The legacy branch reads the older
-    // two-engine payload ({ sim = Aegis v14, sim18, m1, m2, m18 }) so the page
-    // keeps working while the engine deploy rolls out. Remove it once
-    // api-engine.aqmath.xyz answers with engine: "v18".
-    var v18Primary = data.engine === 'v18';
-    var legacy = data.sim || {};
-    var sim = v18Primary ? data.sim : (data.sim18 || null);
-    var m = v18Primary ? data.m : (data.m18 || null);
-    var mBh = v18Primary ? data.mBh : data.m2;
-    var bh = v18Primary ? (data.bh || {}) : {
-        eqB: legacy.eqB, totalInvB: legacy.totalInvB, bhFees: legacy.bhFees
-    };
+    // as { engine, sim, bh, m, mBh }. The two-engine payload (sim = Aegis v14,
+    // sim18, m1, m2, m18) is gone from the endpoint, so there is nothing left
+    // to fall back to.
+    var sim = data.sim, m = data.m, mBh = data.mBh, bh = data.bh || {};
     if (!sim || !m || !mBh) {
         btShowStatus('The engine returned no Proteus (v18) leg. Reload the page and run it again.', 'error');
         return;
     }
-    // invA (cumulative capital put in) is engine-independent: both engines add
-    // every DCA contribution to it whether it buys tokens or parks as USDC.
-    // The legacy payload only carried it on the v14 leg, so fall back to that.
-    var invA = sim.invA || legacy.invA || [];
+    // invA (cumulative capital put in) is engine-independent: every DCA
+    // contribution lands in it whether it buys tokens or parks as USDC.
+    var invA = sim.invA || [];
 
     var days = pr.rets_length;
     var years = days / 365.25;
     var dcaAmt = inp.dca_amount, dcaInt = inp.dca_interval;
     var dateLabels = pr.dates.slice(1);
 
-    var redeploys = (sim.events || []).filter(function(e) { return e.type === 'REDEPLOY'; });
+    var redeploys = sim.events.filter(function(e) { return e.type === 'REDEPLOY'; });
     function expFracs(s) {
-        return (s.expT || []).map(function(v) { return cfg.risk_budget > 0 ? v / cfg.risk_budget : 0; });
+        return s.expT.map(function(v) { return cfg.risk_budget > 0 ? v / cfg.risk_budget : 0; });
     }
     function expStats(s) {
         var f = expFracs(s);
@@ -259,7 +249,7 @@ function btRenderBacktest(data, inp) {
         + '<div class="bt-sub">reference | Max DD: ' + (mBh.mdd * 100).toFixed(1) + '% | Sharpe: ' + mBh.sh.toFixed(2) + '</div>'
         + '<div class="bt-sub">Final: ' + money(mBh.final) + ' | Return: ' + (mBh.ret * 100).toFixed(1) + '%</div>'
         + '<div class="bt-sub">Avg exposure: 100% | Defensive: 0/' + days + ' days</div>'
-        + '<div class="bt-sub" style="color:var(--amber)">Fees: $' + (bh.bhFees || 0).toFixed(0) + ' (DCA only)</div>';
+        + '<div class="bt-sub" style="color:var(--amber)">Fees: $' + bh.bhFees.toFixed(0) + ' (DCA only)</div>';
     sr.appendChild(c2);
 
     var macroInt = pr.macro_interval_days || 180;
@@ -283,7 +273,7 @@ function btRenderBacktest(data, inp) {
             { l: 'Sharpe', get: function(c) { return c.m.sh; }, fmt: function(v) { return v.toFixed(2); } },
             { l: 'Defensive Days', get: function(c) { return c.s ? c.s.shDays : 0; }, fmt: function(v) { return String(v); } },
             { l: 'Rebalances', get: function(c) { return c.s ? c.s.rebN : 0; }, fmt: function(v) { return String(v); } },
-            { l: 'Total Fees', get: function(c) { return c.s ? c.s.totalFees : (bh.bhFees || 0); }, fmt: function(v) { return '$' + v.toFixed(0); } }
+            { l: 'Total Fees', get: function(c) { return c.s ? c.s.totalFees : bh.bhFees; }, fmt: function(v) { return '$' + v.toFixed(0); } }
         ];
         var html = '<table class="bt-wf-grid"><thead><tr><th>Metric</th>';
         cols.forEach(function(c) { html += '<th>' + c.label + '</th>'; });
@@ -394,7 +384,7 @@ function btRenderBacktest(data, inp) {
     // Equity curves — the production engine + the B&H reference
     var eqDatasets = [
         { label: 'Proteus v18 · Adaptive', data: sim.eqA.slice(1), borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.08)', fill: true, pointRadius: 0, borderWidth: 2 },
-        { label: 'Buy & Hold + DCA', data: (bh.eqB || []).slice(1), borderColor: '#fbbf24', borderDash: [4, 3], fill: false, pointRadius: 0, borderWidth: 1.5 }
+        { label: 'Buy & Hold + DCA', data: bh.eqB.slice(1), borderColor: '#fbbf24', borderDash: [4, 3], fill: false, pointRadius: 0, borderWidth: 1.5 }
     ];
     btCharts.eq = new Chart(document.getElementById('btEquityChart'), {
         type: 'line',
@@ -405,8 +395,8 @@ function btRenderBacktest(data, inp) {
 
     // Capital breakdown (Proteus v18): what the shield holds in tokens vs the
     // USDC it parks while defensive.
-    var usdcT = sim.usdcT || [];
-    var tokInv = invA.map(function(v, i) { return v - (usdcT[i] || 0); });
+    var usdcT = sim.usdcT;
+    var tokInv = invA.map(function(v, i) { return v - usdcT[i]; });
     btCharts.cap = new Chart(document.getElementById('btCapitalChart'), {
         type: 'line',
         data: {
@@ -414,7 +404,7 @@ function btRenderBacktest(data, inp) {
             datasets: [
                 { label: 'In Tokens', data: tokInv.slice(1), borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.15)', fill: true, pointRadius: 0, borderWidth: 1.5, stack: 'a' },
                 { label: 'USDC Reserve', data: usdcT.slice(1), borderColor: '#34d399', backgroundColor: 'rgba(52,211,153,0.25)', fill: true, pointRadius: 0, borderWidth: 1, stack: 'a' },
-                { label: 'B&H Equity', data: (bh.eqB || []).slice(1), borderColor: '#fbbf24', borderDash: [4, 3], fill: false, pointRadius: 0, borderWidth: 1.5 }
+                { label: 'B&H Equity', data: bh.eqB.slice(1), borderColor: '#fbbf24', borderDash: [4, 3], fill: false, pointRadius: 0, borderWidth: 1.5 }
             ]
         },
         options: (function() { var o = cO(); o.scales.y.stacked = true; o.scales.y.ticks.callback = function(v) { return '$' + v.toLocaleString(); }; return o; })()
@@ -422,7 +412,7 @@ function btRenderBacktest(data, inp) {
 
     // Exposure — Proteus v18 held exposure × risk budget
     var expDatasets = [
-        { label: 'Proteus v18', data: (sim.expT || []).map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#a855f7', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' }
+        { label: 'Proteus v18', data: sim.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#a855f7', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' }
     ];
     btCharts.exp = new Chart(document.getElementById('btExposureChart'), {
         type: 'line',
@@ -436,7 +426,7 @@ function btRenderBacktest(data, inp) {
     });
 
     // Event log — one engine, so no selector
-    btEventsData = (sim.events || []).slice();
+    btEventsData = sim.events.slice();
     btEventLabels = dateLabels;
     btRenderEvents();
 
