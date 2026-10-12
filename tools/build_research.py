@@ -634,16 +634,17 @@ DOCS = [
         "path": "/research/v18-shock-windows",
         "lang": "en",
         "htmlLang": "en",
-        "published": "2026-10-10",
+        "published": "2026-10-12",
         "title": "Proteus (v18) on Six Real Shock Windows - AQMath",
         "shortTitle": "Six Real Shock Windows &mdash; v18 Drawdown Delta vs Fixed Weights",
         "description": ("Does the live Proteus (v18) Shield cut drawdown on real shock windows, out "
-                        "of sample? Across Aug-2015, late-2018, Mar-2020, May-2022, Mar-2023 and "
-                        "Aug-2024 on the exact production path (KKT risk-parity macro loop, "
-                        "full-history cold-replay), it cut max drawdown in 6/6 windows vs a "
-                        "fixed-weight baseline - average -13.3 pp, no single episode driving it - "
-                        "with a small, quantified calm-period cost (net benefit positive in 5/6)."),
-        "meta_description": "Proteus (v18) on 6 real shock windows (2015-2024), production path: drawdown cut in 6/6 vs fixed weights, avg -13.3 pp, calm-period cost quantified. 2008 not runnable (no crypto data).",
+                        "of sample? Across six windows on the exact production path, it cut max "
+                        "drawdown in 6/6 vs a fixed-weight baseline (average -13.3 pp); an "
+                        "exposure-matched control shows most of the cut was de-risking, while a "
+                        "causal matched control and a volatility-targeting rule at matched exposure "
+                        "still show a clear timing edge. Windows were selected because they were "
+                        "crashes — stress test, not forecast."),
+        "meta_description": "Proteus (v18) on 6 real shock windows: 6/6 vs fixed weights (avg -13.3 pp). Matched control shows mostly de-risking; causal and vol-target controls show clear timing edge. Stress test, not forecast.",
         "sim_notice": True,
         "altLabel": "\u4e2d\u6587",
     },
@@ -653,15 +654,15 @@ DOCS = [
         "path": "/research/v18-shock-windows-zh",
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
-        "published": "2026-10-10",
+        "published": "2026-10-12",
         "title": "Proteus（v18）在六个真实冲击窗口上 - AQMath",
         "shortTitle": "六个真实冲击窗口 &mdash; v18 相对固定权重的回撤差",
         "description": ("现役 Proteus（v18）防护盾能否在真实冲击窗口上、样本外地削减回撤？"
-                        "在 2015 年 8 月、2018 年末、2020 年 3 月、2022 年 5 月、2023 年 3 月与 "
-                        "2024 年 8 月，经过完全相同的生产路径（KKT 风险平价宏观回路、全历史冷回放），"
-                        "它在 6/6 个窗口相对固定权重基线削减了最大回撤 —— 平均 -13.3 pp，无任何单一 "
-                        "窗口带动 —— 并伴随很小且已量化的平静期成本（净收益在 5/6 为正）。"),
-        "meta_description": "Proteus（v18）在 6 个真实冲击窗口（2015-2024）、生产路径上：相对固定权重在 6/6 削减回撤，平均 -13.3 pp，平静期成本已量化。2008 无法运行（无加密数据）。",
+                        "在六个窗口经过完全相同的生产路径，它在 6/6 个窗口相对固定权重基线"
+                        "削减了最大回撤（平均 -13.3 pp）；敢露匹配的对照显示大部分来自降敢露，"
+                        "而因果校准对照与相同平均敢露下的波动率目标规则仍显示明确择时优势。"
+                        "窗口因是崩盘而被选择 —— 压力测试，而非预测。"),
+        "meta_description": "Proteus（v18）6 个真实冲击窗口：6/6 相对固定权重削减回撤（平均 -13.3 pp）。匹配对照显示主要来自降敢露；因果与波动率目标对照显示明确择时优势。压力测试，非预测。",
         "sim_notice": True,
         "altLabel": "English",
     },

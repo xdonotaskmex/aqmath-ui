@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Proteus (v18) on Six Real Shock Windows - AQMath</title>
-<meta name="description" content="Proteus (v18) on 6 real shock windows (2015-2024), production path: drawdown cut in 6/6 vs fixed weights, avg -13.3 pp, calm-period cost quantified. 2008 not runnable (no crypto data).">
+<meta name="description" content="Proteus (v18) on 6 real shock windows: 6/6 vs fixed weights (avg -13.3 pp). Matched control shows mostly de-risking; causal and vol-target controls show clear timing edge. Stress test, not forecast.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://aqmath.xyz/research/v18-shock-windows">
 <link rel="icon" href="/favicon.ico">
@@ -15,7 +15,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://aqmath.xyz/research/v18-shock-windows">
 <meta property="og:title" content="Proteus (v18) on Six Real Shock Windows - AQMath">
-<meta property="og:description" content="Proteus (v18) on 6 real shock windows (2015-2024), production path: drawdown cut in 6/6 vs fixed weights, avg -13.3 pp, calm-period cost quantified. 2008 not runnable (no crypto data).">
+<meta property="og:description" content="Proteus (v18) on 6 real shock windows: 6/6 vs fixed weights (avg -13.3 pp). Matched control shows mostly de-risking; causal and vol-target controls show clear timing edge. Stress test, not forecast.">
 <meta property="og:site_name" content="AQMath">
 <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20260721b">
@@ -25,10 +25,10 @@
 <meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Proteus (v18) on Six Real Shock Windows - AQMath">
-<meta name="twitter:description" content="Proteus (v18) on 6 real shock windows (2015-2024), production path: drawdown cut in 6/6 vs fixed weights, avg -13.3 pp, calm-period cost quantified. 2008 not runnable (no crypto data).">
+<meta name="twitter:description" content="Proteus (v18) on 6 real shock windows: 6/6 vs fixed weights (avg -13.3 pp). Matched control shows mostly de-risking; causal and vol-target controls show clear timing edge. Stress test, not forecast.">
 <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
 <meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"Six Real Shock Windows — v18 Drawdown Delta vs Fixed Weights","url":"https://aqmath.xyz/research/v18-shock-windows","datePublished":"2026-10-10","description":"Proteus (v18) on 6 real shock windows (2015-2024), production path: drawdown cut in 6/6 vs fixed weights, avg -13.3 pp, calm-period cost quantified. 2008 not runnable (no crypto data).","inLanguage":"en","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"Six Real Shock Windows","item":"https://aqmath.xyz/research/v18-shock-windows"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"Six Real Shock Windows — v18 Drawdown Delta vs Fixed Weights","url":"https://aqmath.xyz/research/v18-shock-windows","datePublished":"2026-10-12","description":"Proteus (v18) on 6 real shock windows: 6/6 vs fixed weights (avg -13.3 pp). Matched control shows mostly de-risking; causal and vol-target controls show clear timing edge. Stress test, not forecast.","inLanguage":"en","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"Six Real Shock Windows","item":"https://aqmath.xyz/research/v18-shock-windows"}]}]}</script>
 <link rel="alternate" hreflang="en" href="https://aqmath.xyz/research/v18-shock-windows">
 <link rel="alternate" hreflang="zh-Hans" href="https://aqmath.xyz/research/v18-shock-windows-zh">
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/v18-shock-windows">
@@ -49,14 +49,15 @@
 
 <p class="rs-nav"><a href="/research/">&larr; All research</a><span class="sep">|</span>Also available in <a href="/research/v18-shock-windows-zh" hreflang="zh-Hans">中文</a></p>
 <h1>Proteus (v18) on Six Real Shock Windows — Drawdown Delta vs Fixed Weights</h1>
-<p class="legal-updated">Published: 2026-10-10</p>
+<p class="legal-updated">Published: 2026-10-12</p>
 <p class="sim-notice"><strong>Simulated results &mdash; no real money.</strong> Every figure below is computed from historical price data by a backtest. No capital was invested and no orders were placed. Backtests apply a strategy to the past with full knowledge of how that period turned out, and the figures exclude slippage and liquidity effects, though a simulated 0.1% exchange fee is charged on every rebalance, DCA buy and redeployment. Simulated and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software, not investment advice.</p>
-<p><strong>Date:</strong> 2026-10-10<br>
+<p><strong>Date:</strong> 2026-10-12<br>
 <strong>Engine:</strong> Proteus (v18) adaptive Deleverage Shield — the live production engine — measured on the exact production data path<br>
-<strong>Status:</strong> ✅ The Shield cut max drawdown in 6 of 6 real shock windows (average −13.3 pp vs a fixed-weight baseline), with a small, quantified calm-period cost and no single episode driving the result</p>
+<strong>Status:</strong> ✅ The Shield cut max drawdown in 6 of 6 real shock windows versus a fixed-weight baseline (average −13.3 pp); an exposure-matched control shows this was mostly de-risking, while a causal matched control and a volatility-targeting rule at matched exposure still show a clear timing edge. Windows were selected because they were crashes — this is a stress test, not a forecast.</p>
 <hr>
 <h2>1. Objective</h2>
 <p>A narrow, honest question: on <strong>real</strong> historical shock windows — not synthetic ones — does the v18 regime-split Shield cut drawdown versus a naive fixed-weight rebalance? The result is reported <strong>per window</strong> (an average can hide a single episode carrying the whole improvement), <strong>side-by-side with the baseline</strong>, and with the <strong>cost side</strong> shown too: turnover and any return bled during calm periods when the Shield de-risks unnecessarily. A shield that cuts drawdown in a crash but bleeds through false alarms is not clearly better than fixed weights, so both sides are measured.</p>
+<p>The six windows were selected <strong>because they were crashes</strong> — the study is a stress test of the design under known shocks, not a forecast or a hit rate.</p>
 <h2>2. Method — the exact production path</h2>
 <p>Every run uses the <strong>live production wiring</strong>, not a research approximation.</p>
 <div class="rs-tablewrap">
@@ -279,14 +280,90 @@
 <ul><li><strong>Mar 2020</strong> — the calm window before the crash was a strong rally; the Shield&#x27;s lower exposure lagged it (+13.70 pp bleed), which ate most of the crash protection on a net basis (+3.80 pp).</li><li><strong>Mar 2023</strong> — a shallow, short event: the small protection (+3.29 pp) was slightly outweighed by the calm bleed, for a net <strong>−1.70 pp</strong>. This is the one window where the fixed-weight baseline came out marginally ahead net.</li></ul>
 <h2>6. Robustness — the V/D neighbourhood (Test B)</h2>
 <p>To confirm the result is not a knife-edge fit to two window lengths, the Shield&#x27;s volatility-window and downside-window lengths were swept across a wide neighbourhood (12 alternative settings plus the production point). <strong>Every cell held +12.4 to +13.8 pp mean protection with 6/6 window wins</strong>, and the production operating point sits mid-range (+13.27 pp). Protection is a property of the design, not of a precisely tuned window.</p>
-<h2>7. Interpretation</h2>
-<ul><li><strong>The drawdown mandate holds on real shocks</strong> — per-window, out-of-sample, on the exact production path, against a pre-registered baseline.</li><li><strong>The cost is real but small.</strong> Net of the calm-period bleed the Shield is still ahead in 5 of 6 windows; the exception is a shallow bank-failure scare.</li><li><strong>Honest attribution.</strong> The baseline is a <strong>static 60/40</strong>, while the Shield ran defensive in-window (average exposure ~0.21–0.35). Part of the drawdown cut is therefore lower average exposure, not pure timing — the Buy &amp; Hold (100%) column is shown so the reader can see the full spread.</li></ul>
-<h2>8. Caveats</h2>
-<ul><li><strong>2008 is not runnable</strong> for a crypto basket (BTC data starts 2013-04-28).</li><li>Mar-2020 uses the production basket minus SOL; the two early windows use a five-token legacy basket (the tokens that existed then).</li><li>Fees are modeled at the production rate; slippage, spreads and liquidity are not.</li><li>Exact KKT allocations are withheld (IP).</li><li>Simulated and past performance is not a reliable indicator of future results. AQMath is software, not investment advice.</li></ul>
-<h2>9. Reproducibility</h2>
-<p>Research harness (git-ignored, lives in the private engine repo, not deployed). It imports the production shield, macro-weighting and simulation functions unchanged, cold-replays the full-history window each day with persisted state, and cross-checks that the production setting reproduces the per-window deltas exactly. Historical CSVs are sourced locally and are not committed. Exact KKT allocations are withheld (IP).</p>
+<h2>7. Exposure-matched control — isolating timing from de-risking (Test D)</h2>
+<p>A reader&#x27;s fair challenge: the Shield&#x27;s average in-window exposure (~0.21–0.35) is much lower than the 60% baseline&#x27;s, so part of the drawdown cut is <strong>less beta, not better timing</strong>. To answer, two signal-free control legs are built on the same KKT return stream as the Shield, with the same average exposure per window:</p>
+<ul><li><strong>CONST(c)</strong> — a constant exposure <code>c = mean(shield exposure)</code> over the window, <strong>zero turnover fees</strong> (a deliberate handicap in the control&#x27;s favour, since the Shield does pay fees when it rebalances).</li><li><strong>VOL-target</strong> — <code>min(1, tv / trailing_vol)</code> with <code>tv</code> bisected so the window&#x27;s mean exposure equals <code>c</code>, where <code>trailing_vol</code> is the 30-day annualised realised stdev of the KKT basket, computed only from returns strictly before each date (causal, no drawdown signal). This leg pays fees at the same rate as the Shield.</li></ul>
+<figure class="rs-fig"><img src="/research/assets/shock_exposure_matched.svg" alt="Max drawdown at matched exposure" width="920" height="440" loading="lazy" decoding="async"></figure>
+<div class="rs-tablewrap">
+<table>
+<thead><tr>
+<th style="text-align:left">Window</th>
+<th style="text-align:right">Shield</th>
+<th style="text-align:right">Base 60/40</th>
+<th style="text-align:right">CONST(c)</th>
+<th style="text-align:right">VOL-target</th>
+<th style="text-align:center">Residual (CONST − Shield)</th>
+<th style="text-align:center">Residual (VOL − Shield)</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">Aug 2015</td>
+<td style="text-align:right">6.35%</td>
+<td style="text-align:right">15.11%</td>
+<td style="text-align:right">5.52%</td>
+<td style="text-align:right">6.56%</td>
+<td style="text-align:center"><strong>−0.83 pp</strong></td>
+<td style="text-align:center">+0.21 pp</td>
+</tr>
+<tr>
+<td style="text-align:left">Late 2018</td>
+<td style="text-align:right">13.16%</td>
+<td style="text-align:right">35.58%</td>
+<td style="text-align:right">13.72%</td>
+<td style="text-align:right">15.35%</td>
+<td style="text-align:center"><strong>+0.55 pp</strong></td>
+<td style="text-align:center">+2.19 pp</td>
+</tr>
+<tr>
+<td style="text-align:left">Mar 2020</td>
+<td style="text-align:right">23.35%</td>
+<td style="text-align:right">40.86%</td>
+<td style="text-align:right">24.52%</td>
+<td style="text-align:right">30.37%</td>
+<td style="text-align:center"><strong>+1.17 pp</strong></td>
+<td style="text-align:center">+7.02 pp</td>
+</tr>
+<tr>
+<td style="text-align:left">2022 May–Jun</td>
+<td style="text-align:right">17.02%</td>
+<td style="text-align:right">37.40%</td>
+<td style="text-align:right">15.59%</td>
+<td style="text-align:right">18.32%</td>
+<td style="text-align:center"><strong>−1.43 pp</strong></td>
+<td style="text-align:center">+1.30 pp</td>
+</tr>
+<tr>
+<td style="text-align:left">Mar 2023</td>
+<td style="text-align:right">4.83%</td>
+<td style="text-align:right">8.12%</td>
+<td style="text-align:right">4.83%</td>
+<td style="text-align:right">4.88%</td>
+<td style="text-align:center"><strong>+0.00 pp</strong></td>
+<td style="text-align:center">+0.05 pp</td>
+</tr>
+<tr>
+<td style="text-align:left">Aug 2024</td>
+<td style="text-align:right">11.03%</td>
+<td style="text-align:right">18.32%</td>
+<td style="text-align:right">11.03%</td>
+<td style="text-align:right">11.01%</td>
+<td style="text-align:center"><strong>+0.00 pp</strong></td>
+<td style="text-align:center">−0.03 pp</td>
+</tr>
+</tbody></table></div>
+<p>Against the zero-fee CONST, the Shield is shallower in 3 of 6 windows with a mean residual of <strong>−0.09 pp</strong> — essentially zero. A <strong>causal variant</strong>, where <code>c</code> is calibrated on the 420-day warm-up preceding the shock (no look-ahead into the window), reverses that: the Shield is shallower in <strong>5 of 6</strong> with a mean residual of <strong>+5.37 pp</strong>. The honest reading: against a constant that already knows the shock&#x27;s average exposure, the Shield&#x27;s drawdown cut was mostly de-risking; against a constant that can only see what a live system would have seen, the Shield&#x27;s adaptivity buys a meaningful edge.</p>
+<p>Against the fee-paying VOL-target, the Shield is shallower in <strong>5 of 6</strong> windows, mean residual <strong>+1.79 pp</strong>, worst −0.03 pp. The Shield&#x27;s timing is better than a naive volatility-targeting rule at matched exposure.</p>
+<p>A paired block bootstrap over the concatenated shock-window days (368 days, 1000 reps, 20-day blocks) gives:</p>
+<ul><li>Shield vs CONST: log-growth gap <strong>−5.83%</strong> [−17.21, +4.93] (5/50/95); MaxDD gap <strong>−2.67 pp</strong> [−8.68, +2.59].</li><li>Shield vs VOL: log-growth gap <strong>+9.11%</strong> [−4.46, +24.11]; MaxDD gap <strong>+4.99 pp</strong> [−2.34, +11.49].</li></ul>
+<p>The MaxDD gap is a path-permutation robustness check, not a sampling confidence interval — the effective sample for a max-statistic is the window count, not the daily observations.</p>
+<h2>8. Interpretation</h2>
+<ul><li><strong>The drawdown mandate holds on real shocks</strong> — per-window, out-of-sample, on the exact production path, against a pre-registered baseline.</li><li><strong>The cost is real but small.</strong> Net of the calm-period bleed the Shield is still ahead in 5 of 6 windows; the exception is a shallow bank-failure scare.</li><li><strong>Timing vs de-risking.</strong> Against a zero-fee signal-free constant sized to the Shield&#x27;s own in-window mean exposure, the drawdown cut was mostly de-risking (mean residual −0.09 pp, 3/6). Against a causal constant that cannot see the shock ahead, or against a fee-paying volatility-targeting rule at the same average exposure, the Shield&#x27;s timing buys a clear edge (+5.37 pp and +1.79 pp mean residual, 5/6 in each case).</li></ul>
+<h2>9. Caveats</h2>
+<ul><li><strong>2008 is not runnable</strong> for a crypto basket (BTC data starts 2013-04-28).</li><li>Mar-2020 uses the production basket minus SOL; the two early windows use a five-token legacy basket (the tokens that existed then).</li><li>Fees are modeled at the production rate; slippage, spreads and liquidity are not.</li><li>Exact KKT allocations are withheld (IP).</li><li><strong>The six windows are a stress test, not a forecast.</strong> They were selected because they were crashes; the 6/6 result is not a predictive hit rate.</li><li>Exposure matching uses each window&#x27;s own mean exposure (an in-window calibration); the causal variant, calibrated on the pre-window portion, is reported alongside so the look-ahead is bounded and disclosed.</li><li>The VOL-target&#x27;s 30-day trailing-vol window is a control parameter chosen for exposure parity, not a tuning of the Shield itself.</li><li>Simulated and past performance is not a reliable indicator of future results. AQMath is software, not investment advice.</li></ul>
+<h2>10. Reproducibility</h2>
+<p>Research harness (git-ignored, lives in the private engine repo, not deployed). It imports the production shield, macro-weighting and simulation functions unchanged, cold-replays the full-history window each day with persisted state, and cross-checks that the production setting reproduces the per-window deltas exactly. The exposure-matched control legs (CONST, VOL-target) are produced by the same harness on the same production path. Historical CSVs are sourced locally and are not committed. Exact KKT allocations are withheld (IP).</p>
 <hr>
-<p><strong>Bottom line:</strong> on six real shock windows across 2015–2024, run through the exact production path, the live Proteus (v18) Shield cut maximum drawdown in every one versus a fixed-weight baseline — average <strong>+13.3 pp</strong>, no single episode driving it — at a small, quantified calm-period cost that leaves net benefit positive in five of six. The protection is robust across a wide parameter neighbourhood.</p>
+<p><strong>Bottom line:</strong> on six real shock windows across 2015–2024, run through the exact production path, the live Proteus (v18) Shield cut maximum drawdown in every one versus a fixed-weight baseline — average <strong>+13.3 pp</strong>, no single episode driving it — at a small, quantified calm-period cost that leaves net benefit positive in five of six. Against a signal-free constant sized to its own average exposure, the drawdown cut was mostly de-risking; against a causal constant or a fee-paying volatility-targeting rule at matched exposure, the Shield&#x27;s timing is clearly better. The protection is robust across a wide parameter neighbourhood.</p>
 </main>
 
 <footer class="site-footer">

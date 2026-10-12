@@ -1,8 +1,8 @@
 # Proteus (v18) on Six Real Shock Windows — Drawdown Delta vs Fixed Weights
 
-**Date:** 2026-10-10
+**Date:** 2026-10-12
 **Engine:** Proteus (v18) adaptive Deleverage Shield — the live production engine — measured on the exact production data path
-**Status:** ✅ The Shield cut max drawdown in 6 of 6 real shock windows (average −13.3 pp vs a fixed-weight baseline), with a small, quantified calm-period cost and no single episode driving the result
+**Status:** ✅ The Shield cut max drawdown in 6 of 6 real shock windows versus a fixed-weight baseline (average −13.3 pp); an exposure-matched control shows this was mostly de-risking, while a causal matched control and a volatility-targeting rule at matched exposure still show a clear timing edge. Windows were selected because they were crashes — this is a stress test, not a forecast.
 
 ---
 
@@ -16,6 +16,9 @@ with the **cost side** shown too: turnover and any return bled during calm
 periods when the Shield de-risks unnecessarily. A shield that cuts drawdown in a
 crash but bleeds through false alarms is not clearly better than fixed weights,
 so both sides are measured.
+
+The six windows were selected **because they were crashes** — the study is a
+stress test of the design under known shocks, not a forecast or a hit rate.
 
 ## 2. Method — the exact production path
 
@@ -112,35 +115,98 @@ neighbourhood (12 alternative settings plus the production point). **Every cell 
 operating point sits mid-range (+13.27 pp). Protection is a property of the
 design, not of a precisely tuned window.
 
-## 7. Interpretation
+## 7. Exposure-matched control — isolating timing from de-risking (Test D)
+
+A reader's fair challenge: the Shield's average in-window exposure (~0.21–0.35)
+is much lower than the 60% baseline's, so part of the drawdown cut is **less
+beta, not better timing**. To answer, two signal-free control legs are built on
+the same KKT return stream as the Shield, with the same average exposure per
+window:
+
+- **CONST(c)** — a constant exposure `c = mean(shield exposure)` over the
+  window, **zero turnover fees** (a deliberate handicap in the control's favour,
+  since the Shield does pay fees when it rebalances).
+- **VOL-target** — `min(1, tv / trailing_vol)` with `tv` bisected so the
+  window's mean exposure equals `c`, where `trailing_vol` is the 30-day
+  annualised realised stdev of the KKT basket, computed only from returns
+  strictly before each date (causal, no drawdown signal). This leg pays fees at
+  the same rate as the Shield.
+
+![Max drawdown at matched exposure](oos_assets/shock_exposure_matched.svg)
+
+| Window | Shield | Base 60/40 | CONST(c) | VOL-target | Residual (CONST − Shield) | Residual (VOL − Shield) |
+|--------|-------:|-----------:|---------:|-----------:|:-------------------------:|:-----------------------:|
+| Aug 2015 | 6.35% | 15.11% | 5.52% | 6.56% | **−0.83 pp** | +0.21 pp |
+| Late 2018 | 13.16% | 35.58% | 13.72% | 15.35% | **+0.55 pp** | +2.19 pp |
+| Mar 2020 | 23.35% | 40.86% | 24.52% | 30.37% | **+1.17 pp** | +7.02 pp |
+| 2022 May–Jun | 17.02% | 37.40% | 15.59% | 18.32% | **−1.43 pp** | +1.30 pp |
+| Mar 2023 | 4.83% | 8.12% | 4.83% | 4.88% | **+0.00 pp** | +0.05 pp |
+| Aug 2024 | 11.03% | 18.32% | 11.03% | 11.01% | **+0.00 pp** | −0.03 pp |
+
+Against the zero-fee CONST, the Shield is shallower in 3 of 6 windows with a
+mean residual of **−0.09 pp** — essentially zero. A **causal variant**, where `c`
+is calibrated on the 420-day warm-up preceding the shock (no look-ahead into
+the window), reverses that: the Shield is shallower in **5 of 6** with a mean
+residual of **+5.37 pp**. The honest reading: against a constant that already
+knows the shock's average exposure, the Shield's drawdown cut was mostly
+de-risking; against a constant that can only see what a live system would have
+seen, the Shield's adaptivity buys a meaningful edge.
+
+Against the fee-paying VOL-target, the Shield is shallower in **5 of 6**
+windows, mean residual **+1.79 pp**, worst −0.03 pp. The Shield's timing is
+better than a naive volatility-targeting rule at matched exposure.
+
+A paired block bootstrap over the concatenated shock-window days (368 days,
+1000 reps, 20-day blocks) gives:
+
+- Shield vs CONST: log-growth gap **−5.83%** [−17.21, +4.93] (5/50/95);
+  MaxDD gap **−2.67 pp** [−8.68, +2.59].
+- Shield vs VOL: log-growth gap **+9.11%** [−4.46, +24.11]; MaxDD gap
+  **+4.99 pp** [−2.34, +11.49].
+
+The MaxDD gap is a path-permutation robustness check, not a sampling
+confidence interval — the effective sample for a max-statistic is the window
+count, not the daily observations.
+
+## 8. Interpretation
 
 - **The drawdown mandate holds on real shocks** — per-window, out-of-sample, on
   the exact production path, against a pre-registered baseline.
 - **The cost is real but small.** Net of the calm-period bleed the Shield is still
   ahead in 5 of 6 windows; the exception is a shallow bank-failure scare.
-- **Honest attribution.** The baseline is a **static 60/40**, while the Shield ran
-  defensive in-window (average exposure ~0.21–0.35). Part of the drawdown cut is
-  therefore lower average exposure, not pure timing — the Buy & Hold (100%) column
-  is shown so the reader can see the full spread.
+- **Timing vs de-risking.** Against a zero-fee signal-free constant sized to the
+  Shield's own in-window mean exposure, the drawdown cut was mostly de-risking
+  (mean residual −0.09 pp, 3/6). Against a causal constant that cannot see the
+  shock ahead, or against a fee-paying volatility-targeting rule at the same
+  average exposure, the Shield's timing buys a clear edge (+5.37 pp and +1.79
+  pp mean residual, 5/6 in each case).
 
-## 8. Caveats
+## 9. Caveats
 
 - **2008 is not runnable** for a crypto basket (BTC data starts 2013-04-28).
 - Mar-2020 uses the production basket minus SOL; the two early windows use a
   five-token legacy basket (the tokens that existed then).
 - Fees are modeled at the production rate; slippage, spreads and liquidity are not.
 - Exact KKT allocations are withheld (IP).
+- **The six windows are a stress test, not a forecast.** They were selected
+  because they were crashes; the 6/6 result is not a predictive hit rate.
+- Exposure matching uses each window's own mean exposure (an in-window
+  calibration); the causal variant, calibrated on the pre-window portion, is
+  reported alongside so the look-ahead is bounded and disclosed.
+- The VOL-target's 30-day trailing-vol window is a control parameter chosen
+  for exposure parity, not a tuning of the Shield itself.
 - Simulated and past performance is not a reliable indicator of future results.
   AQMath is software, not investment advice.
 
-## 9. Reproducibility
+## 10. Reproducibility
 
 Research harness (git-ignored, lives in the private engine repo, not deployed). It
 imports the production shield, macro-weighting and simulation functions unchanged,
 cold-replays the full-history window each day with persisted state, and
 cross-checks that the production setting reproduces the per-window deltas exactly.
-Historical CSVs are sourced locally and are not committed. Exact KKT allocations
-are withheld (IP).
+The exposure-matched control legs (CONST, VOL-target) are produced by the same
+harness on the same production path. Historical CSVs are sourced locally and are
+not committed. Exact KKT allocations are withheld (IP).
 
 ---
 
@@ -148,4 +214,7 @@ are withheld (IP).
 production path, the live Proteus (v18) Shield cut maximum drawdown in every one
 versus a fixed-weight baseline — average **+13.3 pp**, no single episode driving
 it — at a small, quantified calm-period cost that leaves net benefit positive in
-five of six. The protection is robust across a wide parameter neighbourhood.
+five of six. Against a signal-free constant sized to its own average exposure,
+the drawdown cut was mostly de-risking; against a causal constant or a
+fee-paying volatility-targeting rule at matched exposure, the Shield's timing
+is clearly better. The protection is robust across a wide parameter neighbourhood.
