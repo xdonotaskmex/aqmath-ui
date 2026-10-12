@@ -283,7 +283,7 @@
 <h2>7. Exposure-matched control — isolating timing from de-risking (Test D)</h2>
 <p>A reader&#x27;s fair challenge: the Shield&#x27;s average in-window exposure (~0.21–0.35) is much lower than the 60% baseline&#x27;s, so part of the drawdown cut is <strong>less beta, not better timing</strong>. To answer, two signal-free control legs are built on the same KKT return stream as the Shield, with the same average exposure per window:</p>
 <ul><li><strong>CONST(c)</strong> — a constant exposure <code>c = mean(shield exposure)</code> over the window, <strong>zero turnover fees</strong> (a deliberate handicap in the control&#x27;s favour, since the Shield does pay fees when it rebalances).</li><li><strong>VOL-target</strong> — <code>min(1, tv / trailing_vol)</code> with <code>tv</code> bisected so the window&#x27;s mean exposure equals <code>c</code>, where <code>trailing_vol</code> is the 30-day annualised realised stdev of the KKT basket, computed only from returns strictly before each date (causal, no drawdown signal). This leg pays fees at the same rate as the Shield.</li></ul>
-<figure class="rs-fig"><img src="/research/assets/shock_exposure_matched.svg" alt="Max drawdown at matched exposure" width="920" height="440" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><img src="/research/assets/shock_exposure_matched.svg" alt="Max drawdown at matched exposure" width="920" height="500" loading="lazy" decoding="async"></figure>
 <div class="rs-tablewrap">
 <table>
 <thead><tr>

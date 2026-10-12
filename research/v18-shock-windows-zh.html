@@ -283,7 +283,7 @@
 <h2>7. 敢露敢入对照 —— 把择时与降敢露分开（测试 D）</h2>
 <p>读者的公平质疑：防护盾在窗口内的平均敢露（约 0.21–0.35）远低于 60% 基线， 因此部分回撤削减来自<strong>更低的 beta，而非更好的择时</strong>。为回答此问题，在与防护盾 相同的 KKT 收益流上构建两个无信号对照腿，每窗口的平均敢露严格一致：</p>
 <ul><li><strong>CONST(c)</strong> —— 常数敢露 <code>c = mean(防护盾敢露)</code>（窗口内均值），<strong>零手续费</strong> （有意偏向对照的惩罚性设置，因防护盾再平衡时需付费）。</li><li><strong>VOL-target</strong> —— <code>min(1, tv / trailing_vol)</code>，其中 <code>trailing_vol</code> 为 KKT 组合 30 日年化已实现标准差（仅用严格早于当日的收益，因果，无回撤信号），<code>tv</code> 按每窗口 二分使窗口均敢露等于 <code>c</code>（容差 1e-4），按与防护盾相同费率付费。</li></ul>
-<figure class="rs-fig"><img src="/research/assets/shock_exposure_matched.svg" alt="敢露匹配下的最大回撤" width="920" height="440" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><img src="/research/assets/shock_exposure_matched.svg" alt="敢露匹配下的最大回撤" width="920" height="500" loading="lazy" decoding="async"></figure>
 <div class="rs-tablewrap">
 <table>
 <thead><tr>
