@@ -39,3 +39,4 @@ _commit_msg.txt
 # visual-regression baselines in tests/visual.spec.cjs-snapshots/; a _-prefixed
 # capture is a one-off probe, not a baseline, so re-ignore it here (last rule wins).
 tests/_*.png
+scratch/reply-quant500-exposure-control.md
