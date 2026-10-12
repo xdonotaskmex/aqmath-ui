@@ -316,7 +316,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=f7dc1cc028')
+    return fetch('/locales/' + lang + '.json?v=a7f64dc139')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -391,7 +391,6 @@ function applyTranslations() {
         toggleDeleverage: function () { toggleDeleverage(); },
         saveSnapshot: function () { saveSnapshot(); },
         btRunBacktest: function () { btRunBacktest(); },
-        btRunWFGrid: function () { btRunWFGrid(); },
         btResetAll: function () { btResetAll(); },
         hideProModal: function () { hideProModal(); },
         reloadApp: function () { window.location.reload(); },
@@ -442,7 +441,6 @@ function applyTranslations() {
     var CHANGE = {
         importCSV: function (el, arg, e) { importCSV(e); },
         importJSON: function (el, arg, e) { importJSON(e); },
-        btRunWFGrid: function () { btRunWFGrid(); },
         btHandleFile: function (el, arg) { btHandleFile(parseInt(arg, 10), el); },
         // Discipline Module (app-notify.js)
         saveDisciplineTarget: function () { saveDisciplineTarget(); },

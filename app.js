@@ -1345,10 +1345,10 @@ function popuniFormu(sym) {
     syncTargetFieldLock();
 }
 
-// Target% belongs to the server once the shield has frozen the KKT plan: v14
-// recomputes it and the next status refresh overwrites anything typed here.
-// Locking the field says so, instead of letting the user fill in a number that
-// gets silently discarded.
+// Target% belongs to the server once the shield has frozen the KKT plan: the
+// shield recomputes it and the next status refresh overwrites anything typed
+// here. Locking the field says so, instead of letting the user fill in a number
+// that gets silently discarded.
 function syncTargetFieldLock() {
     const el = document.getElementById('iTarget');
     if (!el) return;
@@ -1357,7 +1357,7 @@ function syncTargetFieldLock() {
     const hint = document.getElementById('iTargetHint');
     if (hint) {
         hint.textContent = frozen
-            ? 'managed by the Aegis (v14) shield — quantity and APY stay editable'
+            ? 'managed by the Proteus (v18) shield — quantity and APY stay editable'
             : '';
         hint.hidden = !frozen;
     }
@@ -1389,8 +1389,8 @@ async function dodajToken() {
     const safeHaven = isStablecoin(sym);
     if (isNaN(amount) || amount <= 0) return showToast('quantity must be > 0.', 'warning');
 
-    // Once the shield has frozen the KKT plan, Target% is SERVER-owned (v14
-    // computes it) and the field is only a mirror. Demanding "> 0" then made a
+    // Once the shield has frozen the KKT plan, Target% is SERVER-owned (the
+    // engine computes it) and the field is only a mirror. Demanding "> 0" then made a
     // row unmaintainable: KKT legitimately assigns 0% to a token under its
     // min-weight floor, so updating that token's APY or quantity was impossible
     // without inventing an allocation the engine would immediately overwrite.

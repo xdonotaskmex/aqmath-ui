@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=f7dc1cc028">
+    <link rel="stylesheet" href="/styles.min.css?v=a7f64dc139">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
 </head>
@@ -196,11 +196,11 @@
     <!-- Each generated entry page ships exactly one view, so this heading is
          the page's only top-level heading - it is what /backtest ranks on. -->
     <div class="bt-head">
-        <div class="bt-kicker">Interactive Walk-Forward Backtest</div>
+        <div class="bt-kicker">Interactive Production-Engine Backtest</div>
         <h1 class="bt-title">Backtest the Deleverage Shield on Your Own Data</h1>
-        <p class="bt-intro">Upload your own historical price CSVs for up to five tokens and run <strong>two engines in parallel on identical terms</strong>: the fixed-threshold Deleverage Shield <strong>Aegis (v14.0)</strong> and the vol-scaled adaptive production engine <strong>Proteus (v18)</strong> &mdash; all against plain Buy &amp; Hold. Every engine gets identical DCA capital on the same schedule, so the only difference you see is the exposure control itself &mdash; how far each rule pulls risk off the table in stress, and what that costs in upside.</p>
+        <p class="bt-intro">Upload your own historical price CSVs for up to five tokens and run the engine that runs your portfolio: <strong>Proteus (v18)</strong>, the vol-scaled adaptive Deleverage Shield, against plain <strong>Buy &amp; Hold</strong>. Both get identical DCA capital on the same schedule, so the only difference you see is the exposure control itself &mdash; how far the shield pulls risk off the table in stress, and what that costs in upside.</p>
         <p class="bt-intro">Your CSV file never leaves your machine: it is parsed <strong>in your browser</strong>, and only the resulting price series is sent to the engine, where it is processed in-memory and discarded &mdash; never stored, never logged. The run happens on the server because the modulator's parameters stay there and are never shipped to the browser. Results are scored on <strong>risk-adjusted return</strong> (Sharpe and Calmar), not on whether they beat Buy &amp; Hold in raw percent.</p>
-        <div class="rv-v15-notice" data-i18n-html="bt.enginesNotice"><span class="rv-v15-tag">PROTEUS (v18) IS LIVE</span> The backtest now runs <strong>Aegis (v14) and Proteus (v18)</strong> side by side on identical terms. Proteus (v18) uses volatility-scaled adaptive thresholds that auto-tune to both calm large-cap baskets and high-vol alt baskets &mdash; one adaptive engine instead of separate per-profile engines. <strong>Proteus (v18) is the production engine.</strong> Aegis (v14) is its fixed-threshold predecessor and still runs as a fallback for portfolios too young to warm the adaptive threshold.</div>
+        <div class="rv-v15-notice" data-i18n-html="bt.enginesNotice"><span class="rv-v15-tag">PROTEUS (v18) IS LIVE</span> This tab runs <strong>one engine: Proteus (v18)</strong>, the production shield &mdash; the same volatility-scaled adaptive code path a live portfolio is replayed through every day, with thresholds that auto-tune to both calm large-cap baskets and high-vol alt baskets. The former Aegis (v14) comparison leg is retired from the backtest; v14 still runs in production only as a warm-up fallback for portfolios too young to calibrate the adaptive threshold.</div>
         <p class="sim-notice" data-i18n-html="bt.simNotice"><strong>Hypothetical results.</strong> This page computes a simulation from the price history you upload. A backtest applies a strategy to the past with complete knowledge of how that period turned out &mdash; knowledge nobody had at the time &mdash; and it ignores slippage, spreads and taxes, though it does charge a simulated 0.1% exchange fee on every rebalance, DCA buy and redeployment. Hypothetical and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software for your own analysis: it is not investment advice, not a recommendation to buy or sell any asset, and it never places orders or holds funds.</p>
     </div>
 
@@ -219,10 +219,10 @@
         </div>
         <div class="tc-body">
             <div class="bt-explain bt-explain-intro" data-i18n-html="bt.intro">
-                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). Every run executes <strong>two engines in parallel</strong> on the exact same basket, capital and DCA schedule: <strong>Aegis (v14.0) Deleverage</strong> (the fixed-threshold predecessor &mdash; continuous drawdown + downside-vol de-risking) and <strong>Proteus (v18) vol-scaled adaptive</strong> (the production engine &mdash; volatility-scaled dynamic thresholds with V-bounce re-entry). <strong>Buy &amp; Hold</strong> buys tokens unconditionally and stays fully exposed. The basket follows the same <strong>180-day macro loop</strong> as production &mdash; a KKT risk-parity re-optimisation every 180 days on the trailing 180-day window. Both engines charge the same simulated fees, redeploy parked DCA cash the same way, and are scored on <strong>risk-adjusted return (Sharpe and Calmar)</strong>, not on beating Buy &amp; Hold.
+                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). Every run executes the <strong>production engine</strong> &mdash; <strong>Proteus (v18)</strong>, volatility-scaled dynamic thresholds with V-bounce re-entry &mdash; on your basket, capital and DCA schedule, next to <strong>Buy &amp; Hold</strong>, which buys tokens unconditionally and stays fully exposed. The basket follows the same <strong>180-day macro loop</strong> as production &mdash; a KKT risk-parity re-optimisation every 180 days on the trailing 180-day window. Both legs charge the same simulated fees and redeploy parked DCA cash the same way, and results are scored on <strong>risk-adjusted return (Sharpe and Calmar)</strong>, not on beating Buy &amp; Hold.
             </div>
-            <!-- v14.0 continuous DD + downside-vol modulator flow -->
-            <svg class="bt-flow-svg" viewBox="0 0 900 148" role="img" aria-label="Aegis v14.0 continuous drawdown and downside-volatility modulator flow" preserveAspectRatio="xMidYMid meet">
+            <!-- Proteus (v18) vol-scaled adaptive modulator flow -->
+            <svg class="bt-flow-svg" viewBox="0 0 900 148" role="img" aria-label="Proteus v18 volatility-scaled adaptive modulator flow" preserveAspectRatio="xMidYMid meet">
                 <defs>
                     <marker id="btArrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--red)"/></marker>
                     <marker id="btArrowGrn" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--green)"/></marker>
@@ -232,30 +232,30 @@
                 <line x1="426" y1="84" x2="462" y2="84" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#btArrowGrn)"/>
                 <line x1="656" y1="84" x2="692" y2="84" stroke="var(--green)" stroke-width="1.5" marker-end="url(#btArrowGrn)"/>
                 <!-- arrow captions -->
-                <text x="214" y="120" class="bt-flow-cap red">weighted blend</text>
-                <text x="560" y="120" class="bt-flow-cap grn">symmetric ramp (0.30)</text>
+                <text x="214" y="120" class="bt-flow-cap red">vol-scaled band</text>
+                <text x="560" y="120" class="bt-flow-cap grn">asymmetric ramp</text>
                 <!-- nodes -->
                 <g>
                     <rect x="8" y="60" width="186" height="48" rx="6" class="bt-flow-node cyan"/>
-                    <text x="101" y="82" class="bt-flow-t cyan">REGIME SIGNAL</text>
-                    <text x="101" y="98" class="bt-flow-s">drawdown ↑ + downside vol ↑</text>
+                    <text x="101" y="82" class="bt-flow-t cyan">TRAILING SIGMA</text>
+                    <text x="101" y="98" class="bt-flow-s">60d downside deviation</text>
                 </g>
                 <g>
                     <rect x="238" y="60" width="186" height="48" rx="6" class="bt-flow-node red"/>
-                    <text x="331" y="82" class="bt-flow-t red">base_risk</text>
-                    <text x="331" y="98" class="bt-flow-s">drawdown + downside vol</text>
+                    <text x="331" y="82" class="bt-flow-t red">DYNAMIC THRESHOLDS</text>
+                    <text x="331" y="98" class="bt-flow-s">dd_ref = clamp(K · σ)</text>
                 </g>
                 <g>
                     <rect x="468" y="60" width="186" height="48" rx="6" class="bt-flow-node purple"/>
                     <text x="561" y="82" class="bt-flow-t purple">target = 1 − risk</text>
-                    <text x="561" y="98" class="bt-flow-s">continuous · no floor</text>
+                    <text x="561" y="98" class="bt-flow-s">continuous · impulse floor</text>
                 </g>
                 <g>
                     <rect x="698" y="60" width="194" height="48" rx="6" class="bt-flow-node green"/>
                     <text x="795" y="82" class="bt-flow-t green">EXPOSURE</text>
-                    <text x="795" y="98" class="bt-flow-s">smooth ramp · both directions</text>
+                    <text x="795" y="98" class="bt-flow-s">fast exit · V-bounce re-entry</text>
                 </g>
-                <text x="450" y="22" class="bt-flow-title">continuous DD + downside-vol modulator · Aegis v14.0</text>
+                <text x="450" y="22" class="bt-flow-title">vol-scaled adaptive modulator · Proteus v18</text>
                 <text x="450" y="40" class="bt-flow-sub">no indicators · no timers · no correlation gate</text>
             </svg>
         </div>
@@ -295,7 +295,6 @@
             </div>
             <div class="bt-controls">
                 <button class="btn blue" id="btRunBtn" data-action="btRunBacktest" disabled>Run Backtest</button>
-                <button class="btn amber" id="btWfBtn" data-action="btRunWFGrid" disabled>Run WF Grid</button>
                 <button class="btn red" data-action="btResetAll">Reset All</button>
                 <span id="btLoadStatus" style="font-size:.8rem;color:var(--muted)"></span>
             </div>
@@ -347,8 +346,7 @@
         <div class="tc bt-card">
             <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--event-log</span></div>
             <div class="tc-body" style="padding:0;">
-                <div class="bt-explain bt-explain-sm" style="margin:12px 16px 0;"><span style="color:var(--blue);font-weight:700">DCA</span> (cyan) = periodic contribution &mdash; buys tokens when risk-on, parks to USDC when defensive (exposure &lt; 40%) | <span style="color:var(--green);font-weight:600">REDEPLOY</span> (green) = parked cash returns to tokens once exposure recovers &ge; 40%.
-                    <span style="float:right"><label style="color:var(--muted);font-size:.75rem;margin-right:6px">Engine</label><select id="btEventsEngine" data-change="btEventsEngineChange" style="background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-family:var(--mono);font-size:.75rem"><option value="v14">Aegis v14 · Deleverage</option><option value="v18">Proteus v18 · Adaptive</option></select></span>
+                <div class="bt-explain bt-explain-sm" style="margin:12px 16px 0;"><span style="color:var(--blue);font-weight:700">DCA</span> (cyan) = periodic contribution &mdash; buys tokens when risk-on, parks to USDC when defensive (exposure &lt; 40%) | <span style="color:var(--green);font-weight:600">REDEPLOY</span> (green) = parked cash returns to tokens once exposure recovers &ge; 40%. Every row is the production Proteus (v18) engine.
                 </div>
                 <div style="max-height:400px;overflow-y:auto;padding:0 16px 16px;">
                     <table class="bt-events-table" id="btEventsTable">
@@ -357,35 +355,6 @@
                     </table>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- WALK-FORWARD -->
-    <div id="btWfSection" class="tc bt-card hidden">
-        <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--walk-forward-grid</span></div>
-        <div class="tc-body">
-            <div class="bt-explain bt-explain-sm">Systematic sweep of key parameters. Best row highlighted. All runs use the same DCA schedule and production deleverage settings.</div>
-            <div class="bt-wf-controls">
-                <div class="bt-setting"><label>Sweep Parameter</label>
-                    <select id="btWfSweep" data-change="btRunWFGrid">
-                        <option value="dd_ref">DD Reference</option>
-                        <option value="vol_low">Vol Low</option>
-                        <option value="vol_high">Vol High</option>
-                        <option value="w_dd">DD Weight</option>
-                        <option value="exit_speed">Exit Speed</option>
-                        <option value="entry_speed">Entry Speed</option>
-                    </select>
-                </div>
-                <div class="bt-setting"><label>Metric</label>
-                    <select id="btWfMetric" data-change="btRunWFGrid">
-                        <option value="final">Final Value</option>
-                        <option value="calmar">Calmar Ratio</option>
-                        <option value="maxdd">Max Drawdown</option>
-                        <option value="sharpe">Sharpe Ratio</option>
-                    </select>
-                </div>
-            </div>
-            <div id="btWfGridContainer" style="overflow-x:auto"></div>
         </div>
     </div>
 
@@ -407,7 +376,7 @@
     <div class="logo-box-mini">AQ</div>
     <span>AQMath 2026</span>
     <span style="margin-left:12px;color:var(--dim);">|</span>
-    <span>Backtesting Engines · Aegis v14 / Proteus v18</span>
+    <span>Backtesting Engine · Proteus v18 (production)</span>
 </footer>
 
 </div><!-- /backtestView -->
@@ -429,10 +398,10 @@
     <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
 </footer>
 
-<script defer src="/app-widgets.js?v=f7dc1cc028"></script>
-<script defer src="/app-backtest.js?v=f7dc1cc028"></script>
-<script defer src="/app.js?v=f7dc1cc028"></script>
-<script defer src="/app-notify.js?v=f7dc1cc028"></script>
+<script defer src="/app-widgets.js?v=a7f64dc139"></script>
+<script defer src="/app-backtest.js?v=a7f64dc139"></script>
+<script defer src="/app.js?v=a7f64dc139"></script>
+<script defer src="/app-notify.js?v=a7f64dc139"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -446,11 +415,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=f7dc1cc028"></script>
+<script defer src="/vendor/i18next.min.js?v=a7f64dc139"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=f7dc1cc028"></script>
-<script defer src="/app-boot.js?v=f7dc1cc028"></script>
+<script defer src="/app-tour.js?v=a7f64dc139"></script>
+<script defer src="/app-boot.js?v=a7f64dc139"></script>
 
 </body>
 </html>
