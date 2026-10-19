@@ -927,8 +927,11 @@ let _pendingDcaSignalId = null;
 function _renderDcaBlock(s) {
     const p = s.dca_payload || {};
     const route = String(p.route || 'USDC').toLowerCase();
-    const amount = Number(p.amount || s.usd || 0);
-    const amountStr = '$' + Math.round(amount).toLocaleString();
+    // Newer payloads carry the documented final plan (DCA + redeploy together,
+    // small-DCA rule, per-token minimum); older pending cards only have `buys`.
+    const finalBuys = Array.isArray(p.final_buys) ? p.final_buys : null;
+    const amount = Number((finalBuys && p.total) || p.amount || s.usd || 0);
+    const amountStr = '$' + (finalBuys ? amount.toFixed(2) : Math.round(amount)).toLocaleString();
     const regime = s.shield_regime || 'LOW_VOL';
     const regimeClass = regime === 'SHOCK' ? 'regime-shock' : 'regime-lowvol';
     const regimeLabel = regime === 'SHOCK' ? 'SHOCK' : 'LOW VOL';
@@ -946,17 +949,24 @@ function _renderDcaBlock(s) {
                 ? ' Total parked: <strong>$' + Math.round(parked).toLocaleString() + '</strong>.'
                 : '');
     } else {
-        const buys = Array.isArray(p.buys) ? p.buys : [];
+        const buys = finalBuys || (Array.isArray(p.buys) ? p.buys : []);
         const buyTxt = buys.map(function (b) {
+            const usd = Number(b.usd || 0);
             return escapeHtml(_normSym(String(b.sym || '').toUpperCase()))
-                + ' $' + Math.round(Number(b.usd || 0)).toLocaleString();
+                + ' $' + (finalBuys ? usd.toFixed(2) : Math.round(usd)).toLocaleString();
         }).join(' &middot; ');
         routeHtml = '<strong>Risk-on</strong> &mdash; ' + amountStr + ' into tokens'
             + (buyTxt ? ': ' + buyTxt : '') + '.';
         const redeploy = Number(p.redeploy_usdc || 0);
         if (redeploy > 0) {
-            routeHtml += ' <strong>+$' + Math.round(redeploy).toLocaleString()
-                + '</strong> redeployed from parked USDC at the same weights.';
+            routeHtml += finalBuys
+                ? ' Includes <strong>$' + redeploy.toFixed(2) + '</strong> redeployed from parked USDC.'
+                : ' <strong>+$' + Math.round(redeploy).toLocaleString()
+                    + '</strong> redeployed from parked USDC at the same weights.';
+        }
+        const unalloc = Number(p.unallocated || 0);
+        if (finalBuys && unalloc > 0.01) {
+            routeHtml += ' $' + unalloc.toFixed(2) + ' stays in USDC (below the per-token minimum).';
         }
     }
 
@@ -984,7 +994,8 @@ async function executeDcaSignal(el, signalId) {
     if (!signalId) return;
     const sig = _pendingSignals.find(function (s) { return s.signal_id === signalId; });
     const payload = (sig && sig.dca_payload) || {};
-    const amount = Number(payload.amount || (sig && sig.usd) || 0);
+    // total = DCA + redeployed parked USDC, so dca-engine plans the same sum the card shows
+    const amount = Number(payload.total || payload.amount || (sig && sig.usd) || 0);
     const amtInput = document.getElementById('iDcaAmount');
     if (amtInput && amount > 0) amtInput.value = amount;
     _pendingDcaSignalId = signalId;

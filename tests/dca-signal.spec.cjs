@@ -147,3 +147,55 @@ test.describe('DCA pending signal card', () => {
     expect(jsErrors).toEqual([]);
   });
 });
+
+// Newer payload: documented final plan (DCA + redeploy together). The card must
+// show the TOTAL, the final per-token amounts to the cent, and [ execute DCA ]
+// must pre-fill the total so dca-engine plans exactly what the card shows.
+const DCA_TOKENS_FINAL = {
+  signal_id: 'dcafinal0000000000001',
+  side: 'DCA', sym: 'DCA', units: 0, usd: 20,
+  shield_regime: 'LOW_VOL', signal_date: '2026-10-19', days_pending: 0,
+  expires_at: iso(47),
+  dca_payload: {
+    route: 'tokens', amount: 20, redeploy_usdc: 20, total: 40,
+    buys: [{ sym: 'PAXG', usd: 14 }, { sym: 'ATH', usd: 6 }],
+    final_buys: [{ sym: 'PAXG', usd: 28.01 }, { sym: 'ATH', usd: 11.99 }],
+    unallocated: 0, plan_mode: 'proportional',
+  },
+};
+
+test.describe('DCA pending signal card (final plan payload)', () => {
+  test('shows the total + final amounts and pre-fills the total', async ({ page, baseURL }) => {
+    await page.route('**/*', (route) => {
+      const url = route.request().url();
+      if (url.startsWith(baseURL)) return route.continue();
+      const type = route.request().resourceType();
+      if (type !== 'xhr' && type !== 'fetch') return route.continue();
+      return route.fulfill({ status: 200, contentType: 'application/json',
+        headers: { 'Access-Control-Allow-Origin': '*' }, body: '{}' });
+    });
+    const jsErrors = [];
+    page.on('pageerror', (e) => jsErrors.push('pageerror: ' + e.message));
+    await page.addInitScript(() => { localStorage.setItem('aqmath-whatsnew-seen', '2.1'); });
+    await page.goto('/app', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(600);
+
+    const out = await page.evaluate((mock) => {
+      _pendingSignals = [mock];
+      _rerenderSignalList();
+      const list = document.getElementById('signalList');
+      const html = list.innerHTML;
+      const btn = list.querySelector('[data-action="executeDcaSignal"]');
+      btn.click();
+      return { html: html, amt: document.getElementById('iDcaAmount').value };
+    }, DCA_TOKENS_FINAL);
+
+    expect(out.html).toContain('$40.00');       // total in the header and text
+    expect(out.html).toContain('PAXG $28.01');
+    expect(out.html).toContain('ATH $11.99');
+    expect(out.html).toContain('Includes');
+    expect(out.html).toContain('20.00');        // redeployed part
+    expect(out.amt).toBe('40');                 // dca-engine plans the same sum
+    expect(jsErrors).toEqual([]);
+  });
+});
