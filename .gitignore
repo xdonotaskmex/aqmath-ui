@@ -10,6 +10,9 @@ dca-engine/
 !favicon.png
 !apple-touch-icon.png
 !social-preview.png
+# Site imagery (landing mockups, proof charts). Everything *.png above is scratch;
+# these are shipped assets and must be versioned or they 404 on Pages.
+!assets/**/*.png
 # Playwright visual-regression baselines must be versioned for diffing
 !tests/**/*.png
 *.bat

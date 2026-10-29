@@ -42,7 +42,7 @@ SITE = "https://aqmath.xyz"
 # social-media scrapers rather than by the running app, so stamp_version.py
 # deliberately leaves it alone and audit_pages.py excludes it from the
 # single-asset-stamp check. Keep it in step with the entry pages.
-SOCIAL_IMAGE = f"{SITE}/social-preview.png?v=20260721b"
+SOCIAL_IMAGE = f"{SITE}/social-preview.png?v=20261029"
 SOCIAL_IMAGE_ALT = ("AQMath &mdash; Risk Parity crypto portfolio calculator with "
                     "Deleverage Shield")
 

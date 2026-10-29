@@ -114,6 +114,13 @@ FORBIDDEN_ORIGINS = [
 
 COMMENT_RE = re.compile(r"<!--.*?-->", re.S)
 LINK_RE = re.compile(r'<a\b[^>]*?href="([^"]+)"', re.I)
+# Images a visitor actually loads: <img src>, icon <link href>, and the social
+# card that scrapers fetch from the og:/twitter: meta tags.
+IMG_RE = re.compile(r'<img\b[^>]*?\bsrc="([^"]+)"', re.I)
+ICON_RE = re.compile(r'<link\b[^>]*?\bhref="([^"]+\.(?:png|ico|svg|webp)(?:\?[^"]*)?)"', re.I)
+SOCIAL_RE = re.compile(
+    r'<meta\b[^>]*?(?:property|name)="(?:og:image|og:image:secure_url|twitter:image)"[^>]*?content="([^"]+)"',
+    re.I)
 STAMP_RE = re.compile(r"\?v=([\w]+)")
 
 # The Forward Log fallback carries its own generation date. The live section is
@@ -283,6 +290,26 @@ def audit():
         })
         if broken:
             fail(f"broken internal link(s): {broken}")
+
+        # --- images ----------------------------------------------------------
+        # A referenced image that is not in the repo is a broken-image icon for
+        # every visitor. This is not theoretical: the blanket "*.png" ignore
+        # rule once kept the landing mockups and the og:image card out of the
+        # repo, so they rendered locally and 404'd on Pages for weeks.
+        missing_img = set()
+        for src in IMG_RE.findall(html) + ICON_RE.findall(html) + SOCIAL_RE.findall(html):
+            target = src.strip()
+            if target.startswith(SITE + "/"):
+                target = "/" + target[len(SITE) + 1:]
+            elif re.match(r"^(?:data:|https?:|//|mailto:)", target):
+                continue
+            if not target.startswith("/"):
+                base = name.rsplit("/", 1)[0] if "/" in name else ""
+                target = "/" + (base + "/" + target if base else target)
+            if not resolve(target, existing):
+                missing_img.add(target.split("?")[0])
+        if missing_img:
+            fail(f"missing image file(s): {sorted(missing_img)}")
 
         rows.append((name, route or "-", robots or "-", len(h1s)))
 
