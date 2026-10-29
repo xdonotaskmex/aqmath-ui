@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/ibm-plex-serif-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=e44a9a6e4f">
+    <link rel="stylesheet" href="/styles.min.css?v=3fc73f53ff">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
 </head>
@@ -60,7 +60,7 @@
 <div class="whats-new hidden" id="whatsNew">
     <div class="whats-new-box">
         <div class="whats-new-head">
-            <span class="whats-new-ver">v2.1.1</span>
+            <span class="whats-new-ver" data-app-version>v2.1.1</span>
             <button type="button" class="whats-new-close" data-action="closeWhatsNew">&times;</button>
         </div>
         <div class="whats-new-body">
@@ -755,10 +755,10 @@
     </div>
 </footer>
 
-<script defer src="/app-widgets.js?v=e44a9a6e4f"></script>
-<script defer src="/app-backtest.js?v=e44a9a6e4f"></script>
-<script defer src="/app.js?v=e44a9a6e4f"></script>
-<script defer src="/app-notify.js?v=e44a9a6e4f"></script>
+<script defer src="/app-widgets.js?v=3fc73f53ff"></script>
+<script defer src="/app-backtest.js?v=3fc73f53ff"></script>
+<script defer src="/app.js?v=3fc73f53ff"></script>
+<script defer src="/app-notify.js?v=3fc73f53ff"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -772,11 +772,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=e44a9a6e4f"></script>
+<script defer src="/vendor/i18next.min.js?v=3fc73f53ff"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=e44a9a6e4f"></script>
-<script defer src="/app-boot.js?v=e44a9a6e4f"></script>
+<script defer src="/app-tour.js?v=3fc73f53ff"></script>
+<script defer src="/app-boot.js?v=3fc73f53ff"></script>
 
 </body>
 </html>

@@ -553,7 +553,7 @@
       "t9a": "Black purchase chat",
       "t9b": "Handled outside the app (Telegram): username, payment wallet address, transaction ID &mdash; see Privacy section 12; the app never sees them"
     },
-    "version": "v2.2 — October 2026",
+    "versionDate": "October 2026",
     "cap": {
       "arch": "System Architecture Diagram",
       "positions": "Portfolio Position Overview (example)",

@@ -10,10 +10,17 @@
 // / app-backtest is already available when a user event fires.
 // ============================================================================
 
-// Release label of the What's New card. One single source: the dismiss handler
-// stores this value and the auto-show check compares against it, so bumping the
-// release touches exactly this line (plus the v2.x.x label in _src/index.html).
+// Release label of the What's New card. ONE source of truth for every visible
+// version on the site: the What's New header and the docs chip both read it via
+// [data-app-version] below, and the dismiss handler stores it. Bumping a release
+// means editing this single line.
 var APP_VERSION = '2.1.1';
+
+(function () {
+    // app-boot.js is deferred, so the DOM above is already parsed.
+    var nodes = document.querySelectorAll('[data-app-version]');
+    for (var i = 0; i < nodes.length; i++) nodes[i].textContent = 'v' + APP_VERSION;
+})();
 
 // ---------------------------------------------------------------------------
 // 1) Landing terminal typing animation (was inline block at index.html L165)
@@ -321,7 +328,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=e44a9a6e4f')
+    return fetch('/locales/' + lang + '.json?v=3fc73f53ff')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
