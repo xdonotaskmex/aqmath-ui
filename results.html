@@ -26,12 +26,12 @@
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer with Deleverage Shield Crash Protection">
+    <meta property="og:image:alt" content="AQMath — Risk Parity Crypto Portfolio Calculator with Deleverage Shield Drawdown Model">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Crypto Drawdown Protection Backtest Results — 182 Baskets | AQMath">
     <meta name="twitter:description" content="Out-of-sample stress test results: 182 crypto portfolio baskets validated, including tokens never used to tune the model. Median 45% drawdown reduction vs Buy & Hold.">
     <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
-    <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer with Deleverage Shield">
+    <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Calculator with Deleverage Shield">
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","name":"Crypto Drawdown Protection Backtest Results — 182 Baskets Validated","url":"https://aqmath.xyz/results","description":"Out-of-sample stress test: 182 crypto portfolio baskets validated with median 45% drawdown reduction vs Buy & Hold, including tokens never used to tune the model.","articleSection":"Research Results","author":{"@id":"https://aqmath.xyz/#momir-demirov"},"publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Results","item":"https://aqmath.xyz/results"}]}]}</script>
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 
@@ -40,9 +40,9 @@
              handshake off the first authenticated request. -->
         <link rel="preconnect" href="https://api-auth.aqmath.xyz" crossorigin>
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
-    <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=b4d391be81">
+    <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/ibm-plex-serif-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/styles.min.css?v=8bf7eb5417">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
 </head>
@@ -53,7 +53,7 @@
      so build_pages.py keeps it on all generated entry pages. -->
 <div class="update-banner hidden" id="updateBanner">
     <span data-i18n="app.update.msg">A new version of AQMath is available - reload to get the latest build.</span>
-    <button type="button" class="update-banner-btn" data-action="reloadApp" data-i18n="app.update.reload">[ reload ]</button>
+    <button type="button" class="update-banner-btn" data-action="reloadApp" data-i18n="app.update.reload">Reload</button>
 </div>
 
 <!-- WHAT'S NEW: shown by app-boot.js once after each version update -->
@@ -64,13 +64,13 @@
             <button type="button" class="whats-new-close" data-action="closeWhatsNew">&times;</button>
         </div>
         <div class="whats-new-body">
-            <p class="whats-new-desc" data-i18n="app.whatsNew.desc">One-Tap Alignment is here. Confirm or adjust portfolio signals straight from the notification &mdash; no extra steps.</p>
+            <p class="whats-new-desc" data-i18n="app.whatsNew.desc">One-Tap Recording is here. Mark a calculated difference as recorded in your holdings, or adjust the amount, straight from the notification &mdash; no extra steps.</p>
             <ul class="whats-new-list">
-                <li data-i18n="app.whatsNew.item1">Confirm, skip or adjust signals in one tap</li>
+                <li data-i18n="app.whatsNew.item1">Record, dismiss or adjust a calculated difference in one tap</li>
                 <li data-i18n="app.whatsNew.item2">Regime-aware alerts (SHOCK / LOW_VOL)</li>
                 <li data-i18n="app.whatsNew.item3">Small fixes &amp; polish</li>
             </ul>
-            <button type="button" class="whats-new-close-btn" data-action="closeWhatsNew" data-i18n="app.whatsNew.close">[ close ]</button>
+            <button type="button" class="whats-new-close-btn" data-action="closeWhatsNew" data-i18n="app.whatsNew.close">Close</button>
         </div>
     </div>
 </div>
@@ -82,15 +82,15 @@
 <div class="lp-pro-modal hidden" id="proModal">
     <div class="lp-pro-box">
         <h3>&#128274; AQMath Black &mdash; Apply for Access</h3>
-        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card, no bank transfer, no personal data collected.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
+        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card and no bank transfer, so we never collect card or bank details.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
         <div class="lp-pro-beta">
             <div class="lp-pro-beta-label">Send a message to request access:</div>
             <div class="lp-pro-beta-links">
-                <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">[ telegram ]</a>
+                <a href="https://t.me/AQMath_Black" target="_blank" rel="noopener">Telegram</a>
                 <span class="lp-pro-beta-sep">&middot;</span>
-                <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">[ twitter ]</a>
+                <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">Twitter</a>
                 <span class="lp-pro-beta-sep">&middot;</span>
-                <a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">[ substack ]</a>
+                <a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">Substack</a>
             </div>
         </div>
         <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;">
@@ -99,7 +99,7 @@
                 Annual Access Only &middot; No Mobile App &middot; Web Application Only
             </div>
         </div>
-        <button class="lp-pro-close" data-action="hideProModal" style="margin-top:12px;">[ Close ]</button>
+        <button class="lp-pro-close" data-action="hideProModal" style="margin-top:12px;">Close</button>
     </div>
 </div>
 
@@ -112,13 +112,13 @@
     <div class="howaq-box">
         <div class="howaq-head">
             <h3>&#128214; How AQMath Works</h3>
-            <button class="howaq-close" data-action="hideHowAqmath" title="close">[ &times; ]</button>
+            <button class="howaq-close" data-action="hideHowAqmath" title="close">&times;</button>
         </div>
         <div class="howaq-body legal-page" id="howAqmathBody">
             <p>Loading&hellip;</p>
         </div>
         <div class="howaq-foot">
-            <button class="btn purple" id="btnHowAck" data-action="ackHowAqmath">[ I have read ]</button>
+            <button class="btn purple" id="btnHowAck" data-action="ackHowAqmath">I have read</button>
         </div>
     </div>
 </div>
@@ -129,7 +129,7 @@
         <div class="toast-title" id="toastTitle"></div>
         <div class="toast-msg" id="toastMsg"></div>
         <div class="toast-actions hidden" id="toastActions"></div>
-        <button class="toast-close" id="toastClose" data-action="hideToast">[ close ]</button>
+        <button class="toast-close" id="toastClose" data-action="hideToast">Close</button>
     </div>
 </div>
 
@@ -143,8 +143,8 @@
         <div class="dca-preview-note hidden" id="dcaPreviewNote"></div>
         <div class="dca-preview-foot hidden" id="dcaPreviewFoot"></div>
         <div class="dca-preview-actions">
-            <button class="btn green" id="dcaPreviewConfirm" data-action="confirmDca" data-i18n="app.dcaPreview.confirm">[ confirm ]</button>
-            <button class="btn" id="dcaPreviewCancel" data-action="cancelDca" data-i18n="app.dcaPreview.cancel">[ cancel ]</button>
+            <button class="btn green" id="dcaPreviewConfirm" data-action="confirmDca" data-i18n="app.dcaPreview.confirm">Confirm</button>
+            <button class="btn" id="dcaPreviewCancel" data-action="cancelDca" data-i18n="app.dcaPreview.cancel">Cancel</button>
         </div>
     </div>
 </div>
@@ -160,7 +160,7 @@
 <div class="scanlines"></div>
 <header class="hdr">
     <div class="logo">
-        <div class="logo-box">AQ</div>
+        <div class="logo-box" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg></div>
         <div>
             <div class="logo-name">AQMath</div>
             <div class="logo-tag">out-of-sample results</div>
@@ -169,27 +169,18 @@
     <button class="hdr-burger" type="button" aria-label="Menu" data-action="toggleHamburger">&#9776;</button>
     <div class="hdr-nav">
         <a class="hdr-nav-btn" href="/" data-i18n="app.navLanding">landing</a>
-        <a class="hdr-nav-btn" href="/app" data-i18n="app.navApp">app</a>
         <a class="hdr-nav-btn" href="/backtest" data-i18n="app.navBacktest">backtest</a>
         <a class="hdr-nav-btn active" href="/results" data-i18n="app.navResults">results</a>
         <a class="hdr-nav-btn" href="/v18" data-i18n="app.navV18">proteus</a>
         <a class="hdr-nav-btn" href="/research/" data-i18n="app.navResearch">research</a>
         <a class="hdr-nav-btn" href="/docs" data-i18n="app.navDocs">docs</a>
     </div>
-    <div class="hdr-right">
-        <div class="hdr-socials">
-            <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">telegram</a>
-            <span class="hdr-sep">|</span>
-            <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">twitter</a>
-            <span class="hdr-sep">|</span>
-            <a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener">reddit</a>
-            <span class="hdr-sep">|</span>
-            <a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">substack</a>
-        </div>
+    <div class="hdr-right hdr-lang">
         <div class="lp-lang-wrap">
             <button class="lp-lang-btn" data-lang="en" data-action="lang" data-arg="en">EN</button>
             <button class="lp-lang-btn" data-lang="zh-CN" data-action="lang" data-arg="zh-CN">中文</button>
         </div>
+    <a class="hdr-cta" href="/app" data-i18n="app.openApp">Open App</a>
     </div>
 </header>
 <div class="rv-wrap">
@@ -206,9 +197,9 @@
 <p class="rv-intro" data-i18n-html="rv.researchLink">The full test report for the previous unseen-token run &mdash; methodology, all 16 baskets, dead-token stress cases and caveats &mdash; is published at <a href="/research/oos-v14-new-tokens">Research &amp; Validation</a>.</p>
 <!-- engine changelog mirror (single source of truth:
      the same bt.changelog key the backtest tab renders) -->
-<div class="rv-v15-notice" data-i18n-html="rv.enginesNotice"><span class="rv-v15-tag">PROTEUS (v18) IS LIVE</span> The backtest tab now runs <strong>one engine: Proteus (v18)</strong>, the production shield, against a Buy &amp; Hold reference on identical terms. Proteus (v18) uses volatility-scaled adaptive thresholds that auto-tune to both calm large-cap baskets and high-vol alt baskets. The former Aegis (v14) comparison leg is retired from the backtest; v14 still runs in production only as a warm-up fallback for portfolios too young to calibrate the adaptive threshold.</div>
+<div class="rv-v15-notice" data-i18n-html="rv.enginesNotice"><span class="rv-v15-tag">Proteus (v18) is live</span> The backtest tab now runs <strong>one engine: Proteus (v18)</strong>, the production shield, against a Buy &amp; Hold reference on identical terms. Proteus (v18) uses volatility-scaled adaptive thresholds that auto-tune to both calm large-cap baskets and high-vol alt baskets. The former Aegis (v14) comparison leg is retired from the backtest; v14 still runs in production only as a warm-up fallback for portfolios too young to calibrate the adaptive threshold.</div>
 <details class="tc rv-cl">
-<summary class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--changelog</span><span class="rv-cl-hint" data-i18n="rv.changelogMirror">engine change log &middot; click to expand</span></summary>
+<summary class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">Changelog</span><span class="rv-cl-hint" data-i18n="rv.changelogMirror">engine change log &middot; click to expand</span></summary>
 <div class="tc-body">
 <div class="bt-explain bt-explain-sm" data-i18n-html="bt.changelogIntro"><strong>Change log.</strong> A dated record of engine updates, so any result you see can be traced back to the exact version that produced it.</div>
 <ul class="bt-changelog" data-i18n-html="bt.changelog"><li><span class='bt-cl-date'>2026-10-12</span><span class='bt-cl-text'><strong>The backtest tab runs the production engine only.</strong> Proteus (v18) is now the single engine on /backtest, replayed through the same dispatcher a live portfolio uses, and scored against the Buy &amp; Hold reference. The Aegis (v14) comparison leg and the v14 walk-forward parameter grid are removed from the tab. Aegis (v14) still runs in production as the warm-up fallback for portfolios with too little history to calibrate an adaptive threshold. <strong>No engine maths changed</strong> &mdash; every Proteus (v18) constant is untouched.</span></li><li><span class='bt-cl-date'>2026-09-08</span><span class='bt-cl-text'><strong>Proteus (v18) is the production engine.</strong> The volatility-adaptive shield now runs on real portfolios; Aegis (v14) remains only as a warm-up fallback for portfolios with too little history to calibrate an adaptive threshold. This page's copy had kept describing Proteus (v18) as a test candidate and has been corrected. <strong>Results published before this entry were produced by Aegis (v14)</strong> and are labelled as such wherever they appear.</span></li><li><span class='bt-cl-date'>2026-09-07</span><span class='bt-cl-text'><strong>Engines get product names: Aegis (v14) and Proteus (v18).</strong> Naming only &mdash; every formula, preset, frozen weight and result is unchanged, and the version numbers stay in telemetry so any figure still traces to the exact engine that produced it.</span></li><li><span class="bt-cl-date">2026-09-03</span><span class="bt-cl-text"><strong>Backtest now runs Aegis (v14) + Proteus (v18); v15 and v16 retired.</strong> The backtest tab now compares <strong>Aegis (v14)</strong> (production fallback) and <strong>Proteus (v18)</strong> (vol-scaled adaptive test candidate). v15 (CORR regime) was retired because its correlation-rank signal needed more history than the production 180-day window provided (MaxDD 37.6% on MAJORS vs Aegis (v14)'s 25.7%). v16 (trough-tranche) was retired because Proteus (v18)'s vol-scaled approach outperformed it on both profiles. <strong>Aegis (v14) is unchanged.</strong></span></li><li><span class="bt-cl-date">2026-08-12</span><span class="bt-cl-text"><strong>Backtest tab now runs all three engines on the production macro loop.</strong> Every backtest and WF-grid run now executes Aegis (v14), v15 and v16 side by side on identical basket, capital and DCA terms, and the basket follows the same <strong>180-day macro loop</strong> as production (a KKT risk-parity re-optimisation every 180 days). <strong>Aegis (v14) is unchanged.</strong></span></li><li><span class="bt-cl-date">2026-08-12</span><span class="bt-cl-text"><strong>v16 Beta experiment started (parallel paper trading).</strong> A third paper account running the new trough-tranche recovery shield (v16) is now logging next to the Aegis (v14) and v15 logs so all three can be compared on identical terms. <strong>Nothing in Aegis (v14) or v15 was touched</strong> &mdash; their engines and their logs continue exactly as before.</span></li><li><span class="bt-cl-date">2026-08-05</span><span class="bt-cl-text"><strong>v15 Beta experiment started (parallel paper trading).</strong> A second paper account running the new correlation-regime protection (v15) is now logging next to the Aegis (v14) log so the two can be compared on identical terms. <strong>Nothing in Aegis (v14) was touched</strong> &mdash; its engine and its log continue exactly as before.</span></li><li><span class="bt-cl-date">2026-07-21</span><span class="bt-cl-text"><strong>Engine settings frozen (Aegis v14.0).</strong> The modulator's settings were locked on this date. Every result from this day onward comes from this exact, unchanged engine.</span></li><li><span class="bt-cl-date">2026-07-21</span><span class="bt-cl-text"><strong>Recurring contribution can be zero.</strong> You can now set the <strong>DCA Amount</strong> to <strong>0</strong> to test a one-time, lump-sum start. Earlier results are unaffected.</span></li></ul>
@@ -217,8 +208,8 @@
 </div>
 <div class="rv-cards">
 <div class="rv-card"><div class="rv-big">182</div><div class="rv-lbl" data-i18n="rv.c1Lbl">baskets tested</div><div class="rv-sub" data-i18n="rv.c1Sub">3-5 coin equal-weight combos</div></div>
-<div class="rv-card"><div class="rv-big">100%</div><div class="rv-lbl" data-i18n="rv.c2Lbl">cut the crash</div><div class="rv-sub"><span data-i18n="rv.c2SubA">smaller max drawdown vs holding</span> (182/182)</div></div>
-<div class="rv-card"><div class="rv-big">-45 pp</div><div class="rv-lbl" data-i18n="rv.c3Lbl">median crash cut</div><div class="rv-sub" data-i18n="rv.c3Sub">typical drawdown reduction</div></div>
+<div class="rv-card"><div class="rv-big">100%</div><div class="rv-lbl" data-i18n="rv.c2Lbl">smaller drawdown</div><div class="rv-sub"><span data-i18n="rv.c2SubA">smaller max drawdown vs holding</span> (182/182)</div></div>
+<div class="rv-card"><div class="rv-big">-45 pp</div><div class="rv-lbl" data-i18n="rv.c3Lbl">median drawdown reduction</div><div class="rv-sub" data-i18n="rv.c3Sub">typical drawdown reduction</div></div>
 <div class="rv-card"><div class="rv-big">1.40x</div><div class="rv-lbl" data-i18n="rv.c4Lbl">median end value</div><div class="rv-sub" data-i18n="rv.c4Sub">vs buy &amp; hold, same DCA</div></div>
 </div>
 <div class="rv-chart"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 860 468" font-family="Segoe UI,Arial,sans-serif" style="max-width:860px">
@@ -302,9 +293,10 @@
 <rect x="730" y="34" width="12" height="12" fill="#f87171" opacity="0.85"/>
 <text x="746" y="44" font-size="12" fill="#e2e8f0">Buy &amp; Hold</text>
 </svg></div>
+<div class="rv-pair">
 <div class="rv-chart"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 860 330" font-family="Segoe UI,Arial,sans-serif" style="max-width:860px">
 <rect width="860" height="330" fill="#070d1a"/>
-<text x="20" y="30" font-size="18" font-weight="700" fill="#e2e8f0">Every basket cut the crash</text>
+<text x="20" y="30" font-size="18" font-weight="700" fill="#e2e8f0">Every basket: smaller simulated drawdown</text>
 <text x="20" y="50" font-size="12" fill="#8a9bb5">Distribution of drawdown reduction across all 182 baskets — not one landed on the wrong side of zero.</text>
 <line x1="56" y1="276.0" x2="836" y2="276.0" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
 <text x="50" y="279.0" font-size="10" fill="#8a9bb5" text-anchor="end">0</text>
@@ -340,7 +332,7 @@
 <rect x="741.5" y="246.5" width="91.5" height="29.5" fill="#34d399" opacity="0.9" rx="2"/>
 <text x="787.2" y="242.5" font-size="10" fill="#e2e8f0" text-anchor="middle">8</text>
 <text x="787.2" y="292" font-size="9" fill="#8a9bb5" text-anchor="middle">+55</text>
-<text x="446.0" y="320" font-size="10" fill="#8a9bb5" text-anchor="middle">crash cut (percentage points &mdash; further right = more protection)</text>
+<text x="446.0" y="320" font-size="10" fill="#8a9bb5" text-anchor="middle">drawdown reduction (percentage points &mdash; further right = larger reduction)</text>
 </svg></div>
 <div class="rv-chart"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 860 380" font-family="Segoe UI,Arial,sans-serif" style="max-width:860px">
 <rect width="860" height="380" fill="#070d1a"/>
@@ -368,6 +360,7 @@
 <rect x="670" y="88" width="12" height="12" fill="#f87171"/>
 <text x="688" y="99" font-size="12" fill="#e2e8f0">Buy &amp; Hold</text>
 </svg></div>
+</div>
 <div class="rv-chart"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 860 380" font-family="Segoe UI,Arial,sans-serif" style="max-width:860px">
 <rect width="860" height="380" fill="#070d1a"/>
 <text x="20" y="30" font-size="18" font-weight="700" fill="#e2e8f0">How deep the losses got - ATH/SUI/XMR/SOL/DOGE</text>
@@ -397,13 +390,13 @@
 <h2 class="rv-h2" data-i18n="rv.stressTitle">Stress cases</h2>
 <p class="rv-note" data-i18n="rv.stressNote">Harder tests: a dead coin (CEL / Celsius, collapsed 2022), a very short history (PYTH), and the full 13-coin basket. Lower drawdown is better.</p>
 <div class="rv-tablewrap"><table class="rv-table rv-stress">
-<thead><tr><th data-i18n="rv.thBasket">Basket</th><th data-i18n="rv.thShieldDd">Shield DD</th><th data-i18n="rv.thHoldDd">Hold DD</th><th data-i18n="rv.thCrashCut">Crash cut</th><th data-i18n="rv.thShieldCalmar">Shield Calmar</th><th data-i18n="rv.thHoldCalmar">Hold Calmar</th><th data-i18n="rv.thDays">Days</th></tr></thead>
+<thead><tr><th data-i18n="rv.thBasket">Basket</th><th data-i18n="rv.thShieldDd">Shield DD</th><th data-i18n="rv.thHoldDd">Hold DD</th><th data-i18n="rv.thCrashCut">Drawdown reduction</th><th data-i18n="rv.thShieldCalmar">Shield Calmar</th><th data-i18n="rv.thHoldCalmar">Hold Calmar</th><th data-i18n="rv.thDays">Days</th></tr></thead>
 <tbody><tr><td>SOL/SUI/DOGE/CEL<span data-i18n="rv.tagDead">(dead)</span></td><td>20.4%</td><td>72.4%</td><td class="pos">+52.1 pp</td><td>1.07</td><td>0.13</td><td>1173</td></tr><tr><td>ATH/SOL/PYTH<span data-i18n="rv.tagShort">(short)</span></td><td>11.9%</td><td>67.5%</td><td class="pos">+55.6 pp</td><td>0.00</td><td>-0.46</td><td>767</td></tr><tr><td>BTC/ETH/XMR/CEL<span data-i18n="rv.tagDead">(dead)</span></td><td>24.0%</td><td>67.3%</td><td class="pos">+43.3 pp</td><td>1.05</td><td>0.61</td><td>2837</td></tr><tr><td><span data-i18n="rv.rowAll">ALL 13 tokens</span></td><td>15.1%</td><td>47.5%</td><td class="pos">+32.4 pp</td><td>0.33</td><td>-0.20</td><td>767</td></tr></tbody></table></div>
 <h2 class="rv-h2" data-i18n="rv.htrTitle">How to read this</h2>
 <ul class="rv-list"><li data-i18n-html="rv.htr1"><strong>Drawdown</strong> is the worst peak-to-trough drop &mdash; how much your balance fell at the scariest moment.</li><li data-i18n-html="rv.htr2"><strong>Calmar</strong> is annual return divided by that worst drawdown &mdash; higher means more reward for each unit of pain. It improved on every basket.</li><li data-i18n-html="rv.htr3"><strong>Shield &mdash; Aegis (v14)</strong> was the production model when this report was generated &mdash; <strong>Proteus (v18)</strong> has since replaced it as the live engine; <strong>Buy &amp; Hold</strong> just holds the same coins with the same monthly buys.</li><li data-i18n-html="rv.htr4">These coins were <strong>not</strong> used to design the model, so this is a genuine out-of-sample check, not a curve-fit.</li></ul>
 <h2 class="rv-h2" data-i18n="rv.blTitle">Bottom line</h2>
-<p class="rv-intro"><span data-i18n="rv.blA">On coins the model had never seen before, the Shield cut the worst drop in</span> <strong data-i18n="rv.blB">every single basket</strong> <span data-i18n="rv.blC">&mdash; a typical crash cut of roughly</span> <strong>45 <span data-i18n="rv.blD">percentage points</span></strong> <span data-i18n="rv.blE">&mdash; while still compounding to a median</span> <strong>1.40x</strong> <span data-i18n="rv.blF">the end value of simply holding. It trades a sliver of the wildest upside for far shallower, shorter drawdowns, which is exactly the job of a risk shield: keep you in the game through the crashes so the recoveries actually count.</span></p>
-<p class="rv-disc"><span data-i18n="rv.discA">Past performance does not guarantee future results. Educational backtest on historical data; not financial advice. Aggregate: median crash cut</span> -45 pp <span data-i18n="rv.discB">(range</span> -23 <span data-i18n="rv.discTo">to</span> -59 <span data-i18n="rv.discC">pp), Calmar improved in</span> 182/182 <span data-i18n="rv.discD">baskets, Sharpe improved in</span> 172/182.</p>
+<p class="rv-intro"><span data-i18n="rv.blA">On coins the model had never seen before, the Shield cut the worst drop in</span> <strong data-i18n="rv.blB">every single basket</strong> <span data-i18n="rv.blC">&mdash; a typical drawdown reduction of roughly</span> <strong>45 <span data-i18n="rv.blD">percentage points</span></strong> <span data-i18n="rv.blE">&mdash; while still compounding to a median</span> <strong>1.40x</strong> <span data-i18n="rv.blF">the end value of simply holding. It trades a sliver of the wildest upside for far shallower, shorter drawdowns in the simulation. Simulated results are not a reliable indicator of future results.</span></p>
+<p class="rv-disc"><span data-i18n="rv.discA">Past performance does not guarantee future results. Educational backtest on historical data; not financial advice. Aggregate: median drawdown reduction</span> -45 pp <span data-i18n="rv.discB">(range</span> -23 <span data-i18n="rv.discTo">to</span> -59 <span data-i18n="rv.discC">pp), Calmar improved in</span> 182/182 <span data-i18n="rv.discD">baskets, Sharpe improved in</span> 172/182.</p>
 <!-- RESULTS_VIEW_END -->
 <!-- FORWARD_LOG_START -->
 <div id="forwardLogLive">
@@ -451,6 +444,7 @@
 <rect x="84" y="130" width="12" height="12" fill="#06b6d4"/>
 <text x="102" y="141" font-size="12" fill="#e2e8f0">Invested (DCA)</text>
 </svg></div>
+<div class="rv-pair">
 <div class="rv-chart"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 860 260" font-family="Segoe UI,Arial,sans-serif" style="max-width:860px">
 <rect width="860" height="260" fill="#070d1a"/>
 <text x="20" y="30" font-size="16" font-weight="700" fill="#e2e8f0">Drawdown &mdash; Deleverage Shield vs Buy &amp; Hold</text>
@@ -501,6 +495,7 @@
 <text x="640.6" y="196" font-size="10" fill="#8a9bb5" text-anchor="middle">2026-03</text>
 <text x="830.0" y="196" font-size="10" fill="#8a9bb5" text-anchor="middle">2026-10</text>
 </svg></div>
+</div>
 <p class="rv-disc">Paper trading &mdash; no real funds. Telemetry generated 2026-10-19 by the daily loop (Aegis v14.0 deleverage, weights v1 frozen 2026-07-21). Past performance does not guarantee future results; not financial advice.</p>
 </div>
 <!-- FORWARD_LOG_END -->
@@ -521,15 +516,25 @@
 <!-- ============ GLOBAL LEGAL FOOTER ============
      Outside every view container, so it renders on all five routes
      (/, /app, /backtest, /results, /docs) and stays crawlable. -->
-<footer class="site-footer">
-    <span data-i18n="ft.copy">&copy; 2026 AQMath &mdash; Private. Non-Custodial.</span><br>
-    <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
+<footer class="site-footer sf2">
+    <div class="sf2-in">
+        <div class="sf2-top">
+            <a class="sf2-logo" href="/"><svg width="26" height="26" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg><span>AQMath</span></a>
+            <div class="sf2-soc"><a href="https://t.me/AQMath_Black" target="_blank" rel="noopener" aria-label="Telegram (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.4 3.6 2.9 10.8c-.9.4-.9 1.1-.2 1.3l4.7 1.5 1.8 5.6c.2.6.4.8.8.8.4 0 .6-.2.9-.4l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8L22.9 5c.3-1.2-.4-1.8-1.5-1.4zM8.6 13.1l9.5-6c.4-.3.8-.1.5.2l-7.9 7.1-.3 3.3-1.8-4.6z"/></svg><span>Telegram</span></a><a href="https://x.com/aqmathapp" target="_blank" rel="noopener" aria-label="X (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg><span>X</span></a><a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener" aria-label="Reddit (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="14" rx="7.5" ry="5.2"/><path d="M12 8.8l1.2-4.3 4 .9"/><path d="M9.4 16.6c1.6 1 3.6 1 5.2 0"/></g><g fill="currentColor"><circle cx="9.3" cy="13.2" r="1.2"/><circle cx="14.7" cy="13.2" r="1.2"/><circle cx="18" cy="5.6" r="1.4"/></g></svg><span>Reddit</span></a><a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener" aria-label="Substack (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M4 4h16v2.6H4zM4 8.8h16v2.6H4zM4 13.6h16V21l-8-4.4L4 21z"/></svg><span>Substack</span></a></div>
+        </div>
+        <div class="sf2-bot">
+            <div data-i18n="ft.copy">&copy; 2026 AQMath &mdash; Non-custodial. An analytical web application, not a trading bot.</div>
+            <div class="sf2-legal">
+                <a href="/about" data-i18n="ft.about">About</a><a href="/research/" data-i18n="ft.research">Research</a><a href="/impressum" data-i18n="ft.impressum">Impressum</a><a href="/privacy" data-i18n="ft.privacy">Privacy</a><a href="/terms" data-i18n="ft.terms">Terms</a><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
+            </div>
+        </div>
+    </div>
 </footer>
 
-<script defer src="/app-widgets.js?v=b4d391be81"></script>
-<script defer src="/app-backtest.js?v=b4d391be81"></script>
-<script defer src="/app.js?v=b4d391be81"></script>
-<script defer src="/app-notify.js?v=b4d391be81"></script>
+<script defer src="/app-widgets.js?v=8bf7eb5417"></script>
+<script defer src="/app-backtest.js?v=8bf7eb5417"></script>
+<script defer src="/app.js?v=8bf7eb5417"></script>
+<script defer src="/app-notify.js?v=8bf7eb5417"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -543,11 +548,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=b4d391be81"></script>
+<script defer src="/vendor/i18next.min.js?v=8bf7eb5417"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=b4d391be81"></script>
-<script defer src="/app-boot.js?v=b4d391be81"></script>
+<script defer src="/app-tour.js?v=8bf7eb5417"></script>
+<script defer src="/app-boot.js?v=8bf7eb5417"></script>
 
 </body>
 </html>

@@ -79,12 +79,12 @@ test.describe('DCA pending signal card', () => {
         hasExecBtn: !!list.querySelector('[data-action="executeDcaSignal"]'),
         hasDismissBtn: !!list.querySelector('[data-action="skipSignal"]'),
         hasBadge: html.includes('sig-dca-badge'),
-        // USDC (defensive) route
-        hasDefensive: html.includes('Defensive mode'),
+        // stablecoin-allocation route
+        hasDefensive: html.includes('Shield status active'),
         hasParked: html.includes('2,000'),
-        // tokens (risk-on) route
-        hasRiskOn: html.includes('Risk-on'),
-        hasRedeploy: html.includes('redeployed') && html.includes('1,000'),
+        // token-split route
+        hasRiskOn: html.includes('Shield status inactive'),
+        hasRedeploy: html.includes('re-allocated') && html.includes('1,000'),
         hasBtc: html.includes('BTC') && html.includes('250'),
         hasEth: html.includes('ETH') && html.includes('150'),
         hasSol: html.includes('SOL') && html.includes('100'),

@@ -8,8 +8,8 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQMath — Crypto Portfolio Rebalancer | Risk Parity & Crash Protection</title>
-    <meta name="description" content="Free non-custodial crypto portfolio rebalancer with Risk Parity optimization and Deleverage Shield crash protection. Backtest included. No wallet connection, no API keys, no account needed.">
+    <title>AQMath — Crypto Portfolio Calculator | Risk Parity & Drawdown Model</title>
+    <meta name="description" content="Free non-custodial crypto portfolio calculator with Risk Parity optimization and Deleverage Shield drawdown modelling. Backtest included. No wallet connection, no API keys, no account needed.">
     <meta name="author" content="AQMath">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://aqmath.xyz/">
@@ -18,21 +18,21 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://aqmath.xyz/">
-    <meta property="og:title" content="AQMath — Crypto Portfolio Rebalancer | Risk Parity & Crash Protection">
-    <meta property="og:description" content="Free non-custodial crypto portfolio rebalancer with Risk Parity optimization and Deleverage Shield crash protection. Backtest included. No wallet connection, no API keys, no account needed.">
+    <meta property="og:title" content="AQMath — Crypto Portfolio Calculator | Risk Parity & Drawdown Model">
+    <meta property="og:description" content="Free non-custodial crypto portfolio calculator with Risk Parity optimization and Deleverage Shield drawdown modelling. Backtest included. No wallet connection, no API keys, no account needed.">
     <meta property="og:site_name" content="AQMath">
     <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
     <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20260721b">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer with Deleverage Shield Crash Protection">
+    <meta property="og:image:alt" content="AQMath — Risk Parity Crypto Portfolio Calculator with Deleverage Shield Drawdown Model">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="AQMath — Crypto Portfolio Rebalancer | Risk Parity & Crash Protection">
-    <meta name="twitter:description" content="Free non-custodial crypto portfolio rebalancer with Risk Parity optimization and Deleverage Shield crash protection. Backtest included. No wallet connection, no API keys.">
+    <meta name="twitter:title" content="AQMath — Crypto Portfolio Calculator | Risk Parity & Drawdown Model">
+    <meta name="twitter:description" content="Free non-custodial crypto portfolio calculator with Risk Parity optimization and Deleverage Shield drawdown modelling. Backtest included. No wallet connection, no API keys.">
     <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
-    <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer with Deleverage Shield">
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"AQMath","url":"https://aqmath.xyz","description":"Quantitative crypto portfolio rebalancer with Deleverage Modulator drawdown protection. Risk Parity mathematics, DCA optimization, and automatic de-risking during market crashes.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":[{"@type":"Offer","name":"Free Access","price":"0","priceCurrency":"USD","description":"Core DCA distribution, live price sync, non-custodial portfolio tracking"},{"@type":"Offer","name":"Black Annual Access","price":"999","priceCurrency":"EUR","description":"Annual subscription — €999/year, paid in USDC or EURC"}],"featureList":["Risk Parity Optimization","Deleverage Modulator Drawdown Protection","DCA Distribution","Non-Custodial Privacy","Continuous Auto De-Risk"],"creator":{"@id":"https://aqmath.xyz/#momir-demirov"}},{"@type":"Organization","@id":"https://aqmath.xyz/#organization","name":"AQMath","url":"https://aqmath.xyz","logo":"https://aqmath.xyz/favicon.png","description":"Quantitative, non-custodial crypto portfolio rebalancer with KKT Risk-Parity weighting and Deleverage Modulator drawdown protection.","sameAs":["https://x.com/aqmathapp","https://t.me/DoNotAskMex","https://www.reddit.com/user/weaforex/","https://substack.com/@aqmathxyz"]}]}</script>
+    <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Calculator with Deleverage Shield">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"AQMath","url":"https://aqmath.xyz","description":"Quantitative crypto portfolio calculator with Deleverage Modulator drawdown protection. Risk Parity mathematics, DCA optimization, and automatic de-risking during market crashes.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":[{"@type":"Offer","name":"Free Access","price":"0","priceCurrency":"USD","description":"App and Backtest — free, no account and no key needed: DCA distribution, live price sync, non-custodial portfolio tracking"},{"@type":"Offer","name":"Black Annual Access","price":"999","priceCurrency":"EUR","description":"Black access: annual licence — €999/year, paid in USDC or EURC"}],"featureList":["Risk Parity Optimization","Deleverage Modulator Drawdown Protection","DCA Distribution","Non-Custodial Privacy","Continuous Auto De-Risk"],"creator":{"@id":"https://aqmath.xyz/#momir-demirov"}},{"@type":"Organization","@id":"https://aqmath.xyz/#organization","name":"AQMath","url":"https://aqmath.xyz","logo":"https://aqmath.xyz/favicon.png","description":"Quantitative, non-custodial crypto portfolio calculator with KKT Risk-Parity weighting and Deleverage Modulator drawdown protection.","sameAs":["https://x.com/aqmathapp","https://t.me/AQMath_Black","https://www.reddit.com/user/weaforex/","https://substack.com/@aqmathxyz"]}]}</script>
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -40,12 +40,12 @@
              handshake off the first authenticated request. -->
         <link rel="preconnect" href="https://api-auth.aqmath.xyz" crossorigin>
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
-    <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=b4d391be81">
+    <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/ibm-plex-serif-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/styles.min.css?v=8bf7eb5417">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","itemListElement":[{"@type":"Question","name":"How does the engine calculate risk?","acceptedAnswer":{"@type":"Answer","text":"The Black engine uses a <strong>Variance Matrix</strong>, asset <strong>Covariance</strong>, volatility estimates, and KKT-style projection to calculate Risk Parity allocations where each asset contributes a controlled share of portfolio risk. <a href=\"/docs\" style=\"color:var(--purple);\">You can audit the full mathematical model in our [Documentation].</a>"}},{"@type":"Question","name":"How is AQMath actually private?","acceptedAnswer":{"@type":"Answer","text":"We don&rsquo;t track your wallet, and we never store your identity or portfolio in any database &mdash; with one optional exception: if you enable the personalised signal &amp; notification service, your holdings are stored server-side under the hash of your activation key, solely to compute your daily signals and send notifications, and deleted at any time (Privacy Policy &sect;9). By default, your token balances live only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. The only other server-side record is a one-way hashed activation record (see the Black key question below) &mdash; never your financial data. Your financial privacy is architecturally enforced. <a href=\"/docs\" style=\"color:var(--purple);\">Read the full privacy architecture in our [Documentation].</a>"}},{"@type":"Question","name":"Do Black keys track my IP address?","acceptedAnswer":{"@type":"Answer","text":"No &mdash; not in any readable form. A Black key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href=\"/privacy\" style=\"color:var(--purple);\">Privacy Policy</a>."}},{"@type":"Question","name":"What does Black access include?","acceptedAnswer":{"@type":"Answer","text":"Black access includes the full engine &mdash; Risk Parity optimization, Deleverage Shield, DCA distribution, unlimited tokens, automated data pipeline, and the shared Black chat. It&rsquo;s a 365-day term with direct support from the team."}},{"@type":"Question","name":"Why are market widgets separated from features?","acceptedAnswer":{"@type":"Answer","text":"Live markets are informational context: ticker data, Fear &amp; Greed, BTC dominance, movers, and exchange status. They support decision-making but are intentionally separate from the product feature story."}},{"@type":"Question","name":"What is the Safe-Haven (USDC) feature?","acceptedAnswer":{"@type":"Answer","text":"When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token."}},{"@type":"Question","name":"How do I apply for Black access?","acceptedAnswer":{"@type":"Answer","text":"DM us on <a href=\"https://t.me/DoNotAskMex\" target=\"_blank\" style=\"color:var(--purple);\">Telegram</a> or <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:var(--purple);\">Twitter</a>. Annual access is <strong>€999 / year</strong>. No call required — send a message, we review and send your activation key within 48h. Payments accepted exclusively in USDC and EURC."}},{"@type":"Question","name":"Do you offer monthly plans?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath operates exclusively on an annual subscription model. We do not offer monthly, quarterly, or semi-annual plans. EU consumers keep the statutory 14-day right of withdrawal &mdash; see the <a href=\"/widerruf\" style=\"color:#a78bfa;\">withdrawal notice</a>; after that the annual term is firm and is not refunded pro rata on early cancellation."}},{"@type":"Question","name":"Is AQMath a trading bot?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath is an analytical web application. We do not execute trades, manage funds, or interact with any exchange or smart contract. You see the math, you make the decision."}},{"@type":"Question","name":"Is there a mobile app?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath is a web application only. Any app using our name on any app store is unauthorized and not affiliated with us."}},{"@type":"Question","name":"Is there an automatic daily signal or notification service?","acceptedAnswer":{"@type":"Answer","text":"Yes &mdash; as an <strong>optional, opt-in service</strong>. If you enable it, the engine computes your deleverage shield signal and DCA schedule once per day on the server and can push a notification to your device. To do that, your holdings are stored under the hash of your activation key &mdash; never under your name or wallet &mdash; and deleted completely the moment you withdraw consent. Full details are in Section 9 of our <a href=\"/privacy\" style=\"color:var(--purple);\">Privacy Policy</a>."}},{"@type":"Question","name":"What is the Black chat?","acceptedAnswer":{"@type":"Answer","text":"Black users get access to a <strong>shared internal chat</strong> visible only to active Black members. Messages are pseudonymous (shown as a short code like B-XXXXXX, never your real key or IP), capped at 200 characters, and limited to the 20 most recent messages (older ones are automatically swept daily). You can clear your own messages anytime. The chat is stored server-side under the hash of your activation key and is deleted when your key is deactivated."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","itemListElement":[{"@type":"Question","name":"How does the engine calculate risk?","acceptedAnswer":{"@type":"Answer","text":"The Black engine uses a <strong>Variance Matrix</strong>, asset <strong>Covariance</strong>, volatility estimates, and KKT-style projection to calculate Risk Parity allocations where each asset contributes a controlled share of portfolio risk. <a href=\"/docs\" style=\"color:var(--purple);\">You can audit the full mathematical model in our [Documentation].</a>"}},{"@type":"Question","name":"How is AQMath actually private?","acceptedAnswer":{"@type":"Answer","text":"We don't track your wallet and ask for no name or e-mail. On the free tier your token balances live only in your browser's localStorage; during DCA and Optimize, position data is sent to our calculation servers, processed in memory and not written to a database (technical server logs keep counts such as the number of positions and the DCA amount). With a Black key, your holdings (token, amount, entry price, APY) are stored on our server under a hash of your activation key to run your daily calculations and restore your table on a new device, and are deleted on request or when your key is deactivated (Privacy Policy §9). The only other record is a one-way hashed activation record with a hashed IP address. <a href=\"/docs\" style=\"color:#a78bfa;\">Read the full data flow in our [Documentation].</a>"}},{"@type":"Question","name":"Do Black keys track my IP address?","acceptedAnswer":{"@type":"Answer","text":"No &mdash; not in any readable form. A Black key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href=\"/privacy\" style=\"color:var(--purple);\">Privacy Policy</a>."}},{"@type":"Question","name":"What does Black access include?","acceptedAnswer":{"@type":"Answer","text":"Black access includes the full engine &mdash; Risk Parity optimization, Deleverage Shield, DCA distribution, unlimited tokens, automated data pipeline, and the shared Black chat. It&rsquo;s a 365-day term with direct support from the team."}},{"@type":"Question","name":"Why are market widgets separated from features?","acceptedAnswer":{"@type":"Answer","text":"Live markets are informational context: ticker data, Fear &amp; Greed, BTC dominance, movers, and exchange status. They support decision-making but are intentionally separate from the product feature story."}},{"@type":"Question","name":"What is the Safe-Haven (USDC) feature?","acceptedAnswer":{"@type":"Answer","text":"When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token."}},{"@type":"Question","name":"How do I apply for Black access?","acceptedAnswer":{"@type":"Answer","text":"DM us on <a href=\"https://t.me/AQMath_Black\" target=\"_blank\" style=\"color:var(--purple);\">Telegram</a> or <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:var(--purple);\">Twitter</a>. Black access is <strong>€999 / year</strong>. No call required — send a message, we review and send your activation key within 48h. Payments accepted exclusively in USDC and EURC."}},{"@type":"Question","name":"Do you offer monthly plans?","acceptedAnswer":{"@type":"Answer","text":"No. Black access operates exclusively on an annual licence model (the App and the Backtest are free). We do not offer monthly, quarterly, or semi-annual plans. EU consumers keep the statutory 14-day right of withdrawal &mdash; see the <a href=\"/widerruf\" style=\"color:#a78bfa;\">withdrawal notice</a>; after that the annual term is firm and is not refunded pro rata on early cancellation."}},{"@type":"Question","name":"Is AQMath a trading bot?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath is an analytical web application. We do not execute trades, manage funds, or interact with any exchange or smart contract. You see the math, you make the decision."}},{"@type":"Question","name":"Is there a mobile app?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath is a web application only. Any app using our name on any app store is unauthorized and not affiliated with us."}},{"@type":"Question","name":"Is there an automatic daily calculation or notification service?","acceptedAnswer":{"@type":"Answer","text":"Yes &mdash; with Black. The server runs your daily calculations (Deleverage Shield status and DCA split) once per day from your stored holdings and can send a notice to your device. To do that, your holdings are stored under the hash of your activation key &mdash; never under your name or wallet. Notifications are optional and based on your consent; stored holdings are deleted on request or when your key is deactivated. Full details are in Section 9 of our <a href=\"/privacy\" style=\"color:#a78bfa;\">Privacy Policy</a>."}},{"@type":"Question","name":"What is the Black chat?","acceptedAnswer":{"@type":"Answer","text":"Black users get access to a <strong>shared internal chat</strong> visible only to active Black members. Messages are pseudonymous (shown as a short code like B-XXXXXX, never your real key or IP), capped at 200 characters, and limited to the 20 most recent messages (older ones are automatically swept daily). You can clear your own messages anytime. The chat is stored server-side under the hash of your activation key and is deleted when your key is deactivated."}}]}</script>
 </head>
 <body>
 
@@ -54,7 +54,7 @@
      so build_pages.py keeps it on all generated entry pages. -->
 <div class="update-banner hidden" id="updateBanner">
     <span data-i18n="app.update.msg">A new version of AQMath is available - reload to get the latest build.</span>
-    <button type="button" class="update-banner-btn" data-action="reloadApp" data-i18n="app.update.reload">[ reload ]</button>
+    <button type="button" class="update-banner-btn" data-action="reloadApp" data-i18n="app.update.reload">Reload</button>
 </div>
 
 <!-- WHAT'S NEW: shown by app-boot.js once after each version update -->
@@ -65,13 +65,13 @@
             <button type="button" class="whats-new-close" data-action="closeWhatsNew">&times;</button>
         </div>
         <div class="whats-new-body">
-            <p class="whats-new-desc" data-i18n="app.whatsNew.desc">One-Tap Alignment is here. Confirm or adjust portfolio signals straight from the notification &mdash; no extra steps.</p>
+            <p class="whats-new-desc" data-i18n="app.whatsNew.desc">One-Tap Recording is here. Mark a calculated difference as recorded in your holdings, or adjust the amount, straight from the notification &mdash; no extra steps.</p>
             <ul class="whats-new-list">
-                <li data-i18n="app.whatsNew.item1">Confirm, skip or adjust signals in one tap</li>
+                <li data-i18n="app.whatsNew.item1">Record, dismiss or adjust a calculated difference in one tap</li>
                 <li data-i18n="app.whatsNew.item2">Regime-aware alerts (SHOCK / LOW_VOL)</li>
                 <li data-i18n="app.whatsNew.item3">Small fixes &amp; polish</li>
             </ul>
-            <button type="button" class="whats-new-close-btn" data-action="closeWhatsNew" data-i18n="app.whatsNew.close">[ close ]</button>
+            <button type="button" class="whats-new-close-btn" data-action="closeWhatsNew" data-i18n="app.whatsNew.close">Close</button>
         </div>
     </div>
 </div>
@@ -80,16 +80,15 @@
 <div id="landingView">
     <header class="hdr">
         <div class="logo">
-            <div class="logo-box">AQ</div>
+            <div class="logo-box" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg></div>
             <div>
                 <div class="logo-name">AQMath</div>
-                <div class="logo-tag">quantitative portfolio rebalancing</div>
+                <div class="logo-tag">portfolio mathematics</div>
             </div>
         </div>
         <button class="hdr-burger" type="button" aria-label="Menu" data-action="toggleHamburger">&#9776;</button>
         <div class="hdr-nav">
             <a class="hdr-nav-btn active" href="/" data-i18n="app.navLanding">landing</a>
-            <a class="hdr-nav-btn" href="/app" data-i18n="app.navApp">app</a>
             <a class="hdr-nav-btn" href="/backtest" data-i18n="app.navBacktest">backtest</a>
             <a class="hdr-nav-btn" href="/results" data-i18n="app.navResults">results</a>
             <a class="hdr-nav-btn" href="/v18" data-i18n="app.navV18">proteus</a>
@@ -98,7 +97,7 @@
         </div>
         <div class="hdr-right">
             <div class="hdr-socials">
-                <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">telegram</a>
+                <a href="https://t.me/AQMath_Black" target="_blank" rel="noopener">telegram</a>
                 <span class="hdr-sep">|</span>
                 <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">twitter</a>
                 <span class="hdr-sep">|</span>
@@ -110,6 +109,7 @@
                 <button class="lp-lang-btn" data-lang="en" data-action="lang" data-arg="en">EN</button>
                 <button class="lp-lang-btn" data-lang="zh-CN" data-action="lang" data-arg="zh-CN">中文</button>
             </div>
+            <a class="hdr-cta" href="/app" data-i18n="app.openApp">Open App</a>
         </div>
     </header>
 
@@ -125,381 +125,253 @@
     </div>
 
     <main>
-    <section class="lp-hero">
-        <svg viewBox="0 0 420 160" class="lp-hero-svg" xmlns="http://www.w3.org/2000/svg">
-            <line x1="70" y1="80" x2="155" y2="45" stroke="rgba(6,182,212,0.18)" stroke-width="1"/>
-            <line x1="70" y1="80" x2="210" y2="105" stroke="rgba(6,182,212,0.12)" stroke-width="1"/>
-            <line x1="155" y1="45" x2="270" y2="65" stroke="rgba(6,182,212,0.18)" stroke-width="1"/>
-            <line x1="210" y1="105" x2="270" y2="65" stroke="rgba(6,182,212,0.12)" stroke-width="1"/>
-            <line x1="270" y1="65" x2="350" y2="88" stroke="rgba(6,182,212,0.18)" stroke-width="1"/>
-            <line x1="210" y1="105" x2="350" y2="88" stroke="rgba(6,182,212,0.08)" stroke-width="1"/>
-            <line x1="70" y1="80" x2="270" y2="65" stroke="rgba(168,85,247,0.06)" stroke-width="0.5" stroke-dasharray="4,4"/>
-            <line x1="155" y1="45" x2="350" y2="88" stroke="rgba(168,85,247,0.06)" stroke-width="0.5" stroke-dasharray="4,4"/>
-            <circle class="lp-hero-ring" cx="70" cy="80" r="18" fill="none" stroke="var(--blue)" stroke-width="1" opacity="0.25"/>
-            <circle class="lp-hero-ring" cx="155" cy="45" r="15" fill="none" stroke="var(--green)" stroke-width="1" opacity="0.25"/>
-            <circle class="lp-hero-ring" cx="210" cy="105" r="20" fill="none" stroke="var(--amber)" stroke-width="1" opacity="0.2"/>
-            <circle class="lp-hero-ring" cx="270" cy="65" r="13" fill="none" stroke="var(--blue)" stroke-width="1" opacity="0.25"/>
-            <circle class="lp-hero-ring" cx="350" cy="88" r="16" fill="none" stroke="var(--green)" stroke-width="1" opacity="0.2"/>
-            <circle cx="70" cy="80" r="5" fill="var(--blue)" opacity="0.7"/>
-            <circle cx="155" cy="45" r="5" fill="var(--green)" opacity="0.7"/>
-            <circle cx="210" cy="105" r="5" fill="var(--amber)" opacity="0.7"/>
-            <circle cx="270" cy="65" r="5" fill="var(--blue)" opacity="0.7"/>
-            <circle cx="350" cy="88" r="5" fill="var(--green)" opacity="0.7"/>
-            <text x="70" y="108" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7" letter-spacing="1">BTC</text>
-            <text x="155" y="30" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7" letter-spacing="1">ETH</text>
-            <text x="210" y="130" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7" letter-spacing="1">SOL</text>
-            <text x="270" y="50" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7" letter-spacing="1">AVAX</text>
-            <text x="350" y="112" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7" letter-spacing="1">LINK</text>
-        </svg>
-        <h1 data-i18n="hero.title">quantitative <span class="gradient-text">portfolio rebalancer</span></h1>
-        <h2 data-i18n="hero.subtitle">No emotions. No human error. Structural limits on every DCA dollar you deploy.</h2>
-        <p data-i18n-html="hero.description">AQMath runs institutional-grade portfolio math on a secure backend engine &mdash; Risk Parity, KKT optimization, and volatility-weighted DCA. No accounts, no guesswork.</p>
-        <div class="lp-hero-meta">
-            <div class="lp-hero-shield">
-                <span class="lp-shield-badge">deleverage shield</span>
-                <span class="lp-shield-text">continuous de-risk &mdash; exposure scales down as drawdown and downside volatility rise</span>
+    <!-- ============ HERO ============ -->
+    <section class="v2-hero">
+        <div class="v2-wrap v2-hero-grid">
+            <div class="v2-hero-copy">
+                <div class="v2-eyebrow" data-i18n="lp2.eyebrow">Portfolio mathematics software &middot; Non-custodial</div>
+                <h1 class="v2-h1" data-i18n="lp2.heroTitle">Portfolio mathematics you can audit line by line.</h1>
+                <p class="v2-lead" data-i18n="hero.subtitle">No emotions. No human error. Structural limits on every DCA dollar you deploy.</p>
+                <p class="v2-sub" data-i18n-html="lp2.heroDesc">AQMath calculates Risk Parity, Karush&ndash;Kuhn&ndash;Tucker optimization and volatility-weighted dollar-cost averaging for the assets and parameters you enter &mdash; on its own servers. No e-mail accounts, no wallet connection.</p>
+                <div class="v2-cta-row">
+                    <a class="v2-btn v2-btn-primary" href="#access" data-i18n="lp2.ctaAccess">Request Access</a>
+                    <a class="v2-btn v2-btn-ghost" href="#methodology" data-i18n="lp2.ctaAudit">Audit the Model</a>
+                </div>
+                <div class="v2-stats">
+                    <div><div class="v2-stat-v pos">&minus;32.8pp</div><div class="v2-stat-l" data-i18n="shield.s1l">max drawdown cut (large-cap)</div></div>
+                    <div><div class="v2-stat-v">1.63</div><div class="v2-stat-l" data-i18n-html="shield.s2l">Sharpe (B&amp;H 1.37)</div></div>
+                    <div><div class="v2-stat-v">2.00</div><div class="v2-stat-l" data-i18n-html="shield.s3l">Calmar (B&amp;H 1.23)</div></div>
+                </div>
             </div>
-            <div class="lp-community">
-                <span class="lp-community-label" data-i18n="hero.followLabel">follow for updates &amp; news</span>
-                <div class="lp-community-links">
-                    <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">twitter</a>
-                    <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">telegram</a>
-                    <a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener">reddit</a>
-                    <a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">substack</a>
+            <figure class="v2-hero-fig">
+                <img src="/assets/lp-app.png" width="1010" height="700" alt="AQMath App: allocation, holdings table and DCA planner on a sample portfolio with live prices" fetchpriority="high">
+                <figcaption data-i18n="lp2.figApp">The App with sample data.</figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <!-- ============ WHAT THE ENGINE DOES ============ -->
+    <section class="v2-band v2-band-white">
+        <div class="v2-wrap">
+            <div class="v2-eyebrow" data-i18n="lp2.doesTitle">What the engine does</div>
+            <div class="v2-steps">
+                <div><div class="v2-step-n">01</div><div class="v2-step-t" data-i18n="lp2.does1">Recomputes the covariance matrix across your holdings on every cycle.</div></div>
+                <div><div class="v2-step-n">02</div><div class="v2-step-t" data-i18n="lp2.does2">Reads the drawdown and downside-volatility regime continuously. No indicators, no timers.</div></div>
+                <div><div class="v2-step-n">03</div><div class="v2-step-t" data-i18n="lp2.does3">Computes a lower target exposure toward stablecoins as risk rises, and a higher one as it clears.</div></div>
+            </div>
+            <div class="v2-note" data-i18n="lp2.doesNote">The calculations run on our servers. Free: your portfolio stays on your device and requests are not saved to a database. Black: your holdings are stored on our server under a hash of your key, to run your daily calculations.</div>
+        </div>
+    </section>
+
+    <!-- ============ FEATURE ROWS ============ -->
+    <section class="v2-band v2-band-paper">
+        <div class="v2-wrap v2-feature">
+            <figure class="v2-feature-fig"><img src="/assets/lp-backtest.png" width="1360" height="850" loading="lazy" alt="Backtest page: upload your own CSV price history and run the engine against Buy and Hold"></figure>
+            <div class="v2-feature-copy">
+                <div class="v2-eyebrow" data-i18n="lp2.btEyebrow">Backtest</div>
+                <h2 class="v2-h2" data-i18n="lp2.btTitle">Run the engine on your own price history</h2>
+                <p data-i18n="lp2.btText">Upload CSVs for up to five tokens and see how the Deleverage Shield behaves against plain Buy &amp; Hold, with the same DCA on the same schedule.</p>
+                <a class="v2-btn v2-btn-ghost" href="/backtest" data-i18n-html="lp2.btCta">Open the Backtest &rarr;</a>
+            </div>
+        </div>
+    </section>
+    <section class="v2-band v2-band-white">
+        <div class="v2-wrap v2-feature v2-feature-rev">
+            <figure class="v2-feature-fig"><img src="/assets/lp-results.png" width="1360" height="850" loading="lazy" alt="Results page: 182 baskets tested and stress cases for dead coins and short histories"></figure>
+            <div class="v2-feature-copy">
+                <div class="v2-eyebrow" data-i18n="lp2.rsEyebrow">Out-of-sample results</div>
+                <h2 class="v2-h2" data-i18n="lp2.rsTitle">182 baskets the model had never seen</h2>
+                <p data-i18n="lp2.rsText">Dead coins, short histories and a 13-token basket. Every figure is labelled as simulated, with the engine version that produced it.</p>
+                <a class="v2-btn v2-btn-ghost" href="/results" data-i18n-html="lp2.rsCta">See the results &rarr;</a>
+            </div>
+        </div>
+    </section>
+    <section class="v2-band v2-band-paper">
+        <div class="v2-wrap v2-feature">
+            <figure class="v2-feature-fig"><img src="/assets/lp-docs.png" width="1360" height="850" loading="lazy" alt="Documentation page: risk parity formula and constraints"></figure>
+            <div class="v2-feature-copy">
+                <div class="v2-eyebrow" data-i18n="lp2.dcEyebrow">Documentation</div>
+                <h2 class="v2-h2" data-i18n="lp2.dcTitle">Audit the mathematics</h2>
+                <p data-i18n="lp2.dcText">Risk parity, KKT constraints and the Shield are documented in full, including what is sent to our servers and what is stored.</p>
+                <a class="v2-btn v2-btn-ghost" href="/docs" data-i18n-html="lp2.dcCta">Read the docs &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ PROOF ============ -->
+    <section class="v2-band v2-band-white" id="proof">
+        <div class="v2-wrap">
+            <div class="v2-eyebrow" data-i18n="lp2.proofEyebrow">Validated performance</div>
+            <h2 class="v2-h2 v2-h2-wide" data-i18n="lp2.proofTitle">The Deleverage Shield, replayed on the production path.</h2>
+            <p class="v2-body" data-i18n-html="shield.lead">Proteus (v18) scales exposure continuously off a volatility-adaptive drawdown threshold.</p>
+            <div class="v2-proof-grid">
+                <div class="v2-proof-chart">
+                    <figure class="v2-fig-plain">
+                        <img src="/assets/proof-equity.png" width="1720" height="832" loading="lazy" alt="Virtual equity of the paper-trading account versus Buy and Hold and invested capital, log scale, weights frozen 2026-07-21" data-i18n-alt="lp2.proofAlt1">
+                        <figcaption data-i18n="lp2.proofCap1">Paper-trading account, simulated &mdash; no real money. Weights frozen 2026-07-21; right of the amber line is the live forward log, updated after every daily close.</figcaption>
+                    </figure>
+                    <figure class="v2-fig-plain">
+                        <img src="/assets/proof-dd.png" width="1720" height="520" loading="lazy" alt="Drawdown of the paper-trading account versus Buy and Hold" data-i18n-alt="lp2.proofAlt2">
+                    </figure>
+                </div>
+                <div class="v2-proof-side">
+                    <div class="v2-card"><div class="v2-stat-v pos">&minus;32.8pp</div><div class="v2-stat-l" data-i18n="shield.s1l">max drawdown cut (large-cap)</div></div>
+                    <div class="v2-card"><div class="v2-stat-v">1.63</div><div class="v2-stat-l" data-i18n-html="shield.s2l">Sharpe (B&amp;H 1.37)</div></div>
+                    <div class="v2-card"><div class="v2-stat-v">2.00</div><div class="v2-stat-l" data-i18n-html="shield.s3l">Calmar (B&amp;H 1.23)</div></div>
+                    <a class="v2-link" href="/backtest" data-i18n-html="lp2.proofCta">Run the backtest yourself &rarr;</a>
+                </div>
+            </div>
+            <div class="v2-proof-row2">
+                <figure class="v2-fig-plain">
+                    <img src="/assets/proof-baskets.png" width="1720" height="936" loading="lazy" alt="Max drawdown of the Shield versus Buy and Hold on baskets it was never tuned on" data-i18n-alt="lp2.proofAlt3">
+                    <figcaption data-i18n="lp2.proofCap3">Simulated max drawdown on baskets the model was never tuned on (Aegis v14, then in production; since replaced by Proteus v18).</figcaption>
+                </figure>
+                <figure class="v2-fig-plain">
+                    <img src="/assets/proof-hist.png" width="1720" height="660" loading="lazy" alt="Distribution of drawdown reduction across all 182 simulated baskets" data-i18n-alt="lp2.proofAlt4">
+                    <figcaption data-i18n="lp2.proofCap4">Distribution of simulated drawdown reduction across all 182 baskets. Past and simulated results are not a reliable indicator of future results.</figcaption>
+                </figure>
+            </div>
+            <div class="v2-note" data-i18n="lp2.proofNote">Backtest baskets include survivor tokens; past results don't guarantee future performance. Figures are measured on the exact production path, not a continuous full-history replay.</div>
+        </div>
+    </section>
+
+    <!-- ============ METHODOLOGY ============ -->
+    <section class="v2-band v2-band-paper" id="methodology">
+        <div class="v2-wrap">
+            <div class="v2-eyebrow" data-i18n="lp2.howEyebrow">How it works</div>
+            <h2 class="v2-h2" data-i18n="lp2.howTitle">Four mechanisms, fully documented.</h2>
+            <div class="v2-mech">
+                <div class="v2-mech-card">
+                    <div class="v2-mech-k" data-i18n-html="lp2.m1k">01 &mdash; Risk model</div>
+                    <div class="v2-mech-t" data-i18n="lp2.m1t">Risk Parity (Themis)</div>
+                    <p data-i18n="math.riskCopy">The covariance matrix estimates how assets move together.</p>
+                    <a class="v2-link" href="/docs" data-i18n-html="lp2.m1l">Read the proof &rarr;</a>
+                </div>
+                <div class="v2-mech-card">
+                    <div class="v2-mech-k" data-i18n-html="lp2.m2k">02 &mdash; Optimization</div>
+                    <div class="v2-mech-t" data-i18n="lp2.m2t">KKT projection</div>
+                    <p data-i18n="math.optCopy">KKT projection keeps computed allocations inside volatility caps.</p>
+                    <a class="v2-link" href="/docs" data-i18n-html="lp2.m2l">View the formula &rarr;</a>
+                </div>
+                <div class="v2-mech-card">
+                    <div class="v2-mech-k" data-i18n-html="lp2.m3k">03 &mdash; Deleverage</div>
+                    <div class="v2-mech-t" data-i18n="lp2.m3t">Proteus (Deleverage Shield)</div>
+                    <p data-i18n="math.shieldCopy">Proteus is a continuous regime modulator.</p>
+                    <a class="v2-link" href="/backtest" data-i18n-html="lp2.m3l">See the backtest &rarr;</a>
+                </div>
+                <div class="v2-mech-card">
+                    <div class="v2-mech-k" data-i18n-html="lp2.m4k">04 &mdash; Privacy</div>
+                    <div class="v2-mech-t" data-i18n="lp2.m4t">Non-custodial by design</div>
+                    <p data-i18n="math.privCopy">Amounts, targets, and weights stay in your browser's localStorage.</p>
+                    <a class="v2-link" href="/privacy" data-i18n-html="lp2.m4l">See the data flow &rarr;</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="lp-terminal-preview">
-        <div class="lp-terminal-window">
-            <div class="lp-terminal-bar">
-                <span class="lp-terminal-dot red"></span>
-                <span class="lp-terminal-dot yellow"></span>
-                <span class="lp-terminal-dot green"></span>
-                <span class="lp-terminal-title">aqmath --live-engine</span>
-            </div>
-            <div class="lp-terminal-body">
-                <div class="lp-term-line"><span class="lp-term-prompt">$</span> aqmath engine v2.1 &mdash; initializing...</div>
-                <div class="lp-term-line lp-term-ok">data pipeline: 4 market data sources &times; 180-day history &rarr; covariance matrix</div>
-                <div class="lp-term-line lp-term-dyn"><span class="lp-term-prompt">$</span> <span id="termLine0"></span></div>
-                <div class="lp-term-line lp-term-ok lp-term-dyn" id="termLine1"></div>
-                <div class="lp-term-line lp-term-dyn"><span class="lp-term-prompt">$</span> <span id="termLine2"></span></div>
-                <div class="lp-term-line lp-term-ok lp-term-dyn" id="termLine3"></div>
-                <div class="lp-term-line lp-term-cursor">$ <span class="lp-blink">_</span></div>
+    <!-- ============ WHAT / HOW / WHY (detail) ============ -->
+    <section class="v2-band v2-band-white">
+        <div class="v2-wrap">
+            <div class="v2-eyebrow" data-i18n="what.title">What is AQMath, How It Works &amp; Why</div>
+            <p class="v2-body" data-i18n="what.lead">Privacy-first portfolio mathematics software for your own crypto portfolio data.</p>
+            <div class="v2-detail">
+                <div><h3 data-i18n="what.whatTitle">What</h3><p data-i18n-html="what.whatP">&hellip;</p></div>
+                <div><h3 data-i18n="what.howTitle">How</h3><p data-i18n-html="what.howP">&hellip;</p></div>
+                <div><h3 data-i18n="what.whyTitle">Why</h3><p data-i18n-html="what.whyP">&hellip;</p></div>
             </div>
         </div>
-        <div class="lp-terminal-aside">
-            <div class="lp-term-aside-dots" aria-hidden="true">
-                <span class="lp-terminal-dot red"></span>
-                <span class="lp-terminal-dot yellow"></span>
-                <span class="lp-terminal-dot green"></span>
-            </div>
-            <div class="lp-term-aside-label" data-i18n="hero.termLabel">--what-you-are-watching</div>
-            <h3 data-i18n="hero.termTitle">The engine loop, live</h3>
-            <p data-i18n-html="hero.termDesc">A simulation of the exact cycle the engine runs on our backend: recompute the covariance matrix, read the drawdown / downside-volatility regime, scale exposure continuously. Every number shown is real &mdash; taken from the production-path validation backtest.</p>
-            <ul class="lp-term-aside-list">
-                <li data-i18n="hero.termB1">risk parity + KKT projection on live market data</li>
-                <li data-i18n="hero.termB2">continuous de-risk &mdash; no indicators, no timers</li>
-                <li data-i18n="hero.termB3">0 bytes persisted by default &mdash; portfolio processed in-memory (opt-in signal service excepted)</li>
-            </ul>
-        </div>
-    </div>
+    </section>
 
-
-    <div class="lp-content">
-        <section class="lp-section lp-what">
-            <div class="lp-card lp-what-card">
-                <h3 data-i18n="what.title">What is AQMath, How It Works &amp; Why</h3>
-                <p class="lp-what-lead" data-i18n="what.lead">A privacy-first quantitative rebalancer for passive crypto investors.</p>
-                <div class="lp-what-grid">
-                    <div class="lp-card">
-                        <div class="card-title" style="color:var(--blue);" data-i18n="what.whatTitle">--what</div>
-                        <p data-i18n-html="what.whatP">AQMath is a quantitative portfolio rebalancer built for passive crypto investors.<br><br>
-                        It combines institutional-grade mathematics &mdash; Risk Parity, Karush-Kuhn-Tucker (KKT) optimization, and volatility-weighted Dollar-Cost Averaging &mdash; to keep your portfolio balanced without emotion, guesswork, or centralized data collection.<br><br>
-                        Non-Custodial Math Processing. Your portfolio data is sent only during DCA/Optimize and never persisted &mdash; unless you opt in to the optional signal service. No accounts. No tracking. Just math.</p>
-                    </div>
-                    <div class="lp-card">
-                        <div class="card-title" style="color:var(--blue);" data-i18n="what.howTitle">--how</div>
-                        <p data-i18n-html="what.howP">1. Add your tokens and target allocations (or let the engine calculate them using 180-day historical volatility).<br><br>
-                        2. Click SYNC to get live prices &mdash; spot prices come from Binance&rsquo;s public market data, with CoinGecko as automatic fallback. Read-only market data: no API keys, no account linking.<br><br>
-                        3. Use DCA Distribution to invest new capital only into underweight tokens, filtered by volatility and trend.<br><br>
-                        4. (Black) Run the AQMath Engine to re-compute optimal weights using full covariance matrix and KKT projection.</p>
-                    </div>
-                    <div class="lp-card">
-                        <div class="card-title" style="color:var(--blue);" data-i18n="what.whyTitle">--why</div>
-                        <p data-i18n-html="what.whyP">Most portfolio tools either collect your data or offer only basic rebalancing. AQMath is different:<br><br>
-                        &rarr; Institutional-grade math (same concepts used by multi-billion funds)<br>
-                        &rarr; Non-Custodial &mdash; your portfolio stays in your browser&rsquo;s localStorage, backend processing is ephemeral (opt-in signal service excepted)<br>
-                        &rarr; Transparent, auditable logic (no black boxes)<br>
-                        &rarr; €999 / year &mdash; transparent pricing, processed via USDC &amp; EURC<br><br>
-                        Your balances are ephemeral &mdash; processed in-memory, never stored (the opt-in signal service excepted). No exchange API keys required. No data to sell.</p>
-                    </div>
-                </div>
-                <div class="lp-what-closing">
-                    <p data-i18n-html="what.closingP">Every cycle ends the same way: investors ride the rally, freeze in the crash, and sell the bottom &mdash; not for lack of intelligence, but because emotion always outruns discipline. <strong>AQMath removes emotion from the loop.</strong> While others refresh charts at 3 AM, your portfolio is already de-risking itself: as drawdown deepens and downside volatility rises, exposure scales toward stablecoins &mdash; automatically, continuously, by math you can audit line by line.</p>
-                    <div class="lp-what-punch" data-i18n="what.closingPunch">protect the downside. let the math hold the line.</div>
-                    <div class="lp-cta-group">
-                        <a class="lp-btn-primary" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener" data-i18n="what.closingCta1">--request-access</a>
-                        <a class="lp-btn-secondary" href="/docs" data-i18n="what.closingCta2">[ audit the model ]</a>
-                    </div>
-                </div>
+    <!-- ============ INDEPENDENT FEEDBACK (dark band) ============ -->
+    <section class="v2-band v2-band-ink">
+        <div class="v2-wrap">
+            <div class="v2-eyebrow v2-eyebrow-light" data-i18n="lp2.fbEyebrow">Community feedback</div>
+            <h2 class="v2-h2 v2-h2-light v2-h2-wide" data-i18n="lp2.fbTitle">What practitioners wrote after testing it.</h2>
+            <div class="v2-quotes">
+                <blockquote><p>&ldquo;Fed the engine a deliberately broken book to blow past the risk caps &mdash; it held every one and scaled the risky sleeve exactly where it said it would. The allocation math is real, and that&rsquo;s the part most tools fake.&rdquo;</p><cite>r/quant &mdash; portfolio stress-test verification</cite></blockquote>
+                <blockquote><p>&ldquo;I swept 225 parameter combinations around the published point &mdash; a plateau, not a spike. The grid&rsquo;s best corner sits elsewhere, so the parameters weren&rsquo;t max-picked. On the overfit axis, this is clean.&rdquo;</p><cite>r/quant &mdash; independent deleverage sweep, 225 combinations</cite></blockquote>
+                <blockquote><p>&ldquo;On a basket of five tokens each down ~90% from their highs, the modulator held drawdown to 32% versus 84% for buy-and-hold. That is the size of the difference in this simulation.&rdquo;</p><cite>r/quant &mdash; independent deleverage backtest, adverse basket</cite></blockquote>
+                <blockquote><p>&ldquo;This is the best follow-up I&rsquo;ve seen on this sub in a long time &mdash; running both tests and publishing the numbers that hurt your own post puts you in rare company here.&rdquo;</p><cite>r/quant &mdash; on a published half-split overfitting check</cite></blockquote>
             </div>
-        </section>
-
-        <section class="lp-section lp-shield">
-            <div class="tc lp-shield-card">
-                <div class="tc-bar">
-                    <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                    <span class="tc-title" data-i18n-html="shield.label">--deleverage-shield &middot; proteus v18.0</span>
-                </div>
-                <div class="tc-body lp-shield-body">
-                    <h3 data-i18n-html="shield.title">Deleverage Shield &mdash; validated on the production path</h3>
-                    <p class="lp-what-lead" data-i18n-html="shield.lead">Proteus (v18) scales exposure continuously off a volatility-adaptive drawdown threshold &mdash; no indicators, no timers, no correlation gate. It ramps exposure toward its target steadily in either direction, and only rebalances when target exposure drifts meaningfully.</p>
-                    <div class="lp-shield-grid">
-                    <div class="lp-shield-viz">
-                        <svg viewBox="0 0 480 250" role="img" aria-label="Max drawdown on the large-cap basket: Buy and Hold minus 55.9 percent versus Proteus v18 minus 23.1 percent" preserveAspectRatio="xMidYMid meet">
-                            <!-- gridlines -->
-                            <line x1="40" y1="40" x2="460" y2="40" class="lp-sh-grid dash"/>
-                            <line x1="40" y1="125" x2="460" y2="125" class="lp-sh-grid"/>
-                            <line x1="40" y1="210" x2="460" y2="210" class="lp-sh-grid"/>
-                            <text x="36" y="43" class="lp-sh-axis">0%</text>
-                            <text x="36" y="128" class="lp-sh-axis">-50%</text>
-                            <text x="36" y="213" class="lp-sh-axis">-100%</text>
-                            <!-- Buy &amp; Hold drawdown (deeper) -->
-                            <polygon class="lp-sh-fill red" points="40,40 90,72 140,110 180,135 220,113 300,86 380,63 460,52 460,40"/>
-                            <polyline class="lp-sh-line red" pathLength="1" points="40,40 90,72 140,110 180,135 220,113 300,86 380,63 460,52"/>
-                            <!-- Proteus (v18) drawdown (shallower, trough -23.1%) -->
-                            <polygon class="lp-sh-fill cyan" points="40,40 90,52 140,66 180,79 220,68 300,57 380,49 460,45 460,40"/>
-                            <polyline class="lp-sh-line cyan" pathLength="1" points="40,40 90,52 140,66 180,79 220,68 300,57 380,49 460,45"/>
-                            <!-- trough callouts -->
-                            <text x="168" y="151" class="lp-sh-cap red">-55.9% B&amp;H</text>
-                            <!-- Proteus (v18) trough callout -->
-                            <text x="186" y="96" class="lp-sh-cap cyan">-23.1% Proteus v18</text>
-                            <!-- legend -->
-                            <rect x="120" y="232" width="10" height="10" rx="2" class="lp-sh-fill red"/>
-                            <text x="136" y="241" class="lp-sh-leg">Buy &amp; Hold</text>
-                            <rect x="250" y="232" width="10" height="10" rx="2" class="lp-sh-fill cyan"/>
-                            <text x="266" y="241" class="lp-sh-leg">Proteus (v18)</text>
-                        </svg>
-                    </div>
-                        <div class="lp-shield-info">
-                            <div class="lp-shield-stats">
-                                <div class="lp-shield-stat"><span class="v">&minus;32.8pp</span><span class="l" data-i18n="shield.s1l">max drawdown cut (large-cap)</span></div>
-                                <div class="lp-shield-stat"><span class="v">1.63</span><span class="l" data-i18n-html="shield.s2l">Sharpe (B&amp;H 1.37)</span></div>
-                                <div class="lp-shield-stat"><span class="v">2.00</span><span class="l" data-i18n-html="shield.s3l">Calmar (B&amp;H 1.23)</span></div>
-                            </div>
-                            <p data-i18n-html="shield.body">Replayed through the <strong>exact production path</strong> &mdash; a rolling 180-day window, the live re-optimisation cadence, persisted shield state and turnover at the live fee rate &mdash; Proteus (v18) held peak drawdown to <strong>23.1%</strong> against <strong>55.9%</strong> for Buy &amp; Hold on a large-cap basket, at <strong>Sharpe 1.63 vs 1.37</strong> and <strong>Calmar 2.00 vs 1.23</strong>. On a high-volatility alt basket it cut drawdown from <strong>59.8% to 29.4%</strong> and won Calmar (1.29 vs 1.23) &mdash; but <strong>lost Sharpe there, 1.10 vs 1.18</strong>, and Buy &amp; Hold ends both samples with more dollars. The shield&rsquo;s edge is drawdown and consistency, not terminal wealth. On a <strong>sealed out-of-sample second half</strong> of an earlier survivor basket, Aegis (v14) still cut drawdown from 63.2% to 25.3%, but its Sharpe was <strong>lower</strong> than Buy &amp; Hold&rsquo;s (0.24 vs 0.30) &mdash; an earlier version of this page had those two numbers the wrong way round. Backtest baskets include survivor tokens; past results don&rsquo;t guarantee future performance.</p>
-                            <p class="rv-v15-notice lp-shield-nextgen" data-i18n-html="shield.nextgen"><span class="rv-v15-tag">LIVE ENGINE</span> <strong>Proteus (v18) is the production shield.</strong> Aegis (v14), its fixed-threshold predecessor, still runs as a warm-up fallback for portfolios too young to calibrate the adaptive threshold; where v14 figures appear on this site they are labelled as historical. The figures above are measured on the exact production path, not on a continuous full-history replay.</p>
-                            <a class="lp-btn-secondary" href="/backtest" data-i18n="shield.cta">--run-the-backtest</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="lp-section lp-feedbacks">
-            <h3 data-i18n="community.title">--community-signals</h3>
-            <div class="lp-feedback-card">
-                <div class="lp-feedback-quote">
-                    <span class="lp-quote-mark">&ldquo;</span>
-                    Fed the engine a deliberately broken book to blow past the risk caps &mdash; it held every one and scaled the risky sleeve exactly where it said it would. The allocation math is real, and that&rsquo;s the part most tools fake.
-                    <span class="lp-quote-mark">&rdquo;</span>
-                </div>
-                <div class="lp-feedback-attr">
-                    <span class="lp-feedback-author">r/quant</span>
-                    <span class="lp-feedback-context">&middot; portfolio stress-test verification</span>
-                </div>
-            </div>
-            <div class="lp-feedback-card">
-                <div class="lp-feedback-quote">
-                    <span class="lp-quote-mark">&ldquo;</span>
-                    I swept 225 parameter combinations around the published point &mdash; a plateau, not a spike. The grid&rsquo;s best corner sits elsewhere, so the parameters weren&rsquo;t max-picked. On the overfit axis, this is clean.
-                    <span class="lp-quote-mark">&rdquo;</span>
-                </div>
-                <div class="lp-feedback-attr">
-                    <span class="lp-feedback-author">r/quant</span>
-                    <span class="lp-feedback-context">&middot; independent deleverage sweep, 225 combinations</span>
-                </div>
-            </div>
-            <div class="lp-feedback-card">
-                <div class="lp-feedback-quote">
-                    <span class="lp-quote-mark">&ldquo;</span>
-                    On a basket of five tokens each down ~90% from their highs, the modulator held drawdown to 32% versus 84% for buy-and-hold. There it&rsquo;s not a tweak &mdash; it&rsquo;s survival.
-                    <span class="lp-quote-mark">&rdquo;</span>
-                </div>
-                <div class="lp-feedback-attr">
-                    <span class="lp-feedback-author">r/quant</span>
-                    <span class="lp-feedback-context">&middot; independent deleverage backtest, adverse basket</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="lp-section lp-math-section">
-            <div class="lp-math-box lp-card">
-                <div class="card-title" data-i18n="math.sectionTitle">--mathematical-core</div>
-                <div class="lp-math-heading" data-i18n="math.heading">The Math Behind Your Portfolio</div>
-                <p class="lp-math-lead" data-i18n-html="math.lead">The covariance matrix runs on our secure backend. All computation is stateless &mdash; data is processed in-memory and discarded immediately. Nothing is written to disk.</p>
-                <ul class="lp-math-rules">
-                    <li data-i18n-html="math.rule1">High-variance assets receive <strong>smaller dynamic caps</strong></li>
-                    <li data-i18n-html="math.rule2">Correlated assets are <strong>penalized through covariance</strong></li>
-                    <li data-i18n-html="math.rule3">Underweight assets are <strong>prioritized only when they improve</strong> the risk-balanced structure</li>
-                </ul>
-                <div class="lp-math-grid">
-                    <div class="lp-math-metric">
-                        <svg viewBox="0 0 44 44" class="mc-icon" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="11" cy="22" r="7" fill="none" stroke="var(--blue)" stroke-width="1" opacity="0.5"/>
-                            <circle cx="33" cy="11" r="5.5" fill="none" stroke="var(--blue)" stroke-width="1" opacity="0.5"/>
-                            <circle cx="33" cy="33" r="8" fill="none" stroke="var(--blue)" stroke-width="1" opacity="0.5"/>
-                            <circle cx="11" cy="22" r="2.5" fill="var(--blue)" opacity="0.6"/>
-                            <circle cx="33" cy="11" r="2.5" fill="var(--blue)" opacity="0.6"/>
-                            <circle cx="33" cy="33" r="2.5" fill="var(--blue)" opacity="0.6"/>
-                            <line x1="15" y1="20" x2="29" y2="12" stroke="var(--blue)" stroke-width="0.6" opacity="0.3"/>
-                            <line x1="15" y1="24" x2="27" y2="31" stroke="var(--blue)" stroke-width="0.6" opacity="0.3"/>
-                            <line x1="33" y1="16" x2="33" y2="25" stroke="var(--blue)" stroke-width="0.6" opacity="0.3"/>
-                        </svg>
-                        <div class="mc-head"><span class="mc-num">01</span></div>
-                        <div class="metric-label" data-i18n="math.riskLabel">--risk-model</div>
-                        <div class="metric-copy" data-i18n-html="math.riskCopy">The covariance matrix estimates how assets move together. Themis, our Risk Parity allocator, then targets equal risk contribution &mdash; so no single token dominates your volatility.</div>
-                        <a href="/docs" class="doc-formula-link" data-i18n="math.riskLink">[ read mathematical proof in docs ]</a>
-                    </div>
-                    <div class="lp-math-metric">
-                        <svg viewBox="0 0 44 44" class="mc-icon" xmlns="http://www.w3.org/2000/svg">
-                            <line x1="6" y1="10" x2="22" y2="22" stroke="var(--green)" stroke-width="1" opacity="0.5"/>
-                            <line x1="6" y1="34" x2="22" y2="22" stroke="var(--green)" stroke-width="1" opacity="0.5"/>
-                            <line x1="38" y1="10" x2="22" y2="22" stroke="var(--green)" stroke-width="1" opacity="0.5"/>
-                            <line x1="38" y1="34" x2="22" y2="22" stroke="var(--green)" stroke-width="1" opacity="0.5"/>
-                            <circle cx="22" cy="22" r="4" fill="var(--green)" opacity="0.7"/>
-                            <rect x="14" y="14" width="16" height="16" fill="none" stroke="var(--green)" stroke-width="0.6" opacity="0.25" rx="2"/>
-                            <rect x="10" y="10" width="24" height="24" fill="none" stroke="var(--green)" stroke-width="0.4" opacity="0.12" rx="2" stroke-dasharray="3,3"/>
-                        </svg>
-                        <div class="mc-head"><span class="mc-num">02</span></div>
-                        <div class="metric-label" data-i18n="math.optLabel">--optimization</div>
-                        <div class="metric-copy" data-i18n-html="math.optCopy">KKT projection keeps allocations inside volatility caps and prevents oversized high-risk positions. When drawdown is severe, the <strong>Deleverage Shield</strong> instantly cuts exposure &mdash; stopping you from buying into a crash.</div>
-                        <a href="/docs" class="doc-formula-link" data-i18n="math.optLink">[ view formula ]</a>
-                    </div>
-                    <div class="lp-math-metric">
-                        <svg viewBox="0 0 44 44" class="mc-icon" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22 4 L36 12 L36 26 C36 33 29 38 22 40 C15 38 8 33 8 26 L8 12 Z" fill="none" stroke="var(--amber)" stroke-width="1" opacity="0.45"/>
-                            <path d="M22 10 L30 15 L30 25 C30 29 26 33 22 34 C18 33 14 29 14 25 L14 15 Z" fill="none" stroke="var(--amber)" stroke-width="0.5" opacity="0.2"/>
-                            <circle cx="22" cy="22" r="3.5" fill="none" stroke="var(--amber)" stroke-width="1" opacity="0.7"/>
-                            <line x1="22" y1="25.5" x2="22" y2="30" stroke="var(--amber)" stroke-width="1" opacity="0.5"/>
-                        </svg>
-                        <div class="mc-head"><span class="mc-num">03</span></div>
-                        <div class="metric-label" data-i18n="math.privLabel">--privacy</div>
-                        <div class="metric-copy" data-i18n-html="math.privCopy">Amounts, targets, and allocation weights stay in your browser&rsquo;s localStorage. Data sent to the backend is processed in-memory and discarded immediately &mdash; nothing is persisted unless you opt in to the signal service.</div>
-<a href="/docs#doc-dataflow" class="doc-formula-link" data-i18n="math.privLink">[ see the privacy data flow ]</a>
-                    </div>
-                    <div class="lp-math-metric">
-                        <svg viewBox="0 0 44 44" class="mc-icon" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22 4 L36 12 L36 26 C36 33 29 38 22 40 C15 38 8 34 8 26 L8 12 Z" fill="none" stroke="var(--red)" stroke-width="1" opacity="0.5"/>
-                            <path d="M22 10 L30 15 L30 24 C30 29 27 33 22 35 C17 33 14 29 14 24 L14 15 Z" fill="rgba(248,113,113,0.08)" stroke="var(--red)" stroke-width="0.5" opacity="0.3"/>
-                            <text x="22" y="26" text-anchor="middle" fill="var(--red)" font-family="'JetBrains Mono',monospace" font-size="10" font-weight="700" opacity="0.8">&#9888;</text>
-                        </svg>
-                        <div class="mc-head"><span class="mc-num">04</span></div>
-                        <div class="metric-label" data-i18n="math.shieldLabel">--deleverage-modulator</div>
-                        <div class="metric-copy" data-i18n-html="math.shieldCopy">Proteus, the Deleverage Shield, is a continuous regime modulator: exposure scales down as drawdown rises against a volatility-adaptive threshold &mdash; no indicators, no timers, no correlation gate. It moves exposure smoothly toward its target every bar in either direction with no hard floor; parked DCA cash redeploys automatically once exposure recovers.</div>
-                        <a href="/backtest" class="doc-formula-link" data-i18n="math.shieldLink">[ see the production-path backtest ]</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============ TRUST ANCHORS STRIP ============ -->
-        <div class="lp-trust-section">
-            <div class="tc lp-trust-card">
-                <div class="tc-bar">
-                    <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                    <span class="tc-title" data-i18n="math.trustAnchors">--trust-anchors</span>
-                </div>
-                <div class="tc-body">
-                    <div class="lp-trust-strip">
-                        <div class="lp-trust-chip"><span class="lp-trust-dot">●</span> math fully documented — <a href="/docs">audit the model</a></div>
-                        <div class="lp-trust-chip"><span class="lp-trust-dot">●</span> no cookies · privacy-first analytics (Simple Analytics)</div>
-                        <div class="lp-trust-chip"><span class="lp-trust-dot">●</span> portfolio stays in your browser — server data only if you opt in</div>
-                        <div class="lp-trust-chip"><span class="lp-trust-dot">●</span> GDPR / DSGVO compliant infrastructure</div>
-                    </div>
+            <div class="v2-fb-foot">
+                <p data-i18n="lp2.fbNote">Four independent threads on r/quant and r/algotradingcrypto &mdash; not AQMath&rsquo;s own account, not paid placements. Every reviewer who engaged, including a competing platform&rsquo;s founder, asked to stay unnamed; none are named here.</p>
+                <div class="v2-fb-stats">
+                    <div><b>34.6k+</b><span data-i18n="lp2.fbViews">cumulative thread views</span></div>
+                    <div><b>104</b><span data-i18n="lp2.fbComments">comments, 4 threads</span></div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <section class="lp-section lp-tiers-section">
-            <div class="lp-section-label" data-i18n="plans.sectionTitle">--access-tiers</div>
-            <div class="lp-plan-grid" style="grid-template-columns:repeat(2,1fr);">
-                <div class="lp-card lp-plan-card free">
-                    <div class="lp-plan-title" data-i18n="plans.freeTitle">FREE ACCESS</div>
-                    <div class="lp-plan-price">€0 <span style="font-size:0.6em;opacity:0.65;font-weight:400" data-i18n="plans.freePriceNote">/ forever</span></div>
-                    <div class="lp-plan-subtitle" data-i18n="plans.freeSubtitle">Open to everyone · No account · No key needed</div>
-                    <ul class="lp-feature-list">
+    <!-- ============ ACCESS ============ -->
+    <section class="v2-band v2-band-paper" id="access">
+        <div class="v2-wrap">
+            <div class="v2-eyebrow" data-i18n="lp2.accEyebrow">Access</div>
+            <h2 class="v2-h2" data-i18n="lp2.accTitle">Two ways to use AQMath.</h2>
+            <div class="v2-plans">
+                <div class="v2-plan">
+                    <div class="v2-plan-k" data-i18n="lp2.freeK">Free</div>
+                    <div class="v2-plan-price">&euro;0 <span data-i18n="plans.freePriceNote">/ forever</span></div>
+                    <ul class="v2-plan-list">
                         <li data-i18n="plans.freeF1">Core DCA distribution with volatility safety factors</li>
                         <li data-i18n="plans.freeF2">Live price sync (Binance / CoinGecko)</li>
                         <li data-i18n="plans.freeF3">Portfolio tracking in your browser — non-custodial</li>
-                        <li data-i18n="plans.freeF4">Trend filter — buys the dip, skips tokens mid-rally</li>
+                        <li data-i18n="plans.freeF4">Trend filter — the computed share is reduced for tokens in a strong rally</li>
+                        <li data-i18n="plans.freeF6">Backtest on your own price history — free, no key needed</li>
                         <li data-i18n="plans.freeF5">Upgrade anytime to unlock Risk Parity + Deleverage Shield</li>
                     </ul>
-                    <a class="lp-btn-secondary" href="/app" style="width:100%;text-align:center;" data-i18n="plans.freeCta">Open App — no key needed</a>
+                    <a class="v2-btn v2-btn-ghost v2-btn-block" href="/app" data-i18n="plans.freeCta">Open App — no key needed</a>
                 </div>
-                <div class="lp-card lp-plan-card pro">
-                    <div class="lp-plan-title" data-i18n-html="plans.proTitle">BLACK <span class="lp-plan-badge">Annual Access</span></div>
-                    <div class="lp-plan-price pro">€999 <span style="font-size:0.6em;opacity:0.65;font-weight:400">/ year</span></div>
-                    <div class="lp-plan-subtitle">Full engine access · Paid in USDC or EURC · No name, no card, no bank record required.</div>
-                    <ul class="lp-feature-list">
-                        <li data-i18n-html="plans.blackF1">Risk Parity optimization with full Covariance &amp; Variance Matrix</li>
-                        <li data-i18n-html="plans.blackF2">Deleverage Modulator with continuous drawdown protection</li>
+                <div class="v2-plan v2-plan-dark">
+                    <div class="v2-plan-k">Black</div>
+                    <div class="v2-plan-price">&euro;999 <span data-i18n="lp2.perYear">/ year</span></div>
+                    <ul class="v2-plan-list">
+                        <li data-i18n-html="plans.blackF2">Deleverage Modulator: continuous drawdown-based exposure calculation</li>
                         <li data-i18n-html="plans.blackF3">Dynamic volatility-based allocation caps</li>
-                        <li data-i18n-html="plans.blackF4">Automatic 180-day historical data pipeline</li>
-                        <li data-i18n-html="plans.blackF5">Unlimited token support and portfolio optimization</li>
-                        <li data-i18n-html="plans.blackF6">DCA distribution with full safety pipeline</li>
-                        <li data-i18n-html="plans.blackF7">Non-custodial privacy &mdash; portfolio stays in your browser (server-side storage only if you opt in)</li>
-                        <li data-i18n-html="plans.blackF8">Shared Black chat &mdash; pseudonymous, 20-message rolling buffer, deletable anytime</li>
+                        <li data-i18n-html="plans.blackF1">Risk Parity optimization with full Covariance &amp; Variance Matrix</li>
+                        <li data-i18n-html="plans.blackF7">Non-custodial &mdash; no exchange keys, no orders. Free: portfolio stays in your browser. Black: holdings stored under a hash of your key</li>
                         <li data-i18n-html="plans.blackF9">365-day term from activation &mdash; annual access only</li>
-                        <li data-i18n-html="plans.blackF10">14-day EU right of withdrawal &mdash; firm annual term afterwards <a href="/widerruf" style="color:var(--purple);font-size:0.85em">[details]</a></li>
-                        <li data-i18n-html="plans.blackF11">Send a message &mdash; we review and activate within 48h</li>
+                        <li data-i18n-html="plans.blackF10">14-day EU right of withdrawal &mdash; firm annual term afterwards</li>
                     </ul>
-                    <a class="lp-btn-secondary" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener" style="width:100%;display:block;text-align:center;" data-i18n="plans.applyNow">Apply for Access</a>
+                    <label class="v2-consent">
+                        <input type="checkbox" id="chkApplyConsent">
+                        <span data-i18n="lp2.consent">I understand that AQMath is a purely analytical calculation tool. It gives no investment recommendations, does not assess the suitability of any product for me (no Geeignetheitspr&uuml;fung), does not execute or arrange trades, and is not a platform for making decisions. I enter all assets, amounts and model parameters myself, and every decision is mine alone.</span>
+                    </label>
+                    <a class="v2-btn v2-btn-light v2-btn-block" id="btnApplyAccess" href="https://t.me/AQMath_Black" target="_blank" rel="noopener" aria-disabled="true" tabindex="-1" data-i18n="plans.applyNow">Apply for Access</a>
+                    <div class="v2-plan-foot"><a href="/terms" data-i18n="lp2.terms">Terms</a> &middot; <a href="/widerruf" data-i18n="lp2.withdrawal">Right of withdrawal</a></div>
                 </div>
             </div>
-        </section>
-
-        <!-- ============ WHY WE WORK THIS WAY ============ -->
-        <section class="lp-section lp-why-section" style="max-width:860px;margin:0 auto;">
-            <div class="tc lp-why-card">
-                <div class="tc-bar">
-                    <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                    <span class="tc-title" data-i18n="math.whyWeWork">--why-we-work-this-way</span>
-                </div>
-                <div class="tc-body">
-                    <div class="lp-why-grid">
-                        <div>
-                            <div class="lp-why-q">Why USDC &amp; EURC only?</div>
-                            <div class="lp-why-a">Credit cards and bank transfers require your name, address, and card number. We don't want that data — and we shouldn't have it. Stablecoins let us skip all of it. You pay from a wallet, we see a transaction. Nothing personal is collected or stored.</div>
-                        </div>
-                        <div>
-                            <div class="lp-why-q">Why limited slots?</div>
-                            <div class="lp-why-a">Every user who runs the engine triggers real matrix computations on real data. These operations scale with user count. We keep the base small so every member gets fast compute, reliable uptime, and direct support — not a support ticket queue.</div>
-                        </div>
-                        <div>
-                            <div class="lp-why-q">How do refunds work?</div>
-                            <div class="lp-why-a">EU consumers have a statutory 14-day right of withdrawal and we do not pretend otherwise. By default your key is issued <em>after</em> those 14 days, so the period simply passes before anything is delivered. Want access sooner? Ask, and we start straight away &mdash; you keep the right for the remaining days and we settle only the part already used, pro rata. After the 14 days the annual term is firm: no refunds, and no pro-rata on later cancellation.</div>
-                        </div>
-                        <div>
-                            <div class="lp-why-q">Why manual review?</div>
-                            <div class="lp-why-a">We communicate directly with every member. No automated onboarding, no helpdesk. If something doesn't work for your setup, you reach a person who built the engine — not a chatbot. The review is to make sure AQMath is the right tool for you.</div>
-                        </div>
-                    </div>
-                </div>
+            <div class="v2-why">
+                <div><h3>Why USDC &amp; EURC only?</h3><p>Credit cards and bank transfers require your name, address, and card number. We don't want that data — and we shouldn't have it. Stablecoins let us skip all of it. You pay from a wallet, we see a transaction. Nothing personal is collected or stored.</p></div>
+                <div><h3>Why limited slots?</h3><p>Every user who runs the engine triggers real matrix computations on real data. These operations scale with user count. We keep the base small so every member gets fast compute, reliable uptime, and direct support — not a support ticket queue.</p></div>
+                <div><h3>How do refunds work?</h3><p>EU consumers have a statutory 14-day right of withdrawal and we do not pretend otherwise. By default your key is issued <em>after</em> those 14 days, so the period simply passes before anything is delivered. Want access sooner? Ask, and we start straight away &mdash; you keep the right for the remaining days and we settle only the part already used, pro rata. After the 14 days the annual term is firm: no refunds, and no pro-rata on later cancellation.</p></div>
+                <div><h3>Why manual review?</h3><p>We communicate directly with every member. No automated onboarding, no helpdesk. If something doesn't work for your setup, you reach a person who built the engine — not a chatbot. The review is to make sure AQMath is the right tool for you.</p></div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="lp-section lp-faq">
-            <h3 data-i18n="faq.title">--frequently-asked-questions</h3>
+    <!-- ============ TRUST STRIP ============ -->
+    <section class="v2-trust">
+        <div class="v2-wrap v2-trust-row">
+            <span><i></i><a href="/docs" data-i18n="lp2.t1">Math fully documented &mdash; audit the model</a></span>
+            <span><i></i><span data-i18n="lp2.t2">No cookies &mdash; privacy-first analytics</span></span>
+            <span><i></i><span data-i18n="lp2.t3">Free tier: portfolio stored only on your device</span></span>
+            <span><i></i><a href="/privacy" data-i18n="lp2.t4">Data flow documented &mdash; see Privacy &amp; Docs</a></span>
+        </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="v2-band v2-band-paper">
+        <div class="v2-wrap v2-faq-wrap">
+            <div class="v2-eyebrow" data-i18n="faq.title">Frequently asked questions</div>
+            <div class="lp-section lp-faq">
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q1">How does the engine calculate risk?</div>
                 <div class="lp-faq-a" data-i18n-html="faq.a1">The Black engine uses a <strong>Variance Matrix</strong>, asset <strong>Covariance</strong>, volatility estimates, and KKT-style projection to calculate Risk Parity allocations where each asset contributes a controlled share of portfolio risk. <a href="/docs" style="color:var(--purple);">You can audit the full mathematical model in our [Documentation].</a></div>
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q2">How is AQMath actually private?</div>
-                <div class="lp-faq-a" data-i18n-html="faq.a2">We don&rsquo;t track your wallet, and we never store your identity or portfolio in any database &mdash; with one optional exception: if you enable the personalised signal &amp; notification service, your holdings are stored server-side under the hash of your activation key, solely to compute your daily signals and send notifications, and deleted at any time (Privacy Policy &sect;9). By default, your token balances live only in your browser&rsquo;s localStorage. During DCA and Optimize, position data is sent to our backend, processed in-memory, and discarded immediately &mdash; nothing is persisted. The only other server-side record is a one-way hashed activation record (see the Black key question below) &mdash; never your financial data. Your financial privacy is architecturally enforced. <a href="/docs" style="color:var(--purple);">Read the full privacy architecture in our [Documentation].</a></div>
+                <div class="lp-faq-a" data-i18n-html="faq.a2">We don't track your wallet and ask for no name or e-mail. On the free tier your token balances live only in your browser's localStorage; during DCA and Optimize, position data is sent to our calculation servers, processed in memory and not written to a database (technical server logs keep counts such as the number of positions and the DCA amount). With a Black key, your holdings (token, amount, entry price, APY) are stored on our server under a hash of your activation key to run your daily calculations and restore your table on a new device, and are deleted on request or when your key is deactivated (Privacy Policy §9). The only other record is a one-way hashed activation record with a hashed IP address. <a href="/docs" style="color:#a78bfa;">Read the full data flow in our [Documentation].</a></div>
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q10">Do Black keys track my IP address?</div>
@@ -519,11 +391,11 @@
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q6">How do I apply for Black access?</div>
-                <div class="lp-faq-a" data-i18n-html="faq.a6">DM us on <a href="https://t.me/DoNotAskMex" target="_blank" style="color:var(--purple);">Telegram</a> or <a href="https://x.com/aqmathapp" target="_blank" style="color:var(--purple);">Twitter</a>. Annual access is <strong>€999 / year</strong>. No call required — send a message, we review and send your activation key within 48h. Payments accepted exclusively in USDC and EURC.</div>
+                <div class="lp-faq-a" data-i18n-html="faq.a6">DM us on <a href="https://t.me/AQMath_Black" target="_blank" style="color:var(--purple);">Telegram</a> or <a href="https://x.com/aqmathapp" target="_blank" style="color:var(--purple);">Twitter</a>. Black access is <strong>€999 / year</strong>. No call required — send a message, we review and send your activation key within 48h. Payments accepted exclusively in USDC and EURC.</div>
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q7">Do you offer monthly plans?</div>
-                <div class="lp-faq-a" data-i18n-html="faq.a7">No. AQMath operates exclusively on an annual subscription model. We do not offer monthly, quarterly, or semi-annual plans. EU consumers keep the statutory 14-day right of withdrawal &mdash; see the <a href="/widerruf" style="color:#a78bfa;">withdrawal notice</a>; after that the annual term is firm and is not refunded pro rata on early cancellation.</div>
+                <div class="lp-faq-a" data-i18n-html="faq.a7">No. Black access operates exclusively on an annual licence model (the App and the Backtest are free). We do not offer monthly, quarterly, or semi-annual plans. EU consumers keep the statutory 14-day right of withdrawal &mdash; see the <a href="/widerruf" style="color:#a78bfa;">withdrawal notice</a>; after that the annual term is firm and is not refunded pro rata on early cancellation.</div>
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q8">Is AQMath a trading bot?</div>
@@ -534,38 +406,34 @@
                 <div class="lp-faq-a" data-i18n-html="faq.a9">No. AQMath is a web application only. Any app using our name on any app store is unauthorized and not affiliated with us.</div>
             </div>
             <div class="lp-faq-item">
-                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q11">Is there an automatic daily signal or notification service?</div>
-                <div class="lp-faq-a" data-i18n-html="faq.a11">Yes &mdash; as an <strong>optional, opt-in service</strong>. If you enable it, the engine computes your deleverage shield signal and DCA schedule once per day on the server and can push a notification to your device. To do that, your holdings are stored under the hash of your activation key &mdash; never under your name or wallet &mdash; and deleted completely the moment you withdraw consent. Full details are in Section 9 of our <a href="/privacy" style="color:var(--purple);">Privacy Policy</a>.</div>
+                <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q11">Is there an automatic daily calculation or notification service?</div>
+                <div class="lp-faq-a" data-i18n-html="faq.a11">Yes &mdash; with Black. The server runs your daily calculations (Deleverage Shield status and DCA split) once per day from your stored holdings and can send a notice to your device. To do that, your holdings are stored under the hash of your activation key &mdash; never under your name or wallet. Notifications are optional and based on your consent; stored holdings are deleted on request or when your key is deactivated. Full details are in Section 9 of our <a href="/privacy" style="color:#a78bfa;">Privacy Policy</a>.</div>
             </div>
             <div class="lp-faq-item">
                 <div class="lp-faq-q" data-action="toggleParentOpen" data-i18n="faq.q12">What is the Black chat?</div>
                 <div class="lp-faq-a" data-i18n-html="faq.a12">Black users get access to a <strong>shared internal chat</strong> visible only to active Black members. Messages are pseudonymous (shown as a short code like B-XXXXXX, never your real key or IP), capped at 200 characters, and limited to the 20 most recent messages (older ones are automatically swept daily). You can clear your own messages anytime. The chat is stored server-side under the hash of your activation key and is deleted when your key is deactivated.</div>
             </div>
-        </section>
-    </div>
+            </div>
+        </div>
+    </section>
     </main>
 
-    <div class="lp-disclaimer" data-i18n-html="disclaimer">AQMath does not provide financial advice. All calculations are based on historical data and mathematical models.<br>
-        Mathematical processing runs on our secure backend; your portfolio data is processed in-memory and never persisted (opt-in signal service excepted).<br>
-        &copy; 2026 AQMath &mdash; Secure Backend Engine. Private. Non-Custodial.<br>
-        <a href="/docs">Documentation</a> &middot;
-        Follow: <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">Twitter</a> &middot; <a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">Substack</a>
-    </div>
+    <div class="lp-disclaimer" data-i18n-html="disclaimer">AQMath is software for mathematical calculation. It does not provide investment advice or recommendations; every decision is yours. All calculations are based on historical data and mathematical models.<br>Calculations run on our servers; on the free tier your portfolio data is processed in memory and not written to a database (Black stores holdings under a key hash, see Privacy).<br>© 2026 AQMath. Non-Custodial.<br><a href="/docs">Documentation</a></div>
 </div>
 
 <!-- ============ AQMATH BLACK ACCESS MODAL ============ -->
 <div class="lp-pro-modal hidden" id="proModal">
     <div class="lp-pro-box">
         <h3>&#128274; AQMath Black &mdash; Apply for Access</h3>
-        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card, no bank transfer, no personal data collected.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
+        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card and no bank transfer, so we never collect card or bank details.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
         <div class="lp-pro-beta">
             <div class="lp-pro-beta-label">Send a message to request access:</div>
             <div class="lp-pro-beta-links">
-                <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">[ telegram ]</a>
+                <a href="https://t.me/AQMath_Black" target="_blank" rel="noopener">Telegram</a>
                 <span class="lp-pro-beta-sep">&middot;</span>
-                <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">[ twitter ]</a>
+                <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">Twitter</a>
                 <span class="lp-pro-beta-sep">&middot;</span>
-                <a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">[ substack ]</a>
+                <a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">Substack</a>
             </div>
         </div>
         <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;">
@@ -574,7 +442,7 @@
                 Annual Access Only &middot; No Mobile App &middot; Web Application Only
             </div>
         </div>
-        <button class="lp-pro-close" data-action="hideProModal" style="margin-top:12px;">[ Close ]</button>
+        <button class="lp-pro-close" data-action="hideProModal" style="margin-top:12px;">Close</button>
     </div>
 </div>
 
@@ -587,13 +455,13 @@
     <div class="howaq-box">
         <div class="howaq-head">
             <h3>&#128214; How AQMath Works</h3>
-            <button class="howaq-close" data-action="hideHowAqmath" title="close">[ &times; ]</button>
+            <button class="howaq-close" data-action="hideHowAqmath" title="close">&times;</button>
         </div>
         <div class="howaq-body legal-page" id="howAqmathBody">
             <p>Loading&hellip;</p>
         </div>
         <div class="howaq-foot">
-            <button class="btn purple" id="btnHowAck" data-action="ackHowAqmath">[ I have read ]</button>
+            <button class="btn purple" id="btnHowAck" data-action="ackHowAqmath">I have read</button>
         </div>
     </div>
 </div>
@@ -604,7 +472,7 @@
         <div class="toast-title" id="toastTitle"></div>
         <div class="toast-msg" id="toastMsg"></div>
         <div class="toast-actions hidden" id="toastActions"></div>
-        <button class="toast-close" id="toastClose" data-action="hideToast">[ close ]</button>
+        <button class="toast-close" id="toastClose" data-action="hideToast">Close</button>
     </div>
 </div>
 
@@ -618,8 +486,8 @@
         <div class="dca-preview-note hidden" id="dcaPreviewNote"></div>
         <div class="dca-preview-foot hidden" id="dcaPreviewFoot"></div>
         <div class="dca-preview-actions">
-            <button class="btn green" id="dcaPreviewConfirm" data-action="confirmDca" data-i18n="app.dcaPreview.confirm">[ confirm ]</button>
-            <button class="btn" id="dcaPreviewCancel" data-action="cancelDca" data-i18n="app.dcaPreview.cancel">[ cancel ]</button>
+            <button class="btn green" id="dcaPreviewConfirm" data-action="confirmDca" data-i18n="app.dcaPreview.confirm">Confirm</button>
+            <button class="btn" id="dcaPreviewCancel" data-action="cancelDca" data-i18n="app.dcaPreview.cancel">Cancel</button>
         </div>
     </div>
 </div>
@@ -642,15 +510,25 @@
 <!-- ============ GLOBAL LEGAL FOOTER ============
      Outside every view container, so it renders on all five routes
      (/, /app, /backtest, /results, /docs) and stays crawlable. -->
-<footer class="site-footer">
-    <span data-i18n="ft.copy">&copy; 2026 AQMath &mdash; Private. Non-Custodial.</span><br>
-    <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
+<footer class="site-footer sf2">
+    <div class="sf2-in">
+        <div class="sf2-top">
+            <a class="sf2-logo" href="/"><svg width="26" height="26" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg><span>AQMath</span></a>
+            <div class="sf2-soc"><a href="https://t.me/AQMath_Black" target="_blank" rel="noopener" aria-label="Telegram (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.4 3.6 2.9 10.8c-.9.4-.9 1.1-.2 1.3l4.7 1.5 1.8 5.6c.2.6.4.8.8.8.4 0 .6-.2.9-.4l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8L22.9 5c.3-1.2-.4-1.8-1.5-1.4zM8.6 13.1l9.5-6c.4-.3.8-.1.5.2l-7.9 7.1-.3 3.3-1.8-4.6z"/></svg><span>Telegram</span></a><a href="https://x.com/aqmathapp" target="_blank" rel="noopener" aria-label="X (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg><span>X</span></a><a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener" aria-label="Reddit (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="14" rx="7.5" ry="5.2"/><path d="M12 8.8l1.2-4.3 4 .9"/><path d="M9.4 16.6c1.6 1 3.6 1 5.2 0"/></g><g fill="currentColor"><circle cx="9.3" cy="13.2" r="1.2"/><circle cx="14.7" cy="13.2" r="1.2"/><circle cx="18" cy="5.6" r="1.4"/></g></svg><span>Reddit</span></a><a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener" aria-label="Substack (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M4 4h16v2.6H4zM4 8.8h16v2.6H4zM4 13.6h16V21l-8-4.4L4 21z"/></svg><span>Substack</span></a></div>
+        </div>
+        <div class="sf2-bot">
+            <div data-i18n="ft.copy">&copy; 2026 AQMath &mdash; Non-custodial. An analytical web application, not a trading bot.</div>
+            <div class="sf2-legal">
+                <a href="/about" data-i18n="ft.about">About</a><a href="/research/" data-i18n="ft.research">Research</a><a href="/impressum" data-i18n="ft.impressum">Impressum</a><a href="/privacy" data-i18n="ft.privacy">Privacy</a><a href="/terms" data-i18n="ft.terms">Terms</a><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
+            </div>
+        </div>
+    </div>
 </footer>
 
-<script defer src="/app-widgets.js?v=b4d391be81"></script>
-<script defer src="/app-backtest.js?v=b4d391be81"></script>
-<script defer src="/app.js?v=b4d391be81"></script>
-<script defer src="/app-notify.js?v=b4d391be81"></script>
+<script defer src="/app-widgets.js?v=8bf7eb5417"></script>
+<script defer src="/app-backtest.js?v=8bf7eb5417"></script>
+<script defer src="/app.js?v=8bf7eb5417"></script>
+<script defer src="/app-notify.js?v=8bf7eb5417"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -664,11 +542,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=b4d391be81"></script>
+<script defer src="/vendor/i18next.min.js?v=8bf7eb5417"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=b4d391be81"></script>
-<script defer src="/app-boot.js?v=b4d391be81"></script>
+<script defer src="/app-tour.js?v=8bf7eb5417"></script>
+<script defer src="/app-boot.js?v=8bf7eb5417"></script>
 
 </body>
 </html>

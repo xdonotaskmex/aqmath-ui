@@ -65,8 +65,8 @@ try {
 } catch (e) { /* sessionStorage unavailable — ignore */ }
 
 const ROUTES = {
-    '/':         { cls: 'route-landing',  view: 'landingView',   title: 'AQMath — Crypto Portfolio Rebalancer | Risk Parity' },
-    '/app':      { cls: 'route-app',      view: 'appView',       title: 'App — AQMath Portfolio Rebalancer' },
+    '/':         { cls: 'route-landing',  view: 'landingView',   title: 'AQMath — Portfolio Mathematics Software | Risk Parity' },
+    '/app':      { cls: 'route-app',      view: 'appView',       title: 'App — AQMath Portfolio Calculator' },
     '/docs':     { cls: 'route-doc',      view: 'docView',       title: 'System Documentation — AQMath' },
     '/backtest': { cls: 'route-backtest', view: 'backtestView',  title: 'Backtest — AQMath Deleverage Shield' },
     '/results':  { cls: 'route-results',  view: 'resultsView',   title: 'New-Token Stress Test — AQMath' },
@@ -386,7 +386,7 @@ async function activateBeta() {
     const key = document.getElementById('iBetaKey').value.trim();
     if (!key) return showToast('Enter your Black key first.', 'warning');
     const btn = document.getElementById('btnBeta');
-    btn.textContent = '[ verifying... ]';
+    btn.textContent = 'Verifying...';
     btn.disabled = true;
     try {
         const res = await fetch(BETA_AUTH_URL + '/auth/beta', {
@@ -425,7 +425,7 @@ async function activateBeta() {
         console.error('[AQMath] beta activation failed:', e.message);
         showToast("Couldn't reach the activation service — please check your connection and try again.", 'error');
     } finally {
-        btn.textContent = '[ Activate Black ]';
+        btn.textContent = 'Activate Black';
         btn.disabled = false;
     }
 }
@@ -801,8 +801,15 @@ function calcPortfolioVol() {
     return blendedVol;
 }
 
+// Editorial palette (muted, readable on the light theme); cycles with a
+// lightness shift past 10 tokens so neighbouring slices stay distinguishable.
+const _PALETTE = ['#1D3557', '#8C3B3B', '#B07A2A', '#2F6846', '#5B4B8A', '#3F7C85', '#8A5A44', '#6B7A8F', '#A0527C', '#7A8B3A'];
 function genColors(n) {
-    return Array.from({ length: n }, (_, i) => `hsl(${Math.round((i * 360) / Math.max(n, 1))}, 70%, 60%)`);
+    return Array.from({ length: n }, (_, i) => {
+        const base = _PALETTE[i % _PALETTE.length];
+        if (i < _PALETTE.length) return base;
+        return `hsl(${(i * 47) % 360}, 38%, ${34 + ((i / _PALETTE.length | 0) % 3) * 10}%)`;
+    });
 }
 
 function showLoading(title, sub) {
@@ -1040,7 +1047,7 @@ async function osvjeziSveCijene() {
     console.log('[AQMath] price sync start:', snapshot.length, 'tokens:', snapshot.map(t => t.sym).join(','));
     const btn = document.getElementById('btnSyncAll');
     const originalText = btn.textContent;
-    btn.textContent = "[ SYNC... ]";
+    btn.textContent = "SYNC...";
     btn.disabled = true;
     try {
         const data = await fetchBinanceMarkets();
@@ -1340,7 +1347,7 @@ function popuniFormu(sym) {
     document.getElementById('iEntry').value = token.entry || '';
     document.getElementById('iApy').value = token.apy || 0;
     document.getElementById('iTarget').value = token.target;
-    document.getElementById('btnAdd').textContent = '[ Update ]';
+    document.getElementById('btnAdd').textContent = 'Update';
     editMode = token.sym;
     syncTargetFieldLock();
 }
@@ -1366,7 +1373,7 @@ function syncTargetFieldLock() {
 function resetForme() {
     ['iSym','iAmt','iPrice','iEntry','iApy','iTarget'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('iHistoryCSV').value = '';
-    document.getElementById('btnAdd').textContent = '[ Load ]';
+    document.getElementById('btnAdd').textContent = 'Load';
     editMode = null;
     syncTargetFieldLock();
 }
@@ -1407,7 +1414,7 @@ async function dodajToken() {
 
     const coinId = sym.toLowerCase();  // use sym as coinId
     const btn = document.getElementById('btnAdd');
-    btn.textContent = "[ FETCHING... ]";
+    btn.textContent = "FETCHING...";
     btn.disabled = true;
     try {
         const csvFile = document.getElementById('iHistoryCSV').files[0];
@@ -1418,7 +1425,7 @@ async function dodajToken() {
                 showToast('csv contains no valid prices.', 'error');
                 editMode = null;
                 resetForme();
-                btn.textContent = '[ Load ]';
+                btn.textContent = 'Load';
                 btn.disabled = false;
                 return;
             }
@@ -1436,7 +1443,7 @@ async function dodajToken() {
                 showToast(`Price for ${sym} not found on Binance or CoinGecko.\n\nPlease enter the current price manually in the Price field.`, 'error');
                 editMode = null;
                 resetForme();
-                btn.textContent = '[ Load ]';
+                btn.textContent = 'Load';
                 btn.disabled = false;
                 return;
             }
@@ -1474,7 +1481,7 @@ async function dodajToken() {
         resetForme();
     }
     finally {
-        btn.textContent = '[ Load ]';
+        btn.textContent = 'Load';
         btn.disabled = false;
         editMode = null;
     }
@@ -1533,7 +1540,7 @@ async function _tradeResolvePrice(sym, priceInputId) {
 function _backupHoldingsAfterTrade() {
     if (!isPro || typeof pushDurableHoldings !== 'function') return;
     pushDurableHoldings().then(ok => {
-        if (!ok) showToast('Trade saved locally but the account backup failed — press [ update holdings ] to sync it.', 'warning');
+        if (!ok) showToast('Change saved locally but the account backup failed — press Update holdings to sync it.', 'warning');
     });
 }
 
@@ -1542,14 +1549,14 @@ async function recordBuy() {
     if (!sym) return;
 
     const token = portfolio.find(t => t.sym === sym);
-    if (!token) return showToast(`"${sym}" not in portfolio. Add it with [ Load ] first, then record buys.`, 'warning');
+    if (!token) return showToast(`"${sym}" not in portfolio. Add it with Load first, then log additions.`, 'warning');
 
     const boughtAmt = parseFloat(document.getElementById('iBuyAmt').value);
     if (isNaN(boughtAmt) || boughtAmt <= 0) return showToast('Amount must be > 0.', 'warning');
 
     const btn = document.getElementById('btnRecordBuy');
     const btnLabel = btn.textContent; // keep the localized label for restore
-    btn.textContent = '[ ... ]';
+    btn.textContent = '...';
     btn.disabled = true;
 
     try {
@@ -1575,10 +1582,10 @@ async function recordBuy() {
         render();
         _backupHoldingsAfterTrade();
 
-        showToast(`BUY +${fmtTokens(boughtAmt)} ${sym} @ $${fmtPrice(price)} — avg entry $${fmtPrice(token.entry)}`, 'success');
+        showToast(`Logged addition +${fmtTokens(boughtAmt)} ${sym} @ $${fmtPrice(price)} — avg entry $${fmtPrice(token.entry)}`, 'success');
     } catch(e) {
         console.error('[AQMath] record buy failed:', e.message);
-        showToast('Record buy failed: ' + e.message, 'error');
+        showToast('Logging addition failed: ' + e.message, 'error');
     } finally {
         btn.textContent = btnLabel;
         btn.disabled = false;
@@ -1590,7 +1597,7 @@ async function recordSell() {
     if (!sym) return;
 
     const token = portfolio.find(t => t.sym === sym);
-    if (!token) return showToast(`"${sym}" not in portfolio. Add it with [ Load ] first.`, 'warning');
+    if (!token) return showToast(`"${sym}" not in portfolio. Add it with Load first.`, 'warning');
 
     const soldAmt = parseFloat(document.getElementById('iBuyAmt').value);
     if (isNaN(soldAmt) || soldAmt <= 0) return showToast('Amount must be > 0.', 'warning');
@@ -1600,7 +1607,7 @@ async function recordSell() {
 
     const btn = document.getElementById('btnRecordSell');
     const btnLabel = btn.textContent; // keep the localized label for restore
-    btn.textContent = '[ ... ]';
+    btn.textContent = '...';
     btn.disabled = true;
 
     try {
@@ -1631,10 +1638,10 @@ async function recordSell() {
         render();
         _backupHoldingsAfterTrade();
 
-        showToast(`SELL -${fmtTokens(soldAmt)} ${sym} @ $${fmtPrice(price)} — remaining ${fmtTokens(token.amount)} ${sym}`, 'success');
+        showToast(`Logged reduction -${fmtTokens(soldAmt)} ${sym} @ $${fmtPrice(price)} — remaining ${fmtTokens(token.amount)} ${sym}`, 'success');
     } catch(e) {
         console.error('[AQMath] record sell failed:', e.message);
-        showToast('Record sell failed: ' + e.message, 'error');
+        showToast('Logging reduction failed: ' + e.message, 'error');
     } finally {
         btn.textContent = btnLabel;
         btn.disabled = false;
@@ -1648,20 +1655,20 @@ function toggleFreeze(sym) {
 
 function obrisiToken(sym) {
     showToast(`delete ${sym}?`, 'warning', [
-        { label: '[ yes ]', primary: true, onClick: () => {
+        { label: 'Yes', primary: true, onClick: () => {
             portfolio = portfolio.filter(t => t.sym !== sym);
             if (editMode === sym) resetForme();
             render();
             saveState();
             showToast(`${sym} removed.`, 'success');
         }},
-        { label: '[ no ]', onClick: () => {} }
+        { label: 'No', onClick: () => {} }
     ]);
 }
 
 function obrisiSve() {
     showToast('delete entire portfolio?', 'warning', [
-        { label: '[ yes ]', primary: true, onClick: () => {
+        { label: 'Yes', primary: true, onClick: () => {
             portfolio = [];
             lastDcaDate = null;
             lastOptimization = null;
@@ -1676,7 +1683,7 @@ function obrisiSve() {
             renderHistoryChart();
             showToast('portfolio cleared.', 'success');
         }},
-        { label: '[ no ]', onClick: () => {} }
+        { label: 'No', onClick: () => {} }
     ]);
 }
 
@@ -1696,7 +1703,7 @@ async function distribuirajDca() {
     // Circuit Breaker is handled by backend (dca-engine) — Shield-aligned logic
     // Backend returns error if Shield detects extreme crash (DCA lockout)
 
-    showLoading('REBALANCING', 'Calculating optimal DCA distribution...');
+    showLoading('CALCULATING', 'Computing DCA distribution...');
 
     const positions = portfolio.map(t => ({
         symbol: t.sym,
@@ -1735,7 +1742,7 @@ async function distribuirajDca() {
             console.error('[DCA] engine returned error:', result.error);
             const errText = String(result.error).toLowerCase();
             if (errText.includes('defensive') || errText.includes('shield') || errText.includes('circuit') || errText.includes('paused') || errText.includes('lockout') || errText.includes('breaker')) {
-                return showToast("DCA paused: your portfolio is in defensive mode — it'll resume automatically when markets recover.", 'notice');
+                return showToast("DCA calculation paused: the Shield status is active for your inputs — it resumes automatically when the computed exposure recovers.", 'notice');
             }
             return showToast("Couldn't run DCA right now — please try again shortly.", 'error');
         }
@@ -1778,13 +1785,13 @@ function showDcaPreview(result, dcaAmount) {
         if (buy && buy.usd >= 0.01) {
             cls += ' buy';
             amt = `+$${buy.usd.toFixed(2)}`;
-            why = `underweight — buy ${fmtTokens(buy.tokens)} tokens (${c.curPct}% → ${afterPct.toFixed(1)}%)`;
+            why = `below target — computed share ${fmtTokens(buy.tokens)} tokens (${c.curPct}% → ${afterPct.toFixed(1)}%)`;
         } else if (t.frozen) {
             why = 'frozen — skipped';
         } else if (c.drift >= -0.5) {
             why = `target met (${c.curPct}% vs ${t.target}% target)`;
         } else {
-            why = 'underweight, but filtered by the safety pipeline';
+            why = 'below target, but excluded by the safety pipeline';
         }
         rowsEl.insertAdjacentHTML('beforeend',
             `<div class="${cls}"><span class="sym">${escapeHtml(t.sym)}</span>` +
@@ -1797,7 +1804,7 @@ function showDcaPreview(result, dcaAmount) {
     const usdcGets = usdcBuy + remaining;
     if (usdc && (usdcGets >= 0.01 || totalAlloc < 0.01)) {
         const why = totalAlloc < 0.01
-            ? 'Safe-Haven — no underweight positions'
+            ? 'Safe-Haven — no position below target'
             : 'Safe-Haven — leftover from caps and filters';
         rowsEl.insertAdjacentHTML('beforeend',
             `<div class="dca-preview-row safe"><span class="sym">${escapeHtml(usdc.sym)}</span>` +
@@ -1806,7 +1813,7 @@ function showDcaPreview(result, dcaAmount) {
 
     const noteEl = document.getElementById('dcaPreviewNote');
     if (totalAlloc < 0.01) {
-        noteEl.textContent = '\u26a0\ufe0f All targets fulfilled. New capital will park in the stablecoin.';
+        noteEl.textContent = '\u26a0\ufe0f All targets reached. The computed amount is allocated to the stablecoin.';
         noteEl.classList.remove('hidden');
     } else {
         noteEl.classList.add('hidden');
@@ -1846,7 +1853,7 @@ function cancelDca() {
 // Applies a confirmed engine plan to the local portfolio (was the second half
 // of distribuirajDca before the preview step existed).
 async function applyDcaResult(result, dcaAmount) {
-    showLoading('EXECUTING', 'Applying the confirmed DCA plan...');
+    showLoading('RECORDING', 'Recording the confirmed distribution...');
 
     const updated = result.updated_positions || [];
     console.log('DCA updated positions count:', updated.length);
@@ -1929,18 +1936,18 @@ async function applyDcaResult(result, dcaAmount) {
     let msg;
     if (totalAlloc >= 0.01 && coinCount > 0) {
         msg = `Added $${totalAlloc.toFixed(2)} across ${coinCount} ${coinCount === 1 ? 'coin' : 'coins'}.`;
-        if (remaining > 0.01) msg += ` $${remaining.toFixed(2)} parked in USDC for next time.`;
+        if (remaining > 0.01) msg += ` $${remaining.toFixed(2)} allocated to USDC.`;
         // Task 1: show the actual buys (tokens + USD) per coin
         msg += '\n\nBought:';
         Object.entries(tokenTotals).forEach(([sym, t]) => {
             msg += `\n  ${sym}: +${fmtTokens(t.tokens)} tokens (~$${t.usd.toFixed(2)})`;
         });
     } else {
-        msg = `Your portfolio is already at its targets — $${dcaAmount.toFixed(2)} parked in USDC for next time.`;
+        msg = `Your portfolio is already at its targets — $${dcaAmount.toFixed(2)} allocated to USDC.`;
     }
 
     showToast(msg, 'success', [
-        { label: '[ export json ]', primary: true, onClick: () => exportJSON() }
+        { label: 'Export json', primary: true, onClick: () => exportJSON() }
     ]);
 
     // If this run was triggered from a pending DCA card, record the server-side
@@ -2075,7 +2082,7 @@ async function optimizePortfolio() {
         msg += '\n';
         msg += frozenPlan
             ? 'Weights — YOUR FROZEN PLAN:\n'
-              + 'These are the exact weights the daily signals use. They are locked\n'
+              + 'These are the exact weights the daily calculations use. They are locked\n'
               + 'until the macro re-optimization date, so they never drift.\n\n'
             : 'Weights (KKT-projected):\n\n';
         weights.forEach(w => {
@@ -2139,7 +2146,7 @@ async function optimizePortfolio() {
 
         // Friendly, outcome-focused summary
         const coinCount = weights.filter(w => w.weight > 0).length;
-        let summary = `Portfolio optimized — new targets set for ${coinCount} ${coinCount === 1 ? 'coin' : 'coins'}.`;
+        let summary = `Calculation complete — new target weights set for ${coinCount} ${coinCount === 1 ? 'coin' : 'coins'}.`;
         if (usdcTarget > 0) summary += ` ${usdcTarget}% kept in USDC.`;
 
         // Implied rebalance trades to reach the new targets.
@@ -2163,11 +2170,11 @@ async function optimizePortfolio() {
             const qty = usd / t.price;
             if (shieldActive) {
                 if (delta < 0) {
-                    sells.push(`  ${t.sym}: sell ${fmtTokens(qty)} tokens (~$${usd.toFixed(2)})`);
+                    sells.push(`  ${t.sym}: computed reduction ${fmtTokens(qty)} tokens (~$${usd.toFixed(2)})`);
                     sellUsdTotal += usd;
                 }
             } else if (delta > 0) {
-                buys.push(`  ${t.sym}: BUY ${fmtTokens(qty)} tokens (~$${usd.toFixed(2)})`);
+                buys.push(`  ${t.sym}: computed share ${fmtTokens(qty)} tokens (~$${usd.toFixed(2)})`);
             }
         });
 
@@ -2175,18 +2182,18 @@ async function optimizePortfolio() {
         if (dlInfo) {
             summary += `\n\nDeleverage: ${shieldActive ? 'ACTIVE' : 'INACTIVE'}`;
             if (shieldActive) {
-                summary += "\nDefensive mode is on — exposure is dialed back while markets are shaky. New DCA buys are paused; they'll resume automatically as markets recover.";
+                summary += "\nShield status is active — the computed target exposure is lower. The DCA split is paused; it resumes automatically when the computed exposure recovers.";
                 if (sells.length > 0) {
-                    summary += '\n\nReduce exposure — sell into USDC:\n' + sells.join('\n');
+                    summary += '\n\nComputed exposure reduction (to USDC):\n' + sells.join('\n');
                     summary += `\n  Total to USDC: ~$${sellUsdTotal.toFixed(2)}`;
                 }
             } else if (buys.length > 0) {
-                summary += '\n\nSuggested buys (drift rebalance):\n' + buys.join('\n');
+                summary += '\n\nComputed differences to target weights:\n' + buys.join('\n');
             }
         } else {
             summary += '\n\nDeleverage: OFF';
             if (buys.length > 0) {
-                summary += '\n\nSuggested buys (drift rebalance):\n' + buys.join('\n');
+                summary += '\n\nComputed differences to target weights:\n' + buys.join('\n');
             }
         }
         if (insufficient.length > 0) summary += `\n\nNot enough price history yet for: ${insufficient.join(', ')}.`;
@@ -2536,7 +2543,7 @@ function renderHistoryChart() {
     // Discipline Module: ideal vs actual equity lines
     if (hasDisc) {
         datasets.push({
-            label: 'Ideal (signal-time)',
+            label: 'Comparison (recorded at calculation time)',
             data: idealData,
             borderColor: '#34d399',
             borderDash: [5, 5],
@@ -2649,10 +2656,10 @@ function render() {
         const data = allTokens.map(t => portVal > 0 ? r2((t.amount * t.price / portVal) * 100, 2) : t.target);
         myChart = new Chart(chartCtx, {
             type: 'doughnut',
-            data: { labels: allTokens.map(t => t.sym), datasets: [{ data, backgroundColor: colors.map(c => c.replace('hsl(', 'hsla(').replace(')', ', 0.82)')), borderColor: '#060810', borderWidth: 2 }] },
+            data: { labels: allTokens.map(t => t.sym), datasets: [{ data, backgroundColor: colors, borderColor: '#FFFFFF', borderWidth: 2 }] },
             options: { responsive: true, maintainAspectRatio: false, cutout: '74%', plugins: { legend: { display: false } } }
         });
-        document.getElementById('legend').innerHTML = allTokens.map((t,i) => `<div class="leg-item"><div class="leg-dot" style="background:${colors[i]}"></div>${escapeHtml(t.sym)}</div>`).join('');
+        document.getElementById('legend').innerHTML = allTokens.map((t,i) => { const cp = portVal > 0 ? (t.amount * t.price / portVal) * 100 : 0; return `<div class="leg-item"><span class="leg-sym"><span class="leg-dot" style="background:${colors[i]}"></span>${escapeHtml(t.sym)}</span><span class="leg-num">${cp.toFixed(1)}%</span><span class="leg-num">${(Number(t.target) || 0).toFixed(1)}%</span></div>`; }).join('');
     }
 
     document.getElementById('sTotalVal').textContent = `$${fmtUSD(portVal)}`;
@@ -2666,7 +2673,7 @@ function render() {
         const drifts = activeTokens().map(t => Math.abs(calcToken(t, portVal).drift));
         document.getElementById('sMaxDrift').textContent = drifts.length ? `${Math.max(...drifts).toFixed(2)}%` : 'N/A';
         const need = activeTokens().filter(t => calcToken(t, portVal).actionClass === 'buy').length;
-        document.getElementById('sNeedReb').textContent = need > 0 ? `${need} positions` : 'No';
+        document.getElementById('sNeedReb').textContent = need > 0 ? `${need} ${need === 1 ? 'token' : 'tokens'}` : 'No';
     }
 
     const wrap = document.getElementById('tblWrap');
@@ -2693,7 +2700,7 @@ function render() {
                 <td>${t.apy.toFixed(1)}%</td>
                 <td><span class="yield-gap ${c.yieldGap >= 0 ? 'good' : 'bad'}">${ygStr}</span></td>
                 <td style="color:${c.avgType === 'down' ? 'var(--green)' : c.avgType === 'up' ? 'var(--red)' : 'var(--dim)'}">${avgStr}</td>
-                <td><span class="act ${c.actionClass}">${c.action}</span></td>
+                <td><span class="act ${c.actionClass}">${c.action === 'BUY' ? 'BELOW TARGET' : 'WITHIN BAND'}</span></td>
                 <td><span class="freeze" data-action="toggleFreeze" data-arg="${escapeHtml(t.sym)}">${frozenIcon}</span></td>
                 <td><button class="btn-edit" data-action="popuniFormu" data-arg="${escapeHtml(t.sym)}">EDIT</button></td>
                 <td><button class="btn-del" data-action="obrisiToken" data-arg="${escapeHtml(t.sym)}">DEL</button></td>
@@ -2703,11 +2710,11 @@ function render() {
     }
 
     const reminderTxt = document.getElementById('reminderTxt');
-    if (!lastDcaDate) reminderTxt.textContent = 'No scheduled rebalance.';
+    if (!lastDcaDate) reminderTxt.textContent = 'No scheduled DCA calculation.';
     else {
         const next = new Date(lastDcaDate + 180 * 86400000);
         const days = Math.ceil((next - Date.now()) / 86400000);
-        reminderTxt.innerHTML = days > 0 ? `Next rebalance in <strong>${days} days</strong> (${next.toLocaleDateString('en-US')})` : '<strong>⏳ TIME TO REBALANCE!</strong>';
+        reminderTxt.innerHTML = days > 0 ? `Next DCA calculation in <strong>${days} days</strong> (${next.toLocaleDateString('en-US')})` : '<strong>⏳ DCA CALCULATION DUE</strong>';
     }
 
     // Quantum Engine is locked for free tier - shows "Black Access" modal

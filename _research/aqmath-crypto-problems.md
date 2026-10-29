@@ -127,7 +127,7 @@ shows up in the [E2E TIA/QNT study](/research/e2e-tiaq).)
 
 ## 5. Problem 3 — Discipline (rebalance + DCA)
 
-AQMath is a **signal-only rebalancer**: it never trades for you, so the discipline
+AQMath is a **calculation-only tool**: it never trades for you, so the discipline
 is a cadence you follow, not an autonomous bot. The design bakes the two
 behavioural fixes straight into the protocol:
 

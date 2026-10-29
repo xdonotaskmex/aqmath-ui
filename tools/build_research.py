@@ -43,7 +43,7 @@ SITE = "https://aqmath.xyz"
 # deliberately leaves it alone and audit_pages.py excludes it from the
 # single-asset-stamp check. Keep it in step with the entry pages.
 SOCIAL_IMAGE = f"{SITE}/social-preview.png?v=20260721b"
-SOCIAL_IMAGE_ALT = ("AQMath &mdash; Risk Parity crypto portfolio rebalancer with "
+SOCIAL_IMAGE_ALT = ("AQMath &mdash; Risk Parity crypto portfolio calculator with "
                     "Deleverage Shield")
 
 # Markdown link/image targets are repo-relative. Map them onto public URLs.
@@ -101,13 +101,13 @@ DOCS = [
         "lang": "en",
         "htmlLang": "en",
         "published": "2026-08-07",
-        "title": "How AQMath Works: Signals & Frozen Weights - AQMath",
-        "shortTitle": "How AQMath Works &mdash; Signals &amp; What You Execute",
-        "description": ("The must-read user guide: AQMath produces signal-only trading guidance "
-                        "from frozen KKT risk-parity weights (re-optimised every 180 days) and the "
-                        "daily Proteus (v18) Deleverage Shield - the user executes every trade manually, on "
-                        "their own exchange account."),
-        "meta_description": "User guide: signal-only guidance from frozen KKT risk-parity weights and the daily Proteus (v18) Deleverage Shield. You execute every trade manually.",
+        "title": "How AQMath Works: Calculations & Frozen Weights - AQMath",
+        "shortTitle": "How AQMath Works &mdash; What the Calculations Mean &amp; What You Decide",
+        "description": ("The must-read user guide: AQMath is software for mathematical calculation. "
+                        "It computes figures from frozen KKT risk-parity weights (re-optimised every 180 days) "
+                        "and the daily Proteus (v18) Deleverage Shield - no advice, no orders; every decision "
+                        "is yours."),
+        "meta_description": "User guide: mathematical calculations from frozen KKT risk-parity weights and the daily Proteus (v18) Deleverage Shield. No advice; every decision is yours.",
         # User guide, not a performance study: no simulated-results notice.
         "sim_notice": False,
         "altLabel": "中文",
@@ -119,12 +119,12 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-08-07",
-        "title": "AQMath 工作原理：信号与冻结权重 - AQMath",
-        "shortTitle": "AQMath 工作原理 &mdash; 信号与你执行什么",
-        "description": ("必读用户指南：AQMath 仅产生信号型交易指引，基于冻结的 KKT 风险平价"
-                        "权重（每 180 天再优化）与每日 Proteus（v18）去杠杆防护盾 — 用户在自己的交易所"
-                        "账户上手动执行每一笔交易。"),
-        "meta_description": "必读指南：AQMath 基于冻结 KKT 风险平价权重与每日 Proteus（v18）防护盾产生信号，用户在自有交易所手动执行。",
+        "title": "AQMath 工作原理：计算与冻结权重 - AQMath",
+        "shortTitle": "AQMath 工作原理 &mdash; 计算结果的含义与由你决定的事项",
+        "description": ("必读用户指南：AQMath 是数学计算软件，基于冻结的 KKT 风险平价"
+                        "权重（每 180 天再优化）与每日 Proteus（v18）去杠杆防护盾计算数值 — "
+                        "不构成建议，不下达订单，一切决定由你自己做出。"),
+        "meta_description": "必读指南：AQMath 基于冻结 KKT 风险平价权重与每日 Proteus（v18）防护盾进行数学计算，不构成建议，一切决定由你自己做出。",
         "sim_notice": False,
         "altLabel": "English",
     },
@@ -889,8 +889,13 @@ def alternates(path):
     return links
 
 
+PAGE_HEADER = '<header class="hdr legal-hdr">\n  <a class="logo" href="/" aria-label="AQMath"><div class="logo-box" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg></div><div><div class="logo-name">AQMath</div></div></a>\n  <nav class="hdr-nav"><a class="hdr-nav-btn" href="/">Landing</a><a class="hdr-nav-btn" href="/backtest">Backtest</a><a class="hdr-nav-btn" href="/results">Results</a><a class="hdr-nav-btn" href="/v18">Proteus</a><a class="hdr-nav-btn active" href="/research/">Research</a><a class="hdr-nav-btn" href="/docs">Docs</a></nav>\n  <div class="hdr-right"><a class="hdr-cta" href="/app">Open App</a></div>\n</header>\n'
+PAGE_FOOTER = '<footer class="site-footer sf2">\n    <div class="sf2-in">\n        <div class="sf2-top">\n            <a class="sf2-logo" href="/"><svg width="26" height="26" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg><span>AQMath</span></a>\n            <div class="sf2-soc"><a href="https://t.me/AQMath_Black" target="_blank" rel="noopener" aria-label="Telegram (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.4 3.6 2.9 10.8c-.9.4-.9 1.1-.2 1.3l4.7 1.5 1.8 5.6c.2.6.4.8.8.8.4 0 .6-.2.9-.4l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8L22.9 5c.3-1.2-.4-1.8-1.5-1.4zM8.6 13.1l9.5-6c.4-.3.8-.1.5.2l-7.9 7.1-.3 3.3-1.8-4.6z"/></svg><span>Telegram</span></a><a href="https://x.com/aqmathapp" target="_blank" rel="noopener" aria-label="X (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg><span>X</span></a><a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener" aria-label="Reddit (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="14" rx="7.5" ry="5.2"/><path d="M12 8.8l1.2-4.3 4 .9"/><path d="M9.4 16.6c1.6 1 3.6 1 5.2 0"/></g><g fill="currentColor"><circle cx="9.3" cy="13.2" r="1.2"/><circle cx="14.7" cy="13.2" r="1.2"/><circle cx="18" cy="5.6" r="1.4"/></g></svg><span>Reddit</span></a><a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener" aria-label="Substack (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M4 4h16v2.6H4zM4 8.8h16v2.6H4zM4 13.6h16V21l-8-4.4L4 21z"/></svg><span>Substack</span></a></div>\n        </div>\n        <div class="sf2-bot">\n            <div>&copy; 2026 AQMath &mdash; Non-custodial. An analytical web application, not a trading bot.</div>\n            <div class="sf2-legal">\n                <a href="/about">About</a><a href="/research/">Research</a><a href="/impressum">Impressum</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/widerruf">Widerruf</a>\n            </div>\n        </div>\n    </div>\n</footer>'
+
 def shell(lang, html_lang, title, description, path, body, extra_head=(), jsonld=None):
     stamp = asset_stamp()
+    header, footer = PAGE_HEADER, PAGE_FOOTER
+    page_class = " rs-hub" if path == "/research/" else ""
     head = "\n".join(list(extra_head) + alternates(path))
     if jsonld:
         import json as _json
@@ -927,27 +932,19 @@ def shell(lang, html_lang, title, description, path, body, extra_head=(), jsonld
 <meta name="twitter:image:alt" content="{SOCIAL_IMAGE_ALT}">
 {head}
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
-<link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/styles.min.css?v={stamp}">
 </head>
 <body>
 
-<main class="legal-page research-page">
-    <a class="legal-page-brand" href="/">
-        <div class="logo-box">AQ</div>
-        <div>
-            <div class="logo-name">AQMath</div>
-            <div class="logo-tag">&larr; aqmath.xyz</div>
-        </div>
-    </a>
-
+{header}
+<div class="rs-wrap">
+<main class="legal-page research-page{page_class}">
 {body}
 </main>
+</div>
 
-<footer class="site-footer">
-    &copy; 2026 AQMath &mdash; Private. Non-Custodial.<br>
-    <a href="/">Home</a><span class="sep">|</span><a href="/app">App</a><span class="sep">|</span><a href="/backtest">Backtest</a><span class="sep">|</span><a href="/results">Results</a><span class="sep">|</span><a href="/docs">Docs</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
-</footer>
+{footer}
 
 </body>
 </html>
@@ -1026,12 +1023,12 @@ def render_hub():
         other = next((d for d in DOCS
                       for g in TRANSLATION_SETS
                       if doc["path"] in g and d["path"] in g and d["path"] != doc["path"]), None)
-        alt = (f' <span class="rs-card-alt">&middot; <a href="{other["path"]}" '
+        alt = (f' <span class="rs-card-alt"><a href="{other["path"]}" '
                f'hreflang="{other["lang"]}">{doc["altLabel"]}</a></span>') if other else ""
         cards.append(
             f'<li class="rs-card"><a href="{doc["path"]}">{doc["shortTitle"]}</a>'
             f'<span class="rs-card-date">{doc["published"]}</span>{alt}'
-            f'<p>{doc["description"]}</p></li>')
+            f'<p>{doc["description"]}</p><span class="rs-card-more">Read the article &rarr;</span></li>')
     body = "\n".join([
         f'<div class="rs-kicker">{ui["hubKicker"]}</div>',
         f'<h1>{ui["hubTitle"]}</h1>',

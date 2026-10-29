@@ -21,28 +21,27 @@
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="AQMath — Risk Parity crypto portfolio rebalancer with Deleverage Shield">
+    <meta property="og:image:alt" content="AQMath — Risk Parity crypto portfolio calculation software with Deleverage Shield">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Terms of Service — AQMath">
     <meta name="twitter:description" content="Terms of Service and risk disclaimer for the AQMath web application.">
     <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
-    <meta name="twitter:image:alt" content="AQMath — Risk Parity crypto portfolio rebalancer with Deleverage Shield">
+    <meta name="twitter:image:alt" content="AQMath — Risk Parity crypto portfolio calculation software with Deleverage Shield">
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=b4d391be81">
+    <link rel="stylesheet" href="/styles.min.css?v=8bf7eb5417">
 </head>
 <body>
 
+<header class="hdr legal-hdr">
+  <a class="logo" href="/" aria-label="AQMath"><div class="logo-box" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg></div><div><div class="logo-name">AQMath</div></div></a>
+  <nav class="hdr-nav"><a class="hdr-nav-btn" href="/">Landing</a><a class="hdr-nav-btn" href="/backtest">Backtest</a><a class="hdr-nav-btn" href="/results">Results</a><a class="hdr-nav-btn" href="/v18">Proteus</a><a class="hdr-nav-btn" href="/research/">Research</a><a class="hdr-nav-btn" href="/docs">Docs</a></nav>
+  <div class="hdr-right"><a class="hdr-cta" href="/app">Open App</a></div>
+</header>
+<div class="lg-wrap">
+<aside class="lg-side" aria-label="Legal"><div class="lg-side-t">Legal</div><a href="/about">About</a><a href="/impressum">Impressum</a><a href="/privacy">Privacy</a><a href="/terms" class="active" aria-current="page">Terms</a><a href="/widerruf">Withdrawal</a></aside>
 <main class="legal-page">
-    <a class="legal-page-brand" href="/">
-        <div class="logo-box">AQ</div>
-        <div>
-            <div class="logo-name">AQMath</div>
-            <div class="logo-tag">&larr; aqmath.xyz</div>
-        </div>
-    </a>
-
-    <h1>Terms of Service &amp; Disclaimer</h1>
+<h1>Terms of Service &amp; Disclaimer</h1>
     <p class="legal-updated">Last updated: August 2026</p>
 
     <h2>&#127468;&#127463; English Version</h2>
@@ -52,11 +51,15 @@
     Terms of Service. The provider of this service is identified in the
     <a href="/impressum">Impressum</a>.</p>
 
-    <h3>1. Annual Access</h3>
-    <p>AQMath operates on an annual subscription model at <strong>&euro;999 per year
+    <h3>1. Annual Software Licence</h3>
+    <p>The AQMath App (calculator) and the Backtest page are provided <strong>free of charge</strong>,
+    without an account and without an activation key. The provisions of these Terms on the annual licence,
+    the right of withdrawal, the access review, payment and pricing apply to <strong>Black access</strong>
+    (use with an activation key).</p>
+    <p>Black access is offered as software-as-a-service under a time-limited annual licence to use it, at <strong>&euro;999 per year
     (~$1,090 USD)</strong>. We do not offer monthly, quarterly, or semi-annual plans. Access is granted
     manually after an access review. AQMath is a <strong>digital service</strong>: the engine computes
-    a fresh covariance matrix and a personalised allocation for your holdings on every run, and the
+    a fresh covariance matrix and mathematical results for the parameters you enter on every run, and the
     data pipeline is maintained continuously for the whole term. It is not a one-off file you download.</p>
     <p>By default your activation key is issued <strong>after the 14-day withdrawal period has
     expired</strong>. You may ask us to start earlier &mdash; see section&nbsp;2.</p>
@@ -67,7 +70,7 @@
     (&sect;&nbsp;355 Abs.&nbsp;2 BGB). Because AQMath is a digital service rather than digital content
     supplied once, this right <em>does not</em> lapse merely because your key has been activated: for
     services it lapses only on complete performance (&sect;&nbsp;356 Abs.&nbsp;5 Nr.&nbsp;2 BGB), and an
-    annual subscription is completely performed only at the end of the annual term.</p>
+    a licence for a one-year term is completely performed only at the end of that term.</p>
     <p>You therefore have two options, and you choose which one applies:</p>
     <ul>
         <li><strong>Standard &mdash; activation after 14 days.</strong> Nothing is delivered during the
@@ -95,7 +98,7 @@
     statement to obtain access does not deprive an actual consumer of statutory rights.</p>
 
     <h3>3. Web Application Only (No Mobile App)</h3>
-    <p>Your subscription grants access to the AQMath Web Application via compatible web browsers.
+    <p>The App, the Backtest and (with a Black licence) the full engine are accessed via compatible web browsers.
     AQMath does not offer, support, or distribute a mobile application. Any app using our name on any
     app store is unauthorized and not affiliated with us.</p>
 
@@ -103,17 +106,24 @@
     <p>AQMath is an analytical web application. It is not a trading bot, automated trading system, or
     algorithmic execution engine. We do not manage funds, execute trades on your behalf, or interact
     with any crypto exchange or smart contract. All decisions remain with the user.</p>
-    <p><strong>Signal-only automation.</strong> If you activate the optional personalised signal
-    service, AQMath computes daily trading <em>signals</em> (target weights, BUY/SELL amounts, shield
-    state) from the holdings you declare and delivers them to you by in-app display and push
-    notification. These signals are information, not orders: AQMath never places, routes or executes
-    any trade, holds no exchange API keys, and has no access to your accounts. Whether, when and how
-    you act on a signal is exclusively your decision and your responsibility. Signal delivery is
-    best-effort; a missing, delayed or erroneous signal does not create any claim. The service can be
-    switched off at any time.</p>
+    <p><strong>Calculation notices.</strong> If you activate the optional notifications, AQMath
+    recalculates daily, from the holdings and parameters you entered, the deviation of your actual
+    weights from the target weights you entered, and shows the result in the app and as a push
+    notification (&ldquo;Calculation notice&rdquo;). A calculation notice is the output of a
+    mathematical formula, not an order, not a recommendation and not advice: AQMath never places,
+    routes or executes any trade, holds no exchange API keys and has no access to your accounts.
+    Whether, when and how you use a result is exclusively your decision and your responsibility.
+    Delivery is best-effort; a missing, delayed or erroneous notice does not create any claim. The
+    notifications can be switched off at any time.</p>
+    <p><strong>Nature of the software.</strong> AQMath is a purely analytical calculation tool. It
+    provides no investment advice, no personal recommendation and no suitability assessment
+    (Geeignetheitspr&uuml;fung), and it does not assess whether a result suits your knowledge,
+    experience, financial situation or objectives. The results are mathematical outputs for the
+    inputs you entered and are not a recommendation to buy, sell or hold any crypto-asset. You
+    confirm this when you activate your key.</p>
 
     <h3>5. Access Review &amp; Infrastructure Integrity</h3>
-    <p>To maintain computational performance and service quality, access is limited to a small number
+    <p>To maintain computational performance and service quality, Black access is limited to a small number
     of active users. Our backend runs real covariance matrix computations and KKT optimization for
     every user &mdash; these operations scale with user count. Keeping the user base manageable
     ensures fast compute and reliable uptime for all members. We reserve the right to deny or
@@ -121,7 +131,7 @@
     without cause during a paid term, we will refund the unused pro-rata portion of the annual fee.</p>
 
     <h3>6. Payment and Pricing</h3>
-    <p>Annual subscription is <strong>&euro;999 / year (~$1,090 USD)</strong>. All payments are
+    <p>The App and the Backtest are free of charge; no payment is due for them. The annual licence fee for Black access is <strong>&euro;999 / year (~$1,090 USD)</strong>. All payments are
     accepted exclusively in USDC and EURC stablecoins. We use stablecoin payments by design: to avoid
     collecting your name, card number, or banking details. Your financial privacy is protected by
     architecture, not by policy. Prices are stated as final prices; as a small business we do not
@@ -132,8 +142,8 @@
     <p>The tools, data, and calculations provided by AQMath are for informational and educational
     purposes only. We do not provide financial advice, investment advice, or capital management
     services. Cryptocurrencies involve extreme volatility and high risk. AQMath never places an
-    order, never holds funds, and has no access to your exchange accounts or wallets: every buy,
-    sell and allocation decision is taken and carried out by you. You are therefore solely
+    order, never holds funds, and has no access to your exchange accounts or wallets: every decision
+    about transactions is taken and carried out by you. You are therefore solely
     responsible for your trading and investment decisions, and we are not liable for market losses
     resulting from them. Past or simulated performance is not an indication of future results.</p>
     <p><strong>Liability for the software and the service.</strong> Your trading losses are one
@@ -146,6 +156,11 @@
     available to you during the paid term &mdash; and in that case our liability is limited to the
     foreseeable damage typical for this kind of contract. Any further liability for slight
     negligence is excluded. Nothing in these Terms restricts your mandatory statutory rights.</p>
+    <p><strong>Free App and Backtest.</strong> The App and the Backtest are provided free of charge.
+    For them we are liable only for intent and gross negligence, for damage arising from injury to life,
+    body or health, under the German Product Liability Act, and where we have expressly given a guarantee
+    or fraudulently concealed a defect. We may change, restrict or discontinue the free App and Backtest
+    at any time for the future; this does not affect a paid Black term already running.</p>
     <p><strong>Availability.</strong> We do not promise uninterrupted availability. Short
     interruptions for maintenance, deployment or outages at upstream providers are not a defect. If
     the web application or the engine is unavailable for a prolonged period for reasons within our
@@ -178,7 +193,11 @@
     <a href="/impressum">Impressum</a> genannte Person.</p>
 
     <h3>1. Jahreszugang</h3>
-    <p>AQMath wird als Jahresabonnement zum Preis von <strong>999&nbsp;&euro; pro Jahr
+    <p>Die AQMath-App (Rechner) und die Backtest-Seite werden <strong>unentgeltlich</strong>,
+    ohne Konto und ohne Aktivierungsschl&uuml;ssel bereitgestellt. Die Regelungen dieser Bedingungen zur
+    Jahreslizenz, zum Widerrufsrecht, zur Zugangspr&uuml;fung sowie zu Zahlung und Preisen gelten f&uuml;r den
+    <strong>Black-Zugang</strong> (Nutzung mit Aktivierungsschl&uuml;ssel).</p>
+    <p>Der Black-Zugang wird als Software-as-a-Service mit einer zeitlich befristeten Jahreslizenz zur Nutzung zum Preis von <strong>999&nbsp;&euro; pro Jahr
     (~1.090&nbsp;USD)</strong> angeboten. Monats-, Quartals- oder Halbjahrestarife bestehen nicht. Der
     Zugang wird nach einer Pr&uuml;fung manuell freigeschaltet. AQMath ist eine <strong>digitale
     Dienstleistung</strong>: die Engine berechnet bei jedem Lauf eine neue Kovarianzmatrix und eine
@@ -196,7 +215,7 @@
     bereitgestellter digitaler Inhalt ist, erlischt dieses Recht <em>nicht</em> allein durch die
     Freischaltung Ihres Schl&uuml;ssels: bei Dienstleistungen erlischt es erst mit
     vollst&auml;ndiger Erbringung (&sect;&nbsp;356 Abs.&nbsp;5 Nr.&nbsp;2 BGB), und ein
-    Jahresabonnement ist erst am Ende der Laufzeit vollst&auml;ndig erbracht.</p>
+    Lizenz mit einj&auml;hriger Laufzeit ist erst am Ende dieser Laufzeit vollst&auml;ndig erbracht.</p>
     <p>Sie haben daher zwei M&ouml;glichkeiten und entscheiden selbst, welche gilt:</p>
     <ul>
         <li><strong>Standard &mdash; Freischaltung nach 14&nbsp;Tagen.</strong> W&auml;hrend der
@@ -229,8 +248,8 @@
     tats&auml;chlichen Verbraucher nicht seine gesetzlichen Rechte.</p>
 
     <h3>3. Ausschlie&szlig;lich Web-Anwendung (keine mobile App)</h3>
-    <p>Das Abonnement berechtigt zur Nutzung der AQMath Web-Anwendung &uuml;ber kompatible
-    Webbrowser. AQMath bietet, unterst&uuml;tzt und vertreibt keine mobile Anwendung. Jede App, die
+    <p>App, Backtest und (mit Black-Lizenz) die vollst&auml;ndige Engine werden &uuml;ber kompatible
+    Webbrowser genutzt. AQMath bietet, unterst&uuml;tzt und vertreibt keine mobile Anwendung. Jede App, die
     unseren Namen in einem App-Store verwendet, ist nicht autorisiert und steht in keiner Verbindung
     zu uns.</p>
 
@@ -239,18 +258,26 @@
     automatisiertes Handelssystem oder eine algorithmische Ausf&uuml;hrungssoftware. Wir verwalten
     keine Gelder, f&uuml;hren keine Trades f&uuml;r Sie aus und interagieren nicht mit Krypto-B&ouml;rsen
     oder Smart Contracts. Alle Entscheidungen verbleiben beim Nutzer.</p>
-    <p><strong>Signalbasierte Automatisierung.</strong> Wenn Sie den optionalen personalisierten
-    Signal-Dienst aktivieren, berechnet AQMath aus den von Ihnen angegebenen Best&auml;nden
-    t&auml;gliche Handels<em>signale</em> (Zielgewichte, KAUF/VERKAUF-Betr&auml;ge, Shield-Status) und
-    stellt sie Ihnen in der App sowie per Push-Benachrichtigung bereit. Signale sind Informationen,
-    keine Auftr&auml;ge: AQMath platziert, vermittelt oder f&uuml;hrt niemals Trades aus, besitzt keine
-    B&ouml;rsen-API-Schl&uuml;ssel und hat keinen Zugriff auf Ihre Konten. Ob, wann und wie Sie einem
-    Signal folgen, ist ausschlie&szlig;lich Ihre Entscheidung und Ihre Verantwortung. Die
-    Signalzustellung erfolgt nach bestem Bem&uuml;hen; ein fehlendes, versp&auml;tetes oder fehlerhaftes
-    Signal begr&uuml;ndet keinen Anspruch. Der Dienst kann jederzeit deaktiviert werden.</p>
+    <p><strong>Berechnungshinweise.</strong> Wenn Sie die optionalen Benachrichtigungen aktivieren,
+    berechnet AQMath t&auml;glich aus den von Ihnen eingegebenen Best&auml;nden und Parametern die
+    Abweichung Ihrer tats&auml;chlichen Gewichte von den von Ihnen eingegebenen Zielgewichten und zeigt
+    das Ergebnis in der App und als Push-Benachrichtigung an (&bdquo;Berechnungshinweis&ldquo;). Ein
+    Berechnungshinweis ist das Ergebnis einer mathematischen Formel, kein Auftrag, keine Empfehlung und
+    keine Beratung: AQMath platziert, vermittelt oder f&uuml;hrt niemals Trades aus, besitzt keine
+    B&ouml;rsen-API-Schl&uuml;ssel und hat keinen Zugriff auf Ihre Konten. Ob, wann und wie Sie ein
+    Ergebnis verwenden, ist ausschlie&szlig;lich Ihre Entscheidung und Ihre Verantwortung. Die
+    Zustellung erfolgt nach bestem Bem&uuml;hen; ein fehlender, versp&auml;teter oder fehlerhafter
+    Hinweis begr&uuml;ndet keinen Anspruch. Die Benachrichtigungen k&ouml;nnen jederzeit deaktiviert
+    werden.</p>
+    <p><strong>Art der Software.</strong> AQMath ist ein rein analytisches Berechnungswerkzeug. Es
+    erbringt keine Anlageberatung, keine pers&ouml;nliche Empfehlung und keine Geeignetheitspr&uuml;fung
+    und beurteilt nicht, ob ein Ergebnis zu Ihren Kenntnissen, Erfahrungen, Ihrer finanziellen Situation
+    oder Ihren Zielen passt. Die Ergebnisse sind mathematische Ausgaben zu den von Ihnen eingegebenen
+    Werten und keine Empfehlung, Kryptowerte zu kaufen, zu verkaufen oder zu halten. Dies best&auml;tigen
+    Sie bei der Aktivierung Ihres Schl&uuml;ssels.</p>
 
     <h3>5. Zugangspr&uuml;fung &amp; Integrit&auml;t der Infrastruktur</h3>
-    <p>Zur Sicherung der Rechenleistung und Servicequalit&auml;t ist der Zugang auf eine kleine Zahl
+    <p>Zur Sicherung der Rechenleistung und Servicequalit&auml;t ist der Black-Zugang auf eine kleine Zahl
     aktiver Nutzer begrenzt. Unser Backend berechnet f&uuml;r jeden Nutzer echte Kovarianzmatrizen und
     KKT-Optimierungen; diese Operationen skalieren mit der Nutzerzahl. Wir behalten uns vor, den
     Zugang nach billigem Ermessen zu verweigern oder zu beenden, um die Integrit&auml;t der
@@ -258,7 +285,7 @@
     Grund, erstatten wir den nicht genutzten Anteil der Jahresgeb&uuml;hr zeitanteilig.</p>
 
     <h3>6. Zahlung und Preise</h3>
-    <p>Das Jahresabonnement betr&auml;gt <strong>999&nbsp;&euro; / Jahr (~1.090&nbsp;USD)</strong>.
+    <p>App und Backtest sind unentgeltlich; daf&uuml;r f&auml;llt keine Zahlung an. Die j&auml;hrliche Lizenzgeb&uuml;hr f&uuml;r den Black-Zugang betr&auml;gt <strong>999&nbsp;&euro; / Jahr (~1.090&nbsp;USD)</strong>.
     Zahlungen werden ausschlie&szlig;lich in den Stablecoins USDC und EURC akzeptiert. Diese Wahl ist
     bewusst getroffen, um keine Namens-, Karten- oder Bankdaten erheben zu m&uuml;ssen. Ihre
     finanzielle Privatsph&auml;re wird durch die Architektur und nicht nur durch Richtlinien
@@ -270,7 +297,7 @@
     Informations- und Bildungszwecken. Wir erbringen keine Finanz- oder Anlageberatung und keine
     Verm&ouml;gensverwaltung. Kryptow&auml;hrungen sind extrem volatil und mit hohen Risiken
     verbunden. AQMath erteilt keine Orders, verwahrt keine Gelder und hat keinen Zugriff auf Ihre
-    B&ouml;rsenkonten oder Wallets: Jede Kauf-, Verkaufs- und Allokationsentscheidung treffen und
+    B&ouml;rsenkonten oder Wallets: Jede Entscheidung &uuml;ber Transaktionen treffen und
     f&uuml;hren Sie selbst aus. Sie sind daher allein f&uuml;r Ihre Handels- und
     Anlageentscheidungen verantwortlich; f&uuml;r daraus entstehende Marktverluste haften wir nicht.
     Vergangene oder simulierte Wertentwicklungen sind kein Indikator f&uuml;r k&uuml;nftige
@@ -287,6 +314,13 @@
     &mdash; und in diesem Fall begrenzt auf den vorhersehbaren, vertragstypischen Schaden. Eine
     weitergehende Haftung f&uuml;r leichte Fahrl&auml;ssigkeit ist ausgeschlossen. Zwingende
     gesetzliche Rechte werden durch diese Bedingungen nicht eingeschr&auml;nkt.</p>
+    <p><strong>Kostenlose App und Backtest.</strong> App und Backtest werden unentgeltlich bereitgestellt.
+    Daf&uuml;r haften wir nur bei Vorsatz und grober Fahrl&auml;ssigkeit, f&uuml;r Sch&auml;den aus der
+    Verletzung des Lebens, des K&ouml;rpers oder der Gesundheit, nach dem Produkthaftungsgesetz sowie bei
+    &Uuml;bernahme einer ausdr&uuml;cklichen Garantie oder arglistigem Verschweigen eines Mangels. Wir
+    k&ouml;nnen die kostenlose App und den Backtest jederzeit mit Wirkung f&uuml;r die Zukunft
+    &auml;ndern, einschr&auml;nken oder einstellen; eine bereits laufende, bezahlte Black-Laufzeit bleibt
+    davon unber&uuml;hrt.</p>
     <p><strong>Verf&uuml;gbarkeit.</strong> Eine ununterbrochene Verf&uuml;gbarkeit wird nicht
     zugesagt. Kurze Unterbrechungen f&uuml;r Wartung, Deployment oder Ausf&auml;lle vorgelagerter
     Anbieter stellen keinen Mangel dar. Ist die Web-Anwendung oder die Engine &uuml;ber einen
@@ -310,10 +344,21 @@
     <p>Sollte eine Bestimmung dieser Nutzungsbedingungen unwirksam sein oder werden, bleibt die
     Wirksamkeit der übrigen Bestimmungen davon unber&uuml;hrt.</p>
 </main>
+</div>
 
-<footer class="site-footer">
-    &copy; 2026 AQMath &mdash; Private. Non-Custodial.<br>
-    <a href="/">Home</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
+<footer class="site-footer sf2">
+    <div class="sf2-in">
+        <div class="sf2-top">
+            <a class="sf2-logo" href="/"><svg width="26" height="26" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg><span>AQMath</span></a>
+            <div class="sf2-soc"><a href="https://t.me/AQMath_Black" target="_blank" rel="noopener" aria-label="Telegram (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.4 3.6 2.9 10.8c-.9.4-.9 1.1-.2 1.3l4.7 1.5 1.8 5.6c.2.6.4.8.8.8.4 0 .6-.2.9-.4l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8L22.9 5c.3-1.2-.4-1.8-1.5-1.4zM8.6 13.1l9.5-6c.4-.3.8-.1.5.2l-7.9 7.1-.3 3.3-1.8-4.6z"/></svg><span>Telegram</span></a><a href="https://x.com/aqmathapp" target="_blank" rel="noopener" aria-label="X (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg><span>X</span></a><a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener" aria-label="Reddit (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="14" rx="7.5" ry="5.2"/><path d="M12 8.8l1.2-4.3 4 .9"/><path d="M9.4 16.6c1.6 1 3.6 1 5.2 0"/></g><g fill="currentColor"><circle cx="9.3" cy="13.2" r="1.2"/><circle cx="14.7" cy="13.2" r="1.2"/><circle cx="18" cy="5.6" r="1.4"/></g></svg><span>Reddit</span></a><a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener" aria-label="Substack (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M4 4h16v2.6H4zM4 8.8h16v2.6H4zM4 13.6h16V21l-8-4.4L4 21z"/></svg><span>Substack</span></a></div>
+        </div>
+        <div class="sf2-bot">
+            <div>&copy; 2026 AQMath &mdash; Non-custodial. An analytical web application, not a trading bot.</div>
+            <div class="sf2-legal">
+                <a href="/about">About</a><a href="/research/">Research</a><a href="/impressum">Impressum</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/widerruf">Widerruf</a>
+            </div>
+        </div>
+    </div>
 </footer>
 
 </body>

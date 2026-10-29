@@ -85,7 +85,7 @@ positive deltas, so the average is **not** carried by one outlier.
 For each shock, the 90 calm days immediately preceding it are measured: does the
 Shield churn and give up return when there is nothing to protect against?
 
-![Crash protection vs calm-period cost per window](oos_assets/shock_net_benefit.svg)
+![Drawdown modelling vs calm-period cost per window](oos_assets/shock_net_benefit.svg)
 
 | Window | Calm return Shield | Calm return Base | Calm bleed | Shield rebalances (calm) | Net benefit |
 |--------|-------------------:|-----------------:|-----------:|:------------------------:|------------:|

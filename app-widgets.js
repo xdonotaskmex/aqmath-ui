@@ -287,7 +287,7 @@ function getNewsCol(id) {
 function makeWidgetCard(title) {
     const div = document.createElement('div');
     div.className = 'lp-news-item lp-widget';
-    div.innerHTML = `<div class="lp-widget-title">// ${title}</div>`;
+    div.innerHTML = `<div class="lp-widget-title">${title}</div>`;
     return div;
 }
 
@@ -370,10 +370,10 @@ async function loadFearGreed() {
             const cls = d.data[0].value_classification || '';
             let color = 'var(--amber)';
             let signal = 'neutral / mixed';
-            if (v <= 25) { color = 'var(--green)'; signal = 'extreme fear · accumulation bias'; }
-            else if (v <= 45) { color = 'var(--green)'; signal = 'fear · cautious market'; }
-            else if (v >= 75) { color = 'var(--red)'; signal = 'extreme greed · overheated'; }
-            else if (v >= 60) { color = 'var(--red)'; signal = 'greed · risk-on sentiment'; }
+            if (v <= 25) { color = 'var(--green)'; signal = 'extreme fear (index 0–25)'; }
+            else if (v <= 45) { color = 'var(--green)'; signal = 'fear (index 26–45)'; }
+            else if (v >= 75) { color = 'var(--red)'; signal = 'extreme greed (index 75–100)'; }
+            else if (v >= 60) { color = 'var(--red)'; signal = 'greed (index 60–74)'; }
             body.innerHTML = `
                 <div class="lp-widget-main-row"><span class="lp-widget-value" style="color:${color}">${v}</span><span class="lp-widget-signal" style="color:${color}">${v >= 55 ? '↗' : v <= 40 ? '↘' : '→'}</span></div>
                 <div class="lp-widget-sub">${cls}</div>
@@ -427,7 +427,7 @@ async function loadStablecoinDominance() {
             const stablePct = data?.stablecoin_dominance;
             if (stablePct && stablePct > 0) {
                 const color = stablePct < 5 ? 'var(--green)' : stablePct <= 8 ? 'var(--amber)' : 'var(--red)';
-                const signal = stablePct < 5 ? 'neutral liquidity backdrop' : stablePct <= 8 ? 'capital partly sidelined' : 'bearish sidelined capital signal';
+                const signal = stablePct < 5 ? 'low stablecoin share' : stablePct <= 8 ? 'moderate stablecoin share' : 'high stablecoin share';
                 body.innerHTML = `
                     <div class="lp-widget-main-row"><span class="lp-widget-value" style="color:${color}">${stablePct.toFixed(1)}%</span><span class="lp-widget-signal" style="color:${color}">USD</span></div>
                     <div class="lp-widget-sub">USDT + USDC + DAI</div>
@@ -555,14 +555,14 @@ function loadMarketPulse() {
         let color = 'var(--amber)';
         let label = 'mixed / neutral';
         if (fear !== null && fear >= 55 && capDelta >= -0.15) {
-            arrow = '↗'; color = 'var(--green)'; label = 'risk-on bias';
+            arrow = '↗'; color = 'var(--green)'; label = 'sentiment and market cap rising';
         } else if ((fear !== null && fear <= 40) || capDelta < -0.5) {
-            arrow = '↘'; color = 'var(--red)'; label = 'defensive bias';
+            arrow = '↘'; color = 'var(--red)'; label = 'sentiment or market cap falling';
         }
         body.innerHTML = `
             <div class="lp-widget-main-row"><span class="lp-widget-value" style="color:${color}">Trend ${arrow}</span><span class="lp-widget-signal" style="color:${color}">${arrow}</span></div>
             <div class="lp-widget-sub">F&G ${fear ?? '--'} · cap ${capDelta >= 0 ? '+' : ''}${capDelta.toFixed(2)}%</div>
-            <div class="lp-widget-meta">${label} from sentiment + market cap</div>`;
+            <div class="lp-widget-meta">${label} (descriptive, from sentiment + market cap)</div>`;
     }
     render();
     setInterval(render, 60000);

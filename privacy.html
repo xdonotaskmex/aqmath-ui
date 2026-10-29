@@ -21,29 +21,28 @@
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="AQMath — Risk Parity crypto portfolio rebalancer with Deleverage Shield">
+    <meta property="og:image:alt" content="AQMath — Risk Parity crypto portfolio calculator with Deleverage Shield">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Privacy &amp; Legacy Policy — AQMath">
     <meta name="twitter:description" content="Privacy-by-Design: no accounts, no server-side storage of portfolio data, in-memory processing only.">
     <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
-    <meta name="twitter:image:alt" content="AQMath — Risk Parity crypto portfolio rebalancer with Deleverage Shield">
+    <meta name="twitter:image:alt" content="AQMath — Risk Parity crypto portfolio calculator with Deleverage Shield">
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=b4d391be81">
+    <link rel="stylesheet" href="/styles.min.css?v=8bf7eb5417">
 </head>
 <body>
 
+<header class="hdr legal-hdr">
+  <a class="logo" href="/" aria-label="AQMath"><div class="logo-box" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg></div><div><div class="logo-name">AQMath</div></div></a>
+  <nav class="hdr-nav"><a class="hdr-nav-btn" href="/">Landing</a><a class="hdr-nav-btn" href="/backtest">Backtest</a><a class="hdr-nav-btn" href="/results">Results</a><a class="hdr-nav-btn" href="/v18">Proteus</a><a class="hdr-nav-btn" href="/research/">Research</a><a class="hdr-nav-btn" href="/docs">Docs</a></nav>
+  <div class="hdr-right"><a class="hdr-cta" href="/app">Open App</a></div>
+</header>
+<div class="lg-wrap">
+<aside class="lg-side" aria-label="Legal"><div class="lg-side-t">Legal</div><a href="/about">About</a><a href="/impressum">Impressum</a><a href="/privacy" class="active" aria-current="page">Privacy</a><a href="/terms">Terms</a><a href="/widerruf">Withdrawal</a></aside>
 <main class="legal-page">
-    <a class="legal-page-brand" href="/">
-        <div class="logo-box">AQ</div>
-        <div>
-            <div class="logo-name">AQMath</div>
-            <div class="logo-tag">&larr; aqmath.xyz</div>
-        </div>
-    </a>
-
-    <h1>Datenschutzerkl&auml;rung / Privacy &amp; Legacy Policy</h1>
-    <p class="legal-updated">Stand: August 2026</p>
+<h1>Datenschutzerkl&auml;rung / Privacy &amp; Legacy Policy</h1>
+    <p class="legal-updated">Stand: Oktober 2026</p>
 
     <h2>&#127465;&#127466; Deutsche Version</h2>
 
@@ -54,25 +53,31 @@
 
     <h3>1. Allgemeine Grunds&auml;tze und Datensparsamkeit</h3>
     <p>Diese Website verfolgt einen strengen &bdquo;Privacy-by-Design&ldquo;-Ansatz. Es gibt keine
-    Benutzerkonten, keine Wallets und keine serverseitigen Datenbanken. Wir speichern, protokollieren
-    oder persistieren Ihre pers&ouml;nlichen Portfolio- oder Finanzdaten zu keinem Zeitpunkt auf unserer
-    Infrastruktur. Ausnahmen sind unser privates Beta-Zugangssystem (siehe Abschnitt 8),
-    das ausschlie&szlig;lich unumkehrbar gehashte Daten zur Zugangskontrolle speichert, und die
-    optionale, einwilligungsbasierte Funktion &bdquo;Personalisierte Signale&ldquo; (siehe Abschnitt 9),
-    bei der Sie selbst entscheiden, ob und welche Bestandsdaten Sie uns anvertrauen.</p>
+    E-Mail- oder Passwort-Konten und keine Wallet-Anbindung. Im kostenlosen Tarif wird Ihr Portfolio
+    ausschlie&szlig;lich auf Ihrem Ger&auml;t gespeichert. Unsere Server verarbeiten die unten
+    beschriebenen Daten; f&uuml;r Schl&uuml;sselinhaber speichern sie die in den Abschnitten 8 und 9
+    beschriebenen Daten in einer Datenbank. AQMath ist Software, die aus den von Ihnen eingegebenen
+    Daten mathematische Ergebnisse berechnet; sie besitzt keine B&ouml;rsen-API-Schl&uuml;ssel,
+    platziert keine Auftr&auml;ge und erteilt keine Anlageberatung.</p>
 
     <h3>2. Kurzzeitige serverseitige Verarbeitung (In-Memory Processing)</h3>
-    <p>Wenn Sie Berechnungen auf unserer Website durchf&uuml;hren, werden die von Ihnen eingegebenen
-    Daten (wie Token-Mengen oder Symbole) an unseren Server &uuml;bertragen, um die mathematischen
-    Operationen auszuf&uuml;hren.</p>
+    <p>Wenn Sie Berechnungsfunktionen nutzen (DCA, Optimize, Backtest), werden die von Ihnen
+    eingegebenen Daten an unsere Berechnungsserver &uuml;bertragen: Token-Symbole, Mengen, Preise,
+    Einstandspreise, Zielgewichte, APY, Anschaffungskosten, der DCA-Betrag und f&uuml;r
+    Schl&uuml;sselinhaber der Shield-Zustand; beim Backtest die aus Ihrer CSV-Datei gelesene
+    Preisreihe.</p>
     <ul>
-        <li><strong>Keine Speicherung:</strong> Die Verarbeitung erfolgt ausschlie&szlig;lich im
-        fl&uuml;chtigen Arbeitsspeicher (RAM) des Servers.</li>
-        <li><strong>Sofortige L&ouml;schung:</strong> Sobald die Berechnung abgeschlossen und das
-        Ergebnis an Ihren Browser zur&uuml;ckgesendet wurde, werden alle Eingabedaten sofort und
-        unwiderruflich aus dem Arbeitsspeicher gel&ouml;scht.</li>
-        <li><strong>Keine Protokolle:</strong> Es erfolgt keine Speicherung in Datenbanken, auf
-        Festplatten oder in Server-Logdateien.</li>
+        <li><strong>Verarbeitung im Arbeitsspeicher:</strong> Die Berechnung erfolgt im Arbeitsspeicher
+        des Servers, das Ergebnis wird an Ihren Browser zur&uuml;ckgesendet. Die DCA- und
+        Backtest-Dienste schreiben diese Daten nicht in eine Datenbank.</li>
+        <li><strong>Technische Protokolle:</strong> Unsere Server f&uuml;hren technische Protokolle mit
+        Z&auml;hlwerten wie der Anzahl der Positionen, dem DCA-Betrag, den berechneten Betr&auml;gen und
+        der Anzahl der Warnungen einer Anfrage, nicht aber Ihre Token-Liste. Fehlerprotokolle k&ouml;nnen
+        technische Details einer fehlgeschlagenen Anfrage enthalten. Unser Hosting-Anbieter erfasst
+        Verbindungsdaten wie IP-Adresse und Zeitpunkt. IP-Adressen halten wir nur zur Ratenbegrenzung im
+        Arbeitsspeicher vor.</li>
+        <li><strong>Schl&uuml;sselinhaber:</strong> Zus&auml;tzlich werden die in Abschnitt 9
+        beschriebenen Daten gespeichert.</li>
     </ul>
 
     <h3>3. Web-Analyse (Simple Analytics)</h3>
@@ -108,32 +113,40 @@
     (ehemals TTDSG) ohne explizite Einwilligung zul&auml;ssig. Sie k&ouml;nnen diese Daten jederzeit
     selbst l&ouml;schen, indem Sie Ihren Browser-Cache leeren.</p>
 
-    <h3>6. Drittanbieter-APIs (Marktdaten)</h3>
-    <p>Zur Anzeige von Echtzeitkursen ruft Ihr Browser Kursdaten direkt von &ouml;ffentlichen APIs
-    (z.&nbsp;B. Binance) ab. Hierbei wird Ihre IP-Adresse vom jeweiligen API-Anbieter verarbeitet, um
-    die Anfrage zu beantworten. Es werden keine Portfolio-Daten an diese APIs gesendet.</p>
+    <h3>6. Drittanbieter, die Ihr Browser kontaktiert</h3>
+    <p>Zur Anzeige von Marktdaten, Nachrichten und Diagrammen kontaktiert Ihr Browser direkt die
+    folgenden Drittanbieter, die dabei Ihre IP-Adresse und technische Verbindungsdaten verarbeiten:
+    Binance (REST und WebSocket), CoinGecko, CoinLore, alternative.me, einen Dienst zur Umwandlung von
+    Nachrichten-Feeds (rss2json), das Content Delivery Network jsDelivr (Diagrammbibliothek) und Simple
+    Analytics (Web-Analyse, Abschnitt 3). Es werden keine Portfolio-Daten an diese Anbieter
+    &uuml;bermittelt. Einzelne Marktdatenanfragen laufen &uuml;ber unseren eigenen Server (DCA-Dienst),
+    der Ihre IP-Adresse sieht und die Anfrage an die B&ouml;rse weiterleitet.</p>
 
     <h3>7. Haftungsausschluss f&uuml;r Finanzen &amp; Legacy Policy</h3>
-    <p><strong>Haftungsausschluss:</strong> Dieser Dienst wird &bdquo;wie besehen&ldquo; (as is) zur
-    Verf&uuml;gung gestellt. Alle finanziellen Entscheidungen liegen in der alleinigen Verantwortung des
-    Nutzers. Es wird keine Haftung f&uuml;r Verluste oder Sch&auml;den &uuml;bernommen, die aus der
-    Nutzung dieses Dienstes resultieren.</p>
+    <p><strong>Haftungsausschluss:</strong> AQMath ist Berechnungssoftware und bietet keine
+    Anlageberatung, keine Empfehlungen und keine Geeignetheitspr&uuml;fung. Alle Handels- und
+    Anlageentscheidungen liegen in der alleinigen Verantwortung des Nutzers; f&uuml;r Marktverluste aus
+    diesen Entscheidungen haften wir nicht. Unsere Haftung f&uuml;r die Software und den Dienst selbst
+    ist <em>nicht</em> ausgeschlossen: Sie richtet sich nach Abschnitt&nbsp;7 der
+    <a href="/terms">Nutzungsbedingungen</a>, der die Haftung bei Vorsatz und grober Fahrl&auml;ssigkeit,
+    bei Verletzung von Leben, K&ouml;rper oder Gesundheit sowie nach dem Produkthaftungsgesetz
+    unbeschr&auml;nkt l&auml;sst.</p>
     <p><strong>Legacy Policy:</strong> Im Falle einer k&uuml;nftigen Einstellung dieses Dienstes
-    verbleiben au&szlig;er den pseudonymisierten Beta-Aktivierungsdaten (Abschnitt 8) keinerlei
+    verbleiben au&szlig;er den pseudonymisierten Aktivierungsdaten (Abschnitt 8) keinerlei
     Benutzerdaten auf unseren Systemen; diese sind unumkehrbar gehasht, laufen automatisch ab und
     enthalten keine lesbaren personenbezogenen oder Finanzdaten. Die im LocalStorage gesicherten Daten
     verbleiben auf Ihrem eigenen Ger&auml;t und k&ouml;nnen von Ihnen jederzeit gel&ouml;scht werden.</p>
 
-    <h3>8. Beta-Zug&auml;nge &amp; Missbrauchsschutz (nur f&uuml;r Beta-Teilnehmer)</h3>
-    <p>Dieser Abschnitt gilt nur, wenn Sie einen privaten Beta-Zugangsschl&uuml;ssel aktivieren. Um
-    unsere begrenzten Beta-Pl&auml;tze durchzusetzen, die Weitergabe eines Schl&uuml;ssels an mehrere
+    <h3>8. Black-Zugangsschl&uuml;ssel &amp; Missbrauchsschutz (nur f&uuml;r Schl&uuml;sselinhaber)</h3>
+    <p>Dieser Abschnitt gilt nur, wenn Sie einen privaten Black-Zugangsschl&uuml;ssel aktivieren. Um
+    unsere begrenzte Zahl an Black-Zug&auml;ngen durchzusetzen, die Weitergabe eines Schl&uuml;ssels an mehrere
     Personen zu verhindern und den Login-Endpunkt vor Brute-Force-Missbrauch zu sch&uuml;tzen, speichert
     unser Authentifizierungsdienst (gehostet auf Railway) einen minimalen, streng pseudonymisierten
-    Aktivierungsdatensatz. Wir speichern Ihren Beta-Schl&uuml;ssel oder Ihre IP-Adresse niemals in
+    Aktivierungsdatensatz. Wir speichern Ihren Black-Schl&uuml;ssel oder Ihre IP-Adresse niemals in
     lesbarer Form.</p>
     <ul>
         <li><strong>Was gespeichert wird:</strong> ein unumkehrbarer SHA-256-Hash Ihres
-        Beta-Schl&uuml;ssels, ein unumkehrbarer HMAC-SHA256-Fingerabdruck Ihrer IP-Adresse (ein
+        Black-Schl&uuml;ssels, ein unumkehrbarer HMAC-SHA256-Fingerabdruck Ihrer IP-Adresse (ein
         Einwegwert, der nicht in Ihre echte IP zur&uuml;ckgerechnet werden kann), das Datum der ersten
         Aktivierung, ein &bdquo;zuletzt gesehen&ldquo;-Datum und ein einfacher Aktivierungsz&auml;hler.</li>
         <li><strong>Was NICHT gespeichert wird:</strong> Ihre echte IP-Adresse, Ihr
@@ -142,7 +155,7 @@
         <li><strong>Zweck &amp; Rechtsgrundlage:</strong> Der gehashte IP-Wert dient ausschlie&szlig;lich
         dazu, einen Schl&uuml;ssel an ein Ger&auml;t/Netzwerk zu binden und die Ratenbegrenzung
         (exponentielles Backoff nach Fehlversuchen) anzuwenden. Rechtsgrundlage: Vertragserf&uuml;llung
-        der Beta-Vereinbarung sowie unser berechtigtes Interesse an der Verhinderung von Betrug und
+        der Black-Zugangsvereinbarung sowie unser berechtigtes Interesse an der Verhinderung von Betrug und
         Missbrauch &ndash; Art. 6 Abs. 1 lit. b und f DSGVO. Er wird niemals f&uuml;r Tracking,
         Profiling, Werbung oder Analyse verwendet.</li>
         <li><strong>Speicherdauer:</strong> Der Aktivierungsdatensatz wird f&uuml;r den 365-t&auml;gigen
@@ -155,32 +168,38 @@
         Bindung zur&uuml;ck oder l&ouml;schen den Datensatz.</li>
     </ul>
 
-    <h3>9. Personalisierte Signale &amp; Benachrichtigungen (optional, nur Beta-Teilnehmer)</h3>
-    <p>Diese Funktionen sind vollst&auml;ndig optional und werden nur aktiv, wenn Sie sie selbst
-    einschalten. Die Berechnung bleibt signalbasiert: Wir f&uuml;hren niemals Trades aus und besitzen
-    keine B&ouml;rsen-API-Schl&uuml;ssel.</p>
+    <h3>9. Schl&uuml;sselinhaber: Best&auml;nde, t&auml;gliche Berechnungen, Benachrichtigungen &amp; Chat</h3>
+    <p>Dieser Abschnitt gilt, wenn Sie einen Zugangsschl&uuml;ssel (Black) aktivieren. Der Dienst
+    bleibt ein Berechnungswerkzeug: Wir f&uuml;hren niemals Trades aus, besitzen keine
+    B&ouml;rsen-API-Schl&uuml;ssel und erteilen weder Anlageberatung noch Empfehlungen.</p>
     <ul>
-        <li><strong>Bestandsangaben (Holdings):</strong> Wenn Sie personalisierte Signale aktivieren,
-        &uuml;bermitteln Sie uns die Token-Symbole und Mengen, die Sie halten. Diese Angaben werden
-        verschl&uuml;sselt &uuml;bertragen und in unserer Datenbank verkn&uuml;pft mit dem Hash Ihres
-        Aktivierungsschl&uuml;ssels gespeichert, ausschlie&szlig;lich um Ihre pers&ouml;nlichen
-        Tages-Signale zu berechnen. Rechtsgrundlage: Ihre Einwilligung &ndash; Art. 6 Abs. 1 lit. a
-        DSGVO &ndash;, die Sie jederzeit mit Wirkung f&uuml;r die Zukunft widerrufen k&ouml;nnen
-        (Bestand l&ouml;schen oder Schl&uuml;ssel deaktivieren).</li>
+        <li><strong>Bestandsangaben (Holdings):</strong> Ihre Token-Symbole, Mengen, Einstandspreise und
+        APY (sowie von Ihnen erfasste Stablecoin-Positionen) werden verschl&uuml;sselt &uuml;bertragen und
+        in unserer Datenbank verkn&uuml;pft mit dem Hash Ihres Aktivierungsschl&uuml;ssels gespeichert,
+        um Ihre t&auml;glichen Berechnungen durchzuf&uuml;hren, Ihre Tabelle auf einem neuen Ger&auml;t
+        wiederherzustellen und sie konsistent zu halten. Das geschieht, wenn Sie die Synchronisierung
+        ausl&ouml;sen, automatisch nach jeder in der App erfassten Erh&ouml;hung oder Verringerung und
+        wenn die App die Tabelle wiederherstellt oder repariert. Rechtsgrundlage: Vertragserf&uuml;llung
+        &ndash; Art. 6 Abs. 1 lit. b DSGVO. Sie k&ouml;nnen jederzeit die L&ouml;schung Ihrer Bestandsangaben
+        verlangen; die Deaktivierung Ihres Schl&uuml;ssels l&ouml;scht sie.</li>
         <li><strong>Einwilligungsprotokoll:</strong> Jede erteilte Einwilligung (z.&nbsp;B. f&uuml;r
         Benachrichtigungen) sowie Ihre Best&auml;tigung der Pflichtlekt&uuml;re werden mit Zeitstempel
         und Version des Textes protokolliert, damit wir die Einwilligung nachweisen k&ouml;nnen
         (Art. 7 Abs. 1 DSGVO).</li>
-        <li><strong>Benachrichtigungen &ndash; eigene Infrastruktur, keine Dritten:</strong>
-        Push-Benachrichtigungen laufen ausschlie&szlig;lich &uuml;ber unseren eigenen,
-        selbst gehosteten Benachrichtigungsserver. Es ist kein Drittanbieter eingebunden, und Ihre
-        Signaldaten verlassen unsere Infrastruktur nicht. Sie erhalten einen zuf&auml;lligen,
-        nicht erratbaren Themenkanal und einen Nur-Lese-Zugangstoken, der Ihnen genau einmal angezeigt
-        und danach nur noch als Hash gespeichert wird. Beim Deaktivieren wird der Token sofort
-        widerrufen.</li>
-        <li><strong>Tagesprotokoll:</strong> Die Ergebnisse des t&auml;glichen Signal-Laufs werden je
-        Nutzer und Datum protokolliert (Pr&uuml;fpfad), gebunden an den Hash Ihres Schl&uuml;ssels.</li>
-        <li><strong>Beta-Chat:</strong> Beta-Nutzer haben Zugang zu einem gemeinsamen internen Chat.
+        <li><strong>Benachrichtigungen:</strong> Benachrichtigungen sind freiwillig und beruhen auf
+        Ihrer Einwilligung &ndash; Art. 6 Abs. 1 lit. a DSGVO. Nachrichten werden &uuml;ber unseren
+        eigenen, selbst gehosteten Benachrichtigungsserver zugestellt, der Nachrichten 12 Stunden
+        zwischenspeichert. F&uuml;r die Zustellung bei geschlossener App nutzt dieser Server das Relay
+        des Open-Source-Dienstes ntfy.sh sowie die Push-Dienste von Google (Android) oder Apple (iOS);
+        diese Relays erhalten technische Zustelldaten, nicht den Nachrichteninhalt. Sie erhalten einen
+        zuf&auml;lligen, nicht erratbaren Themenkanal und einen Nur-Lese-Zugangstoken, der Ihnen genau
+        einmal angezeigt und danach nur noch als Hash gespeichert wird. Beim Deaktivieren wird der Token
+        sofort widerrufen.</li>
+        <li><strong>Berechnungsdaten:</strong> eingefrorene Portfolio-Gewichte, ein t&auml;gliches
+        Protokoll jedes Berechnungslaufs je Nutzer und Datum (Pr&uuml;fpfad), Ihre Erfassungen
+        berechneter Differenzen und eine daraus abgeleitete Kennzahl, jeweils gebunden an den Hash Ihres
+        Schl&uuml;ssels.</li>
+        <li><strong>Black-Chat:</strong> Black-Nutzer haben Zugang zu einem gemeinsamen internen Chat.
         Nachrichten werden pseudonym unter einem Kurzcode (z.&nbsp;B. B-XXXXXX) gespeichert, der vom
         Hash Ihres Aktivierungsschl&uuml;ssels abgeleitet wird &mdash; Ihr echter Schl&uuml;ssel, Ihre
         IP und Ihre Identit&auml;t werden niemals angezeigt. Es werden h&ouml;chstens 20 Nachrichten
@@ -189,22 +208,60 @@
         Clear-Funktion l&ouml;schen. Rechtsgrundlage: Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO),
         die Sie durch L&ouml;schen Ihrer Nachrichten oder Deaktivierung Ihres Schl&uuml;ssels
         widerrufen k&ouml;nnen.</li>
-        <li><strong>L&ouml;schung:</strong> Widerrufen Sie Ihre Einwilligung, deaktivieren Sie die
-        Benachrichtigungen oder Ihren Schl&uuml;ssel, werden Bestandsangaben, Einwilligungen,
-        Best&auml;tigungen und der Benachrichtigungszugang vollst&auml;ndig gel&ouml;scht
-        (Recht auf L&ouml;schung, Art. 17 DSGVO).</li>
+        <li><strong>L&ouml;schung (ein Klick):</strong> In der App l&ouml;scht die Schaltfl&auml;che
+        <em>delete all my data</em> unter &bdquo;your data&ldquo; Ihre Bestandsangaben,
+        Einwilligungsnachweise, Best&auml;tigungen, das Benachrichtigungs-Abonnement (das Thema wird
+        widerrufen), Chat-Nachrichten und alle Berechnungsdaten unseres Berechnungsdienstes
+        (eingefrorene Gewichte, Tagesprotokoll, Erfassungen, Snapshots, Rabatte) von unseren Servern.
+        Nur der minimale Aktivierungsdatensatz (Hash Ihres Schl&uuml;ssels, Aktivierungsdatum und
+        Ger&auml;tebindung) bleibt erhalten, weil Ihre bezahlte Lizenz davon abh&auml;ngt; er wird auf
+        Anfrage per E-Mail gel&ouml;scht (Art. 17 DSGVO), was die Lizenz beendet. Auch die Deaktivierung
+        eines Schl&uuml;ssels l&ouml;scht die hier beschriebenen Daten. Sicherungskopien unseres
+        Datenbankanbieters werden innerhalb dessen Aufbewahrungsfrist (7 Tage) &uuml;berschrieben. Die
+        auf Ihrem eigenen Ger&auml;t gespeicherte Tabelle ist nicht betroffen.</li>
     </ul>
 
     <h3>10. Ihre Rechte</h3>
-    <p>Abgesehen von dem pseudonymisierten Beta-Aktivierungsdatensatz (Abschnitt 8) und den von Ihnen
-    freiwillig &uuml;bermittelten Daten der personalisierten Signale (Abschnitt 9) speichern wir keine
-    personenbezogenen Daten oder Portfolio-Daten auf unseren Servern. Ihnen stehen grunds&auml;tzlich
-die Rechte auf Auskunft, Berichtigung, L&ouml;schung,
-    Einschr&auml;nkung der Verarbeitung, Daten&uuml;bertragbarkeit und Widerspruch (Art. 15 bis 21 DSGVO)
-    sowie ein Beschwerderecht bei einer Aufsichtsbeh&ouml;rde zu. Beta-Teilnehmer k&ouml;nnen jederzeit
-    das Zur&uuml;cksetzen der Ger&auml;tebindung ihres Schl&uuml;ssels oder die L&ouml;schung ihres
-    gehashten Aktivierungsdatensatzes verlangen. Bei allen Datenschutzfragen erreichen Sie uns unter
+    <p>Abgesehen von dem pseudonymisierten Aktivierungsdatensatz (Abschnitt 8) den f&uuml;r
+    Schl&uuml;sselinhaber gespeicherten Daten (Abschnitt 9) und den Kontaktdaten aus Abschnitt 12 speichern wir keine personenbezogenen Daten
+    oder Portfolio-Daten auf unseren Servern; im kostenlosen Tarif liegen uns daher keine Daten zur
+    Auskunft oder L&ouml;schung vor. Ihnen stehen die Rechte auf Auskunft, Berichtigung,
+    L&ouml;schung, Einschr&auml;nkung der Verarbeitung, Daten&uuml;bertragbarkeit und Widerspruch
+    (Art. 15 bis 21 DSGVO) sowie ein Beschwerderecht bei einer Aufsichtsbeh&ouml;rde zu.
+    Schl&uuml;sselinhaber k&ouml;nnen jederzeit das Zur&uuml;cksetzen der Ger&auml;tebindung ihres
+    Schl&uuml;ssels oder die L&ouml;schung ihres gehashten Aktivierungsdatensatzes verlangen. Bei allen
+    Datenschutzfragen erreichen Sie uns unter
     <a href="mailto:momo.demirov@gmail.com">momo.demirov@gmail.com</a>.</p>
+
+    <h3>11. Fehlerberichte</h3>
+    <p>Wenn die App in Ihrem Browser abst&uuml;rzt, sendet sie Fehlertyp, Seitenpfad und eine Meldung
+    von h&ouml;chstens 100 Zeichen an unseren Server. Es werden weder Schl&uuml;ssel, IP-Adresse noch
+    User-Agent dazu gespeichert. Berichte werden nach 30 Tagen gel&ouml;scht. Rechtsgrundlage:
+    berechtigtes Interesse, Art. 6 Abs. 1 lit. f DSGVO.</p>
+
+    <h3>12. Kontakt und Vertragsabschluss (Telegram, E-Mail)</h3>
+    <p>Wenn Sie uns wegen eines Black-Zugangs per Telegram (@AQMath_Black) oder E-Mail kontaktieren,
+    verarbeiten wir die Daten, die Sie uns senden: Ihre Telegram-Kennung (Benutzername oder ID) und
+    Ihren Profilnamen, Ihre Angabe als Verbraucher oder Unternehmer, Ihre Aktivierungswahl (Standard
+    oder auf Verlangen), die Wallet-Adresse, von der Sie zahlen, die Transaktions-ID sowie den Inhalt
+    der Nachrichten.</p>
+    <ul>
+        <li><strong>Zweck &amp; Rechtsgrundlage:</strong> Anbahnung, Abschluss und Durchf&uuml;hrung des
+        Vertrags (Art. 6 Abs. 1 lit. b DSGVO); Erf&uuml;llung gesetzlicher Aufbewahrungs- und
+        Nachweispflichten, etwa zu Widerruf und Zahlungen (Art. 6 Abs. 1 lit. c DSGVO); Verteidigung
+        von Rechtsanspr&uuml;chen (Art. 6 Abs. 1 lit. f DSGVO). Ohne diese Angaben k&ouml;nnen wir den
+        Vertrag nicht abschlie&szlig;en.</li>
+        <li><strong>Speicherdauer:</strong> Wir speichern die Angaben so lange, wie es der Vertrag und
+        gesetzliche Aufbewahrungsfristen erfordern, und l&ouml;schen sie danach.</li>
+        <li><strong>Telegram:</strong> Nachrichten laufen &uuml;ber den Dienst Telegram, den dessen
+        Betreiber nach seiner eigenen Datenschutzerkl&auml;rung betreibt; die Verarbeitung kann
+        au&szlig;erhalb der EU erfolgen. Normale Telegram-Chats sind nicht Ende-zu-Ende-verschl&uuml;sselt.
+        Senden Sie uns niemals Passw&ouml;rter, Seed-Phrasen oder private Schl&uuml;ssel &mdash; wir
+        verlangen sie nie.</li>
+        <li><strong>Wallet-Adressen:</strong> Eine Wallet-Adresse ist ein pseudonymes Kennzeichen und
+        kann Ihnen zuordenbar sein. Transaktionen in der Blockchain sind &ouml;ffentlich und k&ouml;nnen
+        von uns nicht gel&ouml;scht werden.</li>
+    </ul>
 
     <hr>
 
@@ -216,24 +273,27 @@ die Rechte auf Auskunft, Berichtigung, L&ouml;schung,
     Full details are in the <a href="/impressum">Impressum</a>.</p>
 
     <h3>1. General Principles &amp; Data Minimization</h3>
-    <p>This service is designed with privacy-first principles: no user accounts, no wallets, and no
-    server-side databases by default. We do not store, log, or persist your financial or portfolio data
-    on our infrastructure. The exceptions are our private beta access system (see Section 8), which
-    stores only irreversibly hashed data solely to control beta access, and the optional,
-    consent-based &ldquo;Personalised Signals&rdquo; feature (see Section 9), where you yourself decide
-    whether and which holdings data to entrust to us.</p>
+    <p>This service is designed with privacy-first principles: no e-mail or password accounts and no
+    wallet connections. On the free tier your portfolio is stored only on your device. Our servers
+    process the data described below, and for key holders they keep the data described in
+    Sections 8 and 9 in a database. AQMath is software that computes mathematical results from the data
+    you enter; it holds no exchange API keys, places no orders and gives no investment advice.</p>
 
     <h3>2. Transient Server-Side Processing (Ephemeral Processing)</h3>
-    <p>When you use our computation features, the data you enter (such as token amounts or symbols) is
-    transmitted to our backend server to perform the necessary math operations.</p>
+    <p>When you use our computation features (DCA, Optimize, Backtest), the data you enter is
+    transmitted to our calculation servers: token symbols, amounts, prices, entry prices, target
+    weights, APY, cost basis, the DCA amount and, for key holders, the Shield state; for the Backtest,
+    the price series read from your CSV file.</p>
     <ul>
-        <li><strong>Zero Retention:</strong> This data is processed strictly in-memory (RAM) on our
-        server.</li>
-        <li><strong>Immediate Deletion:</strong> As soon as the computation is finished and the result is
-        sent back to your browser, all input data is immediately and permanently discarded from the
-        server&rsquo;s memory.</li>
-        <li><strong>No Logs:</strong> We do not write your portfolio data to any database, hard drive, or
-        server log files.</li>
+        <li><strong>In-memory processing:</strong> The calculation runs in the server&rsquo;s memory and
+        the result is returned to your browser. The DCA and Backtest services do not write this data to
+        a database.</li>
+        <li><strong>Technical logs:</strong> Our servers keep technical logs containing counts such as
+        the number of positions, the DCA amount, the amounts computed and the number of warnings of a
+        request, but not your token list. Error logs may contain technical details of a failed request.
+        Our hosting provider records connection data such as IP address and time. The server holds IP
+        addresses in memory only for rate limiting.</li>
+        <li><strong>Key holders:</strong> The data described in Section 9 is stored in addition.</li>
     </ul>
 
     <h3>3. Privacy-Friendly Web Analytics (Simple Analytics)</h3>
@@ -266,39 +326,43 @@ die Rechte auf Auskunft, Berichtigung, L&ouml;schung,
     with &sect; 25 Abs. 2 TDDDG / the ePrivacy Directive. You can delete it anytime via your browser
     settings.</p>
 
-    <h3>6. Third-Party APIs (Market Data)</h3>
-    <p>To display real-time prices, this website fetches data from public APIs (such as Binance). When
-    your browser connects to these APIs, your IP address is processed by the respective provider to
-    deliver the market prices. No portfolio data is transmitted during this process.</p>
+    <h3>6. Third-Party Services Contacted by Your Browser</h3>
+    <p>To show market data, news and charts, your browser contacts these third parties directly, which
+    then process your IP address and technical connection data: Binance (REST and WebSocket),
+    CoinGecko, CoinLore, alternative.me, a feed-conversion service for news (rss2json), the content
+    delivery network jsDelivr (chart library) and Simple Analytics (web analytics, Section 3). No
+    portfolio data is sent to them. Some market-data requests are routed through our own server (DCA
+    service), which sees your IP address and forwards the request to the exchange.</p>
 
     <h3>7. Disclaimer of Liability &amp; Legacy Policy</h3>
-    <p><strong>Disclaimer:</strong> All trading and investment decisions remain the responsibility of
+    <p><strong>Disclaimer:</strong> AQMath is calculation software; it provides no investment advice, no
+    recommendations and no suitability assessment. Every decision about transactions remains solely with
     the user, and we are not liable for market losses arising from those decisions. Our liability for
     the software and the service itself is <em>not</em> excluded: it is governed by section&nbsp;7 of the
     <a href="/terms">Terms of Service</a>, which keeps liability unlimited for intent and gross
     negligence, for injury to life, body or health, and under the German Product Liability Act.</p>
     <p><strong>Legacy Policy:</strong> In the event of discontinuation, abandonment, or shutdown of this
-    service, no user data will remain on our infrastructure apart from the pseudonymized beta activation
+    service, no user data will remain on our infrastructure apart from the pseudonymized activation
     records (Section 8), which are irreversibly hashed, expire automatically, and contain no readable
     personal or portfolio data. Any portfolio configurations or preferences saved in your browser&rsquo;s
     localStorage remain solely on your own device. Users retain full control of this data locally and can
     erase it at any moment by clearing their browser.</p>
 
-    <h3>8. Beta Access Keys &amp; Anti-Abuse Protection (Beta Participants Only)</h3>
-    <p>This section applies only if you activate a private beta access key. To enforce our limited beta
-    slots, stop a single key from being shared across many people, and protect the login endpoint from
+    <h3>8. Black Access Keys &amp; Anti-Abuse Protection (Key Holders Only)</h3>
+    <p>This section applies only if you activate a private Black access key. To enforce our limited number
+    of Black accesses, stop a single key from being shared across many people, and protect the login endpoint from
     brute-force abuse, our authentication service (hosted on Railway) keeps a minimal, strictly
-    pseudonymized activation record. We never store your beta key or your IP address in readable form.</p>
+    pseudonymized activation record. We never store your Black key or your IP address in readable form.</p>
     <ul>
-        <li><strong>What is stored:</strong> an irreversible SHA-256 hash of your beta key, an
+        <li><strong>What is stored:</strong> an irreversible SHA-256 hash of your Black key, an
         irreversible HMAC-SHA256 fingerprint of your IP address (a one-way value that cannot be turned
         back into your real IP), the first-activation date, a last-seen date, and a simple activation
         counter.</li>
-        <li><strong>What is NOT stored:</strong> your real IP address, your plain beta key, your name,
+        <li><strong>What is NOT stored:</strong> your real IP address, your plain Black key, your name,
         your email, or any portfolio data &mdash; none of these ever touch the database.</li>
         <li><strong>Purpose &amp; legal basis:</strong> the hashed IP is used only to bind one key to one
         device/network and to apply rate-limiting (exponential back-off after failed attempts). Legal
-        basis: performance of the beta agreement and our legitimate interest in preventing fraud and
+        basis: performance of the Black access agreement and our legitimate interest in preventing fraud and
         abuse &mdash; Art. 6 (1) (b) and (f) GDPR. It is never used for tracking, profiling,
         advertising, or analytics.</li>
         <li><strong>Retention:</strong> the activation record is retained for the 365-day validity window
@@ -309,52 +373,99 @@ die Rechte auf Auskunft, Berichtigung, L&ouml;schung,
         binding or delete the record.</li>
     </ul>
 
-    <h3>9. Personalised Signals &amp; Notifications (Optional, Beta Participants Only)</h3>
-    <p>These features are entirely optional and only activate when you turn them on yourself. The
-    service remains signal-only: we never execute trades and we never hold exchange API keys.</p>
+    <h3>9. Key Holders: Holdings, Daily Calculations, Notifications &amp; Chat</h3>
+    <p>This section applies if you activate an access key (Black). The service remains a
+    calculation tool: we never execute trades, we never hold exchange API keys, and we give no
+    investment advice or recommendations.</p>
     <ul>
-        <li><strong>Holdings:</strong> when you enable personalised signals, you send us the token
-        symbols and amounts you hold. They are transmitted over TLS and stored in our database linked
-        to the hash of your activation key, solely to compute your personal daily signals. Legal basis:
-        your consent &mdash; Art. 6 (1) (a) GDPR &mdash; which you can withdraw at any time with effect
-        for the future (delete your holdings or deactivate your key).</li>
+        <li><strong>Holdings:</strong> your token symbols, amounts, entry prices and APY (and stablecoin
+        positions you record) are transmitted over TLS and stored in our database linked to the hash of
+        your activation key, to compute your daily calculations, to restore your table on a new device
+        and to keep it consistent. This happens when you press sync, automatically after every addition
+        or reduction you log in the app, and when the app restores or repairs your table. Legal basis:
+        performance of the contract &mdash; Art. 6 (1) (b) GDPR. You can ask us to delete your holdings at
+        any time; deactivating your key deletes them.</li>
         <li><strong>Consent log:</strong> every consent you give (e.g. for notifications) and your
         acknowledgement of the mandatory explainer are recorded with a timestamp and the text version,
         so that consent can be demonstrated (Art. 7 (1) GDPR).</li>
-        <li><strong>Notifications &mdash; first-party infrastructure, no third parties:</strong> push
-        notifications run exclusively on our own self-hosted notification server. No third-party
-        provider is involved and your signal data never leaves our infrastructure. You receive a random,
-        unguessable topic channel and a read-only access token, shown to you exactly once and stored
-        only as a hash afterwards. Disabling notifications revokes the token immediately.</li>
-        <li><strong>Daily log:</strong> the results of each daily signal run are logged per user and
-        date (audit trail), tied to the hash of your key.</li>
-        <li><strong>Beta chat:</strong> beta users have access to a shared internal chat. Messages are
+        <li><strong>Notifications:</strong> notifications are optional and based on your consent
+        &mdash; Art. 6 (1) (a) GDPR. Messages are delivered through our own self-hosted notification
+        server, which caches messages for 12 hours. For delivery while the app is closed, this server
+        uses the relay of the open-source service ntfy.sh and the push services of Google (Android) or
+        Apple (iOS); these relays receive technical delivery data, not the message content. You receive
+        a random, unguessable topic channel and a read-only access token, shown to you exactly once and
+        stored only as a hash afterwards. Disabling notifications revokes the token immediately.</li>
+        <li><strong>Calculation records:</strong> frozen portfolio weights, a daily log of each calculation
+        run per user and date (audit trail), your recordings of calculated differences and a score
+        derived from them, all tied to the hash of your key.</li>
+        <li><strong>Black chat:</strong> Black users have access to a shared internal chat. Messages are
         stored pseudonymously under a short code (e.g. B-XXXXXX) derived from the hash of your
         activation key &mdash; your real key, IP, and identity are never displayed. A maximum of 20
         messages are retained (rolling buffer), and the oldest message is additionally swept once per
         UTC day. You can clear your own messages at any time via the Clear button. Legal basis: your
         consent (Art. 6 (1) (a) GDPR), which you can withdraw by clearing your messages or
         deactivating your key.</li>
-        <li><strong>Erasure:</strong> withdrawing consent, disabling notifications or deactivating your
-        key deletes your holdings, consents, acknowledgements and notification access completely
-        (right to erasure, Art. 17 GDPR).</li>
+        <li><strong>Erasure (one click):</strong> in the app, under &ldquo;your data&rdquo;, the button
+        <em>delete all my data</em> deletes your holdings, consents, acknowledgements, notification
+        subscription (the topic is revoked), chat messages and all calculation records of our
+        calculation service (frozen weights, daily log, recordings, snapshots, discounts) from our
+        servers. Only the minimal activation record (hash of your key, activation date and device
+        binding) is kept, because your paid licence depends on it; it is deleted on request by e-mail
+        (Art. 17 GDPR), which ends the licence. Deactivating a key also deletes the data described
+        here. Backups of our database provider are overwritten within the provider&rsquo;s retention
+        period (7 days). Your table stored on your own device is not affected.</li>
     </ul>
 
     <h3>10. Your Rights</h3>
-    <p>Aside from the pseudonymized beta activation record described in Section 8 and the data you
-    voluntarily submit for personalised signals (Section 9), we do not store
-    personal or portfolio data on our servers, so for general processing we simply hold nothing to
-    disclose or delete. You retain the rights of access, rectification, erasure, restriction of
-    processing, data portability and objection (Art. 15&ndash;21 GDPR), as well as the right to lodge a
-    complaint with a supervisory authority. Beta participants may additionally request a reset of their
-    key&rsquo;s device binding or full deletion of their hashed activation record at any time. For any
-    privacy question, contact us at
+    <p>Aside from the pseudonymized activation record described in Section 8, the data stored for key
+    holders (Section 9) and the contact data in Section 12, we do not store personal or portfolio data on our servers, so on the free tier
+    we simply hold nothing to disclose or delete. You retain the rights of access, rectification,
+    erasure, restriction of processing, data portability and objection (Art. 15&ndash;21 GDPR), as well
+    as the right to lodge a complaint with a supervisory authority. Key holders may additionally
+    request a reset of their key&rsquo;s device binding or full deletion of their hashed activation
+    record at any time. For any privacy question, contact us at
     <a href="mailto:momo.demirov@gmail.com">momo.demirov@gmail.com</a>.</p>
-</main>
 
-<footer class="site-footer">
-    &copy; 2026 AQMath &mdash; Private. Non-Custodial.<br>
-    <a href="/">Home</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
+    <h3>11. Error Reports</h3>
+    <p>If the app crashes in your browser it sends the error type, the page path and a message of at
+    most 100 characters to our server. No key, IP address or user agent is stored with it. Reports are
+    deleted after 30 days. Legal basis: legitimate interest, Art. 6 (1) (f) GDPR.</p>
+
+    <h3>12. Contact and Contract Conclusion (Telegram, E-mail)</h3>
+    <p>If you contact us about Black access by Telegram (@AQMath_Black) or e-mail, we process the data
+    you send us: your Telegram identifier (username or ID) and profile name, your declaration as
+    consumer or business, your activation choice (Standard or On Request), the wallet address you pay
+    from, the transaction ID and the content of the messages.</p>
+    <ul>
+        <li><strong>Purpose &amp; legal basis:</strong> preparing, concluding and performing the
+        contract (Art. 6 (1) (b) GDPR); meeting statutory retention and proof obligations, for example
+        on withdrawal and payments (Art. 6 (1) (c) GDPR); defending legal claims (Art. 6 (1) (f) GDPR).
+        Without this data we cannot conclude the contract.</li>
+        <li><strong>Retention:</strong> we keep the data for as long as the contract and statutory
+        retention periods require, and delete it afterwards.</li>
+        <li><strong>Telegram:</strong> messages travel through the Telegram service, which its operator
+        runs under its own privacy policy; processing may take place outside the EU. Regular Telegram
+        chats are not end-to-end encrypted. Never send us passwords, seed phrases or private keys
+        &mdash; we never ask for them.</li>
+        <li><strong>Wallet addresses:</strong> a wallet address is a pseudonymous identifier and may be
+        attributable to you. Blockchain transactions are public and cannot be deleted by us.</li>
+    </ul>
+</main>
+</div>
+
+<footer class="site-footer sf2">
+    <div class="sf2-in">
+        <div class="sf2-top">
+            <a class="sf2-logo" href="/"><svg width="26" height="26" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg><span>AQMath</span></a>
+            <div class="sf2-soc"><a href="https://t.me/AQMath_Black" target="_blank" rel="noopener" aria-label="Telegram (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.4 3.6 2.9 10.8c-.9.4-.9 1.1-.2 1.3l4.7 1.5 1.8 5.6c.2.6.4.8.8.8.4 0 .6-.2.9-.4l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8L22.9 5c.3-1.2-.4-1.8-1.5-1.4zM8.6 13.1l9.5-6c.4-.3.8-.1.5.2l-7.9 7.1-.3 3.3-1.8-4.6z"/></svg><span>Telegram</span></a><a href="https://x.com/aqmathapp" target="_blank" rel="noopener" aria-label="X (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg><span>X</span></a><a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener" aria-label="Reddit (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="14" rx="7.5" ry="5.2"/><path d="M12 8.8l1.2-4.3 4 .9"/><path d="M9.4 16.6c1.6 1 3.6 1 5.2 0"/></g><g fill="currentColor"><circle cx="9.3" cy="13.2" r="1.2"/><circle cx="14.7" cy="13.2" r="1.2"/><circle cx="18" cy="5.6" r="1.4"/></g></svg><span>Reddit</span></a><a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener" aria-label="Substack (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M4 4h16v2.6H4zM4 8.8h16v2.6H4zM4 13.6h16V21l-8-4.4L4 21z"/></svg><span>Substack</span></a></div>
+        </div>
+        <div class="sf2-bot">
+            <div>&copy; 2026 AQMath &mdash; Non-custodial. An analytical web application, not a trading bot.</div>
+            <div class="sf2-legal">
+                <a href="/about">About</a><a href="/research/">Research</a><a href="/impressum">Impressum</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/widerruf">Widerruf</a>
+            </div>
+        </div>
+    </div>
 </footer>
 
 </body>

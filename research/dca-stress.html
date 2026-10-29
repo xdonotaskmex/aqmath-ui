@@ -22,31 +22,30 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
+<meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio calculator with Deleverage Shield">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Human Factor Stress Test - AQMath">
 <meta name="twitter:description" content="DCA jitter costs 0.5 pp MaxDD. 3-day signal lag fails the Sharpe gate. Same-day execution is the only policy that passes all gates.">
 <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
-<meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio rebalancer with Deleverage Shield">
+<meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio calculator with Deleverage Shield">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"Human Factor Stress Tests — DCA Jitter, Signal Lag & Frozen Weights","url":"https://aqmath.xyz/research/dca-stress","datePublished":"2026-08-10","description":"DCA jitter costs 0.5 pp MaxDD. 3-day signal lag fails the Sharpe gate. Same-day execution is the only policy that passes all gates.","inLanguage":"en","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"Human Factor Stress Tests","item":"https://aqmath.xyz/research/dca-stress"}]}]}</script>
 <link rel="alternate" hreflang="en" href="https://aqmath.xyz/research/dca-stress">
 <link rel="alternate" hreflang="zh-Hans" href="https://aqmath.xyz/research/dca-stress-zh">
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/dca-stress">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
-<link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=b4d391be81">
+<link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles.min.css?v=8bf7eb5417">
 </head>
 <body>
 
-<main class="legal-page research-page">
-    <a class="legal-page-brand" href="/">
-        <div class="logo-box">AQ</div>
-        <div>
-            <div class="logo-name">AQMath</div>
-            <div class="logo-tag">&larr; aqmath.xyz</div>
-        </div>
-    </a>
+<header class="hdr legal-hdr">
+  <a class="logo" href="/" aria-label="AQMath"><div class="logo-box" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg></div><div><div class="logo-name">AQMath</div></div></a>
+  <nav class="hdr-nav"><a class="hdr-nav-btn" href="/">Landing</a><a class="hdr-nav-btn" href="/backtest">Backtest</a><a class="hdr-nav-btn" href="/results">Results</a><a class="hdr-nav-btn" href="/v18">Proteus</a><a class="hdr-nav-btn active" href="/research/">Research</a><a class="hdr-nav-btn" href="/docs">Docs</a></nav>
+  <div class="hdr-right"><a class="hdr-cta" href="/app">Open App</a></div>
+</header>
 
+<div class="rs-wrap">
+<main class="legal-page research-page">
 <p class="rs-nav"><a href="/research/">&larr; All research</a><span class="sep">|</span>Also available in <a href="/research/dca-stress-zh" hreflang="zh-Hans">中文</a></p>
 <h1>Human Factor Stress Test: Does the Shield Break When You Do?</h1>
 <p class="legal-updated">Published: 2026-08-10</p>
@@ -56,7 +55,7 @@
 <strong>Status:</strong> Test 1 ✅ PASS 5/5 (DCA jitter) · Test 2 ⚠️ 3/4 (constant lag fails the Sharpe gate) · Test 2b ❌ 0/4 — on the production KKT 60/40 stack, every execution-error scenario fails the MaxDD gate · Test 2c ❌ freezing the weights does not fix it, and there is no lag knee — even a 1-day lag fails the MaxDD gate · 30 seeds per scenario</p>
 <hr>
 <h2>Read this in 60 seconds</h2>
-<ul><li>We deliberately broke the <em>human</em> side of the system: late deposits, trades executed days late, days skipped entirely.</li><li>Messing up your <em>deposits</em> barely matters: protection weakens by at most 0.5 percentage points.</li><li>Executing the engine&#x27;s <em>signals</em> late matters a lot. On the real production setup, <strong>every</strong> delay scenario breaks the drawdown protection.</li><li><strong>The rule:</strong> when a signal arrives, execute it the same day. Skipping a day is far cheaper than being habitually late.</li><li>Reader challenge (&quot;maybe the fragility is the 180-day re-fit, not the errors&quot;): tested in Test 2c — freezing the weights still fails 3 of 4 scenarios. The fragility travels with late execution, not with the re-optimization loop.</li><li>There is no comfortable lag knee: a constant 1-day lag already breaks the drawdown gate. Same-day or nothing.</li></ul>
+<ul><li>We deliberately broke the <em>human</em> side of the system: late deposits, trades executed days late, days skipped entirely.</li><li>Messing up your <em>deposits</em> barely matters: protection weakens by at most 0.5 percentage points.</li><li>Executing the engine&#x27;s <em>signals</em> late matters a lot. On the real production setup, <strong>every</strong> delay scenario breaks the drawdown protection.</li><li><strong>The simulated finding:</strong> in this simulation the drawdown protection held only when each calculated difference was acted on the same day. Skipping a day was far cheaper than being habitually late. This describes the simulation, not an instruction to anyone.</li><li>Reader challenge (&quot;maybe the fragility is the 180-day re-fit, not the errors&quot;): tested in Test 2c — freezing the weights still fails 3 of 4 scenarios. The fragility travels with late execution, not with the re-optimization loop.</li><li>There is no comfortable lag knee: a constant 1-day lag already breaks the drawdown gate. In the simulation, same-day or nothing.</li></ul>
 <p><em>Vocabulary used below:</em> <strong>MaxDD (maximum drawdown)</strong> — how far the portfolio falls from its highest point, i.e. the pain you actually sit through. <strong>Sharpe</strong> — return earned per unit of risk; higher is better. <strong>Vol spike</strong> — an unusually turbulent day compared to the recent past.</p>
 <h2>1. Objective</h2>
 <p>Every backtest published so far assumed a perfect DCA schedule: $100 every 30 days, on the dot, every time. Nobody trades like that. People forget. They pay late. The amount varies. If the shield&#x27;s protection collapses the moment the DCA schedule gets sloppy, the whole design is a lab toy.</p>
@@ -264,7 +263,7 @@
 <td style="text-align:left">where the money actually is</td>
 </tr>
 </tbody></table></div>
-<p>Mechanics, for reproducibility: the ideal target path is computed once — it depends only on returns, not on what the operator does — and each scenario builds its execution schedule from it. A delayed signal overtaken by a newer one is dropped: when the operator finally acts, they execute the newest instruction. A vol spike is a day whose trailing 7-day realized vol sits in the top decile of the window (10.0% of days). Awake means always acting, asleep means never acting.</p>
+<p>Mechanics, for reproducibility: the ideal target path is computed once — it depends only on returns, not on what the operator does — and each scenario builds its execution schedule from it. A delayed signal overtaken by a newer one is dropped: when the operator finally acts, the newest calculated difference is the one that applies. A vol spike is a day whose trailing 7-day realized vol sits in the top decile of the window (10.0% of days). Awake means always acting, asleep means never acting.</p>
 <h3>6a. Headline numbers (median of 30 seeds)</h3>
 <div class="rs-tablewrap">
 <table>
@@ -405,12 +404,12 @@
 <h3>6d. Equity curves</h3>
 <figure class="rs-fig"><img src="/research/assets/lag_stress_equity.svg" alt="Equity under execution error, weekly medians, log scale" width="820" height="436" loading="lazy" decoding="async"></figure>
 <h3>6e. What this means operationally</h3>
-<p>1. <strong>The shield tolerates sloppiness but not routine.</strong> Random delays, missed days, even sleeping through ~29% of the window — all pass. Being systematically 3 days late on every signal is the version that fails. 2. <strong>Being asleep is cheaper than being late.</strong> Missing ~29% of days costs ~$675, because the signal is continuous: when the operator wakes up they execute the latest instruction and the gap heals. A constant lag has no healing mechanism — every single day starts 3 days stale. 3. <strong>The practical rule:</strong> do not optimize for punctuality, optimize against systematic delay. Execute the signal when you see it; a missed day costs far less than a habitual delay.</p>
+<p>1. <strong>The shield tolerates sloppiness but not routine.</strong> Random delays, missed days, even sleeping through ~29% of the window — all pass. Being systematically 3 days late on every signal is the version that fails. 2. <strong>Being asleep is cheaper than being late.</strong> Missing ~29% of days costs ~$675, because the signal is continuous: when the operator wakes up the latest calculated difference applies and the gap heals. A constant lag has no healing mechanism — every single day starts 3 days stale. 3. <strong>What the simulation shows:</strong> a missed day costs far less than a habitual delay, so systematic delay, not punctuality, is what the protection is sensitive to. This is a simulated observation, not advice.</p>
 <p><strong>Test 2b re-ran all of this on the actual production stack</strong> — KKT weights, 60/40 structure, 180-day re-optimization. The verdict got harsher: §7.</p>
 <h2>7. Test 2b — the production stack: the same errors cost more</h2>
 <p>Test 2 ran on a 100% risky equal-weight basket. Production is different:</p>
 <ul><li>KKT risk-parity weights — each token weighted by the risk it contributes, capped 40% per token, risky side max 60%</li><li>structural 40% USDC sleeve</li><li>weights frozen and re-optimised every 180 days, drifting with prices between re-opts (no drift-trading)</li><li>the shield reads the <strong>full portfolio equity</strong> (risky + parked USDC)</li></ul>
-<p>Test 2b replays that exact stack — the real production weight optimizer and risk shield, code unchanged — and re-runs the same A/N/L/M/W execution-error scenarios. The only human surface in production is executing the daily buy/sell signal (weight optimization and the shield are fully automated server-side), so that is exactly what the scenarios perturb. The first re-optimization happens at day 180, because there is not enough price history before it; until then, the portfolio sits in USDC.</p>
+<p>Test 2b replays that exact stack — the real production weight optimizer and risk shield, code unchanged — and re-runs the same A/N/L/M/W execution-error scenarios. The only human surface in production is the user&#x27;s own handling of the daily calculated difference (weight optimization and the shield are fully automated server-side), so that is exactly what the scenarios perturb. The first re-optimization happens at day 180, because there is not enough price history before it; until then, the portfolio sits in USDC.</p>
 <h3>7a. Headline numbers (median of 30 seeds)</h3>
 <div class="rs-tablewrap">
 <table>
@@ -486,7 +485,7 @@
 <figure class="rs-fig"><img src="/research/assets/lag_prod_equity.svg" alt="Equity under execution error, production stack, log scale" width="820" height="436" loading="lazy" decoding="async"></figure>
 <figure class="rs-fig"><img src="/research/assets/lag_prod_damage.svg" alt="Cumulative execution damage vs vol-spike shading, production stack" width="820" height="436" loading="lazy" decoding="async"></figure>
 <h3>7d. Operational conclusion</h3>
-<p>The production stack is <strong>less tolerant of human error than the equal-weight test suggested</strong>: even random 0–3-day delays break the MaxDD gate. The only execution standard that passes is acting on the signal <strong>the same day it arrives</strong>. Any &quot;I&#x27;ll do it in a couple of days&quot; policy invalidates the drawdown protection the shield was built to deliver.</p>
+<p>The production stack is <strong>less tolerant of human error than the equal-weight test suggested</strong>: even random 0–3-day delays break the MaxDD gate. In the simulation, the only execution schedule that passes is acting on the calculated difference <strong>the same day it arrives</strong>; any multi-day delay invalidates the drawdown protection the shield computes. This is a description of simulated results, not an instruction.</p>
 <h2>8. Test 2c — reader challenge: freeze the weights, find the knee</h2>
 <p>External review of Test 2b (reader comment, 2026-08-12) made a sharper claim than the first review: the 0.5 pp result of Test 1 reflected the <em>setup</em>, not the protection, and the fragility in Test 2b sits in the 180-day re-optimization — so the discriminating experiment is to freeze the weights and re-run the same error scenarios: &quot;if frozen weights survive and re-optimizing weights break, the fragility is the refit and not the errors.&quot; It also asked for the operational knee: run constant lags of 1–5 days and plot damage against lag length.</p>
 <p>Both were run. One correction first: the proposed mechanism — a bad fill feeding into the data the next re-fit learns from — does not exist in this system. The re-fit reads trailing market prices only; fills never enter its data. But the discriminating test stands on its own.</p>
@@ -510,12 +509,23 @@
 <h2>10. Reproducibility</h2>
 <p>All tests run the unmodified production engine on the same 6.2 years of daily closes, with 30 independent runs per scenario. Test scripts, chart generators, and raw result data live in the engine&#x27;s internal research tooling; every number in this article is the median of those 30 runs.</p>
 <hr>
-<p><em>This is the first of five planned stress tests for the Aegis (v14) Deleverage Shield. Per the critique in §5, Test 2 moved from deposit jitter to signal execution lag — the first test in this series that can actually fail — and it delivered the first failure: a constant 3-day signal lag breaks the Sharpe gate. Test 2b then re-ran the same errors on the production KKT 60/40 stack, where every error scenario breaks the MaxDD gate. Test 2c ran the reader-proposed frozen-weights control and lag sweep: freezing the weights still fails 3 of 4 scenarios, and even a 1-day lag breaks the MaxDD gate — same-day signal execution remains the only policy that passes. <a href="https://aqmath.xyz">See the full test plan</a> for the remaining four.</em></p>
+<p><em>This is the first of five planned stress tests for the Aegis (v14) Deleverage Shield. Per the critique in §5, Test 2 moved from deposit jitter to signal execution lag — the first test in this series that can actually fail — and it delivered the first failure: a constant 3-day signal lag breaks the Sharpe gate. Test 2b then re-ran the same errors on the production KKT 60/40 stack, where every error scenario breaks the MaxDD gate. Test 2c ran the reader-proposed frozen-weights control and lag sweep: freezing the weights still fails 3 of 4 scenarios, and even a 1-day lag breaks the MaxDD gate — same-day execution remains the only schedule that passes in the simulation. <a href="https://aqmath.xyz">See the full test plan</a> for the remaining four.</em></p>
 </main>
+</div>
 
-<footer class="site-footer">
-    &copy; 2026 AQMath &mdash; Private. Non-Custodial.<br>
-    <a href="/">Home</a><span class="sep">|</span><a href="/app">App</a><span class="sep">|</span><a href="/backtest">Backtest</a><span class="sep">|</span><a href="/results">Results</a><span class="sep">|</span><a href="/docs">Docs</a><span class="sep">|</span><a href="/about">About</a><span class="sep">|</span><a href="/research/">Research</a><span class="sep">|</span><a href="/impressum">Impressum</a><span class="sep">|</span><a href="/privacy">Privacy</a><span class="sep">|</span><a href="/terms">Terms</a><span class="sep">|</span><a href="/widerruf">Widerruf</a>
+<footer class="site-footer sf2">
+    <div class="sf2-in">
+        <div class="sf2-top">
+            <a class="sf2-logo" href="/"><svg width="26" height="26" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg><span>AQMath</span></a>
+            <div class="sf2-soc"><a href="https://t.me/AQMath_Black" target="_blank" rel="noopener" aria-label="Telegram (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.4 3.6 2.9 10.8c-.9.4-.9 1.1-.2 1.3l4.7 1.5 1.8 5.6c.2.6.4.8.8.8.4 0 .6-.2.9-.4l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8L22.9 5c.3-1.2-.4-1.8-1.5-1.4zM8.6 13.1l9.5-6c.4-.3.8-.1.5.2l-7.9 7.1-.3 3.3-1.8-4.6z"/></svg><span>Telegram</span></a><a href="https://x.com/aqmathapp" target="_blank" rel="noopener" aria-label="X (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg><span>X</span></a><a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener" aria-label="Reddit (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="14" rx="7.5" ry="5.2"/><path d="M12 8.8l1.2-4.3 4 .9"/><path d="M9.4 16.6c1.6 1 3.6 1 5.2 0"/></g><g fill="currentColor"><circle cx="9.3" cy="13.2" r="1.2"/><circle cx="14.7" cy="13.2" r="1.2"/><circle cx="18" cy="5.6" r="1.4"/></g></svg><span>Reddit</span></a><a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener" aria-label="Substack (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M4 4h16v2.6H4zM4 8.8h16v2.6H4zM4 13.6h16V21l-8-4.4L4 21z"/></svg><span>Substack</span></a></div>
+        </div>
+        <div class="sf2-bot">
+            <div>&copy; 2026 AQMath &mdash; Non-custodial. An analytical web application, not a trading bot.</div>
+            <div class="sf2-legal">
+                <a href="/about">About</a><a href="/research/">Research</a><a href="/impressum">Impressum</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/widerruf">Widerruf</a>
+            </div>
+        </div>
+    </div>
 </footer>
 
 </body>

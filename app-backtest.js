@@ -5,7 +5,7 @@
 //  AQMath Backtest — UI only
 //  The Deleverage engine (parameters + modulator math) lives on the
 //  server. This file only: parses CSVs in the browser, uploads the
-//  parsed price series to the JWT-gated /backtest endpoint, and renders
+//  parsed price series to the /backtest endpoint (open to everyone), and renders
 //  the returned result with Chart.js. No engine parameters ship here.
 //  Uploaded series are processed in-memory on the server and discarded.
 // ============================================================
@@ -112,19 +112,20 @@ function btValidateInputs(inp) {
     return null;
 }
 
-// Friendly beta gate: backtest runs on the server, so it needs a beta key
-// (same gate as the DCA / Optimize engines).
-function btRequireBeta() {
-    if (typeof isBetaActive === 'function' && isBetaActive()) return true;
-    btShowStatus('Enter your beta key above to run a backtest \u2014 the engine runs securely on our server.', 'notice');
-    if (typeof showToast === 'function') showToast('Enter your beta key to run a backtest', 'notice');
-    return false;
-}
-
-// POST parsed series to a JWT-gated engine endpoint and return parsed JSON.
+// The backtest is free for everyone: no key needed. A valid Black session is
+// still sent along when present (it gets the faster per-key limit); otherwise
+// the engine throttles per IP.
 async function btPost(path, body) {
-    if (typeof pipelineFetch !== 'function') throw new Error('auth helper unavailable');
-    var res = await pipelineFetch(API_URL + path, { method: 'POST', body: JSON.stringify(body) });
+    var res;
+    if (typeof isBetaActive === 'function' && isBetaActive() && typeof pipelineFetch === 'function') {
+        res = await pipelineFetch(API_URL + path, { method: 'POST', body: JSON.stringify(body) });
+    } else {
+        res = await fetch(API_URL + path, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+    }
     if (!res.ok) {
         var err = await res.json().catch(function() { return {}; });
         throw new Error(btErrDetail(err, res.status));
@@ -163,7 +164,6 @@ function btHideLoading() {
 // ============================================================
 
 async function btRunBacktest() {
-    if (!btRequireBeta()) return;
     var tokens = btActiveTokens();
     if (tokens.length < 2) { btShowStatus('Load at least 2 token CSVs to run a backtest.', 'error'); return; }
     var inp = btInputs();
@@ -188,6 +188,7 @@ async function btRunBacktest() {
 }
 
 function btRenderBacktest(data, inp) {
+    if (window.Chart) Chart.defaults.font.family = "'IBM Plex Sans', sans-serif";
     var pr = data.pr, cfg = data.cfg;
 
     // /backtest returns ONE engine leg: Proteus (v18), the production shield,
@@ -235,7 +236,7 @@ function btRenderBacktest(data, inp) {
     var c1 = document.createElement('div');
     c1.className = 'bt-strategy-card';
     c1.innerHTML = '<h3>' + engine.label + '</h3>'
-        + '<div class="bt-big" style="color:var(--purple)">Calmar ' + m.cal.toFixed(2) + '</div>'
+        + '<div class="bt-big" style="color:var(--blue)">Calmar ' + m.cal.toFixed(2) + '</div>'
         + '<div class="bt-sub">' + engine.tag + ' | Max DD: ' + (m.mdd * 100).toFixed(1) + '% | Sharpe: ' + m.sh.toFixed(2) + '</div>'
         + '<div class="bt-sub">Final: ' + money(m.final) + ' | Return: ' + (m.ret * 100).toFixed(1) + '%</div>'
         + '<div class="bt-sub">Avg exposure: ' + (v18x.avg * 100).toFixed(0) + '% | Defensive: ' + sim.shDays + '/' + days + ' days</div>'
@@ -341,7 +342,7 @@ function btRenderBacktest(data, inp) {
             ctx.save();
             ctx.setLineDash([5, 4]);
             ctx.lineWidth = 1.5;
-            ctx.strokeStyle = 'rgba(248, 113, 113, 0.7)';
+            ctx.strokeStyle = 'rgba(140, 59, 59, 0.6)';
             for (var k = 0; k < entryDays.length; k++) {
                 var x = xAxis.getPixelForValue(entryDays[k]);
                 if (x >= chart.chartArea.left && x <= chart.chartArea.right) {
@@ -356,8 +357,8 @@ function btRenderBacktest(data, inp) {
                 var x0 = xAxis.getPixelForValue(entryDays[0]);
                 if (x0 >= chart.chartArea.left && x0 <= chart.chartArea.right) {
                     ctx.setLineDash([]);
-                    ctx.font = 'bold 10px monospace';
-                    ctx.fillStyle = '#f87171';
+                    ctx.font = '600 11px IBM Plex Sans, sans-serif';
+                    ctx.fillStyle = '#8C3B3B';
                     ctx.textAlign = 'left';
                     ctx.textBaseline = 'top';
                     var label = '\u25BC DE-RISK';
@@ -373,18 +374,18 @@ function btRenderBacktest(data, inp) {
     var cO = function() {
         return {
             responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { labels: { color: '#e2e8f0', font: { size: 11 } } } },
+            plugins: { legend: { labels: { color: "#3B3E45", font: { size: 12 } } } },
             scales: {
-                x: { ticks: { color: '#7a8ba5', maxTicksLimit: 12 }, grid: { color: '#1c2128' } },
-                y: { ticks: { color: '#7a8ba5' }, grid: { color: '#1c2128' } }
+                x: { ticks: { color: '#5B5F6B', maxTicksLimit: 12 }, grid: { color: '#E2DFD5' } },
+                y: { ticks: { color: '#5B5F6B' }, grid: { color: '#E2DFD5' } }
             }
         };
     };
 
     // Equity curves — the production engine + the B&H reference
     var eqDatasets = [
-        { label: 'Proteus v18 · Adaptive', data: sim.eqA.slice(1), borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.08)', fill: true, pointRadius: 0, borderWidth: 2 },
-        { label: 'Buy & Hold + DCA', data: bh.eqB.slice(1), borderColor: '#fbbf24', borderDash: [4, 3], fill: false, pointRadius: 0, borderWidth: 1.5 }
+        { label: 'Proteus v18 · Adaptive', data: sim.eqA.slice(1), borderColor: '#1D3557', backgroundColor: 'rgba(29,53,87,0.08)', fill: true, pointRadius: 0, borderWidth: 2 },
+        { label: 'Buy & Hold + DCA', data: bh.eqB.slice(1), borderColor: '#B07A2A', borderDash: [4, 3], fill: false, pointRadius: 0, borderWidth: 1.5 }
     ];
     btCharts.eq = new Chart(document.getElementById('btEquityChart'), {
         type: 'line',
@@ -402,9 +403,9 @@ function btRenderBacktest(data, inp) {
         data: {
             labels: dateLabels,
             datasets: [
-                { label: 'In Tokens', data: tokInv.slice(1), borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.15)', fill: true, pointRadius: 0, borderWidth: 1.5, stack: 'a' },
-                { label: 'USDC Reserve', data: usdcT.slice(1), borderColor: '#34d399', backgroundColor: 'rgba(52,211,153,0.25)', fill: true, pointRadius: 0, borderWidth: 1, stack: 'a' },
-                { label: 'B&H Equity', data: bh.eqB.slice(1), borderColor: '#fbbf24', borderDash: [4, 3], fill: false, pointRadius: 0, borderWidth: 1.5 }
+                { label: 'In Tokens', data: tokInv.slice(1), borderColor: '#1D3557', backgroundColor: 'rgba(29,53,87,0.12)', fill: true, pointRadius: 0, borderWidth: 1.5, stack: 'a' },
+                { label: 'USDC Reserve', data: usdcT.slice(1), borderColor: '#2F6846', backgroundColor: 'rgba(47,104,70,0.2)', fill: true, pointRadius: 0, borderWidth: 1, stack: 'a' },
+                { label: 'B&H Equity', data: bh.eqB.slice(1), borderColor: '#B07A2A', borderDash: [4, 3], fill: false, pointRadius: 0, borderWidth: 1.5 }
             ]
         },
         options: (function() { var o = cO(); o.scales.y.stacked = true; o.scales.y.ticks.callback = function(v) { return '$' + v.toLocaleString(); }; return o; })()
@@ -412,14 +413,14 @@ function btRenderBacktest(data, inp) {
 
     // Exposure — Proteus v18 held exposure × risk budget
     var expDatasets = [
-        { label: 'Proteus v18', data: sim.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#a855f7', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' }
+        { label: 'Proteus v18', data: sim.expT.map(function(v) { return +(v * 100).toFixed(1); }), borderColor: '#1D3557', fill: false, pointRadius: 0, borderWidth: 1.5, stepped: 'before' }
     ];
     btCharts.exp = new Chart(document.getElementById('btExposureChart'), {
         type: 'line',
         data: { labels: dateLabels, datasets: expDatasets },
         options: (function() {
             var o = cO();
-            o.scales.y = { min: 0, max: 100, ticks: { color: '#7a8ba5', callback: function(v) { return v + '%'; } }, grid: { color: '#1c2128' } };
+            o.scales.y = { min: 0, max: 100, ticks: { color: '#5B5F6B', callback: function(v) { return v + '%'; } }, grid: { color: '#E2DFD5' } };
             return o;
         })(),
         plugins: [emergencyBrakePlugin]

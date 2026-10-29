@@ -83,7 +83,7 @@ function hideHowAqmath() {
 
 async function ackHowAqmath() {
     const btn = document.getElementById('btnHowAck');
-    if (btn) { btn.disabled = true; btn.textContent = '[ saving... ]'; }
+    if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
     try {
         const res = await fetch(BETA_AUTH_URL + '/ack', {
             method: 'POST',
@@ -101,7 +101,7 @@ async function ackHowAqmath() {
         console.error('[AQMath] ack failed:', e.message);
         showToast('Could not record your acknowledgement — please try again.', 'error');
     } finally {
-        if (btn) { btn.disabled = false; btn.textContent = '[ I have read ]'; }
+        if (btn) { btn.disabled = false; btn.textContent = 'I have read'; }
     }
 }
 
@@ -202,8 +202,20 @@ function _applyFrozenTargets(weights) {
 // ensures that signal deltas applied on the server (or any other server-side
 // change) are always reflected in the UI, even if localStorage is stale.
 // localStorage becomes a cache/fallback — unsynced users keep their local data.
+// After "delete all my data" the app must not quietly upload the table again.
+// The flag is cleared only by an explicit [ sync to shield ] / [ update holdings ].
+const CLOUD_OFF_KEY = 'aqmath_cloud_off';
+function cloudSyncOff() {
+    try { return localStorage.getItem(CLOUD_OFF_KEY) === '1'; } catch (e) { return false; }
+}
+function _setCloudSyncOff(off) {
+    try {
+        if (off) localStorage.setItem(CLOUD_OFF_KEY, '1'); else localStorage.removeItem(CLOUD_OFF_KEY);
+    } catch (e) { /* storage unavailable */ }
+}
+
 async function restoreHoldingsFromServer() {
-    if (!isBetaActive() || _holdingsRestored) return 0;
+    if (!isBetaActive() || _holdingsRestored || cloudSyncOff()) return 0;
     _holdingsRestored = true;
     console.log('[AQMath] holdings restore: starting, local portfolio =', (portfolio || []).map(t => `${t.sym}:${t.amount}`).join(',') || '(empty)');
     let holdings = [];
@@ -344,7 +356,7 @@ function _durableHoldings() {
 // Deliberately does NOT call /portfolio/init — frozen weights must not move on
 // a trade; the daily signal loop reads the fresh holdings from beta-auth anyway.
 async function pushDurableHoldings() {
-    if (!isBetaActive()) return false;
+    if (!isBetaActive() || cloudSyncOff()) return false;
     const holdings = _durableHoldings();
     if (!holdings.length) return false;
     try {
@@ -378,7 +390,7 @@ function _renderShieldStatus(data) {
         return;
     }
     const active = data.shield_active
-        ? '<span class="shield-on">ACTIVE (defensive)</span>'
+        ? '<span class="shield-on">ACTIVE (lower target exposure)</span>'
         : '<span class="shield-off">OFF (normal)</span>';
     // The stored weights cover only the risky sleeve (KKT caps it well below
     // 100%); USDC absorbs the remainder. Printing only the risky rows made the
@@ -415,7 +427,7 @@ function _renderShieldStatus(data) {
         // Standing confirmation that the setup is DONE. Without it the card reads
         // like a settings form, so a returning user cannot tell whether the
         // engine ever accepted the sync.
-        `<span class="shield-ok">✓ synced — daily-close signals run for you</span><br>`
+        `<span class="shield-ok">✓ synced — your daily calculations run on the server</span><br>`
         + `shield: ${active}<br>`
         + `frozen weights${froze ? ' (locked ' + froze + ')' : ''}: ${weights || '—'}`
         + recomputed + `<br>`
@@ -462,12 +474,12 @@ function _setShieldSynced(synced) {
     // label must stop inviting a "first" sync — the freeze already happened and
     // re-clicking can never re-run it.
     const btn = document.getElementById('btnShieldSync');
-    if (btn) btn.textContent = synced ? '[ update holdings ]' : '[ sync to shield ]';
+    if (btn) btn.textContent = synced ? 'Update holdings' : 'Sync to shield';
     const hint = document.getElementById('shieldSyncHint');
     if (hint) {
         hint.textContent = synced
-            ? 'your holdings are stored and your KKT weights are frozen. re-sync only after you change amounts — daily-close signals keep running either way, and you execute every trade yourself.'
-            : 'saves your holdings & freezes your KKT weights on first sync. daily-close signals run automatically — you execute every trade yourself.';
+            ? 'your holdings are stored and your KKT weights are frozen. re-sync only after you change amounts — the daily calculations keep running either way. AQMath places no orders; any transaction is entirely your own.'
+            : 'saves your holdings & freezes your KKT weights on first sync. the daily calculations then run automatically on the server. AQMath places no orders; any transaction is entirely your own.';
     }
 }
 
@@ -500,7 +512,7 @@ async function saveShieldSettings() {
     if (amt && amt.value !== '') body.dca_amount = Number(amt.value);
     if (itv && itv.value !== '') body.dca_interval = Number(itv.value);
     const btn = document.getElementById('btnShieldSettings');
-    if (btn) { btn.disabled = true; btn.textContent = '[ saving... ]'; }
+    if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
     try {
         const res = await _shieldFetch('/portfolio/settings', {
             method: 'POST',
@@ -514,18 +526,18 @@ async function saveShieldSettings() {
         _applyShieldSettings(data.settings);
         const hint = document.getElementById('dcaHint');
         if (hint && data.next_dca_on) {
-            hint.textContent = 'next DCA signal: ' + data.next_dca_on
-                + ' — you will be told whether it goes to USDC or into tokens.';
+            hint.textContent = 'next DCA calculation: ' + data.next_dca_on
+                + ' — the calculation will show whether it is allocated to USDC or split across tokens.';
         }
         showToast(body.deleverage
-            ? 'Saved — full mode: shield + USDC routing + DCA on schedule.'
-            : 'Saved — shield OFF: plain drift-rebalance signals only.', 'success');
+            ? 'Saved — full mode: shield + USDC allocation + DCA on schedule.'
+            : 'Saved — shield OFF: plain weight-deviation calculations only.', 'success');
         refreshShieldStatus();
     } catch (e) {
         console.error('[AQMath] settings save failed:', e.message);
         showToast('Save failed: ' + e.message, 'error');
     } finally {
-        if (btn) { btn.disabled = false; btn.textContent = '[ save mode & DCA ]'; }
+        if (btn) { btn.disabled = false; btn.textContent = 'Save mode & DCA'; }
     }
 }
 
@@ -565,7 +577,7 @@ async function syncShieldPortfolio() {
         return showToast('Add at least 2 tokens with quantities to your portfolio first.', 'warning');
     }
     const btn = document.getElementById('btnShieldSync');
-    if (btn) { btn.disabled = true; btn.textContent = '[ syncing... ]'; }
+    if (btn) { btn.disabled = true; btn.textContent = 'Syncing...'; }
     try {
         // 1. Persist the holdings on beta-auth (personal data, GDPR-logged).
         // The durable copy carries safe-haven rows plus entry/APY; the engine
@@ -584,6 +596,7 @@ async function syncShieldPortfolio() {
             throw new Error(err.detail || 'HTTP ' + res.status);
         }
         await res.json();
+        _setCloudSyncOff(false);   // explicit sync = the user wants cloud storage again
 
         // PUT succeeded — beta-auth now has our data. Re-read from server so
         // the local portfolio reflects the authoritative copy (amounts, entry,
@@ -665,7 +678,7 @@ async function syncShieldPortfolio() {
         }
         const data = await init.json();
         showToast(data.status === 'frozen'
-            ? 'KKT weights frozen — the daily signal loop is now active for you.'
+            ? 'KKT weights frozen — the daily calculation loop is now active for you.'
             : 'Holdings updated — your frozen weights are unchanged.', 'success');
         // Re-read from the server rather than rendering the init response: the
         // card must show the same row the daily loop reads, settings included.
@@ -701,7 +714,7 @@ function _setNtfyStatus(connected, topic) {
     const statusEl = document.getElementById('ntfyStatus');
     if (!statusEl) return;
     statusEl.innerHTML = connected
-        ? '<span class="ntfy-dot on"></span>✓ connected — you are receiving signals &middot; topic <span class="mono">' + topic + '</span>'
+        ? '<span class="ntfy-dot on"></span>✓ connected — you are receiving calculation notices &middot; topic <span class="mono">' + topic + '</span>'
         : '<span class="ntfy-dot off"></span>not connected';
 }
 
@@ -773,7 +786,7 @@ async function enableNotifications() {
         return showToast('Please tick the consent box first.', 'warning');
     }
     const btn = document.getElementById('btnNtfyEnable');
-    if (btn) { btn.disabled = true; btn.textContent = '[ enabling... ]'; }
+    if (btn) { btn.disabled = true; btn.textContent = 'Enabling...'; }
     try {
         const authH = { 'Authorization': 'Bearer ' + getBetaToken() };
         // 1. Log the GDPR consent receipt for this feature.
@@ -801,7 +814,7 @@ async function enableNotifications() {
         console.error('[AQMath] notifications enable failed:', e.message);
         showToast('Could not enable notifications: ' + e.message, 'error');
     } finally {
-        if (btn) { btn.disabled = false; btn.textContent = '[ enable notifications ]'; }
+        if (btn) { btn.disabled = false; btn.textContent = 'Enable notifications'; }
     }
 }
 
@@ -837,6 +850,58 @@ async function _doDisableNotifications() {
         showToast('Could not disable notifications: ' + e.message, 'error');
     } finally {
         if (btn) { btn.disabled = false; }
+    }
+}
+
+// ---------- Delete all my data (GDPR Art. 17, one click) ----------
+
+function eraseMyData() {
+    showToast(
+        'Delete ALL your data on our servers? Holdings, consents, notification topic, chat messages and all calculation records are removed. Your licence key stays valid and your table on THIS device is kept. This cannot be undone.',
+        'warning',
+        [
+            { label: 'cancel' },
+            { label: 'yes, delete everything', primary: false, onClick: _doEraseMyData }
+        ]
+    );
+}
+
+async function _doEraseMyData() {
+    const btn = document.getElementById('btnEraseData');
+    if (btn) { btn.disabled = true; btn.textContent = 'Deleting...'; }
+    const token = getBetaToken();
+    if (!token) {
+        showToast('Please log in with your key first.', 'warning');
+        if (btn) { btn.disabled = false; btn.textContent = 'Delete all my data'; }
+        return;
+    }
+    const headers = { 'Authorization': 'Bearer ' + token };
+    let authOk = false, engineOk = false;
+    try {
+        const r1 = await fetch(BETA_AUTH_URL + '/me/data', { method: 'DELETE', headers });
+        authOk = r1.ok;
+    } catch (e) { console.warn('[AQMath] erase (auth) failed:', e.message); }
+    // Stop quiet re-uploads as soon as the first delete went through.
+    if (authOk) _setCloudSyncOff(true);
+    try {
+        const r2 = await _shieldFetch('/me/data', { method: 'DELETE' });
+        engineOk = !!(r2 && r2.ok);
+    } catch (e) { console.warn('[AQMath] erase (engine) failed:', e.message); }
+    try {
+        if (authOk && engineOk) {
+            // Local mirror of what was just deleted server-side.
+            if (typeof setDeleverageToggle === 'function') setDeleverageToggle(false);
+            if (typeof setDeleverageShieldState === 'function') setDeleverageShieldState(null);
+            _holdingsRestored = true;
+            if (typeof _setShieldSynced === 'function') _setShieldSynced(false);
+            _hideNtfyPanel();
+            try { await refreshNtfyStatus(); } catch (e) {}
+            showToast('All your server-side data was deleted. Your table on this device was kept \u2014 use Delete entire portfolio to clear it too.', 'success');
+        } else {
+            showToast('Deletion incomplete (' + (authOk ? 'calculation records' : 'account data') + ' could not be reached). Press the button again \u2014 it is safe to repeat.', 'error');
+        }
+    } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Delete all my data'; }
     }
 }
 
@@ -896,22 +961,22 @@ function _renderSignalBlock(s) {
     const countdown = s.expires_at ? _renderCountdown(s.expires_at) : '';
     return '<div class="sig-block" data-signal-id="' + s.signal_id + '">'
         + '<div class="sig-header">'
-        +   '<span class="sig-side ' + sideClass + '">' + s.side + '</span>'
+        +   '<span class="sig-side ' + sideClass + '">' + (s.side === 'BUY' ? 'BELOW TARGET' : 'ABOVE TARGET') + '</span>'
         +   '<span class="sig-sym">' + displaySym + '</span>'
-        +   '<span class="sig-amount">' + unitsStr + ' &rarr; ' + usdStr + '</span>'
+        +   '<span class="sig-amount">' + (s.side === 'BUY' ? '+' : '&minus;') + unitsStr + ' units &rarr; ' + usdStr + '</span>'
         +   '<span class="sig-regime ' + regimeClass + '">' + regimeLabel + '</span>'
         +   daysWarn
         +   countdown
         + '</div>'
         + '<div class="sig-actions">'
-        +   '<button class="btn green" data-action="confirmSignal" data-arg="' + s.signal_id + '">[ confirm &amp; sync ]</button>'
-        +   '<button class="btn amber" data-action="showAdjustForm" data-arg="' + s.signal_id + '">[ adjust ]</button>'
-        +   '<button class="btn ghost" data-action="skipSignal" data-arg="' + s.signal_id + '">[ skip ]</button>'
+        +   '<button class="btn green" data-action="confirmSignal" data-arg="' + s.signal_id + '">Record &amp; sync</button>'
+        +   '<button class="btn amber" data-action="showAdjustForm" data-arg="' + s.signal_id + '">Adjust</button>'
+        +   '<button class="btn ghost" data-action="skipSignal" data-arg="' + s.signal_id + '">Dismiss</button>'
         + '</div>'
         + '<div class="sig-adjust-form hidden" id="adj_' + s.signal_id + '">'
-        +   '<input type="number" step="any" min="0" placeholder="actual units" class="sig-adjust-input" id="adjInput_' + s.signal_id + '">'
-        +   '<button class="btn green" data-action="adjustSignal" data-arg="' + s.signal_id + '">[ save &amp; sync ]</button>'
-        +   '<button class="btn ghost" data-action="hideAdjustForm" data-arg="' + s.signal_id + '">[ cancel ]</button>'
+        +   '<input type="number" step="any" min="0" placeholder="recorded units" class="sig-adjust-input" id="adjInput_' + s.signal_id + '">'
+        +   '<button class="btn green" data-action="adjustSignal" data-arg="' + s.signal_id + '">Save &amp; sync</button>'
+        +   '<button class="btn ghost" data-action="hideAdjustForm" data-arg="' + s.signal_id + '">Cancel</button>'
         + '</div>'
         + '</div>';
 }
@@ -943,10 +1008,10 @@ function _renderDcaBlock(s) {
     let routeHtml;
     if (route === 'usdc') {
         const parked = Number(p.parked_total || 0);
-        routeHtml = '<strong>Defensive mode</strong> &mdash; ' + amountStr
-            + ' parks in your stablecoin.'
+        routeHtml = '<strong>Shield status active</strong> &mdash; ' + amountStr
+            + ' is allocated to your stablecoin.'
             + (parked > 0
-                ? ' Total parked: <strong>$' + Math.round(parked).toLocaleString() + '</strong>.'
+                ? ' Total allocated to stablecoin: <strong>$' + Math.round(parked).toLocaleString() + '</strong>.'
                 : '');
     } else {
         const buys = finalBuys || (Array.isArray(p.buys) ? p.buys : []);
@@ -955,25 +1020,25 @@ function _renderDcaBlock(s) {
             return escapeHtml(_normSym(String(b.sym || '').toUpperCase()))
                 + ' $' + (finalBuys ? usd.toFixed(2) : Math.round(usd)).toLocaleString();
         }).join(' &middot; ');
-        routeHtml = '<strong>Risk-on</strong> &mdash; ' + amountStr + ' into tokens'
+        routeHtml = '<strong>Shield status inactive</strong> &mdash; ' + amountStr + ' split across tokens'
             + (buyTxt ? ': ' + buyTxt : '') + '.';
         const redeploy = Number(p.redeploy_usdc || 0);
         if (redeploy > 0) {
             routeHtml += finalBuys
-                ? ' Includes <strong>$' + redeploy.toFixed(2) + '</strong> redeployed from parked USDC.'
+                ? ' Includes <strong>$' + redeploy.toFixed(2) + '</strong> re-allocated from the earlier USDC allocation.'
                 : ' <strong>+$' + Math.round(redeploy).toLocaleString()
-                    + '</strong> redeployed from parked USDC at the same weights.';
+                    + '</strong> re-allocated from the earlier USDC allocation at the same weights.';
         }
         const unalloc = Number(p.unallocated || 0);
         if (finalBuys && unalloc > 0.01) {
-            routeHtml += ' $' + unalloc.toFixed(2) + ' stays in USDC (below the per-token minimum).';
+            routeHtml += ' $' + unalloc.toFixed(2) + ' stays allocated to USDC (below the per-token minimum).';
         }
     }
 
     return '<div class="sig-block sig-dca" data-signal-id="' + s.signal_id + '">'
         + '<div class="sig-header">'
         +   '<span class="sig-side sig-dca-badge">DCA</span>'
-        +   '<span class="sig-sym">Contribution due</span>'
+        +   '<span class="sig-sym">DCA calculation</span>'
         +   '<span class="sig-amount">' + amountStr + ' &rarr; ' + route.toUpperCase() + '</span>'
         +   '<span class="sig-regime ' + regimeClass + '">' + regimeLabel + '</span>'
         +   daysWarn
@@ -981,8 +1046,8 @@ function _renderDcaBlock(s) {
         + '</div>'
         + '<div class="sig-dca-detail">' + routeHtml + '</div>'
         + '<div class="sig-actions">'
-        +   '<button class="btn green" data-action="executeDcaSignal" data-arg="' + s.signal_id + '">[ execute DCA ]</button>'
-        +   '<button class="btn ghost" data-action="skipSignal" data-arg="' + s.signal_id + '">[ dismiss ]</button>'
+        +   '<button class="btn green" data-action="executeDcaSignal" data-arg="' + s.signal_id + '">Open DCA calculation</button>'
+        +   '<button class="btn ghost" data-action="skipSignal" data-arg="' + s.signal_id + '">Dismiss</button>'
         + '</div>'
         + '</div>';
 }
@@ -1094,24 +1159,24 @@ async function confirmSignal(el, signalId) {
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
             if (res.status === 410) {
-                showToast('Signal expired — execution window closed', 'error');
+                showToast('Record expired — recording window closed', 'error');
                 loadPendingSignals();
                 return;
             }
             if (res.status === 409) {
                 // Already resolved (double-tap or another tab) — not an
                 // error, just refresh the list so the card disappears.
-                showToast(err.detail || 'Signal already processed', 'notice');
+                showToast(err.detail || 'Record already processed', 'notice');
                 loadPendingSignals();
                 return;
             }
-            showToast(err.detail || 'Confirm failed (HTTP ' + res.status + ')', 'error');
+            showToast(err.detail || 'Recording failed (HTTP ' + res.status + ')', 'error');
             return;
         }
         const data = await res.json();
-        const deltaMsg = data.delta_applied ? 'portfolio synced' : 'confirmed but sync failed — re-sync manually';
+        const deltaMsg = data.delta_applied ? 'portfolio synced' : 'recorded but sync failed — re-sync manually';
         const dayMsg = data.same_day ? 'same-day' : 'late';
-        showToast('Signal confirmed (' + dayMsg + ') — ' + deltaMsg, 'success');
+        showToast('Difference recorded (' + dayMsg + ') — ' + deltaMsg, 'success');
         // Optimistic: remove from local array immediately so card disappears
         _pendingSignals = _pendingSignals.filter(s => s.signal_id !== signalId);
         _rerenderSignalList();
@@ -1122,7 +1187,7 @@ async function confirmSignal(el, signalId) {
         // if the reload fails the optimistic update already hid the signal.
         loadPendingSignals();
     } catch (e) {
-        showToast('Confirm failed: ' + e.message, 'error');
+        showToast('Recording failed: ' + e.message, 'error');
     } finally {
         if (el) el.disabled = false;
     }
@@ -1141,20 +1206,20 @@ async function skipSignal(el, signalId) {
             const err = await res.json().catch(() => ({}));
             if (res.status === 409 || res.status === 410) {
                 // Already resolved or expired — refresh, don't alarm.
-                showToast(err.detail || 'Signal no longer pending', 'notice');
+                showToast(err.detail || 'Record no longer pending', 'notice');
                 loadPendingSignals();
                 return;
             }
-            showToast(err.detail || 'Skip failed (HTTP ' + res.status + ')', 'error');
+            showToast(err.detail || 'Dismiss failed (HTTP ' + res.status + ')', 'error');
             return;
         }
-        showToast('Signal skipped', 'notice');
+        showToast('Record dismissed', 'notice');
         // Optimistic: remove from local array immediately
         _pendingSignals = _pendingSignals.filter(s => s.signal_id !== signalId);
         _rerenderSignalList();
         loadPendingSignals();
     } catch (e) {
-        showToast('Skip failed: ' + e.message, 'error');
+        showToast('Dismiss failed: ' + e.message, 'error');
     } finally {
         if (el) el.disabled = false;
     }
@@ -1171,7 +1236,7 @@ async function skipAllSignals() {
             });
         } catch (e) { /* continue with next */ }
     }
-    showToast('All signals skipped', 'notice');
+    showToast('All records dismissed', 'notice');
     // Optimistic: clear all locally
     _pendingSignals = [];
     _rerenderSignalList();
@@ -1209,7 +1274,7 @@ async function adjustSignal(el, signalId) {
             const err = await res.json().catch(() => ({}));
             if (res.status === 409 || res.status === 410) {
                 // Already resolved or expired — refresh, don't alarm.
-                showToast(err.detail || 'Signal no longer pending', 'notice');
+                showToast(err.detail || 'Record no longer pending', 'notice');
                 loadPendingSignals();
                 return;
             }
@@ -1413,7 +1478,7 @@ async function loadDisciplineMeter() {
     // they're at 60". Showing the number does most of the work, no friction.
     if (rec) {
         if (data.recent) {
-            rec.textContent = 'last ' + data.recent.resolved + ' signals: '
+            rec.textContent = 'last ' + data.recent.resolved + ' records: '
                 + data.recent.confirmed + ' confirmed ('
                 + Math.round(data.recent.rate * 100) + '%)';
             rec.classList.remove('hidden');
@@ -1428,7 +1493,7 @@ async function loadDisciplineMeter() {
             var sr = data.shock_recent || {};
             pat.textContent = 'Pattern forming: ' + (sr.missed || 0)
                 + ' of your last ' + (sr.resolved || 0)
-                + ' SHOCK signals went unconfirmed. One miss is a normal day \u2014 this is starting to look like a habit.';
+                + ' SHOCK-regime records were not recorded the same day.';
             pat.classList.remove('hidden');
         } else {
             pat.classList.add('hidden');
@@ -1474,7 +1539,7 @@ async function saveDisciplineTarget() {
             return showToast(data.detail || 'Could not save your goal.', 'error');
         }
         showToast('Goal saved: ' + Math.round(tgt * 100)
-            + '% same-day confirms — your number, your friction.', 'success');
+            + '% same-day records — your own goal.', 'success');
         loadDisciplineMeter();
     } catch (e) {
         console.error('[AQMath] discipline target save failed:', e.message);
@@ -1502,7 +1567,7 @@ async function toggleEscOptIn() {
             return showToast(data.detail || 'Could not save.', 'error');
         }
         showToast(on
-            ? 'Active reminders ON — you get a nudge while a signal is still unconfirmed.'
+            ? 'Active reminders ON — you get a notice while a calculated difference is still unrecorded.'
             : 'Active reminders OFF — the meter stays silent; check the app on your own terms.', 'success');
     } catch (e) {
         chk.checked = !on;
@@ -1555,16 +1620,16 @@ function _promptExecutionTime(signalId) {
     overlay.dataset.signalId = signalId;
     overlay.innerHTML =
         '<div class="exec-box">' +
-            '<h4>⏱ execution time</h4>' +
-            '<p>When did you actually execute the trade on the exchange? ' +
+            '<h4>⏱ time of your transaction</h4>' +
+            '<p>At what time did you carry out your own transaction? ' +
             '(optional — improves the timing stats)</p>' +
             '<div class="exec-grid">' + buttons + '</div>' +
             '<div class="exec-custom">' +
-                '<input type="datetime-local" id="execTimeCustom" aria-label="custom execution time">' +
-                '<button class="btn green" onclick="_reportExecTimeCustom()">[ set ]</button>' +
+                '<input type="datetime-local" id="execTimeCustom" aria-label="custom transaction time">' +
+                '<button class="btn green" onclick="_reportExecTimeCustom()">Set</button>' +
             '</div>' +
             '<button class="btn ghost exec-skip" ' +
-            'onclick="document.getElementById(\'execTimePrompt\').classList.add(\'hidden\')">[ skip ]</button>' +
+            'onclick="document.getElementById(\'execTimePrompt\').classList.add(\'hidden\')">Skip</button>' +
         '</div>';
     // Tapping the backdrop dismisses (same as skip).
     overlay.addEventListener('click', e => {
@@ -1591,7 +1656,7 @@ function _reportExecTimeCustom() {
         return;
     }
     if (d.getTime() > Date.now() + 60000) {
-        if (typeof showToast === 'function') showToast('Execution time cannot be in the future', 'warning');
+        if (typeof showToast === 'function') showToast('Time cannot be in the future', 'warning');
         return;
     }
     _reportExecTimeAt(bar.dataset.signalId, d.toISOString());
@@ -1613,9 +1678,9 @@ async function _reportExecTimeAt(signalId, executedAt) {
         });
         if (res && res.ok) {
             console.log('[AQMath] Execution time reported:', signalId, executedAt);
-            if (typeof showToast === 'function') showToast('Execution time saved', 'success');
+            if (typeof showToast === 'function') showToast('Time saved', 'success');
         } else if (typeof showToast === 'function') {
-            showToast('Execution time save failed (HTTP ' + (res ? res.status : '?') + ')', 'warning');
+            showToast('Time save failed (HTTP ' + (res ? res.status : '?') + ')', 'warning');
         }
     } catch (e) {
         console.warn('[AQMath] Execution time report failed:', e.message);
@@ -1718,7 +1783,7 @@ async function _applyUnappliedDeltas() {
             portfolio = portfolio.filter(t => t.amount > 0);
             saveState();
             render();
-            showToast(`${data.applied} signal delta${data.applied > 1 ? 's' : ''} applied — holdings corrected.`, 'success');
+            showToast(`${data.applied} calculated difference${data.applied > 1 ? 's' : ''} recorded — holdings corrected.`, 'success');
         }
     }
 }

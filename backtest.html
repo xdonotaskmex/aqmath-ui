@@ -9,7 +9,7 @@
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free Crypto Backtest Tool — DCA & Shield Strategy | AQMath</title>
-    <meta name="description" content="Free interactive crypto backtest tool: replays years of real daily prices with DCA simulation and crash protection. Compare drawdowns and returns against Buy & Hold on identical terms. No signup required.">
+    <meta name="description" content="Free interactive crypto backtest tool: replays years of real daily prices with DCA simulation and drawdown modelling. Compare drawdowns and returns against Buy & Hold on identical terms. No signup required.">
     <meta name="author" content="AQMath">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://aqmath.xyz/backtest">
@@ -19,20 +19,20 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://aqmath.xyz/backtest">
     <meta property="og:title" content="Free Crypto Backtest Tool — DCA & Shield Strategy | AQMath">
-    <meta property="og:description" content="Free interactive crypto backtest tool: replays years of real daily prices with DCA simulation and crash protection. Compare drawdowns and returns against Buy & Hold on identical terms. No signup required.">
+    <meta property="og:description" content="Free interactive crypto backtest tool: replays years of real daily prices with DCA simulation and drawdown modelling. Compare drawdowns and returns against Buy & Hold on identical terms. No signup required.">
     <meta property="og:site_name" content="AQMath">
     <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
     <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20260721b">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer with Deleverage Shield Crash Protection">
+    <meta property="og:image:alt" content="AQMath — Risk Parity Crypto Portfolio Calculator with Deleverage Shield Drawdown Model">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Free Crypto Backtest Tool — DCA & Shield Strategy | AQMath">
-    <meta name="twitter:description" content="Free interactive crypto backtest tool: replays years of real daily prices with DCA simulation and crash protection. Compare drawdowns and returns against Buy & Hold on identical terms. No signup required.">
+    <meta name="twitter:description" content="Free interactive crypto backtest tool: replays years of real daily prices with DCA simulation and drawdown modelling. Compare drawdowns and returns against Buy & Hold on identical terms. No signup required.">
     <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
-    <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer with Deleverage Shield">
-    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Free Crypto Backtest Tool","url":"https://aqmath.xyz/backtest","description":"Free interactive crypto backtest tool: replays years of real daily prices with DCA simulation and crash protection. Compare strategies against Buy & Hold on identical terms.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":[{"@type":"Offer","name":"Free Access","price":"0","priceCurrency":"USD","description":"Core DCA distribution, live price sync, non-custodial portfolio tracking"},{"@type":"Offer","name":"Black Annual Access","price":"999","priceCurrency":"EUR","description":"Annual subscription — €999/year, paid in USDC or EURC"}],"featureList":["Risk Parity Optimization","Deleverage Modulator Drawdown Protection","DCA Distribution","Non-Custodial Privacy","Continuous Auto De-Risk"],"creator":{"@id":"https://aqmath.xyz/#momir-demirov"}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Backtest","item":"https://aqmath.xyz/backtest"}]}]}</script>
+    <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Calculator with Deleverage Shield">
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Free Crypto Backtest Tool","url":"https://aqmath.xyz/backtest","description":"Free interactive crypto backtest tool: replays years of real daily prices with DCA simulation and drawdown modelling. Compare strategies against Buy & Hold on identical terms.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":[{"@type":"Offer","name":"Free Access","price":"0","priceCurrency":"USD","description":"App and Backtest — free, no account and no key needed: DCA distribution, live price sync, non-custodial portfolio tracking"},{"@type":"Offer","name":"Black Annual Access","price":"999","priceCurrency":"EUR","description":"Black access: annual licence — €999/year, paid in USDC or EURC"}],"featureList":["Risk Parity Optimization","Deleverage Modulator Drawdown Protection","DCA Distribution","Non-Custodial Privacy","Continuous Auto De-Risk"],"creator":{"@id":"https://aqmath.xyz/#momir-demirov"}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Backtest","item":"https://aqmath.xyz/backtest"}]}]}</script>
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -40,9 +40,9 @@
              handshake off the first authenticated request. -->
         <link rel="preconnect" href="https://api-auth.aqmath.xyz" crossorigin>
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
-    <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=b4d391be81">
+    <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/ibm-plex-serif-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/styles.min.css?v=8bf7eb5417">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
 </head>
@@ -53,7 +53,7 @@
      so build_pages.py keeps it on all generated entry pages. -->
 <div class="update-banner hidden" id="updateBanner">
     <span data-i18n="app.update.msg">A new version of AQMath is available - reload to get the latest build.</span>
-    <button type="button" class="update-banner-btn" data-action="reloadApp" data-i18n="app.update.reload">[ reload ]</button>
+    <button type="button" class="update-banner-btn" data-action="reloadApp" data-i18n="app.update.reload">Reload</button>
 </div>
 
 <!-- WHAT'S NEW: shown by app-boot.js once after each version update -->
@@ -64,13 +64,13 @@
             <button type="button" class="whats-new-close" data-action="closeWhatsNew">&times;</button>
         </div>
         <div class="whats-new-body">
-            <p class="whats-new-desc" data-i18n="app.whatsNew.desc">One-Tap Alignment is here. Confirm or adjust portfolio signals straight from the notification &mdash; no extra steps.</p>
+            <p class="whats-new-desc" data-i18n="app.whatsNew.desc">One-Tap Recording is here. Mark a calculated difference as recorded in your holdings, or adjust the amount, straight from the notification &mdash; no extra steps.</p>
             <ul class="whats-new-list">
-                <li data-i18n="app.whatsNew.item1">Confirm, skip or adjust signals in one tap</li>
+                <li data-i18n="app.whatsNew.item1">Record, dismiss or adjust a calculated difference in one tap</li>
                 <li data-i18n="app.whatsNew.item2">Regime-aware alerts (SHOCK / LOW_VOL)</li>
                 <li data-i18n="app.whatsNew.item3">Small fixes &amp; polish</li>
             </ul>
-            <button type="button" class="whats-new-close-btn" data-action="closeWhatsNew" data-i18n="app.whatsNew.close">[ close ]</button>
+            <button type="button" class="whats-new-close-btn" data-action="closeWhatsNew" data-i18n="app.whatsNew.close">Close</button>
         </div>
     </div>
 </div>
@@ -82,15 +82,15 @@
 <div class="lp-pro-modal hidden" id="proModal">
     <div class="lp-pro-box">
         <h3>&#128274; AQMath Black &mdash; Apply for Access</h3>
-        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card, no bank transfer, no personal data collected.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
+        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card and no bank transfer, so we never collect card or bank details.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
         <div class="lp-pro-beta">
             <div class="lp-pro-beta-label">Send a message to request access:</div>
             <div class="lp-pro-beta-links">
-                <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">[ telegram ]</a>
+                <a href="https://t.me/AQMath_Black" target="_blank" rel="noopener">Telegram</a>
                 <span class="lp-pro-beta-sep">&middot;</span>
-                <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">[ twitter ]</a>
+                <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">Twitter</a>
                 <span class="lp-pro-beta-sep">&middot;</span>
-                <a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">[ substack ]</a>
+                <a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">Substack</a>
             </div>
         </div>
         <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;">
@@ -99,7 +99,7 @@
                 Annual Access Only &middot; No Mobile App &middot; Web Application Only
             </div>
         </div>
-        <button class="lp-pro-close" data-action="hideProModal" style="margin-top:12px;">[ Close ]</button>
+        <button class="lp-pro-close" data-action="hideProModal" style="margin-top:12px;">Close</button>
     </div>
 </div>
 
@@ -112,13 +112,13 @@
     <div class="howaq-box">
         <div class="howaq-head">
             <h3>&#128214; How AQMath Works</h3>
-            <button class="howaq-close" data-action="hideHowAqmath" title="close">[ &times; ]</button>
+            <button class="howaq-close" data-action="hideHowAqmath" title="close">&times;</button>
         </div>
         <div class="howaq-body legal-page" id="howAqmathBody">
             <p>Loading&hellip;</p>
         </div>
         <div class="howaq-foot">
-            <button class="btn purple" id="btnHowAck" data-action="ackHowAqmath">[ I have read ]</button>
+            <button class="btn purple" id="btnHowAck" data-action="ackHowAqmath">I have read</button>
         </div>
     </div>
 </div>
@@ -129,7 +129,7 @@
         <div class="toast-title" id="toastTitle"></div>
         <div class="toast-msg" id="toastMsg"></div>
         <div class="toast-actions hidden" id="toastActions"></div>
-        <button class="toast-close" id="toastClose" data-action="hideToast">[ close ]</button>
+        <button class="toast-close" id="toastClose" data-action="hideToast">Close</button>
     </div>
 </div>
 
@@ -143,8 +143,8 @@
         <div class="dca-preview-note hidden" id="dcaPreviewNote"></div>
         <div class="dca-preview-foot hidden" id="dcaPreviewFoot"></div>
         <div class="dca-preview-actions">
-            <button class="btn green" id="dcaPreviewConfirm" data-action="confirmDca" data-i18n="app.dcaPreview.confirm">[ confirm ]</button>
-            <button class="btn" id="dcaPreviewCancel" data-action="cancelDca" data-i18n="app.dcaPreview.cancel">[ cancel ]</button>
+            <button class="btn green" id="dcaPreviewConfirm" data-action="confirmDca" data-i18n="app.dcaPreview.confirm">Confirm</button>
+            <button class="btn" id="dcaPreviewCancel" data-action="cancelDca" data-i18n="app.dcaPreview.cancel">Cancel</button>
         </div>
     </div>
 </div>
@@ -158,7 +158,7 @@
 
 <header class="hdr">
     <div class="logo">
-        <div class="logo-box">AQ</div>
+        <div class="logo-box" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg></div>
         <div>
             <div class="logo-name">AQMath</div>
             <div class="logo-tag">backtesting engine</div>
@@ -167,27 +167,18 @@
     <button class="hdr-burger" type="button" aria-label="Menu" data-action="toggleHamburger">&#9776;</button>
     <div class="hdr-nav">
         <a class="hdr-nav-btn" href="/" data-i18n="app.navLanding">landing</a>
-        <a class="hdr-nav-btn" href="/app" data-i18n="app.navApp">app</a>
         <a class="hdr-nav-btn active" href="/backtest" data-i18n="app.navBacktest">backtest</a>
         <a class="hdr-nav-btn" href="/results" data-i18n="app.navResults">results</a>
         <a class="hdr-nav-btn" href="/v18" data-i18n="app.navV18">proteus</a>
         <a class="hdr-nav-btn" href="/research/" data-i18n="app.navResearch">research</a>
         <a class="hdr-nav-btn" href="/docs" data-i18n="app.navDocs">docs</a>
     </div>
-    <div class="hdr-right">
-        <div class="hdr-socials">
-            <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">telegram</a>
-            <span class="hdr-sep">|</span>
-            <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">twitter</a>
-            <span class="hdr-sep">|</span>
-            <a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener">reddit</a>
-            <span class="hdr-sep">|</span>
-            <a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">substack</a>
-        </div>
+    <div class="hdr-right hdr-lang">
         <div class="lp-lang-wrap">
             <button class="lp-lang-btn" data-lang="en" data-action="lang" data-arg="en">EN</button>
             <button class="lp-lang-btn" data-lang="zh-CN" data-action="lang" data-arg="zh-CN">中文</button>
         </div>
+    <a class="hdr-cta" href="/app" data-i18n="app.openApp">Open App</a>
     </div>
 </header>
 
@@ -197,10 +188,12 @@
          the page's only top-level heading - it is what /backtest ranks on. -->
     <div class="bt-head">
         <div class="bt-kicker">Interactive Production-Engine Backtest</div>
-        <h1 class="bt-title">Backtest the Deleverage Shield on Your Own Data</h1>
-        <p class="bt-intro">Upload your own historical price CSVs for up to five tokens and run the engine that runs your portfolio: <strong>Proteus (v18)</strong>, the vol-scaled adaptive Deleverage Shield, against plain <strong>Buy &amp; Hold</strong>. Both get identical DCA capital on the same schedule, so the only difference you see is the exposure control itself &mdash; how far the shield pulls risk off the table in stress, and what that costs in upside.</p>
-        <p class="bt-intro">Your CSV file never leaves your machine: it is parsed <strong>in your browser</strong>, and only the resulting price series is sent to the engine, where it is processed in-memory and discarded &mdash; never stored, never logged. The run happens on the server because the modulator's parameters stay there and are never shipped to the browser. Results are scored on <strong>risk-adjusted return</strong> (Sharpe and Calmar), not on whether they beat Buy &amp; Hold in raw percent.</p>
-        <div class="rv-v15-notice" data-i18n-html="bt.enginesNotice"><span class="rv-v15-tag">PROTEUS (v18) IS LIVE</span> This tab runs <strong>one engine: Proteus (v18)</strong>, the production shield &mdash; the same volatility-scaled adaptive code path a live portfolio is replayed through every day, with thresholds that auto-tune to both calm large-cap baskets and high-vol alt baskets. The former Aegis (v14) comparison leg is retired from the backtest; v14 still runs in production only as a warm-up fallback for portfolios too young to calibrate the adaptive threshold.</div>
+        <h1 class="bt-title">Backtest the Deleverage Shield on your own data</h1>
+        <p class="bt-intro bt-lead">Upload historical price CSVs for up to five tokens and run Proteus (v18), the volatility-scaled adaptive Deleverage Shield, against plain <strong>Buy &amp; Hold</strong>. Both receive identical DCA capital on the same schedule, so the only difference is the exposure control itself: how far the shield pulls risk off the table in stress, and what that costs in upside.</p>
+        <p class="bt-intro bt-sub">Your CSV is parsed <strong>in your browser</strong>. Only the resulting price series is sent to the engine, where it is processed in memory and discarded &mdash; never stored, never logged. The run happens on the server because the modulator's parameters stay there and are never shipped to the browser. Results are scored on <strong>risk-adjusted return</strong> (Sharpe and Calmar), not on whether they beat Buy &amp; Hold in raw percent.</p>
+    </div>
+    <div class="bt-notices">
+        <div class="rv-v15-notice" data-i18n-html="bt.enginesNotice"><span class="rv-v15-tag">Proteus (v18) is live</span> This tab runs <strong>one engine: Proteus (v18)</strong>, the production shield &mdash; the same volatility-scaled adaptive code path a live portfolio is replayed through every day, with thresholds that auto-tune to both calm large-cap baskets and high-vol alt baskets. The former Aegis (v14) comparison leg is retired from the backtest; v14 still runs in production only as a warm-up fallback for portfolios too young to calibrate the adaptive threshold.</div>
         <p class="sim-notice" data-i18n-html="bt.simNotice"><strong>Hypothetical results.</strong> This page computes a simulation from the price history you upload. A backtest applies a strategy to the past with complete knowledge of how that period turned out &mdash; knowledge nobody had at the time &mdash; and it ignores slippage, spreads and taxes, though it does charge a simulated 0.1% exchange fee on every rebalance, DCA buy and redeployment. Hypothetical and past performance is <strong>not a reliable indicator of future results</strong>. AQMath is software for your own analysis: it is not investment advice, not a recommendation to buy or sell any asset, and it never places orders or holds funds.</p>
     </div>
 
@@ -211,16 +204,95 @@
             <div class="bt-loading-text">Please wait while AQMath calculates...</div>
         </div>
     </div>
-    <!-- INTRO -->
-    <div class="tc bt-card">
-        <div class="tc-bar">
-            <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-            <span class="tc-title">--deleverage-backtesting</span>
-        </div>
-        <div class="tc-body">
-            <div class="bt-explain bt-explain-intro" data-i18n-html="bt.intro">
-                <strong>How it works:</strong> Upload historical price CSVs for your tokens (up to 5). Every run executes the <strong>production engine</strong> &mdash; <strong>Proteus (v18)</strong>, volatility-scaled dynamic thresholds with V-bounce re-entry &mdash; on your basket, capital and DCA schedule, next to <strong>Buy &amp; Hold</strong>, which buys tokens unconditionally and stays fully exposed. The basket follows the same <strong>180-day macro loop</strong> as production &mdash; a KKT risk-parity re-optimisation every 180 days on the trailing 180-day window. Both legs charge the same simulated fees and redeploy parked DCA cash the same way, and results are scored on <strong>risk-adjusted return (Sharpe and Calmar)</strong>, not on beating Buy &amp; Hold.
+    <!-- PRICE DATA + SETTINGS -->
+    <div class="bt-two">
+        <section class="bt-pricedata">
+            <h2 class="bt-h2">1. Price data</h2>
+            <div class="bt-explain bt-explain-sm" data-i18n-html="bt.csvFormat">
+                <strong>CSV format:</strong> Header with date column (<code>event_date</code>/<code>date</code>/<code>Date</code>) + price column (<code>close_price_usd</code>/<code>Close</code>/<code>price</code>). Equal-weighted portfolio.
             </div>
+            <div class="bt-upload-grid">
+                <div class="bt-upload-slot" data-slot="0"><div class="bt-slot-sym">Token 1</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="0">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="0"></div>
+                <div class="bt-upload-slot" data-slot="1"><div class="bt-slot-sym">Token 2</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="1">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="1"></div>
+                <div class="bt-upload-slot" data-slot="2"><div class="bt-slot-sym">Token 3</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="2">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="2"></div>
+                <div class="bt-upload-slot" data-slot="3"><div class="bt-slot-sym">Token 4</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="3">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="3"></div>
+                <div class="bt-upload-slot" data-slot="4"><div class="bt-slot-sym">Token 5</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="4">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="4"></div>
+            </div>
+        </section>
+        <aside class="bt-settings">
+            <h2 class="bt-h2">2. Settings</h2>
+            <div class="bt-settings-grid">
+                <div class="bt-setting"><label for="btStartCapital">Start capital ($)</label><input type="number" id="btStartCapital" value="1000" step="100" min="100" max="1000000"></div>
+                <div class="bt-setting"><label for="btDcaAmount">DCA amount ($)</label><input type="number" id="btDcaAmount" value="100" step="50" min="0" max="100000"><div class="bt-hint">Set to 0 for a one-time lump-sum start.</div></div>
+                <div class="bt-setting"><label for="btDcaInterval">DCA interval (days)</label><input type="number" id="btDcaInterval" value="30" min="7" max="90"></div>
+            </div>
+            <div class="bt-controls">
+                <button class="btn blue" id="btRunBtn" data-action="btRunBacktest" disabled>Run backtest</button>
+                <button class="btn red" data-action="btResetAll">Reset</button>
+            </div>
+            <div id="btLoadStatus" class="bt-loadstatus"></div>
+            <div id="btStatusBar" class="bt-status"></div>
+        </aside>
+    </div>
+
+
+    <!-- RESULTS -->
+    <div id="btResultsSection" class="hidden">
+        <h2 class="bt-h2 bt-results-h">Results</h2>
+        <div class="tc bt-card">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title">Strategy comparison</span>
+            </div>
+            <div class="tc-body">
+                <div class="bt-explain bt-explain-sm" id="btCompareExplain"></div>
+                <div class="bt-strategy-row" id="btStrategyRow"></div>
+                <div id="btCompareTable" style="overflow-x:auto;margin-top:14px"></div>
+            </div>
+        </div>
+
+        <div class="tc bt-card">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title">Deleverage metrics</span>
+            </div>
+            <div class="tc-body">
+                <div class="bt-explain bt-explain-sm" id="btSummaryExplain"></div>
+                <div class="bt-metrics-grid" id="btMetricsGrid"></div>
+            </div>
+        </div>
+
+        <div class="bt-chart-pair">
+        <div class="tc bt-card">
+            <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">Equity curves</span></div>
+            <div class="tc-body"><div class="bt-chart-wrap"><canvas id="btEquityChart"></canvas></div></div>
+        </div>
+        <div class="tc bt-card">
+            <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">Shield exposure</span></div>
+            <div class="tc-body"><div class="bt-chart-wrap"><canvas id="btExposureChart"></canvas></div></div>
+        </div>
+        </div>
+        <div class="tc bt-card">
+            <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">Capital breakdown</span></div>
+            <div class="tc-body"><div class="bt-chart-wrap"><canvas id="btCapitalChart"></canvas></div></div>
+        </div>
+
+        <div class="tc bt-card">
+            <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">Event log</span></div>
+            <div class="tc-body" style="padding:0;">
+                <div class="bt-explain bt-explain-sm" style="margin:12px 16px 0;"><span style="color:var(--blue);font-weight:700">DCA</span> (blue) = periodic contribution &mdash; allocated to tokens when exposure is high, to USDC while the Shield status is active (exposure &lt; 40%) | <span style="color:var(--green);font-weight:600">REDEPLOY</span> (green) = the USDC allocation returns to tokens once exposure recovers &ge; 40%. Every row is the production Proteus (v18) engine.
+                </div>
+                <div style="max-height:400px;overflow-y:auto;padding:0 16px 16px;">
+                    <table class="bt-events-table" id="btEventsTable">
+                        <thead><tr><th>Date</th><th>Day</th><th>Event</th><th>Exposure</th><th>USDC</th><th>Detail</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bt-flowcard">
             <!-- Proteus (v18) vol-scaled adaptive modulator flow -->
             <svg class="bt-flow-svg" viewBox="0 0 900 148" role="img" aria-label="Proteus v18 volatility-scaled adaptive modulator flow" preserveAspectRatio="xMidYMid meet">
                 <defs>
@@ -258,122 +330,30 @@
                 <text x="450" y="22" class="bt-flow-title">vol-scaled adaptive modulator · Proteus v18</text>
                 <text x="450" y="40" class="bt-flow-sub">no indicators · no timers · no correlation gate</text>
             </svg>
-        </div>
     </div>
 
-    <!-- CSV UPLOAD -->
-    <div class="tc bt-card">
-        <div class="tc-bar">
-            <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-            <span class="tc-title">--price-data</span>
-        </div>
-        <div class="tc-body">
-            <div class="bt-explain bt-explain-sm" data-i18n-html="bt.csvFormat">
-                <strong>CSV format:</strong> Header with date column (<code>event_date</code>/<code>date</code>/<code>Date</code>) + price column (<code>close_price_usd</code>/<code>Close</code>/<code>price</code>). Equal-weighted portfolio.
+    <!-- HOW IT WORKS + CHANGELOG -->
+    <div class="bt-bottom">
+        <section class="bt-how">
+            <h2 class="bt-h2">How it works</h2>
+            <div class="bt-explain bt-explain-intro" data-i18n-html="bt.intro">
+                Upload historical price CSVs for your tokens (up to 5). Every run executes the <strong>production engine</strong> &mdash; <strong>Proteus (v18)</strong>, volatility-scaled dynamic thresholds with V-bounce re-entry &mdash; on your basket, capital and DCA schedule, next to <strong>Buy &amp; Hold</strong>, which buys tokens unconditionally and stays fully exposed. The basket follows the same <strong>180-day macro loop</strong> as production &mdash; a KKT risk-parity re-optimisation every 180 days on the trailing 180-day window. Both legs charge the same simulated fees and redeploy parked DCA cash the same way, and results are scored on <strong>risk-adjusted return (Sharpe and Calmar)</strong>, not on beating Buy &amp; Hold.
             </div>
-            <div class="bt-upload-grid">
-                <div class="bt-upload-slot" data-slot="0"><div class="bt-slot-sym">Token 1</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="0">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="0"></div>
-                <div class="bt-upload-slot" data-slot="1"><div class="bt-slot-sym">Token 2</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="1">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="1"></div>
-                <div class="bt-upload-slot" data-slot="2"><div class="bt-slot-sym">Token 3</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="2">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="2"></div>
-                <div class="bt-upload-slot" data-slot="3"><div class="bt-slot-sym">Token 4</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="3">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="3"></div>
-                <div class="bt-upload-slot" data-slot="4"><div class="bt-slot-sym">Token 5</div><div class="bt-slot-info">Drop CSV or click</div><button class="bt-remove-btn" data-action="btRemoveSlot" data-arg="4">&times;</button><input type="file" accept=".csv" data-change="btHandleFile" data-arg="4"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- SETTINGS -->
-    <div class="tc bt-card">
-        <div class="tc-bar">
-            <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-            <span class="tc-title">--backtest-settings</span>
-        </div>
-        <div class="tc-body">
-            <div class="bt-settings-grid">
-                <div class="bt-setting"><label>Start Capital ($)</label><input type="number" id="btStartCapital" value="1000" step="100" min="100" max="1000000"></div>
-                <div class="bt-setting"><label>DCA Amount ($)</label><input type="number" id="btDcaAmount" value="100" step="50" min="0" max="100000"></div>
-                <div class="bt-setting"><label>DCA Interval (days)</label><input type="number" id="btDcaInterval" value="30" min="7" max="90"></div>
-            </div>
-            <div class="bt-controls">
-                <button class="btn blue" id="btRunBtn" data-action="btRunBacktest" disabled>Run Backtest</button>
-                <button class="btn red" data-action="btResetAll">Reset All</button>
-                <span id="btLoadStatus" style="font-size:.8rem;color:var(--muted)"></span>
-            </div>
-        </div>
-    </div>
-
-    <div id="btStatusBar" class="bt-status"></div>
-
-    <!-- RESULTS -->
-    <div id="btResultsSection" class="hidden">
-        <div class="tc bt-card">
-            <div class="tc-bar">
-                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title">--strategy-comparison</span>
-            </div>
-            <div class="tc-body">
-                <div class="bt-explain bt-explain-sm" id="btCompareExplain"></div>
-                <div class="bt-strategy-row" id="btStrategyRow"></div>
-                <div id="btCompareTable" style="overflow-x:auto;margin-top:14px"></div>
-            </div>
-        </div>
-
-        <div class="tc bt-card">
-            <div class="tc-bar">
-                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title">--deleverage-metrics</span>
-            </div>
-            <div class="tc-body">
-                <div class="bt-explain bt-explain-sm" id="btSummaryExplain"></div>
-                <div class="bt-metrics-grid" id="btMetricsGrid"></div>
-            </div>
-        </div>
-
-        <div class="tc bt-card">
-            <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--equity-curves</span></div>
-            <div class="tc-body"><div class="bt-chart-wrap"><canvas id="btEquityChart"></canvas></div></div>
-        </div>
-
-        <div class="tc bt-card">
-            <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--capital-breakdown</span></div>
-            <div class="tc-body"><div class="bt-chart-wrap"><canvas id="btCapitalChart"></canvas></div></div>
-        </div>
-
-        <div class="tc bt-card">
-            <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--shield-exposure</span></div>
-            <div class="tc-body"><div class="bt-chart-wrap"><canvas id="btExposureChart"></canvas></div></div>
-        </div>
-
-        <div class="tc bt-card">
-            <div class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">--event-log</span></div>
-            <div class="tc-body" style="padding:0;">
-                <div class="bt-explain bt-explain-sm" style="margin:12px 16px 0;"><span style="color:var(--blue);font-weight:700">DCA</span> (cyan) = periodic contribution &mdash; buys tokens when risk-on, parks to USDC when defensive (exposure &lt; 40%) | <span style="color:var(--green);font-weight:600">REDEPLOY</span> (green) = parked cash returns to tokens once exposure recovers &ge; 40%. Every row is the production Proteus (v18) engine.
-                </div>
-                <div style="max-height:400px;overflow-y:auto;padding:0 16px 16px;">
-                    <table class="bt-events-table" id="btEventsTable">
-                        <thead><tr><th>Date</th><th>Day</th><th>Event</th><th>Exposure</th><th>USDC</th><th>Detail</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CHANGELOG -->
-    <div class="tc bt-card">
-        <div class="tc-bar">
-            <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-            <span class="tc-title">--changelog</span>
-        </div>
-        <div class="tc-body">
-            <div class="bt-explain bt-explain-sm" data-i18n-html="bt.changelogIntro"></div>
-            <ul class="bt-changelog" data-i18n-html="bt.changelog"></ul>
-        </div>
+        </section>
+        <section class="bt-log">
+            <h2 class="bt-h2">Engine change log</h2>
+            <details class="bt-details">
+                <summary>Dated record of engine updates, click to expand</summary>
+                <div class="bt-explain bt-explain-sm" data-i18n-html="bt.changelogIntro"></div>
+                <ul class="bt-changelog" data-i18n-html="bt.changelog"></ul>
+            </details>
+        </section>
     </div>
 
 </div><!-- /bt-main -->
 
 <footer class="footer">
-    <div class="logo-box-mini">AQ</div>
+    <div class="logo-box-mini" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg></div>
     <span>AQMath 2026</span>
     <span style="margin-left:12px;color:var(--dim);">|</span>
     <span>Backtesting Engine · Proteus v18 (production)</span>
@@ -393,15 +373,25 @@
 <!-- ============ GLOBAL LEGAL FOOTER ============
      Outside every view container, so it renders on all five routes
      (/, /app, /backtest, /results, /docs) and stays crawlable. -->
-<footer class="site-footer">
-    <span data-i18n="ft.copy">&copy; 2026 AQMath &mdash; Private. Non-Custodial.</span><br>
-    <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
+<footer class="site-footer sf2">
+    <div class="sf2-in">
+        <div class="sf2-top">
+            <a class="sf2-logo" href="/"><svg width="26" height="26" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg><span>AQMath</span></a>
+            <div class="sf2-soc"><a href="https://t.me/AQMath_Black" target="_blank" rel="noopener" aria-label="Telegram (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.4 3.6 2.9 10.8c-.9.4-.9 1.1-.2 1.3l4.7 1.5 1.8 5.6c.2.6.4.8.8.8.4 0 .6-.2.9-.4l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8L22.9 5c.3-1.2-.4-1.8-1.5-1.4zM8.6 13.1l9.5-6c.4-.3.8-.1.5.2l-7.9 7.1-.3 3.3-1.8-4.6z"/></svg><span>Telegram</span></a><a href="https://x.com/aqmathapp" target="_blank" rel="noopener" aria-label="X (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg><span>X</span></a><a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener" aria-label="Reddit (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="14" rx="7.5" ry="5.2"/><path d="M12 8.8l1.2-4.3 4 .9"/><path d="M9.4 16.6c1.6 1 3.6 1 5.2 0"/></g><g fill="currentColor"><circle cx="9.3" cy="13.2" r="1.2"/><circle cx="14.7" cy="13.2" r="1.2"/><circle cx="18" cy="5.6" r="1.4"/></g></svg><span>Reddit</span></a><a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener" aria-label="Substack (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M4 4h16v2.6H4zM4 8.8h16v2.6H4zM4 13.6h16V21l-8-4.4L4 21z"/></svg><span>Substack</span></a></div>
+        </div>
+        <div class="sf2-bot">
+            <div data-i18n="ft.copy">&copy; 2026 AQMath &mdash; Non-custodial. An analytical web application, not a trading bot.</div>
+            <div class="sf2-legal">
+                <a href="/about" data-i18n="ft.about">About</a><a href="/research/" data-i18n="ft.research">Research</a><a href="/impressum" data-i18n="ft.impressum">Impressum</a><a href="/privacy" data-i18n="ft.privacy">Privacy</a><a href="/terms" data-i18n="ft.terms">Terms</a><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
+            </div>
+        </div>
+    </div>
 </footer>
 
-<script defer src="/app-widgets.js?v=b4d391be81"></script>
-<script defer src="/app-backtest.js?v=b4d391be81"></script>
-<script defer src="/app.js?v=b4d391be81"></script>
-<script defer src="/app-notify.js?v=b4d391be81"></script>
+<script defer src="/app-widgets.js?v=8bf7eb5417"></script>
+<script defer src="/app-backtest.js?v=8bf7eb5417"></script>
+<script defer src="/app.js?v=8bf7eb5417"></script>
+<script defer src="/app-notify.js?v=8bf7eb5417"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -415,11 +405,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=b4d391be81"></script>
+<script defer src="/vendor/i18next.min.js?v=8bf7eb5417"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=b4d391be81"></script>
-<script defer src="/app-boot.js?v=b4d391be81"></script>
+<script defer src="/app-tour.js?v=8bf7eb5417"></script>
+<script defer src="/app-boot.js?v=8bf7eb5417"></script>
 
 </body>
 </html>

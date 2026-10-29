@@ -34,7 +34,7 @@ def main():
             print("  ", k)
 
     html = io.open(os.path.join(BASE, "_src", "index.html"), encoding="utf-8").read()
-    used = set(re.findall(r'data-i18n(?:-html|-placeholder)?="([^"]+)"', html))
+    used = set(re.findall(r'data-i18n(?:-html|-placeholder|-alt)?="([^"]+)"', html))
     missing_en = sorted(k for k in used if k not in en)
     missing_zh = sorted(k for k in used if k not in zh)
     if missing_en:

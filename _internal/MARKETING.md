@@ -15,7 +15,7 @@
 | **Twitter/X** | [@aqmathapp](https://x.com/aqmathapp) | Short insights, charts, threads linking to Substack |
 | **Reddit** | [/u/weaforex](https://www.reddit.com/user/weaforex/) | Community discussion, AMAs, crossposts to crypto subs |
 | Website | https://aqmath.xyz | Product (beta-gated) |
-| Telegram | @DoNotAskMex | Direct contact (not a marketing channel) |
+| Telegram | @AQMath_Black | Direct contact (not a marketing channel) |
 
 ---
 

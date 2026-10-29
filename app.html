@@ -26,13 +26,13 @@
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer with Deleverage Shield Crash Protection">
+    <meta property="og:image:alt" content="AQMath — Risk Parity Crypto Portfolio Calculator with Deleverage Shield Drawdown Model">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="App — AQMath Crypto Portfolio Optimizer">
     <meta name="twitter:description" content="The AQMath app: track your portfolio, distribute DCA and optimize with Risk Parity math — non-custodial, private, no account needed.">
     <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20260721b">
-    <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Rebalancer with Deleverage Shield">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"AQMath","url":"https://aqmath.xyz","description":"Quantitative crypto portfolio rebalancer with Deleverage Modulator drawdown protection. Risk Parity mathematics, DCA optimization, and automatic de-risking during market crashes.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":[{"@type":"Offer","name":"Free Access","price":"0","priceCurrency":"USD","description":"Core DCA distribution, live price sync, non-custodial portfolio tracking"},{"@type":"Offer","name":"Black Annual Access","price":"999","priceCurrency":"EUR","description":"Annual subscription — €999/year, paid in USDC or EURC"}],"featureList":["Risk Parity Optimization","Deleverage Modulator Drawdown Protection","DCA Distribution","Non-Custodial Privacy","Continuous Auto De-Risk"],"creator":{"@id":"https://aqmath.xyz/#momir-demirov"}}</script>
+    <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Calculator with Deleverage Shield">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"AQMath","url":"https://aqmath.xyz","description":"Quantitative crypto portfolio calculator with Deleverage Modulator drawdown protection. Risk Parity mathematics, DCA optimization, and automatic de-risking during market crashes.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":[{"@type":"Offer","name":"Free Access","price":"0","priceCurrency":"USD","description":"App and Backtest — free, no account and no key needed: DCA distribution, live price sync, non-custodial portfolio tracking"},{"@type":"Offer","name":"Black Annual Access","price":"999","priceCurrency":"EUR","description":"Black access: annual licence — €999/year, paid in USDC or EURC"}],"featureList":["Risk Parity Optimization","Deleverage Modulator Drawdown Protection","DCA Distribution","Non-Custodial Privacy","Continuous Auto De-Risk"],"creator":{"@id":"https://aqmath.xyz/#momir-demirov"}}</script>
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -40,9 +40,9 @@
              handshake off the first authenticated request. -->
         <link rel="preconnect" href="https://api-auth.aqmath.xyz" crossorigin>
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
-    <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=b4d391be81">
+    <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/ibm-plex-serif-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/styles.min.css?v=8bf7eb5417">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
 </head>
@@ -53,7 +53,7 @@
      so build_pages.py keeps it on all generated entry pages. -->
 <div class="update-banner hidden" id="updateBanner">
     <span data-i18n="app.update.msg">A new version of AQMath is available - reload to get the latest build.</span>
-    <button type="button" class="update-banner-btn" data-action="reloadApp" data-i18n="app.update.reload">[ reload ]</button>
+    <button type="button" class="update-banner-btn" data-action="reloadApp" data-i18n="app.update.reload">Reload</button>
 </div>
 
 <!-- WHAT'S NEW: shown by app-boot.js once after each version update -->
@@ -64,13 +64,13 @@
             <button type="button" class="whats-new-close" data-action="closeWhatsNew">&times;</button>
         </div>
         <div class="whats-new-body">
-            <p class="whats-new-desc" data-i18n="app.whatsNew.desc">One-Tap Alignment is here. Confirm or adjust portfolio signals straight from the notification &mdash; no extra steps.</p>
+            <p class="whats-new-desc" data-i18n="app.whatsNew.desc">One-Tap Recording is here. Mark a calculated difference as recorded in your holdings, or adjust the amount, straight from the notification &mdash; no extra steps.</p>
             <ul class="whats-new-list">
-                <li data-i18n="app.whatsNew.item1">Confirm, skip or adjust signals in one tap</li>
+                <li data-i18n="app.whatsNew.item1">Record, dismiss or adjust a calculated difference in one tap</li>
                 <li data-i18n="app.whatsNew.item2">Regime-aware alerts (SHOCK / LOW_VOL)</li>
                 <li data-i18n="app.whatsNew.item3">Small fixes &amp; polish</li>
             </ul>
-            <button type="button" class="whats-new-close-btn" data-action="closeWhatsNew" data-i18n="app.whatsNew.close">[ close ]</button>
+            <button type="button" class="whats-new-close-btn" data-action="closeWhatsNew" data-i18n="app.whatsNew.close">Close</button>
         </div>
     </div>
 </div>
@@ -82,15 +82,15 @@
 <div class="lp-pro-modal hidden" id="proModal">
     <div class="lp-pro-box">
         <h3>&#128274; AQMath Black &mdash; Apply for Access</h3>
-        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card, no bank transfer, no personal data collected.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
+        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card and no bank transfer, so we never collect card or bank details.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
         <div class="lp-pro-beta">
             <div class="lp-pro-beta-label">Send a message to request access:</div>
             <div class="lp-pro-beta-links">
-                <a href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">[ telegram ]</a>
+                <a href="https://t.me/AQMath_Black" target="_blank" rel="noopener">Telegram</a>
                 <span class="lp-pro-beta-sep">&middot;</span>
-                <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">[ twitter ]</a>
+                <a href="https://x.com/aqmathapp" target="_blank" rel="noopener">Twitter</a>
                 <span class="lp-pro-beta-sep">&middot;</span>
-                <a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">[ substack ]</a>
+                <a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">Substack</a>
             </div>
         </div>
         <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;">
@@ -99,7 +99,7 @@
                 Annual Access Only &middot; No Mobile App &middot; Web Application Only
             </div>
         </div>
-        <button class="lp-pro-close" data-action="hideProModal" style="margin-top:12px;">[ Close ]</button>
+        <button class="lp-pro-close" data-action="hideProModal" style="margin-top:12px;">Close</button>
     </div>
 </div>
 
@@ -112,13 +112,13 @@
     <div class="howaq-box">
         <div class="howaq-head">
             <h3>&#128214; How AQMath Works</h3>
-            <button class="howaq-close" data-action="hideHowAqmath" title="close">[ &times; ]</button>
+            <button class="howaq-close" data-action="hideHowAqmath" title="close">&times;</button>
         </div>
         <div class="howaq-body legal-page" id="howAqmathBody">
             <p>Loading&hellip;</p>
         </div>
         <div class="howaq-foot">
-            <button class="btn purple" id="btnHowAck" data-action="ackHowAqmath">[ I have read ]</button>
+            <button class="btn purple" id="btnHowAck" data-action="ackHowAqmath">I have read</button>
         </div>
     </div>
 </div>
@@ -129,7 +129,7 @@
         <div class="toast-title" id="toastTitle"></div>
         <div class="toast-msg" id="toastMsg"></div>
         <div class="toast-actions hidden" id="toastActions"></div>
-        <button class="toast-close" id="toastClose" data-action="hideToast">[ close ]</button>
+        <button class="toast-close" id="toastClose" data-action="hideToast">Close</button>
     </div>
 </div>
 
@@ -143,8 +143,8 @@
         <div class="dca-preview-note hidden" id="dcaPreviewNote"></div>
         <div class="dca-preview-foot hidden" id="dcaPreviewFoot"></div>
         <div class="dca-preview-actions">
-            <button class="btn green" id="dcaPreviewConfirm" data-action="confirmDca" data-i18n="app.dcaPreview.confirm">[ confirm ]</button>
-            <button class="btn" id="dcaPreviewCancel" data-action="cancelDca" data-i18n="app.dcaPreview.cancel">[ cancel ]</button>
+            <button class="btn green" id="dcaPreviewConfirm" data-action="confirmDca" data-i18n="app.dcaPreview.confirm">Confirm</button>
+            <button class="btn" id="dcaPreviewCancel" data-action="cancelDca" data-i18n="app.dcaPreview.cancel">Cancel</button>
         </div>
     </div>
 </div>
@@ -159,9 +159,9 @@
 <div class="mobile-gate">
     <div class="mobile-gate-box">
         <div class="mobile-gate-icon">&#128187;</div>
-        <div class="mobile-gate-title" data-i18n="app.mobileGate.title">--desktop-only</div>
-        <p class="mobile-gate-msg" data-i18n-html="app.mobileGate.msg">The AQMath App is a <strong>web-only</strong> experience built for desktop browsers. Charts, tables and the rebalancing engine need a bigger screen.<br><br>Please open <span class="mono">/app</span> on a computer.</p>
-        <a class="mobile-gate-home" href="/" data-i18n="app.mobileGate.home">[ back to landing ]</a>
+        <div class="mobile-gate-title" data-i18n="app.mobileGate.title">Desktop only</div>
+        <p class="mobile-gate-msg" data-i18n-html="app.mobileGate.msg">The AQMath App is a <strong>web-only</strong> experience built for desktop browsers. Charts, tables and the calculation engine need a bigger screen.<br><br>Please open <span class="mono">/app</span> on a computer.</p>
+        <a class="mobile-gate-home" href="/" data-i18n="app.mobileGate.home">Back to landing</a>
     </div>
 </div>
 
@@ -173,7 +173,7 @@
 
 <header class="hdr">
     <div class="logo">
-        <div class="logo-box">AQ</div>
+        <div class="logo-box" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg></div>
         <div>
             <div class="logo-name">AQMath</div>
             <div class="logo-tag" data-i18n="app.logoTag">non-custodial • quantum engine</div>
@@ -182,28 +182,38 @@
     <button class="hdr-burger" type="button" aria-label="Menu" data-action="toggleHamburger">&#9776;</button>
     <div class="hdr-nav">
         <a class="hdr-nav-btn" href="/" data-i18n="app.navLanding">landing</a>
-        <a class="hdr-nav-btn active" href="/app" data-i18n="app.navApp">app</a>
         <a class="hdr-nav-btn" href="/backtest" data-i18n="app.navBacktest">backtest</a>
         <a class="hdr-nav-btn" href="/results" data-i18n="app.navResults">results</a>
         <a class="hdr-nav-btn" href="/v18" data-i18n="app.navV18">proteus</a>
         <a class="hdr-nav-btn" href="/research/" data-i18n="app.navResearch">research</a>
         <a class="hdr-nav-btn" href="/docs" data-i18n="app.navDocs">docs</a>
     </div>
-    <div class="hdr-right">
-        <button class="hdr-btn" id="btnSyncAll" data-action="osvjeziSveCijene" data-i18n="app.sync">SYNC</button>
-        <button class="hdr-btn c-amber" data-action="clickEl" data-arg="csvFile" data-i18n="app.csvImport">CSV IMPORT</button>
-        <input type="file" id="csvFile" accept=".csv" style="display:none" data-change="importCSV">
-        <button class="hdr-btn c-amber" data-action="exportJSON" data-i18n="app.export">EXPORT</button>
-        <button class="hdr-btn c-green" data-action="clickEl" data-arg="importFile" data-i18n="app.import">IMPORT</button>
-        <input type="file" id="importFile" accept=".json" style="display:none" data-change="importJSON">
-        <button class="hdr-btn c-red" data-action="obrisiSve" data-i18n="app.reset">RESET</button>
+    <div class="hdr-right hdr-lang">
+        <div class="lp-lang-wrap">
+            <button class="lp-lang-btn" data-lang="en" data-action="lang" data-arg="en">EN</button>
+            <button class="lp-lang-btn" data-lang="zh-CN" data-action="lang" data-arg="zh-CN">中文</button>
+        </div>
     </div>
 </header>
 
-<!-- /app is noindex (paid, closed tool), so this heading exists for assistive
-     tech and document structure, not for search. Kept visually hidden so the
-     app's dense terminal layout is unchanged. -->
-<h1 class="sr-only" data-i18n="app.heading">AQMath Portfolio Rebalancer</h1>
+
+<div class="lp-ticker" id="priceTicker"><div class="lp-ticker-track"><div class="lp-ticker-item"><span class="lp-ticker-sym">BTC</span><span class="lp-ticker-price">---</span><span class="lp-ticker-change">--</span></div></div></div>
+
+<div class="app-head">
+    <div class="app-head-l">
+        <div class="app-eyebrow" data-i18n="app.eyebrow">Your portfolio &middot; stored on this device</div>
+        <h1 class="app-h1" data-i18n="app.heading">Portfolio Calculator</h1>
+    </div>
+    <div class="hdr-right app-toolbar">
+            <button class="hdr-btn" id="btnSyncAll" data-action="osvjeziSveCijene" data-i18n="app.sync">SYNC</button>
+            <button class="hdr-btn c-amber" data-action="clickEl" data-arg="csvFile" data-i18n="app.csvImport">CSV IMPORT</button>
+            <input type="file" id="csvFile" accept=".csv" style="display:none" data-change="importCSV">
+            <button class="hdr-btn c-amber" data-action="exportJSON" data-i18n="app.export">EXPORT</button>
+            <button class="hdr-btn c-green" data-action="clickEl" data-arg="importFile" data-i18n="app.import">IMPORT</button>
+            <input type="file" id="importFile" accept=".json" style="display:none" data-change="importJSON">
+            <button class="hdr-btn c-red" data-action="obrisiSve" data-i18n="app.reset">RESET</button>
+    </div>
+</div>
 
 <div class="main">
     <aside class="sidebar">
@@ -211,7 +221,7 @@
         <div class="tc beta-active-card beta-card hidden" id="betaActive">
             <div class="tc-bar">
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title" data-i18n="app.betaAccess">--beta-access</span>
+                <span class="tc-title" data-i18n="app.betaAccess">Black access</span>
             </div>
             <div class="tc-body">
                 <div class="beta-active-row">
@@ -229,7 +239,7 @@
         <div class="tc beta-card" id="betaSection">
             <div class="tc-bar">
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title" data-i18n="app.betaAccess">--beta-access</span>
+                <span class="tc-title" data-i18n="app.betaAccess">Black access</span>
             </div>
             <div class="tc-body" style="text-align:center;">
                 <div class="beta-active-row" style="margin-bottom:10px;">
@@ -242,7 +252,7 @@
                 <button class="btn purple" id="btnBeta" data-action="activateBeta" data-i18n="app.activateBeta">Activate Black</button>
                 <div class="beta-hint" data-i18n="app.betaHint">unlocks pipeline prices, CSV parsing & engine</div>
                 <div class="beta-links">
-                    <a class="beta-link" href="https://t.me/DoNotAskMex" target="_blank" rel="noopener">telegram</a>
+                    <a class="beta-link" href="https://t.me/AQMath_Black" target="_blank" rel="noopener">telegram</a>
                     <a class="beta-link" href="https://x.com/aqmathapp" target="_blank" rel="noopener">twitter</a>
                     <a class="beta-link" href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener">substack</a>
                 </div>
@@ -254,7 +264,7 @@
         <div class="tc signal-card hidden" id="signalCard">
             <div class="tc-bar">
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title" data-i18n="app.pendingSignals">--pending-signals</span>
+                <span class="tc-title" data-i18n="app.pendingSignals">Pending calculations</span>
                 <span class="tc-right">
                     <span class="signal-stats-badge hidden" id="signalStatsBadge"></span>
                 </span>
@@ -264,9 +274,9 @@
                     <!-- Populated dynamically by app-notify.js: one block per pending signal -->
                 </div>
                 <div class="signal-actions hidden" id="signalBulkActions">
-                    <button class="btn ghost" data-action="skipAllSignals">[ skip all ]</button>
+                    <button class="btn ghost" data-action="skipAllSignals">Skip all</button>
                 </div>
-                <div class="signal-empty hidden" id="signalEmpty">no pending signals</div>
+                <div class="signal-empty hidden" id="signalEmpty">no pending calculations</div>
             </div>
         </div>
 
@@ -274,18 +284,26 @@
         <div class="tc shield-card">
             <div class="tc-bar">
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title" data-i18n="app.shieldSignals">--shield-signals</span>
+                <span class="tc-title" data-i18n="app.shieldSignals">Shield calculations</span>
             </div>
             <div class="tc-body">
                 <div class="shield-status" id="shieldStatus">not initialized &mdash; sync your portfolio below</div>
-                <button class="btn amber" id="btnShieldSync" data-action="syncShieldPortfolio">[ sync to shield ]</button>
-                <div class="beta-hint" id="shieldSyncHint">saves your holdings &amp; freezes your KKT weights on first sync. daily-close signals run automatically &mdash; you execute every trade yourself.</div>
+                <button class="btn amber" id="btnShieldSync" data-action="syncShieldPortfolio">Sync to shield</button>
+                <div class="beta-hint" id="shieldSyncHint">saves your holdings &amp; freezes your KKT weights on first sync. the daily calculations then run automatically on the server. AQMath places no orders; any transaction is entirely your own.</div>
 
+            </div>
+        </div>
+
+        <div class="tc dca-card">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title">Mode &amp; DCA</span>
+            </div>
+            <div class="tc-body">
                 <div class="dca-sec">
-                    <div class="ntfy-title">mode &amp; DCA</div>
                     <label class="ntfy-consent">
                         <input type="checkbox" id="chkDeleverage" checked>
-                        <span><strong>Deleverage Shield (full mode)</strong> &mdash; the daily loop runs exactly as programmed: shield-modulated weights, USDC routing and DCA on schedule. Switch OFF only for plain drift-rebalance signals without the shield &mdash; the two modes never mix.</span>
+                        <span><strong>Deleverage Shield (full mode)</strong> &mdash; the daily calculation loop runs exactly as programmed: shield-modulated weights, USDC allocation and DCA on schedule. Switch OFF only for plain weight-deviation calculations without the shield &mdash; the two modes never mix.</span>
                     </label>
                     <div class="fg-row">
                         <div class="fg">
@@ -297,20 +315,28 @@
                             <input type="number" id="numDcaInterval" min="1" max="365" value="30">
                         </div>
                     </div>
-                    <button class="btn amber" id="btnShieldSettings" data-action="saveShieldSettings">[ save mode &amp; DCA ]</button>
+                    <button class="btn amber" id="btnShieldSettings" data-action="saveShieldSettings">Save mode &amp; DCA</button>
                     <div class="beta-hint" id="dcaHint">on every DCA date you get a notice whether the contribution goes to USDC (shield defensive) or into which tokens.</div>
                 </div>
 
+            </div>
+        </div>
+
+        <div class="tc ntfy-card">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title">Notifications</span>
+            </div>
+            <div class="tc-body">
                 <div class="ntfy-sec">
-                    <div class="ntfy-title">notifications</div>
                     <div class="ntfy-status" id="ntfyStatus"><span class="ntfy-dot off"></span>not connected</div>
 
                     <div id="ntfyOff">
                         <label class="ntfy-consent">
                             <input type="checkbox" id="chkNtfyConsent">
-                            <span>I consent to my holdings being processed to generate personal signals and to receiving push notifications on our first-party server (no third parties). See the <a href="/privacy" target="_blank">Privacy Policy</a>. I can withdraw at any time.</span>
+                            <span>I consent to my holdings being processed to compute my daily calculations and to receiving push notifications on our first-party server (no third parties). See the <a href="/privacy" target="_blank">Privacy Policy</a>. I can withdraw at any time.</span>
                         </label>
-                        <button class="btn green" id="btnNtfyEnable" data-action="enableNotifications">[ enable notifications ]</button>
+                        <button class="btn green" id="btnNtfyEnable" data-action="enableNotifications">Enable notifications</button>
                     </div>
 
                     <div class="hidden" id="ntfyOn">
@@ -329,17 +355,31 @@
                                 <div class="ntfy-note">iOS: enable background fetch for the ntfy app so notifications arrive while it is closed.</div>
                             </div>
                         </div>
-                        <button class="btn ghost btn-danger" id="btnNtfyDisable" data-action="disableNotifications">[ disable notifications ]</button>
+                        <button class="btn ghost btn-danger" id="btnNtfyDisable" data-action="disableNotifications">Disable notifications</button>
                     </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="tc data-card">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title">Your data</span>
+            </div>
+            <div class="tc-body">
+                <div class="ntfy-sec" id="dataSec">
+                    <div class="ntfy-note">One click deletes everything we store about you on our servers: holdings, consents, acknowledgements, notification topic, chat messages and all calculation records. Your licence key stays valid; your table on this device is not touched.</div>
+                    <button class="btn ghost btn-danger" id="btnEraseData" data-action="eraseMyData">Delete all my data</button>
                 </div>
             </div>
         </div>
 
         <!-- POSITION -->
-        <div class="tc">
+        <div class="tc app-pos">
             <div class="tc-bar">
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title" data-i18n="app.position">--position</span>
+                <span class="tc-title" data-i18n="app.position">Position</span>
             </div>
             <div class="tc-body">
                 <div class="fg">
@@ -389,11 +429,40 @@
             </div>
         </div>
 
+        <!-- RECORD TRADE + DCA/ENGINE: moved from the sidebar, directly above live-markets widgets -->
+        <div class="tc app-rec">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title" data-i18n="app.recordTrade">Record a position change</span>
+            </div>
+            <div class="tc-body">
+                <div class="fg">
+                    <label data-i18n="app.tradeToken">Token</label>
+                    <select id="iTradeSym"><option value="">&mdash;</option></select>
+                </div>
+                <div class="fg-row">
+                    <div class="fg">
+                        <label data-i18n="app.tradeAmt">Amount (tokens)</label>
+                        <input type="number" id="iBuyAmt" step="any" placeholder="0.00000000" min="0">
+                    </div>
+                    <div class="fg">
+                        <label data-i18n="app.tradePrice">Price ($) &mdash; Auto</label>
+                        <input type="number" id="iBuyPrice" step="any" placeholder="Empty = API">
+                    </div>
+                </div>
+                <div class="fg-row">
+                    <button class="btn green btn-trade" id="btnRecordBuy" data-action="recordBuy" data-i18n="app.recordBuy">Log Addition</button>
+                    <button class="btn red btn-trade" id="btnRecordSell" data-action="recordSell" data-i18n="app.recordSell">Log Reduction</button>
+                </div>
+                <div class="fg-hint" data-i18n="app.tradeHint">Log what you did yourself: an addition increases the recorded position, a reduction decreases it &mdash; avg price updates automatically</div>
+            </div>
+        </div>
+
         <!-- RISK SETTINGS -->
         <div class="tc" id="optSection">
             <div class="tc-bar">
                 <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title" data-i18n="app.riskSettings">--risk-settings</span>
+                <span class="tc-title" data-i18n="app.riskSettings">Risk settings</span>
             </div>
             <div class="tc-body">
                 <div class="sh-row" id="shToggleRow" data-action="toggleGlobalSafeHaven">
@@ -415,6 +484,49 @@
                         <div class="dl-dsc" id="dlDesc">OFF — KKT weights pass through unmodified</div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Discipline Module: meter card (shown only once signals exist) -->
+        <div class="tc discipline-card hidden" id="disciplineCard">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title">Recording Meter</span>
+                <div class="tc-right"><span class="disc-badge" id="discBadge">&mdash;</span></div>
+            </div>
+            <div class="tc-body">
+                <!-- Your goal: the user's OWN same-day confirmation target.
+                     Self-set friction feels different to an app deciding you've
+                     been bad. The hidden renewal-discount gate is deliberately
+                     never shown here — it appears only once earned. -->
+                <div class="disc-target-row">
+                    <span class="disc-target-l">your same-day goal</span>
+                    <select class="disc-target-sel" id="selDiscTarget" data-change="saveDisciplineTarget" aria-label="your same-day discipline goal"></select>
+                </div>
+                <div class="disc-meter">
+                    <div class="disc-bar"><div class="disc-fill" id="discFill"></div></div>
+                    <div class="disc-labels"><span>0%</span><span class="disc-thresh" id="discThresh">pick your goal</span><span>100%</span></div>
+                </div>
+                <div class="disc-empty hidden" id="discEmpty">No records yet &mdash; your recording rate appears after the first calculated difference.</div>
+                <div class="disc-tiles" id="discTiles">
+                    <div class="disc-tile"><div class="disc-tile-l disc-confirmed">&#10003; Recorded</div><div class="disc-tile-v" id="discConfirmed">0</div></div>
+                    <div class="disc-tile"><div class="disc-tile-l disc-missed">&#10007; Missed</div><div class="disc-tile-v" id="discMissed">0</div></div>
+                    <div class="disc-tile"><div class="disc-tile-l disc-skipped">&#9675; Dismissed</div><div class="disc-tile-v" id="discSkipped">0</div></div>
+                </div>
+                <!-- Rolling window: "most assume they're at 90 and find out
+                     they're at 60" — showing this number does most of the work. -->
+                <div class="disc-recent hidden" id="discRecent"></div>
+                <!-- Pattern trigger: escalate on the pattern, not on the event. -->
+                <div class="disc-pattern hidden" id="discPattern"></div>
+                <div class="disc-note hidden" id="discPending"></div>
+                <div class="disc-note hidden" id="discReaction"></div>
+                <!-- Active reminders are opt-in: silent by default so the ladder
+                     never punishes opening the app. The user turns them on
+                     themselves once they see their own rate and don't like it. -->
+                <label class="disc-optin"><input type="checkbox" id="chkEscOptIn" data-change="toggleEscOptIn">
+                    <span>active reminders &mdash; notify me when a calculated difference is still unrecorded (off by default)</span></label>
+                <div class="disc-hint">Score: 100% within 1h &rarr; decays to 0% at the 12h deadline</div>
+                <div class="disc-discount hidden" id="discDiscount">Reward unlocked &mdash; your renewal discount is earned</div>
             </div>
         </div>
 
@@ -440,15 +552,134 @@
                     <button class="btn blue chat-send" id="btnChatSend" data-action="sendChatMessage" title="Send" aria-label="Send">&#10148;</button>
                 </div>
                 <div class="chat-info">
-                    <span class="chat-counter">Shared with all beta users — last 20 messages</span>
+                    <span class="chat-counter">Shared with all Black users — last 20 messages</span>
                     <button class="btn ghost chat-clear" id="btnChatClear" data-action="clearMyChatMessages" title="Delete my messages">CLEAR</button>
                 </div>
             </div>
         </div>
 
-        <!-- FAQ -->
+    </aside>
+
+    <main class="content">
+        <div class="status idle" id="statusBar">
+            <div class="dot"></div>
+            <span id="statusTxt">Add positions or import CSV/JSON</span>
+        </div>
+
+        <div class="sum-grid kpi-strip">
+            <div class="sum-item"><div class="sum-l" data-i18n="app.total">Total</div><div class="sum-v" id="sTotalVal">$0.00</div></div>
+            <div class="sum-item"><div class="sum-l">P&L</div><div class="sum-v" id="sPnl">—</div></div>
+            <div class="sum-item"><div class="sum-l" data-i18n="app.largest">Largest</div><div class="sum-v" id="sLargest">—</div></div>
+            <div class="sum-item"><div class="sum-l" data-i18n="app.maxDrift">Max Drift</div><div class="sum-v" id="sMaxDrift">—</div></div>
+            <div class="sum-item"><div class="sum-l" data-i18n="app.dcaNeeded">DCA needed</div><div class="sum-v" id="sNeedReb">—</div></div>
+            <div class="sum-item"><div class="sum-l" data-i18n="app.statStatus">Status</div><div class="sum-v" id="sStatusVal">—</div></div>
+        </div>
+
+        <div class="calc-notice">
+            <div class="calc-notice-k" data-i18n="app.noticeK">Calculation notice</div>
+            <p data-i18n="app.noticeP">The figures below are arithmetic results for the assets, amounts and parameters you entered, compared with the theoretical model weights. They contain no instruction and are not a recommendation.</p>
+        </div>
+
+        <div class="top-row">
+            <div class="tc">
+                <div class="tc-bar">
+                    <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                    <span class="tc-title" data-i18n="app.allocationTitle">Allocation</span>
+                </div>
+                <div class="tc-body">
+                    <div class="chart-wrap"><canvas id="chart"></canvas><div class="chart-center"><div class="chart-cv" id="cCV">—</div><div class="chart-cl" data-i18n="app.tokens">Tokens</div></div></div>
+                    <div class="leg-head"><span data-i18n="app.legToken">Token</span><span data-i18n="app.legNow">Now</span><span data-i18n="app.legTarget">Target</span></div>
+                    <div class="legend" id="legend"></div>
+                </div>
+            </div>
+            <div class="tc">
+                <div class="tc-bar">
+                    <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                    <span class="tc-title" data-i18n="app.overviewTitle">Overview</span>
+                </div>
+                <div class="tc-body">
+                    <div class="rebalance-reminder" id="reminderBox"><span id="reminderTxt">No scheduled DCA calculation.</span></div>
+                    <!-- ALLOCATION METER: sits directly under the rebalance reminder -->
+                    <div class="a-meter">
+                        <div class="a-meter-top"><span data-i18n="app.allocation">ALLOCATION</span><span id="aPctLbl">0.00%</span></div>
+                        <div class="a-track"><div class="a-fill" id="aFill" style="width:0%"></div></div>
+                        <div class="a-num"><span id="aNumVal">0.00</span><span style="font-size:1rem;color:var(--muted)">%</span></div>
+                        <div class="a-rem" id="aRem">Remaining: 100.00%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tc">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title" data-i18n="app.holdingsTitle">Holdings calculation engine</span>
+                <span class="tc-right"><label class="tbl-more"><input type="checkbox" id="chkMoreCols"> <span data-i18n="app.moreCols">All columns</span></label></span>
+            </div>
+            <div class="tc-body" style="padding:0;">
+                <div class="tbl-wrap" id="tblWrap">
+                    <div class="empty"><div class="empty-ico">[∅]</div><div class="empty-txt" data-i18n="app.portfolioEmpty">Portfolio empty</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tc">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title" data-i18n="app.dcaEngine">Dca engine</span>
+            </div>
+            <div class="tc-body">
+                <div class="btn-stack">
+                    <div class="fg" style="margin-bottom:8px;">
+                        <label data-i18n="app.dcaAmount">DCA Amount ($)</label>
+                        <input type="number" id="iDcaAmount" step="any" placeholder="500.00" min="0">
+                    </div>
+                    <button class="btn green" id="btnDca" data-action="distribuirajDca" data-i18n="app.distributeDca">Distribute DCA</button>
+                    <div class="fg-hint" data-i18n="app.smartAlloc">Smart allocation across positions</div>
+                    <button class="btn amber" id="btnEngine" data-action="optimizePortfolio" data-i18n="app.engineBtn">AQMath Engine — Black</button>
+                    <div class="engine-hint" data-i18n="app.engineHint">180-day covariance + ERC analysis</div>
+                    <button class="btn ghost" id="btnRefreshHistory" data-action="refreshHistory" disabled data-i18n="app.refreshHistory">Refresh History — Black</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tc">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title" data-i18n="app.historyTitle">Portfolio history</span>
+                <div class="tc-right">
+                    <button class="tc-action" data-action="saveSnapshot" data-i18n="app.saveSnapshot">Save Snapshot</button>
+                </div>
+            </div>
+            <div class="tc-body">
+                <div class="history-stats" id="historyStats"></div>
+                <div class="history-chart-wrap"><canvas id="historyChart"></canvas></div>
+                <div class="fg-hint" data-i18n="app.historyHint">Automatically updated after DCA distribution.</div>
+            </div>
+        </div>
+
+
+
+        <!-- LIVE MARKETS -->
+        <div class="tc">
+            <div class="tc-bar">
+                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
+                <span class="tc-title" data-i18n="app.liveMarkets">Live markets</span>
+            </div>
+            <div class="tc-body" style="padding:0;">
+                <div class="lp-market-grid" id="appMarketWidgets">
+                    <div class="lp-news-col" id="appNewsLeft"></div>
+                    <div class="lp-news-col" id="appNewsRight"></div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<section class="app-faq">
         <div class="faq-section">
-            <div class="section-label" data-i18n="app.faqTitle">--frequently-asked-questions</div>
+            <div class="section-label" data-i18n="app.faqTitle">Frequently asked questions</div>
             <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q1">What is AQMath?</div>
                 <div class="faq-a" data-i18n="app.faq.a1">A non-custodial tool for long-term passive crypto portfolio management using DCA and quantitative optimization (Risk Parity).</div>
@@ -459,7 +690,7 @@
             </div>
             <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q3">What does the AQMath Engine do?</div>
-                <div class="faq-a" data-i18n="app.faq.a3">It uses 180 days of price history to compute optimal allocation weights (Risk Parity) so each token contributes equally to portfolio risk.</div>
+                <div class="faq-a" data-i18n="app.faq.a3">It uses 180 days of price history to compute the theoretical weights (Risk Parity) at which each token contributes equally to modelled portfolio risk.</div>
             </div>
             <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q4">How to import data?</div>
@@ -479,194 +710,16 @@
             </div>
             <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q8">Is my data safe?</div>
-                <div class="faq-a" data-i18n="app.faq.a8">Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in-memory, and discarded immediately. The only server-side records are the one-way hashed beta-key activation (with a hashed IP fingerprint) and &mdash; only if you opt in to the signal &amp; notification service &mdash; your holdings under your hashed key, deleted on withdrawal. Non-custodial by design.</div>
+                <div class="faq-a" data-i18n="app.faq.a8">Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in memory, and not written to a database. The only server-side records are the one-way hashed key activation (with a hashed IP fingerprint) and, for Black, your holdings under your hashed key, deleted on request or when the key is deactivated. Non-custodial by design.</div>
             </div>
         </div>
-    </aside>
-
-    <main class="content">
-        <div class="status idle" id="statusBar">
-            <div class="dot"></div>
-            <span id="statusTxt">Add positions or import CSV/JSON</span>
-        </div>
-
-        <div class="top-row">
-            <div class="tc">
-                <div class="tc-bar">
-                    <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                    <span class="tc-title" data-i18n="app.allocationTitle">--allocation</span>
-                </div>
-                <div class="tc-body">
-                    <div class="chart-wrap"><canvas id="chart"></canvas><div class="chart-center"><div class="chart-cv" id="cCV">—</div><div class="chart-cl" data-i18n="app.tokens">Tokens</div></div></div>
-                    <div class="legend" id="legend"></div>
-                </div>
-            </div>
-            <div class="tc">
-                <div class="tc-bar">
-                    <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                    <span class="tc-title" data-i18n="app.overviewTitle">--overview</span>
-                </div>
-                <div class="tc-body">
-                    <div class="sum-grid">
-                        <div class="sum-item"><div class="sum-l" data-i18n="app.total">Total</div><div class="sum-v" id="sTotalVal">$0.00</div></div>
-                        <div class="sum-item"><div class="sum-l">P&L</div><div class="sum-v" id="sPnl">—</div></div>
-                        <div class="sum-item"><div class="sum-l" data-i18n="app.largest">Largest</div><div class="sum-v" id="sLargest">—</div></div>
-                        <div class="sum-item"><div class="sum-l" data-i18n="app.maxDrift">Max Drift</div><div class="sum-v" id="sMaxDrift">—</div></div>
-                        <div class="sum-item"><div class="sum-l" data-i18n="app.dcaNeeded">DCA needed</div><div class="sum-v" id="sNeedReb">—</div></div>
-                        <div class="sum-item"><div class="sum-l" data-i18n="app.statStatus">Status</div><div class="sum-v" id="sStatusVal">—</div></div>
-                    </div>
-                    <div class="rebalance-reminder" id="reminderBox"><span id="reminderTxt">No scheduled rebalance.</span></div>
-                    <!-- ALLOCATION METER: sits directly under the rebalance reminder -->
-                    <div class="a-meter">
-                        <div class="a-meter-top"><span data-i18n="app.allocation">ALLOCATION</span><span id="aPctLbl">0.00%</span></div>
-                        <div class="a-track"><div class="a-fill" id="aFill" style="width:0%"></div></div>
-                        <div class="a-num"><span id="aNumVal">0.00</span><span style="font-size:1rem;color:var(--muted)">%</span></div>
-                        <div class="a-rem" id="aRem">Remaining: 100.00%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tc">
-            <div class="tc-bar">
-                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title" data-i18n="app.holdingsTitle">--holdings-rebalance-engine</span>
-            </div>
-            <div class="tc-body" style="padding:0;">
-                <div class="tbl-wrap" id="tblWrap">
-                    <div class="empty"><div class="empty-ico">[∅]</div><div class="empty-txt" data-i18n="app.portfolioEmpty">Portfolio empty</div></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tc">
-            <div class="tc-bar">
-                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title" data-i18n="app.historyTitle">--portfolio-history</span>
-                <div class="tc-right">
-                    <button class="tc-action" data-action="saveSnapshot" data-i18n="app.saveSnapshot">Save Snapshot</button>
-                </div>
-            </div>
-            <div class="tc-body">
-                <div class="history-stats" id="historyStats"></div>
-                <div class="history-chart-wrap"><canvas id="historyChart"></canvas></div>
-                <div class="fg-hint" data-i18n="app.historyHint">Automatically updated after DCA distribution.</div>
-            </div>
-        </div>
-
-        <!-- Discipline Module: meter card (shown only once signals exist) -->
-        <div class="tc discipline-card hidden" id="disciplineCard">
-            <div class="tc-bar">
-                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title">Discipline Meter</span>
-                <div class="tc-right"><span class="disc-badge" id="discBadge">&mdash;</span></div>
-            </div>
-            <div class="tc-body">
-                <!-- Your goal: the user's OWN same-day confirmation target.
-                     Self-set friction feels different to an app deciding you've
-                     been bad. The hidden renewal-discount gate is deliberately
-                     never shown here — it appears only once earned. -->
-                <div class="disc-target-row">
-                    <span class="disc-target-l">your same-day goal</span>
-                    <select class="disc-target-sel" id="selDiscTarget" data-change="saveDisciplineTarget" aria-label="your same-day discipline goal"></select>
-                </div>
-                <div class="disc-meter">
-                    <div class="disc-bar"><div class="disc-fill" id="discFill"></div></div>
-                    <div class="disc-labels"><span>0%</span><span class="disc-thresh" id="discThresh">pick your goal</span><span>100%</span></div>
-                </div>
-                <div class="disc-empty hidden" id="discEmpty">No signals yet &mdash; your discipline rate appears after the first rebalance signal.</div>
-                <div class="disc-tiles" id="discTiles">
-                    <div class="disc-tile"><div class="disc-tile-l disc-confirmed">&#10003; Confirmed</div><div class="disc-tile-v" id="discConfirmed">0</div></div>
-                    <div class="disc-tile"><div class="disc-tile-l disc-missed">&#10007; Missed</div><div class="disc-tile-v" id="discMissed">0</div></div>
-                    <div class="disc-tile"><div class="disc-tile-l disc-skipped">&#9675; Skipped</div><div class="disc-tile-v" id="discSkipped">0</div></div>
-                </div>
-                <!-- Rolling window: "most assume they're at 90 and find out
-                     they're at 60" — showing this number does most of the work. -->
-                <div class="disc-recent hidden" id="discRecent"></div>
-                <!-- Pattern trigger: escalate on the pattern, not on the event. -->
-                <div class="disc-pattern hidden" id="discPattern"></div>
-                <div class="disc-note hidden" id="discPending"></div>
-                <div class="disc-note hidden" id="discReaction"></div>
-                <!-- Active reminders are opt-in: silent by default so the ladder
-                     never punishes opening the app. The user turns them on
-                     themselves once they see their own rate and don't like it. -->
-                <label class="disc-optin"><input type="checkbox" id="chkEscOptIn" data-change="toggleEscOptIn">
-                    <span>active reminders &mdash; push me when a signal is still unconfirmed (off by default)</span></label>
-                <div class="disc-hint">Score: 100% within 1h &rarr; decays to 0% at the 12h deadline</div>
-                <div class="disc-discount hidden" id="discDiscount">Reward unlocked &mdash; your renewal discount is earned</div>
-            </div>
-        </div>
-
-        <!-- RECORD TRADE + DCA/ENGINE: moved from the sidebar, directly above live-markets widgets -->
-        <div class="tc">
-            <div class="tc-bar">
-                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title" data-i18n="app.recordTrade">--record-trade</span>
-            </div>
-            <div class="tc-body">
-                <div class="fg">
-                    <label data-i18n="app.tradeToken">Token</label>
-                    <select id="iTradeSym"><option value="">&mdash;</option></select>
-                </div>
-                <div class="fg-row">
-                    <div class="fg">
-                        <label data-i18n="app.tradeAmt">Amount (tokens)</label>
-                        <input type="number" id="iBuyAmt" step="any" placeholder="0.00000000" min="0">
-                    </div>
-                    <div class="fg">
-                        <label data-i18n="app.tradePrice">Price ($) &mdash; Auto</label>
-                        <input type="number" id="iBuyPrice" step="any" placeholder="Empty = API">
-                    </div>
-                </div>
-                <div class="fg-row">
-                    <button class="btn green btn-trade" id="btnRecordBuy" data-action="recordBuy" data-i18n="app.recordBuy">[ Record Buy ]</button>
-                    <button class="btn red btn-trade" id="btnRecordSell" data-action="recordSell" data-i18n="app.recordSell">[ Record Sell ]</button>
-                </div>
-                <div class="fg-hint" data-i18n="app.tradeHint">Buy adds to the position, sell removes from it &mdash; avg price updates automatically</div>
-            </div>
-        </div>
-        <div class="tc">
-            <div class="tc-bar">
-                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title" data-i18n="app.dcaEngine">--dca-engine</span>
-            </div>
-            <div class="tc-body">
-                <div class="btn-stack">
-                    <div class="fg" style="margin-bottom:8px;">
-                        <label data-i18n="app.dcaAmount">DCA Amount ($)</label>
-                        <input type="number" id="iDcaAmount" step="any" placeholder="500.00" min="0">
-                    </div>
-                    <button class="btn green" id="btnDca" data-action="distribuirajDca" data-i18n="app.distributeDca">Distribute DCA</button>
-                    <div class="fg-hint" data-i18n="app.smartAlloc">Smart allocation across positions</div>
-                    <button class="btn amber" id="btnEngine" data-action="optimizePortfolio" data-i18n="app.engineBtn">AQMath Engine — Black</button>
-                    <div class="engine-hint" data-i18n="app.engineHint">180-day covariance + ERC analysis</div>
-                    <button class="btn ghost" id="btnRefreshHistory" data-action="refreshHistory" disabled data-i18n="app.refreshHistory">Refresh History — Black</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- LIVE MARKETS -->
-        <div class="tc">
-            <div class="tc-bar">
-                <span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span>
-                <span class="tc-title" data-i18n="app.liveMarkets">--live-markets</span>
-            </div>
-            <div class="tc-body" style="padding:0;">
-                <div class="lp-market-grid" id="appMarketWidgets">
-                    <div class="lp-news-col" id="appNewsLeft"></div>
-                    <div class="lp-news-col" id="appNewsRight"></div>
-                </div>
-            </div>
-        </div>
-
-    </main>
-</div>
+</section>
 
 <footer class="footer">
-    <div class="logo-box-mini">AQ</div>
+    <div class="logo-box-mini" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg></div>
     <span>AQMath 2026</span>
     <span style="margin-left:12px;color:var(--dim);">|</span>
-    <span data-i18n="app.footerDisclaimer">AQMath does not provide financial advice.</span>
+    <span data-i18n="app.footerDisclaimer">AQMath is calculation software and does not provide financial advice.</span>
 </footer>
 
 </div><!-- /appView -->
@@ -686,15 +739,25 @@
 <!-- ============ GLOBAL LEGAL FOOTER ============
      Outside every view container, so it renders on all five routes
      (/, /app, /backtest, /results, /docs) and stays crawlable. -->
-<footer class="site-footer">
-    <span data-i18n="ft.copy">&copy; 2026 AQMath &mdash; Private. Non-Custodial.</span><br>
-    <a href="/about" data-i18n="ft.about">About</a><span class="sep">|</span><a href="/research/" data-i18n="ft.research">Research</a><span class="sep">|</span><a href="/impressum" data-i18n="ft.impressum">Impressum</a><span class="sep">|</span><a href="/privacy" data-i18n="ft.privacy">Privacy</a><span class="sep">|</span><a href="/terms" data-i18n="ft.terms">Terms</a><span class="sep">|</span><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
+<footer class="site-footer sf2">
+    <div class="sf2-in">
+        <div class="sf2-top">
+            <a class="sf2-logo" href="/"><svg width="26" height="26" viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="3"/><rect x="15" y="22.5" width="18" height="3" fill="currentColor"/><rect transform="rotate(-45 24 24)" x="22.5" y="38.5" width="3" height="7.5" fill="currentColor"/></svg><span>AQMath</span></a>
+            <div class="sf2-soc"><a href="https://t.me/AQMath_Black" target="_blank" rel="noopener" aria-label="Telegram (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M21.4 3.6 2.9 10.8c-.9.4-.9 1.1-.2 1.3l4.7 1.5 1.8 5.6c.2.6.4.8.8.8.4 0 .6-.2.9-.4l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8L22.9 5c.3-1.2-.4-1.8-1.5-1.4zM8.6 13.1l9.5-6c.4-.3.8-.1.5.2l-7.9 7.1-.3 3.3-1.8-4.6z"/></svg><span>Telegram</span></a><a href="https://x.com/aqmathapp" target="_blank" rel="noopener" aria-label="X (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg><span>X</span></a><a href="https://www.reddit.com/user/weaforex/" target="_blank" rel="noopener" aria-label="Reddit (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="14" rx="7.5" ry="5.2"/><path d="M12 8.8l1.2-4.3 4 .9"/><path d="M9.4 16.6c1.6 1 3.6 1 5.2 0"/></g><g fill="currentColor"><circle cx="9.3" cy="13.2" r="1.2"/><circle cx="14.7" cy="13.2" r="1.2"/><circle cx="18" cy="5.6" r="1.4"/></g></svg><span>Reddit</span></a><a href="https://substack.com/@aqmathxyz" target="_blank" rel="noopener" aria-label="Substack (opens in a new tab)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M4 4h16v2.6H4zM4 8.8h16v2.6H4zM4 13.6h16V21l-8-4.4L4 21z"/></svg><span>Substack</span></a></div>
+        </div>
+        <div class="sf2-bot">
+            <div data-i18n="ft.copy">&copy; 2026 AQMath &mdash; Non-custodial. An analytical web application, not a trading bot.</div>
+            <div class="sf2-legal">
+                <a href="/about" data-i18n="ft.about">About</a><a href="/research/" data-i18n="ft.research">Research</a><a href="/impressum" data-i18n="ft.impressum">Impressum</a><a href="/privacy" data-i18n="ft.privacy">Privacy</a><a href="/terms" data-i18n="ft.terms">Terms</a><a href="/widerruf" data-i18n="ft.widerruf">Widerruf</a>
+            </div>
+        </div>
+    </div>
 </footer>
 
-<script defer src="/app-widgets.js?v=b4d391be81"></script>
-<script defer src="/app-backtest.js?v=b4d391be81"></script>
-<script defer src="/app.js?v=b4d391be81"></script>
-<script defer src="/app-notify.js?v=b4d391be81"></script>
+<script defer src="/app-widgets.js?v=8bf7eb5417"></script>
+<script defer src="/app-backtest.js?v=8bf7eb5417"></script>
+<script defer src="/app.js?v=8bf7eb5417"></script>
+<script defer src="/app-notify.js?v=8bf7eb5417"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -708,11 +771,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=b4d391be81"></script>
+<script defer src="/vendor/i18next.min.js?v=8bf7eb5417"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=b4d391be81"></script>
-<script defer src="/app-boot.js?v=b4d391be81"></script>
+<script defer src="/app-tour.js?v=8bf7eb5417"></script>
+<script defer src="/app-boot.js?v=8bf7eb5417"></script>
 
 </body>
 </html>

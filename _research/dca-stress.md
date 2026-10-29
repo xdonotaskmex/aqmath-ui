@@ -15,14 +15,16 @@
 - Executing the engine's *signals* late matters a lot. On the real
   production setup, **every** delay scenario breaks the drawdown
   protection.
-- **The rule:** when a signal arrives, execute it the same day. Skipping
-  a day is far cheaper than being habitually late.
+- **The simulated finding:** in this simulation the drawdown protection held
+  only when each calculated difference was acted on the same day. Skipping
+  a day was far cheaper than being habitually late. This describes the
+  simulation, not an instruction to anyone.
 - Reader challenge ("maybe the fragility is the 180-day re-fit, not the
   errors"): tested in Test 2c — freezing the weights still fails 3 of 4
   scenarios. The fragility travels with late execution, not with the
   re-optimization loop.
 - There is no comfortable lag knee: a constant 1-day lag already breaks
-  the drawdown gate. Same-day or nothing.
+  the drawdown gate. In the simulation, same-day or nothing.
 
 *Vocabulary used below:* **MaxDD (maximum drawdown)** — how far the
 portfolio falls from its highest point, i.e. the pain you actually sit
@@ -171,8 +173,8 @@ DCA is perfect in every scenario, so execution error is the only disturbance.
 Mechanics, for reproducibility: the ideal target path is computed once — it
 depends only on returns, not on what the operator does — and each scenario
 builds its execution schedule from it. A delayed signal overtaken by a newer
-one is dropped: when the operator finally acts, they execute the newest
-instruction. A vol spike is a day whose trailing 7-day realized vol sits in
+one is dropped: when the operator finally acts, the newest calculated
+difference is the one that applies. A vol spike is a day whose trailing 7-day realized vol sits in
 the top decile of the window (10.0% of days). Awake means always acting,
 asleep means never acting.
 
@@ -244,12 +246,12 @@ where the engine needs you most.
    missed days, even sleeping through ~29% of the window — all pass. Being
    systematically 3 days late on every signal is the version that fails.
 2. **Being asleep is cheaper than being late.** Missing ~29% of days costs
-   ~$675, because the signal is continuous: when the operator wakes up they
-   execute the latest instruction and the gap heals. A constant lag has no
+   ~$675, because the signal is continuous: when the operator wakes up the
+   latest calculated difference applies and the gap heals. A constant lag has no
    healing mechanism — every single day starts 3 days stale.
-3. **The practical rule:** do not optimize for punctuality, optimize against
-   systematic delay. Execute the signal when you see it; a missed day costs
-   far less than a habitual delay.
+3. **What the simulation shows:** a missed day costs far less than a
+   habitual delay, so systematic delay, not punctuality, is what the
+   protection is sensitive to. This is a simulated observation, not advice.
 
 **Test 2b re-ran all of this on the actual production stack** — KKT weights,
 60/40 structure, 180-day re-optimization. The verdict got harsher: §7.
@@ -268,7 +270,7 @@ Test 2 ran on a 100% risky equal-weight basket. Production is different:
 Test 2b replays that exact stack — the real production weight optimizer
 and risk shield, code unchanged — and re-runs the
 same A/N/L/M/W execution-error scenarios. The only human surface in
-production is executing the daily buy/sell signal (weight optimization
+production is the user's own handling of the daily calculated difference (weight optimization
 and the shield are fully automated server-side), so that is exactly what
 the scenarios perturb. The first re-optimization happens at day 180,
 because there is not enough price history before it; until then, the
@@ -324,10 +326,11 @@ promise — drawdown protection — is exactly what breaks.
 ### 7d. Operational conclusion
 
 The production stack is **less tolerant of human error than the equal-weight
-test suggested**: even random 0–3-day delays break the MaxDD gate. The only
-execution standard that passes is acting on the signal **the same day it
-arrives**. Any "I'll do it in a couple of days" policy invalidates the
-drawdown protection the shield was built to deliver.
+test suggested**: even random 0–3-day delays break the MaxDD gate. In the
+simulation, the only execution schedule that passes is acting on the
+calculated difference **the same day it arrives**; any multi-day delay
+invalidates the drawdown protection the shield computes. This is a
+description of simulated results, not an instruction.
 
 ## 8. Test 2c — reader challenge: freeze the weights, find the knee
 
@@ -441,6 +444,6 @@ the first failure: a constant 3-day signal lag breaks the Sharpe gate. Test 2b
 then re-ran the same errors on the production KKT 60/40 stack, where every
 error scenario breaks the MaxDD gate. Test 2c ran the reader-proposed
 frozen-weights control and lag sweep: freezing the weights still fails 3 of 4
-scenarios, and even a 1-day lag breaks the MaxDD gate — same-day signal
-execution remains the only policy that passes.
+scenarios, and even a 1-day lag breaks the MaxDD gate — same-day
+execution remains the only schedule that passes in the simulation.
 [See the full test plan](https://aqmath.xyz) for the remaining four.*

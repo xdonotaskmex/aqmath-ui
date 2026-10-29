@@ -26,18 +26,18 @@
         [
             'computing risk parity weights...',
             'covariance matrix computed (BTC\u00d7SUI\u00d7XMR) \u2014 KKT projection converged',
-            'reading regime signal (drawdown + downside vol)...',
+            'reading regime indicator (drawdown + downside vol)...',
             'regime healthy \u2014 exposure set: 87.3% risky / 12.7% USDC'
         ],
         [
             'deleverage modulator: tracking drawdown + downside volatility...',
-            '\u26a0 DE-RISK \u2014 drawdown + downside vol rising, exposure scaled down fast',
-            'rerouting DCA to USDC reserve while defensive...',
-            'capital preserved \u2014 drawdown held to 23.1% vs 55.9% buy & hold'
+            '\u26a0 LOWER EXPOSURE \u2014 drawdown + downside vol rising, target exposure computed lower',
+            'allocating DCA to USDC while Shield status is active...',
+            'simulated drawdown 23.1% vs 55.9% buy & hold'
         ],
         [
             'regime clearing: drawdown/vol easing \u2014 re-entering gradually...',
-            'parked USDC redeployed to tokens as exposure recovers \u2265 40%',
+            'USDC allocation returns to tokens as computed exposure recovers \u2265 40%',
             'continuous exposure control \u2014 no timers, no correlation gate',
             'exposure fully data-driven across 106 DCA events'
         ],
@@ -316,7 +316,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=b4d391be81')
+    return fetch('/locales/' + lang + '.json?v=8bf7eb5417')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -350,6 +350,11 @@ function applyTranslations() {
         var key = el.getAttribute('data-i18n-html');
         var t = i18next.t(key);
         if (t && t !== key) el.innerHTML = t;
+    });
+    document.querySelectorAll('[data-i18n-alt]').forEach(function (el) {
+        var key = el.getAttribute('data-i18n-alt');
+        var t = i18next.t(key);
+        if (t && t !== key) el.setAttribute('alt', t);
     });
     // Server-rendered forward-log fragments carry no data-i18n — re-render
     // each box from its stored EN original for the active language.
@@ -411,6 +416,7 @@ function applyTranslations() {
         saveShieldSettings: function () { saveShieldSettings(); },
         enableNotifications: function () { enableNotifications(); },
         disableNotifications: function () { disableNotifications(); },
+        eraseMyData: function () { eraseMyData(); },
         copyField: function (el) { _copyText(el); },
         // One-Tap Alignment signal actions (app-notify.js)
         confirmSignal: function (el, arg) { confirmSignal(el, arg); },
@@ -529,4 +535,21 @@ function applyTranslations() {
     setTimeout(function () {
         if (typeof maybeAutoTour === 'function') maybeAutoTour();
     }, 3000);
+})();
+
+// ---------------------------------------------------------------------------
+// Landing: "Apply for Access" stays disabled until the user ticks the
+// calculation-tool acknowledgement (aria-disabled + CSS pointer-events).
+// ---------------------------------------------------------------------------
+(function () {
+    var chk = document.getElementById('chkApplyConsent');
+    var btn = document.getElementById('btnApplyAccess');
+    if (!chk || !btn) return;
+    function sync() {
+        btn.setAttribute('aria-disabled', chk.checked ? 'false' : 'true');
+        btn.setAttribute('tabindex', chk.checked ? '0' : '-1');
+    }
+    chk.addEventListener('change', sync);
+    btn.addEventListener('click', function (e) { if (!chk.checked) e.preventDefault(); });
+    sync();
 })();

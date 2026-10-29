@@ -23,7 +23,7 @@
             element: '.hdr',
             popover: {
                 title: 'Welcome to AQMath',
-                description: 'Your non-custodial portfolio rebalancer. Let\u2019s take a 60-second tour of how it works.',
+                description: 'Your non-custodial portfolio calculator. Let\u2019s take a 60-second tour of how it works.',
                 side: 'bottom',
                 align: 'center'
             }
@@ -40,8 +40,8 @@
         {
             element: '.shield-card',
             popover: {
-                title: 'Shield Signals',
-                description: 'Sync your portfolio to receive daily deleverage signals. Enable push notifications to stay informed on every regime change.',
+                title: 'Shield Calculations',
+                description: 'Sync your portfolio to get daily Deleverage Shield calculations. Enable push notifications to receive a notice on every status change.',
                 side: 'right',
                 align: 'start'
             }
@@ -76,8 +76,8 @@
         {
             element: '#tblWrap',
             popover: {
-                title: 'Holdings & Rebalance Engine',
-                description: 'Every token here is tracked in real-time. Drift, P&L, and rebalance needs are calculated automatically.',
+                title: 'Holdings & Calculation Engine',
+                description: 'Every token here is tracked in real-time. Drift and P&L are calculated automatically.',
                 side: 'left',
                 align: 'start'
             }
@@ -86,7 +86,7 @@
             element: '#btnDca',
             popover: {
                 title: 'DCA Distribution',
-                description: 'Enter a budget and the engine allocates it to underweight tokens \u2014 filtered by volatility and trend.',
+                description: 'Enter an amount and the engine computes how it splits across tokens below their target \u2014 filtered by volatility and trend.',
                 side: 'left',
                 align: 'center'
             }
@@ -95,7 +95,7 @@
             element: '#btnEngine',
             popover: {
                 title: 'Risk Parity Engine',
-                description: 'Runs 180-day covariance analysis and KKT projection to compute optimal weights. Institutional-grade math.',
+                description: 'Runs 180-day covariance analysis and KKT projection to compute theoretical weights.',
                 side: 'left',
                 align: 'center'
             }
@@ -104,7 +104,7 @@
             element: '#shToggleRow',
             popover: {
                 title: 'Safe-Haven (USDC)',
-                description: 'When ON, surplus flows to USDC as a stablecoin buffer. An extra layer of downside protection.',
+                description: 'When ON, the calculation allocates surplus to USDC as a stablecoin buffer.',
                 side: 'right',
                 align: 'start'
             }
@@ -112,8 +112,8 @@
         {
             element: '#disciplineCard',
             popover: {
-                title: 'Discipline Meter',
-                description: 'Track your signal confirmation rate. Set a same-day goal and build consistency \u2014 your score decays if signals are missed.',
+                title: 'Recording Meter',
+                description: 'Track how promptly you record calculated differences. Set your own same-day goal \u2014 the score decays as the recording window runs out.',
                 side: 'left',
                 align: 'start'
             }
