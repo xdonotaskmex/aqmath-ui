@@ -3813,7 +3813,20 @@ a:hover { color: var(--blue-hi); }
 .v2-trust { background: #FFFFFF; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .v2-trust-row { display: flex; gap: 28px; flex-wrap: wrap; justify-content: space-between; padding-top: 18px; padding-bottom: 18px; font-size: 13.5px; color: var(--text-2); }
 .v2-trust-row i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-right: 10px; vertical-align: middle; }
-.v2-trust-row a { color: var(--text-2); }
+/* One row, one voice: all four claims link to their proof and share the same
+   quiet rule at rest, so nothing in the strip looks like a different widget.
+   The rule goes solid and the text goes full contrast on hover/focus. */
+.v2-trust-row a {
+    color: var(--text-2);
+    text-decoration: underline;
+    text-decoration-color: rgba(29, 53, 87, 0.28);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+.v2-trust-row a:hover,
+.v2-trust-row a:focus-visible { color: var(--text); text-decoration-color: currentColor; }
+.v2-trust-row a:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 2px; }
 
 .v2-faq-wrap .lp-faq { padding: 0; max-width: 860px; }
 .v2-faq-wrap .lp-faq h3 { display: none; }

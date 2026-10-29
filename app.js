@@ -2218,7 +2218,11 @@ function exportJSON() {
         lastOptimization: lastOptimization,
         portfolioHistory: portfolioHistory,
         exportTimestamp: new Date().toISOString(),
-        version: '2.9'
+        // Release that produced the file (one source: APP_VERSION in app-boot.js).
+        appVersion: (typeof APP_VERSION === 'string' ? APP_VERSION : 'unknown'),
+        // Shape of the portfolio payload itself. Bump only when a field changes
+        // meaning; import ignores unknown keys, so old exports keep working.
+        schemaVersion: 1
     };
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
