@@ -714,8 +714,8 @@ function _setNtfyStatus(connected, topic) {
     const statusEl = document.getElementById('ntfyStatus');
     if (!statusEl) return;
     statusEl.innerHTML = connected
-        ? '<span class="ntfy-dot on"></span>✓ connected — you are receiving calculation notices &middot; topic <span class="mono">' + topic + '</span>'
-        : '<span class="ntfy-dot off"></span>not connected';
+        ? '<span class="ntfy-dot on"></span><span>connected &mdash; you are receiving calculation notices</span>'
+        : '<span class="ntfy-dot off"></span><span>not connected</span>';
 }
 
 // The credentials panel stays visible for returning users too — server, topic
@@ -727,7 +727,13 @@ function _showNtfyPanel(opts) {
     const tokenEl = document.getElementById('ntfyToken');
     const tokenCopy = document.getElementById('btnNtfyTokenCopy');
     if (opts.server) document.getElementById('ntfyServer').textContent = opts.server;
-    if (opts.topic) document.getElementById('ntfyTopic').textContent = opts.topic;
+    if (opts.topic) {
+        const topicEl = document.getElementById('ntfyTopic');
+        topicEl.textContent = opts.topic;
+        // The value is ellipsised to one line; the tooltip keeps the full topic
+        // readable without stretching the credentials panel.
+        topicEl.title = opts.topic;
+    }
     if (opts.token) {
         tokenEl.textContent = opts.token;
         tokenEl.classList.remove('ntfy-mask');
