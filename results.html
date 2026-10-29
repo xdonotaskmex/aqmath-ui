@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/ibm-plex-serif-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=8bf7eb5417">
+    <link rel="stylesheet" href="/styles.min.css?v=e44a9a6e4f">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
 </head>
@@ -60,15 +60,16 @@
 <div class="whats-new hidden" id="whatsNew">
     <div class="whats-new-box">
         <div class="whats-new-head">
-            <span class="whats-new-ver">v2.1</span>
+            <span class="whats-new-ver">v2.1.1</span>
             <button type="button" class="whats-new-close" data-action="closeWhatsNew">&times;</button>
         </div>
         <div class="whats-new-body">
-            <p class="whats-new-desc" data-i18n="app.whatsNew.desc">One-Tap Recording is here. Mark a calculated difference as recorded in your holdings, or adjust the amount, straight from the notification &mdash; no extra steps.</p>
+            <p class="whats-new-desc" data-i18n="app.whatsNew.desc">A lighter look, plus two things you asked for: the backtest is now free for everyone, and one button deletes everything we store about you.</p>
             <ul class="whats-new-list">
-                <li data-i18n="app.whatsNew.item1">Record, dismiss or adjust a calculated difference in one tap</li>
-                <li data-i18n="app.whatsNew.item2">Regime-aware alerts (SHOCK / LOW_VOL)</li>
-                <li data-i18n="app.whatsNew.item3">Small fixes &amp; polish</li>
+                <li data-i18n="app.whatsNew.item1">New light theme and self-hosted fonts &mdash; calmer and easier to read</li>
+                <li data-i18n="app.whatsNew.item2">Backtest is free: no key needed, upload a CSV and run</li>
+                <li data-i18n="app.whatsNew.item3">Delete all my data: holdings, records and notification topics go in one click</li>
+                <li data-i18n="app.whatsNew.item4">Plain wording everywhere: what was computed, not what to trade</li>
             </ul>
             <button type="button" class="whats-new-close-btn" data-action="closeWhatsNew" data-i18n="app.whatsNew.close">Close</button>
         </div>
@@ -531,10 +532,10 @@
     </div>
 </footer>
 
-<script defer src="/app-widgets.js?v=8bf7eb5417"></script>
-<script defer src="/app-backtest.js?v=8bf7eb5417"></script>
-<script defer src="/app.js?v=8bf7eb5417"></script>
-<script defer src="/app-notify.js?v=8bf7eb5417"></script>
+<script defer src="/app-widgets.js?v=e44a9a6e4f"></script>
+<script defer src="/app-backtest.js?v=e44a9a6e4f"></script>
+<script defer src="/app.js?v=e44a9a6e4f"></script>
+<script defer src="/app-notify.js?v=e44a9a6e4f"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -548,11 +549,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=8bf7eb5417"></script>
+<script defer src="/vendor/i18next.min.js?v=e44a9a6e4f"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=8bf7eb5417"></script>
-<script defer src="/app-boot.js?v=8bf7eb5417"></script>
+<script defer src="/app-tour.js?v=e44a9a6e4f"></script>
+<script defer src="/app-boot.js?v=e44a9a6e4f"></script>
 
 </body>
 </html>

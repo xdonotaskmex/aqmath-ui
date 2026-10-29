@@ -1754,7 +1754,7 @@ async function distribuirajDca() {
         showDcaPreview(result, dcaAmount);
     } catch(e) {
         hideLoading();
-        console.error('[DCA] rebalancing failed:', e.message);
+        console.error('[DCA] allocation failed:', e.message);
         showToast("DCA couldn't complete — please check your connection and try again.", 'error');
     }
 }

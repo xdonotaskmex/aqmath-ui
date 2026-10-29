@@ -10,6 +10,11 @@
 // / app-backtest is already available when a user event fires.
 // ============================================================================
 
+// Release label of the What's New card. One single source: the dismiss handler
+// stores this value and the auto-show check compares against it, so bumping the
+// release touches exactly this line (plus the v2.x.x label in _src/index.html).
+var APP_VERSION = '2.1.1';
+
 // ---------------------------------------------------------------------------
 // 1) Landing terminal typing animation (was inline block at index.html L165)
 // ---------------------------------------------------------------------------
@@ -316,7 +321,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=8bf7eb5417')
+    return fetch('/locales/' + lang + '.json?v=e44a9a6e4f')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -402,7 +407,7 @@ function applyTranslations() {
         closeWhatsNew: function () {
             var card = document.getElementById('whatsNew');
             if (card) card.classList.add('hidden');
-            localStorage.setItem('aqmath-whatsnew-seen', '2.1');
+            localStorage.setItem('aqmath-whatsnew-seen', APP_VERSION);
         },
         // signal-only automation (app-notify.js)
         showHowAqmath: function () { showHowAqmath(false); },
@@ -517,7 +522,7 @@ function applyTranslations() {
 //    Dismissed via the × button (closeWhatsNew action above).
 // ---------------------------------------------------------------------------
 (function () {
-    var VER = '2.1';
+    var VER = APP_VERSION;
     var seen = localStorage.getItem('aqmath-whatsnew-seen');
     if (seen === VER) return;
     var card = document.getElementById('whatsNew');

@@ -920,11 +920,14 @@
 }
 .whats-new-list li {
         font-family: var(--sans); font-size: 0.85rem; color: var(--text);
-        padding: 8px 0; display: flex; align-items: center; gap: 10px;
+        line-height: 1.5;
+        /* flex-start, not center: a two-line item must keep its arrow on the
+           first line instead of floating it between the two lines. */
+        padding: 8px 0; display: flex; align-items: flex-start; gap: 10px;
 }
 .whats-new-list li::before {
         content: '→'; color: var(--blue); font-family: var(--mono);
-        font-weight: 600; flex-shrink: 0;
+        font-weight: 600; flex-shrink: 0; line-height: 1.5;
 }
 .whats-new-close-btn {
         margin-top: 24px; width: 100%;

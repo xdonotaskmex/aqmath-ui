@@ -126,9 +126,6 @@
     "q12": "What is the Black chat?",
     "a12": "Black users get access to a <strong>shared internal chat</strong> visible only to active Black members. Messages are pseudonymous (shown as a short code like B-XXXXXX, never your real key or IP), capped at 200 characters, and limited to the 20 most recent messages (older ones are automatically swept daily). You can clear your own messages anytime. The chat is stored server-side under the hash of your activation key and is deleted when your key is deactivated."
   },
-  "community": {
-    "title": "Community signals"
-  },
   "disclaimer": "AQMath is software for mathematical calculation. It does not provide investment advice or recommendations; every decision is yours. All calculations are based on historical data and mathematical models.<br>Calculations run on our servers; on the free tier your portfolio data is processed in memory and not written to a database (Black stores holdings under a key hash, see Privacy).<br>© 2026 AQMath. Non-Custodial.<br><a href=\"/docs\">Documentation</a>",
   "app": {
     "heading": "Portfolio Calculator",
@@ -155,10 +152,11 @@
       "reload": "Reload"
     },
     "whatsNew": {
-      "desc": "One-Tap Recording is here. Mark a calculated difference as recorded in your holdings, or adjust the amount, straight from the notification — no extra steps.",
-      "item1": "Record, dismiss or adjust a calculated difference in one tap",
-      "item2": "Regime-aware alerts (SHOCK / LOW_VOL)",
-      "item3": "Small fixes & polish",
+      "desc": "A lighter look, plus two things you asked for: the backtest is now free for everyone, and one button deletes everything we store about you.",
+      "item1": "New light theme and self-hosted fonts — calmer and easier to read",
+      "item2": "Backtest is free: no key needed, upload a CSV and run",
+      "item3": "Delete all my data: holdings, records and notification topics go in one click",
+      "item4": "Plain wording everywhere: what was computed, not what to trade",
       "close": "Close"
     },
     "sync": "Sync all",
@@ -234,7 +232,7 @@
     "total": "Total value",
     "largest": "Largest",
     "maxDrift": "Max Drift",
-    "dcaNeeded": "Below theoretical weight",
+    "dcaNeeded": "Below target",
     "allocationStat": "Allocation",
     "allocation": "ALLOCATION",
     "remaining": "Remaining: 100.00%",

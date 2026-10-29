@@ -76,10 +76,10 @@ test.describe('AQMath key pages — visual regression', () => {
         // Suppress the first-visit onboarding overlays so the snapshot captures
         // the steady-state page a returning visitor sees, not a transient modal.
         // Both are gated on exactly these keys: app-boot.js shows the "What's New"
-        // card unless aqmath-whatsnew-seen === '2.1', and app-tour.js launches the
+        // card unless aqmath-whatsnew-seen === APP_VERSION, and app-tour.js launches the
         // driver.js tour on /app unless aqmath_tour_done is set. Left unseeded they
         // dim/cover the page and re-break the baseline on every copy tweak.
-        localStorage.setItem('aqmath-whatsnew-seen', '2.1');
+        localStorage.setItem('aqmath-whatsnew-seen', '2.1.1');
         localStorage.setItem('aqmath_tour_done', '1');
 
         // Neutralise the live Binance WebSocket price feed. It pushes ticks

@@ -1052,7 +1052,7 @@ function _renderDcaBlock(s) {
         + '</div>';
 }
 
-// [ execute DCA ] — pre-fill the amount from the server notice, remember which
+// Open DCA calculation — pre-fill the amount from the server notice, remember which
 // card to confirm, then run the normal client-side DCA preview flow. The card
 // is confirmed server-side only AFTER applyDcaResult() succeeds (see app.js).
 async function executeDcaSignal(el, signalId) {

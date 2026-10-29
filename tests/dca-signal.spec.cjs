@@ -57,7 +57,7 @@ test.describe('DCA pending signal card', () => {
     // Suppress the onboarding "What's New" modal (it dims the page and would
     // cover the signal card in the inspection screenshot).
     await page.addInitScript(() => {
-      localStorage.setItem('aqmath-whatsnew-seen', '2.1');
+      localStorage.setItem('aqmath-whatsnew-seen', '2.1.1');
     });
 
     await page.goto('/app', { waitUntil: 'domcontentloaded' });
@@ -176,7 +176,7 @@ test.describe('DCA pending signal card (final plan payload)', () => {
     });
     const jsErrors = [];
     page.on('pageerror', (e) => jsErrors.push('pageerror: ' + e.message));
-    await page.addInitScript(() => { localStorage.setItem('aqmath-whatsnew-seen', '2.1'); });
+    await page.addInitScript(() => { localStorage.setItem('aqmath-whatsnew-seen', '2.1.1'); });
     await page.goto('/app', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(600);
 
