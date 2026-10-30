@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/oos-v14-new-tokens">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -59,7 +59,7 @@
 <p>调节器的评分标准是<strong>回撤削减与风险调整后收益（Calmar / Sharpe）</strong>， <strong>而非</strong>跑赢买入持有（Buy &amp; Hold）的最终价值。本测试正是衡量该目标。</p>
 <p><strong>未改动任何参数。</strong> 所有运行均使用生产环境 <code>default_config()</code>。</p>
 <h2>2. 代币范围</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">分组</th>
@@ -82,10 +82,10 @@
 <td style="text-align:left">CEL（Celsius）</td>
 <td style="text-align:left">2022 年崩盘 — 幸存者偏差压力测试</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>设置：等权组合，初始 $1,000，每 30 天定投 $100。 两种策略在相同时间表上获得相同的定投资金。买入持有保持满仓； 调节器根据上升的回撤与上升的下行波动率连续调整敞口。</p>
 <h2>3. 汇总结果（16 个组合，5 个存续代币的全部 k=3 / k=4 / k=5 组合）</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">指标</th>
@@ -108,17 +108,17 @@
 <td style="text-align:left"><strong>相对 B&amp;H 最终值</strong></td>
 <td style="text-align:left">中位数 <strong>0.88×</strong>（最小 0.31×，最大 1.64×）</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p><strong>解读：</strong> 在每一个未见过的组合上，调节器都将峰值回撤削减约一半 （通常 ~84% → ~28%），且几乎在所有组合上都改善了风险调整后收益。 中位数上相对满仓买入持有让出约 12% 的最终收益——这是以上涨空间换取回撤保护的、 预期之内的刻意取舍。</p>
 <h2>3a. 图表</h2>
 <p><strong>各样本外组合的最大回撤</strong> — 调节器（绿色）对比买入持有（红色）：</p>
-<figure class="rs-fig"><img src="/research/assets/dd_comparison.svg" alt="最大回撤：调节器 vs 买入持有（16 个样本外组合）" width="820" height="648" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/dd_comparison.svg" target="_blank" rel="noopener"><img src="/research/assets/dd_comparison.svg" alt="最大回撤：调节器 vs 买入持有（16 个样本外组合）" width="820" height="648" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/dd_comparison.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p><strong>水下（回撤）曲线</strong> — 代表性五代币全组合（AVAX/CRO/DOGE/HBAR/LINK）：</p>
-<figure class="rs-fig"><img src="/research/assets/underwater.svg" alt="水下回撤曲线，调节器 vs 买入持有" width="820" height="420" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/underwater.svg" target="_blank" rel="noopener"><img src="/research/assets/underwater.svg" alt="水下回撤曲线，调节器 vs 买入持有" width="820" height="420" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/underwater.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p><strong>净值曲线（对数刻度）</strong> — 同一组合，相同定投时间表：</p>
-<figure class="rs-fig"><img src="/research/assets/equity_curve.svg" alt="净值曲线，调节器 vs 买入持有，对数刻度" width="820" height="420" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/equity_curve.svg" target="_blank" rel="noopener"><img src="/research/assets/equity_curve.svg" alt="净值曲线，调节器 vs 买入持有，对数刻度" width="820" height="420" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/equity_curve.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h2>4. 逐组合明细</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">组合</th>
@@ -291,9 +291,9 @@
 <td style="text-align:center">$16,149 / $20,612</td>
 <td style="text-align:right">2118</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <h2>5. 压力测试</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">组合</th>
@@ -346,7 +346,7 @@
 <td style="text-align:center"><strong>$25,023</strong> / $18,554</td>
 <td style="text-align:right">2489</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p><strong>归零代币压力测试（幸存者偏差）：</strong> 当成分代币崩盘（Celsius，2022 年）时， 调节器在<strong>最终值</strong>和<strong>回撤</strong>上<strong>同时</strong>跑赢买入持有（+55–59 个百分点）。 回撤保护直接缓解了固定加密组合最大的尾部风险。</p>
 <p><strong>测试台一致性：</strong> <code>HBAR/CRO/DOGE/PYTH</code> 一行完全复现了生产 UI 回测结果 （最终值 $5,731，最大回撤 17.8%，Calmar 0.70，Sharpe 0.28， 对比 B&amp;H $4,987 / 49.4% / 0.13 / 0.03），证明本地测试台与已部署引擎一致。</p>
 <h2>6. 解读</h2>

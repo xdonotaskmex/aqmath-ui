@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/mc-risk">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -63,7 +63,7 @@
 <h2>2. The bootstrap: 3,000 lives of the same market</h2>
 <p>The stationary block bootstrap resamples blocks of consecutive days with geometric block lengths (mean 10 days), so each synthetic path preserves serial correlation, volatility clustering and fat tails — the three properties that make i.i.d. resampling wrong for financial data. For each of the 3,000 paths, both legs (strategy and buy &amp; hold) are evaluated on the identical resampled sequence, so every comparison is paired: the strategy cannot win because it got an easier history.</p>
 <p><strong>Observed values and 90% bootstrap confidence intervals:</strong></p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Basket</th>
@@ -102,9 +102,9 @@
 <td style="text-align:right">1.03</td>
 <td style="text-align:right">0.81</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p><strong>Probability that the strategy beats buy &amp; hold across the 3,000 paths:</strong></p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Basket</th>
@@ -135,8 +135,8 @@
 <td style="text-align:right">76.3%</td>
 <td style="text-align:right">18.8%</td>
 </tr>
-</tbody></table></div>
-<figure class="rs-fig"><img src="/research/assets/mc_institutional.svg" alt="CVaR tail risk, bootstrap win probabilities and Deflated Sharpe across three baskets" width="1040" height="430" loading="lazy" decoding="async"></figure>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
+<figure class="rs-fig"><a href="/research/assets/mc_institutional.svg" target="_blank" rel="noopener"><img src="/research/assets/mc_institutional.svg" alt="CVaR tail risk, bootstrap win probabilities and Deflated Sharpe across three baskets" width="1040" height="430" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/mc_institutional.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <h2>3. What holds: the risk edge is statistically real</h2>
 <p>The drawdown cut is the one claim that survives everywhere. Across all 9,000 synthetic paths, the strategy&#x27;s maximum drawdown is lower than buy &amp; hold&#x27;s in <strong>98.6–99.7%</strong> of them — not a point estimate but a distribution statement, and the confidence-interval bands above show it is not even close: on basket A the strategy&#x27;s MDD CI90 upper bound (39.7%) sits below buy &amp; hold&#x27;s median (40.0%).</p>
 <p>The tail is thinner by the same margin. At the one-month horizon, CVaR(95%) — the average loss conditional on being in the worst 5% of months — is <strong>−8.5% vs −14.4%</strong> on A, <strong>−9.8% vs −16.7%</strong> on B and <strong>−7.1% vs −11.7%</strong> on C: roughly a 40% shallower tail on every basket, including basket B where every return-based metric fails. The shield&#x27;s job description is exactly this, and the bootstrap confirms it is not a property of the one history we happened to live through.</p>

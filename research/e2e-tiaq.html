@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/e2e-tiaq">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -58,7 +58,7 @@
 <p>Evaluate a <strong>candidate basket built around two newly added tokens (TIA, QNT)</strong> under the exact production control stack: the 180-day KKT risk-parity MACRO loop for base weights and the Aegis (v14) Deleverage Shield for daily exposure control. The question is not &quot;can this beat Buy &amp; Hold&quot; but how the <em>shipped</em> machinery behaves on this asset mix — allocation decisions, defensive behaviour and risk-adjusted outcome included.</p>
 <p><strong>No parameters were changed.</strong> Every run uses production <code>default_config()</code> and the unmodified production code path.</p>
 <h2>2. Basket and data</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Token</th>
@@ -91,10 +91,10 @@
 <td style="text-align:left">Shield parking asset</td>
 <td style="text-align:left">defensive cash, unchanged</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>Settings: start $1,000, DCA $100 every 30 days, 10 bps simulated fee on every trade. Common price window 2023-10-31 → 2026-07-27 (1,001 days); 180-day optimizer warm-up, then <strong>821 trading days</strong> (2024-04-28 → 2026-07-27) with <strong>5 walk-forward MACRO re-optimisations</strong> (2024-04-27, 2024-10-24, 2025-04-22, 2025-10-19, 2026-04-17).</p>
 <h2>3. Headline result</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Metric</th>
@@ -172,18 +172,18 @@
 <td style="text-align:right">56.9%</td>
 <td style="text-align:right">100%</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p><strong>Reading:</strong> the Shield did its job on risk — max drawdown came in at 16.9% versus 24.6% for Buy &amp; Hold (−7.7 pp) at a beta of 0.62 — but this window was net-positive for the basket, so the ~43% average de-risking cost absolute return (−4.65% p.a. alpha). Risk cut, upside given up: the classic, expected trade — here with the cost side visible.</p>
 <h2>3a. Visualizations</h2>
 <p><strong>Virtual equity — walk-forward E2E</strong> (identical DCA schedule both sides):</p>
-<figure class="rs-fig"><img src="/research/assets/tiaq_equity.svg" alt="Virtual equity, Shield strategy vs Buy &amp; Hold" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/tiaq_equity.svg" target="_blank" rel="noopener"><img src="/research/assets/tiaq_equity.svg" alt="Virtual equity, Shield strategy vs Buy &amp; Hold" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/tiaq_equity.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <p><strong>Drawdown — Shield vs Buy &amp; Hold:</strong></p>
-<figure class="rs-fig"><img src="/research/assets/tiaq_drawdown.svg" alt="Drawdown curves, Shield vs Buy &amp; Hold" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/tiaq_drawdown.svg" target="_blank" rel="noopener"><img src="/research/assets/tiaq_drawdown.svg" alt="Drawdown curves, Shield vs Buy &amp; Hold" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/tiaq_drawdown.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <p><strong>Deleverage Shield risky exposure</strong> (share of deployed NAV; remainder parked in USDC):</p>
-<figure class="rs-fig"><img src="/research/assets/tiaq_exposure.svg" alt="Risky exposure over time" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/tiaq_exposure.svg" target="_blank" rel="noopener"><img src="/research/assets/tiaq_exposure.svg" alt="Risky exposure over time" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/tiaq_exposure.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <h2>4. In-sample / out-of-sample splits</h2>
 <p>TWR daily returns (DCA flows removed), rf 5%. Every re-optimisation after the first uses trailing data only — no lookahead anywhere in the chain.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Split</th>
@@ -218,7 +218,7 @@
 <td style="text-align:center"><strong>17.6% / 29.9%</strong></td>
 <td style="text-align:center">−20.9% / −36.7%</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p><em>Annualised segment CAGRs (TWR, rf 5%); exact daily series in the result JSON.</em></p>
 <p>The sharpest evidence is OOS-2: in the worst segment of the window the Shield held max drawdown to 17.6% while Buy &amp; Hold went 29.9% underwater (−12.3 pp).</p>
 <h2>5. Allocation findings (qualitative)</h2>

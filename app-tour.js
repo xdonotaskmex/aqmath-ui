@@ -56,7 +56,7 @@
             }
         },
         {
-            element: '.hdr-right',
+            element: '.app-toolbar',
             popover: {
                 title: 'Import & Export',
                 description: 'SYNC fetches live prices. CSV IMPORT loads transactions, EXPORT saves your portfolio as JSON, IMPORT restores it. RESET clears everything.',
@@ -68,7 +68,7 @@
             element: '.chart-wrap',
             popover: {
                 title: 'Allocation Overview',
-                description: 'This chart shows your current allocation vs targets. The center displays your portfolio coefficient of variation.',
+                description: 'This chart shows your current allocation vs targets. The center displays the number of tokens in your portfolio.',
                 side: 'left',
                 align: 'start'
             }
@@ -143,7 +143,7 @@
             var el = document.querySelector(step.element);
             if (!el) return false;
             var style = window.getComputedStyle(el);
-            var isHidden = (style.display === 'none' || style.visibility === 'hidden' || el.classList.contains('hidden'));
+            var isHidden = (style.display === 'none' || style.visibility === 'hidden' || el.classList.contains('hidden') || el.getClientRects().length === 0);
             if (isHidden && step.alwaysShow) {
                 // Temporarily reveal for the tour
                 el.classList.remove('hidden');

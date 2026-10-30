@@ -489,8 +489,9 @@ async function loadTopGainers() {
             const gainers = usdt.slice(0, 3);
             body.innerHTML = gainers.map(t => {
                 const sym = t.symbol.replace('USDT', '');
-                const pct = parseFloat(t.priceChangePercent).toFixed(2);
-                return `<div class="lp-widget-row"><span class="sym">${sym}</span><span class="val up">+${pct}%</span></div>`;
+                const pct = parseFloat(t.priceChangePercent);
+                const sign = pct >= 0 ? '+' : '';
+                return `<div class="lp-widget-row"><span class="sym">${sym}</span><span class="val ${pct >= 0 ? 'up' : 'down'}">${sign}${pct.toFixed(2)}%</span></div>`;
             }).join('') + '<div class="lp-widget-meta">strongest tracked Binance moves</div>';
         } catch(e) {
             widgetUnavailable(body);

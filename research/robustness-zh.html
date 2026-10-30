@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/robustness">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -62,7 +62,7 @@
 <p>防护盾常数以<strong>生产值的倍数</strong>展示；绝对常数不予公布。</p>
 <h2>2. 参数高原 — 每次只动一个旋钮</h2>
 <p>下面每个点都是一次完整的滚动前推重跑（约 6 年，12-13 次 再优化），且恰好只移动一个旋钮。琥珀色列：生产设置。</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">旋钮</th>
@@ -121,15 +121,15 @@
 <td style="text-align:right">0.65</td>
 <td style="text-align:left">无作用（已验证）</td>
 </tr>
-</tbody></table></div>
-<figure class="rs-fig"><img src="/research/assets/robust_plateau.svg" alt="Parameter plateau, Calmar ratio per knob, three baskets" width="1040" height="602" loading="lazy" decoding="async"></figure>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
+<figure class="rs-fig"><a href="/research/assets/robust_plateau.svg" target="_blank" rel="noopener"><img src="/research/assets/robust_plateau.svg" alt="Parameter plateau, Calmar ratio per knob, three baskets" width="1040" height="602" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/robust_plateau.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p><strong>平坦的旋钮。</strong> 再平衡阈值与下行波动率窗口在整个网格上几乎 不动任何东西 — 在组合 A 上 Calmar 区间为 0.50-0.57，最大回撤 区间不到 2.4 个百分点。这是真正的高原：系统不在乎它们在测试 范围内处于哪个位置。</p>
 <p><strong>旋钮。</strong> 防护盾的回撤参考值表现起来完全像一个保护旋钮， 而不是一个脆弱的常数。收紧它会<strong>单调地</strong>用参与度换保护 — 在组合 A 上，全窗口最大回撤从 2.67× 时的 25.1% 移动到生产值 0.53× 时的 14.6% — 而 Calmar 在每一个点上都保持在 0.49-0.62 区间内。没有任何网格点击破了机制；这个旋钮选择的是保护<em>多少</em>， 而不是<em>是否</em>有效。</p>
 <p><strong>宏观旋钮。</strong> 回看期与再优化节奏产生的离散度最大（在 A 上， 仅回看期一项就让最终权益在 $14.5k-$23.3k 之间变动）。这是 诚实，不是稳健性表演：协方差窗口确实会改变哪些权重被冻结。 对本研究重要的是形状 — 组合 A 和 C 上的每个网格点都保持正的 Calmar，并留在狭窄的最大回撤区间内（A 上 16.9-18.9%）。 网格中任何地方都没有断崖。组合 B 在每一个设置下都仍是弱组合， 与市场状态尸检一致：它的全窗口案例从来就不建立在调参上。</p>
 <p><strong>无作用的旋钮。</strong> 风险预算旋钮缩放<em>报告的</em>风险敞口，但在 Aegis（v14） 记账中不应用于收益 — 网格确认这是精确成立而非近似的：五个 设置，权益精确到分都相同。我们公布这一点，因为一个看起来有 保护作用、实际只是装饰的旋钮应该被知道，而不是被假设。</p>
 <h2>3. 现实压力 — 手续费</h2>
 <p>系统中的每笔交易（防护盾再平衡、DCA 买入、分批资金重新部署） 都支付模拟手续费。网格把它从生产的 10 个基点压到该水平的 20 倍。</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:right">手续费</th>
@@ -186,12 +186,12 @@
 <td style="text-align:right">$14,334</td>
 <td style="text-align:right">0.42</td>
 </tr>
-</tbody></table></div>
-<figure class="rs-fig"><img src="/research/assets/robust_fees.svg" alt="Final equity versus trading fee, Shield vs Buy and Hold" width="920" height="400" loading="lazy" decoding="async"></figure>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
+<figure class="rs-fig"><a href="/research/assets/robust_fees.svg" target="_blank" rel="noopener"><img src="/research/assets/robust_fees.svg" alt="Final equity versus trading fee, Shield vs Buy and Hold" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/robust_fees.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p>退化是平缓的且大致线性。在 <strong>100 个基点</strong> — 比生产高一个 数量级，也高于现实的散户吃单费率 — 组合 A 和 C 的风险调整后 表现仍然不逊于大多数已发布研究中最强的数字。本已边缘的 组合 B 只在 200 个基点时才跌破零。买入持有的 DCA 买入支付相同 手续费，因此防护盾的<em>边际</em>成本只是再平衡换手 — 而阈值再平衡 的设计目的恰恰是压低这个换手（网格的手续费总额证实了这一点）。</p>
 <h2>4. 现实压力 — 延迟执行</h2>
 <p>每日回路在评估完同一个收盘价的防护盾后按该收盘价交易。 如果订单晚到一两天呢？防护盾的敞口决策被延迟 1 个和 2 个 交易日，其余一切 — 记账、手续费、DCA、资金重新部署 — 都 保持在生产代码路径上。</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:right">延迟</th>
@@ -222,8 +222,8 @@
 <td style="text-align:right">17.8%</td>
 <td style="text-align:right">不变</td>
 </tr>
-</tbody></table></div>
-<figure class="rs-fig"><img src="/research/assets/robust_lag.svg" alt="Max drawdown under 0, 1 and 2 day execution lag" width="920" height="380" loading="lazy" decoding="async"></figure>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
+<figure class="rs-fig"><a href="/research/assets/robust_lag.svg" target="_blank" rel="noopener"><img src="/research/assets/robust_lag.svg" alt="Max drawdown under 0, 1 and 2 day execution lag" width="920" height="380" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/robust_lag.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p>延迟执行在组合 A 和 B 上大约损失 <strong>2.4-3.1 个百分点</strong>的回撤 保护，在 C 上几乎为零 — 而保护依然很大：即使晚两天，防护盾 在组合 A 上的最大回撤是 19.5%，对买入持有的 43.2%，削减约 24 个百分点。最终权益几乎不受影响（六个格子中甚至有两个 略微上升 — 防护盾不是择时系统，所以晚到并不系统性更差， 只是稍微钝一点）。一个无法瞬时成交的日收盘价系统仍然完成了 它的工作。</p>
 <h2>5. 注意事项</h2>
 <ul><li><strong>逐一设计。</strong> 每个点恰好移动一个旋钮。网格证明不存在 单旋钮断崖，但它没有探索旋钮之间的交互；联合空间中的 敌对角落未被排除。</li><li><strong>权重轮换的手续费。</strong> 与早先每一项研究一样，宏观再优化时 的权重变化不收费。因此更快的节奏看起来比实盘略便宜； 手续费压力结果正是该假设的保守补充。</li><li><strong>延迟模型</strong>把防护盾的决策作为一个整体延迟，包括其内部 斜坡反馈。它是散漫程度的上界，不是订单簿模型。</li><li><strong>组合 B</strong> 在整个研究中始终是诚实的例外：在每一个设置下 全窗口数字都弱。保留它，是因为一个藏起最差组合的稳健性 论断不是稳健性论断。</li></ul>

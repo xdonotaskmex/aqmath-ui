@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/v18-shock-windows">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -59,7 +59,7 @@
 <p>The six windows were selected <strong>because they were crashes</strong> — the study is a stress test of the design under known shocks, not a forecast or a hit rate.</p>
 <h2>2. Method — the exact production path</h2>
 <p>Every run uses the <strong>live production wiring</strong>, not a research approximation.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Element</th>
@@ -90,12 +90,12 @@
 <td style="text-align:left">Pre-registered metric</td>
 <td style="text-align:left"><code>MaxDD_delta = MaxDD(baseline) − MaxDD(shield)</code>, per window and averaged</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>The Shield scales every threshold off the basket&#x27;s own trailing downside volatility, so its sensitivity is basket-relative rather than a single fixed number, and an asymmetric ramp moves held exposure toward that target. <strong>No parameter was changed, re-fit or re-tuned</strong> — the production configuration is used throughout. (The exact signal constants live in the private engine repo.)</p>
 <p><strong>Leave-one-crash-out is satisfied by construction.</strong> The KKT weights are causal (each re-optimisation sees only the trailing 180 days) and v18 carries no cross-window fit, so no window&#x27;s result is influenced by any other crash. Each window is therefore measured strictly out-of-sample.</p>
 <h2>3. Windows and baskets (real data; 2008 not runnable)</h2>
 <p>Seven windows were requested; <strong>six are runnable</strong>. The 2008 GFC is impossible for any crypto basket — the oldest token in the dataset (BTC) starts 2013-04-28, so no crypto price exists for 2008. Early windows use the five longest-history legacy tokens; Mar-2020 uses the production basket <strong>minus SOL</strong> (SOL starts 2020-04-10, after that crash).</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Window</th>
@@ -140,10 +140,10 @@
 <td style="text-align:left">ADA · BNB · ETH · XRP · SOL</td>
 <td style="text-align:left">2024-07-15 → 2024-09-30</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <h2>4. Result — drawdown delta per window (Test A)</h2>
-<figure class="rs-fig"><img src="/research/assets/shock_dd_delta.svg" alt="Max drawdown per shock window, v18 Shield vs fixed-weight baseline" width="920" height="440" loading="lazy" decoding="async"></figure>
-<div class="rs-tablewrap">
+<figure class="rs-fig"><a href="/research/assets/shock_dd_delta.svg" target="_blank" rel="noopener"><img src="/research/assets/shock_dd_delta.svg" alt="Max drawdown per shock window, v18 Shield vs fixed-weight baseline" width="920" height="440" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/shock_dd_delta.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Window</th>
@@ -210,12 +210,12 @@
 <td style="text-align:center"><strong>+13.27 pp</strong></td>
 <td style="text-align:right">—</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>The Shield cut drawdown in <strong>6 of 6</strong> windows, by <strong>+3.3 to +22.4 pp</strong> (average <strong>+13.3 pp</strong>). <strong>Dominance check:</strong> no single episode contributes more than 50% of the total improvement — the largest (Late 2018, +22.42 pp) is ~28% of the sum of positive deltas, so the average is <strong>not</strong> carried by one outlier.</p>
 <h2>5. Cost side — calm-period whipsaw (Test C)</h2>
 <p>For each shock, the 90 calm days immediately preceding it are measured: does the Shield churn and give up return when there is nothing to protect against?</p>
-<figure class="rs-fig"><img src="/research/assets/shock_net_benefit.svg" alt="Drawdown modelling vs calm-period cost per window" width="920" height="440" loading="lazy" decoding="async"></figure>
-<div class="rs-tablewrap">
+<figure class="rs-fig"><a href="/research/assets/shock_net_benefit.svg" target="_blank" rel="noopener"><img src="/research/assets/shock_net_benefit.svg" alt="Drawdown modelling vs calm-period cost per window" width="920" height="440" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/shock_net_benefit.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Window</th>
@@ -274,7 +274,7 @@
 <td style="text-align:center">0</td>
 <td style="text-align:right"><strong>+4.99 pp</strong></td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p><code>Net benefit = MaxDD_delta − calm_bleed</code>. It is <strong>positive in 5 of 6</strong> windows. The cost shows up exactly where predicted:</p>
 <ul><li><strong>Mar 2020</strong> — the calm window before the crash was a strong rally; the Shield&#x27;s lower exposure lagged it (+13.70 pp bleed), which ate most of the crash protection on a net basis (+3.80 pp).</li><li><strong>Mar 2023</strong> — a shallow, short event: the small protection (+3.29 pp) was slightly outweighed by the calm bleed, for a net <strong>−1.70 pp</strong>. This is the one window where the fixed-weight baseline came out marginally ahead net.</li></ul>
 <h2>6. Robustness — the V/D neighbourhood (Test B)</h2>
@@ -282,8 +282,8 @@
 <h2>7. Exposure-matched control — isolating timing from de-risking (Test D)</h2>
 <p>A reader&#x27;s fair challenge: the Shield&#x27;s average in-window exposure (~0.21–0.35) is much lower than the 60% baseline&#x27;s, so part of the drawdown cut is <strong>less beta, not better timing</strong>. To answer, two signal-free control legs are built on the same KKT return stream as the Shield, with the same average exposure per window:</p>
 <ul><li><strong>CONST(c)</strong> — a constant exposure <code>c = mean(shield exposure)</code> over the window, <strong>zero turnover fees</strong> (a deliberate handicap in the control&#x27;s favour, since the Shield does pay fees when it rebalances).</li><li><strong>VOL-target</strong> — <code>min(1, tv / trailing_vol)</code> with <code>tv</code> bisected so the window&#x27;s mean exposure equals <code>c</code>, where <code>trailing_vol</code> is the 30-day annualised realised stdev of the KKT basket, computed only from returns strictly before each date (causal, no drawdown signal). This leg pays fees at the same rate as the Shield.</li></ul>
-<figure class="rs-fig"><img src="/research/assets/shock_exposure_matched.svg" alt="Max drawdown at matched exposure" width="920" height="500" loading="lazy" decoding="async"></figure>
-<div class="rs-tablewrap">
+<figure class="rs-fig"><a href="/research/assets/shock_exposure_matched.svg" target="_blank" rel="noopener"><img src="/research/assets/shock_exposure_matched.svg" alt="Max drawdown at matched exposure" width="920" height="500" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/shock_exposure_matched.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Window</th>
@@ -349,7 +349,7 @@
 <td style="text-align:center"><strong>+0.00 pp</strong></td>
 <td style="text-align:center">−0.03 pp</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>Against the zero-fee CONST, the Shield is shallower in 2 of 6 windows, deeper in 2, and identical in 2 (the flat-exposure windows where the Shield never changed exposure, so it matches the constant by construction); the mean residual is <strong>−0.09 pp</strong> — essentially zero. A <strong>causal variant</strong>, where <code>c</code> is calibrated on the 420-day warm-up preceding the shock (no look-ahead into the window), reverses that: the Shield is shallower in <strong>5 of 6</strong> with a mean residual of <strong>+5.37 pp</strong>. The honest reading: against a constant that already knows the shock&#x27;s average exposure, the Shield&#x27;s drawdown cut was mostly de-risking; against a constant that can only see what a live system would have seen, the Shield&#x27;s adaptivity buys a meaningful edge.</p>
 <p>Against the fee-paying VOL-target, the Shield is shallower in <strong>5 of 6</strong> windows, mean residual <strong>+1.79 pp</strong>, worst −0.03 pp. The Shield&#x27;s timing is better than a naive volatility-targeting rule at matched exposure.</p>
 <p>A paired block bootstrap over the concatenated shock-window days (368 days, 1000 reps, 20-day blocks) gives:</p>

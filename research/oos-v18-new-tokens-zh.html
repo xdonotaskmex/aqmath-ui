@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/oos-v18-new-tokens">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -59,7 +59,7 @@
 <p>本研究在<strong>完全相同的 182 组合面板上重新测量 Proteus（v18）</strong>，并同时对照买入持有 与已发布的 v14 数字评分。问题狭窄而诚实：<em>在模型从未见过的代币上，我们实际运行的 引擎是否仍尽到职责 —— 自适应阈值是否名副其实，还是过拟合？</em></p>
 <p><strong>没有更改、重新拟合或重新调参任何参数。</strong> 每次运行都使用生产 <code>default_config()</code>； 与 v14 研究的唯一区别是调用哪个防护盾函数。</p>
 <h2>2. 方法 —— 与 v14 面板完全一致，只替换一个引擎</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">要素</th>
@@ -90,11 +90,11 @@
 <td style="text-align:left"><strong>唯一变化</strong></td>
 <td style="text-align:left"><code>simulate_v18</code>（波动率缩放的自适应阈值）取代 <code>simulate</code>（v14 固定阈值）</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>买入持有与引擎无关，因此两列都取自同一次运行。<code>simulate_v18</code> 不接受任何逐代币回撤 输入，因此<strong>两个引擎读取完全相同的窗口内组合曲线</strong> —— 这一正面对比测量的是引擎， 而非回撤基准。</p>
 <p><strong>自检。</strong> 本 harness 的 v14 腿<em>精确</em>复现了已发布的 /results 数字 —— 回撤削减中位数 <strong>+45.0 个百分点</strong>、Calmar <strong>+0.46（182/182）</strong>、Sharpe <strong>+0.25（172/182）</strong>、最终价值 中位数 <strong>1.40×</strong>。因为 v14 列与已上线报告逐数吻合，v18 列就站在一个经过验证的基础上。</p>
 <h2>3. 汇总结果（182 个组合，各自对比买入持有）</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">指标</th>
@@ -122,10 +122,10 @@
 <td style="text-align:center">中位数 <strong>1.40×</strong>（最小 0.06×，最大 2.59×）</td>
 <td style="text-align:center">中位数 <strong>1.41×</strong>（最小 0.05×，最大 2.15×）</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p><strong>解读：</strong> 在全部 182 个未见组合中的每一个，现役 v18 引擎都削减了最深跌幅 —— 中位数 削减约 45 个百分点，与其前身相同 —— 同时在完全相同的定投下仍复利增长至买入持有最终 价值的中位数 1.41×。风险调整后收益在中位数上比 v14 略有提升（Calmar +0.55 对 +0.46， Sharpe +0.27 对 +0.25）。</p>
 <h2>4. Proteus（v18）对 Aegis（v14），在相同 182 组合上的正面对比</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left"></th>
@@ -140,13 +140,13 @@
 <td style="text-align:center">18.3%</td>
 <td style="text-align:center"><strong>16.8%</strong></td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>v18 在相同组合上胜过 v14 的比例：</p>
 <ul><li><strong>更低最大回撤 —— 113 / 182</strong> 个组合（62%）</li><li><strong>更高 Calmar —— 115 / 182</strong> 个组合（63%）</li><li><strong>更高 Sharpe —— 121 / 182</strong> 个组合（66%）</li></ul>
 <p>自适应引擎总体上略优：它把中位数组合的最深跌幅比 v14 多削减约 1.5 个百分点，并在约 三分之二的直接对比中胜出。它并<strong>不</strong>全面碾压 —— 见第 5 节与第 8 节。</p>
 <h2>5. 优势来自何处 —— 按历史长度</h2>
 <p>182 个组合的历史从约 2.1 年（任何含最年轻代币 ATH/SUI 的组合）到约 12.2 年（仅含 老牌代币的组合）不等。按 K 线数分组：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">窗口</th>
@@ -205,12 +205,12 @@
 <td style="text-align:center">0 / 1</td>
 <td style="text-align:center">0 / 1</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>以 1500 根为界分组：</p>
 <ul><li><strong>较短 / 近期窗口（&lt;1500 根，141 个组合 —— 占面板 77%）：</strong> v18 明显更好。最大回撤 中位数 17.1% → <strong>15.7%</strong>，在 <strong>98/141</strong> 个组合上回撤更低，在 <strong>102/141</strong> 个组合上 Calmar 更高。这些是 2020 年后的组合，波动率缩放阈值能很好地适应它们。</li><li><strong>较长、横跨多次崩盘的历史（≥1500 根，41 个组合 —— 占 23%）：</strong> 喜忧参半。回撤削减 中位数大致相等（v14 +47.0 对 v18 +45.8），v18 在回撤（15/41）与 Calmar（13/41）的 正面对比中胜出更少，尽管它在 30/41 个组合上仍赢得 Sharpe。在最长的窗口上 —— 它们 纳入了 2014-15 与 2018 年的深度熊市 —— v14 固定的 15% 参考是更保守的设置，偶尔削得 更深（≥3982 根的 5 个组合是最清楚的例子）。</li></ul>
 <p><strong>原因：</strong> v18 依据组合<em>自身</em>的滚动下行 sigma 来确定每个阈值的尺度。在很长的历史上， 该 sigma 很高，因此自适应回撤参考位得更高，在完全转入防御前容忍更多回撤 —— 这在平静的 近期市场状态中是优势，在最严重的历史崩盘中则是小小的代价。这是设计的一个属性，在此 如实披露而非隐藏。</p>
 <h2>6. 逐组合样本 —— /results 上绘制的十二个组合，加入 v18</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">组合</th>
@@ -343,10 +343,10 @@
 <td style="text-align:center">1.03 / 1.03 / 0.92</td>
 <td style="text-align:right">2275</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>这十二个是 /results 图表所绘制的组合（仅 v14）。两个引擎在每一个组合上都大幅削减了 相对买入持有的回撤；在它们不同之处，短的 ATH/SUI 时代组合偏爱 v14 的固定阈值，而较长 或以 SUI 为锚的组合偏爱 v18。若干近期全未见组合的绝对 Calmar/Sharpe 为负，是因为这些币 的<em>原始</em>收益很差 —— 防护盾的评分依据是<strong>相对买入持有的变化量</strong>，而它几乎处处为正。</p>
 <h2>7. 压力案例</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">组合</th>
@@ -394,7 +394,7 @@
 <td style="text-align:center">-0.00 / <strong>0.09</strong> / -0.32</td>
 <td style="text-align:right">767</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>两个引擎在每个压力案例上都碾压买入持有的回撤（一个崩塌的 Celsius 成分、一个短历史组合、 完整的 13 代币池）。v18 在宽泛的 13 代币组合上是明显赢家 —— 最大回撤 <strong>9.4% 对 14.3%</strong>、 Calmar <strong>0.77 对 0.34</strong> —— 并在两个死亡代币组合上略逊于 v14，与第 5 节的模式一致。代表性 的全未见组合（ATH/SUI/XMR/SOL/DOGE）读数为 v14 回撤 19.1% / v18 回撤 19.6%，对比买入持有 60.1%，其中 v18 把 Calmar 从 -0.01 提升到 +0.04。</p>
 <h2>8. 解读</h2>
 <ul><li><strong>回撤使命在现役引擎上得以泛化。</strong> v18 在 <strong>182 / 182</strong> 个未见组合中都削减了最深跌幅， 中位数约 45 个百分点，与 v14 的覆盖率相同。这种保护是设计的属性，而非它所调参代币的属性。</li><li><strong>自适应阈值名副其实 —— 但幅度不大。</strong> 更深的中位数削减（16.8% 对 18.3%）、更高的中位数 Calmar（+0.55 对 +0.46）与 Sharpe（+0.27 对 +0.25），以及约三分之二的正面对比胜率。这是一个 真实但不夸张的改进，正是一次诚实重测应有的样子：无重新调参、无精挑细选，在同一面板上一个 小小的优势。</li><li><strong>v18 并不全面碾压，我们照实说。</strong> 它失去了 v14 完美的 Calmar 全胜（178/182 对 182/182）， 且在最长、崩盘最丰富的历史上，其波动率缩放参考比 v14 固定的 15% 容忍更多回撤，因此 v14 在那里 有时削得更深。优势集中在构成面板大部分主体的较近期窗口。</li></ul>

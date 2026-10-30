@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/liveness-screen">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -61,7 +61,7 @@
 <h2>2. 复现失效模式</h2>
 <p>测试组合 <strong>C 雷区</strong>：BTC、ETH、CEL（Celsius — 自 2022 年中 破产，交易所冻结，代币在稀薄的二级市场继续交易）+ PAXG 黄金锚。 滚动前推，180 天再优化，生产数学，不改任何参数。 窗口 2020-03 → 2026-08，$1,000 起始，$100/30 天 DCA， 10 个基点手续费。</p>
 <p>在 <strong>2025-08-24 再优化</strong>时，优化器产出了这样一个冻结部分：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">代币</th>
@@ -89,12 +89,12 @@
 <td style="text-align:right">0.62%</td>
 <td style="text-align:right">44.0%</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>机制如下：宏观优化器为每个代币配一个随其近期波动率上升而 收紧的动态权重上限 — 组合中波动最大的成员总是被完全挤出 — 然后把得到的权重重新归一化到 100%。那一天 ETH 是波动最大的 代币，于是它拿到零 — 而价格几乎不动的死代币 CEL，纯粹因为 崩塌后的图表测得的波动率低，继承了 <strong>24.7% 的冻结权重</strong>。 波动率数学中没有任何东西能看出这些收盘价背后的市场已经消失。</p>
-<figure class="rs-fig"><img src="/research/assets/liveness_weights.svg" alt="CEL frozen weight at every macro re-optimisation — the 2025-08-24 anomaly in red" width="920" height="392" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/liveness_weights.svg" target="_blank" rel="noopener"><img src="/research/assets/liveness_weights.svg" alt="CEL frozen weight at every macro re-optimisation — the 2025-08-24 anomaly in red" width="920" height="392" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/liveness_weights.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h2>3. 候选筛查 — 我们测试并否决了什么</h2>
 <p>所有筛查都<strong>只使用过去数据</strong>（不超过再优化日期），并在组合 C 全部 13 次再优化上逐一运行。</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">变体</th>
@@ -127,10 +127,10 @@
 <td style="text-align:left">异常被消除，指标改善（见下）</td>
 <td style="text-align:left">✅ 选定</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>胜出的设计是一个<strong>上限归零筛查</strong>：KKT 优化器始终在<em>完整</em>的 组合全集上运行（上限与协方差不动）；筛查随后在部分为下一个 窗口冻结<em>之前</em>过滤优化器的输出 — 被筛查的代币以零权重进入 新部分，幸存者重新归一化。窗口中途已经冻结的任何东西都永远 不会被触碰。持续性要求（连续两次再优化，约一年）保证一个 坏数据日永远不会把一个活着的代币归零。</p>
 <h2>4. 结果 — 组合 C 雷区</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">指标</th>
@@ -169,10 +169,10 @@
 <td style="text-align:right">0.65</td>
 <td style="text-align:right">0.50</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>筛查在六年中恰好触发了一次 — 正是在异常再优化时 （2025-08-24），把 CEL 的 24.7% 归零，并把部分重新归一化为 BTC 41.6% / PAXG 58.4%。</p>
-<figure class="rs-fig"><img src="/research/assets/liveness_equity.svg" alt="Virtual equity, basket C with and without the liveness screen" width="920" height="400" loading="lazy" decoding="async"></figure>
-<figure class="rs-fig"><img src="/research/assets/liveness_dd.svg" alt="Drawdown curves, basket C with and without the liveness screen" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/liveness_equity.svg" target="_blank" rel="noopener"><img src="/research/assets/liveness_equity.svg" alt="Virtual equity, basket C with and without the liveness screen" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/liveness_equity.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
+<figure class="rs-fig"><a href="/research/assets/liveness_dd.svg" target="_blank" rel="noopener"><img src="/research/assets/liveness_dd.svg" alt="Drawdown curves, basket C with and without the liveness screen" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/liveness_dd.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p><strong>诚实的权衡：</strong> 筛查后的部分 BTC 占比更重，因此 2025-26 回调 切得更深 — 最大回撤从 14.1% 升到 17.8%，Calmar 从 0.72 降到 0.65（仍高于买入持有的 0.50）。作为交换，策略获得 +8.5% 的 最终价值和明显更高的 Sharpe，且系统性缺陷被消除。</p>
 <p><strong>零附带成本：</strong> 同一个筛查在两个全存续对照组合（主流币+黄金， 以及 2019-20 代组合）上运行过：在那里从未触发，结果与未筛查 基线逐位一致。</p>
 <h2>5. 为什么回测低估了真实收益</h2>

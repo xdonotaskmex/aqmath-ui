@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/dca-stress">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -64,7 +64,7 @@
 <p><strong>未改动任何参数。</strong>每一次运行都使用生产默认配置。</p>
 <h2>2. 设计</h2>
 <p>五个场景，每个场景以不同随机种子运行 30 次。使用已发布的篮子 （ADA、BNB、ETH、XRP、SOL），$1,000 起步、每 30 天 $100，覆盖完整 6.2 年窗口（2020-04-10 至 2026-07-04）。</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">场景</th>
@@ -109,11 +109,11 @@
 <td style="text-align:left">全扰动</td>
 <td style="text-align:left">最现实的糟糕情形</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>定投抖动以完全相同的方式施加在调制器与买入持有参照上，两个策略看到 的是同一份不完美的现金流。比较是公平的：我们测量的是防护盾的保护 是否在不完美定投下衰减，而不是不完美定投本身是否更差。</p>
 <h2>3. 结果</h2>
 <h3>3a. 最大回撤 — 全部五个场景（30 次运行的中位数）</h3>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">场景</th>
@@ -158,11 +158,11 @@
 <td style="text-align:center">+0.5 pp</td>
 <td style="text-align:center">✅</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p><strong>最大回撤的最差衰减只有 0.5 个百分点。</strong>防护盾的回撤保护基本不受 定投计划影响 — 即使你同时迟交、变动金额并漏掉月份。</p>
-<figure class="rs-fig"><img src="/research/assets/dca_stress_dd.svg" alt="五个定投场景的最大回撤对比" width="820" height="320" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/dca_stress_dd.svg" target="_blank" rel="noopener"><img src="/research/assets/dca_stress_dd.svg" alt="五个定投场景的最大回撤对比" width="820" height="320" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/dca_stress_dd.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h3>3b. 风险调整收益 — 夏普与卡玛比率</h3>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">场景</th>
@@ -207,13 +207,13 @@
 <td style="text-align:center">0.702</td>
 <td style="text-align:center">+0.043</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p><strong>延迟与金额噪声下，Sharpe 与基准的偏差在 0.003 以内</strong> — 实际上为 零。漏掉月份（D 与 E）反而抬高了 Sharpe，因为投入的总资金更少，而在 上涨的市场中，前期更少的资金意味着已投入部分的百分比回报更高。这是 指标的怪癖，不是缺陷 — 关键在于防护盾在任何抖动下都没有<em>损失</em>风险 调整收益。</p>
 <h3>3c. 净值曲线 — 基准 vs 最坏情形</h3>
 <p>完美计划（A）与叠加最坏计划（E）的净值曲线几乎无法区分：</p>
-<figure class="rs-fig"><img src="/research/assets/dca_stress_equity.svg" alt="净值曲线：基准 vs 最坏定投，对数轴" width="820" height="436" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/dca_stress_equity.svg" target="_blank" rel="noopener"><img src="/research/assets/dca_stress_equity.svg" alt="净值曲线：基准 vs 最坏定投，对数轴" width="820" height="436" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/dca_stress_equity.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p>水下（回撤）曲线讲同一个故事 — 完美定投与最坏定投之间，回撤的深度 与时间完全一致：</p>
-<figure class="rs-fig"><img src="/research/assets/dca_stress_underwater.svg" alt="水下曲线：基准 vs 最坏定投" width="820" height="436" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/dca_stress_underwater.svg" target="_blank" rel="noopener"><img src="/research/assets/dca_stress_underwater.svg" alt="水下曲线：基准 vs 最坏定投" width="820" height="436" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/dca_stress_underwater.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h2>4. 这证明了什么</h2>
 <p>1. <strong>防护盾并不脆弱。</strong>定投时机错误、金额变动与漏月最多让最大回撤 衰减 0.5 个百分点 — 远低于表明存在真实问题的 3 个百分点阈值。</p>
 <p>2. <strong>防护盾的保护是结构性的，不是运气。</strong>连续调制器由回撤深度与下行 波动率驱动，而不是由现金流入的精确时机驱动。只要资金最终进入篮子， 防护盾就以同样的方式保护它。</p>
@@ -228,7 +228,7 @@
 <p><strong>测试 2 已经完成。</strong>设计、数字，以及本系列第一次真正的失败：§6。</p>
 <h2>6. 测试 2 — 信号执行滞后：结果</h2>
 <p>按 §5 提出的后续方案实施并运行：同样的篮子、同样的窗口、同样的生产 配置、每场景 30 个种子 — 但这一次，误差打在引擎真正响应的东西上： 防护盾信号。所有场景的定投都是完美的，执行误差是唯一的扰动。</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">场景</th>
@@ -261,10 +261,10 @@
 <td style="text-align:left">波动尖峰时触发的信号晚 3 天</td>
 <td style="text-align:left">钱真正所在的地方</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>机制（可复现性说明）：理想目标路径只计算一次 — 它只依赖收益率，不 依赖操作者做什么 — 每个场景从中构造自己的执行时间表。被更新信号超越 的延迟信号会被丢弃：操作者真正行动时，适用的是最新的计算差额。波动尖峰 定义为滚动 7 日实现波动率处于窗口顶部十分位的日子（占 10.0% 的天数）。 醒着就意味着总是行动，睡着就意味着从不行动。</p>
 <h3>6a. 核心数字（30 个种子的中位数）</h3>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">场景</th>
@@ -327,13 +327,13 @@
 <td style="text-align:center">$29,734</td>
 <td style="text-align:center">+$387</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>通过标准与测试 1 相同：最大回撤恶化低于 3 个百分点，且夏普损失低于 0.10。买入持有被略去，因为它不执行任何信号 — 五次运行中它完全相同 （MaxDD 81.5%）。</p>
-<figure class="rs-fig"><img src="/research/assets/lag_stress_dd.svg" alt="执行误差下的最大回撤，中位数与 p5–p95 须线" width="820" height="364" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/lag_stress_dd.svg" target="_blank" rel="noopener"><img src="/research/assets/lag_stress_dd.svg" alt="执行误差下的最大回撤，中位数与 p5–p95 须线" width="820" height="364" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/lag_stress_dd.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p><strong>结论：4 项中 3 项通过，1 项失败 — 而且失败的正是评审预测的那一项。</strong> 持续晚 3 天（L）在 $30k 的最终权益上损失 $5,058（16.8%），把年化收益 从 22.5% 拖到 19.0%，并打破夏普门槛（−0.105 对 −0.10 的限制）。回撤 保护本身在所有场景中都守住了 — 最坏的 MaxDD 恶化只有 +1.4 个百分点 — 所以滞后漏掉的是<em>收益</em>，不是<em>保护</em>。</p>
 <h3>6b. 滞后不是噪声</h3>
 <p>§5 的评审提出了这个区分；数字残酷地证实了它。相对基准的最终权益损害， 跨 30 个种子：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">场景</th>
@@ -360,11 +360,11 @@
 <td style="text-align:center">+$675</td>
 <td style="text-align:center">+$4,265</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>随机延迟的分布很宽，某些种子上迟到反而<em>帮了忙</em>（p5 为负）— 噪声会被 平均掉。恒定滞后的方差为<strong>零</strong>：每个种子都吃下完全相同的 $5,058。 滞后有方向，再多的种子平均也藏不住它。如果我们只测随机延迟，就会再 发表一个不可能失败的测试。</p>
 <h3>6c. 损害落在哪里</h3>
 <p>波动尖峰日占窗口的 10.0%。执行总损害中落在这些日子上的份额：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">场景</th>
@@ -397,11 +397,11 @@
 <td style="text-align:center">10.0%</td>
 <td style="text-align:center">4.0×</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>即使均匀的误差也会集中在最糟糕的几周 — 而当误差被限制在尖峰时段 （W），集中度翻到四倍。损害恰好落在引擎最需要你的地方。</p>
-<figure class="rs-fig"><img src="/research/assets/lag_stress_damage.svg" alt="累计执行损害与波动尖峰着色" width="820" height="436" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/lag_stress_damage.svg" target="_blank" rel="noopener"><img src="/research/assets/lag_stress_damage.svg" alt="累计执行损害与波动尖峰着色" width="820" height="436" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/lag_stress_damage.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h3>6d. 净值曲线</h3>
-<figure class="rs-fig"><img src="/research/assets/lag_stress_equity.svg" alt="执行误差下的净值曲线，周中位数，对数轴" width="820" height="436" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/lag_stress_equity.svg" target="_blank" rel="noopener"><img src="/research/assets/lag_stress_equity.svg" alt="执行误差下的净值曲线，周中位数，对数轴" width="820" height="436" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/lag_stress_equity.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h3>6e. 这在操作上意味着什么</h3>
 <p>1. <strong>防护盾容忍马虎，不容忍惯例。</strong>随机延迟、漏掉几天、甚至睡过约 29% 的时间 — 都通过。系统性地每个信号晚 3 天，才是会失败的那一种。 2. <strong>睡着比迟到便宜。</strong>漏掉约 29% 的天数只花约 $675，因为信号是连续的： 操作者醒来时适用最新的计算差额，缺口就愈合了。恒定滞后没有愈合机制 — 每一天都从 3 天前的过期状态开始。 3. <strong>模拟显示：</strong>漏掉一天，远比习惯性拖延便宜，所以保护能力对系统性 延迟敏感，而不是对准时与否敏感。这是模拟观察，不是建议。</p>
 <p><strong>测试 2b 把这一切在真实生产堆栈上重跑了一遍</strong> — KKT 权重、60/40 结构、180 天再优化。结论更加严厉：§7。</p>
@@ -410,7 +410,7 @@
 <ul><li>KKT 风险平价权重 — 按每个代币贡献的风险分配权重，单币上限 40%，风险仓位最高 60%</li><li>结构性 40% USDC 仓位</li><li>权重每 180 天冻结并重新优化，期间随价格漂移（不做漂移交易）</li><li>防护盾读取<strong>完整组合权益</strong>（风险资产 + 停泊的 USDC）</li></ul>
 <p>测试 2b 重放这个完整堆栈 — 原样使用真实的生产权重优化器与风险 防护盾，代码未改动 — 并重新运行同样的 A/N/L/M/W 执行误差场景。 生产中唯一的人为环节就是用户自己对每日计算差额的处理（权重优化与防护盾完全 由服务器自动完成），所以场景扰动的正是这一点。首次再优化发生在 第 180 天，因为在此之前价格历史还不够长；在此之前组合停泊在 USDC。</p>
 <h3>7a. 核心数字（30 个种子的中位数）</h3>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">场景</th>
@@ -473,16 +473,16 @@
 <td style="text-align:center">$31,760</td>
 <td style="text-align:center">+$1,033</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>通过标准与之前相同：最大回撤恶化低于 3 个百分点，且夏普损失低于 0.10。</p>
-<figure class="rs-fig"><img src="/research/assets/lag_prod_dd.svg" alt="执行误差下的最大回撤，生产堆栈" width="820" height="364" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/lag_prod_dd.svg" target="_blank" rel="noopener"><img src="/research/assets/lag_prod_dd.svg" alt="执行误差下的最大回撤，生产堆栈" width="820" height="364" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/lag_prod_dd.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p><strong>结论：0/4。</strong>在生产堆栈上，每一个执行误差场景都未通过最大回撤门槛， 恒定滞后（L）两个门槛都未通过。测试 2 的结论 — 滞后漏掉<em>收益</em>但<em>保护</em> 守得住 — 在生产结构面前站不住了。</p>
 <h3>7b. 为什么生产中保护会漏</h3>
 <p>在等权篮子上，防护盾的爬坡能把 3 天执行滞后吸收在最多 +1.4 个百分点 的额外回撤内。在 KKT 60/40 堆栈上，同样的滞后带来 +4.7 到 +11.3 个 百分点。60/40 组合上防护盾的爬坡更平缓、更慢；执行迟到时，组合会以 满仓暴露更深地骑进崩盘，去杠杆才落地。产品的核心承诺 — 回撤保护 — 恰恰是被打破的那个。</p>
 <h3>7c. 从测试 2 幸存下来的结论</h3>
 <p>1. <strong>滞后仍然不是噪声。</strong>L 的种子方差为零（p5 = p95 = +$5,371）；W 同样是确定性的（+$1,033）。随机场景仍有迟到反而<em>帮了忙</em>的种子 （N 损害 p5 = −$1,854，M p5 = −$3,202）。 2. <strong>损害仍然集中。</strong>W 把 42.0% 的损害集中在波动尖峰日，而尖峰日在 生产序列上只占窗口的 9.2%（4.6 倍于基准率）。 3. <strong>睡着仍然比迟到便宜</strong> — $1,587 对 $5,371 — 但在生产中两者都 不通过。 4. <strong>W 仍是最尖锐的案例：</strong>总损害只有 $1,033，MaxDD 却恶化 +11.3 个 百分点。掐在最坏几周上的误差几乎不动最终权益，却摧毁了保护。</p>
-<figure class="rs-fig"><img src="/research/assets/lag_prod_equity.svg" alt="执行误差下的净值曲线，生产堆栈，对数轴" width="820" height="436" loading="lazy" decoding="async"></figure>
-<figure class="rs-fig"><img src="/research/assets/lag_prod_damage.svg" alt="累计执行损害与波动尖峰着色，生产堆栈" width="820" height="436" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/lag_prod_equity.svg" target="_blank" rel="noopener"><img src="/research/assets/lag_prod_equity.svg" alt="执行误差下的净值曲线，生产堆栈，对数轴" width="820" height="436" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/lag_prod_equity.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
+<figure class="rs-fig"><a href="/research/assets/lag_prod_damage.svg" target="_blank" rel="noopener"><img src="/research/assets/lag_prod_damage.svg" alt="累计执行损害与波动尖峰着色，生产堆栈" width="820" height="436" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/lag_prod_damage.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h3>7d. 操作结论</h3>
 <p>生产堆栈<strong>比等权测试所暗示的更不能容忍人为误差</strong>：连随机 0–3 天的 延迟都打破了最大回撤门槛。在模拟中，唯一能通过的执行时间表是<strong>在计算差额出现的 当天处理</strong>；任何延迟数日的做法，都会让防护盾所计算的回撤 保护失效。这是对模拟结果的描述，不是指示。</p>
 <h2>8. 测试 2c — 读者挑战：冻结权重，找出拐点</h2>
@@ -492,12 +492,12 @@
 <p>两个变体，同样的 A/N/L/M/W 场景，各 30 个种子：</p>
 <ul><li><strong>恒定权重（FC）：</strong>第一次成功再优化（2020-10-07）的权重在每个 180 天边界被重复使用。与测试 2b 堆栈完全一致，只是再拟合永远 不适应新数据 — 对“再拟合”的干净对照。</li><li><strong>永不再平衡（FN）：</strong>权重在第 180 天设定一次，之后永远漂移、 不再重置，组合混合比例按日归一化。</li></ul>
 <p><strong>恒定权重在最大回撤门槛上有 4 个场景中的 3 个失败</strong>（只有睡觉 场景通过）。冻结权重并不能修复问题。</p>
-<figure class="rs-fig"><img src="/research/assets/lag_2c_frozen.svg" alt="最大回撤衰减：再优化 vs 恒定权重" width="820" height="422" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/lag_2c_frozen.svg" target="_blank" rel="noopener"><img src="/research/assets/lag_2c_frozen.svg" alt="最大回撤衰减：再优化 vs 恒定权重" width="820" height="422" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/lag_2c_frozen.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p>冻结真正的代价：恒定权重基准的夏普为 0.314，再优化堆栈为 0.453， 最终权益 $23,634 对 $32,793。再拟合是<em>收益</em>的来源；滞后脆弱性并 不是再拟合特有的代价 — 无论堆栈持有什么权重，它都是晚执行的 去杠杆斜坡的代价。永不再平衡变体在每个维度上都更差（夏普 0.160， 最终 $15,366），同样有 3/4 失败。读者的假设预测的是相反的结果； 数据否定了它。</p>
 <h3>8b. 滞后拐点：不存在</h3>
 <p>在生产堆栈上以 1–5 天恒定滞后运行，各 30 个种子（确定性：零种子 散布，与 §6b 一致）：</p>
 <ul><li><strong>1 天滞后：</strong>最大回撤 +3.3 个百分点 — 已经在 3 个百分点门槛之外</li><li><strong>2 天滞后：</strong>最大回撤 +8.5 个百分点，夏普门槛也被打破（−0.114）</li><li><strong>3–5 天：</strong>最大回撤 +7.6 至 +11.9 个百分点，夏普衰减加深至 −0.165</li></ul>
-<figure class="rs-fig"><img src="/research/assets/lag_2c_knee.svg" alt="损害与最大回撤衰减 vs 恒定滞后长度" width="820" height="436" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/lag_2c_knee.svg" target="_blank" rel="noopener"><img src="/research/assets/lag_2c_knee.svg" alt="损害与最大回撤衰减 vs 恒定滞后长度" width="820" height="436" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/lag_2c_knee.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p>损害随滞后大致单调上升（$4,650 → $7,320），但存在相位效应 — 3 天比 2 天便宜，5 天对回撤的伤害小于 4 天 — 因为固定滞后落在 崩盘日期上的方式不同。但门槛结论没有拐点：第一天就已失败。这场 扫描本来要给出的操作数字是：可接受的滞后为零天。当日执行不是 严格与否的偏好，它就是容错预算本身。</p>
 <h2>9. 测试细节</h2>
 <ul><li><strong>篮子：</strong> ADA、BNB、ETH、XRP、SOL（等权重）</li><li><strong>窗口：</strong> 2020-04-10 至 2026-07-04（2,275 天，6.2 年）</li><li><strong>起始资金：</strong> $1,000</li><li><strong>定投：</strong> 每 30 天 $100（共 75 次计划投入）</li><li><strong>每场景种子数：</strong> 30</li><li><strong>引擎：</strong> 生产模拟器，未改动</li><li><strong>手续费：</strong> 每笔交易 0.1%</li><li><strong>全部参数：</strong> 生产默认配置，未改动</li></ul>

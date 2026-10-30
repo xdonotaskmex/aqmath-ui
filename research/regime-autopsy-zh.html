@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/regime-autopsy">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -60,7 +60,7 @@
 <p><strong>未改动任何参数。</strong> 所有运行均使用生产环境 <code>default_config()</code> 与未经修改的生产代码路径 — 滚动前推，无前视。这也是第一项 在每次再优化时都开启 <a href="/research/liveness-screen">ADV-K2 活性筛查</a> 的研究，与生产服务完全一致。</p>
 <h2>2. 组合与数据</h2>
 <p>三个结构不同的长历史组合，每个都以 PAXG 为锚：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">组合</th>
@@ -83,13 +83,13 @@
 <td style="text-align:left">BTC, ETH, CEL + PAXG</td>
 <td style="text-align:left">刻意包含一个归零的代币（Celsius）</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>每个组合切出六个市场状态窗口：R1 2020 年 3 月崩盘、R2 2021 年 5 月去杠杆、R3 LUNA 传染、R4 FTX 崩盘、R5 2024 年 8 月套息 平仓、R6 2025-26 年回调。</p>
 <p>设置：初始 $1,000，每 30 天定投 $100，每笔交易收取 10 个基点 模拟手续费，180 天优化器预热，每 180 天一次 MACRO 再优化 （每个组合 12-13 次再优化）。</p>
 <p><strong>数据：</strong> Yahoo Finance 日收盘价（未复权），获取于 2026-08-07； 按组合做共同日期对齐。本研究使用与早先基于 CoinGecko 的研究 不同的数据源；日收盘价口径的数字可比，但并非逐位相同。</p>
 <h2>3. 头条结果 — 分市场状态的回撤削减</h2>
 <p>每个市场状态窗口内部的最大回撤，防护盾 vs 买入持有。TWR 日收益， 剔除 DCA 现金流，rf 5%。</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">组合</th>
@@ -220,13 +220,13 @@
 <td style="text-align:right">32.9%</td>
 <td style="text-align:right"><strong>+12.8 pp</strong></td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p><strong>15 个被覆盖的市场状态-组合搭配中，15 个显示出正的回撤削减。</strong> 最差几段：LUNA 传染在组合 A 上被控制在 16.8% vs 44.1%， 在组合 B 上为 21.3% vs 44.8%；FTX 崩盘被削减至 3.3% vs 13.3%（A） 和 1.9% vs 9.2%（B）。</p>
 <p><strong>R1（2020 年 3 月崩盘）未被覆盖</strong> — PAXG 锚加上 180 天预热 使组合 A 和 C 从 2020-03-24 才开始，即在恐慌性底部之后。 作为缺口如实报告，不隐藏。</p>
 <p>关于组合 C 的说明：它的买入持有一列在整个窗口内包含已死亡的 CEL 代币 — 这正是该组合的用意。防护盾一侧运行着活性筛查， 它曾把 CEL 的权重归零一次（2025-08-24，见 <a href="/research/liveness-screen">活性筛查研究</a>）。</p>
 <h2>4. 全窗口运行</h2>
 <p>每个组合在其完整滚动前推窗口上的表现（含预热）。</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">组合</th>
@@ -269,18 +269,18 @@
 <td style="text-align:right">17.8% / 31.2%</td>
 <td style="text-align:right"><strong>0.65</strong> / 0.50</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p><strong>解读：</strong> 特征与早先每一项研究相同 — 防护盾在包含强劲牛市 段的窗口里放弃绝对收益，再把它以回撤的形式买回来。在组合 A 和 C 上，全窗口风险调整后效率提升（Calmar 0.57 vs 0.38 和 0.65 vs 0.50）。<strong>组合 B 是诚实的例外</strong>：它是三者中最弱的组合， 在 B 上全窗口的 Sharpe <em>和</em> Calmar 都偏向买入持有 — 防护盾在 B 上 的论据完全建立在上面分市场状态的回撤削减上，而不是全窗口效率。</p>
 <h2>5. 可视化</h2>
 <p><strong>虚拟权益，三个组合在同一绝对时间轴上（对数刻度）：</strong></p>
-<figure class="rs-fig"><img src="/research/assets/regime_equity.svg" alt="Regime autopsy virtual equity curves, three baskets, log scale" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/regime_equity.svg" target="_blank" rel="noopener"><img src="/research/assets/regime_equity.svg" alt="Regime autopsy virtual equity curves, three baskets, log scale" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/regime_equity.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p><strong>回撤 — 防护盾 vs 买入持有，完整历史：</strong></p>
-<figure class="rs-fig"><img src="/research/assets/regime_dd.svg" alt="Regime autopsy underwater curves, Shield vs Buy and Hold" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/regime_dd.svg" target="_blank" rel="noopener"><img src="/research/assets/regime_dd.svg" alt="Regime autopsy underwater curves, Shield vs Buy and Hold" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/regime_dd.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p><strong>分市场状态的最大回撤削减（百分点），按组合分组：</strong></p>
-<figure class="rs-fig"><img src="/research/assets/regime_cuts.svg" alt="Per-regime drawdown cut bars for baskets A, B and C" width="920" height="420" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/regime_cuts.svg" target="_blank" rel="noopener"><img src="/research/assets/regime_cuts.svg" alt="Per-regime drawdown cut bars for baskets A, B and C" width="920" height="420" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/regime_cuts.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h2>6. 跳空 vs 漂移 — 日收盘价系统能捕捉到什么</h2>
 <p>防护盾对日收盘价作出反应。同日开盘跳空是任何基于收盘价的 系统都无法捕捉的。把每个市场状态在等权风险组合（不含 PAXG） 上的回撤分解为收盘到开盘段（跳空）与开盘到收盘段（漂移）：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">市场状态</th>
@@ -331,7 +331,7 @@
 <td style="text-align:right">1%</td>
 <td style="text-align:right">−18.7%</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>加密货币崩盘是<strong>漂移主导</strong>的：每个市场状态 95-100% 的伤害 展开在已见价的日内段中，日收盘价系统可以对其作出反应。 无法捕捉的残余部分集中在最差的那几天（2021 年 5 月 19 日： 等权风险组合 −30%）。</p>
 <h2>7. 注意事项（披露，不隐藏）</h2>
 <ul><li><strong>R1 2020 年 3 月按设计未被覆盖</strong>（PAXG 锚 + 180 天预热 使组合从 2020-03-24 开始）。本研究对那次崩盘没有发言权。</li><li><strong>R6 防御占比高。</strong> 在 2025-26 窗口中，防护盾约有 40% 的日子 停泊于 USDC（组合 B 的 583 个市场状态日中有 236 天）。这与 实盘前瞻日志中可见的防御倾向相同 — 它提供保护，但也付出 参与度的代价。</li><li><strong>本文替代了一份被扣下的早期草稿。</strong> 本研究的第一版没有 运行活性筛查，波动率上限曾在一个组合 C 的再优化中把已死亡 的 CEL 代币赋予 24.7% 的冻结权重，污染了结果。该缺陷已在 生产和本研究中修复 — 见<a href="/research/liveness-screen">活性筛查文章</a>。 筛查在全部 38 次再优化中恰好触发了一次（CEL，2025-08-24）； 组合 A 和 B 与其未筛查运行逐位一致。</li><li><strong>数据源变更：</strong> 使用 Yahoo Finance（未复权收盘价）替代 CoinGecko；数字与早先研究可比，但并非完全相同。</li></ul>

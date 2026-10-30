@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/recovery-test">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -63,7 +63,7 @@
 <p>组合与皇冠测试 2 相同（ADA、BNB、ETH、XRP、SOL），但使用 <strong>生产 KKT 风险平价堆栈</strong>代替等权。权重通过 180 天对数收益 协方差上的 ERC 计算，每代币上限 40%/10%，结构性 60% 风险 / 40% USDC 分配。权重每 180 天冻结并重新优化，期间随价格漂移 — 与服务器上运行的完全一致。</p>
 <p>窗口：2020-04-10 至 2026-07-04（6.2 年、两轮熊市），$1,000 起步，每 30 天 $100 完美定投，每笔交易 0.1% 手续费，稳定币 收益为零。期间共 12 次 KKT 重新优化。</p>
 <p>两个工具以完全相同的记账方式并行运行：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">工具</th>
@@ -78,12 +78,12 @@
 <td style="text-align:left"><strong>买入持有</strong></td>
 <td style="text-align:left">始终 100% 投资于同一 KKT 组合，相同的定投安排和手续费</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p><strong>防守阶段</strong>是防护盾持有敞口持续低于 40%（重新部署阈值）的 连续时段。对于每次阶段退出 — 敞口重新越过 40% 的那一天 — 我们度量：</p>
 <ul><li><strong>达到 50% 敞口的天数：</strong> 防护盾多快回到有意义的仓位</li><li><strong>1 个月 / 3 个月 / 6 个月 / 12 个月的恢复参与度：</strong> 同期 窗口内防护盾权益增益除以买入持有权益增益</li><li><strong>12 个月后防护盾权益是否超过买入持有权益？</strong></li></ul>
 <h2>3. 结果</h2>
 <p>防护盾在 2,275 天中有 1,844 天（81.1%）处于防守模式。识别出 十一次独立的防守阶段：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:center">#</th>
@@ -218,14 +218,14 @@
 <td style="text-align:center">—</td>
 <td style="text-align:center">否</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>三个突出的事实：</p>
 <p>1. <strong>重新进入很快。</strong> 中位数 1 天达到 50% 敞口，范围 0–51 天。 防护盾不会&quot;把你锁在外面&quot;。它对改善的条件几乎立即做出 反应 — 除了跨越整个 LUNA/FTX/2022 熊市的 760 天巨型阶段 （#7）。 2. <strong>参与度很低。</strong> 在有 12 个月数据的周期中，恢复捕获中位数 为买入持有的 32% — 远低于 70% 的门槛。防护盾重新进入了， 但以降低的敞口，只捕获了上行的一小部分。 3. <strong>防护盾从未追上。</strong> 有 12 个月数据的七个周期中没有一个是 12 个月后防护盾权益超过买入持有权益的。防守期间造成的差距 从未被完全弥合。</p>
-<figure class="rs-fig"><img src="/research/assets/recovery_participation.svg" alt="恢复参与度：防护盾捕获了多少买入持有的复苏（KKT 生产堆栈）" width="820" height="480" loading="lazy" decoding="async"></figure>
-<figure class="rs-fig"><img src="/research/assets/recovery_timeline.svg" alt="所有十一次防守阶段及其复苏的时间线（KKT 生产堆栈）" width="820" height="420" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/recovery_participation.svg" target="_blank" rel="noopener"><img src="/research/assets/recovery_participation.svg" alt="恢复参与度：防护盾捕获了多少买入持有的复苏（KKT 生产堆栈）" width="820" height="480" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/recovery_participation.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
+<figure class="rs-fig"><a href="/research/assets/recovery_timeline.svg" target="_blank" rel="noopener"><img src="/research/assets/recovery_timeline.svg" alt="所有十一次防守阶段及其复苏的时间线（KKT 生产堆栈）" width="820" height="420" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/recovery_timeline.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h2>4. 门槛记分卡</h2>
 <p>原测试计划中的通过标准，逐字引用：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">门槛</th>
@@ -258,7 +258,7 @@
 <td style="text-align:left">0</td>
 <td style="text-align:center">❌ 失败</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p><strong>4 过 1。</strong> 唯一通过的门槛是重新进入速度 — 而且是以很大优势 通过（1 对 60）。参与度门槛也以很大差距失败。</p>
 <h2>5. 诚实的解读</h2>
 <p>1. <strong>防护盾没有&quot;把你锁在外面&quot; — 从技术上说。</strong> 重新进入的 中位数是 1 天。如果唯一的问题是&quot;防护盾是否快速回到市场？&quot; 答案是肯定的，而且是决定性地肯定。</p>

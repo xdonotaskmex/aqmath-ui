@@ -1,4 +1,8 @@
 {
+  "readability": {
+    "chartScroll": "图表 — 横向滚动以查看全部细节。",
+    "tableScroll": "表格 — 横向滚动以查看其他列。"
+  },
   "hero": {
     "title": "投资组合数学计算软件",
     "subtitle": "无情绪干扰。无人为错误。每一笔 DCA 投入都有结构性限制。",
@@ -242,6 +246,7 @@
     "historyTitle": "--投资组合历史",
     "saveSnapshot": "保存快照",
     "historyHint": "DCA 分配后自动更新。",
+    "historyEmpty": "暂无历史记录。保存快照即可开始跟踪你的投资组合。",
     "liveMarkets": "--实时市场",
     "footerDisclaimer": "AQMath 是计算软件，不提供财务建议。",
     "navResults": "结果",
@@ -463,7 +468,7 @@
       "m4": "夏普比率（Proteus vs 买入持有）",
       "m5": "卡尔马比率（Proteus vs 买入持有）",
       "m6": "山寨币篮最大回撤",
-      "m7": "59.8% 买入持有 &rarr; 29.4%"
+      "m7": "59.8% 买入持有 → 29.4%"
     },
     "s9": {
       "title": "9. 隐私与数据分离",

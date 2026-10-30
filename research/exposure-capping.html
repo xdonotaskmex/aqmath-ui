@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/exposure-capping">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -78,7 +78,7 @@
 <p>The general rule to keep permanently: <strong>any threshold that is a statistic of the data it is applied to must be re-tested at the production window length.</strong> Expanding percentiles are the obvious case; trailing-volatility scaling is the same species with a shorter tail, and it is on the same watch-list (§7).</p>
 <h2>3. Execution state machine</h2>
 <p>The adaptive engine replaces the binary shield state with a <strong>continuous regime modulator</strong> whose output maps to three operational zones. Exposure is a smooth function of the downside signature — there are no hard switches. The zones are diagnostic, not structural.</p>
-<figure class="rs-fig"><img src="/research/assets/exposure_state_machine.svg" alt="Execution state machine — continuous regime modulator with three operational zones" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/exposure_state_machine.svg" target="_blank" rel="noopener"><img src="/research/assets/exposure_state_machine.svg" alt="Execution state machine — continuous regime modulator with three operational zones" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/exposure_state_machine.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <p><strong>Normal → Telemetry Alert.</strong> When the drawdown signal or downside volatility signal rises above its respective threshold, the composite risk measure begins to increase. The target exposure drops below 100%. The exposure ramp begins reducing risk, with hysteresis between the de-risk and re-entry directions so that ordinary chop does not generate round-trip trades. DCA is still deployed into the basket but the system is no longer fully invested.</p>
 <p><strong>Telemetry Alert → Hard Enforcement.</strong> When target exposure drops below the redeploy threshold, the system enters full defensive mode. Parked DCA accumulates in stablecoin. The shield is absorbing the crash at deterministically reduced risk. This is the only zone where capital is actually being protected — telemetry alone does nothing.</p>
 <p><strong>Hard Enforcement → Normal.</strong> Recovery is not a binary switch. The adaptive engine tracks the trough since the last basket all-time high and accelerates re-entry when a confirmed V-bounce is detected — but only when the bounce impulse clears a confirmation threshold, protecting against dead-cat rallies. The ramp naturally tracks the basket recovery because drawdown shrinks as the equity curve heals.</p>
@@ -87,12 +87,12 @@
 <p>The adaptive threshold engine replaces the fixed drawdown reference with a volatility-scaled one. Instead of comparing the portfolio&#x27;s drawdown to a constant level, the system measures the basket&#x27;s own trailing annualised downside volatility and scales every threshold proportionally.</p>
 <p>The effect is basket-relative sensitivity: a dip that is statistically ordinary for a low-volatility basket and a considerably larger dip that is statistically ordinary for a high-volatility basket produce the same response, because the reference moves with each basket&#x27;s own realised risk instead of sitting at a fixed level. <strong>The scaling law and its multiplier are withheld.</strong> One engine, two sensitivity profiles, no manual tuning per basket type.</p>
 <p>The difference between the two engines lies in threshold sensitivity and in how re-entry behaves once a bounce is confirmed. Ramp speeds and signal weightings are withheld for both.</p>
-<figure class="rs-fig"><img src="/research/assets/exposure_concept.svg" alt="Adaptive threshold concept — fixed versus volatility-scaled drawdown reference" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/exposure_concept.svg" target="_blank" rel="noopener"><img src="/research/assets/exposure_concept.svg" alt="Adaptive threshold concept — fixed versus volatility-scaled drawdown reference" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/exposure_concept.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <h2>5. Walk-forward head-to-head comparison</h2>
 <p>Both engines run on the <strong>identical</strong> production KKT-180 macro loop (risk-parity weights re-optimised every 180 days on trailing data), identical fee model (10 bps per trade, DCA buy and redeploy), identical DCA schedule. The only difference is the exposure-capping engine.</p>
 <p><strong>All metrics below are walk-forward out-of-sample.</strong> Each engine runs continuously on the rolling 180-day bounded window with cold replay and persisted shield state — the exact production data path. No in-sample full-window optimisation, no lookahead. The numbers represent what the system would have delivered in real time, not what looks best in hindsight.</p>
 <p>Two baskets, selected for structural contrast:</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left"></th>
@@ -107,10 +107,10 @@
 <td style="text-align:left"><strong>Alts</strong></td>
 <td style="text-align:left">XMR, BCH, XLM, LINK, CEL, QNT, HBAR, PAXG — eight tokens, structurally larger daily moves. CEL is a deliberate dead-token stress (Celsius, collapsed 2022); the ADV-K2 liveness screen zero-weights it once it fails the $1M/day trailing-volume test</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>Settings: lump-sum start, 180-day optimizer warm-up, rolling 180-day bounded window, cold replay with persisted shield state, 2,095 measured intervals on majors and 2,316 on alts. <strong>Walk-forward OOS — no in-sample fitting.</strong></p>
 <h3>5.1 Majors basket (walk-forward OOS)</h3>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Metric</th>
@@ -148,9 +148,9 @@
 <td style="text-align:right">44.6%</td>
 <td style="text-align:right">50.1%</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <h3>5.2 Alt basket (walk-forward OOS)</h3>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Metric</th>
@@ -188,10 +188,10 @@
 <td style="text-align:right">56.9%</td>
 <td style="text-align:right">46.5%</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>The adaptive engine wins on Sharpe, Calmar and max drawdown for both baskets. The largest gap is on the alt basket&#x27;s max drawdown — 29.4% versus 36.8%, a 7.4 percentage-point reduction. That is the fixed-threshold failure mode in numbers: a reference level tuned for one volatility regime over-reacts on another.</p>
 <p>The last two rows are the ones that decide whether that gap means anything, and they split the two baskets. On alts the engines hold <strong>identical average exposure</strong> (0.4349 versus 0.4351 — the same to four decimals), so the 7.4 pp drawdown gap is exposure-matched by construction and cannot be a level effect. On majors they do not: the adaptive engine holds <strong>7.3 pp less</strong> exposure on average, so its drawdown advantage is <em>not</em> matched, and it has to be tested rather than asserted. Section 5.4 runs that test.</p>
-<figure class="rs-fig"><img src="/research/assets/exposure_dd_comparison.svg" alt="Head-to-head max drawdown: fixed versus adaptive threshold, both baskets" width="920" height="380" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/exposure_dd_comparison.svg" target="_blank" rel="noopener"><img src="/research/assets/exposure_dd_comparison.svg" alt="Head-to-head max drawdown: fixed versus adaptive threshold, both baskets" width="920" height="380" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/exposure_dd_comparison.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <h3>5.3 Reading</h3>
 <p>On the majors basket the improvement is meaningful but modest — the fixed threshold was already a reasonable fit for the volatility profile. On the alt basket the improvement is large — the fixed threshold was structurally mismatched, spending 56.9% of days in defense while still absorbing a 36.8% drawdown.</p>
 <p>The adaptive engine&#x27;s vol-scaled threshold automatically tunes itself to each basket. No separate configuration, no profile classification, no manual override.</p>
@@ -199,7 +199,7 @@
 <p>A drawdown cut is not, on its own, evidence of skill. <strong>Any</strong> rule that holds less than full exposure on average will cut drawdown in almost every window, because the reduction can come from the <em>level</em> of exposure rather than from the <em>timing</em> of it. A claim of &quot;the shield cut max drawdown by X pp&quot; is untestable until it is compared against the dumbest possible alternative holding the same average risk.</p>
 <p>So we ran that alternative. The <strong>constant-exposure control</strong> has no signal, no state, no thresholds and no memory: the identical KKT weight stream, scaled every day to a fixed fraction equal to the shield&#x27;s own time-average exposure, on the identical production path. It pays <strong>no turnover fee</strong>, and as shown below it receives a further analytic advantage — the test is deliberately biased in the control&#x27;s favour.</p>
 <p><strong>Majors basket</strong></p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Leg</th>
@@ -256,9 +256,9 @@
 <td style="text-align:right">0.443</td>
 <td style="text-align:right">0</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p><strong>Alts basket</strong></p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Leg</th>
@@ -306,7 +306,7 @@
 <td style="text-align:right">0.435</td>
 <td style="text-align:right">0</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>The two alts engines hold means that differ only in the fifth decimal, so their constant controls are near-identical but not bit-identical: 30.9% max drawdown at the fixed engine&#x27;s mean (0.4351), 30.8% at the adaptive engine&#x27;s (0.4349). The table shows the adaptive-matched leg; prose comparing the fixed engine to its own control uses 30.9%.</p>
 <p>Four conclusions.</p>
 <p><strong>1. On majors the adaptive engine beats its own exposure-matched constant on every metric</strong> — Sharpe 1.63 versus 1.19, Calmar 2.00 versus 1.04, max drawdown 23.1% versus 28.4%, CAGR 46.2% versus 29.5% — while paying fees the control does not pay. The fixed engine also beats its own constant (Sharpe 1.52 versus 1.23, drawdown 25.7% versus 32.5%). On this basket the timing earns its keep, and the majors drawdown advantage in §5.1 is not a level effect.</p>
@@ -314,7 +314,7 @@
 <p><strong>3. The return advantage is significant on majors and not on alts.</strong> A paired block bootstrap (1,000 resamples, 20-day blocks drawn jointly so the pairing survives) puts the adaptive engine&#x27;s annualised log-growth advantage over its own constant at <strong>+11.7 pp on majors (90% interval +3.1 to +21.7)</strong> and <strong>+4.5 pp on alts (90% interval −4.2 to +14.4)</strong>. The majors advantage clears zero; the alts advantage does not. Against the fixed engine&#x27;s constant, the fixed engine itself scores +8.4 pp on majors (interval −0.7 to +18.2) and +3.9 pp on alts (interval −5.6 to +14.2).</p>
 <p><strong>4. The control&#x27;s own handicap is measured, not assumed.</strong> Matching the <em>mean</em> of a time-varying exposure does not match its <em>variance</em>, and the difference is not neutral: under standard log-growth arithmetic a constant leg receives a variance-related growth allowance for free that a time-varying leg with the same mean does not. We evaluated that allowance on the realised exposure path (dispersion 0.245 majors / 0.223 alts) rather than assuming it away. It runs <strong>in the control&#x27;s favour, at +0.65 pp/yr on majors and +0.83 pp/yr on alts</strong> — small against the gaps above, but it belongs on the record, and it is why a mean-matched constant is a strong control rather than a strawman: the shield&#x27;s advantage is measured <em>after</em> granting the control that head start. The closed-form expression is withheld along with the rest of the engine&#x27;s mathematics.</p>
 <p><strong>Where the control wins.</strong> Max drawdown is an extremum statistic: its effective sample size is the number of independent crash episodes (five or six across 6.5 years), not the 2,095 daily observations. Sliced per regime, the adaptive engine is shallower than its own constant in <strong>3 of 5</strong> regimes on majors and <strong>3 of 6</strong> on alts.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Regime</th>
@@ -366,13 +366,13 @@
 <td style="text-align:right">21.3%</td>
 <td style="text-align:right"><strong>17.5%</strong></td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>The majors measurement window opens after the March-2020 crash, which is why that regime has five rows on one basket and six on the other.</p>
 <p>The full-window advantage is concentrated in the <strong>deepest</strong> regimes — LUNA-class contagion and the 2025-26 correction on majors, LUNA and Aug-2024 on alts. In short, fast regimes the constant is equal or better. Anyone reading the 23.1% headline as &quot;the shield wins every crash&quot; is reading too much into it. The defensible claim is narrower and stronger: <strong>the shield wins the crashes that actually set the full-window maximum, and it beats a signal-free constant of the same average size on risk-adjusted return over the whole path.</strong></p>
 <h3>5.5 Where the exposure minimum sits</h3>
 <p>A volatility-scaled rule has a known failure mode. Realised volatility rises <em>after</em> the drop and falls <em>after</em> the bounce, so the rule reaches its smallest exposure near the bottom — exactly when it should be re-entering. If the ramp in addition de-risks faster than it re-enters, that makes the problem worse on V-shaped recoveries, and V-shaped is most of what crypto does.</p>
 <p>The adaptive engine is designed against this: once a bounce clears a confirmation threshold measured off the trough, its re-entry speed accelerates sharply and an exposure floor is unlocked, so that a genuine V is not sat out at minimum size. But a design intention is not a measurement, so we measured it. For every named regime and every defensive episode: the date of the basket&#x27;s cumulative low versus the date of the shield&#x27;s exposure low. <strong>Positive lag = exposure bottomed after price = the failure mode.</strong> Negative lag = the shield was already light going into the trough.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Regime</th>
@@ -424,7 +424,7 @@
 <td style="text-align:right">+312 d</td>
 <td style="text-align:right">0.17</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p><strong>The failure mode is absent from the three deep crashes</strong> that define the full-window maximum. In May-2021, LUNA and FTX the shield&#x27;s exposure bottomed <strong>32–57 days before</strong> the basket did, at 0.15–0.41 exposure. It was light going in, not light at the bottom.</p>
 <p><strong>It is present in the fast, V-shaped ones.</strong> August-2024 is a four-week down-and-up move, and the shield&#x27;s exposure minimum lands 8 days (majors) and 36 days (alts) <em>after</em> the basket&#x27;s low. That is the same regime where the constant control beats the shield in §5.4 — the two findings corroborate each other instead of competing.</p>
 <p>The 2025-26 lag (+305/+312 days) is not a missed bounce. That regime window is open-ended and the shield is still inside a live defensive episode at the time of writing, so its exposure minimum is recent by construction. The number measures &quot;still defending,&quot; not &quot;re-entered late.&quot;</p>
@@ -435,7 +435,7 @@
 <p>Every regime below was scored by parameters frozen <strong>before</strong> it happened — by construction out of sample.</p>
 <h3>6.1 Profile 1 — Majors + Gold (BTC, ETH, XRP, XMR + PAXG)</h3>
 <p>Low-volatility core with a gold anchor. Note this is a <strong>different basket</strong> from the §5 majors profile — four tokens plus the gold anchor, on a different data source and window. The two are not interchangeable.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Regime</th>
@@ -480,11 +480,11 @@
 <td style="text-align:right">32.1%</td>
 <td style="text-align:right"><strong>+13.2 pp</strong></td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>Full-window (2020-03 → 2026-08, 2,327 days): Calmar <strong>0.57</strong> vs 0.38 B&amp;H. MaxDD <strong>16.9%</strong> vs 43.2% B&amp;H. The shield gives up $7,414 of final equity ($15,650 vs $23,064 B&amp;H) but delivers 50% more risk-adjusted efficiency per unit of drawdown risk.</p>
 <h3>6.2 Profile 2 — 2019-20 Generation (ETH, LINK, ATOM, DOT + PAXG)</h3>
 <p>Higher-volatility basket from the last cycle generation. The fixed drawdown reference is a poor fit here, and the per-regime cuts below are the concept working despite that mismatch rather than because of any self-tuning.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Regime</th>
@@ -529,11 +529,11 @@
 <td style="text-align:right">34.9%</td>
 <td style="text-align:right"><strong>+12.4 pp</strong></td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>Full-window (2021-02 → 2026-08, 1,998 days): MaxDD <strong>18.9%</strong> vs 37.5% B&amp;H — the shield halved the drawdown. Per-regime cuts are uniformly positive. The full-window Calmar favours B&amp;H (0.12 vs 0.19) — this is the honest limit of the claim: per-regime protection yes, but on this specific basket the bull legs were large enough that the protection cost more in participation than it saved in drawdown.</p>
 <h3>6.3 Profile 2 stress — Landmine basket (BTC, ETH, CEL + PAXG)</h3>
 <p>Deliberately includes a token that went to zero (Celsius). The Aegis (v14) shield ran with the ADV-K2 liveness screen active, which zeroed CEL&#x27;s weight once it failed the $1M/day trailing-volume test.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Regime</th>
@@ -571,11 +571,11 @@
 <td style="text-align:right">32.9%</td>
 <td style="text-align:right"><strong>+12.8 pp</strong></td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>Full-window Calmar <strong>0.65</strong> vs 0.50 B&amp;H — the best risk-adjusted efficiency of all three baskets. The dead token stress confirms: the shield + liveness screen handles catastrophic individual-asset failure without manual intervention.</p>
 <h3>6.4 OOS validation — 16 unseen token baskets, and what &quot;16&quot; actually means</h3>
 <p>An out-of-sample test on baskets of tokens <strong>never used to design or tune</strong> the system. The 16 are <em>all</em> k=3, k=4 and k=5 combinations of five survivors — AVAX, CRO, DOGE, HBAR, LINK — which is 10 + 5 + 1. PYTH (short history, launched 2023-11) and CEL (dead token) are separate stress cases <strong>outside</strong> the 16, not members of it.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Metric</th>
@@ -594,14 +594,14 @@
 <td style="text-align:left">Sharpe delta</td>
 <td style="text-align:left">median <strong>+0.16</strong> — improved in <strong>15 / 16</strong></td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p><strong>What this establishes, and what it does not.</strong> The 16 are not 16 independent trials. Every one is a subset of the <em>same five assets</em> over the <em>same three date windows</em> (2,118 / 2,489 / 2,764 bars), so a single 2022-shaped drawdown moves all sixteen simultaneously. A sign test over sixteen draws this correlated has an effective sample size closer to one regime than to sixteen. The honest description is <strong>five unseen assets observed through one market history</strong>, and the +54.3 pp median is one large measurement, not sixteen confirmations.</p>
 <p>The benchmark compounds the problem. Buy &amp; Hold in that study is 100% exposed while the modulator&#x27;s average exposure is far below 1, so a drawdown reduction is close to guaranteed before any signal is evaluated. Section 5.4 is the experiment that removes that guarantee — it re-runs the comparison against a constant sized to the shield&#x27;s <em>own</em> average exposure — and §6.4 should be read against it, not instead of it.</p>
 <p>The selection-bias correction this count deserves is applied elsewhere in the corpus: the <a href="/research/mc-risk">Monte Carlo &amp; selection-bias study</a> computes deflated Sharpe ratios against the number of configurations actually tried in this project&#x27;s history. It was not applied here. That is an omission, not a disagreement.</p>
 <p>What survives the correction is narrower and still real: no parameter of the engine was tuned on any of these five assets, and the drawdown-reduction mandate held on every subset including the dead-token stress.</p>
 <h3>6.5 Execution robustness</h3>
 <p>A <a href="/research/robustness">robustness study</a> of 129 walk-forward re-runs — perturbing every user-facing knob one at a time, stress-testing fees to 20× and execution to 2 days late — found no cliff:</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Stress</th>
@@ -634,7 +634,7 @@
 <td style="text-align:right">&lt; 3 pp</td>
 <td style="text-align:right">&lt; 0.08</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>The drawdown cut survives late execution almost intact on the perturbation harness. The shield&#x27;s threshold rebalancing (only trade when the target drifts beyond the deadband) naturally reduces fee drag — approximately 64% fewer rebalances versus continuous adjustment.</p>
 <p>One published study disagrees on magnitude. The <a href="/research/dca-stress">Human Factor / execution-error study</a> found that on the production KKT stack a 3-day execution lag adds <strong>+4.7 to +11.3 pp</strong> of drawdown and fails its protection gates, because the ramp on the production portfolio is gentler than on the equal-weight test basket. Both results are correct on their own harness; the perturbation table above is the optimistic bound and the execution-error study is the pessimistic one. Neither should be quoted alone.</p>
 <p>See the <a href="/research/regime-autopsy">Regime Autopsy study</a> for the full per-regime decomposition, the <a href="/research/oos-v14-new-tokens">OOS Validation study</a> for per-basket detail, and the <a href="/research/static-vs-dynamic">Static vs Dynamic study</a> for the comparison against 60/40, 70/30, and 80/20 static allocations. Those three static splits all sit <em>above</em> the shield&#x27;s realised average exposure (0.44 majors / 0.43 alts), which is why the exposure-matched control in §5.4 was necessary rather than redundant.</p>

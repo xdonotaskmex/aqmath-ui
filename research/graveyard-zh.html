@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/graveyard">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -62,7 +62,7 @@
 <p>研究把该组合跑了两次 — 一次开启生产筛查、一次关闭 — 并诚实地归因保护来自哪里。诚实的答案出乎我们意料， 我们按实测结果如实发布。</p>
 <h2>2. 系统在墓地中存活</h2>
 <p>按构造，买入持有组合 G 就是一场灾难：六个代币中三个归（近）零， 原始组合在整个窗口内回撤 <strong>62%</strong>。策略经历同一个组合的体验 完全是另一回事。</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">死亡事件</th>
@@ -89,9 +89,9 @@
 <td style="text-align:right">$6,833</td>
 <td style="text-align:right">−1.3%</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>任何一次死亡给策略造成的损失都不超过权益的约 1.5%；CEL 那一天 甚至是正的，因为防护盾早已降险，而幸存者接住了反弹。 在两个已命名的死亡市场状态中，相对买入持有的回撤削减约为 36-38 个百分点：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">市场状态</th>
@@ -112,8 +112,8 @@
 <td style="text-align:right">48.7%</td>
 <td style="text-align:right">+37.6 pp</td>
 </tr>
-</tbody></table></div>
-<figure class="rs-fig"><img src="/research/assets/graveyard_gauntlet.svg" alt="Graveyard Gauntlet: equity through three token deaths, with screen event timeline" width="1060" height="640" loading="lazy" decoding="async"></figure>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
+<figure class="rs-fig"><a href="/research/assets/graveyard_gauntlet.svg" target="_blank" rel="noopener"><img src="/research/assets/graveyard_gauntlet.svg" alt="Graveyard Gauntlet: equity through three token deaths, with screen event timeline" width="1060" height="640" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/graveyard_gauntlet.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h2>3. 是谁做的 — 诚实的归因</h2>
 <p>以下是营销页面会跳过的部分：<strong>活性筛查并没有在死亡期间拯救 组合。</strong> 关闭筛查时，死亡市场状态的回撤为 13.4% 和 11.2% — 与开启筛查运行的 13.3% 和 11.1% 在统计上相同。归因可以干净地 分解：</p>
 <p><strong>死亡之前：优化器。</strong> 风险平价再优化早在 2020 年底就已把 LUNC 排除出冻结权重 — 一个成交量稀薄、波动率病态的代币在 KKT 解中 根本赢不到权重。因此 LUNC 在 2022 年 5 月的崩盘在<em>两次</em>运行中 击中的都是一个（几乎）空的仓位。</p>

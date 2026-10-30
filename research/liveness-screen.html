@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/liveness-screen">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -61,7 +61,7 @@
 <h2>2. The failure mode, reproduced</h2>
 <p>Test basket <strong>C LANDMINE</strong>: BTC, ETH, CEL (Celsius — bankrupt since mid-2022, exchange frozen, token kept trading on thin secondary markets) + PAXG gold anchor. Walk-forward, 180-day re-optimisation, production math, no parameter changes. Window 2020-03 → 2026-08, $1,000 start, DCA $100/30d, 10 bps fee.</p>
 <p>At the <strong>2025-08-24 re-optimisation</strong> the optimizer produced this frozen sleeve:</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Token</th>
@@ -89,12 +89,12 @@
 <td style="text-align:right">0.62%</td>
 <td style="text-align:right">44.0%</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>The mechanism: the macro optimiser pairs every token with a dynamic weight ceiling that tightens as its recent volatility rises — the most volatile member of the basket is always squeezed out entirely — and the resulting weights are renormalised to 100%. ETH was the most volatile token that day, so it took zero — and the dead CEL token, whose price barely moved, inherited a <strong>24.7% frozen weight</strong> purely because a collapsed chart has low measured volatility. Nothing in the volatility math can see that the market behind those closes is gone.</p>
-<figure class="rs-fig"><img src="/research/assets/liveness_weights.svg" alt="CEL frozen weight at every macro re-optimisation — the 2025-08-24 anomaly in red" width="920" height="392" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/liveness_weights.svg" target="_blank" rel="noopener"><img src="/research/assets/liveness_weights.svg" alt="CEL frozen weight at every macro re-optimisation — the 2025-08-24 anomaly in red" width="920" height="392" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/liveness_weights.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <h2>3. Candidate screens — what we tested and rejected</h2>
 <p>All screens use <strong>trailing data only</strong> (≤ the re-optimisation date) and were walked through every one of the 13 re-optimisations of basket C.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Variant</th>
@@ -127,10 +127,10 @@
 <td style="text-align:left">anomaly removed, metrics improve (below)</td>
 <td style="text-align:left">✅ selected</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>The winning design is a <strong>cap-zero screen</strong>: the KKT optimizer always runs on the <em>full</em> basket universe (caps and covariance untouched); the screen then filters the optimizer&#x27;s output <em>before</em> the sleeve freezes for the coming window — screened tokens enter the new sleeve at zero weight and the survivors are renormalized. Nothing that is already frozen mid-window is ever touched. The persistence requirement (two consecutive re-optimisations, ~one year) guarantees one bad data day can never zero a live token.</p>
 <h2>4. Results — basket C LANDMINE</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Metric</th>
@@ -169,10 +169,10 @@
 <td style="text-align:right">0.65</td>
 <td style="text-align:right">0.50</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>The screen fired exactly once in six years — at the anomaly re-opt (2025-08-24), zeroing CEL&#x27;s 24.7% and renormalizing the sleeve to BTC 41.6% / PAXG 58.4%.</p>
-<figure class="rs-fig"><img src="/research/assets/liveness_equity.svg" alt="Virtual equity, basket C with and without the liveness screen" width="920" height="400" loading="lazy" decoding="async"></figure>
-<figure class="rs-fig"><img src="/research/assets/liveness_dd.svg" alt="Drawdown curves, basket C with and without the liveness screen" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/liveness_equity.svg" target="_blank" rel="noopener"><img src="/research/assets/liveness_equity.svg" alt="Virtual equity, basket C with and without the liveness screen" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/liveness_equity.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
+<figure class="rs-fig"><a href="/research/assets/liveness_dd.svg" target="_blank" rel="noopener"><img src="/research/assets/liveness_dd.svg" alt="Drawdown curves, basket C with and without the liveness screen" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/liveness_dd.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <p><strong>Honest trade-off:</strong> the screened sleeve is BTC-heavier, so the 2025-26 correction cut deeper — max drawdown rises 14.1% → 17.8% and Calmar drops 0.72 → 0.65 (still above Buy &amp; Hold&#x27;s 0.50). In exchange the strategy gains +8.5% final value and a meaningfully higher Sharpe, and the systemic flaw is gone.</p>
 <p><strong>Zero collateral cost:</strong> the same screen was walked over two all-live control baskets (majors + gold, and the 2019-20 generation basket): it never fired there and the results are bit-identical to the unscreened baseline.</p>
 <h2>5. Why the backtest understates the real benefit</h2>

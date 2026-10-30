@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/feed-sensitivity">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -60,7 +60,7 @@
 <p>Three feeds were pulled independently for the eight tokens in the frozen Aegis (v14) plan: the aggregator the production collector uses (CoinGecko), and two exchange-native feeds (Coinbase Exchange candles, Kraken OHLC).</p>
 <h2>2. Coverage — already a finding</h2>
 <p>Listing status on 2026-08-09 — and what the production collectors actually pull (per their configs):</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Token</th>
@@ -126,12 +126,12 @@
 <td style="text-align:center">✗</td>
 <td style="text-align:center">1 source</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>Two findings. First, <strong>TICS is single-source everywhere</strong>: no exchange lists it, so any bad print there is undetectable by construction. Second, and more surprising: <strong>in production, 5 of the 8 plan tokens are single-source</strong>. The exchange collectors only pull TIA, PYTH and PAXG. Kraken <em>lists</em> ATH, DAG, EWT and PEAQ as well (this study uses its feed for them), but the production Kraken collector is not configured to collect them — so for those four tokens the cross-source median described above operates on exactly one input, equivalent to trusting the aggregator alone.</p>
 <p>One more coverage fact with operational weight: the aggregator&#x27;s free tier (what the production collector uses — browser User-Agent, no key) is now capped at <strong>365 days</strong> of history; deeper requests answer HTTP 401. That caps this study&#x27;s window and would cap any fresh deployment&#x27;s backfill.</p>
 <h2>3. How much do the feeds disagree?</h2>
 <p>Pairwise absolute relative difference of same-day prices, over overlapping dates. (One convention fix first: the aggregator&#x27;s &quot;daily&quot; point is the UTC-00:00 snapshot, i.e. the <em>previous</em> day&#x27;s close — verified by the 2025-10-10 crash printing under 10-10 on both exchanges and under 10-11 there. All series were relabelled to the exchange convention before comparison.)</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Pair</th>
@@ -230,14 +230,14 @@
 <td style="text-align:right">40.2%</td>
 <td style="text-align:right">50.4%</td>
 </tr>
-</tbody></table></div>
-<figure class="rs-fig"><img src="/research/assets/feed_divergence.svg" alt="median and p95 same-day feed divergence per token pair, log axis" width="920" height="400" loading="lazy" decoding="async"></figure>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
+<figure class="rs-fig"><a href="/research/assets/feed_divergence.svg" target="_blank" rel="noopener"><img src="/research/assets/feed_divergence.svg" alt="median and p95 same-day feed divergence per token pair, log axis" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/feed_divergence.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <p><em>Median (blue) and p95 (red) same-day feed divergence, per token and feed pair; log axis. Dashed guide: 0.5%, the Aegis (v14) rebalance threshold.</em></p>
 <p><strong>The exchanges agree with each other.</strong> Venue-to-venue divergence on the same day is noise: median 0.04–0.21%, p95 under 0.9%. Price discovery is not the issue.</p>
 <p><strong>The aggregator mostly agrees — until it doesn&#x27;t.</strong> Median divergence is equally small, but the tail is enormous: p95 between 13% and 59%, worst single-day gaps up to 76%. The disagreement is not a wide distribution; it is a handful of extreme prints. Section 4 shows where they come from.</p>
 <h2>4. Anatomy of the bad prints</h2>
 <p>Suspect single-day moves (|return| &gt; 30%) over the 364-day window, counted per feed and token. For the aggregator, a jump is <strong>uncorroborated</strong> when no exchange shows a &gt;15% move on the same or a neighbouring day — i.e. it is a bad print, not a market event.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Feed</th>
@@ -300,14 +300,14 @@
 <td style="text-align:right">5</td>
 <td style="text-align:right">—</td>
 </tr>
-</tbody></table></div>
-<figure class="rs-fig"><img src="/research/assets/feed_contamination.svg" alt="aggregator jumps over 30% per token, uncorroborated share in red" width="920" height="400" loading="lazy" decoding="async"></figure>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
+<figure class="rs-fig"><a href="/research/assets/feed_contamination.svg" target="_blank" rel="noopener"><img src="/research/assets/feed_contamination.svg" alt="aggregator jumps over 30% per token, uncorroborated share in red" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/feed_contamination.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <p><em>Single-day moves above 30% on the aggregator feed, per token (grey); the red part is corroborated by no exchange — bad prints, not market events.</em></p>
 <p>The production feed printed <strong>49 one-day moves above 30% in a single year, 41 of them corroborated by no exchange</strong> — prints like +107% and −52% on TIA in consecutive weeks while both exchanges traded flat. The exchanges&#x27; jumps, by contrast, are nearly all shared events (the October 2025 liquidation cascade appears on every feed that lists the token). The contamination concentrates in exactly the thin-liquidity tokens a small-cap plan must hold.</p>
 <p>For context on why this reaches the strategy: the pipeline&#x27;s outlier filter drops prices deviating more than 4.5 standard deviations from a 7-day rolling mean, per source — a useful sieve for blue chips, but a thin token&#x27;s own volatility inflates the local std, so extreme prints can survive it. Where the merge has three sources (TIA, PYTH, PAXG) the cross-source median then absorbs any survivor; where a token is single-source (§2), nothing stands between the print and the shield. The validator additionally <em>flags</em> moves above 50% but does not reject them, and moves of 30–50% are not checked at all.</p>
 <h2>5. Replay — same shield, three feeds</h2>
 <p>The real Aegis (v14) shield (<code>evaluate_shield</code>, production constants, 10 bps fees, threshold rebalancing) was replayed once per feed plus a <strong>consensus</strong> arm — the per-token median across the three feeds, i.e. the same merge rule the production pipeline applies to TIA/PYTH/PAXG — on the 4-token sub-basket listed everywhere (weights: the frozen plan renormalised — ATH 20.1%, PAXG 52.6%, PYTH 14.4%, TIA 12.9%). Window: 364 days, 2025-08-09 → 2026-08-07. $10,000 start + $300/30d DCA.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Feed</th>
@@ -355,8 +355,8 @@
 <td style="text-align:right">$35</td>
 <td style="text-align:right">23</td>
 </tr>
-</tbody></table></div>
-<figure class="rs-fig"><img src="/research/assets/feed_replay.svg" alt="equity paths per feed arm plus consensus and buy-and-hold" width="920" height="400" loading="lazy" decoding="async"></figure>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
+<figure class="rs-fig"><a href="/research/assets/feed_replay.svg" target="_blank" rel="noopener"><img src="/research/assets/feed_replay.svg" alt="equity paths per feed arm plus consensus and buy-and-hold" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/feed_replay.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <p><em>Equity per feed arm, same shield code. The Consensus arm mirrors the merge production serves for the triple-sourced tokens; the Aggregator-only arm is the reality of the five single-source tokens. Dashed grey: Buy &amp; Hold.</em></p>
 <p>Buy &amp; Hold on the same window: +28.3–28.4%.</p>
 <p><strong>The bottom line is feed-robust in this window.</strong> Final values sit inside a 0.7% band, max drawdown inside 0.3 pp. Two structural reasons: the sub-basket is dominated by PAXG (52.6% — the cleanest series in the study, 0 jumps on every feed), and contaminated prints are mean-reverting (a +107% print is followed by a −52% print), so their net effect on level largely cancels.</p>
@@ -365,7 +365,7 @@
 <p>Outcome equivalence is not mechanism equivalence. Two channels show movement:</p>
 <p><strong>Timing.</strong> Shield exposure paths differ by more than 5 percentage points on 6.9% of days (vs Coinbase) and 5.0% (vs Kraken); versus the consensus, 4.7%. Exchange-vs-exchange: 1.4%, and zero days above 10 pp. The production feed makes the shield <em>trade on different days</em> roughly once a fortnight — a bad print spikes the drawdown window, the shield de-risks a day early or re-enters a day late. In this window the net result almost fully cancelled; there is no guarantee it cancels in the next one.</p>
 <p><strong>The macro input.</strong> The KKT loop re-optimises on realised volatilities and covariances computed from the same daily series. Per-feed annualised vol of the sub-basket tokens:</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Token</th>
@@ -403,7 +403,7 @@
 <td style="text-align:right">105.4%</td>
 <td style="text-align:right"><strong>187.5 pp</strong></td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>The production feed estimates TIA&#x27;s risk at <strong>2.8× the exchange estimate</strong> — purely from bad prints. The frozen weights locked 2026-08-08 are untouched by this (they are frozen), but the next macro re-optimisation reads those contaminated vols — and for the five single-source tokens (§2) the contaminated vol is exactly what sits in the production DB, with no second feed to outvote it. Thin tokens get systematically over-penalised, and the &quot;clean&quot; answer depends on which feed you ask. This is the channel where feed choice stops being noise and becomes a hidden parameter.</p>
 <h2>7. Caveats</h2>
 <ul><li><strong>Window:</strong> 364 days (2025-08-09 → 2026-08-07), capped by the aggregator&#x27;s free-tier 365-day history limit. No bear-market leg is covered.</li><li><strong>Sub-basket:</strong> only the 4 of 8 plan tokens listed on all three feeds. The replay is gold-heavy by construction; the contaminated single-source tokens (DAG, EWT, PEAQ; ATH is in the replay, TICS is not) could not be replayed across feeds. Their contamination counts in §4 are the evidence for them instead.</li><li><strong>Study series vs production DB:</strong> this study pulls the public APIs directly; production reads the merged DB. For TIA/PYTH/PAXG the Consensus arm replicates the pipeline&#x27;s merge rule (per-date median) on the same three feeds.</li><li><strong>Jump threshold:</strong> 30% is a heuristic; genuine thin-token moves can exceed it. The uncorroborated count (requiring silence on BOTH exchanges ±1 day) is the conservative figure used for attribution.</li><li><strong>No lookahead anywhere:</strong> every feed arm runs the identical production code path, same DCA, same fees, same constants.</li></ul>

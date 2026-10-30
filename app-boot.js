@@ -198,6 +198,7 @@ function renderForwardLog(box) {
             localizeForwardLog(box);
         }
     } catch (e) { /* storage disabled — EN snapshot already applied */ }
+    prepareReadableContent();
 }
 
 function localizeForwardLog(box) {
@@ -317,7 +318,10 @@ function localizeForwardLog(box) {
     if (!box || !window.fetch) return;
     fetch('https://api-backtest.aqmath.xyz/forward-log-v18')
         .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
-        .then(function (html) { box.innerHTML = sanitizeFirstPartyHtml(html); })
+        .then(function (html) {
+            box.innerHTML = sanitizeFirstPartyHtml(html);
+            prepareReadableContent();
+        })
         .catch(function () { /* keep the bundled loading note */ });
 })();
 
@@ -328,7 +332,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=183bf74fcb')
+    return fetch('/locales/' + lang + '.json?v=9c3047d2b3')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -373,6 +377,7 @@ function applyTranslations() {
     ['forwardLogLive'].forEach(function (id) {
         renderForwardLog(document.getElementById(id));
     });
+    prepareReadableContent();
 }
 
 (function () {
@@ -565,3 +570,56 @@ function applyTranslations() {
     btn.addEventListener('click', function (e) { if (!chk.checked) e.preventDefault(); });
     sync();
 })();
+
+// Preserve legible chart labels, including freshly fetched telemetry. Only the
+// figure scrolls; its heading and the rest of the page remain viewport-sized.
+function updateReadableOverflow() {
+    document.querySelectorAll('.figure-scroll, .doc-tablewrap').forEach(function (el) {
+        var overflows = el.scrollWidth > el.clientWidth + 1;
+        el.classList.toggle('is-overflowing', overflows);
+        if (overflows) el.setAttribute('tabindex', '0');
+        else el.removeAttribute('tabindex');
+    });
+}
+
+var readableObserver = typeof ResizeObserver === 'function'
+    ? new ResizeObserver(updateReadableOverflow) : null;
+
+function prepareReadableContent() {
+    document.querySelectorAll('.rv-chart svg, .doc-diagram svg, .bt-flow-svg').forEach(function (svg) {
+        if (svg.parentElement.classList.contains('figure-scroll')) return;
+        var box = svg.viewBox && svg.viewBox.baseVal;
+        if (!box || !box.width) return;
+        var sizes = Array.from(svg.querySelectorAll('text')).map(function (text) {
+            return parseFloat(getComputedStyle(text).fontSize);
+        }).filter(function (size) { return Number.isFinite(size) && size > 0; });
+        var minFont = Math.min.apply(null, [12].concat(sizes));
+        var wrap = document.createElement('div');
+        wrap.className = 'figure-scroll';
+        wrap.style.setProperty('--figure-width', Math.ceil(box.width * 12 / minFont) + 'px');
+        svg.parentNode.insertBefore(wrap, svg);
+        wrap.appendChild(svg);
+    });
+    if (readableObserver) readableObserver.disconnect();
+    document.querySelectorAll('.figure-scroll, .doc-tablewrap').forEach(function (el) {
+        var chart = el.classList.contains('figure-scroll');
+        var key = chart ? 'readability.chartScroll' : 'readability.tableScroll';
+        var fallback = chart ? 'Chart — scroll horizontally to see all details.'
+            : 'Table — scroll horizontally for additional columns.';
+        var text = window.i18next && i18nReady ? i18next.t(key) : fallback;
+        if (!text || text === key) text = fallback;
+        el.setAttribute('role', 'region');
+        el.setAttribute('aria-label', text);
+        var hint = el.nextElementSibling;
+        if (!hint || !hint.classList.contains('scroll-hint')) {
+            hint = document.createElement('div');
+            hint.className = 'scroll-hint';
+            el.insertAdjacentElement('afterend', hint);
+        }
+        hint.textContent = text;
+        if (readableObserver) readableObserver.observe(el);
+    });
+    updateReadableOverflow();
+}
+window.addEventListener('resize', updateReadableOverflow);
+prepareReadableContent();

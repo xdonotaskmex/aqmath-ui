@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/mc-risk">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -63,7 +63,7 @@
 <h2>2. 自助法：同一个市场的 3,000 次人生</h2>
 <p>平稳分块自助法以几何分布的块长（平均 10 天）对连续日块进行 重采样，因此每段合成路径都保留了序列相关、波动聚集与肥尾 — 正是这三个性质让独立同分布重采样在金融数据上是错的。对 3,000 段路径中的每一段，两条腿（策略与买入持有）都在完全相同的重采样 序列上评估，因此每一次对比都是成对的：策略不可能因为拿到一段 更轻松的历史而获胜。</p>
 <p><strong>观测值与 90% 自助法置信区间：</strong></p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">组合</th>
@@ -102,9 +102,9 @@
 <td style="text-align:right">1.03</td>
 <td style="text-align:right">0.81</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p><strong>策略在 3,000 段路径上胜过买入持有的概率：</strong></p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">组合</th>
@@ -135,8 +135,8 @@
 <td style="text-align:right">76.3%</td>
 <td style="text-align:right">18.8%</td>
 </tr>
-</tbody></table></div>
-<figure class="rs-fig"><img src="/research/assets/mc_institutional.svg" alt="CVaR tail risk, bootstrap win probabilities and Deflated Sharpe across three baskets" width="1040" height="430" loading="lazy" decoding="async"></figure>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
+<figure class="rs-fig"><a href="/research/assets/mc_institutional.svg" target="_blank" rel="noopener"><img src="/research/assets/mc_institutional.svg" alt="CVaR tail risk, bootstrap win probabilities and Deflated Sharpe across three baskets" width="1040" height="430" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/mc_institutional.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h2>3. 站得住的：风险优势在统计上是真实的</h2>
 <p>回撤削减是唯一在每一项检验中都站得住的论断。在全部 9,000 段 合成路径中，策略的最大回撤在 <strong>98.6–99.7%</strong> 的路径上低于买入 持有 — 这不是点估计而是分布层面的论断，上面的置信区间带表明 这甚至不是接近的胜负：在组合 A 上，策略 MDD 的 CI90 上限 （39.7%）低于买入持有的中位数（40.0%）。</p>
 <p>尾部以同样的幅度更薄。在一个月期限上，CVaR(95%) — 处于最差 5% 月份条件下的平均损失 — 在 A 上为 <strong>−8.5% vs −14.4%</strong>、 B 上为 <strong>−9.8% vs −16.7%</strong>、C 上为 <strong>−7.1% vs −11.7%</strong>： 每个组合的尾部都浅了约 40%，包括所有收益类指标都失效的组合 B。 防护盾的职责描述恰恰就是这个，自助法证实它不是我们恰好经历的 那一段历史的性质。</p>

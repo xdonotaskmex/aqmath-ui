@@ -1,4 +1,8 @@
 {
+  "readability": {
+    "chartScroll": "Chart — scroll horizontally to see all details.",
+    "tableScroll": "Table — scroll horizontally for additional columns."
+  },
   "hero": {
     "title": "portfolio mathematics software",
     "subtitle": "No emotions. No human error. Structural limits on every DCA dollar you deploy.",
@@ -242,6 +246,7 @@
     "historyTitle": "Portfolio history",
     "saveSnapshot": "Save Snapshot",
     "historyHint": "Automatically updated after DCA distribution.",
+    "historyEmpty": "No history yet. Save a snapshot to start tracking your portfolio.",
     "liveMarkets": "Live markets",
     "footerDisclaimer": "AQMath is calculation software and does not provide financial advice.",
     "navResults": "results",
@@ -463,7 +468,7 @@
       "m4": "Sharpe (Proteus vs B&H)",
       "m5": "Calmar (Proteus vs B&H)",
       "m6": "Alt Basket Max Drawdown",
-      "m7": "59.8% B&H &rarr; 29.4%"
+      "m7": "59.8% B&H → 29.4%"
     },
     "s9": {
       "title": "9. Privacy & Data Separation",

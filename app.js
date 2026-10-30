@@ -2452,16 +2452,15 @@ function renderHistoryChart() {
     const discData = (typeof _disciplineHistory !== 'undefined') ? _disciplineHistory : null;
     const hasPortfolio = portfolioHistory.length > 0;
     const hasDisc = discData && discData.dates && discData.dates.length > 0;
+    const empty = !hasPortfolio && !hasDisc;
+    const emptyEl = document.getElementById('historyEmpty');
+    if (emptyEl) emptyEl.classList.toggle('hidden', !empty);
+    const chartWrap = document.querySelector('.history-chart-wrap');
+    if (chartWrap) chartWrap.classList.toggle('hidden', empty);
 
-    if (!hasPortfolio && !hasDisc) {
+    if (empty) {
         const statsEl = document.getElementById('historyStats');
         if (statsEl) statsEl.innerHTML = '';
-        const ctx = document.getElementById('historyChart').getContext('2d');
-        historyChart = new Chart(ctx, {
-            type: 'line',
-            data: { labels: [], datasets: [{ label: 'Portfolio Value', data: [], borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.05)', fill: true }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { ticks: { callback: v => '$' + v.toFixed(0) } } } }
-        });
         return;
     }
 

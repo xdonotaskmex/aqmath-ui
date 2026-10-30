@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/static-vs-dynamic">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -61,7 +61,7 @@
 <p>有一处不对称被摆在明面上，而非藏起来：静态分配拥有<strong>零操作面</strong> — 没有会错过的信号，没有会迟到的执行。人为因素系列恰好度量了防护盾 一侧为此付出的代价。因此这次比较是&quot;每单位所需纪律换来的防护&quot;， 文章对此直言不讳。</p>
 <h2>2. 设计</h2>
 <p>所有策略共享相同输入：组合 ADA、BNB、ETH、XRP、SOL（风险腿等权）， 2020-04-10 至 2026-07-04（6.2 年、两轮熊市），$1,000 起步，每 30 天 $100 完美定投，每笔交易 0.1% 手续费，稳定币收益为零。定投维度保持 完美 — 抖动已在人为因素系列中测过。</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">策略</th>
@@ -100,11 +100,11 @@
 <td style="text-align:center">动态</td>
 <td style="text-align:left">生产配置，当日执行</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>S3 细节：痛苦阈值 35% ± 5 个百分点，按种子抖动（30 个种子）。 回归变体：<strong>永不</strong>回归、只在组合创<strong>历史新高</strong>时回归（买在顶上）、 或离场<strong>一年</strong>后回归。回归后计划继续执行，人还可以再次违约。</p>
 <p>S2 值得一句话：牛市里风险腿不断长大，&quot;设完就忘&quot;的 60/40 会在顶部 附近悄悄变成 ~90/10 — 满仓撞上崩盘。这种漂移不是稻草人，而是静态 分配在现实中最常见的版本。</p>
 <h2>3. 结果 — 机器人与抽屉党</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">策略</th>
@@ -179,14 +179,14 @@
 <td style="text-align:center">22.5%</td>
 <td style="text-align:center">$30,121</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>三个突出的事实：</p>
 <p>1. <strong>机器人很强。</strong> 每年只再平衡一次的教科书 60/40，夏普是这里测试 的所有策略（包括防护盾）中最高的。6.2 年里 6 次再平衡，手续费 $48。 2. <strong>漂移吃掉的是防护，不是收益。</strong> 抽屉变体的最终金额与机器人相差 无几（60/40 只差 −$646），却承受了几乎完整的买入持有回撤 （80.5% 对 60.7%）。年度再平衡买来的是痛苦削减，不是收益。 3. <strong>防护盾是唯一 MaxDD 低于 35% 的策略 — 而它为此付了钱。</strong> 2,275 天中 1,758 天处于防守状态（77%），最终权益不足机器人 60/40 的一半。</p>
-<figure class="rs-fig"><img src="/research/assets/static_equity.svg" alt="权益曲线：机器人、抽屉党、真人与防护盾" width="820" height="436" loading="lazy" decoding="async"></figure>
-<figure class="rs-fig"><img src="/research/assets/static_scatter.svg" alt="痛苦 vs 回报：九个策略的 MaxDD 对夏普" width="820" height="436" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/static_equity.svg" target="_blank" rel="noopener"><img src="/research/assets/static_equity.svg" alt="权益曲线：机器人、抽屉党、真人与防护盾" width="820" height="436" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/static_equity.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
+<figure class="rs-fig"><a href="/research/assets/static_scatter.svg" target="_blank" rel="noopener"><img src="/research/assets/static_scatter.svg" alt="痛苦 vs 回报：九个策略的 MaxDD 对夏普" width="820" height="436" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/static_scatter.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h2>4. 结果 — 真人</h2>
 <p>S3 操作者严格按机器人的计划执行，直到自身权益回撤越过 ~35% （实际触发阈值中位数 34.0–34.2%），然后把所有风险资产换成稳定币。 30 个种子的中位数：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">回归规则</th>
@@ -225,13 +225,13 @@
 <td style="text-align:center">4</td>
 <td style="text-align:center">1,838</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>慢慢读：</p>
 <ul><li><strong>每一个人都违约了。</strong> 30 个种子、三种回归规则 — 没有一个模拟的 人把 60/40 撑过了痛苦。每个生命周期中位数 3–5 次投降。</li><li><strong>他们约 81% 的时间不在市场里</strong>（2,275 天中的 1,682–1,838 天）— 却<em>仍然</em>在崩溃之前经历了 60–66% 的回撤。</li><li><strong>违约的代价是 $12.5k–$16.4k</strong> — 相对同一个计划被机器人式地执行。 &quot;创新高再回归&quot;的 MaxDD 最差（65.7%），因为它系统性地买在顶部。</li></ul>
-<figure class="rs-fig"><img src="/research/assets/static_capitulation.svg" alt="投降放弃的权益 vs 用纪律执行同一个计划" width="820" height="332" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/static_capitulation.svg" target="_blank" rel="noopener"><img src="/research/assets/static_capitulation.svg" alt="投降放弃的权益 vs 用纪律执行同一个计划" width="820" height="332" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/static_capitulation.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h2>5. 门槛记分卡</h2>
 <p>原测试计划中的通过标准，逐字引用：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">门槛</th>
@@ -264,7 +264,7 @@
 <td style="text-align:left">仅为最佳的 45%</td>
 <td style="text-align:center">❌ 失败</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p><strong>4 过 2。</strong> 防护盾在每一个衡量痛苦的指标上占优，在这个窗口的每一个 衡量终端财富的指标上落败。</p>
 <h2>6. 诚实的解读</h2>
 <p>1. <strong>防护是真实的，且是同类中最强的。</strong> MaxDD 34.2% 对每一个静态 变体的 60.7–81.1%，Calmar 是九个策略中最高的 — 真正坐穿的痛苦 换来的最佳回报。这是产品的承诺，本次测试确认了它。</p>

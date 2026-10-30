@@ -82,6 +82,8 @@ UI = {
         "backToHub": "&larr; All research",
         "alsoIn": "Also available in",
         "published": "Published",
+        "fullSize": "Open full-size chart",
+        "tableScroll": "Table — scroll horizontally for additional columns if needed.",
     },
     "zh-Hans": {
         "hubTitle": "研究与验证",
@@ -90,6 +92,8 @@ UI = {
         "backToHub": "&larr; 全部研究",
         "alsoIn": "其他语言版本",
         "published": "发布日期",
+        "fullSize": "打开完整尺寸图表",
+        "tableScroll": "表格 — 如需查看其他列，请横向滚动。",
     },
 }
 
@@ -740,7 +744,7 @@ def inline(text):
     return text
 
 
-def render_table(rows):
+def render_table(rows, lang="en"):
     align_row = rows[1]
     aligns = []
     for cell in [c.strip() for c in align_row.strip("|").split("|")]:
@@ -754,7 +758,9 @@ def render_table(rows):
     def cells(row):
         return [c.strip() for c in row.strip().strip("|").split("|")]
 
-    out = ['<div class="rs-tablewrap">', "<table>", "<thead><tr>"]
+    hint = htmllib.escape(UI[lang]["tableScroll"])
+    out = [f'<div class="rs-tablewrap" tabindex="0" role="region" aria-label="{hint}">',
+           "<table>", "<thead><tr>"]
     for i, cell in enumerate(cells(rows[0])):
         a = aligns[i] if i < len(aligns) else "left"
         out.append(f'<th style="text-align:{a}">{inline(cell)}</th>')
@@ -766,7 +772,7 @@ def render_table(rows):
             a = aligns[i] if i < len(aligns) else "left"
             out.append(f'<td style="text-align:{a}">{inline(cell)}</td>')
         out.append("</tr>")
-    out.append("</tbody></table></div>")
+    out.append(f'</tbody></table></div><p class="rs-scroll-hint">{hint}</p>')
     return "\n".join(out)
 
 
@@ -777,7 +783,7 @@ def render_paragraph(lines):
     return "<p>" + inline(" ".join(lines)) + "</p>"
 
 
-def markdown_to_html(md):
+def markdown_to_html(md, lang="en"):
     """Render the Markdown subset these reports actually use. Not a general parser:
     it fails loudly on anything it does not recognise rather than dropping it."""
     lines = md.replace("\r\n", "\n").split("\n")
@@ -828,8 +834,12 @@ def markdown_to_html(md):
             flush()
             url = rewrite_target(m.group(2))
             w, h = svg_box(url)
-            out.append(f'<figure class="rs-fig"><img src="{url}" alt="{htmllib.escape(m.group(1))}" '
-                       f'width="{w}" height="{h}" loading="lazy" decoding="async"></figure>')
+            safe_url = htmllib.escape(url, quote=True)
+            label = htmllib.escape(UI[lang]["fullSize"])
+            out.append(f'<figure class="rs-fig"><a href="{safe_url}" target="_blank" rel="noopener">'
+                       f'<img src="{safe_url}" alt="{htmllib.escape(m.group(1))}" '
+                       f'width="{w}" height="{h}" loading="lazy" decoding="async"></a>'
+                       f'<figcaption><a href="{safe_url}" target="_blank" rel="noopener">{label}</a></figcaption></figure>')
             i += 1
             continue
 
@@ -841,7 +851,7 @@ def markdown_to_html(md):
             while i < len(lines) and lines[i].strip().startswith("|"):
                 rows.append(lines[i].strip())
                 i += 1
-            out.append(render_table(rows))
+            out.append(render_table(rows, lang))
             continue
 
         if line.startswith("- "):
@@ -958,7 +968,7 @@ def render_doc(doc):
                   for g in TRANSLATION_SETS
                   if doc["path"] in g and d["path"] in g and d["path"] != doc["path"]), None)
 
-    body_md = markdown_to_html(md)
+    body_md = markdown_to_html(md, doc["lang"])
     # The source's own cross-language line points at a repo file; the header link
     # below is the real one, so drop the duplicate.
     body_md = re.sub(r"<blockquote>.*?</blockquote>\s*", "", body_md, count=1, flags=re.S)

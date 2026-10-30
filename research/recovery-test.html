@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/recovery-test">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -63,7 +63,7 @@
 <p>Same basket as Crown Test 2 (ADA, BNB, ETH, XRP, SOL) but with the <strong>production KKT risk-parity stack</strong> instead of equal weights. Weights are computed via ERC on the trailing 180-day log-return covariance, capped at 40%/10% per token, with a structural 60% risky / 40% USDC split. Weights are frozen and re-optimised every 180 days, drifting with prices between re-opts — exactly what runs on the server.</p>
 <p>Window: 2020-04-10 to 2026-07-04 (6.2 years, two bear cycles), $1,000 start, $100 every 30 days perfect DCA, 0.1% fee per trade, stablecoin earns zero. 12 KKT re-optimisations over the period.</p>
 <p>Two instruments run in parallel with identical accounting:</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Instrument</th>
@@ -78,12 +78,12 @@
 <td style="text-align:left"><strong>Buy &amp; Hold</strong></td>
 <td style="text-align:left">100% invested in the same KKT portfolio at all times, same DCA schedule and fees</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>A <strong>defensive episode</strong> is a contiguous period where the Shield&#x27;s held exposure stays below 40% (the redeploy threshold). For each episode exit — the bar where exposure crosses back above 40% — we measure:</p>
 <ul><li><strong>Days to 50% re-exposure:</strong> how fast the Shield gets back to a meaningful position</li><li><strong>Recovery participation at 1m / 3m / 6m / 12m:</strong> Shield equity gain divided by B&amp;H equity gain over the same forward window</li><li><strong>Does Shield equity exceed B&amp;H equity after 12 months?</strong></li></ul>
 <h2>3. Results</h2>
 <p>The Shield spent 1,844 of 2,275 days (81.1%) in defensive mode. Eleven distinct defensive episodes were identified:</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:center">#</th>
@@ -218,14 +218,14 @@
 <td style="text-align:center">—</td>
 <td style="text-align:center">no</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>Three facts stand out:</p>
 <p>1. <strong>Re-entry is fast.</strong> Median 1 day to reach 50% exposure, with a range of 0–51 days. The Shield does not &quot;lock you out.&quot; It responds to improving conditions almost immediately — except for the monster 760-day episode (#7) that spans the entire LUNA/FTX/2022 bear. 2. <strong>Participation is low.</strong> Among cycles with 12-month data, the median recovery capture is 32% of B&amp;H — far below the 70% threshold. The Shield re-enters, but at reduced exposure, and captures a fraction of the upside. 3. <strong>Shield never catches up.</strong> Zero of seven cycles with 12m data end with Shield equity above B&amp;H equity at 12 months. The protection gap from the defensive period is never fully closed.</p>
-<figure class="rs-fig"><img src="/research/assets/recovery_participation.svg" alt="Recovery participation: how much of the B&amp;H recovery the Shield captured (KKT production stack)" width="820" height="480" loading="lazy" decoding="async"></figure>
-<figure class="rs-fig"><img src="/research/assets/recovery_timeline.svg" alt="Timeline of all eleven defensive episodes and their recovery (KKT production stack)" width="820" height="420" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/recovery_participation.svg" target="_blank" rel="noopener"><img src="/research/assets/recovery_participation.svg" alt="Recovery participation: how much of the B&amp;H recovery the Shield captured (KKT production stack)" width="820" height="480" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/recovery_participation.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
+<figure class="rs-fig"><a href="/research/assets/recovery_timeline.svg" target="_blank" rel="noopener"><img src="/research/assets/recovery_timeline.svg" alt="Timeline of all eleven defensive episodes and their recovery (KKT production stack)" width="820" height="420" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/recovery_timeline.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <h2>4. The gate scorecard</h2>
 <p>The pass criteria from the original test plan, verbatim:</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Gate</th>
@@ -258,7 +258,7 @@
 <td style="text-align:left">0</td>
 <td style="text-align:center">❌ FAIL</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p><strong>1 of 4.</strong> The only passing gate is the speed of re-entry — and that passes by a wide margin (1 vs 60). The participation gates fail by a wide margin too.</p>
 <h2>5. Honest reading</h2>
 <p>1. <strong>The Shield does not &quot;lock you out&quot; — technically.</strong> Median re-entry is 1 day. If the only question is &quot;does the Shield get back in quickly?&quot;, the answer is yes, decisively.</p>

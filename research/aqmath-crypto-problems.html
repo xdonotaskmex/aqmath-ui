@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/aqmath-crypto-problems">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -61,7 +61,7 @@
 <p><strong>The thesis, stated up front so the tables cannot be misread:</strong> AQMath is not a return machine. Its published risk report already showed that the excess return over Buy &amp; Hold is <a href="/research/mc-risk">statistically zero</a>; the drawdown cut wins in 98.6–99.7% of synthetic histories. Every test below reproduces that on one real basket: <strong>the win is the size of the hole you survive, paid for with some of the upside.</strong></p>
 <h2>2. How we tested</h2>
 <p>One basket, one DCA schedule, one fee, the unmodified production code path — <code>compute_equal_weight_returns → compute_macro_weights → apply_macro_weights → simulate_v18</code>. No parameter was tuned to this data.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Token</th>
@@ -88,10 +88,10 @@
 <td style="text-align:left">CEL</td>
 <td style="text-align:left">added only in §6 — collapsed 2022, the dead-token probe</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <ul><li><strong>Basket:</strong> 8 assets — a diversified mix (gold anchor + high-beta SOL + majors) — over the shared window <strong>2020-04-10 → 2026-07-04</strong> (2,275 days, 6.23 y), <strong>12 MACRO re-optimisations</strong>, spanning the 2021 blow-off <strong>and</strong> the 2022 collapse.</li><li><strong>Money:</strong> $10,000 start + $300 DCA every 30 days (<strong>$32,500 invested on both sides</strong>), 0.1% simulated fee on every trade, DCA buy and redeploy.</li><li><strong>Benchmark:</strong> a Buy &amp; Hold + DCA reference run on the <strong>identical basket and identical DCA stream</strong>, so the only difference is the strategy.</li><li><strong>Data:</strong> daily CoinGecko closes from a local refresh (2026-07); the shared window is set by the youngest token (SOL, from 2020-04) so the 2022 bear is preserved. Still survivorship-selected large caps — see §7.</li></ul>
 <h2>3. Problem 1 — Crashes and drawdown control</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Metric</th>
@@ -149,16 +149,16 @@
 <td style="text-align:right">$4,454</td>
 <td style="text-align:right">—</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p><strong>Reading:</strong> this is the whole case in one row. AQMath cut the worst drop from <strong>57.3% to 27.1% — a 30-point reduction</strong> — roughly halving the hole a holder has to sit through. It did that by averaging only <strong>43% market exposure</strong>, and it wins on the drawdown-scaled measure (Calmar 1.18 vs 1.00). It does <strong>not</strong> win on raw Sharpe here (0.78 vs 0.89): in a window dominated by the 2020–21 melt-up, Buy &amp; Hold&#x27;s full exposure rode a smoother climb, while AQMath&#x27;s in-and-out of risk adds its own variance. And the protection is paid for in absolute dollars — Buy &amp; Hold finished at $552k against AQMath&#x27;s $182k. <strong>Staying fully invested won on return and on Sharpe, and lost on the size of the crash</strong> — exactly the trade §1 promised.</p>
 <p><em>The earlier Aegis (v14) shield on the same basket and path cut marginally deeper still — 24.9% MaxDD, Calmar 1.32 — a fair note given v18 is the live engine: v18&#x27;s edge over v14 is a modest, honestly-caveated improvement measured across 182 unseen baskets (<a href="/research/oos-v18-new-tokens">OOS validation</a>), and on this particular set v14&#x27;s slower re-risk happened to serve the window slightly better.</em></p>
 <p><strong>Virtual equity — AQMath vs Buy &amp; Hold + DCA</strong> (identical DCA stream, amber dashes = scheduled MACRO re-optimisations):</p>
-<figure class="rs-fig"><img src="/research/assets/crypto_problems_equity.svg" alt="Virtual equity, AQMath (v18) vs Buy &amp; Hold + DCA" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/crypto_problems_equity.svg" target="_blank" rel="noopener"><img src="/research/assets/crypto_problems_equity.svg" alt="Virtual equity, AQMath (v18) vs Buy &amp; Hold + DCA" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/crypto_problems_equity.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <p><strong>Drawdown — the 57.3% hole vs the 27.1% hole:</strong></p>
-<figure class="rs-fig"><img src="/research/assets/crypto_problems_drawdown.svg" alt="Drawdown curves, AQMath vs Buy &amp; Hold" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/crypto_problems_drawdown.svg" target="_blank" rel="noopener"><img src="/research/assets/crypto_problems_drawdown.svg" alt="Drawdown curves, AQMath vs Buy &amp; Hold" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/crypto_problems_drawdown.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <h2>4. Problem 2 — Risk-balanced allocation (KKT vs equal weight)</h2>
 <p>Stripping the shield away and holding each weighting with a single purchase of $1 isolates the allocation layer itself. On this diversified basket the KKT weighter is no longer a rounding error — it wins on <strong>all four</strong> measures:</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Metric</th>
@@ -191,9 +191,9 @@
 <td style="text-align:right">1.46</td>
 <td style="text-align:right">1.04</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>That is an <strong>18.3-point drawdown cut and a higher terminal value</strong> from the weighting alone, before any shield. The reason it finally shows teeth is that the objective is <em>not a formula in disguise</em>: the frozen KKT weights on the final re-optimisation ranged from <strong>0% to 29.2%</strong>, nowhere near the flat 12.5%:</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Asset</th>
@@ -218,7 +218,7 @@
 <td style="text-align:right">7.0%</td>
 <td style="text-align:right"><strong>0.0%</strong></td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>The gold anchor PAXG — the lowest-volatility name in the book — was loaded up to <strong>29.2%</strong>, more than double its equal weight, while the meme coin DOGE was <strong>zero-weighted</strong> and hyper-beta SOL trimmed to a token 7%. That is risk-parity doing portfolio construction: lean on the stable asset, refuse the erratic one. An equal-weight basket cannot — it holds DOGE and PAXG at the same 12.5% by definition. (The qualitative &quot;optimizer refuses the risky name&quot; pattern also shows up in the <a href="/research/e2e-tiaq">E2E TIA/QNT study</a>.)</p>
 <h2>5. Problem 3 — Discipline (rebalance + DCA)</h2>
 <p>AQMath is a <strong>calculation-only tool</strong>: it never trades for you, so the discipline is a cadence you follow, not an autonomous bot. The design bakes the two behavioural fixes straight into the protocol:</p>
@@ -226,7 +226,7 @@
 <p>The behavioural case is already published: DCA jitter costs at most 0.5 pp of MaxDD and <strong>only same-day execution passes</strong> (<a href="/research/dca-stress">human-factor stress test</a>); and across 30 simulated people, <strong>zero held a static 60/40 plan</strong> — every one capitulated 3–5 times (<a href="/research/static-vs-dynamic">static vs dynamic</a>). This study is not a fresh test of the human behaviour; it is the mechanical cadence that the stress tests reward.</p>
 <h2>6. Problem 4 — Dead-token safety</h2>
 <p>Adding Celsius (CEL) to the same basket — same shared window <strong>2020-04-10 → 2026-07-04</strong> (6.23 y), running straight through the 2021 peak and the 2022 collapse:</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Metric</th>
@@ -254,7 +254,7 @@
 <td style="text-align:right">1.46</td>
 <td style="text-align:right">1.06</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>The shield held the drawdown to 32.1% against 68.6% (<strong>−36.5 pp</strong>) even with a collapsing asset in the book, and on this window it also wins on both Sharpe and Calmar — CEL finished at roughly <strong>a sixth of its first-day price</strong>. The run still <strong>reproduces the flaw honestly</strong>: in CEL&#x27;s first year inside the window the frozen KKT loop handed it a <strong>12.2% weight</strong> (day 180) before the collapse zeroed it, because a delisting chart can look low-volatility to a pure price-variance objective. That is exactly the dead-token weight flaw the <a href="/research/liveness-screen">liveness-screen study</a> reproduces and fixes with the ADV-K2 cap-zero filter, and the slow-vs-fast death attribution in the <a href="/research/graveyard">graveyard gauntlet</a>. The raw macro loop helps; the shipped screen is what closes it.</p>
 <h2>7. What this does <em>not</em> claim</h2>
 <ul><li><strong>Not a return edge.</strong> Buy &amp; Hold finished far higher in absolute terms on this window; AQMath&#x27;s case is drawdown and risk-adjusted survival, consistent with the statistically-zero excess return in <a href="/research/mc-risk">mc-risk</a>.</li><li><strong>A friendlier window, a softer basket.</strong> 2020–2026 large caps are survivorship-selected, and this basket deliberately includes a gold anchor (PAXG) plus a diversified mix rather than an all-crypto max-beta book — so both sides start from a lower drawdown than a pure crypto basket. The comparison stays fair because AQMath and the benchmark hold the <em>same</em> eight names; the protection looks expensive precisely because this slice of the bull was strong. The crash-regime cuts in <a href="/research/regime-autopsy">regime-autopsy</a> are where the same machinery earns its keep.</li><li><strong>Simulated, single basket, one DCA setting.</strong> No slippage or liquidity, a 0.1% fee, one 8-asset basket. Robustness of the knobs is a separate study (<a href="/research/robustness">129 walk-forward re-runs</a>).</li></ul>

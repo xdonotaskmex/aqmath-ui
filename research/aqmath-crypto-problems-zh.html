@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/aqmath-crypto-problems">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -61,7 +61,7 @@
 <p><strong>把前提写在最前面，让下面的表格无法被误读：</strong> AQMath 不是一台收益机器。它的风险报告已经证明，相对买入持有的超额收益在<a href="/research/mc-risk">统计上为零</a>；而回撤削减在 98.6–99.7% 的合成历史中获胜。以下每一项测试都在同一个真实组合上重述这一点：<strong>赢在你所能存活的下跌幅度，代价是让出一部分上行。</strong></p>
 <h2>2. 测试方法</h2>
 <p>一个组合、一套定投计划、一种手续费、未经修改的生产代码路径 — <code>compute_equal_weight_returns → compute_macro_weights → apply_macro_weights → simulate_v18</code>。没有任何参数针对该数据调优。</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">代币</th>
@@ -88,10 +88,10 @@
 <td style="text-align:left">CEL</td>
 <td style="text-align:left">仅在第 6 节加入 — 2022 年崩塌，用作死代币探针</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <ul><li><strong>组合：</strong> 8 个资产 — 一个多元化组合（黄金锚 + 高贝塔 SOL + 主流币），重叠窗口 <strong>2020-04-10 → 2026-07-04</strong>（2,275 天，6.23 年），<strong>12 次 MACRO 再优化</strong>，横跨 2021 年的冲高<strong>与</strong> 2022 年的崩塌。</li><li><strong>资金：</strong> 起始 $10,000 + 每 30 天 $300 定投（<strong>两侧均投入 $32,500</strong>），每笔交易、定投买入与再部署收取 0.1% 模拟手续费。</li><li><strong>基准：</strong> 在<strong>完全相同的组合与完全相同的定投流</strong>上运行的买入持有 + 定投参照，因此唯一差异是策略本身。</li><li><strong>数据：</strong> 来自本地刷新（2026-07）的 CoinGecko 日线收盘；重叠窗口由最年轻的代币（SOL，自 2020-04 起）决定，从而保留了 2022 年熊市。仍是经过幸存者偏差筛选的大市值币 — 见第 7 节。</li></ul>
 <h2>3. 问题 1 — 崩盘与回撤控制</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">指标</th>
@@ -149,16 +149,16 @@
 <td style="text-align:right">$4,454</td>
 <td style="text-align:right">—</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p><strong>解读：</strong> 整个论点浓缩在这一行里。AQMath 把最深跌幅从 <strong>57.3% 压到 27.1% — 削减 30 个百分点</strong> — 大致将持有者必须熬过的那个深坑砍半。它做到的方式是把平均 市场敞口压到只有 <strong>43%</strong>，并在以回撤衡量的指标上获胜（卡玛 1.18 对 1.00）。它在此 并<strong>不</strong>在原始夏普上获胜（0.78 对 0.89）：在一个由 2020–21 年飙升主导的窗口里， 买入持有的满仓敞口搭上了一条更平滑的上行曲线，而 AQMath 在风险敞口中的进进出出 加上了自己的方差。而这份保护是以绝对美元付出的代价 — 买入持有终值 $552k， AQMath 为 $182k。<strong>满仓持有在收益与夏普上胜出、在崩盘的幅度上落败</strong> — 正是 第 1 节所承诺的那笔取舍。</p>
 <p><em>较早的 Aegis（v14）防护盾在同一组合、同一路径上削减得略深一点 — 最大回撤 24.9%、 卡玛 1.32 — 鉴于 v18 才是现役引擎，这是一个公允的说明：v18 相对 v14 的优势是在 182 个未见组合上测得的小幅、如实标注的改进（<a href="/research/oos-v18-new-tokens">样本外验证</a>）， 而在这个特定组合上，v14 更慢的再冒险恰好略微更契合该窗口。</em></p>
 <p><strong>虚拟权益 — AQMath 对买入持有 + 定投</strong>（定投流相同，琥珀色虚线 = 排定的 MACRO 再优化）：</p>
-<figure class="rs-fig"><img src="/research/assets/crypto_problems_equity.svg" alt="虚拟权益，AQMath（v18）对买入持有 + 定投" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/crypto_problems_equity.svg" target="_blank" rel="noopener"><img src="/research/assets/crypto_problems_equity.svg" alt="虚拟权益，AQMath（v18）对买入持有 + 定投" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/crypto_problems_equity.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p><strong>回撤 — 57.3% 的深坑 对 27.1% 的浅坑：</strong></p>
-<figure class="rs-fig"><img src="/research/assets/crypto_problems_drawdown.svg" alt="回撤曲线，AQMath 对买入持有" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/crypto_problems_drawdown.svg" target="_blank" rel="noopener"><img src="/research/assets/crypto_problems_drawdown.svg" alt="回撤曲线，AQMath 对买入持有" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/crypto_problems_drawdown.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h2>4. 问题 2 — 风险平衡的配置（KKT 对等权）</h2>
 <p>剥掉防护盾、各用一笔 $1 买入并持有每种权重，就能单独隔离配置层本身。在这个 多元化组合上，KKT 权重器不再是误差范围内的数字 — 它在<strong>全部四项</strong>指标上都获胜：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">指标</th>
@@ -191,9 +191,9 @@
 <td style="text-align:right">1.46</td>
 <td style="text-align:right">1.04</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>仅凭权重（在任何防护盾之前）就带来 <strong>18.3 个百分点的回撤削减和更高的终值</strong>。 它终于显露锋芒的原因是，这个目标<em>并非伪装成公式的东西</em>：最后一次再优化的冻结 KKT 权重范围从 <strong>0% 到 29.2%</strong>，与平坦的 12.5% 相去甚远：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">资产</th>
@@ -218,7 +218,7 @@
 <td style="text-align:right">7.0%</td>
 <td style="text-align:right"><strong>0.0%</strong></td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>黄金锚 PAXG — 账中波动最低的名字 — 被上调至 <strong>29.2%</strong>，是其等权配置的两倍多； 而 meme 币 DOGE 被<strong>赋予零权重</strong>，高贝塔的 SOL 被削减到区区 7%。这正是风险平价 在做组合构建：倚重稳健资产、拒绝摆动大的那个。等权篮子做不到 — 按定义它把 DOGE 和 PAXG 都拿在同样的 12.5%。（“优化器拒绝高风险名字”这一模式在 <a href="/research/e2e-tiaq">E2E TIA/QNT 研究</a>中亦有体现。）</p>
 <h2>5. 问题 3 — 纪律（再平衡 + 定投）</h2>
 <p>AQMath 是一个<strong>仅信号型再平衡器</strong>：它从不替你交易，所以所谓纪律是你遵循的节奏， 而非自动机器人。设计把两项行为性修正直接嵌进了协议：</p>
@@ -226,7 +226,7 @@
 <p>行为层面的论证已发表：定投抖动最多损失 0.5 个百分点的最大回撤，且<strong>只有当日执行能通过</strong> （<a href="/research/dca-stress">人为因素压力测试</a>）；而在 30 个模拟的人里，<strong>没有一个守住静态 60/40 计划</strong> — 每人投降 3–5 次（<a href="/research/static-vs-dynamic">静态 vs 动态</a>）。本研究不是对人类行为的新测试； 它是压力测试所奖励的那套机械节奏。</p>
 <h2>6. 问题 4 — 死代币安全</h2>
 <p>把 Celsius（CEL）加入同一组合 — 相同的重叠窗口 <strong>2020-04-10 → 2026-07-04</strong>（6.23 年）， 一路穿过 2021 年的顶点与 2022 年的崩塌：</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">指标</th>
@@ -254,7 +254,7 @@
 <td style="text-align:right">1.46</td>
 <td style="text-align:right">1.06</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>即便账里有一个正在崩塌的资产，防护盾仍把回撤守在 32.1% 对 68.6%（<strong>−36.5 个百分点</strong>）， 且在此窗口它还在夏普与卡玛双双获胜 — CEL 收盘时大约只有其首日价格的<strong>六分之一</strong>。 这次运行仍<strong>诚实地复现了缺陷</strong>：在 CEL 进入组合的第一年，冻结的 KKT 回路一度给它 <strong>12.2% 的权重</strong>（第 180 天），直到崩塌才归零，因为一张退市的图表在纯价格方差目标 眼里可能显得低波动。这正是<a href="/research/liveness-screen">活性筛查研究</a>复现并以 ADV-K2 上限归零过滤器修复的死代币权重缺陷，也是<a href="/research/graveyard">墓地试炼</a>里的慢死 vs 快死归因。 原始宏观回路有所帮助；真正堵上缺口的是已上线的筛查。</p>
 <h2>7. 本文<em>不</em>主张什么</h2>
 <ul><li><strong>不是收益优势。</strong> 在此窗口，买入持有的绝对终值高得多；AQMath 的主张是回撤与 风险调整的存活，与 <a href="/research/mc-risk">mc-risk</a> 中统计上为零的超额收益一致。</li><li><strong>一段较友好的窗口、一个较软的组合。</strong> 2020–2026 的大市值币经过幸存者筛选，且此 组合刻意纳入黄金锚（PAXG）加多元化配置，而非全加密的最大贝塔账 — 于是两侧的起始 回撤都低于纯加密组合。比较依然公平，因为 AQMath 与基准持有<em>相同</em>的八个名字；正因 这段牛市强劲，保护才显得昂贵。同一套机械真正的用武之地是 <a href="/research/regime-autopsy">regime-autopsy</a> 里的崩盘状态削减。</li><li><strong>模拟、单一组合、一种定投设置。</strong> 无滑点或流动性，0.1% 手续费，一个 8 资产组合。 参数稳健性是另一项研究（<a href="/research/robustness">129 次滚动前推重跑</a>）。</li></ul>

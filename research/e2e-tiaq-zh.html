@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/e2e-tiaq">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -58,7 +58,7 @@
 <p>在<strong>完全相同的生产控制栈</strong>下评估一个<strong>围绕两个新加入代币（TIA、QNT） 构建的候选组合</strong>：用 180 天 KKT 风险平价 MACRO 回路确定基础权重， 用 Aegis（v14）去杠杆防护盾做每日敞口控制。问题不是&quot;这能否跑赢买入持有&quot;， 而是<em>已上线</em>的机器在这种资产组合上如何表现 — 包括配置决策、 防御行为与风险调整后结果。</p>
 <p><strong>未改动任何参数。</strong> 所有运行均使用生产环境 <code>default_config()</code> 与未经修改的生产代码路径。</p>
 <h2>2. 组合与数据</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">代币</th>
@@ -91,10 +91,10 @@
 <td style="text-align:left">防护盾停泊资产</td>
 <td style="text-align:left">防御性现金，保持不变</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p>设置：初始 $1,000，每 30 天定投 $100，每笔交易收取 10 个基点的 模拟手续费。共同价格窗口 2023-10-31 → 2026-07-27（1,001 天）； 180 天优化器预热，随后 <strong>821 个交易日</strong>（2024-04-28 → 2026-07-27）， <strong>5 次滚动前推 MACRO 再优化</strong>（2024-04-27、2024-10-24、2025-04-22、 2025-10-19、2026-04-17）。</p>
 <h2>3. 头条结果</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">指标</th>
@@ -172,18 +172,18 @@
 <td style="text-align:right">56.9%</td>
 <td style="text-align:right">100%</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p><strong>解读：</strong> 防护盾在风险上完成了它的职责 — 最大回撤 16.9%， 而买入持有为 24.6%（−7.7 个百分点），beta 仅 0.62 — 但该窗口对 组合整体是净上涨的，因此约 43% 的平均降险牺牲了绝对收益 （年化 alpha −4.65%）。削减了风险，放弃了上行：这是经典且预期 之中的交换 — 只是这里成本一侧清晰可见。</p>
 <h2>3a. 可视化</h2>
 <p><strong>虚拟权益 — 滚动前推 E2E</strong>（双方 DCA 计划完全相同）：</p>
-<figure class="rs-fig"><img src="/research/assets/tiaq_equity.svg" alt="Virtual equity, Shield strategy vs Buy &amp; Hold" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/tiaq_equity.svg" target="_blank" rel="noopener"><img src="/research/assets/tiaq_equity.svg" alt="Virtual equity, Shield strategy vs Buy &amp; Hold" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/tiaq_equity.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p><strong>回撤 — 防护盾 vs 买入持有：</strong></p>
-<figure class="rs-fig"><img src="/research/assets/tiaq_drawdown.svg" alt="Drawdown curves, Shield vs Buy &amp; Hold" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/tiaq_drawdown.svg" target="_blank" rel="noopener"><img src="/research/assets/tiaq_drawdown.svg" alt="Drawdown curves, Shield vs Buy &amp; Hold" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/tiaq_drawdown.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <p><strong>去杠杆防护盾风险敞口</strong>（已部署净值占比；其余停泊于 USDC）：</p>
-<figure class="rs-fig"><img src="/research/assets/tiaq_exposure.svg" alt="Risky exposure over time" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/tiaq_exposure.svg" target="_blank" rel="noopener"><img src="/research/assets/tiaq_exposure.svg" alt="Risky exposure over time" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/tiaq_exposure.svg" target="_blank" rel="noopener">打开完整尺寸图表</a></figcaption></figure>
 <h2>4. 样本内 / 样本外切分</h2>
 <p>TWR 日收益（剔除 DCA 现金流），rf 5%。第一次之后的每次再优化 都只使用过去数据 — 整条链路中没有任何前视。</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="表格 — 如需查看其他列，请横向滚动。">
 <table>
 <thead><tr>
 <th style="text-align:left">切分</th>
@@ -218,7 +218,7 @@
 <td style="text-align:center"><strong>17.6% / 29.9%</strong></td>
 <td style="text-align:center">−20.9% / −36.7%</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">表格 — 如需查看其他列，请横向滚动。</p>
 <p><em>年化分段 CAGR（TWR，rf 5%）；精确日序列见结果 JSON。</em></p>
 <p>最有力的证据是 OOS-2：在窗口中最差的一段，防护盾把最大回撤 控制在 17.6%，而买入持有一段水下 29.9%（−12.3 个百分点）。</p>
 <h2>5. 配置发现（定性）</h2>

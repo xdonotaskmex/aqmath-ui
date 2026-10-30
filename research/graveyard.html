@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/graveyard">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -62,7 +62,7 @@
 <p>The study runs the basket twice — with the production screen and with the screen switched off — and attributes the protection honestly. The honest answer surprised us, and we publish it as measured.</p>
 <h2>2. The system survives the graveyard</h2>
 <p>Buy &amp; hold on basket G is a disaster by construction: three of six tokens go to (near) zero, and the raw basket draws down <strong>62%</strong> across the window. The strategy&#x27;s experience of the same basket is a different animal.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Death event</th>
@@ -89,9 +89,9 @@
 <td style="text-align:right">$6,833</td>
 <td style="text-align:right">−1.3%</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>No single death costs the strategy more than ~1.5% of equity; the CEL date is even positive because the Shield had already de-risked and the survivors caught the bounce. Over the two named death regimes the cut versus buy &amp; hold is ~36-38 percentage points of drawdown:</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Regime</th>
@@ -112,8 +112,8 @@
 <td style="text-align:right">48.7%</td>
 <td style="text-align:right">+37.6 pp</td>
 </tr>
-</tbody></table></div>
-<figure class="rs-fig"><img src="/research/assets/graveyard_gauntlet.svg" alt="Graveyard Gauntlet: equity through three token deaths, with screen event timeline" width="1060" height="640" loading="lazy" decoding="async"></figure>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
+<figure class="rs-fig"><a href="/research/assets/graveyard_gauntlet.svg" target="_blank" rel="noopener"><img src="/research/assets/graveyard_gauntlet.svg" alt="Graveyard Gauntlet: equity through three token deaths, with screen event timeline" width="1060" height="640" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/graveyard_gauntlet.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <h2>3. Who did the work — the honest attribution</h2>
 <p>Here is the part a marketing page would skip: <strong>the liveness screen did not save the basket during the deaths.</strong> With the screen off, the death-regime drawdowns are 13.4% and 11.2% — statistically the same as the screened run&#x27;s 13.3% and 11.1%. The attribution decomposes cleanly:</p>
 <p><strong>Before the deaths: the optimizer.</strong> The risk-parity re-optimisation had already excluded LUNC from the frozen weights from late 2020 — a token with thin volume and pathological volatility simply does not win weight in the KKT solution. LUNC&#x27;s May-2022 collapse therefore hit an (almost) empty position in <em>both</em> runs.</p>

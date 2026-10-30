@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/ibm-plex-serif-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+    <link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
 </head>
@@ -319,11 +319,11 @@
                     <text x="700" y="104" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="8">Binance (frontend spot prices)</text>
                     <text x="700" y="120" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="8">CoinGecko (daily close history)</text>
                     <text x="700" y="136" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="8">Data Pipeline (daily close)</text>
-                    <rect x="620" y="200" width="160" height="80" rx="4" fill="rgba(251,191,36,0.06)" stroke="var(--amber)" stroke-width="0.5" opacity="0.4"/>
+                    <rect x="620" y="200" width="160" height="110" rx="4" fill="rgba(251,191,36,0.06)" stroke="var(--amber)" stroke-width="0.5" opacity="0.4"/>
                     <text x="700" y="222" text-anchor="middle" fill="var(--amber)" font-family="'JetBrains Mono',monospace" font-size="8" font-weight="500">PRIVACY BOUNDARY</text>
-                    <text x="700" y="240" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Positions sent during DCA, never stored.</text>
-                    <text x="700" y="254" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Holdings synced only if you opt in.</text>
-                    <text x="700" y="268" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">No persistence on the free tier (Black: Section 9).</text>
+                    <text x="700" y="240" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7"><tspan x="700">Positions sent during DCA, </tspan><tspan x="700" dy="14">never stored.</tspan></text>
+                    <text x="700" y="268" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7">Holdings synced only if you opt in.</text>
+                    <text x="700" y="282" text-anchor="middle" fill="var(--muted)" font-family="'JetBrains Mono',monospace" font-size="7"><tspan x="700">No persistence on the free tier </tspan><tspan x="700" dy="14">(Black: Section 9).</tspan></text>
                 </svg>
             </div>
 
@@ -1047,10 +1047,10 @@
     </div>
 </footer>
 
-<script defer src="/app-widgets.js?v=183bf74fcb"></script>
-<script defer src="/app-backtest.js?v=183bf74fcb"></script>
-<script defer src="/app.js?v=183bf74fcb"></script>
-<script defer src="/app-notify.js?v=183bf74fcb"></script>
+<script defer src="/app-widgets.js?v=9c3047d2b3"></script>
+<script defer src="/app-backtest.js?v=9c3047d2b3"></script>
+<script defer src="/app.js?v=9c3047d2b3"></script>
+<script defer src="/app-notify.js?v=9c3047d2b3"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -1064,11 +1064,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=183bf74fcb"></script>
+<script defer src="/vendor/i18next.min.js?v=9c3047d2b3"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=183bf74fcb"></script>
-<script defer src="/app-boot.js?v=183bf74fcb"></script>
+<script defer src="/app-tour.js?v=9c3047d2b3"></script>
+<script defer src="/app-boot.js?v=9c3047d2b3"></script>
 
 </body>
 </html>

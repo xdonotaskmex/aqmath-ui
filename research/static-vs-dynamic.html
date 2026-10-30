@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/static-vs-dynamic">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -61,7 +61,7 @@
 <p>One asymmetry is stated up front, not hidden: static allocations have <strong>zero operational surface</strong> — no signals to miss, nothing to execute late. The Human Factor series measured exactly that price on the Shield side. This comparison is therefore protection <strong>per unit of discipline required</strong>, and the article says so out loud.</p>
 <h2>2. Design</h2>
 <p>Everything shares the same inputs: basket ADA, BNB, ETH, XRP, SOL (equal-weight risky sleeve), 2020-04-10 to 2026-07-04 (6.2 years, two bear cycles), $1,000 start, $100 every 30 days perfect DCA, 0.1% fee per trade, stablecoin earns zero. The DCA dimension stays perfect — jitter was already tested in the Human Factor series.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Strategy</th>
@@ -100,11 +100,11 @@
 <td style="text-align:center">dynamic</td>
 <td style="text-align:left">production config, same-day execution</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>S3 details: the pain threshold is 35% ± 5 percentage points, jittered per seed (30 seeds). Re-entry variants: <strong>never</strong> return, return only on a <strong>new all-time high</strong> of the basket (buying the top), or return after <strong>one year</strong> out. After re-entry the plan resumes, and the human can break it again.</p>
 <p>S2 deserves a sentence: in a bull run the risky side grows, so a &quot;set and forget&quot; 60/40 silently becomes ~90/10 exactly at the top — full exposure into the crash. That drift is not a strawman; it is the most common real-world version of a static split.</p>
 <h2>3. Results — robot and drawer</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Strategy</th>
@@ -179,14 +179,14 @@
 <td style="text-align:center">22.5%</td>
 <td style="text-align:center">$30,121</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>Three facts stand out:</p>
 <p>1. <strong>The robot is strong.</strong> The textbook 60/40 with one rebalance a year has the highest Sharpe of everything tested here, Shield included. Six rebalances in 6.2 years, $48 of fees. 2. <strong>Drift eats protection, not return.</strong> The drawer variants end with barely less money than the robot (−$646 at 60/40) but carry almost the full Buy &amp; Hold drawdown (80.5% vs 60.7%). The yearly rebalance bought pain reduction, not return. 3. <strong>The Shield is the only strategy under 35% MaxDD — and it pays for it.</strong> Defensive 1,758 of 2,275 days (77%), final equity less than half of the robot 60/40.</p>
-<figure class="rs-fig"><img src="/research/assets/static_equity.svg" alt="Equity curves: robot, drawer, human and Shield" width="820" height="436" loading="lazy" decoding="async"></figure>
-<figure class="rs-fig"><img src="/research/assets/static_scatter.svg" alt="Pain vs reward: MaxDD against Sharpe for all nine strategies" width="820" height="436" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/static_equity.svg" target="_blank" rel="noopener"><img src="/research/assets/static_equity.svg" alt="Equity curves: robot, drawer, human and Shield" width="820" height="436" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/static_equity.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
+<figure class="rs-fig"><a href="/research/assets/static_scatter.svg" target="_blank" rel="noopener"><img src="/research/assets/static_scatter.svg" alt="Pain vs reward: MaxDD against Sharpe for all nine strategies" width="820" height="436" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/static_scatter.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <h2>4. Results — the human</h2>
 <p>The S3 operator holds the robot&#x27;s exact plan until their own equity drawdown crosses ~35% (median realized threshold 34.0–34.2%), then sells everything into stablecoin. Medians of 30 seeds:</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Re-entry rule</th>
@@ -225,13 +225,13 @@
 <td style="text-align:center">4</td>
 <td style="text-align:center">1,838</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>Read that slowly:</p>
 <ul><li><strong>Every human broke the plan.</strong> 30 seeds, three re-entry rules — not one simulated person held the 60/40 through the pain. Median 3–5 capitulations per lifetime.</li><li><strong>They were out of the market ~81% of the window</strong> (1,682–1,838 of 2,275 days) — and <em>still</em> lived through a 60–66% drawdown before breaking.</li><li><strong>Breaking the plan cost $12.5k–$16.4k</strong> against the same plan held robotically. The &quot;buy the new ATH&quot; re-entry is the worst on MaxDD (65.7%) because it systematically re-enters at tops.</li></ul>
-<figure class="rs-fig"><img src="/research/assets/static_capitulation.svg" alt="Equity lost by capitulating vs holding the same plan with discipline" width="820" height="332" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/static_capitulation.svg" target="_blank" rel="noopener"><img src="/research/assets/static_capitulation.svg" alt="Equity lost by capitulating vs holding the same plan with discipline" width="820" height="332" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/static_capitulation.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <h2>5. The gate scorecard</h2>
 <p>The pass criteria from the original test plan, verbatim:</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Gate</th>
@@ -264,7 +264,7 @@
 <td style="text-align:left">45% of best</td>
 <td style="text-align:center">❌ FAIL</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p><strong>2 of 4.</strong> The Shield dominates on every metric that measures pain and loses on every metric that measures terminal wealth in this window.</p>
 <h2>6. Honest reading</h2>
 <p>1. <strong>The protection is real and it is the best in class.</strong> MaxDD 34.2% against 60.7–81.1% for every static variant, and the highest Calmar of all nine strategies — the best return per unit of pain actually sat through. That is the product&#x27;s promise, and this test confirms it.</p>

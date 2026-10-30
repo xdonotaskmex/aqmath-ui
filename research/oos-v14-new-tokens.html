@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/oos-v14-new-tokens">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -59,7 +59,7 @@
 <p>The modulator is scored on <strong>drawdown reduction and risk-adjusted return (Calmar / Sharpe)</strong> — <em>not</em> on beating Buy &amp; Hold final value. The test measures exactly that objective.</p>
 <p><strong>No parameters were changed.</strong> Every run uses production <code>default_config()</code>.</p>
 <h2>2. Universe</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Group</th>
@@ -82,10 +82,10 @@
 <td style="text-align:left">CEL (Celsius)</td>
 <td style="text-align:left">collapsed 2022 — survivorship-bias stress</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>Settings: equal-weighted basket, start $1,000, DCA $100 every 30 days. Both strategies receive identical DCA capital on the same schedule. Buy &amp; Hold stays fully exposed; the modulator scales exposure continuously off rising drawdown and rising downside volatility.</p>
 <h2>3. Aggregate result (16 baskets, all k=3 / k=4 / k=5 combos of the 5 survivors)</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Metric</th>
@@ -108,17 +108,17 @@
 <td style="text-align:left"><strong>Final vs B&amp;H</strong></td>
 <td style="text-align:left">median <strong>0.88×</strong> (min 0.31×, max 1.64×)</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p><strong>Reading:</strong> across every unseen basket the modulator cut peak drawdown by roughly half (typically ~84% → ~28%), and improved risk-adjusted return almost everywhere. On median it gives up ~12% of final equity versus fully-exposed Buy &amp; Hold — the expected, deliberate trade of upside for drawdown protection.</p>
 <h2>3a. Visualizations</h2>
 <p><strong>Max drawdown, every OOS basket</strong> — modulator (green) vs Buy &amp; Hold (red):</p>
-<figure class="rs-fig"><img src="/research/assets/dd_comparison.svg" alt="Max drawdown: Modulator vs Buy &amp; Hold across 16 OOS baskets" width="820" height="648" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/dd_comparison.svg" target="_blank" rel="noopener"><img src="/research/assets/dd_comparison.svg" alt="Max drawdown: Modulator vs Buy &amp; Hold across 16 OOS baskets" width="820" height="648" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/dd_comparison.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <p><strong>Underwater (drawdown) curve</strong> — representative full 5-token basket (AVAX/CRO/DOGE/HBAR/LINK):</p>
-<figure class="rs-fig"><img src="/research/assets/underwater.svg" alt="Underwater drawdown curve, modulator vs Buy &amp; Hold" width="820" height="420" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/underwater.svg" target="_blank" rel="noopener"><img src="/research/assets/underwater.svg" alt="Underwater drawdown curve, modulator vs Buy &amp; Hold" width="820" height="420" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/underwater.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <p><strong>Equity curve (log scale)</strong> — same basket, identical DCA schedule:</p>
-<figure class="rs-fig"><img src="/research/assets/equity_curve.svg" alt="Equity curve, modulator vs Buy &amp; Hold, log scale" width="820" height="420" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/equity_curve.svg" target="_blank" rel="noopener"><img src="/research/assets/equity_curve.svg" alt="Equity curve, modulator vs Buy &amp; Hold, log scale" width="820" height="420" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/equity_curve.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <h2>4. Per-basket detail</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Basket</th>
@@ -291,9 +291,9 @@
 <td style="text-align:center">$16,149 / $20,612</td>
 <td style="text-align:right">2118</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <h2>5. Stress cases</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Basket</th>
@@ -346,7 +346,7 @@
 <td style="text-align:center"><strong>$25,023</strong> / $18,554</td>
 <td style="text-align:right">2489</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p><strong>Dead-token stress (survivorship bias):</strong> when a constituent collapses (Celsius, 2022), the modulator beats Buy &amp; Hold on <strong>both</strong> final value <strong>and</strong> drawdown (+55–59 pp). Drawdown protection directly mitigates the single largest tail risk of a fixed crypto basket.</p>
 <p><strong>Harness fidelity:</strong> the <code>HBAR/CRO/DOGE/PYTH</code> row reproduces the production UI backtest exactly (final $5,731, Max DD 17.8%, Calmar 0.70, Sharpe 0.28 vs B&amp;H $4,987 / 49.4% / 0.13 / 0.03), confirming the local harness matches the deployed engine.</p>
 <h2>6. Interpretation</h2>

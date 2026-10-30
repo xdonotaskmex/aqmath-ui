@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/baskets-v14-hist3">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=183bf74fcb">
+<link rel="stylesheet" href="/styles.min.css?v=9c3047d2b3">
 </head>
 <body>
 
@@ -58,7 +58,7 @@
 <p>Build <strong>three structurally different baskets</strong> from a 17-token pool of daily price history (2013-2026) and find out which one has historically produced the best results under the exact shipped production stack: the 180-day KKT risk-parity MACRO loop for base weights and the Aegis (v14) Deleverage Shield for daily exposure control.</p>
 <p><strong>No parameters were changed.</strong> Every run uses production <code>default_config()</code> and the unmodified production code path — walk-forward, no lookahead.</p>
 <h2>2. Baskets and data</h2>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Basket</th>
@@ -91,13 +91,13 @@
 <td style="text-align:left">defensive cash, unchanged</td>
 <td style="text-align:left">—</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>Settings: start $1,000, DCA $100 every 30 days, 10 bps simulated fee on every trade, 180-day optimizer warm-up, MACRO re-optimisation every 180 days.</p>
 <p>Each basket was tested twice:</p>
 <ul><li><strong>Full history</strong> — each basket on its own longest possible window (which basket is historically best on its own turf).</li><li><strong>Shared window</strong> — all three on the same calendar window from 2025-05-28 (limited by the newest token, HYPE) → the apples-to-apples comparison.</li></ul>
 <h2>3. Headline result — shared window (apples-to-apples)</h2>
 <p>All three baskets, identical calendar window 2025-05-28 → 2026-07 (≈400-420 trading days), identical $2,300 invested.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Metric</th>
@@ -166,11 +166,11 @@
 <td style="text-align:right">$5.27</td>
 <td style="text-align:right">$6.15</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p><strong>Reading:</strong> the shared window was a down market for crypto (Buy &amp; Hold lost 13-17% on the two established baskets and 54% peak drawdown on the new-gen mix). In that regime <strong>K1 Majors+Gold is the winner</strong>: highest final value, lowest max drawdown (9.8%, −15.6 pp vs its own B&amp;H), positive Jensen alpha. K2 is nearly tied on return with a somewhat deeper drawdown. K3 trailed even its own Buy &amp; Hold on return — the 2025-26 window was hostile to the newest-generation alts — although the Shield still cut its max drawdown by 36 pp (18.4% vs 54.4%).</p>
 <h2>4. Full-history runs</h2>
 <p>Each basket on its own longest window (warm-up included, walk-forward).</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Basket</th>
@@ -213,19 +213,19 @@
 <td style="text-align:right">18.4% / 54.4%</td>
 <td style="text-align:right">−0.72 / −0.10</td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>Invested per run: $7,900 (K1), $8,600 (K2), $2,300 (K3).</p>
 <p><strong>Reading:</strong> on their own turf both established baskets show the same signature: the Shield gives up absolute return in a strongly positive window (B&amp;H +241%/+223% total) but <strong>nearly triples risk-adjusted efficiency</strong> — Calmar 0.85 vs 0.49 (K1) and 0.63 vs 0.39 (K2), with max drawdowns of 18-21% instead of 49-53%. K1 is the stronger of the two on Sharpe, Calmar and drawdown; K2 offers the longest tradable history (from March 2020).</p>
 <h2>4a. Visualizations</h2>
 <p><strong>Shared window — Virtual equity (solid) vs Buy &amp; Hold (dashed):</strong></p>
-<figure class="rs-fig"><img src="/research/assets/hist3_shared_equity.svg" alt="Shared window equity curves for all three baskets" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/hist3_shared_equity.svg" target="_blank" rel="noopener"><img src="/research/assets/hist3_shared_equity.svg" alt="Shared window equity curves for all three baskets" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/hist3_shared_equity.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <p><strong>Shared window — Shield drawdown (from the virtual equity peak):</strong></p>
-<figure class="rs-fig"><img src="/research/assets/hist3_shared_dd.svg" alt="Shared window underwater curves" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/hist3_shared_dd.svg" target="_blank" rel="noopener"><img src="/research/assets/hist3_shared_dd.svg" alt="Shared window underwater curves" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/hist3_shared_dd.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <p><strong>Full histories on one absolute-time axis (log scale):</strong></p>
-<figure class="rs-fig"><img src="/research/assets/hist3_full_equity.svg" alt="Full-history virtual equity, log scale" width="920" height="400" loading="lazy" decoding="async"></figure>
+<figure class="rs-fig"><a href="/research/assets/hist3_full_equity.svg" target="_blank" rel="noopener"><img src="/research/assets/hist3_full_equity.svg" alt="Full-history virtual equity, log scale" width="920" height="400" loading="lazy" decoding="async"></a><figcaption><a href="/research/assets/hist3_full_equity.svg" target="_blank" rel="noopener">Open full-size chart</a></figcaption></figure>
 <h2>5. In-sample / out-of-sample splits (shared window)</h2>
 <p>TWR daily returns (DCA flows removed), rf 5%; IS / OOS-1 / OOS-2 = 50 / 25 / 25 of the trading window. Every re-optimisation after the first uses trailing data only.</p>
-<div class="rs-tablewrap">
+<div class="rs-tablewrap" tabindex="0" role="region" aria-label="Table — scroll horizontally for additional columns if needed.">
 <table>
 <thead><tr>
 <th style="text-align:left">Basket</th>
@@ -298,7 +298,7 @@
 <td style="text-align:center">+12.8% / +188.9%</td>
 <td style="text-align:center"><strong>3.3% / 23.8%</strong></td>
 </tr>
-</tbody></table></div>
+</tbody></table></div><p class="rs-scroll-hint">Table — scroll horizontally for additional columns if needed.</p>
 <p>The sharpest evidence is the 2026 draw market (OOS-1/OOS-2): on K1 the Shield held max drawdown to 7.4% and 4.2% while Buy &amp; Hold went 25.4% and 22.8% underwater. In every one of the nine segments the Shield&#x27;s max drawdown is at or below Buy &amp; Hold&#x27;s.</p>
 <h2>6. Allocation findings (qualitative)</h2>
 <ul><li><strong>PAXG consistently carried the largest single weight</strong> in K1 and K2 re-optimisations — the low-vol gold anchor inside the risky sleeve, as expected for a mixed-vol basket.</li><li><strong>SOL was zero-weighted in most K1 re-optimisations</strong> (high recent vol vs the other majors); <strong>PEAQ was zero-weighted in two of three K3 re-optimisations</strong>; QNT was screened out in several K2 windows. The optimizer does the selection without any manual intervention.</li><li>K3&#x27;s average exposure was only 22.4% — the Shield spent 86% of the window defensive, which is why its result tracks cash more than the basket.</li><li>Exact allocations are withheld (IP). Only the zero/largest-weight facts are disclosed — the same level of detail as the public forward log.</li></ul>
