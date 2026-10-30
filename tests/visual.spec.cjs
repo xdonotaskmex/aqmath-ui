@@ -429,4 +429,29 @@ test.describe('Readability and responsive layouts', () => {
       await page.screenshot({ path: test.info().outputPath(`research-${start}-content.png`) });
     }
   });
+
+  test('landing proof figures share one size side by side', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    const figs = page.locator('.v2-proof-row2 .v2-fig-plain img');
+    await expect(figs).toHaveCount(2);
+    for (const fig of await figs.all()) {
+      await fig.scrollIntoViewIfNeeded();
+      await expect.poll(() => fig.evaluate(el => el.complete && el.naturalWidth > 0)).toBeTruthy();
+    }
+    const boxes = await figs.evaluateAll(nodes => nodes.map(el => {
+      const r = el.getBoundingClientRect();
+      return { w: Math.round(r.width), h: Math.round(r.height), fit: getComputedStyle(el).objectFit };
+    }));
+    expect(Math.abs(boxes[0].w - boxes[1].w)).toBeLessThanOrEqual(1);
+    expect(Math.abs(boxes[0].h - boxes[1].h)).toBeLessThanOrEqual(1);
+    // contain keeps the wider histogram whole instead of cropping it.
+    expect(boxes[0].fit).toBe('contain');
+    await page.locator('.v2-proof-row2').screenshot({ path: test.info().outputPath('proof-figures-1440.png') });
+    // Stacked on a phone the charts keep their natural heights; no overflow.
+    await page.setViewportSize({ width: 390, height: 844 });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+    const stacked = await figs.evaluateAll(nodes => nodes.map(el => Math.round(el.getBoundingClientRect().height)));
+    expect(stacked[0]).toBeGreaterThan(stacked[1]);
+  });
 });

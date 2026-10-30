@@ -332,7 +332,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=9c3047d2b3')
+    return fetch('/locales/' + lang + '.json?v=d8ee03e093')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
