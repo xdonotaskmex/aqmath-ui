@@ -75,7 +75,7 @@
     "betaF5": "DCA 分配，配备完整安全管道",
     "betaF6": "非托管 — 无交易所密钥、无订单。免费版：投资组合保留在您的浏览器中。Black：持仓以您密钥的哈希存储",
     "betaF7": "自激活起 365 天访问权限",
-    "betaF8": "发送消息 — 我们在 48 小时内审核并激活",
+    "betaF8": "发送消息 — 我们在 48 小时内审核并回复",
     "betaF9": "共享 Black 聊天——伪匿名，20 条消息滚动缓冲，随时可删除",
     "blackF1": "风险平价优化，完整协方差与方差矩阵",
     "blackF2": "去杠杆调制器：基于回撤的连续敞口计算",
@@ -87,7 +87,7 @@
     "blackF8": "共享 Black 聊天——伪匿名，20 条消息滚动缓冲，随时可删除",
     "blackF9": "自激活起 365 天期限 — 仅限年度访问",
     "blackF10": "欧盟 14 天法定撤回权 — 之后年度期限固定 <a href=\"/widerruf\" style=\"color:var(--purple);font-size:0.85em\">[详情]</a>",
-    "blackF11": "发送消息 — 我们在 48 小时内审核并激活"
+    "blackF11": "发送消息 — 我们在 48 小时内审核并回复"
   },
   "what": {
     "title": "AQMath 是什么、如何运作、为什么",
@@ -116,7 +116,7 @@
     "q5": "安全港（USDC）功能是什么？",
     "a5": "启用后，USDC 作为组合内的稳定币缓冲。硬上限产生的盈余或未分配的 DCA 预算流入 USDC，而非丢失。关闭此功能可将 USDC 视为普通代币。",
     "q6": "如何申请 Black 访问权限？",
-    "a6": "通过 <a href=\"https://t.me/AQMath_Black\" target=\"_blank\" style=\"color:#a78bfa;\">Telegram</a> 或 <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:#a78bfa;\">Twitter</a> 私信我们。我们会亲自审核每位申请者 — Black 访问 €999 / 年。无需通话 — 发送消息，我们会在 48 小时内审核并发送您的激活密钥。仅接受 USDC 和 EURC 付款。",
+    "a6": "通过 <a href=\"https://t.me/AQMath_Black\" target=\"_blank\" style=\"color:#a78bfa;\">Telegram</a> 或 <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:#a78bfa;\">Twitter</a> 私信我们。我们会亲自审核每位申请者 — Black 访问 €999 / 年。无需通话 — 发送消息，我们在 48 小时内审核您的请求。默认在 14 天撤销期结束后发放激活密钥；如您明确要求，可立即激活，仅按已使用部分结算。仅接受 USDC 和 EURC 付款。",
     "q7": "是否提供月度计划？",
     "a7": "不提供。Black 访问仅采用年度软件许可模式（应用与回测免费），不提供月度、季度或半年度计划。欧盟消费者享有 14 天法定撤回权 — 详见<a href=\"/widerruf\" style=\"color:#a78bfa;\">撤回权说明</a>；该期限过后，年度期限即为固定，提前取消不按比例退款。",
     "q8": "AQMath 是交易机器人吗？",

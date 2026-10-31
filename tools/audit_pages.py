@@ -121,6 +121,12 @@ ICON_RE = re.compile(r'<link\b[^>]*?\bhref="([^"]+\.(?:png|ico|svg|webp)(?:\?[^"
 SOCIAL_RE = re.compile(
     r'<meta\b[^>]*?(?:property|name)="(?:og:image|og:image:secure_url|twitter:image)"[^>]*?content="([^"]+)"',
     re.I)
+# Free plan condition: Simple Analytics looks for this exact link, UTM codes
+# included, in a footer that shows on every page. Miss it for 14 days after
+# their warning and the dashboard, API and exports lock for the site.
+SA_BADGE_RE = re.compile(
+    r'href="https://www\.simpleanalytics\.com\?[^"]*utm_source=aqmath\.xyz[^"]*'
+    r'utm_content=badge"')
 STAMP_RE = re.compile(r"\?v=([\w]+)")
 
 # The Forward Log fallback carries its own generation date. The live section is
@@ -268,6 +274,12 @@ def audit():
         for origin in FORBIDDEN_ORIGINS:
             if origin in raw:
                 fail(f"references {origin} - fonts and scripts must be first-party")
+
+        # --- Simple Analytics free-plan badge ------------------------------
+        # The badge lives in the shared footer; a footer rewrite that drops it
+        # would silently cost the free plan after their 14-day grace window.
+        if 'class="site-footer sf2"' in html and not SA_BADGE_RE.search(html):
+            fail("site footer carries no Simple Analytics badge")
 
         # --- asset stamps ---------------------------------------------------
         # social-preview.png is versioned by hand on purpose: it is consumed by

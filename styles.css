@@ -3363,3 +3363,14 @@ body > .lp-disclaimer { border-top: 0; }
 .site-footer.sf2 .sf2-soc a svg { flex: none; }
 .site-footer.sf2 .sf2-soc a:hover { color: var(--blue); border-color: var(--blue); background: rgba(29,53,87,0.05); }
 @media (max-width: 760px) { .site-footer.sf2 .sf2-soc a { padding: 6px 11px; } }
+
+/* ---- Simple Analytics free-plan badge (footer credit) ----
+   Free-plan condition: the badge has to be visible and link out on every page.
+   Self-hosted SVG, so CSP img-src 'self' already covers it. Sits at the right
+   end of the social row; the pill and the badge are both bordered chips. */
+.sf2-right { display: flex; align-items: center; justify-content: flex-end; gap: 16px; flex-wrap: wrap; }
+.sf2-right .sf2-sa { display: inline-flex; line-height: 0; border-radius: 6px; }
+.sf2-right .sf2-sa img { display: block; width: 168px; height: 40px; }
+.sf2-right .sf2-sa:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+@media (max-width: 760px) { .sf2-right { justify-content: flex-start; } }
+

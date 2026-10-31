@@ -75,7 +75,7 @@
     "betaF5": "DCA distribution with full safety pipeline",
     "betaF6": "Non-custodial — no exchange keys, no orders. Free: portfolio stays in your browser. Black: holdings stored under a hash of your key",
     "betaF7": "365-day access from activation",
-    "betaF8": "Send a message — we review and activate within 48h",
+    "betaF8": "Send a message — we review and reply within 48h",
     "betaF9": "Shared Black chat — pseudonymous, 20-message rolling buffer, deletable anytime",
     "blackF1": "Risk Parity optimization with full Covariance &amp; Variance Matrix",
     "blackF2": "Deleverage Modulator: continuous drawdown-based exposure calculation",
@@ -87,7 +87,7 @@
     "blackF8": "Shared Black chat &mdash; pseudonymous, 20-message rolling buffer, deletable anytime",
     "blackF9": "365-day term from activation &mdash; annual access only",
     "blackF10": "14-day EU right of withdrawal &mdash; firm annual term afterwards <a href=\"/widerruf\" style=\"color:var(--purple);font-size:0.85em\">[details]</a>",
-    "blackF11": "Send a message &mdash; we review and activate within 48h"
+    "blackF11": "Send a message &mdash; we review and reply within 48h"
   },
   "what": {
     "title": "What is AQMath, How It Works & Why",
@@ -116,7 +116,7 @@
     "q5": "What is the Safe-Haven (USDC) feature?",
     "a5": "When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token.",
     "q6": "How do I apply for Black access?",
-    "a6": "DM us on <a href=\"https://t.me/AQMath_Black\" target=\"_blank\" style=\"color:#a78bfa;\">Telegram</a> or <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:#a78bfa;\">Twitter</a>. We review every applicant personally — Black access is €999 / year. No call required — send a message, we review and send your activation key within 48h. Payments accepted exclusively in USDC and EURC.",
+    "a6": "DM us on <a href=\"https://t.me/AQMath_Black\" target=\"_blank\" style=\"color:#a78bfa;\">Telegram</a> or <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:#a78bfa;\">Twitter</a>. We review every applicant personally — Black access is €999 / year. No call required — send a message and we review your request within 48h. By default the key is issued after the 14-day withdrawal period; ask us and we activate immediately, settling only the part already used. Payments accepted exclusively in USDC and EURC.",
     "q7": "Do you offer monthly plans?",
     "a7": "No. Black access operates exclusively on an annual licence model (the App and the Backtest are free). We do not offer monthly, quarterly, or semi-annual plans. EU consumers keep the statutory 14-day right of withdrawal &mdash; see the <a href=\"/widerruf\" style=\"color:#a78bfa;\">withdrawal notice</a>; after that the annual term is firm and is not refunded pro rata on early cancellation.",
     "q8": "Is AQMath a trading bot?",
