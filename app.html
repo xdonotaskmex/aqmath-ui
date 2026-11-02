@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/ibm-plex-serif-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=0169c992b8">
+    <link rel="stylesheet" href="/styles.min.css?v=5d9a1d9a75">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
 </head>
@@ -683,11 +683,11 @@
             <div class="section-label" data-i18n="app.faqTitle">Frequently asked questions</div>
             <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q1">What is AQMath?</div>
-                <div class="faq-a" data-i18n="app.faq.a1">A non-custodial tool for long-term passive crypto portfolio management using DCA and quantitative optimization (Risk Parity).</div>
+                <div class="faq-a" data-i18n="app.faq.a1">A non-custodial calculator for long-term DCA planning and portfolio mathematics (Risk Parity). It computes figures from the tokens, amounts and parameters you enter; it manages no funds and places no orders.</div>
             </div>
             <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q2">How does DCA distribution work?</div>
-                <div class="faq-a" data-i18n="app.faq.a2">You enter a total budget, and the app allocates it to tokens below their target allocation, considering risk and average cost.</div>
+                <div class="faq-a" data-i18n="app.faq.a2">You enter a total budget and the app computes how that budget would be split across the tokens that sit below their theoretical weight, taking risk and average cost into account. The split is a calculation, not an order — you decide what to do with it.</div>
             </div>
             <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q3">What does the AQMath Engine do?</div>
@@ -698,12 +698,12 @@
                 <div class="faq-a" data-i18n="app.faq.a4">You can manually enter, import a CSV with transactions (Date, Type, Symbol, Amount) or load a previously exported JSON.</div>
             </div>
             <div class="faq-item" data-action="toggleOpen">
-                <div class="faq-q">What do &#10052;&#65039; / &#128293; mean?</div>
-                <div class="faq-a">Freeze (&#10052;&#65039;) excludes the token from DCA and optimization; useful for positions you don&rsquo;t want to change.</div>
+                <div class="faq-q" data-i18n="app.faq.q5">What do &#10052;&#65039; / &#128293; mean?</div>
+                <div class="faq-a" data-i18n="app.faq.a5">&#128293; means the token is active: it takes part in the DCA split and in the optimisation. &#10052;&#65039; (freeze) excludes it from both, which is useful for positions you do not want to change. Click the icon to switch between the two.</div>
             </div>
             <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q6">Why the &#9888;&#65039; warning?</div>
-                <div class="faq-a" data-i18n="app.faq.a6">The token has less than 180 days of price history – optimization results are less reliable.</div>
+                <div class="faq-a" data-i18n="app.faq.a6">The token has less than 180 days of price history — the covariance estimate rests on fewer observations, so the computed weights are less reliable.</div>
             </div>
             <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q7">What is Safe-Haven (USDC)?</div>
@@ -712,6 +712,18 @@
             <div class="faq-item" data-action="toggleOpen">
                 <div class="faq-q" data-i18n="app.faq.q8">Is my data safe?</div>
                 <div class="faq-a" data-i18n="app.faq.a8">Your portfolio amounts, targets, and allocation choices are stored in your browser (localStorage). During DCA and Optimize, positions are sent to our backend, processed in memory, and not written to a database. The only server-side records are the one-way hashed key activation (with a hashed IP fingerprint) and, for Black, your holdings under your hashed key, deleted on request or when the key is deactivated. Non-custodial by design.</div>
+            </div>
+            <div class="faq-item" data-action="toggleOpen">
+                <div class="faq-q" data-i18n="app.faq.q9">Is any of this investment advice?</div>
+                <div class="faq-a" data-i18n="app.faq.a9">No. This is calculation software: no investment advice, no personal recommendation, no suitability assessment. The figures are arithmetic on the data you entered, and every decision is yours alone (Terms § 4 and § 7).</div>
+            </div>
+            <div class="faq-item" data-action="toggleOpen">
+                <div class="faq-q" data-i18n="app.faq.q10">What if I don't record a calculated difference?</div>
+                <div class="faq-a" data-i18n="app.faq.a10">Nothing happens. No order exists and no position changes. The Recording Meter logs which differences you recorded and how quickly, and shows you that rate — only to you. It has no effect on your price and carries no penalty. The score is 100% within the first hour and decays to 0% at the 12-hour deadline; reminders are off unless you switch them on.</div>
+            </div>
+            <div class="faq-item" data-action="toggleOpen">
+                <div class="faq-q" data-i18n="app.faq.q11">How do I delete my data?</div>
+                <div class="faq-a" data-i18n="app.faq.a11">Under “your data”, the button “delete all my data” removes your holdings, consents, acknowledgements, notification subscription, chat messages and all calculation records from our servers. Only the minimal activation record (hash of your key, activation date, device binding) remains, because the licence depends on it; ask us by e-mail and that goes too, which ends the licence.</div>
             </div>
         </div>
 </section>
@@ -755,10 +767,10 @@
             </div>
 </footer>
 
-<script defer src="/app-widgets.js?v=0169c992b8"></script>
-<script defer src="/app-backtest.js?v=0169c992b8"></script>
-<script defer src="/app.js?v=0169c992b8"></script>
-<script defer src="/app-notify.js?v=0169c992b8"></script>
+<script defer src="/app-widgets.js?v=5d9a1d9a75"></script>
+<script defer src="/app-backtest.js?v=5d9a1d9a75"></script>
+<script defer src="/app.js?v=5d9a1d9a75"></script>
+<script defer src="/app-notify.js?v=5d9a1d9a75"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -772,11 +784,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=0169c992b8"></script>
+<script defer src="/vendor/i18next.min.js?v=5d9a1d9a75"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=0169c992b8"></script>
-<script defer src="/app-boot.js?v=0169c992b8"></script>
+<script defer src="/app-tour.js?v=5d9a1d9a75"></script>
+<script defer src="/app-boot.js?v=5d9a1d9a75"></script>
 
 </body>
 </html>

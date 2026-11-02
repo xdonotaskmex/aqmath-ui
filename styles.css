@@ -3376,3 +3376,16 @@ body > .lp-disclaimer { border-top: 0; }
 .sf2-right .sf2-sa:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 @media (max-width: 760px) { .sf2-right { justify-content: flex-start; } }
 
+/* ===== FAQ LINKS v2 — links follow the theme token, never a hard-coded colour.
+   Appended last so it wins over any older rule. ===== */
+.lp-faq-a a,
+.faq-a a {
+    color: var(--purple);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+}
+.lp-faq-a a:hover,
+.faq-a a:hover { color: var(--blue); }
+.lp-faq-a em,
+.faq-a em { font-style: italic; color: var(--text-2, var(--muted)); }
