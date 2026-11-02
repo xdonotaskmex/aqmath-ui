@@ -894,22 +894,29 @@
         .hdr.menu-open .hdr-burger { color: var(--blue); border-color: rgba(29,53,87,0.4); background: rgba(29,53,87,0.06); }
         .hdr-nav-btn { text-align: center; padding: 10px 14px; }
 
-        /* App view is web-only: overlay replaces the whole UI on phones */
+        /* App view is web-only: overlay replaces the whole UI on phones.
+           Editorial redesign (v2): paper ground, letterhead mark, serif
+           headline, hairline rule, v2 buttons. No card, no emoji. */
         .mobile-gate { display: flex; position: fixed; inset: 0; z-index: 200;
-            align-items: center; justify-content: center; padding: 24px;
-            background: var(--s1); }
+            align-items: center; justify-content: flex-start; flex-direction: column;
+            padding: 56px 16px 32px; background: var(--bg); overflow-y: auto; }
         #appView > *:not(.mobile-gate) { display: none !important; }
-        .mobile-gate-box { max-width: 340px; text-align: center; padding: 28px 22px;
-            background: var(--s2); border: 1px solid var(--border); border-radius: 6px; }
-        .mobile-gate-icon { font-size: 1.8rem; margin-bottom: 12px; }
-        .mobile-gate-title { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 2px;
-            color: var(--blue); margin-bottom: 14px; }
-        .mobile-gate-msg { font-size: 0.8rem; color: var(--muted); line-height: 1.7; margin-bottom: 18px; }
-        .mobile-gate-msg strong { color: var(--text); }
-        .mobile-gate-msg .mono { font-family: var(--mono); color: var(--blue); font-size: 0.72rem; }
-        .mobile-gate-home { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 1px;
-            color: var(--blue); text-decoration: none; border: 1px solid rgba(29,53,87,0.25);
-            padding: 8px 16px; border-radius: 3px; display: inline-block; }
+        .mobile-gate-box { width: 100%; max-width: 420px; text-align: left; }
+        .mg-mark { display: flex; align-items: center; gap: 9px; color: var(--blue); margin-bottom: 40px; }
+        .mg-mark-ico { display: inline-flex; }
+        .mg-mark-name { font-family: var(--serif); font-size: 19px; font-weight: 500;
+            letter-spacing: -0.01em; color: var(--text); }
+        .mg-eyebrow { font-family: var(--sans); font-size: 12px; font-weight: 600;
+            letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; }
+        .mg-title { font-family: var(--serif); font-weight: 500; font-size: 30px; line-height: 1.18;
+            letter-spacing: -0.01em; color: var(--text); margin: 0 0 18px; max-width: 15ch; }
+        .mg-msg { font-size: 15.5px; line-height: 1.6; color: var(--muted); margin: 0 0 18px; }
+        .mg-msg strong { color: var(--text); font-weight: 500; }
+        .mg-path { font-size: 15px; line-height: 1.6; color: var(--text-2); margin: 0 0 26px; }
+        .mg-path .mono, .mg-msg .mono { font-family: var(--mono); font-size: 14px; color: var(--blue); }
+        .mg-actions { display: flex; flex-direction: column; gap: 10px;
+            padding-top: 24px; border-top: 1px solid var(--border); }
+        .mg-note { margin-top: 18px; font-size: 13px; line-height: 1.55; color: var(--dim); }
 
         /* Header: reduce hdr-right min-width for smaller screens */
         .hdr-right { min-width: auto; }
@@ -2866,9 +2873,24 @@ body > .lp-disclaimer { border-top: 0; }
 .leg-sym { display: flex; align-items: center; gap: 10px; }
 .leg-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; flex: 0 0 auto; }
 .leg-num { text-align: right; font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--text-2); }
-.app-faq { max-width: 1244px; margin: 0 auto; padding: 8px 32px 56px; position: relative; z-index: 1; }
-.app-faq .faq-section { max-width: 820px; margin: 0; padding-top: 0; border-top: 0; }
-@media (max-width: 1000px) { #appView .main { grid-template-columns: minmax(0, 1fr); } #appView .sidebar { order: 3; } #appView .top-row { grid-template-columns: minmax(0, 1fr); } }
+/* The FAQ is a grid item of .main (column 1) so it follows the content
+   column directly instead of waiting for the taller sidebar: the dead space
+   under the last content card is what the FAQ now fills. The sidebar spans
+   both rows, so the two columns still start at the same line. */
+.app-faq { position: relative; z-index: 1; }
+#appView .main > .app-faq { grid-column: 1; grid-row: 2; max-width: none; margin: 28px 0 0;
+    padding: 28px 0 0; border-top: 1px solid var(--border); }
+#appView .main > .content { grid-column: 1; grid-row: 1; }
+#appView .main > .sidebar { grid-column: 2; grid-row: 1 / span 2; }
+.app-faq .faq-section { max-width: none; margin: 0; padding-top: 0; border-top: 0; }
+@media (max-width: 1000px) {
+    #appView .main { grid-template-columns: minmax(0, 1fr); }
+    #appView .top-row { grid-template-columns: minmax(0, 1fr); }
+    /* One column: content, then the widget cards, then the FAQ last. */
+    #appView .main > .content { grid-column: 1; grid-row: auto; order: 1; }
+    #appView .main > .sidebar { grid-column: 1; grid-row: auto; order: 2; }
+    #appView .main > .app-faq { grid-column: 1; grid-row: auto; order: 3; }
+}
 
 .app-toolbar { background: none; border: 0; padding: 0; box-shadow: none; }
 #appView .sidebar { display: flex; flex-direction: column; }

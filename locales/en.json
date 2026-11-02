@@ -156,9 +156,13 @@
     "navResearch": "research",
     "navBacktest": "backtest",
     "mobileGate": {
-      "title": "Desktop only",
-      "msg": "The AQMath App is a <strong>web-only</strong> experience built for desktop browsers. Charts, tables and the calculation engine need a bigger screen.<br><br>Please open <span class=\"mono\">/app</span> on a computer.",
-      "home": "Back to landing"
+      "eyebrow": "Desktop only",
+      "title": "The App is built for a bigger screen.",
+      "msg": "Covariance tables, the weight plan and the daily calculations need the width of a desktop browser, so the App opens on a computer rather than here. Nothing on your side changes: your key stays valid and your holdings stay as they are.",
+      "path": "Open <span class=\"mono\">aqmath.xyz/app</span> on a computer.",
+      "home": "Back to landing",
+      "read": "How AQMath works",
+      "note": "The research pages and the documentation read fine on a phone."
     },
     "update": {
       "msg": "A new version of AQMath is available - reload to get the latest build.",

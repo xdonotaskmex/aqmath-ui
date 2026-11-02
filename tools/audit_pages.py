@@ -56,11 +56,12 @@ SITE = "https://aqmath.xyz"
 # dev machine but never in a CI checkout or a deploy, so auditing them only
 # produced local-only false failures (e.g. playwright-report/index.html has no
 # h1/canonical by design).
-# _internal/ holds working docs; Jekyll excludes underscore dirs from the site,
-# so anything landing there (including a stray .html) is not a published page.
+# _internal/ and _legal/ hold working docs and the customer/authority documents;
+# Jekyll excludes underscore dirs from the site, and the Caddy deploy blocks them
+# explicitly, so anything landing there (including a stray .html) is not a page.
 SKIP_DIRS = {"_src", "_research", "node_modules", "tools", ".git", ".qoder",
              "playwright-report", "test-results", "blob-report", "_logs",
-             "_internal"}
+             "_internal", "_legal", "vendor"}
 
 # 404.html is served by the host on an error, has no canonical route of its own
 # and must never be indexed or listed.

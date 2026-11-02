@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://scripts.simpleanalyticscdn.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https: wss:; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://scripts.simpleanalyticscdn.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https: wss:; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -33,16 +33,15 @@
     <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20261029">
     <meta name="twitter:image:alt" content="AQMath — Risk Parity Crypto Portfolio Calculator with Deleverage Shield">
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Free Crypto Backtest Tool","url":"https://aqmath.xyz/backtest","description":"Free interactive crypto backtest tool: replays years of real daily prices with DCA simulation and drawdown modelling. Compare strategies against Buy & Hold on identical terms.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":[{"@type":"Offer","name":"Free Access","price":"0","priceCurrency":"USD","description":"App and Backtest — free, no account and no key needed: DCA distribution, live price sync, non-custodial portfolio tracking"},{"@type":"Offer","name":"Black Annual Access","price":"999","priceCurrency":"EUR","description":"Black access: annual licence — €999/year, paid in USDC or EURC"}],"featureList":["Risk Parity Optimization","Deleverage Modulator Drawdown Protection","DCA Distribution","Non-Custodial Privacy","Continuous Auto De-Risk"],"creator":{"@id":"https://aqmath.xyz/#momir-demirov"}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Backtest","item":"https://aqmath.xyz/backtest"}]}]}</script>
-    <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+    <script defer src="/vendor/chart.umd.min.js"></script>
 
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
         <!-- API origin used by app-boot auth checks; connect early to save the TLS
              handshake off the first authenticated request. -->
         <link rel="preconnect" href="https://api-auth.aqmath.xyz" crossorigin>
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/ibm-plex-serif-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=5d9a1d9a75">
+    <link rel="stylesheet" href="/styles.min.css?v=f1eba66829">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
 </head>
@@ -389,10 +388,10 @@
             </div>
 </footer>
 
-<script defer src="/app-widgets.js?v=5d9a1d9a75"></script>
-<script defer src="/app-backtest.js?v=5d9a1d9a75"></script>
-<script defer src="/app.js?v=5d9a1d9a75"></script>
-<script defer src="/app-notify.js?v=5d9a1d9a75"></script>
+<script defer src="/app-widgets.js?v=f1eba66829"></script>
+<script defer src="/app-backtest.js?v=f1eba66829"></script>
+<script defer src="/app.js?v=f1eba66829"></script>
+<script defer src="/app-notify.js?v=f1eba66829"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -406,11 +405,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=5d9a1d9a75"></script>
+<script defer src="/vendor/i18next.min.js?v=f1eba66829"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=5d9a1d9a75"></script>
-<script defer src="/app-boot.js?v=5d9a1d9a75"></script>
+<script defer src="/app-tour.js?v=f1eba66829"></script>
+<script defer src="/app-boot.js?v=f1eba66829"></script>
 
 </body>
 </html>

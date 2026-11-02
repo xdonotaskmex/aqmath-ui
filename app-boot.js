@@ -332,7 +332,7 @@ var i18nResources = {};
 var i18nReady = false;
 
 function loadLocale(lang) {
-    return fetch('/locales/' + lang + '.json?v=5d9a1d9a75')
+    return fetch('/locales/' + lang + '.json?v=f1eba66829')
         .then(function (r) { return r.ok ? r.json() : null; })
         .catch(function () { return null; });
 }
@@ -486,6 +486,17 @@ function applyTranslations() {
 })();
 
 // ---------------------------------------------------------------------------
+// Mobile gate guard — on phones the desktop-only overlay replaces the whole
+// app UI. A changelog card or the product tour stacked on top of it is noise
+// (and hides the one instruction that matters), so both stay closed there.
+// The element only exists on /app, so landing and docs are unaffected.
+// ---------------------------------------------------------------------------
+function mobileGateActive() {
+    var g = document.querySelector('.mobile-gate');
+    return !!(g && getComputedStyle(g).display !== 'none');
+}
+
+// ---------------------------------------------------------------------------
 // 5) Freshness check - every visitor runs the latest build.
 //    The whole asset set is pinned to one build id (?v=..., written by
 //    tools/stamp_version.py), and that id is mirrored to /version.txt at
@@ -516,6 +527,9 @@ function applyTranslations() {
                 if (!latest) return;
                 latest = latest.trim();
                 if (!latest || latest === mine) return;
+                // Behind the desktop-only gate there is nothing to reload into,
+                // so the banner stays down on phones.
+                if (mobileGateActive()) return;
                 var banner = document.getElementById('updateBanner');
                 if (banner) banner.classList.remove('hidden');
             })
@@ -537,6 +551,7 @@ function applyTranslations() {
     var VER = APP_VERSION;
     var seen = localStorage.getItem('aqmath-whatsnew-seen');
     if (seen === VER) return;
+    if (mobileGateActive()) return;
     var card = document.getElementById('whatsNew');
     if (card) card.classList.remove('hidden');
 })();
@@ -548,6 +563,7 @@ function applyTranslations() {
 (function () {
     if (location.pathname !== '/app') return;
     if (localStorage.getItem('aqmath_tour_done')) return;
+    if (mobileGateActive()) return;
     // Wait for dynamic content to settle, then launch
     setTimeout(function () {
         if (typeof maybeAutoTour === 'function') maybeAutoTour();

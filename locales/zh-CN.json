@@ -156,9 +156,13 @@
     "navResearch": "研究",
     "navBacktest": "回测",
     "mobileGate": {
-      "title": "--仅限桌面端",
-      "msg": "AQMath 应用是为桌面浏览器打造的<strong>纯网页</strong>体验。图表、表格和计算引擎需要更大的屏幕。<br><br>请在电脑上打开 <span class=\"mono\">/app</span>。",
-      "home": "返回主页"
+      "eyebrow": "仅限桌面端",
+      "title": "App 为更大的屏幕而建。",
+      "msg": "协方差表格、权重方案与每日计算需要桌面浏览器的宽度，因此 App 在电脑上打开，而不是这里。你这边没有任何变化：密钥仍然有效，持仓也保持原样。",
+      "path": "请在电脑上打开 <span class=\"mono\">aqmath.xyz/app</span>。",
+      "home": "返回主页",
+      "read": "AQMath 工作原理",
+      "note": "研究页面与文档在手机上阅读正常。"
     },
     "update": {
       "msg": "AQMath 有新版本可用 - 重新加载以获取最新构建。",
