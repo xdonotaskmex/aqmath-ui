@@ -39,7 +39,7 @@ complementary question — what happens *after* the stress passes?
 
 This is the biggest psychological fear about any defensive system:
 that it kicks you out and you miss the recovery. The fear is rational.
-A system that protects you from a 60% crash but then sits at 20%
+A system that cuts a 60% crash but then sits at 20%
 exposure while the market triples is not a product anyone would use.
 
 The test is straightforward: find every defensive episode in 6.2 years

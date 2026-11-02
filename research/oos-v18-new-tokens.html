@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/oos-v18-new-tokens">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=5b3c1ed61b">
+<link rel="stylesheet" href="/styles.min.css?v=0169c992b8">
 </head>
 <body>
 
@@ -403,7 +403,7 @@
 <h2>10. Reproducibility</h2>
 <p>Research harness (git-ignored, not deployed): <code>scratch/oos_v18_2026.py</code>. It imports the <strong>production</strong> <code>backtest.simulate</code>, <code>backtest.simulate_v18</code>, <code>calc_metrics</code> and <code>default_config</code> unchanged, so both columns reflect the deployed engines exactly, and it re-runs the v14 leg as a self-check against the published /results figures. Historical CSVs are sourced locally and are not committed.</p>
 <hr>
-<p><strong>Bottom line:</strong> the live Proteus (v18) engine delivers the same out-of-sample drawdown protection as its predecessor — cutting the worst drop in all 182 unseen-token baskets — with a modest improvement in median depth and risk-adjusted return, and an honestly disclosed soft spot on the longest, crash-rich histories. <strong>Recommendation: v18 stays live; Aegis (v14) remains the warm-up fallback for portfolios too young to calibrate an adaptive threshold.</strong></p>
+<p><strong>Bottom line:</strong> the live Proteus (v18) engine delivers the same out-of-sample drawdown protection as its predecessor — cutting the worst drop in all 182 unseen-token baskets — with a modest improvement in median depth and risk-adjusted return, and an honestly disclosed soft spot on the longest, crash-rich histories. <strong>Engineering verdict: v18 stays live; Aegis (v14) remains the warm-up fallback for portfolios too young to calibrate an adaptive threshold.</strong></p>
 </main>
 </div>
 

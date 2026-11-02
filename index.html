@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/ibm-plex-serif-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=5b3c1ed61b">
+    <link rel="stylesheet" href="/styles.min.css?v=0169c992b8">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","itemListElement":[{"@type":"Question","name":"How does the engine calculate risk?","acceptedAnswer":{"@type":"Answer","text":"The Black engine uses a <strong>Variance Matrix</strong>, asset <strong>Covariance</strong>, volatility estimates, and KKT-style projection to calculate Risk Parity allocations where each asset contributes a controlled share of portfolio risk. <a href=\"/docs\" style=\"color:var(--purple);\">You can audit the full mathematical model in our [Documentation].</a>"}},{"@type":"Question","name":"How is AQMath actually private?","acceptedAnswer":{"@type":"Answer","text":"We don't track your wallet and ask for no name or e-mail. On the free tier your token balances live only in your browser's localStorage; during DCA and Optimize, position data is sent to our calculation servers, processed in memory and not written to a database (technical server logs keep counts such as the number of positions and the DCA amount). With a Black key, your holdings (token, amount, entry price, APY) are stored on our server under a hash of your activation key to run your daily calculations and restore your table on a new device, and are deleted on request or when your key is deactivated (Privacy Policy §9). The only other record is a one-way hashed activation record with a hashed IP address. <a href=\"/docs\" style=\"color:#a78bfa;\">Read the full data flow in our [Documentation].</a>"}},{"@type":"Question","name":"Do Black keys track my IP address?","acceptedAnswer":{"@type":"Answer","text":"No &mdash; not in any readable form. A Black key is tied to one device/network so it can&rsquo;t be shared, but we only ever store a one-way hash of your key and a one-way HMAC fingerprint of your IP. Neither can be reversed back to your real key or IP. It exists purely to enforce one-key-one-user and to rate-limit brute-force attempts &mdash; never for tracking or profiling. Full details are in Section 8 of our <a href=\"/privacy\" style=\"color:var(--purple);\">Privacy Policy</a>."}},{"@type":"Question","name":"What does Black access include?","acceptedAnswer":{"@type":"Answer","text":"Black access includes the full engine &mdash; Risk Parity optimization, Deleverage Shield, DCA distribution, unlimited tokens, automated data pipeline, and the shared Black chat. It&rsquo;s a 365-day term with direct support from the team."}},{"@type":"Question","name":"Why are market widgets separated from features?","acceptedAnswer":{"@type":"Answer","text":"Live markets are informational context: ticker data, Fear &amp; Greed, BTC dominance, movers, and exchange status. They support decision-making but are intentionally separate from the product feature story."}},{"@type":"Question","name":"What is the Safe-Haven (USDC) feature?","acceptedAnswer":{"@type":"Answer","text":"When enabled, USDC acts as a stablecoin buffer inside your portfolio. Any surplus from hard caps or unallocated DCA budget flows into USDC instead of being lost. Toggle it OFF to treat USDC as a normal token."}},{"@type":"Question","name":"How do I apply for Black access?","acceptedAnswer":{"@type":"Answer","text":"DM us on <a href=\"https://t.me/AQMath_Black\" target=\"_blank\" style=\"color:var(--purple);\">Telegram</a> or <a href=\"https://x.com/aqmathapp\" target=\"_blank\" style=\"color:var(--purple);\">Twitter</a>. Black access is <strong>€999 / year</strong>. No call required — send a message and we review your request within 48h. By default the key is issued after the 14-day withdrawal period; ask us and we activate immediately, settling only the part already used. Payments accepted exclusively in USDC and EURC."}},{"@type":"Question","name":"Do you offer monthly plans?","acceptedAnswer":{"@type":"Answer","text":"No. Black access operates exclusively on an annual licence model (the App and the Backtest are free). We do not offer monthly, quarterly, or semi-annual plans. EU consumers keep the statutory 14-day right of withdrawal &mdash; see the <a href=\"/widerruf\" style=\"color:#a78bfa;\">withdrawal notice</a>; after that the annual term is firm and is not refunded pro rata on early cancellation."}},{"@type":"Question","name":"Is AQMath a trading bot?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath is an analytical web application. We do not execute trades, manage funds, or interact with any exchange or smart contract. You see the math, you make the decision."}},{"@type":"Question","name":"Is there a mobile app?","acceptedAnswer":{"@type":"Answer","text":"No. AQMath is a web application only. Any app using our name on any app store is unauthorized and not affiliated with us."}},{"@type":"Question","name":"Is there an automatic daily calculation or notification service?","acceptedAnswer":{"@type":"Answer","text":"Yes &mdash; with Black. The server runs your daily calculations (Deleverage Shield status and DCA split) once per day from your stored holdings and can send a notice to your device. To do that, your holdings are stored under the hash of your activation key &mdash; never under your name or wallet. Notifications are optional and based on your consent; stored holdings are deleted on request or when your key is deactivated. Full details are in Section 9 of our <a href=\"/privacy\" style=\"color:#a78bfa;\">Privacy Policy</a>."}},{"@type":"Question","name":"What is the Black chat?","acceptedAnswer":{"@type":"Answer","text":"Black users get access to a <strong>shared internal chat</strong> visible only to active Black members. Messages are pseudonymous (shown as a short code like B-XXXXXX, never your real key or IP), capped at 200 characters, and limited to the 20 most recent messages (older ones are automatically swept daily). You can clear your own messages anytime. The chat is stored server-side under the hash of your activation key and is deleted when your key is deactivated."}}]}</script>
@@ -132,7 +132,7 @@
             <div class="v2-hero-copy">
                 <div class="v2-eyebrow" data-i18n="lp2.eyebrow">Portfolio mathematics software &middot; Non-custodial</div>
                 <h1 class="v2-h1" data-i18n="lp2.heroTitle">Portfolio mathematics you can audit line by line.</h1>
-                <p class="v2-lead" data-i18n="hero.subtitle">No emotions. No human error. Structural limits on every DCA dollar you deploy.</p>
+                <p class="v2-lead" data-i18n="hero.subtitle">Arithmetic, not opinion. Structural limits computed for every DCA dollar you enter.</p>
                 <p class="v2-sub" data-i18n-html="lp2.heroDesc">AQMath calculates Risk Parity, Karush&ndash;Kuhn&ndash;Tucker optimization and volatility-weighted dollar-cost averaging for the assets and parameters you enter &mdash; on its own servers. No e-mail accounts, no wallet connection.</p>
                 <div class="v2-cta-row">
                     <a class="v2-btn v2-btn-primary" href="#access" data-i18n="lp2.ctaAccess">Request Access</a>
@@ -326,6 +326,7 @@
                 <div class="v2-plan v2-plan-dark">
                     <div class="v2-plan-k">Black</div>
                     <div class="v2-plan-price">&euro;999 <span data-i18n="lp2.perYear">/ year</span></div>
+                    <div class="v2-plan-note" data-i18n="plans.priceNote">Final price &mdash; as a small business under &sect;&nbsp;19 UStG we add no VAT. One payment for 12 months; the licence does not renew automatically.</div>
                     <ul class="v2-plan-list">
                         <li data-i18n-html="plans.blackF2">Deleverage Modulator: continuous drawdown-based exposure calculation</li>
                         <li data-i18n-html="plans.blackF3">Dynamic volatility-based allocation caps</li>
@@ -346,7 +347,7 @@
                 <div><h3>Why USDC &amp; EURC only?</h3><p>Credit cards and bank transfers require your name, address, and card number. We don't want that data — and we shouldn't have it. Stablecoins let us skip all of it. You pay from a wallet, we see a transaction. Nothing personal is collected or stored.</p></div>
                 <div><h3>Why limited slots?</h3><p>Every user who runs the engine triggers real matrix computations on real data. These operations scale with user count. We keep the base small so every member gets fast compute, reliable uptime, and direct support — not a support ticket queue.</p></div>
                 <div><h3>How do refunds work?</h3><p>EU consumers have a statutory 14-day right of withdrawal and we do not pretend otherwise. By default your key is issued <em>after</em> those 14 days, so the period simply passes before anything is delivered. Want access sooner? Ask, and we start straight away &mdash; you keep the right for the remaining days and we settle only the part already used, pro rata. After the 14 days the annual term is firm: no refunds, and no pro-rata on later cancellation.</p></div>
-                <div><h3>Why manual review?</h3><p>We communicate directly with every member. No automated onboarding, no helpdesk. If something doesn't work for your setup, you reach a person who built the engine — not a chatbot. The review is to make sure AQMath is the right tool for you.</p></div>
+                <div><h3>Why manual review?</h3><p>We communicate directly with every member. No automated onboarding, no helpdesk. If something doesn't work for your setup, you reach a person who built the engine — not a chatbot. The review keeps the user base small and lets us answer your questions before you order; we do not assess whether any investment suits you.</p></div>
             </div>
         </div>
     </section>
@@ -426,7 +427,7 @@
 <div class="lp-pro-modal hidden" id="proModal">
     <div class="lp-pro-box">
         <h3>&#128274; AQMath Black &mdash; Apply for Access</h3>
-        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card and no bank transfer, so we never collect card or bank details.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
+        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card and no bank transfer, so we never collect card or bank details.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br>The price is a final price &mdash; as a small business under &sect; 19 UStG we add no VAT. The licence runs for 12 months and does not renew automatically.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
         <div class="lp-pro-beta">
             <div class="lp-pro-beta-label">Send a message to request access:</div>
             <div class="lp-pro-beta-links">
@@ -526,10 +527,10 @@
             </div>
 </footer>
 
-<script defer src="/app-widgets.js?v=5b3c1ed61b"></script>
-<script defer src="/app-backtest.js?v=5b3c1ed61b"></script>
-<script defer src="/app.js?v=5b3c1ed61b"></script>
-<script defer src="/app-notify.js?v=5b3c1ed61b"></script>
+<script defer src="/app-widgets.js?v=0169c992b8"></script>
+<script defer src="/app-backtest.js?v=0169c992b8"></script>
+<script defer src="/app.js?v=0169c992b8"></script>
+<script defer src="/app-notify.js?v=0169c992b8"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -543,11 +544,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=5b3c1ed61b"></script>
+<script defer src="/vendor/i18next.min.js?v=0169c992b8"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=5b3c1ed61b"></script>
-<script defer src="/app-boot.js?v=5b3c1ed61b"></script>
+<script defer src="/app-tour.js?v=0169c992b8"></script>
+<script defer src="/app-boot.js?v=0169c992b8"></script>
 
 </body>
 </html>

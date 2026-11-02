@@ -1,6 +1,6 @@
 # How AQMath Works — What the Calculations Mean and What You Decide
 
-**Version:** v3.0
+**Version:** v3.1
 **Audience:** every BLACK user, shown as a must-read before first use
 **Status:** 📖 USER GUIDE — the single source of truth for the in-app explainer
 
@@ -55,16 +55,23 @@ After each daily run the engine compares the shield-adjusted theoretical
 weights with the holdings you declared. If the difference for a token is
 material, you receive a **calculation notice** that states it as a figure:
 
-- **BTC: calculated difference −0.5 BTC ≈ −31,200 USD** — your declared
-  holding is above its theoretical weight by roughly this amount.
-- **SOL: calculated difference +120 SOL ≈ +18,400 USD** — your declared
-  holding is below its theoretical weight by roughly this amount.
+- **BTC: computed difference to the theoretical weight -0.5 units
+  (≈ 31,200 USD)** — your declared holding is above its theoretical weight
+  by roughly this amount.
+- **SOL: computed difference to the theoretical weight +120 units
+  (≈ 18,400 USD)** — your declared holding is below its theoretical weight
+  by roughly this amount.
 
-The amounts are computed from the prices and the portfolio value at run time.
-They describe the **size and sign of a mathematical difference** and nothing
-more: they contain no instruction and are not a recommendation. Whether you
-do anything about a figure, and how, is entirely your own decision; fees and
-slippage are yours to consider.
+That is the exact wording of the notice. The sign belongs to the unit figure
+and says which side of the theoretical weight your holding sits on: a minus
+sign means your holding is above it, a plus sign means it is below it. The USD
+figure is the size of the difference, computed from the prices and the
+portfolio value at run time.
+
+Both figures describe the **size and direction of a mathematical difference**
+and nothing more: they contain no instruction and are not a recommendation.
+Whether you do anything about a figure, and how, is entirely your own decision;
+fees and slippage are yours to consider.
 
 Notifications are deliberately rare. You only receive a message when:
 
@@ -72,10 +79,23 @@ Notifications are deliberately rare. You only receive a message when:
    exposure is reduced),
 2. the Deleverage Shield status turns back **OFF**,
 3. a **macro re-optimisation** freezes new weights (every 180 days),
-4. a **material calculated difference** is found,
-5. the daily run **fails** — you are told the calculation did not run.
+4. a **material calculated difference** is found (material means at least 5%
+   of your portfolio value, and at least 25 USD),
+5. a **scheduled contribution (DCA) falls due** on that day, if you set a DCA
+   amount and interval — the notice states how the amount is split across
+   your tokens, or that it is allocated to your stablecoin while the shield
+   status is active,
+6. the daily run **fails** — you are told the calculation did not run.
 
 No message on ordinary days means the calculation found nothing material.
+
+**Reminders are off by default.** Active reminders are a separate switch you
+turn on yourself, and you can turn it off again at any time. While it is on
+and a material calculated difference is not recorded in your holdings table,
+up to three further reminders follow on the same day (about four, eight and
+eleven hours after the notice). They repeat the same figure and state that it
+has not yet been recorded. A reminder carries no instruction either, and
+recording nothing has no consequence beyond those messages.
 
 ## 4. Your data
 

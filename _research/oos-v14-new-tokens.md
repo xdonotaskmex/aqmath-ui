@@ -148,4 +148,4 @@ Historical CSVs are sourced locally and are not committed.
 
 **Bottom line:** Aegis (v14.0) delivers its mandate — large, consistent drawdown
 reduction and improved risk-adjusted returns — on tokens it has never seen,
-including a collapsed token. **Recommendation: keep Aegis (v14) unchanged.**
+including a collapsed token. **Engineering verdict: keep Aegis (v14) unchanged.**

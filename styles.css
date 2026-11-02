@@ -2661,6 +2661,8 @@ a:hover { color: var(--blue-hi); }
 .v2-plan-dark .v2-plan-list li::before { color: #7FCB9C; }
 .v2-consent { display: flex; gap: 12px; align-items: flex-start; font-size: 12.5px; line-height: 1.5; color: #D6DEE9; margin-bottom: 16px; cursor: pointer; }
 .v2-consent input { margin-top: 3px; flex: 0 0 auto; width: 16px; height: 16px; accent-color: #F2F0E9; }
+.v2-plan-note { margin: -4px 0 10px; font-size: 12px; line-height: 1.5; color: #A9C3DC; }
+.v2-plan:not(.v2-plan-dark) .v2-plan-note { color: var(--muted); }
 .v2-plan-foot { margin-top: 14px; font-size: 12.5px; color: #A9C3DC; text-align: center; }
 .v2-plan-foot a { color: #D6DEE9; }
 .v2-why { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; margin-top: 44px; padding-top: 32px; border-top: 1px solid var(--border); }

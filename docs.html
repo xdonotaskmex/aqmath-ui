@@ -42,7 +42,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/ibm-plex-serif-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=5b3c1ed61b">
+    <link rel="stylesheet" href="/styles.min.css?v=0169c992b8">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
 </head>
@@ -83,7 +83,7 @@
 <div class="lp-pro-modal hidden" id="proModal">
     <div class="lp-pro-box">
         <h3>&#128274; AQMath Black &mdash; Apply for Access</h3>
-        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card and no bank transfer, so we never collect card or bank details.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
+        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card and no bank transfer, so we never collect card or bank details.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br>The price is a final price &mdash; as a small business under &sect; 19 UStG we add no VAT. The licence runs for 12 months and does not renew automatically.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
         <div class="lp-pro-beta">
             <div class="lp-pro-beta-label">Send a message to request access:</div>
             <div class="lp-pro-beta-links">
@@ -639,7 +639,7 @@
 
             <h4 data-i18n="doc.s8.shieldHow">How It Works</h4>
             <ul>
-                <li data-i18n-html="doc.s8.shield1"><strong>Two-signal regime read</strong> &mdash; the engine tracks only rising <strong>drawdown</strong> and rising <strong>downside volatility</strong> over a short rolling window. No moving averages, no timers, no correlation gate.</li>
+                <li data-i18n-html="doc.s8.shield1"><strong>Two-input regime read</strong> &mdash; the engine tracks only rising <strong>drawdown</strong> and rising <strong>downside volatility</strong> over a short rolling window. No moving averages, no timers, no correlation gate.</li>
                 <li data-i18n-html="doc.s8.shield2"><strong>Continuous scaling</strong> &mdash; target exposure is a smooth 0&ndash;100% dial that turns down as drawdown and downside volatility rise &mdash; not a set of discrete steps. There is <strong>no hard floor</strong>: in a deep, volatile crash exposure can approach zero.</li>
                 <li data-i18n-html="doc.s8.shield3"><strong>Capital preservation in simulation</strong> &mdash; while the Shield status is active the simulated portfolio holds the majority in cash-equivalent (USDC), absorbing only a fraction of the simulated decline. Exposure scales continuously with the regime, holding cash when drawdown and downside volatility are elevated.</li>
                 <li data-i18n-html="doc.s8.shield4"><strong>Steady ramp, fewer changes</strong> &mdash; computed exposure moves smoothly toward its target every bar, whether falling or recovering. To avoid over-trading in the simulation, Aegis (v14) only rebalances when the target drifts meaningfully from the simulated position &mdash; this deadband (not a slower re-entry) is what prevents whipsaw and keeps simulated trading costs low. DCA amounts allocated to USDC return to tokens in the calculation once exposure recovers.</li>
@@ -877,9 +877,9 @@
 
             <h4 data-i18n="doc.s8.testingHow">Validation Process</h4>
             <ul>
-                <li data-i18n-html="doc.s8.testing1"><strong>Signal construction</strong> &mdash; each bar we compute rolling drawdown from the running equity peak and downside volatility over a short rolling window, then map each to a 0&ndash;1 signal.</li>
-                <li data-i18n-html="doc.s8.testing2"><strong>Exposure rule</strong> &mdash; the combined risk signal drives a continuous exposure dial with no hard floor and no correlation gate.</li>
-                <li data-i18n-html="doc.s8.testing3"><strong>Hysteresis + threshold rebalancing</strong> &mdash; exposure moves smoothly toward target every bar in either direction, and Aegis (v14) only trades when the target drifts meaningfully from the held position &mdash; fewer rebalances with an identical signal. Parked USDC redeploys once exposure recovers.</li>
+                <li data-i18n-html="doc.s8.testing1"><strong>Risk-score construction</strong> &mdash; each bar we compute rolling drawdown from the running equity peak and downside volatility over a short rolling window, then map each to a 0&ndash;1 risk score.</li>
+                <li data-i18n-html="doc.s8.testing2"><strong>Exposure rule</strong> &mdash; the combined risk score drives a continuous exposure dial with no hard floor and no correlation gate.</li>
+                <li data-i18n-html="doc.s8.testing3"><strong>Hysteresis + threshold rebalancing</strong> &mdash; exposure moves smoothly toward target every bar in either direction, and Aegis (v14) only trades when the target drifts meaningfully from the held position &mdash; fewer rebalances with an identical risk score. Parked USDC redeploys once exposure recovers.</li>
                 <li data-i18n-html="doc.s8.testing4"><strong>Engine/backtester parity</strong> &mdash; the live engine and the backtester run the same shield function on the same drawdown definition, so the public comparison is measured on one basis rather than two.</li>
             </ul>
 
@@ -1047,10 +1047,10 @@
             </div>
 </footer>
 
-<script defer src="/app-widgets.js?v=5b3c1ed61b"></script>
-<script defer src="/app-backtest.js?v=5b3c1ed61b"></script>
-<script defer src="/app.js?v=5b3c1ed61b"></script>
-<script defer src="/app-notify.js?v=5b3c1ed61b"></script>
+<script defer src="/app-widgets.js?v=0169c992b8"></script>
+<script defer src="/app-backtest.js?v=0169c992b8"></script>
+<script defer src="/app.js?v=0169c992b8"></script>
+<script defer src="/app-notify.js?v=0169c992b8"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -1064,11 +1064,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=5b3c1ed61b"></script>
+<script defer src="/vendor/i18next.min.js?v=0169c992b8"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=5b3c1ed61b"></script>
-<script defer src="/app-boot.js?v=5b3c1ed61b"></script>
+<script defer src="/app-tour.js?v=0169c992b8"></script>
+<script defer src="/app-boot.js?v=0169c992b8"></script>
 
 </body>
 </html>

@@ -29,7 +29,7 @@
     <meta name="twitter:image:alt" content="AQMath — Risk Parity crypto portfolio calculation software with Deleverage Shield">
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=5b3c1ed61b">
+    <link rel="stylesheet" href="/styles.min.css?v=0169c992b8">
 </head>
 <body>
 
@@ -42,7 +42,7 @@
 <aside class="lg-side" aria-label="Legal"><div class="lg-side-t">Legal</div><a href="/about">About</a><a href="/impressum">Impressum</a><a href="/privacy">Privacy</a><a href="/terms" class="active" aria-current="page">Terms</a><a href="/widerruf">Withdrawal</a></aside>
 <main class="legal-page">
 <h1>Terms of Service &amp; Disclaimer</h1>
-    <p class="legal-updated">Last updated: October 2026</p>
+    <p class="legal-updated">Last updated: November 2026</p>
 
     <h2>&#127468;&#127463; English Version</h2>
 
@@ -62,6 +62,15 @@
     data pipeline is maintained continuously for the whole term. It is not a one-off file you download.</p>
     <p>By default your activation key is issued <strong>after the 14-day withdrawal period has
     expired</strong>. You may ask us to start earlier &mdash; see section&nbsp;2.</p>
+    <p><strong>How the contract is concluded.</strong> Before you place an order we send you, in text
+    form, the pre-contractual consumer information, these Terms and the withdrawal notice. Your order
+    is your declaration, in text form, that you want the annual licence on those terms. The contract
+    is concluded when we confirm that order in text form (Telegram or e-mail); our confirmation
+    states the day the 14-day withdrawal period begins. Sending a payment alone does not conclude a
+    contract: if we do not confirm, we return the amount received.</p>
+    <p><strong>No automatic renewal.</strong> The licence runs for 12 months from activation and
+    <strong>ends automatically</strong> when the term expires. It does not renew, and no notice of
+    termination is needed. If you want a further year, you place a new order.</p>
 
     <h3>2. Right of Withdrawal (EU Consumers)</h3>
     <p>If you are a consumer resident in the European Union, you have a statutory 14-day right of
@@ -106,28 +115,50 @@
     algorithmic execution engine. We do not manage funds, execute trades on your behalf, or interact
     with any crypto exchange or smart contract. All decisions remain with the user.</p>
     <p><strong>Calculation notices.</strong> If you activate the optional notifications, AQMath
-    recalculates daily, from the holdings and parameters you entered, the deviation of your actual
-    weights from the target weights you entered, and shows the result in the app and as a push
-    notification (&ldquo;Calculation notice&rdquo;). A calculation notice is the output of a
+    recalculates daily, from the holdings you entered and the market prices at run time, the
+    deviation of your actual weights from the theoretical weights computed by the software, and
+    shows the result in the app and as a push
+    notification (&ldquo;Calculation notice&rdquo;). The theoretical weights are not entered by you:
+    the software computes them from historical market data when you first enter your portfolio and
+    keeps them frozen until the next scheduled re-optimisation (every 180 days). Where you switch
+    the optional Deleverage Shield on, it may additionally scale the computed target exposure.
+    A calculation notice is the output of a
     mathematical formula, not an order, not a recommendation and not advice: AQMath never places,
     routes or executes any trade, holds no exchange API keys and has no access to your accounts.
     Whether, when and how you use a result is exclusively your decision and your responsibility.
-    Delivery is best-effort; a missing, delayed or erroneous notice does not create any claim. The
-    notifications can be switched off at any time.</p>
+    Delivery is best-effort: we do not owe a particular delivery time for a notice, and a missing,
+    delayed or erroneous notice does not in itself give rise to a claim. Our liability under
+    section&nbsp;7 remains unaffected. The notifications can be switched off at any time.</p>
+    <p><strong>Reminders.</strong> Reminders are an additional, separate feature and are
+    <strong>switched off by default</strong>; they are sent only if you switch them on yourself in
+    the app, and you can switch them off again at any time. While they are on and a calculated
+    difference from a daily run is not recorded in your holdings table, the software sends up to
+    three further, neutrally worded reminders on the same day (approximately four, eight and eleven
+    hours after the calculation notice) stating that the difference has not yet been recorded.
+    Independently of this, the app shows you statistics on how promptly you record differences. A reminder repeats the same arithmetic; it is not an order, not a recommendation and
+    not advice, and it does not oblige you to do anything. Not recording a difference has no
+    consequence other than these messages.</p>
     <p><strong>Nature of the software.</strong> AQMath is a purely analytical calculation tool. It
     provides no investment advice, no personal recommendation and no suitability assessment
     (Geeignetheitspr&uuml;fung), and it does not assess whether a result suits your knowledge,
-    experience, financial situation or objectives. The results are mathematical outputs for the
-    inputs you entered and are not a recommendation to buy, sell or hold any crypto-asset. You
-    confirm this when you activate your key.</p>
+    experience, financial situation or objectives. The results are mathematical outputs computed
+    from the values you entered and from market data, and are not a recommendation to buy, sell or
+    hold any crypto-asset. Before you first use Black access, the explainer
+    &ldquo;How AQMath Works&rdquo; is shown in the app as a must-read and you confirm it with
+    &ldquo;I have read&rdquo;; we record that confirmation with its time and the version of the text
+    you were shown.</p>
 
     <h3>5. Access Review &amp; Infrastructure Integrity</h3>
     <p>To maintain computational performance and service quality, Black access is limited to a small number
     of active users. Our backend runs real covariance matrix computations and KKT optimization for
     every user &mdash; these operations scale with user count. Keeping the user base manageable
-    ensures fast compute and reliable uptime for all members. We reserve the right to deny or
-    terminate access at our discretion to protect infrastructure integrity. Where we terminate access
-    without cause during a paid term, we will refund the unused pro-rata portion of the annual fee.</p>
+    ensures fast compute and reliable uptime for all members. We may refuse an application for Black
+    access without giving reasons; we are not obliged to enter into a contract. During a running paid
+    term we may terminate your access <strong>only for good cause</strong> &mdash; in particular
+    misuse of the service, sharing or resale of your activation key, attempts to circumvent technical
+    limits, unlawful use, or a serious threat to the integrity or availability of the infrastructure.
+    If we terminate for a reason for which you are not responsible, we refund the unused pro-rata
+    portion of the annual fee. Your statutory rights remain unaffected.</p>
 
     <h3>6. Payment and Pricing</h3>
     <p>The App and the Backtest are free of charge; no payment is due for them. The annual licence fee for Black access is <strong>&euro;999 / year</strong>. All payments are
@@ -136,6 +167,11 @@
     architecture, not by policy. Prices are stated as final prices; as a small business we do not
     charge VAT separately where the small business regulation
     (&sect;&nbsp;19 UStG) applies.</p>
+    <p><strong>The price does not depend on how you use the software.</strong> The fee is the same
+    whatever you do with the calculated figures. We do not reward or penalise whether, how fast or
+    how often you record a calculated difference in your holdings table, and no discount, extra
+    function or other advantage is tied to that. If we ever grant you a discount on a new annual
+    order, we tell you about it before you order; there are no hidden price conditions.</p>
 
     <h3>7. Risk Disclaimer, No Financial Advice &amp; Liability</h3>
     <p>The tools, data, and calculations provided by AQMath are for informational and educational
@@ -166,19 +202,34 @@
     responsibility, you may claim a pro-rata reduction of the annual fee for the affected period;
     statutory claims remain unaffected.</p>
 
-    <h3>8. Consumer Dispute Resolution</h3>
+    <h3>8. Updates, Conformity and Changes</h3>
+    <p>For the duration of a paid Black term we provide the service in conformity with the contract
+    and supply the updates &mdash; including security updates &mdash; that are necessary to keep it in
+    conformity, and we inform you about them (&sect;&nbsp;327f BGB). Where a defect occurs, your
+    statutory rights for digital products (&sect;&sect;&nbsp;327i ff. BGB) apply; nothing in these
+    Terms limits them.</p>
+    <p><strong>Changes to the engine.</strong> We develop the engine further. Ordinary improvements,
+    new calculations and corrections are covered by your licence and cost you nothing. A change that
+    goes beyond what is needed to keep the service in conformity is made only for a valid reason
+    &mdash; technical necessity, security, a change in the market-data sources we depend on, or
+    adapting to legal requirements &mdash; and at no additional cost to you. If such a change impairs
+    your access to the service or its usability more than insignificantly, we inform you on a durable
+    medium before it takes effect, and you may then terminate the contract free of charge within 30
+    days (&sect;&nbsp;327r BGB).</p>
+
+    <h3>9. Consumer Dispute Resolution</h3>
     <p>We are not obliged and not willing to participate in dispute resolution proceedings before a
     consumer arbitration board within the meaning of the German Consumer Dispute Resolution Act
     (VSBG). The European Online Dispute Resolution platform was discontinued on 20 July 2025 and is
     therefore no longer available.</p>
 
-    <h3>9. Applicable Law</h3>
+    <h3>10. Applicable Law</h3>
     <p>These Terms are governed by the law of the Federal Republic of Germany, excluding the UN
     Convention on Contracts for the International Sale of Goods. Where you are a consumer, this choice
     of law does not deprive you of the protection of mandatory consumer law of your country of
     residence.</p>
 
-    <h3>10. Severability</h3>
+    <h3>11. Severability</h3>
     <p>If any provision of these Terms is or becomes invalid, the validity of the remaining provisions
     remains unaffected.</p>
 
@@ -199,12 +250,22 @@
     <p>Der Black-Zugang wird als Software-as-a-Service mit einer zeitlich befristeten Jahreslizenz zur Nutzung zum Preis von <strong>999&nbsp;&euro; pro Jahr</strong> angeboten. Monats-, Quartals- oder Halbjahrestarife bestehen nicht. Der
     Zugang wird nach einer Pr&uuml;fung manuell freigeschaltet. AQMath ist eine <strong>digitale
     Dienstleistung</strong>: die Engine berechnet bei jedem Lauf eine neue Kovarianzmatrix und eine
-    auf Ihre Positionen zugeschnittene Allokation, und die Datenpipeline wird w&auml;hrend der
+    Allokation aus den von Ihnen eingegebenen Positionen, und die Datenpipeline wird w&auml;hrend der
     gesamten Laufzeit fortlaufend gepflegt. Es handelt sich nicht um eine einmalig bereitgestellte
     Datei.</p>
     <p>Der Aktivierungsschl&uuml;ssel wird standardm&auml;&szlig;ig <strong>erst nach Ablauf der
     14-t&auml;gigen Widerrufsfrist</strong> ausgegeben. Auf Wunsch beginnen wir fr&uuml;her &mdash;
     siehe Ziffer&nbsp;2.</p>
+    <p><strong>Zustandekommen des Vertrages.</strong> Vor Ihrer Bestellung &uuml;bersenden wir Ihnen in
+    Textform die vorvertraglichen Verbraucherinformationen, diese Bedingungen und die
+    Widerrufsbelehrung. Ihre Bestellung ist Ihre Erkl&auml;rung in Textform, die Jahreslizenz zu diesen
+    Bedingungen erwerben zu wollen. Der Vertrag kommt zustande, wenn wir diese Bestellung in Textform
+    best&auml;tigen (Telegram oder E-Mail); in der Best&auml;tigung nennen wir den Tag, an dem die
+    14-t&auml;gige Widerrufsfrist beginnt. Eine blo&szlig;e Zahlung begr&uuml;ndet keinen Vertrag:
+    best&auml;tigen wir nicht, erstatten wir den erhaltenen Betrag.</p>
+    <p><strong>Keine automatische Verl&auml;ngerung.</strong> Die Lizenz l&auml;uft 12 Monate ab
+    Freischaltung und <strong>endet automatisch</strong> mit Ablauf der Laufzeit. Sie verl&auml;ngert
+    sich nicht; einer K&uuml;ndigung bedarf es nicht. F&uuml;r ein weiteres Jahr bestellen Sie neu.</p>
 
     <h3>2. Widerrufsrecht (Verbraucher)</h3>
     <p>Verbrauchern mit Wohnsitz in der Europ&auml;ischen Union steht bei Fernabsatzvertr&auml;gen ein
@@ -256,30 +317,56 @@
     keine Gelder, f&uuml;hren keine Trades f&uuml;r Sie aus und interagieren nicht mit Krypto-B&ouml;rsen
     oder Smart Contracts. Alle Entscheidungen verbleiben beim Nutzer.</p>
     <p><strong>Berechnungshinweise.</strong> Wenn Sie die optionalen Benachrichtigungen aktivieren,
-    berechnet AQMath t&auml;glich aus den von Ihnen eingegebenen Best&auml;nden und Parametern die
-    Abweichung Ihrer tats&auml;chlichen Gewichte von den von Ihnen eingegebenen Zielgewichten und zeigt
-    das Ergebnis in der App und als Push-Benachrichtigung an (&bdquo;Berechnungshinweis&ldquo;). Ein
+    berechnet AQMath t&auml;glich aus den von Ihnen eingegebenen Best&auml;nden und den Marktpreisen
+    zum Zeitpunkt der Berechnung die Abweichung Ihrer tats&auml;chlichen Gewichte von den
+    theoretischen Gewichten, die die Software selbst ermittelt, und zeigt
+    das Ergebnis in der App und als Push-Benachrichtigung an (&bdquo;Berechnungshinweis&ldquo;). Die
+    theoretischen Gewichte geben Sie nicht selbst ein: Die Software berechnet sie aus historischen
+    Marktdaten, wenn Sie Ihr Portfolio erstmals eingeben, und h&auml;lt sie bis zur n&auml;chsten
+    planm&auml;&szlig;igen Neuoptimierung (alle 180 Tage) unver&auml;ndert. Wenn Sie den optionalen
+    Deleverage Shield aktivieren, kann dieser zus&auml;tzlich die berechnete Ziel-Exposure
+    skalieren. Ein
     Berechnungshinweis ist das Ergebnis einer mathematischen Formel, kein Auftrag, keine Empfehlung und
     keine Beratung: AQMath platziert, vermittelt oder f&uuml;hrt niemals Trades aus, besitzt keine
     B&ouml;rsen-API-Schl&uuml;ssel und hat keinen Zugriff auf Ihre Konten. Ob, wann und wie Sie ein
     Ergebnis verwenden, ist ausschlie&szlig;lich Ihre Entscheidung und Ihre Verantwortung. Die
-    Zustellung erfolgt nach bestem Bem&uuml;hen; ein fehlender, versp&auml;teter oder fehlerhafter
-    Hinweis begr&uuml;ndet keinen Anspruch. Die Benachrichtigungen k&ouml;nnen jederzeit deaktiviert
-    werden.</p>
+    Zustellung erfolgt nach bestem Bem&uuml;hen: eine bestimmte Zustellzeit schulden wir nicht, und
+    ein fehlender, versp&auml;teter oder fehlerhafter Hinweis begr&uuml;ndet f&uuml;r sich genommen
+    keinen Anspruch. Unsere Haftung nach Ziffer&nbsp;7 bleibt unber&uuml;hrt. Die Benachrichtigungen
+    k&ouml;nnen jederzeit deaktiviert werden.</p>
+    <p><strong>Erinnerungen.</strong> Erinnerungen sind eine zus&auml;tzliche, separate Funktion und
+    <strong>standardm&auml;&szlig;ig deaktiviert</strong>; sie werden nur versendet, wenn Sie sie
+    selbst in der App aktivieren, und Sie k&ouml;nnen sie jederzeit wieder deaktivieren. Solange sie
+    aktiviert sind und eine berechnete Differenz aus einem t&auml;glichen Lauf nicht in Ihrer
+    Bestandstabelle erfasst wird, versendet die Software am selben Tag bis zu drei weitere, neutral
+    formulierte Erinnerungen (etwa vier, acht und elf Stunden nach dem Berechnungshinweis) mit dem
+    Inhalt, dass die Differenz noch nicht erfasst wurde. Unabh&auml;ngig davon zeigt Ihnen die App
+    eine Statistik dar&uuml;ber, wie z&uuml;gig Sie Differenzen erfassen. Eine Erinnerung wiederholt
+    dieselbe Rechnung; sie ist kein Auftrag, keine Empfehlung und keine Beratung und verpflichtet Sie
+    zu nichts. Das Nichterfassen einer Differenz hat au&szlig;er diesen Mitteilungen keine
+    Folgen.</p>
     <p><strong>Art der Software.</strong> AQMath ist ein rein analytisches Berechnungswerkzeug. Es
     erbringt keine Anlageberatung, keine pers&ouml;nliche Empfehlung und keine Geeignetheitspr&uuml;fung
     und beurteilt nicht, ob ein Ergebnis zu Ihren Kenntnissen, Erfahrungen, Ihrer finanziellen Situation
-    oder Ihren Zielen passt. Die Ergebnisse sind mathematische Ausgaben zu den von Ihnen eingegebenen
-    Werten und keine Empfehlung, Kryptowerte zu kaufen, zu verkaufen oder zu halten. Dies best&auml;tigen
-    Sie bei der Aktivierung Ihres Schl&uuml;ssels.</p>
+    oder Ihren Zielen passt. Die Ergebnisse sind mathematische Ausgaben, die aus den von Ihnen
+    eingegebenen Werten und aus Marktdaten berechnet werden, und keine Empfehlung, Kryptowerte zu
+    kaufen, zu verkaufen oder zu halten. Vor der ersten Nutzung des Black-Zugangs wird Ihnen in der
+    App die Erl&auml;uterung &bdquo;How AQMath Works&ldquo; als Pflichtlekt&uuml;re angezeigt und Sie
+    best&auml;tigen sie mit &bdquo;I have read&ldquo;; wir dokumentieren diese Best&auml;tigung mit
+    Zeitpunkt und der Version des Ihnen angezeigten Textes.</p>
 
     <h3>5. Zugangspr&uuml;fung &amp; Integrit&auml;t der Infrastruktur</h3>
     <p>Zur Sicherung der Rechenleistung und Servicequalit&auml;t ist der Black-Zugang auf eine kleine Zahl
     aktiver Nutzer begrenzt. Unser Backend berechnet f&uuml;r jeden Nutzer echte Kovarianzmatrizen und
-    KKT-Optimierungen; diese Operationen skalieren mit der Nutzerzahl. Wir behalten uns vor, den
-    Zugang nach billigem Ermessen zu verweigern oder zu beenden, um die Integrit&auml;t der
-    Infrastruktur zu schützen. Beenden wir den Zugang w&auml;hrend einer bezahlten Laufzeit ohne
-    Grund, erstatten wir den nicht genutzten Anteil der Jahresgeb&uuml;hr zeitanteilig.</p>
+    KKT-Optimierungen; diese Operationen skalieren mit der Nutzerzahl. Wir k&ouml;nnen eine Anfrage auf
+    Black-Zugang ohne Angabe von Gr&uuml;nden ablehnen; ein Kontrahierungszwang besteht nicht.
+    W&auml;hrend einer laufenden bezahlten Laufzeit k&ouml;nnen wir Ihren Zugang
+    <strong>nur aus wichtigem Grund</strong> beenden &mdash; insbesondere bei missbr&auml;uchlicher
+    Nutzung, Weitergabe oder Weiterverkauf Ihres Aktivierungsschl&uuml;ssels, Umgehungsversuchen
+    technischer Grenzen, rechtswidriger Nutzung oder einer erheblichen Gef&auml;hrdung der
+    Integrit&auml;t oder Verf&uuml;gbarkeit der Infrastruktur. Beenden wir den Zugang aus einem Grund,
+    den Sie nicht zu vertreten haben, erstatten wir den nicht genutzten Anteil der Jahresgeb&uuml;hr
+    zeitanteilig. Ihre gesetzlichen Rechte bleiben unber&uuml;hrt.</p>
 
     <h3>6. Zahlung und Preise</h3>
     <p>App und Backtest sind unentgeltlich; daf&uuml;r f&auml;llt keine Zahlung an. Die j&auml;hrliche Lizenzgeb&uuml;hr f&uuml;r den Black-Zugang betr&auml;gt <strong>999&nbsp;&euro; / Jahr</strong>.
@@ -288,6 +375,13 @@
     finanzielle Privatsph&auml;re wird durch die Architektur und nicht nur durch Richtlinien
     geschützt. Die Preise sind Endpreise; als Kleinunternehmer wird gem&auml;&szlig;
     &sect;&nbsp;19 UStG keine Umsatzsteuer gesondert ausgewiesen.</p>
+    <p><strong>Der Preis h&auml;ngt nicht davon ab, wie Sie die Software nutzen.</strong> Die
+    Geb&uuml;hr ist dieselbe, unabh&auml;ngig davon, was Sie mit den berechneten Werten tun. Wir
+    belohnen und sanktionieren nicht, ob, wie schnell oder wie oft Sie eine berechnete Differenz in
+    Ihrer Bestandstabelle erfassen; daran ist kein Rabatt, keine zus&auml;tzliche Funktion und kein
+    sonstiger Vorteil gekn&uuml;pft. Sollten wir Ihnen f&uuml;r eine neue Jahresbestellung einen
+    Rabatt gew&auml;hren, teilen wir Ihnen das vor Ihrer Bestellung mit; verdeckte Preisbedingungen
+    gibt es nicht.</p>
 
     <h3>7. Risikohinweis, keine Finanzberatung &amp; Haftung</h3>
     <p>Die von AQMath bereitgestellten Werkzeuge, Daten und Berechnungen dienen ausschlie&szlig;lich
@@ -326,18 +420,36 @@
     zeitanteilige Minderung der Jahresgeb&uuml;hr verlangen; gesetzliche Anspr&uuml;che bleiben
     unber&uuml;hrt.</p>
 
-    <h3>8. Verbraucherstreitbeilegung</h3>
+    <h3>8. Aktualisierungen, Vertragsm&auml;&szlig;igkeit und &Auml;nderungen</h3>
+    <p>W&auml;hrend einer bezahlten Black-Laufzeit stellen wir den Dienst vertragsgem&auml;&szlig;
+    bereit und liefern die Aktualisierungen &mdash; einschlie&szlig;lich Sicherheitsaktualisierungen
+    &mdash;, die erforderlich sind, um die Vertragsm&auml;&szlig;igkeit zu erhalten, und informieren
+    Sie dar&uuml;ber (&sect;&nbsp;327f BGB). Bei einem Mangel gelten Ihre gesetzlichen Rechte f&uuml;r
+    digitale Produkte (&sect;&sect;&nbsp;327i ff. BGB); diese Bedingungen schr&auml;nken sie nicht
+    ein.</p>
+    <p><strong>&Auml;nderungen an der Engine.</strong> Wir entwickeln die Engine weiter.
+    Gew&ouml;hnliche Verbesserungen, neue Berechnungen und Korrekturen sind von Ihrer Lizenz umfasst
+    und f&uuml;r Sie kostenlos. Eine &Auml;nderung, die &uuml;ber das zur Erhaltung der
+    Vertragsm&auml;&szlig;igkeit Erforderliche hinausgeht, nehmen wir nur aus triftigem Grund vor
+    &mdash; technische Notwendigkeit, Sicherheit, eine Ver&auml;nderung der genutzten
+    Marktdatenquellen oder die Anpassung an rechtliche Vorgaben &mdash; und ohne zus&auml;tzliche
+    Kosten f&uuml;r Sie. Beeintr&auml;chtigt eine solche &Auml;nderung Ihren Zugang zum Dienst oder
+    dessen Nutzbarkeit mehr als nur geringf&uuml;gig, informieren wir Sie vor Wirksamwerden auf einem
+    dauerhaften Datentr&auml;ger; Sie k&ouml;nnen den Vertrag dann innerhalb von 30 Tagen
+    unentgeltlich beenden (&sect;&nbsp;327r BGB).</p>
+
+    <h3>9. Verbraucherstreitbeilegung</h3>
     <p>Wir sind nicht verpflichtet und nicht bereit, an Streitbeilegungsverfahren vor einer
     Verbraucherschlichtungsstelle im Sinne des Verbraucherstreitbeilegungsgesetzes (VSBG)
     teilzunehmen. Die Europ&auml;ische Plattform zur Online-Streitbeilegung (OS-Plattform) wurde zum
     20.&nbsp;Juli 2025 eingestellt und steht daher nicht mehr zur Verf&uuml;gung.</p>
 
-    <h3>9. Anwendbares Recht</h3>
+    <h3>10. Anwendbares Recht</h3>
     <p>Es gilt das Recht der Bundesrepublik Deutschland unter Ausschluss des UN-Kaufrechts. Sind Sie
     Verbraucher, so wird Ihnen durch diese Rechtswahl nicht der Schutz zwingender
     verbraucherschützender Vorschriften Ihres Aufenthaltsstaates entzogen.</p>
 
-    <h3>10. Salvatorische Klausel</h3>
+    <h3>11. Salvatorische Klausel</h3>
     <p>Sollte eine Bestimmung dieser Nutzungsbedingungen unwirksam sein oder werden, bleibt die
     Wirksamkeit der übrigen Bestimmungen davon unber&uuml;hrt.</p>
 </main>

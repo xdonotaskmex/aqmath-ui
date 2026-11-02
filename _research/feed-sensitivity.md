@@ -1,4 +1,4 @@
-# Three Price Feeds, One Strategy — does the signal depend on who tells you the price?
+# Three Price Feeds, One Strategy — does the calculation depend on who tells you the price?
 
 **Date:** 2026-08-09
 **Engine:** Aegis (v14) Deleverage Shield — production `evaluate_shield` / `backtest_modulator` imported unmodified; daily-close series pulled independently from three public price feeds
@@ -21,7 +21,7 @@ read one feed blindly — but only for the tokens that more than one collector
 actually collects. Section 2 shows where that condition fails.
 
 The question this study asks: *if the shield had trusted a different feed,
-would the user have gotten different signals?*
+would the user have gotten different calculations?*
 
 Three feeds were pulled independently for the eight tokens in the frozen Aegis (v14)
 plan: the aggregator the production collector uses (CoinGecko), and two
@@ -170,7 +170,7 @@ The basket-level return of the production feed deviated from the consensus by
 more than 2 pp on **0 of 363 days** — the contamination is real but, at these
 weights, it stays below the basket surface.
 
-## 6. Where the feed DOES change the signal
+## 6. Where the feed DOES change the calculation
 
 Outcome equivalence is not mechanism equivalence. Two channels show movement:
 
@@ -246,7 +246,7 @@ choice stops being noise and becomes a hidden parameter.
    case — it is listed nowhere else — and deserves its own plausibility
    clamp.
 
-The honest summary: *the signal does not depend on who tells you the price in
+The honest summary: *the calculation does not depend on who tells you the price in
 the median case — the pipeline already takes the median. But one of the three
 feeds occasionally lies, the lie is concentrated in exactly the tokens the
 plan must hold, five of the eight tokens get no second opinion in production,

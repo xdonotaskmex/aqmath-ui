@@ -12,7 +12,7 @@
   trades executed days late, days skipped entirely.
 - Messing up your *deposits* barely matters: protection weakens by at
   most 0.5 percentage points.
-- Executing the engine's *signals* late matters a lot. On the real
+- Recording the engine's *calculated differences* late matters a lot. On the real
   production setup, **every** delay scenario breaks the drawdown
   protection.
 - **The simulated finding:** in this simulation the drawdown protection held
@@ -142,7 +142,7 @@ weakness. We tested everything around the engine, but not the thing the engine
 actually reacts to.
 
 **The version that can fail: delay the deleverage, not the deposit.** If a
-shield signal fires and you act 3 days late — or skip the rebalance entirely
+shield computes a difference and you act 3 days late — or skip the rebalance entirely
 because you are asleep — that is the sloppiness that costs money. And it costs
 most exactly when vol is spiking, so the damage clusters in the worst weeks
 rather than spreading out evenly.
@@ -155,24 +155,25 @@ run the two separately or the seed averaging will hide the damage.
 **Test 2 was run.** Design, numbers, and this series' first real failure:
 §6.
 
-## 6. Test 2 — Signal execution lag: results
+## 6. Test 2 — Recording lag: results
 
 The follow-up proposed in §5 was implemented and run: same basket, same
 window, same production config, 30 seeds per scenario — but this time the
-error hits the thing the engine actually reacts to: the shield's signals.
+error hits the thing the engine actually reacts to: the shield's calculated
+differences.
 DCA is perfect in every scenario, so execution error is the only disturbance.
 
 | Scenario | Execution error | Model |
 |----------|-----------------|-------|
-| **A — Baseline** | none | every signal executed same day (production) |
-| **N — Random delay** | every signal 0–3 days late | noise — expected to average out |
-| **L — Constant lag** | every signal exactly 3 days late | directional — does NOT average out |
-| **M — Missed rebalances** | asleep ~29% of days, in ~4-day episodes | signals ignored while asleep |
-| **W — Worst weeks only** | 3-day lag on signals fired during vol spikes | where the money actually is |
+| **A — Baseline** | none | every difference recorded same day (production) |
+| **N — Random delay** | every difference 0–3 days late | noise — expected to average out |
+| **L — Constant lag** | every difference exactly 3 days late | directional — does NOT average out |
+| **M — Missed rebalances** | asleep ~29% of days, in ~4-day episodes | differences ignored while asleep |
+| **W — Worst weeks only** | 3-day lag on differences computed during vol spikes | where the money actually is |
 
 Mechanics, for reproducibility: the ideal target path is computed once — it
 depends only on returns, not on what the operator does — and each scenario
-builds its execution schedule from it. A delayed signal overtaken by a newer
+builds its execution schedule from it. A delayed difference overtaken by a newer
 one is dropped: when the operator finally acts, the newest calculated
 difference is the one that applies. A vol spike is a day whose trailing 7-day realized vol sits in
 the top decile of the window (10.0% of days). Awake means always acting,
@@ -189,8 +190,8 @@ asleep means never acting.
 | W — Worst weeks only | 35.6% | +1.4 | 0.468 | −0.025 | 0.626 | $29,734 | +$387 |
 
 Pass criteria are the same as Test 1: MaxDD degradation under 3 pp AND
-Sharpe loss under 0.10. Buy & Hold is omitted because it executes no
-signals — it is literally identical in all five runs (MaxDD 81.5%).
+Sharpe loss under 0.10. Buy & Hold is omitted because it reacts to no
+differences — it is literally identical in all five runs (MaxDD 81.5%).
 
 ![Max drawdown under execution error, median with p5–p95 whiskers](/research/assets/lag_stress_dd.svg)
 
@@ -244,9 +245,9 @@ where the engine needs you most.
 
 1. **The shield tolerates sloppiness but not routine.** Random delays,
    missed days, even sleeping through ~29% of the window — all pass. Being
-   systematically 3 days late on every signal is the version that fails.
+   systematically 3 days late on every difference is the version that fails.
 2. **Being asleep is cheaper than being late.** Missing ~29% of days costs
-   ~$675, because the signal is continuous: when the operator wakes up the
+   ~$675, because the calculation is continuous: when the operator wakes up the
    latest calculated difference applies and the gap heals. A constant lag has no
    healing mechanism — every single day starts 3 days stale.
 3. **What the simulation shows:** a missed day costs far less than a
@@ -413,7 +414,7 @@ Test 2 parameters: lag 3 days (L, W) and uniform 0–3 days (N); sleep model
 P(fall asleep) = 0.10 per awake day, P(wake) = 0.25 per asleep day (≈29% of
 days asleep in ~4-day episodes); vol spike = trailing 7-day realized vol,
 top decile of the window. Execution errors only change *when* the
-operator acts; the engine's signals themselves are never altered.
+operator acts; the engine's calculated differences themselves are never altered.
 
 Test 2b parameters: production KKT weights recomputed every 180 days
 from the trailing 180 days of prices, weights drift with prices between
@@ -438,9 +439,9 @@ those 30 runs.
 ---
 
 *This is the first of five planned stress tests for the Aegis (v14) Deleverage Shield.
-Per the critique in §5, Test 2 moved from deposit jitter to signal execution
+Per the critique in §5, Test 2 moved from deposit jitter to recording
 lag — the first test in this series that can actually fail — and it delivered
-the first failure: a constant 3-day signal lag breaks the Sharpe gate. Test 2b
+the first failure: a constant 3-day recording lag breaks the Sharpe gate. Test 2b
 then re-ran the same errors on the production KKT 60/40 stack, where every
 error scenario breaks the MaxDD gate. Test 2c ran the reader-proposed
 frozen-weights control and lag sweep: freezing the weights still fails 3 of 4

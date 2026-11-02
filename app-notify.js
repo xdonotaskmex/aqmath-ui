@@ -1443,8 +1443,8 @@ async function loadDisciplineMeter() {
         }
         sel.value = String(tgt);
     }
-    // Meter label shows the USER's goal only — the hidden renewal-discount
-    // gate is never surfaced before it is earned (surprise reward).
+    // Meter label shows the USER's goal only. The rate is informational: it
+    // never affects the price of the licence.
     if (thresh) thresh.textContent = 'your goal: ' + Math.round(tgt * 100) + '%';
     // Opt-in toggle mirrors the server setting (silent by default).
     if (opt) opt.checked = !!(data && data.escalation_opt_in);
@@ -1457,8 +1457,6 @@ async function loadDisciplineMeter() {
         if (pat) pat.classList.add('hidden');
         if (badge) badge.textContent = '\u2014';
         if (fill) { fill.style.width = '0%'; }
-        const disc = document.getElementById('discDiscount');
-        if (disc) disc.classList.add('hidden');
         return;
     }
     if (empty) empty.classList.add('hidden');
@@ -1520,10 +1518,6 @@ async function loadDisciplineMeter() {
             reac.classList.add('hidden');
         }
     }
-    // Discount badge — appears ONLY once earned; the gate number is never
-    // advertised in advance (surprise reward).
-    var disc = document.getElementById('discDiscount');
-    if (disc) disc.classList.toggle('hidden', !data.discount_eligible);
 }
 
 // Discipline Module: save the user's OWN same-day confirmation goal.

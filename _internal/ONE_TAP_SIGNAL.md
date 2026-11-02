@@ -129,7 +129,6 @@ Double-width terminal card showing the user's discipline rate:
 │ last 10 signals: 6 confirmed (60%)          │
 │ ⚠ Pattern forming: 4 of last 10 SHOCK ...  │
 │ ☐ active reminders (off by default)         │
-│ 🎁 Reward unlocked (only once earned)       │
 └─────────────────────────────────────────────┘
 ```
 
@@ -150,9 +149,13 @@ Design principles ("escalate on the pattern, not on the event"):
 - **Opt-in active reminders** — `escalation_opt_in` (OFF by default): the
   escalation ladder only pushes to users who turned it on themselves after
   seeing their rate, so it never punishes opening the app.
-- **Surprise reward** — any reward tied to the rate is evaluated server-side
-  and NEVER surfaced before it is earned. The gate itself is an unpublished
-  business rule and is deliberately not documented here.
+- **No commercial coupling** — the rate is information for the user only. It
+  must never gate a price, a discount or any other advantage: a licence price
+  that depended on whether the user acted on a computed difference would turn
+  an information tool into an incentive to transact, and the condition would
+  also have to be disclosed before the contract. Renewal discounts, if granted
+  at all, are a manual commercial decision communicated before the renewal
+  order (`POST /admin/renewal-discount`).
 
 ### 2.5 Portfolio History — Ideal vs Actual Equity
 

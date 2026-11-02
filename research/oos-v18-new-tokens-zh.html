@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/oos-v18-new-tokens">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=5b3c1ed61b">
+<link rel="stylesheet" href="/styles.min.css?v=0169c992b8">
 </head>
 <body>
 
@@ -403,7 +403,7 @@
 <h2>10. 可复现性</h2>
 <p>研究 harness（git-ignored，未部署）：<code>scratch/oos_v18_2026.py</code>。它原封不动地导入<strong>生产</strong>的 <code>backtest.simulate</code>、<code>backtest.simulate_v18</code>、<code>calc_metrics</code> 与 <code>default_config</code>，因此两列都精确 反映已部署的引擎，并且它把 v14 腿作为对照已发布 /results 数字的自检重跑一遍。历史 CSV 本地取材， 不予提交。</p>
 <hr>
-<p><strong>结论：</strong> 现役 Proteus（v18）引擎提供了与其前身相同的样本外回撤保护 —— 在全部 182 个未见代币 组合中削减最深跌幅 —— 并在中位数深度与风险调整后收益上有适度改进，同时如实披露了它在最长、崩盘最 丰富历史上的软肋。<strong>建议：v18 保持现役；Aegis（v14）仍作为预热回退，服务于历史太短、不足以校准 自适应阈值的组合。</strong></p>
+<p><strong>结论：</strong> 现役 Proteus（v18）引擎提供了与其前身相同的样本外回撤保护 —— 在全部 182 个未见代币 组合中削减最深跌幅 —— 并在中位数深度与风险调整后收益上有适度改进，同时如实披露了它在最长、崩盘最 丰富历史上的软肋。<strong>工程结论：v18 保持现役；Aegis（v14）仍作为预热回退，服务于历史太短、不足以校准 自适应阈值的组合。</strong></p>
 </main>
 </div>
 

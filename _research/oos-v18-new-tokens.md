@@ -200,5 +200,5 @@ committed.
 drawdown protection as its predecessor — cutting the worst drop in all 182
 unseen-token baskets — with a modest improvement in median depth and
 risk-adjusted return, and an honestly disclosed soft spot on the longest,
-crash-rich histories. **Recommendation: v18 stays live; Aegis (v14) remains the
+crash-rich histories. **Engineering verdict: v18 stays live; Aegis (v14) remains the
 warm-up fallback for portfolios too young to calibrate an adaptive threshold.**

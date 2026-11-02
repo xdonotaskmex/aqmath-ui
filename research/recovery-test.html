@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/recovery-test">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=5b3c1ed61b">
+<link rel="stylesheet" href="/styles.min.css?v=0169c992b8">
 </head>
 <body>
 
@@ -57,7 +57,7 @@
 <p><em>Vocabulary used below:</em> <strong>MaxDD (maximum drawdown)</strong> — how far the portfolio falls from its highest point. <strong>Recovery participation</strong> — what fraction of the B&amp;H equity gain the Shield captured in the same period. <strong>Defensive episode</strong> — a contiguous period where the Shield&#x27;s held exposure stays below 40% (the redeploy threshold).</p>
 <h2>1. Objective</h2>
 <p>Tests 1 and 2 established what the Shield does <em>during</em> stress: it cuts drawdown at a measurable cost to terminal wealth. Test 4 asks the complementary question — what happens <em>after</em> the stress passes?</p>
-<p>This is the biggest psychological fear about any defensive system: that it kicks you out and you miss the recovery. The fear is rational. A system that protects you from a 60% crash but then sits at 20% exposure while the market triples is not a product anyone would use.</p>
+<p>This is the biggest psychological fear about any defensive system: that it kicks you out and you miss the recovery. The fear is rational. A system that cuts a 60% crash but then sits at 20% exposure while the market triples is not a product anyone would use.</p>
 <p>The test is straightforward: find every defensive episode in 6.2 years of history, measure what happens after each one, and score against four pass thresholds.</p>
 <h2>2. Design</h2>
 <p>Same basket as Crown Test 2 (ADA, BNB, ETH, XRP, SOL) but with the <strong>production KKT risk-parity stack</strong> instead of equal weights. Weights are computed via ERC on the trailing 180-day log-return covariance, capped at 40%/10% per token, with a structural 60% risky / 40% USDC split. Weights are frozen and re-optimised every 180 days, drifting with prices between re-opts — exactly what runs on the server.</p>

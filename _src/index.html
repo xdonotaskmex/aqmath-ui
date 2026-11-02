@@ -41,7 +41,7 @@
     <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
     <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/ibm-plex-serif-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="/styles.min.css?v=5b3c1ed61b">
+    <link rel="stylesheet" href="/styles.min.css?v=0169c992b8">
     <!-- Driver.js — product tour spotlight (vendored, same cache-stamp as i18next) -->
     <link rel="stylesheet" href="/vendor/driver.css">
 </head>
@@ -130,7 +130,7 @@
             <div class="v2-hero-copy">
                 <div class="v2-eyebrow" data-i18n="lp2.eyebrow">Portfolio mathematics software &middot; Non-custodial</div>
                 <h1 class="v2-h1" data-i18n="lp2.heroTitle">Portfolio mathematics you can audit line by line.</h1>
-                <p class="v2-lead" data-i18n="hero.subtitle">No emotions. No human error. Structural limits on every DCA dollar you deploy.</p>
+                <p class="v2-lead" data-i18n="hero.subtitle">Arithmetic, not opinion. Structural limits computed for every DCA dollar you enter.</p>
                 <p class="v2-sub" data-i18n-html="lp2.heroDesc">AQMath calculates Risk Parity, Karush&ndash;Kuhn&ndash;Tucker optimization and volatility-weighted dollar-cost averaging for the assets and parameters you enter &mdash; on its own servers. No e-mail accounts, no wallet connection.</p>
                 <div class="v2-cta-row">
                     <a class="v2-btn v2-btn-primary" href="#access" data-i18n="lp2.ctaAccess">Request Access</a>
@@ -324,6 +324,7 @@
                 <div class="v2-plan v2-plan-dark">
                     <div class="v2-plan-k">Black</div>
                     <div class="v2-plan-price">&euro;999 <span data-i18n="lp2.perYear">/ year</span></div>
+                    <div class="v2-plan-note" data-i18n="plans.priceNote">Final price &mdash; as a small business under &sect;&nbsp;19 UStG we add no VAT. One payment for 12 months; the licence does not renew automatically.</div>
                     <ul class="v2-plan-list">
                         <li data-i18n-html="plans.blackF2">Deleverage Modulator: continuous drawdown-based exposure calculation</li>
                         <li data-i18n-html="plans.blackF3">Dynamic volatility-based allocation caps</li>
@@ -344,7 +345,7 @@
                 <div><h3>Why USDC &amp; EURC only?</h3><p>Credit cards and bank transfers require your name, address, and card number. We don't want that data — and we shouldn't have it. Stablecoins let us skip all of it. You pay from a wallet, we see a transaction. Nothing personal is collected or stored.</p></div>
                 <div><h3>Why limited slots?</h3><p>Every user who runs the engine triggers real matrix computations on real data. These operations scale with user count. We keep the base small so every member gets fast compute, reliable uptime, and direct support — not a support ticket queue.</p></div>
                 <div><h3>How do refunds work?</h3><p>EU consumers have a statutory 14-day right of withdrawal and we do not pretend otherwise. By default your key is issued <em>after</em> those 14 days, so the period simply passes before anything is delivered. Want access sooner? Ask, and we start straight away &mdash; you keep the right for the remaining days and we settle only the part already used, pro rata. After the 14 days the annual term is firm: no refunds, and no pro-rata on later cancellation.</p></div>
-                <div><h3>Why manual review?</h3><p>We communicate directly with every member. No automated onboarding, no helpdesk. If something doesn't work for your setup, you reach a person who built the engine — not a chatbot. The review is to make sure AQMath is the right tool for you.</p></div>
+                <div><h3>Why manual review?</h3><p>We communicate directly with every member. No automated onboarding, no helpdesk. If something doesn't work for your setup, you reach a person who built the engine — not a chatbot. The review keeps the user base small and lets us answer your questions before you order; we do not assess whether any investment suits you.</p></div>
             </div>
         </div>
     </section>
@@ -424,7 +425,7 @@
 <div class="lp-pro-modal hidden" id="proModal">
     <div class="lp-pro-box">
         <h3>&#128274; AQMath Black &mdash; Apply for Access</h3>
-        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card and no bank transfer, so we never collect card or bank details.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
+        <p>AQMath Black is <strong>€999 / year</strong>. Access is limited to a small number of users to keep compute fast and support direct.<br><br>We accept <strong>USDC</strong> and <strong>EURC</strong> only — no credit card and no bank transfer, so we never collect card or bank details.<br><br>Send a message and we'll review your request within 48h. No call required.<br><br>The price is a final price &mdash; as a small business under &sect; 19 UStG we add no VAT. The licence runs for 12 months and does not renew automatically.<br><br><em>EU consumers keep the statutory 14-day right of withdrawal. By default your key is issued after those 14 days; ask us and we activate immediately, settling only the part already used. Details in the Terms.</em></p>
         <div class="lp-pro-beta">
             <div class="lp-pro-beta-label">Send a message to request access:</div>
             <div class="lp-pro-beta-links">
@@ -839,8 +840,8 @@
             <div class="tc-body">
                 <!-- Your goal: the user's OWN same-day confirmation target.
                      Self-set friction feels different to an app deciding you've
-                     been bad. The hidden renewal-discount gate is deliberately
-                     never shown here — it appears only once earned. -->
+                     been bad. The rate is information for the user only: it must
+                     never affect the price or unlock any commercial advantage. -->
                 <div class="disc-target-row">
                     <span class="disc-target-l">your same-day goal</span>
                     <select class="disc-target-sel" id="selDiscTarget" data-change="saveDisciplineTarget" aria-label="your same-day discipline goal"></select>
@@ -868,7 +869,6 @@
                 <label class="disc-optin"><input type="checkbox" id="chkEscOptIn" data-change="toggleEscOptIn">
                     <span>active reminders &mdash; notify me when a calculated difference is still unrecorded (off by default)</span></label>
                 <div class="disc-hint">Score: 100% within 1h &rarr; decays to 0% at the 12h deadline</div>
-                <div class="disc-discount hidden" id="discDiscount">Reward unlocked &mdash; your renewal discount is earned</div>
             </div>
         </div>
 
@@ -1323,7 +1323,7 @@
 <summary class="tc-bar"><span class="tc-dot r"></span><span class="tc-dot y"></span><span class="tc-dot g"></span><span class="tc-title">Changelog</span><span class="rv-cl-hint" data-i18n="rv.changelogMirror">engine change log &middot; click to expand</span></summary>
 <div class="tc-body">
 <div class="bt-explain bt-explain-sm" data-i18n-html="bt.changelogIntro"><strong>Change log.</strong> A dated record of engine updates, so any result you see can be traced back to the exact version that produced it.</div>
-<ul class="bt-changelog" data-i18n-html="bt.changelog"><li><span class='bt-cl-date'>2026-10-12</span><span class='bt-cl-text'><strong>The backtest tab runs the production engine only.</strong> Proteus (v18) is now the single engine on /backtest, replayed through the same dispatcher a live portfolio uses, and scored against the Buy &amp; Hold reference. The Aegis (v14) comparison leg and the v14 walk-forward parameter grid are removed from the tab. Aegis (v14) still runs in production as the warm-up fallback for portfolios with too little history to calibrate an adaptive threshold. <strong>No engine maths changed</strong> &mdash; every Proteus (v18) constant is untouched.</span></li><li><span class='bt-cl-date'>2026-09-08</span><span class='bt-cl-text'><strong>Proteus (v18) is the production engine.</strong> The volatility-adaptive shield now runs on real portfolios; Aegis (v14) remains only as a warm-up fallback for portfolios with too little history to calibrate an adaptive threshold. This page's copy had kept describing Proteus (v18) as a test candidate and has been corrected. <strong>Results published before this entry were produced by Aegis (v14)</strong> and are labelled as such wherever they appear.</span></li><li><span class='bt-cl-date'>2026-09-07</span><span class='bt-cl-text'><strong>Engines get product names: Aegis (v14) and Proteus (v18).</strong> Naming only &mdash; every formula, preset, frozen weight and result is unchanged, and the version numbers stay in telemetry so any figure still traces to the exact engine that produced it.</span></li><li><span class="bt-cl-date">2026-09-03</span><span class="bt-cl-text"><strong>Backtest now runs Aegis (v14) + Proteus (v18); v15 and v16 retired.</strong> The backtest tab now compares <strong>Aegis (v14)</strong> (production fallback) and <strong>Proteus (v18)</strong> (vol-scaled adaptive test candidate). v15 (CORR regime) was retired because its correlation-rank signal needed more history than the production 180-day window provided (MaxDD 37.6% on MAJORS vs Aegis (v14)'s 25.7%). v16 (trough-tranche) was retired because Proteus (v18)'s vol-scaled approach outperformed it on both profiles. <strong>Aegis (v14) is unchanged.</strong></span></li><li><span class="bt-cl-date">2026-08-12</span><span class="bt-cl-text"><strong>Backtest tab now runs all three engines on the production macro loop.</strong> Every backtest and WF-grid run now executes Aegis (v14), v15 and v16 side by side on identical basket, capital and DCA terms, and the basket follows the same <strong>180-day macro loop</strong> as production (a KKT risk-parity re-optimisation every 180 days). <strong>Aegis (v14) is unchanged.</strong></span></li><li><span class="bt-cl-date">2026-08-12</span><span class="bt-cl-text"><strong>v16 Beta experiment started (parallel paper trading).</strong> A third paper account running the new trough-tranche recovery shield (v16) is now logging next to the Aegis (v14) and v15 logs so all three can be compared on identical terms. <strong>Nothing in Aegis (v14) or v15 was touched</strong> &mdash; their engines and their logs continue exactly as before.</span></li><li><span class="bt-cl-date">2026-08-05</span><span class="bt-cl-text"><strong>v15 Beta experiment started (parallel paper trading).</strong> A second paper account running the new correlation-regime protection (v15) is now logging next to the Aegis (v14) log so the two can be compared on identical terms. <strong>Nothing in Aegis (v14) was touched</strong> &mdash; its engine and its log continue exactly as before.</span></li><li><span class="bt-cl-date">2026-07-21</span><span class="bt-cl-text"><strong>Engine settings frozen (Aegis v14.0).</strong> The modulator's settings were locked on this date. Every result from this day onward comes from this exact, unchanged engine.</span></li><li><span class="bt-cl-date">2026-07-21</span><span class="bt-cl-text"><strong>Recurring contribution can be zero.</strong> You can now set the <strong>DCA Amount</strong> to <strong>0</strong> to test a one-time, lump-sum start. Earlier results are unaffected.</span></li></ul>
+<ul class="bt-changelog" data-i18n-html="bt.changelog"><li><span class='bt-cl-date'>2026-10-12</span><span class='bt-cl-text'><strong>The backtest tab runs the production engine only.</strong> Proteus (v18) is now the single engine on /backtest, replayed through the same dispatcher a live portfolio uses, and scored against the Buy &amp; Hold reference. The Aegis (v14) comparison leg and the v14 walk-forward parameter grid are removed from the tab. Aegis (v14) still runs in production as the warm-up fallback for portfolios with too little history to calibrate an adaptive threshold. <strong>No engine maths changed</strong> &mdash; every Proteus (v18) constant is untouched.</span></li><li><span class='bt-cl-date'>2026-09-08</span><span class='bt-cl-text'><strong>Proteus (v18) is the production engine.</strong> The volatility-adaptive shield now runs on real portfolios; Aegis (v14) remains only as a warm-up fallback for portfolios with too little history to calibrate an adaptive threshold. This page's copy had kept describing Proteus (v18) as a test candidate and has been corrected. <strong>Results published before this entry were produced by Aegis (v14)</strong> and are labelled as such wherever they appear.</span></li><li><span class='bt-cl-date'>2026-09-07</span><span class='bt-cl-text'><strong>Engines get product names: Aegis (v14) and Proteus (v18).</strong> Naming only &mdash; every formula, preset, frozen weight and result is unchanged, and the version numbers stay in telemetry so any figure still traces to the exact engine that produced it.</span></li><li><span class="bt-cl-date">2026-09-03</span><span class="bt-cl-text"><strong>Backtest now runs Aegis (v14) + Proteus (v18); v15 and v16 retired.</strong> The backtest tab now compares <strong>Aegis (v14)</strong> (production fallback) and <strong>Proteus (v18)</strong> (vol-scaled adaptive test candidate). v15 (CORR regime) was retired because its correlation-rank input needed more history than the production 180-day window provided (MaxDD 37.6% on MAJORS vs Aegis (v14)'s 25.7%). v16 (trough-tranche) was retired because Proteus (v18)'s vol-scaled approach outperformed it on both profiles. <strong>Aegis (v14) is unchanged.</strong></span></li><li><span class="bt-cl-date">2026-08-12</span><span class="bt-cl-text"><strong>Backtest tab now runs all three engines on the production macro loop.</strong> Every backtest and WF-grid run now executes Aegis (v14), v15 and v16 side by side on identical basket, capital and DCA terms, and the basket follows the same <strong>180-day macro loop</strong> as production (a KKT risk-parity re-optimisation every 180 days). <strong>Aegis (v14) is unchanged.</strong></span></li><li><span class="bt-cl-date">2026-08-12</span><span class="bt-cl-text"><strong>v16 Beta experiment started (parallel paper trading).</strong> A third paper account running the new trough-tranche recovery shield (v16) is now logging next to the Aegis (v14) and v15 logs so all three can be compared on identical terms. <strong>Nothing in Aegis (v14) or v15 was touched</strong> &mdash; their engines and their logs continue exactly as before.</span></li><li><span class="bt-cl-date">2026-08-05</span><span class="bt-cl-text"><strong>v15 Beta experiment started (parallel paper trading).</strong> A second paper account running the new correlation-regime protection (v15) is now logging next to the Aegis (v14) log so the two can be compared on identical terms. <strong>Nothing in Aegis (v14) was touched</strong> &mdash; its engine and its log continue exactly as before.</span></li><li><span class="bt-cl-date">2026-07-21</span><span class="bt-cl-text"><strong>Engine settings frozen (Aegis v14.0).</strong> The modulator's settings were locked on this date. Every result from this day onward comes from this exact, unchanged engine.</span></li><li><span class="bt-cl-date">2026-07-21</span><span class="bt-cl-text"><strong>Recurring contribution can be zero.</strong> You can now set the <strong>DCA Amount</strong> to <strong>0</strong> to test a one-time, lump-sum start. Earlier results are unaffected.</span></li></ul>
 </div>
 </details>
 </div>
@@ -1458,7 +1458,7 @@
 <div class="rv-chart"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 860 380" font-family="Segoe UI,Arial,sans-serif" style="max-width:860px">
 <rect width="860" height="380" fill="#070d1a"/>
 <text x="20" y="30" font-size="18" font-weight="700" fill="#e2e8f0">Growth of $1,000 + $100/mo DCA - ATH/SUI/XMR/SOL/DOGE (log scale)</text>
-<text x="20" y="50" font-size="12" fill="#8a9bb5">Same schedule for both. The Shield trades a little upside for far less pain.</text>
+<text x="20" y="50" font-size="12" fill="#8a9bb5">Same schedule for both. The Shield gives up some upside for far shallower drawdowns.</text>
 <line x1="74" y1="326.0" x2="830" y2="326.0" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
 <text x="68" y="329.0" font-size="10" fill="#8a9bb5" text-anchor="end">$803</text>
 <line x1="74" y1="261.0" x2="830" y2="261.0" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
@@ -2207,7 +2207,7 @@
 
             <h4 data-i18n="doc.s8.shieldHow">How It Works</h4>
             <ul>
-                <li data-i18n-html="doc.s8.shield1"><strong>Two-signal regime read</strong> &mdash; the engine tracks only rising <strong>drawdown</strong> and rising <strong>downside volatility</strong> over a short rolling window. No moving averages, no timers, no correlation gate.</li>
+                <li data-i18n-html="doc.s8.shield1"><strong>Two-input regime read</strong> &mdash; the engine tracks only rising <strong>drawdown</strong> and rising <strong>downside volatility</strong> over a short rolling window. No moving averages, no timers, no correlation gate.</li>
                 <li data-i18n-html="doc.s8.shield2"><strong>Continuous scaling</strong> &mdash; target exposure is a smooth 0&ndash;100% dial that turns down as drawdown and downside volatility rise &mdash; not a set of discrete steps. There is <strong>no hard floor</strong>: in a deep, volatile crash exposure can approach zero.</li>
                 <li data-i18n-html="doc.s8.shield3"><strong>Capital preservation in simulation</strong> &mdash; while the Shield status is active the simulated portfolio holds the majority in cash-equivalent (USDC), absorbing only a fraction of the simulated decline. Exposure scales continuously with the regime, holding cash when drawdown and downside volatility are elevated.</li>
                 <li data-i18n-html="doc.s8.shield4"><strong>Steady ramp, fewer changes</strong> &mdash; computed exposure moves smoothly toward its target every bar, whether falling or recovering. To avoid over-trading in the simulation, Aegis (v14) only rebalances when the target drifts meaningfully from the simulated position &mdash; this deadband (not a slower re-entry) is what prevents whipsaw and keeps simulated trading costs low. DCA amounts allocated to USDC return to tokens in the calculation once exposure recovers.</li>
@@ -2445,9 +2445,9 @@
 
             <h4 data-i18n="doc.s8.testingHow">Validation Process</h4>
             <ul>
-                <li data-i18n-html="doc.s8.testing1"><strong>Signal construction</strong> &mdash; each bar we compute rolling drawdown from the running equity peak and downside volatility over a short rolling window, then map each to a 0&ndash;1 signal.</li>
-                <li data-i18n-html="doc.s8.testing2"><strong>Exposure rule</strong> &mdash; the combined risk signal drives a continuous exposure dial with no hard floor and no correlation gate.</li>
-                <li data-i18n-html="doc.s8.testing3"><strong>Hysteresis + threshold rebalancing</strong> &mdash; exposure moves smoothly toward target every bar in either direction, and Aegis (v14) only trades when the target drifts meaningfully from the held position &mdash; fewer rebalances with an identical signal. Parked USDC redeploys once exposure recovers.</li>
+                <li data-i18n-html="doc.s8.testing1"><strong>Risk-score construction</strong> &mdash; each bar we compute rolling drawdown from the running equity peak and downside volatility over a short rolling window, then map each to a 0&ndash;1 risk score.</li>
+                <li data-i18n-html="doc.s8.testing2"><strong>Exposure rule</strong> &mdash; the combined risk score drives a continuous exposure dial with no hard floor and no correlation gate.</li>
+                <li data-i18n-html="doc.s8.testing3"><strong>Hysteresis + threshold rebalancing</strong> &mdash; exposure moves smoothly toward target every bar in either direction, and Aegis (v14) only trades when the target drifts meaningfully from the held position &mdash; fewer rebalances with an identical risk score. Parked USDC redeploys once exposure recovers.</li>
                 <li data-i18n-html="doc.s8.testing4"><strong>Engine/backtester parity</strong> &mdash; the live engine and the backtester run the same shield function on the same drawdown definition, so the public comparison is measured on one basis rather than two.</li>
             </ul>
 
@@ -2615,10 +2615,10 @@
             </div>
 </footer>
 
-<script defer src="/app-widgets.js?v=5b3c1ed61b"></script>
-<script defer src="/app-backtest.js?v=5b3c1ed61b"></script>
-<script defer src="/app.js?v=5b3c1ed61b"></script>
-<script defer src="/app-notify.js?v=5b3c1ed61b"></script>
+<script defer src="/app-widgets.js?v=0169c992b8"></script>
+<script defer src="/app-backtest.js?v=0169c992b8"></script>
+<script defer src="/app.js?v=0169c992b8"></script>
+<script defer src="/app-notify.js?v=0169c992b8"></script>
 
 <!-- 100% privacy-first analytics -->
 <!-- SRI note: simpleanalytics' latest.js is a rolling URL (the file changes on every
@@ -2632,11 +2632,11 @@
      sat on the critical path and cost ~900 ms LCP on slow networks. Stamped like
      every other first-party asset, so replacing the vendored copy is part of the
      atomic build id instead of living forever in someone's cache. -->
-<script defer src="/vendor/i18next.min.js?v=5b3c1ed61b"></script>
+<script defer src="/vendor/i18next.min.js?v=0169c992b8"></script>
 <!-- Driver.js — product tour library (vendored, MIT, ~5kb gzipped) -->
 <script defer src="/vendor/driver.min.js"></script>
-<script defer src="/app-tour.js?v=5b3c1ed61b"></script>
-<script defer src="/app-boot.js?v=5b3c1ed61b"></script>
+<script defer src="/app-tour.js?v=0169c992b8"></script>
+<script defer src="/app-boot.js?v=0169c992b8"></script>
 
 </body>
 </html>

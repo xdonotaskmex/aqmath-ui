@@ -5,7 +5,7 @@
   },
   "hero": {
     "title": "投资组合数学计算软件",
-    "subtitle": "无情绪干扰。无人为错误。每一笔 DCA 投入都有结构性限制。",
+    "subtitle": "是算术，不是意见。为你输入的每一笔 DCA 金额计算结构性上限。",
     "description": "AQMath 在安全后端引擎上运行机构级投资组合数学 — 风险平价、KKT 优化和波动率加权 DCA。无账户，无猜测。",
     "cta": "--申请 Black 访问",
     "proBeta": "申请 Black 访问权限",
@@ -87,7 +87,8 @@
     "blackF8": "共享 Black 聊天——伪匿名，20 条消息滚动缓冲，随时可删除",
     "blackF9": "自激活起 365 天期限 — 仅限年度访问",
     "blackF10": "欧盟 14 天法定撤回权 — 之后年度期限固定 <a href=\"/widerruf\" style=\"color:var(--purple);font-size:0.85em\">[详情]</a>",
-    "blackF11": "发送消息 — 我们在 48 小时内审核并回复"
+    "blackF11": "发送消息 — 我们在 48 小时内审核并回复",
+    "priceNote": "最终价格 — 作为小规模经营者，依据德国增值税法第 19 条不加收增值税。一次付款、为期 12 个月；许可不会自动续期。"
   },
   "what": {
     "title": "AQMath 是什么、如何运作、为什么",
@@ -210,7 +211,7 @@
     "safeHavenDesc": "开启 — 吸收硬上限盈余和未分配 DCA",
     "deleverage": "去杠杆",
     "deleverageDesc": "关闭 — KKT 权重直接通过",
-    "deleverageOn": "开启 — 在下行信号期间保护 KKT 权重",
+    "deleverageOn": "开启 — 在下行特征期间保护 KKT 权重",
     "deleverageOff": "关闭 — KKT 权重直接通过",
     "deployToDca": "部署到 DCA",
     "faqTitle": "--常见问题",
@@ -434,7 +435,7 @@
       "shieldCallout": "⚠ 敞口计算 vs 暂停",
       "shieldCalloutP": "当市场状态恶化时，调制器<strong>同时计算两项内容</strong>：（1）更低的目标敞口，所有代币持仓的权重按比例下调；（2）护盾状态激活期间，将 DCA 金额分配给 USDC。一个只暂停 DCA 拆分而在 -80% 回撤中保持敞口不变的计算<strong>不是护盾计算</strong> &mdash; 它只是一次暂停。AQMath 只显示这些数值，不执行任何交易。",
       "shieldHow": "运作方式",
-      "shield1": "<strong>双信号环境读取</strong>——引擎仅追踪短期滚动窗口内上升的<strong>回撤</strong>和上升的<strong>下行波动率</strong>。无移动平均线、无计时器、无相关性门控。",
+      "shield1": "<strong>双输入环境读取</strong>——引擎仅追踪短期滚动窗口内上升的<strong>回撤</strong>和上升的<strong>下行波动率</strong>。无移动平均线、无计时器、无相关性门控。",
       "shield2": "<strong>连续缩放</strong>——目标敞口是一个平滑的 0&ndash;100% 旋钮，随着回撤和下行波动率上升而调低&mdash;而不是一组离散层级。公式<strong>无硬性底仓</strong>：在深度、高波动崩盘中敞口可以接近零。5% 的结构性缓冲（风险预算上限 95%）确保始终保留最低稳定币配置。",
       "shield3": "<strong>模拟中的资本保全</strong> &mdash; 护盾状态激活时，模拟投资组合将大部分持有现金等价物（USDC），只承受模拟跌幅的一小部分。敞口随市场状态连续变化，在回撤和下行波动率偏高时持有现金。",
       "shield4": "<strong>稳健爬坡，减少变动</strong>——无论是下降还是恢复，计算出的敞口每根 K 线都平滑地向目标移动。为避免模拟中的过度交易，Aegis（v14）仅在目标敞口与模拟持仓明显偏离时才再平衡&mdash;正是这个死区（而非更慢的重新入场）防止了反复震荡，并使模拟交易成本保持在低位。分配给 USDC 的 DCA 金额会在敞口恢复后在计算中回到代币。",
@@ -449,9 +450,9 @@
       "testingCallout": "✅ 基于真实数据验证",
       "testingCalloutP": "在大盘币篮的 <strong>2,095 个日线区间（约 5.7 年）</strong>与高波动山寨币篮的 <strong>2,316 个区间（约 6.3 年）</strong>上，按完全相同的生产路径重放，Proteus（v18）在大盘上将峰值回撤控制在 <strong>23.1%</strong>，而买入持有为 <strong>55.9%</strong>；在山寨上为 <strong>29.4%</strong> 对 <strong>59.8%</strong>。它在大盘上的 Sharpe 跑赢买入持有（<strong>1.63 对 1.37</strong>），但<strong>在山寨上没有（1.10 对 1.18）</strong>；并且在两个币篮上都在 Sharpe、Calmar 与最大回撤上跑赢了自己的固定阈值前身。两次引擎选择都通过了各自的上线门槛。",
       "testingHow": "验证过程",
-      "testing1": "<strong>信号构建</strong>——每根 K 线我们从运行中的权益峰值计算滚动回撤，并在短期滚动窗口内计算下行波动率，然后将每个映射到 0&ndash;1 信号。",
-      "testing2": "<strong>敞口规则</strong>——组合风险信号驱动一个连续的敞口旋钮，无硬性底仓，无相关性门控。",
-      "testing3": "<strong>稳健爬坡 + 阈值再平衡</strong>——无论去风险还是重新入场，敞口每根 K 线都平滑地向目标移动；Aegis（v14）仅在目标与持仓明显偏离时才交易——以更少的再平衡次数实现完全一致的信号。闲置的 USDC 在敞口恢复后重新部署。",
+      "testing1": "<strong>风险评分构建</strong>——每根 K 线我们从运行中的权益峰值计算滚动回撤，并在短期滚动窗口内计算下行波动率，然后将每个映射到 0&ndash;1 风险评分。",
+      "testing2": "<strong>敞口规则</strong>——组合风险评分驱动一个连续的敞口旋钮，无硬性底仓，无相关性门控。",
+      "testing3": "<strong>稳健爬坡 + 阈值再平衡</strong>——无论去风险还是重新入场，敞口每根 K 线都平滑地向目标移动；Aegis（v14）仅在目标与持仓明显偏离时才交易——以更少的再平衡次数实现完全一致的风险评分。闲置的 USDC 在敞口恢复后重新部署。",
       "testing4": "<strong>引擎/回测器一致性</strong> &mdash; 实时引擎与回测器在相同的回撤定义上运行同一个护盾函数，因此公开比较是在一个基准而非两个基准上测量的。",
       "testingAudit": "验证检查",
       "testingAuditP": "护盾通过以下在生产路径上的检查进行验证：",
@@ -577,7 +578,7 @@
     "csvFormat": "<strong>CSV 格式：</strong>包含日期列（<code>event_date</code>/<code>date</code>/<code>Date</code>）+ 价格列（<code>close_price_usd</code>/<code>Close</code>/<code>price</code>）的表头。等权重组合。",
     "navBacktest": "回测",
     "changelogIntro": "<strong>更新日志。</strong>引擎更新的带日期记录，让您看到的任何结果都能追溯到产生它的确切版本。",
-    "changelog": "<li><span class='bt-cl-date'>2026-10-29</span><span class='bt-cl-text'><strong>回测现对所有人免费。</strong>无需密钥或注册：上传 CSV 即可运行。每个连接每隔几秒可运行一次，您上传的价格仅在内存中处理，绝不存储。</span></li><li><span class='bt-cl-date'>2026-10-12</span><span class='bt-cl-text'><strong>回测页现只运行生产环境引擎。</strong>Proteus（v18）现为 /backtest 上的唯一引擎，通过与真实组合相同的调度器重放，并与买入持有参照对比评分。Aegis（v14）对比腿与 v14 走查参数网格已从本页面移除。Aegis（v14）在生产环境中仍作为预热回退运行，用于历史数据不足以校准自适应阈值的组合。<strong>引擎数学未做任何改动</strong> &mdash; Proteus（v18）的每个常量都保持原样。</span></li><li><span class='bt-cl-date'>2026-09-08</span><span class='bt-cl-text'><strong>Proteus（v18）现为生产引擎。</strong>波动率自适应防护盾现运行于真实组合；Aegis（v14）仅保留为预热回退，用于历史数据不足以校准自适应阈值的组合。本页文案此前一直将 Proteus（v18）描述为测试候选，现已更正。<strong>本条目之前发布的结果均由 Aegis（v14）产生</strong>，并在出现之处如实标注。</span></li><li><span class=\"bt-cl-date\">2026-09-07</span><span class='bt-cl-text'><strong>引擎获得产品名：Aegis（v14）与 Proteus（v18）。</strong>仅为命名 &mdash; 所有公式、预设、冻结权重与结果均未改变；版本号仍保留在遥测中，因此任何数据仍可追溯到产生它的确切引擎。</span></li><li><span class='bt-cl-date'>2026-09-03</span><span class=\"bt-cl-text\"><strong>回测现运行 Aegis（v14）+ Proteus（v18）；v15 与 v16 已停用。</strong>回测页现对比 <strong>Aegis（v14）</strong>（生产回退）与 <strong>Proteus（v18）</strong>（波动率自适应测试候选）。v15（相关性区间）已停用，因为其相关性排名信号需要比生产环境 180 天窗口更多的历史数据（MAJORS 最大回撤 37.6%，而 Aegis（v14）为 25.7%）。v16（低谷分批）已停用，因为 Proteus（v18）的波动率缩放方法在两个配置上都优于它。<strong>Aegis（v14）未改动。</strong></span></li><li><span class=\"bt-cl-date\">2026-08-12</span><span class=\"bt-cl-text\"><strong>回测页现以生产宏观循环运行全部三个引擎。</strong>每次回测与 WF 网格运行现在都会在完全相同的组合、资金与 DCA 条件下并排执行 Aegis（v14）、v15 与 v16，且组合遵循与生产环境相同的 <strong>180 天宏观循环</strong>（每 180 天一次 KKT 风险平价再优化）。<strong>Aegis（v14）未改动。</strong></span></li><li><span class=\"bt-cl-date\">2026-08-12</span><span class=\"bt-cl-text\"><strong>v16 Beta 实验启动（并行模拟交易）。</strong>运行全新低谷分批恢复护盾（v16）的第三个模拟账户现已与 Aegis（v14）和 v15 记录并行运行，以便在完全相同的条件下对比三者。<strong>Aegis（v14）与 v15 均未做任何改动</strong> &mdash; 其引擎与记录完全照旧继续。</span></li><li><span class=\"bt-cl-date\">2026-08-05</span><span class=\"bt-cl-text\"><strong>v15 Beta 实验启动（并行模拟交易）。</strong>运行全新相关性区间保护（v15）的第二个模拟账户现已与 Aegis（v14）记录并行运行，以便在完全相同的条件下对比两者。<strong>Aegis（v14）未做任何改动</strong> &mdash; 其引擎与记录完全照旧继续。</span></li><li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>引擎设置已冻结（Aegis v14.0）。</strong>调节器的设置已于当日锁定。从这一天起的每个结果都来自这个完全相同、未改动的引擎。</span></li><li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>定投金额可为零。</strong>现在可将 <strong>DCA 金额</strong>设为 <strong>0</strong>，以测试一次性、整笔起始的投入。此前的结果不受影响。</span></li>",
+    "changelog": "<li><span class='bt-cl-date'>2026-10-29</span><span class='bt-cl-text'><strong>回测现对所有人免费。</strong>无需密钥或注册：上传 CSV 即可运行。每个连接每隔几秒可运行一次，您上传的价格仅在内存中处理，绝不存储。</span></li><li><span class='bt-cl-date'>2026-10-12</span><span class='bt-cl-text'><strong>回测页现只运行生产环境引擎。</strong>Proteus（v18）现为 /backtest 上的唯一引擎，通过与真实组合相同的调度器重放，并与买入持有参照对比评分。Aegis（v14）对比腿与 v14 走查参数网格已从本页面移除。Aegis（v14）在生产环境中仍作为预热回退运行，用于历史数据不足以校准自适应阈值的组合。<strong>引擎数学未做任何改动</strong> &mdash; Proteus（v18）的每个常量都保持原样。</span></li><li><span class='bt-cl-date'>2026-09-08</span><span class='bt-cl-text'><strong>Proteus（v18）现为生产引擎。</strong>波动率自适应防护盾现运行于真实组合；Aegis（v14）仅保留为预热回退，用于历史数据不足以校准自适应阈值的组合。本页文案此前一直将 Proteus（v18）描述为测试候选，现已更正。<strong>本条目之前发布的结果均由 Aegis（v14）产生</strong>，并在出现之处如实标注。</span></li><li><span class=\"bt-cl-date\">2026-09-07</span><span class='bt-cl-text'><strong>引擎获得产品名：Aegis（v14）与 Proteus（v18）。</strong>仅为命名 &mdash; 所有公式、预设、冻结权重与结果均未改变；版本号仍保留在遥测中，因此任何数据仍可追溯到产生它的确切引擎。</span></li><li><span class='bt-cl-date'>2026-09-03</span><span class=\"bt-cl-text\"><strong>回测现运行 Aegis（v14）+ Proteus（v18）；v15 与 v16 已停用。</strong>回测页现对比 <strong>Aegis（v14）</strong>（生产回退）与 <strong>Proteus（v18）</strong>（波动率自适应测试候选）。v15（相关性区间）已停用，因为其相关性排名输入需要比生产环境 180 天窗口更多的历史数据（MAJORS 最大回撤 37.6%，而 Aegis（v14）为 25.7%）。v16（低谷分批）已停用，因为 Proteus（v18）的波动率缩放方法在两个配置上都优于它。<strong>Aegis（v14）未改动。</strong></span></li><li><span class=\"bt-cl-date\">2026-08-12</span><span class=\"bt-cl-text\"><strong>回测页现以生产宏观循环运行全部三个引擎。</strong>每次回测与 WF 网格运行现在都会在完全相同的组合、资金与 DCA 条件下并排执行 Aegis（v14）、v15 与 v16，且组合遵循与生产环境相同的 <strong>180 天宏观循环</strong>（每 180 天一次 KKT 风险平价再优化）。<strong>Aegis（v14）未改动。</strong></span></li><li><span class=\"bt-cl-date\">2026-08-12</span><span class=\"bt-cl-text\"><strong>v16 Beta 实验启动（并行模拟交易）。</strong>运行全新低谷分批恢复护盾（v16）的第三个模拟账户现已与 Aegis（v14）和 v15 记录并行运行，以便在完全相同的条件下对比三者。<strong>Aegis（v14）与 v15 均未做任何改动</strong> &mdash; 其引擎与记录完全照旧继续。</span></li><li><span class=\"bt-cl-date\">2026-08-05</span><span class=\"bt-cl-text\"><strong>v15 Beta 实验启动（并行模拟交易）。</strong>运行全新相关性区间保护（v15）的第二个模拟账户现已与 Aegis（v14）记录并行运行，以便在完全相同的条件下对比两者。<strong>Aegis（v14）未做任何改动</strong> &mdash; 其引擎与记录完全照旧继续。</span></li><li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>引擎设置已冻结（Aegis v14.0）。</strong>调节器的设置已于当日锁定。从这一天起的每个结果都来自这个完全相同、未改动的引擎。</span></li><li><span class=\"bt-cl-date\">2026-07-21</span><span class=\"bt-cl-text\"><strong>定投金额可为零。</strong>现在可将 <strong>DCA 金额</strong>设为 <strong>0</strong>，以测试一次性、整笔起始的投入。此前的结果不受影响。</span></li>",
     "simNotice": "<strong>假设性结果。</strong>本页面根据您上传的价格历史进行模拟计算。回测是在完全知晓该时段结果的前提下把策略套用于过去 &mdash; 而当时没有人拥有这种信息 &mdash; 并且忽略了滑点、买卖价差和税费，但会对每次再平衡、DCA 买入和资金重新部署收取 0.1% 的模拟交易所手续费。假设性表现与过往表现<strong>不能可靠地预示未来结果</strong>。AQMath 是供您自行分析的软件：它不是投资建议，不构成买入或卖出任何资产的推荐，也从不下单或持有资金。"
   },
   "rv": {
