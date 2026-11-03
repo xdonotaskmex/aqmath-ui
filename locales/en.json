@@ -88,7 +88,7 @@
     "blackF9": "365-day term from activation &mdash; annual access only",
     "blackF10": "14-day EU right of withdrawal &mdash; firm annual term afterwards <a href=\"/widerruf\" style=\"color:var(--purple);font-size:0.85em\">[details]</a>",
     "blackF11": "Send a message &mdash; we review and reply within 48h",
-    "priceNote": "Final price &mdash; as a small business under &sect;&nbsp;19 UStG we add no VAT. One payment for 12 months; the licence does not renew automatically."
+    "priceNote": "Final price — as a small business under § 19 UStG we add no VAT. One payment for 12 months; the licence does not renew automatically."
   },
   "what": {
     "title": "What is AQMath, How It Works & Why",
@@ -534,7 +534,7 @@
       "t6a": "Historical allocations",
       "t6b": "Snapshots exist only in localStorage",
       "t7a": "Entry prices",
-      "t7b": "Sent during DCA, not stored by the DCA service &mdash; Black stores APY with your holdings (UI bookkeeping)",
+      "t7b": "Sent during DCA, not stored by the DCA service — Black stores APY with your holdings (UI bookkeeping)",
       "t8a": "Black key identity",
       "t8b": "Never your raw key — everything is linked to a one-way hash; no name, email, or wallet",
       "bnP2": "The backend processes your DCA request in a single HTTP round-trip: receive positions → compute allocation → return results → discard. On the free tier there is no database table that maps users to portfolios (Black is the exception: holdings stored under the hash of your activation key). Technical server logs keep counts such as the number of positions and the DCA amount, not your token list.",
