@@ -52,35 +52,35 @@ PAGES = {
         "view": "landingView",
         "robots": "index, follow",
         "title": "AQMath \u2014 Crypto Portfolio Calculator | Risk Parity & Drawdown Model",
-        "description": "Free non-custodial crypto portfolio calculator with Risk Parity optimization and Deleverage Shield drawdown modelling. Backtest included. No wallet connection, no API keys, no account needed.",
+        "description": "Free non-custodial crypto portfolio calculator: Risk Parity optimization, Deleverage Shield drawdown modelling, backtest included. No account, no API keys.",
     },
     "docs.html": {
         "path": "/docs",
         "view": "docView",
         "robots": "index, follow",
         "title": "Risk Parity Engine & Deleverage Shield Documentation \u2014 AQMath",
-        "description": "Full technical documentation: how Risk Parity (ERC + KKT) optimization works, the Deleverage Shield drawdown modelling model, DCA safety pipeline and the non-custodial privacy architecture.",
+        "description": "Technical documentation: Risk Parity (ERC + KKT) optimization, the Deleverage Shield drawdown model, the DCA safety pipeline and the privacy architecture.",
     },
     "backtest.html": {
         "path": "/backtest",
         "view": "backtestView",
         "robots": "index, follow",
         "title": "Free Crypto Backtest Tool \u2014 DCA & Shield Strategy | AQMath",
-        "description": "Free interactive crypto backtest tool: replays years of real daily prices with DCA simulation and drawdown modelling. Compare drawdowns and returns against Buy & Hold on identical terms. No signup required.",
+        "description": "Free crypto backtest tool: replays years of real daily prices with DCA simulation and drawdown modelling. Compare against Buy & Hold on identical terms.",
     },
     "results.html": {
         "path": "/results",
         "view": "resultsView",
         "robots": "index, follow",
         "title": "Crypto Drawdown Protection Backtest Results \u2014 182 Baskets | AQMath",
-        "description": "Out-of-sample stress test results: 182 crypto portfolio baskets validated, including tokens never used to tune the model. Median 45% drawdown reduction vs Buy & Hold.",
+        "description": "Out-of-sample stress test: 182 crypto portfolio baskets validated, including tokens never used to tune the model. Median 45% drawdown reduction vs Buy & Hold.",
     },
     "v18.html": {
         "path": "/v18",
         "view": "v18View",
         "robots": "index, follow",
         "title": "Proteus (v18) Adaptive Shield \u2014 Live Two-Basket Paper Trading | AQMath",
-        "description": "Live paper-trading telemetry for Proteus (v18), the vol-scaled adaptive shield and the production engine, on two frozen baskets \u2014 MAJORS (BTC/ETH/BNB/SOL/XRP) and ALTS (ATH/SUI/XMR/DOGE/LINK). Simulated, no real money; Aegis (v14) is shown alongside as its fixed-threshold predecessor.",
+        "description": "Live paper-trading telemetry for Proteus (v18), the vol-scaled adaptive shield, on two frozen baskets: MAJORS and ALTS. Simulated, no real money.",
     },
     # The app is a paid, closed tool behind a beta key: there is no public
     # content to rank, and leaving it indexable only added a fifth duplicate.
@@ -98,7 +98,39 @@ PAGES = {
 # WebApplication block; render() replaces it with the page-specific graph.
 
 _SITE = "https://aqmath.xyz"
-_PERSON = {"@id": f"{_SITE}/#momir-demirov"}
+# Full node, matching the one hand-written on about.html exactly. A JSON-LD
+# {"@id": "..."} only resolves against a node defined in the SAME document;
+# cross-page @id links do not resolve for a crawler, so every page whose
+# graph references the person or the org must carry the full node too, not
+# just the bare id stub. _PERSON_REF/_ORG_REF are for use as a property
+# value (e.g. "creator": _PERSON_REF); _PERSON/_ORG (the full nodes) must
+# also be present as their own entries in that page's @graph.
+_PERSON = {
+    "@type": "Person",
+    "@id": f"{_SITE}/#momir-demirov",
+    "name": "Momir Demirov",
+    "jobTitle": "Founder and sole developer",
+    "email": "momo.demirov@gmail.com",
+    "worksFor": {"@id": f"{_SITE}/#organization"},
+    "address": {
+        "@type": "PostalAddress",
+        "postalCode": "71332",
+        "addressLocality": "Waiblingen",
+        "addressCountry": "DE",
+    },
+    "knowsAbout": [
+        "Risk parity portfolio optimization",
+        "Drawdown control",
+        "Quantitative backtesting",
+        "Cryptocurrency portfolio construction",
+    ],
+    "sameAs": [
+        "https://x.com/aqmathapp",
+        "https://t.me/AQMath_Black",
+        "https://www.reddit.com/user/weaforex/",
+    ],
+}
+_PERSON_REF = {"@id": _PERSON["@id"]}
 _ORG = {
     "@type": "Organization",
     "@id": f"{_SITE}/#organization",
@@ -113,6 +145,7 @@ _ORG = {
         "https://substack.com/@aqmathxyz",
     ],
 }
+_ORG_REF = {"@id": _ORG["@id"]}
 _WEBAPP = {
     "@type": "WebApplication",
     "name": "AQMath",
@@ -133,7 +166,7 @@ _WEBAPP = {
         "Non-Custodial Privacy",
         "Continuous Auto De-Risk",
     ],
-    "creator": _PERSON,
+    "creator": _PERSON_REF,
 }
 
 # Regex to extract FAQ Q&A pairs from the landing-page HTML.
@@ -168,7 +201,8 @@ PAGE_JSONLD = {
     "index.html": lambda: {
         "@context": "https://schema.org",
         "@graph": [
-            {**_WEBAPP, "creator": _PERSON},
+            {**_WEBAPP, "creator": _PERSON_REF},
+            _PERSON,
             _ORG,
         ],
     },
@@ -180,8 +214,10 @@ PAGE_JSONLD = {
              "url": _SITE + "/docs",
              "description": "Full technical documentation: ERC + KKT Risk Parity optimization, Deleverage Shield drawdown modelling model, DCA safety pipeline and non-custodial privacy architecture.",
              "articleSection": "Technical Documentation",
-             "author": _PERSON,
-             "publisher": {"@id": f"{_SITE}/#organization"}},
+             "author": _PERSON_REF,
+             "publisher": _ORG_REF},
+            _PERSON,
+            _ORG,
             _breadcrumb("Documentation", "/docs"),
         ],
     },
@@ -191,7 +227,9 @@ PAGE_JSONLD = {
             {**_WEBAPP, "name": "Free Crypto Backtest Tool",
              "url": _SITE + "/backtest",
              "description": "Free interactive crypto backtest tool: replays years of real daily prices with DCA simulation and drawdown modelling. Compare strategies against Buy & Hold on identical terms.",
-             "creator": _PERSON},
+             "creator": _PERSON_REF},
+            _PERSON,
+            _ORG,
             _breadcrumb("Backtest", "/backtest"),
         ],
     },
@@ -203,8 +241,10 @@ PAGE_JSONLD = {
              "url": _SITE + "/results",
              "description": "Out-of-sample stress test: 182 crypto portfolio baskets validated with median 45% drawdown reduction vs Buy & Hold, including tokens never used to tune the model.",
              "articleSection": "Research Results",
-             "author": _PERSON,
-             "publisher": {"@id": f"{_SITE}/#organization"}},
+             "author": _PERSON_REF,
+             "publisher": _ORG_REF},
+            _PERSON,
+            _ORG,
             _breadcrumb("Results", "/results"),
         ],
     },
@@ -216,13 +256,19 @@ PAGE_JSONLD = {
              "url": _SITE + "/v18",
              "description": "Live paper-trading telemetry for Proteus (v18), the vol-scaled adaptive shield, on two frozen baskets (MAJORS and ALTS), compared against Buy & Hold on identical terms. Simulated results, no real money.",
              "articleSection": "Research Results",
-             "author": _PERSON,
-             "publisher": {"@id": f"{_SITE}/#organization"}},
+             "author": _PERSON_REF,
+             "publisher": _ORG_REF},
+            _PERSON,
+            _ORG,
             _breadcrumb("Proteus v18 Adaptive", "/v18"),
         ],
     },
-    # app.html is noindex; keep the baseline WebApplication only.
-    "app.html": lambda: {"@context": "https://schema.org", **_WEBAPP},
+    # app.html is noindex, but the creator ref still needs its node to
+    # resolve, so the page carries a graph rather than a lone WebApplication.
+    "app.html": lambda: {
+        "@context": "https://schema.org",
+        "@graph": [_WEBAPP, _PERSON, _ORG],
+    },
 }
 
 ALL_VIEWS = [meta["view"] for meta in PAGES.values()]

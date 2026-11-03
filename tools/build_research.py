@@ -43,6 +43,26 @@ SITE = "https://aqmath.xyz"
 # deliberately leaves it alone and audit_pages.py excludes it from the
 # single-asset-stamp check. Keep it in step with the entry pages.
 SOCIAL_IMAGE = f"{SITE}/social-preview.png?v=20261029"
+
+# A JSON-LD {"@id": "..."} only resolves against a node defined in the SAME
+# document, so a research page that names the organisation as its publisher
+# has to carry the organisation node too. Same values as build_pages.py's
+# _ORG; keep the two in step.
+ORG = {
+    "@type": "Organization",
+    "@id": f"{SITE}/#organization",
+    "name": "AQMath",
+    "url": SITE,
+    "logo": f"{SITE}/favicon.png",
+    "description": "Quantitative, non-custodial crypto portfolio calculator with KKT Risk-Parity weighting and Deleverage Modulator drawdown protection.",
+    "sameAs": [
+        "https://x.com/aqmathapp",
+        "https://t.me/AQMath_Black",
+        "https://www.reddit.com/user/weaforex/",
+        "https://substack.com/@aqmathxyz",
+    ],
+}
+ORG_REF = {"@id": ORG["@id"]}
 SOCIAL_IMAGE_ALT = ("AQMath &mdash; Risk Parity crypto portfolio calculator with "
                     "Deleverage Shield")
 
@@ -577,7 +597,7 @@ DOCS = [
                         "the exposure-matched constant control that separates de-risking from timing, the "
                         "exposure-minimum vs price-minimum lag diagnostic, and the lookback-truncation "
                         "inversion that demoted the full-history winner to worst on the production path."),
-        "meta_description": "Fixed vs adaptive exposure capping on the production path, plus the signal-free constant-exposure control that separates de-risking from timing. Alt MaxDD 29.4% vs 36.8% fixed at identical average exposure.",
+        "meta_description": "Fixed vs adaptive exposure capping on the production path, plus a constant-exposure control. Alt MaxDD 29.4% vs 36.8% at identical average exposure.",
         "sim_notice": True,
         "altLabel": "\u4e2d\u6587",
     },
@@ -648,7 +668,7 @@ DOCS = [
                         "causal matched control and a volatility-targeting rule at matched exposure "
                         "still show a clear timing edge. Windows were selected because they were "
                         "crashes — stress test, not forecast."),
-        "meta_description": "Proteus (v18) on 6 real shock windows: 6/6 vs fixed weights (avg -13.3 pp). Matched control shows mostly de-risking; causal and vol-target controls show clear timing edge. Stress test, not forecast.",
+        "meta_description": "Proteus (v18) on 6 real shock windows: 6/6 vs fixed weights (avg -13.3 pp), with matched, causal and vol-target controls. Stress test, not forecast.",
         "sim_notice": True,
         "altLabel": "\u4e2d\u6587",
     },
@@ -1007,7 +1027,8 @@ def render_doc(doc):
              "datePublished": doc["published"],
              "description": meta_desc,
              "inLanguage": doc["lang"],
-             "publisher": {"@id": f"{SITE}/#organization"}},
+             "publisher": ORG_REF},
+            ORG,
             {"@type": "BreadcrumbList",
              "itemListElement": [
                  {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
@@ -1054,8 +1075,8 @@ def render_hub():
     # the sitemap must use the trailing-slash form or crawlers log a redirect hop.
     return shell(
         "en", "en", "Crypto Portfolio Research &amp; Backtests &mdash; AQMath",
-        "Backtested crypto portfolio research: out-of-sample validation, stress tests, drawdown protection "
-        "and risk parity analysis. 15+ published reports with full methodology and results.",
+        "Backtested crypto portfolio research: out-of-sample validation, stress tests "
+        "and drawdown protection. 15+ reports with full methodology and results.",
         "/research/", body,
         jsonld={"@context": "https://schema.org",
                 "@graph": [
