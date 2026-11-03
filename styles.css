@@ -1616,8 +1616,8 @@
     }
     .discipline-card.hidden { display: none; }
     .disc-empty.hidden, .disc-tiles.hidden, .disc-note.hidden,
-    .disc-recent.hidden, .disc-pattern.hidden, .disc-optin.hidden,
-    .disc-discount.hidden { display: none; }
+    .disc-recent.hidden, .disc-pattern.hidden,
+    .disc-optin.hidden { display: none; }
     .disc-badge {
         font-family: var(--mono); font-size: 0.65rem; font-weight: 700;
         padding: 2px 8px; border-radius: 3px;
@@ -1667,12 +1667,6 @@
         font-size: 0.62rem; color: var(--dim); font-family: var(--mono);
         padding: 14px; text-align: center; margin-bottom: 8px;
         background: #F2F0E9; border: 1px dashed var(--border); border-radius: 4px;
-    }
-    .disc-discount {
-        font-size: 0.6rem; color: var(--green); font-weight: 600;
-        padding: 4px 10px; background: rgba(47,104,70,0.1);
-        border: 1px solid rgba(47,104,70,0.2); border-radius: 4px;
-        text-align: center;
     }
     /* Discipline Module: user-set same-day goal (self-set friction) */
     .disc-target-row {
@@ -2507,7 +2501,7 @@
    REDESIGN v2 - editorial light layer (loads last, wins on equal specificity)
    ===================================================================== */
 body { font-family: var(--sans); -webkit-font-smoothing: antialiased; }
-h1, h2, h3, .card-title, .lp-plan-title, .lp-what-punch, .doc-title { font-family: var(--serif); }
+h1, h2, h3 { font-family: var(--serif); }
 
 /* header + logo */
 .hdr { background: rgba(247,245,239,0.88); border-bottom: 1px solid var(--border); box-shadow: none; height: 68px; padding: 0 32px; }

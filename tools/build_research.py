@@ -608,13 +608,13 @@ DOCS = [
         "lang": "zh-Hans",
         "htmlLang": "zh-CN",
         "published": "2026-09-02",
-        "title": "\u81ea\u9002\u5e94\u6572\u53e3\u4e0a\u9650\uff1a\u56fa\u5b9a\u9608\u503c\u4e0e\u6ce2\u52a8\u7387\u7f29\u653e - AQMath",
-        "shortTitle": "\u81ea\u9002\u5e94\u6572\u53e3\u4e0a\u9650 &mdash; \u4e3a\u4f55\u56fa\u5b9a\u56de\u64a4\u9608\u503c\u5728\u5e02\u573a\u72b6\u6001\u5207\u6362\u4e2d\u5931\u6548",
+        "title": "\u81ea\u9002\u5e94\u655e\u53e3\u4e0a\u9650\uff1a\u56fa\u5b9a\u9608\u503c\u4e0e\u6ce2\u52a8\u7387\u7f29\u653e - AQMath",
+        "shortTitle": "\u81ea\u9002\u5e94\u655e\u53e3\u4e0a\u9650 &mdash; \u4e3a\u4f55\u56fa\u5b9a\u56de\u64a4\u9608\u503c\u5728\u5e02\u573a\u72b6\u6001\u5207\u6362\u4e2d\u5931\u6548",
         "description": ("\u56fa\u5b9a\u56de\u64a4\u9608\u503c\u5bf9\u7ec4\u5408\u89c6\u800c\u4e0d\u89c1\uff1a\u5355\u4e00\u6570\u5b57\u65e0\u6cd5\u540c\u65f6\u670d\u52a1"
                         "\u4f4e\u6ce2\u52a8\u4e3b\u6d41\u5e01\u4e0e\u9ad8\u6ce2\u52a8\u5c71\u5be8\u5e01\u3002\u751f\u4ea7\u8def\u5f84\u4e0a\u7684\u6eda\u52a8\u524d\u63a8\u6837\u672c\u5916\u9a8c\u8bc1\uff1a"
                         "\u81ea\u9002\u5e94\uff08\u6ce2\u52a8\u7387\u7f29\u653e\uff09\u5728\u4e24\u4e2a\u7ec4\u5408\u7684\u5c16\u666e\u3001\u5361\u5c14\u739b\u548c\u6700\u5927\u56de\u64a4\u4e0a\u90fd\u80dc\u51fa\u3002"
                         "\u5c71\u5be8\u5e01\u7ec4\u5408\u6700\u5927\u56de\u64a4 29.4% vs \u56fa\u5b9a 36.8%\u3002"),
-        "meta_description": "\u56fa\u5b9a vs \u81ea\u9002\u5e94\u6572\u53e3\u4e0a\u9650\uff1a\u751f\u4ea7\u8def\u5f84\u6eda\u52a8\u524d\u63a8\u6837\u672c\u5916\u3002\u81ea\u9002\u5e94\u4e24\u7ec4\u5408\u7686\u80dc\u3002\u5c71\u5be8\u5e01 MaxDD 29.4% vs \u56fa\u5b9a 36.8%\u3002",
+        "meta_description": "\u56fa\u5b9a vs \u81ea\u9002\u5e94\u655e\u53e3\u4e0a\u9650\uff1a\u751f\u4ea7\u8def\u5f84\u6eda\u52a8\u524d\u63a8\u6837\u672c\u5916\u3002\u81ea\u9002\u5e94\u4e24\u7ec4\u5408\u7686\u80dc\u3002\u5c71\u5be8\u5e01 MaxDD 29.4% vs \u56fa\u5b9a 36.8%\u3002",
         "sim_notice": True,
         "altLabel": "English",
     },
@@ -683,10 +683,10 @@ DOCS = [
         "shortTitle": "六个真实冲击窗口 &mdash; v18 相对固定权重的回撤差",
         "description": ("现役 Proteus（v18）防护盾能否在真实冲击窗口上、样本外地削减回撤？"
                         "在六个窗口经过完全相同的生产路径，它在 6/6 个窗口相对固定权重基线"
-                        "削减了最大回撤（平均 -13.3 pp）；敢露匹配的对照显示大部分来自降敢露，"
-                        "而因果校准对照与相同平均敢露下的波动率目标规则仍显示明确择时优势。"
+                        "削减了最大回撤（平均 -13.3 pp）；敞口匹配的对照显示大部分来自降敞口，"
+                        "而因果校准对照与相同平均敞口下的波动率目标规则仍显示明确择时优势。"
                         "窗口因是崩盘而被选择 —— 压力测试，而非预测。"),
-        "meta_description": "Proteus（v18）6 个真实冲击窗口：6/6 相对固定权重削减回撤（平均 -13.3 pp）。匹配对照显示主要来自降敢露；因果与波动率目标对照显示明确择时优势。压力测试，非预测。",
+        "meta_description": "Proteus（v18）6 个真实冲击窗口：6/6 相对固定权重削减回撤（平均 -13.3 pp）。匹配对照显示主要来自降敞口；因果与波动率目标对照显示明确择时优势。压力测试，非预测。",
         "sim_notice": True,
         "altLabel": "English",
     },
@@ -843,10 +843,31 @@ def markdown_to_html(md, lang="en"):
             i += 1
             continue
 
-        if line.startswith("> "):
+        if line.startswith(">"):
             flush()
-            out.append(f"<blockquote>{inline(line[2:])}</blockquote>")
-            i += 1
+            # A blockquote runs over every consecutive '>' line, and a bare '>'
+            # separates paragraphs inside it. Emitting one <blockquote> per line
+            # split multi-line quotes into separate boxes and left the bare '>'
+            # as literal text in the page.
+            quoted = []
+            while i < len(lines) and lines[i].strip().startswith(">"):
+                q = lines[i].strip()[1:]
+                quoted.append(q[1:] if q.startswith(" ") else q)
+                i += 1
+            paras, cur = [], []
+            for q in quoted:
+                if q.strip():
+                    cur.append(q.strip())
+                elif cur:
+                    paras.append(" ".join(cur))
+                    cur = []
+            if cur:
+                paras.append(" ".join(cur))
+            if len(paras) == 1:
+                out.append(f"<blockquote>{inline(paras[0])}</blockquote>")
+            elif paras:
+                inner = "".join(f"<p>{inline(p)}</p>" for p in paras)
+                out.append(f"<blockquote>{inner}</blockquote>")
             continue
 
         m = IMG_RE.fullmatch(line)
@@ -988,10 +1009,15 @@ def render_doc(doc):
                   for g in TRANSLATION_SETS
                   if doc["path"] in g and d["path"] in g and d["path"] != doc["path"]), None)
 
+    # The source's own cross-language line points at a repo file and the header
+    # link below is the real one, so drop that quoted line before rendering.
+    # Done on the Markdown, not the HTML: the line can sit alone or as one line
+    # inside a longer note, and dropping "the first blockquote" from the output
+    # used to delete reviewer quotes and revision notes instead.
+    _XLANG = re.compile(r"^>\s*(?:English version:|\u4e2d\u6587\u7248\u672c\uff1a)")
+    md = "\n".join(l for l in md.split("\n") if not _XLANG.match(l.strip()))
+
     body_md = markdown_to_html(md, doc["lang"])
-    # The source's own cross-language line points at a repo file; the header link
-    # below is the real one, so drop the duplicate.
-    body_md = re.sub(r"<blockquote>.*?</blockquote>\s*", "", body_md, count=1, flags=re.S)
 
     nav = [f'<p class="rs-nav"><a href="/research/">{ui["backToHub"]}</a>']
     if other:

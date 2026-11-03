@@ -5,8 +5,8 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>自适应敲口上限：固定阈值与波动率缩放 - AQMath</title>
-<meta name="description" content="固定 vs 自适应敲口上限：生产路径滚动前推样本外。自适应两组合皆胜。山寨币 MaxDD 29.4% vs 固定 36.8%。">
+<title>自适应敞口上限：固定阈值与波动率缩放 - AQMath</title>
+<meta name="description" content="固定 vs 自适应敞口上限：生产路径滚动前推样本外。自适应两组合皆胜。山寨币 MaxDD 29.4% vs 固定 36.8%。">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://aqmath.xyz/research/exposure-capping-zh">
 <link rel="icon" href="/favicon.ico">
@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://aqmath.xyz/research/exposure-capping-zh">
-<meta property="og:title" content="自适应敲口上限：固定阈值与波动率缩放 - AQMath">
-<meta property="og:description" content="固定 vs 自适应敲口上限：生产路径滚动前推样本外。自适应两组合皆胜。山寨币 MaxDD 29.4% vs 固定 36.8%。">
+<meta property="og:title" content="自适应敞口上限：固定阈值与波动率缩放 - AQMath">
+<meta property="og:description" content="固定 vs 自适应敞口上限：生产路径滚动前推样本外。自适应两组合皆胜。山寨币 MaxDD 29.4% vs 固定 36.8%。">
 <meta property="og:site_name" content="AQMath">
 <meta property="og:image" content="https://aqmath.xyz/social-preview.png?v=20261029">
 <meta property="og:image:secure_url" content="https://aqmath.xyz/social-preview.png?v=20261029">
@@ -24,17 +24,17 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio calculator with Deleverage Shield">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="自适应敲口上限：固定阈值与波动率缩放 - AQMath">
-<meta name="twitter:description" content="固定 vs 自适应敲口上限：生产路径滚动前推样本外。自适应两组合皆胜。山寨币 MaxDD 29.4% vs 固定 36.8%。">
+<meta name="twitter:title" content="自适应敞口上限：固定阈值与波动率缩放 - AQMath">
+<meta name="twitter:description" content="固定 vs 自适应敞口上限：生产路径滚动前推样本外。自适应两组合皆胜。山寨币 MaxDD 29.4% vs 固定 36.8%。">
 <meta name="twitter:image" content="https://aqmath.xyz/social-preview.png?v=20261029">
 <meta name="twitter:image:alt" content="AQMath &mdash; Risk Parity crypto portfolio calculator with Deleverage Shield">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"自适应敲口上限 — 为何固定回撤阈值在市场状态切换中失效","url":"https://aqmath.xyz/research/exposure-capping-zh","datePublished":"2026-09-02","description":"固定 vs 自适应敲口上限：生产路径滚动前推样本外。自适应两组合皆胜。山寨币 MaxDD 29.4% vs 固定 36.8%。","inLanguage":"zh-Hans","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"Organization","@id":"https://aqmath.xyz/#organization","name":"AQMath","url":"https://aqmath.xyz","logo":"https://aqmath.xyz/favicon.png","description":"Quantitative, non-custodial crypto portfolio calculator with KKT Risk-Parity weighting and Deleverage Modulator drawdown protection.","sameAs":["https://x.com/aqmathapp","https://t.me/AQMath_Black","https://www.reddit.com/user/weaforex/","https://substack.com/@aqmathxyz"]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"自适应敲口上限","item":"https://aqmath.xyz/research/exposure-capping-zh"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"自适应敞口上限 — 为何固定回撤阈值在市场状态切换中失效","url":"https://aqmath.xyz/research/exposure-capping-zh","datePublished":"2026-09-02","description":"固定 vs 自适应敞口上限：生产路径滚动前推样本外。自适应两组合皆胜。山寨币 MaxDD 29.4% vs 固定 36.8%。","inLanguage":"zh-Hans","publisher":{"@id":"https://aqmath.xyz/#organization"}},{"@type":"Organization","@id":"https://aqmath.xyz/#organization","name":"AQMath","url":"https://aqmath.xyz","logo":"https://aqmath.xyz/favicon.png","description":"Quantitative, non-custodial crypto portfolio calculator with KKT Risk-Parity weighting and Deleverage Modulator drawdown protection.","sameAs":["https://x.com/aqmathapp","https://t.me/AQMath_Black","https://www.reddit.com/user/weaforex/","https://substack.com/@aqmathxyz"]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aqmath.xyz/"},{"@type":"ListItem","position":2,"name":"Research","item":"https://aqmath.xyz/research/"},{"@type":"ListItem","position":3,"name":"自适应敞口上限","item":"https://aqmath.xyz/research/exposure-capping-zh"}]}]}</script>
 <link rel="alternate" hreflang="en" href="https://aqmath.xyz/research/exposure-capping">
 <link rel="alternate" hreflang="zh-Hans" href="https://aqmath.xyz/research/exposure-capping-zh">
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/exposure-capping">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=8a3f72813f">
+<link rel="stylesheet" href="/styles.min.css?v=7b46131ca5">
 </head>
 <body>
 
@@ -54,8 +54,7 @@
 <strong>引擎：</strong> 生产去杠杆防护盾 — 滚动 180 天 KKT 风险平价 MACRO 回路，Aegis（v14）固定阈值基线对比 Proteus（v18）自适应波动率缩放阈值，数据与手续费完全相同<br>
 <strong>状态：</strong> 研究 — 生产路径上固定敞口上限与自适应敞口上限的对比<br>
 <strong>披露：</strong> 本页不出现任何引擎数值设置，也不出现任何闭式表达式。参考值水平、信号权重、斜坡速度及其对称性、缩放乘数、钳制区间、预热地板与反弹确认触发值均不予公开，第 5.4 节方差劣势背后的运算同样不予公开。公开的是机制<em>类别</em>、实测行为，以及结果层面的指标。见第 8 节第 5 条。</p>
-<p>&gt;</p>
-<blockquote>English version: <a href="/research/exposure-capping">Adaptive Exposure Capping</a></blockquote>
+<blockquote><strong>修订说明：</strong> 英文版于 2026-09-08 新增第 5.4 节（无信号恒定敞口对照组 — 将“降低仓位”与“择时”分离）与第 5.5 节（敞口最低点与价格最低点的滞后诊断）。本中文版已同步更正事实错误（第 6 节引擎归属、第 6.4 节 16 个组合的有效样本量、第 5 节组合成分与平均敞口），但新增两节的完整译文尚未完成，请参阅<a href="/research/exposure-capping">英文版</a>。</blockquote>
 <hr>
 <h2>1. 目标</h2>
 <p>资本仅通过确定性地降低敞口来保护。风险指标 — 自峰值的回撤、滚动下行波动率 — 是遥测数据；它们观察但从不防护。唯一限制回撤的机制是系统在下行特征上升时物理上无法维持满仓风险配置。</p>

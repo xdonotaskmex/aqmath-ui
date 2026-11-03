@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/dca-stress">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=8a3f72813f">
+<link rel="stylesheet" href="/styles.min.css?v=7b46131ca5">
 </head>
 <body>
 
@@ -220,8 +220,7 @@
 <p>3. <strong>你可以像个普通人。</strong>防护盾不要求机器人式的精确。无论你定投得完美 还是马虎，它都保护这个组合。</p>
 <h2>5. 诚实的局限：这个测试本不可能失败</h2>
 <p>一篇对本研究的外部评审（读者评论，2026-08-11）提出了一个值得完整发表 的观点，因为它是对的：</p>
-<blockquote>时间表 — 所以打乱现金到账的时间根本碰不到它。你们证明了两者解耦，</blockquote>
-<blockquote>这值得知道，但这也意味着测试其实不可能失败。</blockquote>
+<blockquote>结果几乎没动，原因在于风险引擎读取的是组合波动率与回撤，而不是定投 时间表 — 所以打乱现金到账的时间根本碰不到它。你们证明了两者解耦， 这值得知道，但这也意味着测试其实不可能失败。</blockquote>
 <p>这重新框定了 §4 实际证明的东西：定投抖动测试的是一项<strong>设计属性</strong> （入金时机与风险引擎解耦），而不是一个脆弱的边界。一个不可能失败的 测试只能验证稳健性 — 它发现不了弱点。我们测试了引擎周围的一切，唯独 没测引擎真正响应的东西。</p>
 <p><strong>能失败的版本：延迟去杠杆，而不是延迟定投。</strong>如果防护盾计算出差额后 你晚 3 天才行动 — 或者因为睡着了干脆跳过再平衡 — 这种马虎才会亏钱。 而且它在波动率飙升时亏得最多，所以损害集中在最糟糕的几周，而不是 均匀摊开。</p>
 <p>评审还点破了一个区分：<strong>滞后不是噪声。</strong>如果你总是晚同样的时间，那是 滞后，滞后有方向。随机延迟会在种子之间相互抵消；持续迟到不会。任何 后续测试都必须把两者分开跑，否则种子平均会把损害藏起来。</p>

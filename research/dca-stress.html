@@ -34,7 +34,7 @@
 <link rel="alternate" hreflang="x-default" href="https://aqmath.xyz/research/dca-stress">
 <!-- Fonts are self-hosted (see @font-face in styles.css) so no request reaches Google. -->
 <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/styles.min.css?v=8a3f72813f">
+<link rel="stylesheet" href="/styles.min.css?v=7b46131ca5">
 </head>
 <body>
 
@@ -220,9 +220,7 @@
 <p>3. <strong>You can be human.</strong> The shield does not require robotic precision. It protects the portfolio whether you DCA perfectly or sloppily.</p>
 <h2>5. Honest limits: this test could not fail</h2>
 <p>An external review of this article (reader comment, 2026-08-11) made a point worth publishing in full, because it is correct:</p>
-<blockquote>drawdown, not the deposit schedule — so messing with when cash arrives was</blockquote>
-<blockquote>never going to touch it. You proved the two are decoupled, which is worth</blockquote>
-<blockquote>knowing, but it means the test couldn&#x27;t really fail.</blockquote>
+<blockquote>The reason it barely moved is that the risk engine reads portfolio vol and drawdown, not the deposit schedule — so messing with when cash arrives was never going to touch it. You proved the two are decoupled, which is worth knowing, but it means the test couldn&#x27;t really fail.</blockquote>
 <p>That reframes what §4 actually proved: the DCA jitter tested a <strong>design property</strong> (deposit timing is decoupled from the risk engine), not a fragile edge. A test that cannot fail verifies robustness — it cannot discover weakness. We tested everything around the engine, but not the thing the engine actually reacts to.</p>
 <p><strong>The version that can fail: delay the deleverage, not the deposit.</strong> If a shield computes a difference and you act 3 days late — or skip the rebalance entirely because you are asleep — that is the sloppiness that costs money. And it costs most exactly when vol is spiking, so the damage clusters in the worst weeks rather than spreading out evenly.</p>
 <p>One more distinction the review nailed: <strong>lag is not noise.</strong> If you are always late by the same amount, that is a lag, and lag has a direction. Random delays average out across seeds; consistent lateness does not. Any follow-up test must run the two separately or the seed averaging will hide the damage.</p>
